@@ -5,19 +5,43 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
+        .chart-container {
+            margin: 10px;
+            padding: 10px;
+            border-radius: 15px;
+            background-color: white;
+            display: inline-block;
+            height: 40vh;
+            width: 35vw; 
+        }
+
         .chart-container canvas {
-            background-color: white; /* Set the background color to white */
-            border-radius: 15px; /* Set the border radius to 15px */
-            margin-left: 20px;
+            background-color: white;
+            border-radius: 15px;
+        }
+        body.dark-mode .chart-container {
+            background-color: black;
+        }
+        body.dark-mode .chart-container canvas {
+            background-color: black;}
+
+
+        @media (max-width: 900px) {
+            .chart-container {
+                flex-basis: 100%;
+                max-width: 100%;
+                width: 100%;
+                display: block; /* Change to block to stack vertically */
+            }
         }
     </style>
 </head>
 <body>
-    <div class="chart-container" style="display: inline-block; height: 40vh; width: 35vw;">
+    <div class="chart-container" >
         <canvas id="barChart" data-chart-data="<?= htmlspecialchars(json_encode($barChartData), ENT_QUOTES, 'UTF-8') ?>"></canvas>
     </div>
 
-    <div class="chart-container" style="display: inline-block; height: 40vh; width: 35vw;">
+    <div class="chart-container" >
         <canvas id="pieChart" data-chart-data="<?= htmlspecialchars(json_encode($pieChartData), ENT_QUOTES, 'UTF-8') ?>"></canvas>
     </div>
 
@@ -77,7 +101,7 @@
         // Prepare the pie chart
         var pieCtx = document.getElementById('pieChart').getContext('2d');
         var pieChart = new Chart(pieCtx, {
-            type: 'pie',
+            type: 'doughnut',
             data: pieChartData,
             options: {
                 maintainAspectRatio: false,
