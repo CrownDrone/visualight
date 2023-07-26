@@ -16,8 +16,8 @@ $userName = ucfirst($userName); // Convert the first letter to uppercase.
 <aside class="main-sidebar sidebar-dark-primary elevation-4" style="background-color: #2A2C2F;">
     <!-- Brand Logo -->
     <div class="brand-link">
-        <img src="<?=$assetDir?>/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-        <span class="brand-text font-weight-light">Visualight</span>
+        <img src="<?=$assetDir?>/img/logo2.png" alt="Logo" class="brand-image" style="opacity: .8">
+        <span class="brand-text font-weight-light">DOST-ITDI</span>
 </div>
 
     <!-- Sidebar -->
