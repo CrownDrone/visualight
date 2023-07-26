@@ -77,7 +77,7 @@
         // Prepare the pie chart
         var pieCtx = document.getElementById('pieChart').getContext('2d');
         var pieChart = new Chart(pieCtx, {
-            type: 'doughnut',
+            type: 'pie',
             data: pieChartData,
             options: {
                 maintainAspectRatio: false,
