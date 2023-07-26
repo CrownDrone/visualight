@@ -1,6 +1,6 @@
 <?php
 
-namespace backend\modules\chart;
+namespace app\modules\chart;
 
 class Module extends \yii\base\Module
 {
