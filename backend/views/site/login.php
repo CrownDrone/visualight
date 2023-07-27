@@ -28,7 +28,7 @@ use yii\helpers\Html;
             ->label(false)
             ->passwordInput(['placeholder' => $model->getAttributeLabel('password')]) ?>
 
-        <div class="row">
+        <div class="row" style="color: white">
             <div class="col-8">
                 <?= $form->field($model, 'rememberMe')->checkbox([
                     'template' => '<div class="icheck-primary">{input}{label}</div>',
