@@ -12,6 +12,11 @@ return [
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'controllerNamespace' => 'frontend\controllers',
+    'modules' => [
+        'userprofile' => [
+            'class' => 'common\modules\userprofile\Module',
+        ],
+    ],
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-frontend',
@@ -51,6 +56,8 @@ return [
             'showScriptName' => false,
             'rules' => [
                 'create-predefined-user' => 'user/create-predefined-user',
+                'user/profile' => 'user/profile', // Make sure this rule is correctly set
+
             ],
         ],
         'authManager' => [

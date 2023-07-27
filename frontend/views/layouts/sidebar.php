@@ -1,6 +1,8 @@
 <?php 
 use mdm\admin\components\Helper;
 use yii\bootstrap5\Html;
+use yii\helpers\Url;
+
 
 $userName = Yii::$app->user->identity->username;
 $userRole = Yii::$app->authManager->getRolesByUser(Yii::$app->user->id);
@@ -30,7 +32,8 @@ $userName = ucfirst($userName); // Convert the first letter to uppercase.
         </div>
         <div class="info d-flex flex-column justify-content-between ml-2">
             <div>
-                <a href="#" class="d-block"> <?= Html::encode($userName) ?> </a>
+                <a href="<?= Url::to(['user/profile']) ?>" class="d-block"><?= Html::encode($userName) ?></a>
+
             </div>
             <div>
                 <p style="color: #F8B200; font-size: 14px;"> <?= Html::encode($userRoleName) ?> </p> <!-- Display the user's role with yellow text color -->

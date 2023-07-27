@@ -18,6 +18,9 @@ return [
         'chart' => [
                     'class' => 'app\modules\chart\Module',
                 ],
+       'userprofile' => [
+                    'class' => 'common\modules\userprofile\Module',
+                ],
     ],
     'components' => [
         'request' => [
@@ -57,6 +60,10 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                'profile' => 'userprofile/profile/view',
+                'profile/update' => 'userprofile/profile/update',
+                'settings' => 'userprofile/settings/view',
+                'settings/update' => 'userprofile/settings/update',
             ],
         ],
         'authManager' => [
