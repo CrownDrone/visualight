@@ -1,16 +1,18 @@
 <?php
+
 use yii\helpers\Html;
 
 ?>
-<div class="card">
+<div class="">
     <div class="card-body login-card-body" style="background: linear-gradient(180deg, rgba(6, 6, 6, 0.80) 0%, rgba(34, 37, 52, 0.80) 91.55%); border-radius: 20px;">
         <!-- <p class="login-box-msg">Sign in to start your session UwU</p> -->
         <img src="/images/LogoVL.png" alt="qwerty" style="width: 100%">
 
-        
+
+
         <?php $form = \yii\bootstrap5\ActiveForm::begin(['id' => 'login-form']) ?>
 
-        <?= $form->field($model,'username', [
+        <?= $form->field($model, 'username', [
             'options' => ['class' => 'form-group has-feedback'],
             // 'inputTemplate' => '{input}<div class="input-group-append"><div class="input-group-text"><span class="fas fa-envelope"></span></div></div>',
             'template' => '{beginWrapper}{input}{error}{endWrapper}',
@@ -45,7 +47,7 @@ use yii\helpers\Html;
 
         <?php \yii\bootstrap5\ActiveForm::end(); ?>
 
-       
+
     </div>
     <!-- /.login-card-body -->
 </div>

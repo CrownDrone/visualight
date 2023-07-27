@@ -23,13 +23,16 @@ $this->registerCssFile('https://code.ionicframework.com/ionicons/2.0.1/css/ionic
     <?php $this->head() ?>
 </head>
 
-<body class="hold-transition login-page">
+<body class="hold-transition login-page" style="background-image: url(/images/back_ground.png); background-repeat: no-repeat; background-attachment: fixed;
+  background-size: cover;">
+
     <?php $this->beginBody() ?>
     <div class="login-box">
         <div class="login-logo">
 
         </div>
         <!-- /.login-logo -->
+
 
         <?= $content ?>
     </div>
