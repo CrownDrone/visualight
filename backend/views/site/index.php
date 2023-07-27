@@ -30,6 +30,7 @@ $this->title = '';
     {
         float: right;
         height: 3rem;
+        margin-bottom: 1rem;
     }
     
     .DailyTransaction
@@ -46,6 +47,7 @@ $this->title = '';
         font-weight: 600;
         line-height: normal;
         letter-spacing: 2.4px;
+        
 
         
     }
@@ -94,6 +96,30 @@ $this->title = '';
         grid-template-rows: auto auto;
         
     }
+
+    /* responsiveness */
+
+    @media (max-width: 900px) {
+            .deptransaction {
+                width: 80%;
+                display: justify; /* Change to block to stack vertically */
+                margin: 0 auto 1rem;
+                
+                
+            }
+            .header
+            { 
+                font-size: 1rem;
+            }
+            .header img
+            {
+                height: 2rem;
+                margin-bottom: 1rem;
+            }
+        }
+    
+
+
 
 </style>
 <?= 
@@ -185,7 +211,7 @@ $this->title = '';
 
 
 
-<div class="container-fluid">
+<!-- <div class="container-fluid">
     <div class="row">
         <div class="col-lg-6">
             <?= \hail812\adminlte\widgets\Alert::widget([
@@ -314,4 +340,4 @@ $this->title = '';
             ]) ?>
         </div>
     </div>
-</div>
+</div> -->
