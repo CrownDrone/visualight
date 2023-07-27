@@ -5,7 +5,7 @@ use yii\helpers\Html;
 <div class="card">
     <div class="card-body login-card-body" style="background: linear-gradient(180deg, rgba(6, 6, 6, 0.80) 0%, rgba(34, 37, 52, 0.80) 91.55%); border-radius: 20px;">
         <!-- <p class="login-box-msg">Sign in to start your session UwU</p> -->
-        <img src="/LogoVL.png" alt="qwerty" style="width: 100%">
+        <img src="/images/LogoVL.png" alt="qwerty" style="width: 100%">
 
         
         <?php $form = \yii\bootstrap5\ActiveForm::begin(['id' => 'login-form']) ?>
