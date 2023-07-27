@@ -3,6 +3,7 @@
 $this->title = 'Starter Page';
 $this->params['breadcrumbs'] = [['label' => $this->title]];
 ?>
+
 <style>
     @font-face {
             font-family: 'Poppins';
@@ -45,38 +46,98 @@ $this->params['breadcrumbs'] = [['label' => $this->title]];
     }
     .deptransaction img
     {
-    float: left;
-    margin-left: 10px;
-    margin-bottom: 50px;
+        float: left;
+        margin-left: 10px;
     }
+    #valueIncrease
+    {
+        font-size: 24px;
+        font-weight: 400;
+        letter-spacing: 3.6px;
+        float: bottom;
+    }
+    #dailyTrans
+    {
+        font-size: 54px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: normal;
+        letter-spacing: 8.1px;
+    }
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr); 
+        grid-gap: 2px;
+        
+    }
+
 </style>
+<?= 
+    // metrology transaction
+    $lastmettrans=5;
+    $todaymettrans=3;
+    $metdailytransincrease = (($todaymettrans - $lastmettrans) /$todaymettrans) * 100;
+    $metdailytransincrease = number_format($metdailytransincrease, 2);
+    $incIcon= Yii::$app->request->baseUrl.'/images/increase.png';
+    if($metdailytransincrease>1)
+    {
+        $metdailytransincrease = '+'.$metdailytransincrease . '%';
+        
+    }
+
+    //S&T transaction
+    $lastSandTtrans=2;
+    $todaySandTtrans=10;
+    $SandTdailytransincrease = (($todaySandTtrans - $lastSandTtrans) / $todaySandTtrans) * 100;
+    $SandTdailytransincrease = number_format( $SandTdailytransincrease, 2);
+    if($SandTdailytransincrease>1)
+    {
+        $SandTdailytransincrease = '+'.$SandTdailytransincrease . '%';
+    }
+    //T&S transaction
+    $lastTandStrans=6;
+    $todayTandStrans=100;
+    $TandSdailytransincrease = (($todayTandStrans - $lastTandStrans) / $todayTandStrans) * 100;
+    $TandSdailytransincrease = number_format( $TandSdailytransincrease, 2);
+    if($TandSdailytransincrease>1)
+    {
+        $TandSdailytransincrease = '+'.$TandSdailytransincrease . '%';
+    }
+
+
+    ?>
 
 <div class="DailyTransaction">
     <p>Total Transactions Daily</p>
-    <?= 
-    $lastmettrans=5;
-    $todaymettrans=3;
-    $metdailytransincrease=4;
-    ?>
 
     <div class="deptransaction">
         <p>National Metrology</p>
+        <div class="grid">
         <img src="<?= Yii::$app->request->baseUrl ?>/images/Pressure Gauge.png" alt="icon1">
-        <p><?= $metdailytransincrease?></p>
-        
+        <p id="dailyTrans"><?=$todaymettrans?></p>
+        <p id="valueIncrease"><?= $metdailytransincrease?></p>
+        </div>
     </div>
     <div class="deptransaction" style="background-color:#02A560;">
         <p>Standards and Testing</p>
+        <div class="grid">
         <img src="<?= Yii::$app->request->baseUrl ?>/images/Pass Fail.png" alt="icon2">
-        <p><?= $metdailytransincrease?></p>
+        <p id="dailyTrans"><?=$todaySandTtrans?></p>
+        <p id="valueIncrease"><?= $SandTdailytransincrease?></p>
+        </div>
     </div>
     <div class="deptransaction" style="background-color:#F21A9C;">
         <p>Technological Services</p>
+        <div class="grid">
         <img src="<?= Yii::$app->request->baseUrl ?>/images/Service.png" alt="icon3">
-        <p><?= $metdailytransincrease?></p>
+        <p id="dailyTrans"><?=$todayTandStrans?></p>
+        <p id="valueIncrease"><?= $TandSdailytransincrease?></p>
+        </div>
     </div>
 
 </div>
+
+
 
 
 <div class="container-fluid">
