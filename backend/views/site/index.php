@@ -1,27 +1,47 @@
 <?php
 
-$this->title = 'Starter Page';
-$this->params['breadcrumbs'] = [['label' => $this->title]];
+$this->title = '';
 ?>
 
-<style>
+<style> 
     @font-face {
             font-family: 'Poppins';
             src: url('<?= Yii::$app->request->baseUrl ?>/fonts/Poppins-Light.ttf') format('truetype'),
                  url('<?= Yii::$app->request->baseUrl ?>/fonts/Poppins-Light.woff') format('woff');
     
         }
+    :root {
+        font-size: 16px;
+    }
+    .header
+    {
+        color: #0362BA;
+        font-family: Poppins;
+        font-size: 2rem;
+        font-weight: 600;
+        line-height: normal;
+        letter-spacing: 3px;
+        border-bottom: solid 0.2vh;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .header img
+    {
+        float: right;
+        height: 3rem;
+    }
     
     .DailyTransaction
     {
-        width: 1222px;
-        height: 173px; 
-        border-radius: 10px;
+        width: 100%;
+        height: 10.8125rem; 
+        border-radius: .635rem;
         background: #EFF5FF;
         text-align: center;
         color: #3A3835;
         font-family: Poppins;
-        font-size: 16px;
+        font-size: 1rem;
         font-style: normal;
         font-weight: 600;
         line-height: normal;
@@ -31,13 +51,13 @@ $this->params['breadcrumbs'] = [['label' => $this->title]];
     }
     .deptransaction
     {
-        width: 381.903px;
-        height: 110px;
-        border-radius: 10px;
+        width: 32%;
+        height: 7.875rem;
+        border-radius: .635rem;
         background: #0073C7;
         color: #FFF;
         font-family: Poppins;
-        font-size: 16px;
+        font-size: 1rem;
         font-style: normal;
         font-weight: 700;
         line-height: normal;
@@ -47,18 +67,21 @@ $this->params['breadcrumbs'] = [['label' => $this->title]];
     .deptransaction img
     {
         float: left;
-        margin-left: 10px;
+        margin-left: .625rem;
     }
     #valueIncrease
     {
-        font-size: 24px;
+        font-size: 1.5rem;
         font-weight: 400;
         letter-spacing: 3.6px;
-        float: bottom;
+        grid-column: 3; /* Position this div in the second column */
+        text-align: right; /* Align the text to the right (bottom right) */
+        padding-top: 40px;
+       
     }
     #dailyTrans
     {
-        font-size: 54px;
+        font-size: 3.375rem;
         font-style: normal;
         font-weight: 700;
         line-height: normal;
@@ -67,22 +90,28 @@ $this->params['breadcrumbs'] = [['label' => $this->title]];
     .grid {
         display: grid;
         grid-template-columns: repeat(3, 1fr); 
-        grid-gap: 2px;
+        grid-gap: .125rem;
+        grid-template-rows: auto auto;
         
     }
 
 </style>
 <?= 
+    $m="";
     // metrology transaction
     $lastmettrans=5;
     $todaymettrans=3;
     $metdailytransincrease = (($todaymettrans - $lastmettrans) /$todaymettrans) * 100;
     $metdailytransincrease = number_format($metdailytransincrease, 2);
-    $incIcon= Yii::$app->request->baseUrl.'/images/increase.png';
     if($metdailytransincrease>1)
     {
         $metdailytransincrease = '+'.$metdailytransincrease . '%';
+
         
+    }
+    else
+    {
+        $metdailytransincrease = $metdailytransincrease . '%';
     }
 
     //S&T transaction
@@ -94,6 +123,10 @@ $this->params['breadcrumbs'] = [['label' => $this->title]];
     {
         $SandTdailytransincrease = '+'.$SandTdailytransincrease . '%';
     }
+    else
+    {
+        $metdailytransincrease = $metdailytransincrease . '%';
+    }
     //T&S transaction
     $lastTandStrans=6;
     $todayTandStrans=100;
@@ -103,9 +136,20 @@ $this->params['breadcrumbs'] = [['label' => $this->title]];
     {
         $TandSdailytransincrease = '+'.$TandSdailytransincrease . '%';
     }
+    else
+    {
+        $metdailytransincrease = $metdailytransincrease . '%';
+    }
 
 
     ?>
+
+    <div class="header">
+        <!-- <div class="header-grid"> -->
+            <p>Dashboard</p>
+            <img src="/images/LogoVL.png" alt="visLogo" >
+        <!-- </div> -->
+    </div> <br>
 
 <div class="DailyTransaction">
     <p>Total Transactions Daily</p>
@@ -113,7 +157,7 @@ $this->params['breadcrumbs'] = [['label' => $this->title]];
     <div class="deptransaction">
         <p>National Metrology</p>
         <div class="grid">
-        <img src="<?= Yii::$app->request->baseUrl ?>/images/Pressure Gauge.png" alt="icon1">
+        <img src="/images/Pressure Gauge.png" alt="icon1">
         <p id="dailyTrans"><?=$todaymettrans?></p>
         <p id="valueIncrease"><?= $metdailytransincrease?></p>
         </div>
@@ -121,7 +165,7 @@ $this->params['breadcrumbs'] = [['label' => $this->title]];
     <div class="deptransaction" style="background-color:#02A560;">
         <p>Standards and Testing</p>
         <div class="grid">
-        <img src="<?= Yii::$app->request->baseUrl ?>/images/Pass Fail.png" alt="icon2">
+        <img src="/images/Pass Fail.png" alt="icon2">
         <p id="dailyTrans"><?=$todaySandTtrans?></p>
         <p id="valueIncrease"><?= $SandTdailytransincrease?></p>
         </div>
@@ -129,13 +173,14 @@ $this->params['breadcrumbs'] = [['label' => $this->title]];
     <div class="deptransaction" style="background-color:#F21A9C;">
         <p>Technological Services</p>
         <div class="grid">
-        <img src="<?= Yii::$app->request->baseUrl ?>/images/Service.png" alt="icon3">
+        <img src="/images/Service.png" alt="icon3">
         <p id="dailyTrans"><?=$todayTandStrans?></p>
         <p id="valueIncrease"><?= $TandSdailytransincrease?></p>
         </div>
     </div>
 
 </div>
+
 
 
 
