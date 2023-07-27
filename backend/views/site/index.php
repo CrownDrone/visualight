@@ -1,7 +1,84 @@
 <?php
+
 $this->title = 'Starter Page';
 $this->params['breadcrumbs'] = [['label' => $this->title]];
 ?>
+<style>
+    @font-face {
+            font-family: 'Poppins';
+            src: url('<?= Yii::$app->request->baseUrl ?>/fonts/Poppins-Light.ttf') format('truetype'),
+                 url('<?= Yii::$app->request->baseUrl ?>/fonts/Poppins-Light.woff') format('woff');
+    
+        }
+    
+    .DailyTransaction
+    {
+        width: 1222px;
+        height: 173px; 
+        border-radius: 10px;
+        background: #EFF5FF;
+        text-align: center;
+        color: #3A3835;
+        font-family: Poppins;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 600;
+        line-height: normal;
+        letter-spacing: 2.4px;
+
+        
+    }
+    .deptransaction
+    {
+        width: 381.903px;
+        height: 110px;
+        border-radius: 10px;
+        background: #0073C7;
+        color: #FFF;
+        font-family: Poppins;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: normal;
+        letter-spacing: 2.4px;
+        display:inline-block;
+    }
+    .deptransaction img
+    {
+    float: left;
+    margin-left: 10px;
+    margin-bottom: 50px;
+    }
+</style>
+
+<div class="DailyTransaction">
+    <p>Total Transactions Daily</p>
+    <?= 
+    $lastmettrans=5;
+    $todaymettrans=3;
+    $metdailytransincrease=4;
+    ?>
+
+    <div class="deptransaction">
+        <p>National Metrology</p>
+        <img src="<?= Yii::$app->request->baseUrl ?>/images/Pressure Gauge.png" alt="icon1">
+        <p><?=$metdailytrans?></p>
+        
+    </div>
+    <div class="deptransaction" style="background-color:#02A560;">
+        <p>Standards and Testing</p>
+        <img src="<?= Yii::$app->request->baseUrl ?>/images/Pass Fail.png" alt="icon2">
+        <p><?=$metdailytrans?></p>
+    </div>
+    <div class="deptransaction" style="background-color:#F21A9C;">
+        <p>Technological Services</p>
+        <img src="<?= Yii::$app->request->baseUrl ?>/images/Service.png" alt="icon3">
+        <p><?=$metdailytrans?></p>
+    </div>
+
+</div>
+
+
 <div class="container-fluid">
     <div class="row">
         <div class="col-lg-6">
