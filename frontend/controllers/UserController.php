@@ -18,12 +18,7 @@ class UserController extends Controller
                 'class' => AccessControl::class,
                 'rules' => [
                     [
-                        'actions' => ['profile'],
-                        'allow' => true,
-                        'roles' => ['@'],
-                    ],
-                    [
-                        'actions' => ['index', 'view', 'create', 'update', 'delete','profile'],
+                        'actions' => ['index', 'view', 'create', 'update','delete'],
                         'allow' => true,
                         'roles' => ['admin'],
                     ],
@@ -133,41 +128,5 @@ protected function findModel($id)
 
     throw new NotFoundHttpException('The requested page does not exist.');
 }
-
-// ...
-
-public function actionProfile($edit = false)
-    {
-        // Get the current user model
-        $userId = Yii::$app->user->id;
-        $model = User::findOne($userId);
-
-        // Store the existing password for validation
-        $existingPassword = $model->password_hash;
-
-        // Check if the user has submitted the form for updating profile
-        if ($model->load(Yii::$app->request->post())) {
-            // Check if the entered existing password matches the one in the database
-            if (Yii::$app->security->validatePassword($model->existingPassword, $existingPassword)) {
-                // Save the model
-                if ($model->save()) {
-                    Yii::$app->session->setFlash('success', 'Profile updated successfully.');
-                    return $this->redirect(['profile']);
-                } else {
-                    Yii::$app->session->setFlash('error', 'An error occurred while updating the profile.');
-                }
-            } else {
-                $model->addError('existingPassword', 'Existing password is incorrect.');
-            }
-        }
-
-        return $this->render('profile', [
-            'model' => $model,
-            'editMode' => $edit, // Pass the $edit variable as $editMode to the view
-        ]);
-    }
-
-// ...
-
 
 }

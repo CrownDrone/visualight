@@ -30,7 +30,7 @@ class User extends ActiveRecord implements IdentityInterface
     const SCENARIO_UPDATE = 'update';
     const SCENARIO_CREATE = 'create';
 
-    public $newUsername;
+
     public $newPassword;
     public $passwordInput;
     public $updatedPassword;
@@ -54,7 +54,6 @@ class User extends ActiveRecord implements IdentityInterface
             TimestampBehavior::class,
         ];
     }
-    
 
     // common\models\User.php
 
@@ -100,16 +99,8 @@ class User extends ActiveRecord implements IdentityInterface
 
             // Validation rules for the update scenario
             [['existingPassword'], 'required', 'on' => self::SCENARIO_UPDATE],
-            [['existingPassword', 'newPassword'], 'string', 'min' => 6, 'on' => self::SCENARIO_UPDATE],
             ['existingPassword', 'validateExistingPassword', 'on' => self::SCENARIO_UPDATE],
-
-            [['username', 'email', 'newUsername'], 'required'],
-            ['username', 'unique'],
-            ['newUsername', 'string', 'min' => 4],
-
-            [['existingPassword', 'newPassword'], 'string', 'min' => 6],
-            [['existingPassword', 'newPassword'], 'required', 'on' => 'update'],
-            ];
+        ];
     }
 
 
@@ -321,51 +312,16 @@ public function setPassword($password)
     }
 
     public function beforeSave($insert)
-    {
-        if (parent::beforeSave($insert)) {
-            // Check if 'newPassword' attribute is not empty and set the 'password_hash' attribute accordingly
-            if (!empty($this->newPassword)) {
-                $this->password_hash = Yii::$app->security->generatePasswordHash($this->newPassword);
-            }
-
-            return true;
+{
+    if (parent::beforeSave($insert)) {
+        // Check if 'newPassword' attribute is not empty and set the 'password_hash' attribute accordingly
+        if (!empty($this->newPassword)) {
+            $this->password_hash = Yii::$app->security->generatePasswordHash($this->newPassword);
         }
 
-        return false;
+        return true;
     }
 
-public function afterSave($insert, $changedAttributes)
-{
-    parent::afterSave($insert, $changedAttributes);
-
-    // Get the authManager component
-    $authManager = Yii::$app->authManager;
-
-    // Check if the role already exists
-    if (!$authManager->getRole('user')) {
-        // Create the "user" role
-        $userRole = $authManager->createRole('user');
-        $userRole->description = 'User Role';
-        $authManager->add($userRole);
-    }
-
-    // Assign the "user" role to the new user
-    if ($insert) {
-        $role = $authManager->getRole('user');
-        $authManager->assign($role, $this->id);
-    }
-
-    // Check if the username has changed
-    if ($this->newUsername !== $this->username) {
-        // Update the username in the authManager assignments
-        $authManager->revokeAll($this->id);
-        $role = $authManager->getRole('user');
-        $authManager->assign($role, $this->id);
-        // Update the username in the database
-        $this->updateAttributes(['username' => $this->newUsername]);
-        // Clear the newUsername attribute to prevent repeated changes
-        $this->newUsername = null;
-    }
+    return false;
 }
-
 }
