@@ -32,7 +32,10 @@ return [
         'urlManager' => [
             'rules' => [
                 'create-predefined-user' => 'user/create-predefined-user',
-                // Other URL rules...
+                'profile' => 'userprofile/profile/view',
+                'profile/update' => 'userprofile/profile/update',
+                'settings' => 'userprofile/settings/view',
+                'settings/update' => 'userprofile/settings/update',
             ],
         ],
         'defaultRoute' => 'site/login',
