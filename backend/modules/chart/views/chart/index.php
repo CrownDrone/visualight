@@ -1,3 +1,7 @@
+<?php
+use backend\modules\chart\controllers\ChartController;
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -38,11 +42,13 @@
 </head>
 <body>
     <div class="chart-container" >
-        <canvas id="barChart" data-chart-data="<?= htmlspecialchars(json_encode($barChartData), ENT_QUOTES, 'UTF-8') ?>"></canvas>
+        <canvas id="barChart" data-chart-data="
+        <?= htmlspecialchars(json_encode($barChartData), ENT_QUOTES, 'UTF-8') ?>"></canvas>
     </div>
 
     <div class="chart-container" >
-        <canvas id="pieChart" data-chart-data="<?= htmlspecialchars(json_encode($pieChartData), ENT_QUOTES, 'UTF-8') ?>"></canvas>
+        <canvas id="pieChart" data-chart-data="
+        <?= htmlspecialchars(json_encode($pieChartData), ENT_QUOTES, 'UTF-8') ?>"></canvas>
     </div>
 
     <script>
