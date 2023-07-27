@@ -10,6 +10,8 @@ use yii\db\Query;
 // I-extend natin yung Controller class para makagawa tayo ng ating custom ChartController.
 class ChartController extends Controller
 {
+
+    
     // Ito yung pangunahing action na tatawagin kapag may nag-access sa page ng chart.
     public function actionIndex()
     {
@@ -27,7 +29,7 @@ class ChartController extends Controller
     }
 
     // Function para i-prepare yung data para sa bar chart.
-    private function prepareBarChartData()
+    public function prepareBarChartData()
     {
         // Kukuhanin natin yung data mula sa 'car_brands' table sa database.
         $data = (new Query())
@@ -99,7 +101,7 @@ class ChartController extends Controller
     }
 
     // Function para i-prepare yung data para sa pie chart.
-    private function preparePieChartData()
+    public function preparePieChartData()
     {
         // Kukuhanin natin yung data mula sa 'car_brands' table sa database, at i-count yung bilang ng orders para sa bawat brand.
         $data = (new Query())
