@@ -62,18 +62,18 @@ $this->params['breadcrumbs'] = [['label' => $this->title]];
     <div class="deptransaction">
         <p>National Metrology</p>
         <img src="<?= Yii::$app->request->baseUrl ?>/images/Pressure Gauge.png" alt="icon1">
-        <p><?=$metdailytrans?></p>
+        <p><?= $metdailytransincrease?></p>
         
     </div>
     <div class="deptransaction" style="background-color:#02A560;">
         <p>Standards and Testing</p>
         <img src="<?= Yii::$app->request->baseUrl ?>/images/Pass Fail.png" alt="icon2">
-        <p><?=$metdailytrans?></p>
+        <p><?= $metdailytransincrease?></p>
     </div>
     <div class="deptransaction" style="background-color:#F21A9C;">
         <p>Technological Services</p>
         <img src="<?= Yii::$app->request->baseUrl ?>/images/Service.png" alt="icon3">
-        <p><?=$metdailytrans?></p>
+        <p><?= $metdailytransincrease?></p>
     </div>
 
 </div>
