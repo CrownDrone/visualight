@@ -1,7 +1,10 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\ActiveForm;
+
+$this->registerCssFile(Url::to(['/css/custom.css']));
 
 $this->title = 'Update Profile';
 $this->params['breadcrumbs'][] = ['label' => 'User Profile', 'url' => ['view']];
@@ -17,7 +20,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= $form->field($model, 'email')->textInput() ?>
 
-    <?= $form->field($model, 'newPassword')->passwordInput()->hint('Leave it blank if you do not want to change your password.') ?>
+    <?php $hasPasswordError = $model->hasErrors('newPassword'); ?>
+    <?= $form->field($model, 'newPassword')->passwordInput()->hint($hasPasswordError ? '' : '   *Leave it blank if you dont want to change the password',['style' => 'color: green']) ?>
+
 
     <div class="form-group">
         <?= Html::submitButton('Update', ['class' => 'btn btn-primary']) ?>

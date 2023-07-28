@@ -4,16 +4,13 @@ namespace common\models;
 
 use Yii;
 use yii\db\ActiveRecord;
+use yii\helpers\StringHelper;
 
 class UserProfile extends ActiveRecord
 {
     public $existingUsername;
     public $existingEmail;
     public $newPassword; // Add the new password attribute
-
-
-
-
 
     const SCENARIO_UPDATE = 'update';
 
@@ -30,10 +27,10 @@ class UserProfile extends ActiveRecord
             }],
 
             // New rule for the new password field
-            ['newPassword', 'string', 'min' => 6], // Adjust the validation rule as needed
+            ['newPassword', 'string', 'min' => 6],
+            ['newPassword', 'validatePasswordComplexity'],
 
             [['username', 'email'], 'required', 'on' => self::SCENARIO_UPDATE],
-
         ];
     }
 
@@ -42,7 +39,18 @@ class UserProfile extends ActiveRecord
         return [
             'username' => 'Username',
             'email' => 'Email',
+            'newPassword' => 'New Password',
         ];
+    }
+
+    public function validatePasswordComplexity($attribute, $params)
+    {
+        // Regular expression to check if the password contains special characters
+        $specialCharacterRegex = '/[!@#$%^&*()\-_=+{};:,<.>]/';
+
+        if (!empty($this->newPassword) && !preg_match($specialCharacterRegex, $this->$attribute)) {
+            $this->addError($attribute, 'Password must contain special characters.');
+        }
     }
 
     public static function tableName()
@@ -53,7 +61,7 @@ class UserProfile extends ActiveRecord
     public function scenarios()
     {
         $scenarios = parent::scenarios();
-        $scenarios[self::SCENARIO_UPDATE] = ['username', 'email', 'existingEmail'];
+        $scenarios[self::SCENARIO_UPDATE] = ['username', 'email', 'existingEmail','newPassword'];
         return $scenarios;
     }
     public function beforeSave($insert)
