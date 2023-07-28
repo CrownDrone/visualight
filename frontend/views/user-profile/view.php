@@ -1,11 +1,12 @@
 <?php
-
 use yii\helpers\Html;
 use yii\helpers\Url;
 
-
 $this->title = 'User Profile';
 $this->params['breadcrumbs'][] = $this->title;
+
+// Generate the URL for the default image using the @web alias
+$defaultImagePath = Yii::getAlias('@web') . '/assets/5c76938a/img/user2-160x160.jpg';
 ?>
 
 <div class="user-profile-view">
@@ -25,12 +26,12 @@ $this->params['breadcrumbs'][] = $this->title;
         <tr>
             <th>Profile Picture:</th>
             <td>
-            <?php if ($user->profile_picture): ?>
-                <?= Html::img(Url::to(['user-profile/get-profile-picture', 'fileName' => $user->profile_picture]), ['class' => 'img-thumbnail', 'style' => 'max-width: 200px']) ?>
-            <?php else: ?>
-                <!-- Display a default profile picture if no image is available -->
-                <?= Html::img(Url::to(['/images/default-profile-picture.png']), ['class' => 'img-thumbnail', 'style' => 'max-width: 200px']) ?>
-            <?php endif; ?>
+                <?php if ($user->profile_picture): ?>
+                    <?= Html::img(Url::to(['user-profile/get-profile-picture', 'fileName' => $user->profile_picture]), ['class' => 'img-thumbnail', 'style' => 'max-width: 200px']) ?>
+                <?php else: ?>
+                    <!-- Display the custom default profile picture if no image is available -->
+                    <?= Html::img($defaultImagePath, ['class' => 'img-thumbnail', 'style' => 'max-width: 200px']) ?>
+                <?php endif; ?>
             </td>
         </tr>
     </table>

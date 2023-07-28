@@ -1,5 +1,4 @@
 <?php 
-use common\models\UserProfile;
 use mdm\admin\components\Helper;
 use yii\bootstrap5\Html;
 use yii\helpers\Url;
@@ -11,7 +10,11 @@ $userRole = Yii::$app->authManager->getRolesByUser(Yii::$app->user->id);
 $userRoleName = isset($userRole) && !empty($userRole) ? reset($userRole)->name : 'Guest';
 $userName = ucfirst($userName); // Convert the first letter to uppercase.
 
-$this->params['model'] = UserProfile::findOne(Yii::$app->user->id);
+$userId = Yii::$app->user->id;
+$model = \common\models\UserProfile::findOne(['id' => $userId]);
+
+$defaultImagePath = Yii::getAlias('@web') . '/assets/24427cba/img/user2-160x160.jpg';
+
 
 
 ?>
@@ -31,11 +34,11 @@ $this->params['model'] = UserProfile::findOne(Yii::$app->user->id);
             <div class="image" style="padding-left: 10px;">
                 <!-- Show the user's profile picture -->
                 <?php
-                if (isset($this->params['model']) && $this->params['model'] && $this->params['model']->profile_picture) {
-                    $profilePicturePath = Url::to(['user-profile/get-profile-picture', 'fileName' => $this->params['model']->profile_picture]);
+                if ($model && $model->profile_picture) {
+                    $profilePicturePath = Url::to(['user-profile/get-profile-picture', 'fileName' => $model->profile_picture]);
                     echo Html::img($profilePicturePath, ['class' => 'img-circle elevation-2', 'style' => 'height: 50px; width: 50px;']);
                 } else {
-                    echo Html::img('@web/images/default-profile-picture.png', ['class' => 'img-circle elevation-2', 'style' => 'height: 50px; width: 50px;']);
+                    echo Html::img($defaultImagePath, ['class' => 'img-circle elevation-2', 'style' => 'height: 50px; width: 50px;']);
                 }
                 ?>
             </div>

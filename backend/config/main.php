@@ -60,7 +60,7 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-                'profile' => 'user-profile/view',
+               'profile' => 'user-profile/view',
                 'profile/update' => 'user-profile/update',
             ],
         ],
