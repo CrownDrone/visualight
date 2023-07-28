@@ -20,6 +20,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= $form->field($model, 'email')->textInput() ?>
 
+    <?php $hasPasswordError = $model->hasErrors('existingPassword'); ?>
+    <?= $form->field($model, 'existingPassword')->passwordInput()->hint($hasPasswordError ? '' : '   *Leave it blank if you dont want to change the password',['style' => 'color: green']) ?>
+   
     <?php $hasPasswordError = $model->hasErrors('newPassword'); ?>
     <?= $form->field($model, 'newPassword')->passwordInput()->hint($hasPasswordError ? '' : '   *Leave it blank if you dont want to change the password',['style' => 'color: green']) ?>
 

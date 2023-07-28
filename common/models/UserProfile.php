@@ -12,6 +12,9 @@ class UserProfile extends ActiveRecord
     public $existingEmail;
     public $newPassword; // Add the new password attribute
 
+    public $existingPassword;
+
+
     const SCENARIO_UPDATE = 'update';
 
     public function rules()
@@ -31,6 +34,9 @@ class UserProfile extends ActiveRecord
             ['newPassword', 'validatePasswordComplexity'],
 
             [['username', 'email'], 'required', 'on' => self::SCENARIO_UPDATE],
+
+            ['existingPassword', 'validateExistingPassword', 'on' => self::SCENARIO_UPDATE],
+
         ];
     }
 
@@ -43,15 +49,29 @@ class UserProfile extends ActiveRecord
         ];
     }
 
-    public function validatePasswordComplexity($attribute, $params)
+
+    public function validateExistingPassword($attribute, $params)
+    {
+        // Find the current user model by the ID of the logged-in user
+        $user = User::findOne(Yii::$app->user->id);
+
+        // Check if the entered existing password matches the current password
+        if (!$user->validatePassword($this->existingPassword)) {
+            $this->addError($attribute, 'Existing password doesn\'t match.');
+        }
+    }
+
+
+      public function validatePasswordComplexity($attribute, $params)
     {
         // Regular expression to check if the password contains special characters
         $specialCharacterRegex = '/[!@#$%^&*()\-_=+{};:,<.>]/';
 
-        if (!empty($this->newPassword) && !preg_match($specialCharacterRegex, $this->$attribute)) {
+        if (!preg_match($specialCharacterRegex, $this->$attribute)) {
             $this->addError($attribute, 'Password must contain special characters.');
         }
     }
+
 
     public static function tableName()
     {
@@ -61,7 +81,7 @@ class UserProfile extends ActiveRecord
     public function scenarios()
     {
         $scenarios = parent::scenarios();
-        $scenarios[self::SCENARIO_UPDATE] = ['username', 'email', 'existingEmail','newPassword'];
+        $scenarios[self::SCENARIO_UPDATE] = ['username', 'email', 'existingEmail','newPassword','existingPassword'];
         return $scenarios;
     }
     public function beforeSave($insert)
