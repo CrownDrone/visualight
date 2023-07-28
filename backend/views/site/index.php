@@ -15,6 +15,8 @@ $this->title = '';
         font-size: 16px;
     }
 
+    /* header div css (Visualight logo and the "Dashboard text") */
+
     .header {
         color: #0362BA;
         font-family: Poppins;
@@ -25,7 +27,7 @@ $this->title = '';
         border-bottom: solid 0.2vh;
         display: flex;
         justify-content: space-between;
-        align-items: center;
+
     }
 
     .header img {
@@ -33,6 +35,8 @@ $this->title = '';
         height: 3rem;
         margin-bottom: 1rem;
     }
+
+    /* Daily transaction css */
 
     .DailyTransaction {
         width: 100%;
@@ -47,13 +51,12 @@ $this->title = '';
         font-weight: 600;
         line-height: normal;
         letter-spacing: 2.4px;
-
-
+        display: wrap;
 
     }
 
     .deptransaction {
-        width: 32%;
+        width: 30%;
         height: 7.875rem;
         border-radius: .635rem;
         background: #0073C7;
@@ -68,8 +71,12 @@ $this->title = '';
     }
 
     .deptransaction img {
-        float: left;
         margin-left: .625rem;
+    }
+
+    .deptransaction:hover {
+    transform: scale(1.1);
+    cursor: pointer; 
     }
 
     #valueIncrease {
@@ -77,10 +84,8 @@ $this->title = '';
         font-weight: 400;
         letter-spacing: 3.6px;
         grid-column: 3;
-        /* Position this div in the second column */
         text-align: right;
-        /* Align the text to the right (bottom right) */
-        padding-top: 40px;
+        padding-top: 2.5rem;
 
     }
 
@@ -100,6 +105,42 @@ $this->title = '';
 
     }
 
+    /* graph div */
+    .graph
+    {
+        width: 100%;
+        text-align: center;
+        display: wrap;
+    }
+    .chart-container {
+            margin: 10px;
+            padding: 3em;
+            border-radius: 15px;
+            background-color: white;
+            display: inline-block;
+            height: 40vh;
+            width:40%;
+        }
+
+        body.dark-mode .chart-container {
+            background-color: black;
+
+        }
+        body.dark-mode .chart-container canvas {
+            background-color: black;
+            color: white;
+        }
+
+        #reportTitle
+        {
+            color: #0362BA;
+            font-family: Poppins;
+            font-size: .875rem;
+            font-weight: 700;
+            letter-spacing: 2.1px;
+            
+        }
+
     /* responsiveness */
 
     @media (max-width: 900px) {
@@ -111,6 +152,9 @@ $this->title = '';
 
 
         }
+        .DailyTransaction {
+        height:auto;
+        }
 
         .header {
             font-size: 1rem;
@@ -120,8 +164,19 @@ $this->title = '';
             height: 2rem;
             margin-bottom: 1rem;
         }
+            
+        /* graph responsiveness */
+        @media (max-width: 900px) {
+            .chart-container {
+                flex-basis: 100%;
+                max-width: 100%;
+                width: 100%;
+                display: block; /* Change to block to stack vertically */
+            }
+        }
     }
 </style>
+
 <?=
 $m = "";
 // metrology transaction
@@ -194,7 +249,359 @@ if ($TandSdailytransincrease > 1) {
         </div>
     </div>
 
-</div>
+</div> <br>
+
+<?php
+//transactions data
+$SalesperDiv = [
+    'labels' => ['06/10/2023', '06/11/2023', '06/12/2023', '06/13/2023', '06/14/2023', '06/15/2023','06/16/2023'],
+    'datasets' => [
+        [
+            'label' => 'NMD',
+            'data' => [500000, 80000, 270000, 100000, 410000, 120000, 200000],
+        ],
+        [
+            'label' => 'STD',
+            'data' => [200000, 80000, 400000, 500000, 120000, 230000, 300000],
+         
+        ],
+        [
+            'label' => 'TSD',
+            'data' => [450000, 80000, 350000, 120000, 410000, 120000, 280000],
+            
+        ],
+    ],
+];
+$TransactionperDiv = [
+    'labels' => ['06/10/2023', '06/11/2023', '06/12/2023', '06/13/2023', '06/14/2023', '06/15/2023','06/16/2023'],
+    'datasets' => [
+        [
+            'label' => 'NMD',
+            'data' => [5, 1, 2, 4, 3, 2, 3],
+           
+            
+        ],
+        [
+            'label' => 'STD',
+            'data' => [1, 1, 3, 4, 2, 2, 2],
+         
+        ],
+        [
+            'label' => 'TSD',
+            'data' => [5, 1, 3, 1, 3, 1, 3],
+           
+        ],
+    ],
+];
+
+?>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.1"></script>
+<div class="graph">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+    <div class="chart-container">
+        <p id="reportTitle"> Physical Report of Operation</p>
+        <canvas id="combinedChart"></canvas>
+    </div>
+
+    <div class="chart-container">
+        <p id="reportTitle"> Transaction Per Division</p>
+        <canvas id="transactionChart"></canvas>
+    </div>
+
+    <!-- <div class="chart-container">
+        <p id="reportTitle"> Sales per Division</p>
+        <canvas id="horizontalChart"></canvas>
+    </div> -->
+
+
+    <div class="chart-container">
+        <p id="reportTitle"> Sales per Division</p>
+        <canvas id="salesChart"></canvas>
+    </div>
+    
+    <!-- <div class="chart-container" >
+        <p id="reportTitle"> Total transaction</p>
+        <canvas id="barChart"></canvas>
+    </div> -->
+
+    <div class="chart-container" >
+        <p id="reportTitle"> Average Sales per Day </p>
+        <canvas id="semiCircleChart"></canvas>
+    </div>
+
+
+
+    <script>
+        // Reference datas
+        const TransactionperDiv = <?php echo json_encode($TransactionperDiv); ?>;
+        const SalesperDiv = <?php echo json_encode($SalesperDiv); ?>; 
+
+        // getting the sum of the transactions per day (from the data of $TransactionperDiv)
+        const sumTransaction = TransactionperDiv.labels.map((label, index) => {
+            let sum = 0;
+            TransactionperDiv.datasets.forEach(dataset => {
+                sum += dataset.data[index];
+            });
+            return sum;
+        });
+
+        // Create a new data set named sumTransactionDataset from what we got from sumTransaction
+        const sumTransactionDataset = {
+            label: 'Total Transaction',
+            data: sumTransaction,
+           
+        };
+
+        // creating bar graph for the sumTransactionDataset
+        // const barCtx = document.getElementById('barChart').getContext('2d');
+
+        // const barChart = new Chart(barCtx, {
+        //     type: 'bar',
+        //     data: {
+        //         labels: TransactionperDiv.labels,
+        //         datasets: [sumTransactionDataset],
+        //     },
+        //     options: {
+        //         responsive: true,
+        //         maintainAspectRatio: false,
+        //         scales: {
+        //             y: {
+        //                 beginAtZero: true
+        //             }
+        //         }
+        //     }
+        // });
+
+         // getting the sum of the sales per day (from the data of $SalesperDiv)
+        const sumSalesData = SalesperDiv.labels.map((label, index) => {
+            let sum = 0;
+            SalesperDiv.datasets.forEach(dataset => {
+                sum += dataset.data[index];
+            });
+            return sum;
+        });
+
+        // Create a new data set named sumSalesDataset from what we got from sumSalesData
+        const sumSalesDataset = {
+            label: 'Total Sales',
+            data: sumSalesData,
+        };
+
+        //Creating a combined data using the sumTransactionDataset and sumSalesDataset (to be used/call in creating combined chart)
+        const combinedData = {
+            labels: TransactionperDiv.labels,
+            datasets: [
+                {
+                    ...sumSalesDataset,
+                    type: 'line', // Use line type
+                    backgroundColor: 'black',
+                    borderColor: '#e75480',
+                    yAxisID: 'lineY', // Assign the line chart to a specific y-axis
+                    cubicInterpolationMode: 'monotone'
+                    
+    
+                },
+                {
+                    ...sumTransactionDataset,
+                    borderColor: 'black',
+                    backgroundColor: '#87CEEB',
+                    type: 'bar',
+                    borderWidth: 1,
+                    yAxisID: 'y-axis-bar', // Assign the line chart to a specific y-axis
+                    
+                },
+            ]
+        };
+
+         // Createing combined chart
+         const combinedCtx = document.getElementById('combinedChart').getContext('2d');
+
+        const combinedChart = new Chart(combinedCtx, {
+         type: 'line', // Start as bar chart
+         data: combinedData,
+            options: {
+            maintainAspectRatio: false,
+                scales: {
+                     y: 
+                        {
+                      beginAtZero: true,
+                      ticks: {
+                        stepSize: 1
+                    },
+                    grid: {
+                        display: false
+                    }   
+                         },
+                     'y-axis-bar':
+                        {
+                       position: 'right', // Show the primary y-axis on the left side (sumTransactionDataset)
+                        },
+                     'lineY':
+                        {
+                        position: 'left', // Show the secondary y-axis on the right side (sumSalesDataset)
+                        beginAtZero: true,
+                    ticks: {
+                        stepSize: 1 // Customize the step size as needed
+                    },
+                    grid: {
+                        display: false
+                    }
+                        },
+                        },
+                 plugins: {
+                      legend:
+                        {
+                         position: 'top',
+                        },
+        },
+        responsive: true,
+            layout: {
+                padding: {
+                    left: 15,
+                    right: 15,
+                    top: 15,
+                    bottom: 15
+                }
+            },
+    },
+});
+
+      
+
+        // Creating bar graphs
+        const transactionCtx = document.getElementById('transactionChart').getContext('2d');
+        const salesCtx = document.getElementById('salesChart').getContext('2d');
+
+        const transactionChart = new Chart(transactionCtx, {
+            type: 'bar',
+            data: TransactionperDiv,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        //creating line graph
+        const salesChart = new Chart(salesCtx, {
+            type: 'line',
+            data: SalesperDiv,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        
+     
+                    },
+                    
+                },
+                elements: {
+            line: {
+                borderColor: ['blue','#e75480','green'], // Change the color of the lines
+                borderWidth: 2, // Adjust the width of the lines
+            },
+            point: {
+                backgroundColor: 'red', // Change the color of the dots
+                borderColor: 'red', // Change the border color of the dots
+                borderWidth: 1, // Adjust the width of the border of the dots
+                radius: 4, // Adjust the size of the dots
+                hoverRadius: 6, // Adjust the size of the dots on hover
+            },
+        },
+               
+                
+            }
+        });
+
+        // Function to calculate the average of an array of numbers
+        const calculateAverage = (array) => {
+            if (array.length === 0) return 0;
+            const sum = array.reduce((total, num) => total + num, 0);
+            return Math.round(sum / array.length);
+        };
+
+        // Calculate the average of each dataset
+        const salesAverage = SalesperDiv.datasets.map(dataset => ({
+          label: dataset.label,
+         average: calculateAverage(dataset.data),
+        }));
+
+        // //data set
+        // const salesAverageDataset = {
+        //  labels: salesAverage.map(data => data.label),
+        //  datasets: [{
+        //   data: salesAverage.map(data => data.average),
+        //  backgroundColor: ['blue', 'green', 'pink'], // Add colors for each dataset
+        //      label: 'Average Sales'
+        //     }]
+        //     };
+
+//             const salesAverage = [
+//   { label: 'NMD', average: 5 },
+//   { label: 'STD', average: 4 },
+//   { label: 'TSD', average: 3 },
+// ];
+
+const semiCircleCtx = document.getElementById('semiCircleChart').getContext('2d');
+
+const semiCircleChart = new Chart(semiCircleCtx, {
+  type: 'doughnut',
+  data: {
+    labels: salesAverage.map(data => data.label),
+    datasets: [{
+      data: salesAverage.map(data => data.average),
+      backgroundColor: ['blue', 'green', 'pink'],
+      borderWidth: 1,
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    cutout: '70%', // Adjust this value to control the size of the "doughnut hole" (semi-circle)
+    plugins: {
+      legend: {
+        display: true,
+        position: 'bottom', // Adjust legend position as needed
+      },
+      datalabels: {
+        color: 'white', // Set the color of data labels (values) inside each segment
+        font: {
+          size: 14, // Adjust the font size of data labels as needed
+        }
+      }
+    }
+  }
+});  
+
+        //creating horizontal bar graph (kaso ayaw lumabas HAHAHAHAH)
+        // const horizontalCtx = document.getElementById('horizontalChart').getContext('2d');
+
+        // const horizontalChart = new Chart(horizontalCtx, {
+        //     type: 'bar',
+        //     data: TotalTransaction,
+        //     options: {
+        //         responsive: true,
+        //         maintainAspectRatio: false,
+        //         scales: {
+        //             y: {
+        //                 beginAtZero: true
+        //             }
+        //         }
+        //     }
+        // });
+
+
+    </script>
+
 
 
 
