@@ -17,6 +17,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= $form->field($model, 'email')->textInput() ?>
 
+    <?= $form->field($model, 'newPassword')->passwordInput()->hint('Leave it blank if you do not want to change your password.') ?>
+
     <div class="form-group">
         <?= Html::submitButton('Update', ['class' => 'btn btn-primary']) ?>
     </div>

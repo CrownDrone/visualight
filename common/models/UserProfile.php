@@ -9,6 +9,8 @@ class UserProfile extends ActiveRecord
 {
     public $existingUsername;
     public $existingEmail;
+    public $newPassword; // Add the new password attribute
+
 
 
 
@@ -26,6 +28,11 @@ class UserProfile extends ActiveRecord
             ['username', 'unique', 'targetClass' => User::class, 'message' => 'This username has already been taken.', 'filter' => function ($query) {
                 $query->andWhere(['not', ['id' => Yii::$app->user->id]])->andWhere(['not', ['username' => $this->username]]);
             }],
+
+            // New rule for the new password field
+            ['newPassword', 'string', 'min' => 6], // Adjust the validation rule as needed
+
+            [['username', 'email'], 'required', 'on' => self::SCENARIO_UPDATE],
 
         ];
     }
