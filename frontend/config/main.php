@@ -55,6 +55,8 @@ return [
             'showScriptName' => false,
             'rules' => [
                 'create-predefined-user' => 'user/create-predefined-user',
+                 'profile' => 'user-profile/view',
+                'profile/update' => 'user-profile/update',
             ],
         ],
         'authManager' => [
