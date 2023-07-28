@@ -3,6 +3,7 @@
 use common\models\UserProfile;
 use mdm\admin\components\Helper;
 use yii\bootstrap5\Html;
+use yii\helpers\Url;
 
 $userName = Yii::$app->user->identity->username;
 $userRole = Yii::$app->authManager->getRolesByUser(Yii::$app->user->id);
@@ -11,8 +12,8 @@ $userRole = Yii::$app->authManager->getRolesByUser(Yii::$app->user->id);
 $userRoleName = isset($userRole) && !empty($userRole) ? reset($userRole)->name : 'Guest';
 $userName = ucfirst($userName); // Convert the first letter to uppercase.
 
-$userId = Yii::$app->user->id;
-$model = UserProfile::findOne(['id' => $userId]);
+$this->params['model'] = UserProfile::findOne(Yii::$app->user->id);
+
 
 
 ?>
@@ -30,22 +31,26 @@ $model = UserProfile::findOne(['id' => $userId]);
     <div class="sidebar">
         <!-- Sidebar user panel (optional) -->
         <div class="user-panel mt-3 pb-0 mb-0 d-flex" style="margin-left: -3px;">
-        <div class="image" style="padding-left: 10px;">
-        <?php if ($model && $model->profile_picture): ?>
-                    <?= Html::img(['/uploads/' . $model->profile_picture], ['class' => 'img-circle elevation-2', 'style' => 'height: 50px; width: 50px;']) ?>
-                <?php else: ?>
-                    <?= Html::img([$assetDir . '/img/user2-160x160.jpg'], ['class' => 'img-circle elevation-2', 'style' => 'height: 50px; width: 50px;']) ?>
-                <?php endif; ?>    
-        </div>
-        <div class="info d-flex flex-column justify-content-between ml-2">
-            <div>
-                <a href="/profile" class="d-block"> <?= Html::encode($userName) ?> </a>
+            <div class="image" style="padding-left: 10px;">
+                <!-- Show the user's profile picture -->
+                <?php
+                if (isset($this->params['model']) && $this->params['model'] && $this->params['model']->profile_picture) {
+                    $profilePicturePath = Url::to(['user-profile/get-profile-picture', 'fileName' => $this->params['model']->profile_picture]);
+                    echo Html::img($profilePicturePath, ['class' => 'img-circle elevation-2', 'style' => 'height: 50px; width: 50px;']);
+                } else {
+                    echo Html::img('@web/images/default-profile-picture.png', ['class' => 'img-circle elevation-2', 'style' => 'height: 50px; width: 50px;']);
+                }
+                ?>
             </div>
-            <div>
-                <p style="color: #F8B200; font-size: 14px;"> <?= Html::encode($userRoleName) ?> </p> <!-- Display the user's role with yellow text color -->
-            </div> 
-        </div> 
-    </div>
+            <div class="info d-flex flex-column justify-content-between ml-2">
+                <div>
+                    <a href="/profile" class="d-block"> <?= Html::encode($userName) ?> </a>
+                </div>
+                <div>
+                    <p style="color: #F8B200; font-size: 14px;"> <?= Html::encode($userRoleName) ?> </p> <!-- Display the user's role with yellow text color -->
+                </div>
+            </div>
+        </div>
 
         <!-- SidebarSearch Form -->
         <!-- href be escaped -->

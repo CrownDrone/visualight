@@ -60,10 +60,8 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-                'profile' => 'userprofile/profile/view',
-                'profile/update' => 'userprofile/profile/update',
-                'settings' => 'userprofile/settings/view',
-                'settings/update' => 'userprofile/settings/update',
+                'profile' => 'user-profile/view',
+                'profile/update' => 'user-profile/update',
             ],
         ],
         'authManager' => [

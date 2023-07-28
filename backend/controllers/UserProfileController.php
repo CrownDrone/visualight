@@ -1,6 +1,5 @@
 <?php
-// frontend/controllers/UserProfileController.php
-namespace frontend\controllers;
+namespace backend\controllers;
 
 use Yii;
 use yii\base\Security;
