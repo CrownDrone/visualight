@@ -14,6 +14,9 @@ class UserProfile extends ActiveRecord
 
     public $existingPassword;
 
+    public $imageFile; // Add this property to hold the uploaded image file
+
+
 
     const SCENARIO_UPDATE = 'update';
 
@@ -36,6 +39,9 @@ class UserProfile extends ActiveRecord
             [['username', 'email'], 'required', 'on' => self::SCENARIO_UPDATE],
 
             ['existingPassword', 'validateExistingPassword', 'on' => self::SCENARIO_UPDATE],
+
+            [['imageFile'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg, jpeg, gif'],
+
 
         ];
     }
