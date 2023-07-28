@@ -1,5 +1,6 @@
 <?php
 
+use common\models\UserProfile;
 use mdm\admin\components\Helper;
 use yii\bootstrap5\Html;
 
@@ -10,6 +11,8 @@ $userRole = Yii::$app->authManager->getRolesByUser(Yii::$app->user->id);
 $userRoleName = isset($userRole) && !empty($userRole) ? reset($userRole)->name : 'Guest';
 $userName = ucfirst($userName); // Convert the first letter to uppercase.
 
+$userId = Yii::$app->user->id;
+$model = UserProfile::findOne(['id' => $userId]);
 
 
 ?>
@@ -28,7 +31,11 @@ $userName = ucfirst($userName); // Convert the first letter to uppercase.
         <!-- Sidebar user panel (optional) -->
         <div class="user-panel mt-3 pb-0 mb-0 d-flex" style="margin-left: -3px;">
         <div class="image" style="padding-left: 10px;">
-            <img src="<?=$assetDir?>/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image" style="height: 50px; width: 50px;">
+        <?php if ($model && $model->profile_picture): ?>
+                    <?= Html::img(['/uploads/' . $model->profile_picture], ['class' => 'img-circle elevation-2', 'style' => 'height: 50px; width: 50px;']) ?>
+                <?php else: ?>
+                    <?= Html::img([$assetDir . '/img/user2-160x160.jpg'], ['class' => 'img-circle elevation-2', 'style' => 'height: 50px; width: 50px;']) ?>
+                <?php endif; ?>    
         </div>
         <div class="info d-flex flex-column justify-content-between ml-2">
             <div>
