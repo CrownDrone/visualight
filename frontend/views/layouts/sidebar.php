@@ -27,18 +27,18 @@ $userName = ucfirst($userName); // Convert the first letter to uppercase.
     <div class="sidebar">
         <!-- Sidebar user panel (optional) -->
         <div class="user-panel mt-3 pb-0 mb-0 d-flex" style="margin-left: -3px;">
-            <div class="image" style="padding-left: 10px;">
-                <img src="<?= $assetDir ?>/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image" style="height: 50px; width: 50px;">
-            </div>
-            <div class="info d-flex flex-column justify-content-between ml-2">
-                <div>
-                    <a href="#" class="d-block"> <?= Html::encode($userName) ?> </a>
-                </div>
-                <div>
-                    <p style="color: #F8B200; font-size: 14px;"> <?= Html::encode($userRoleName) ?> </p> <!-- Display the user's role with yellow text color -->
-                </div>
-            </div>
+        <div class="image" style="padding-left: 10px;">
+            <img src="<?=$assetDir?>/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image" style="height: 50px; width: 50px;">
         </div>
+        <div class="info d-flex flex-column justify-content-between ml-2">
+            <div>
+                <a href="/profile" class="d-block"> <?= Html::encode($userName) ?> </a>
+            </div>
+            <div>
+                <p style="color: #F8B200; font-size: 14px;"> <?= Html::encode($userRoleName) ?> </p> <!-- Display the user's role with yellow text color -->
+            </div> 
+        </div> 
+    </div>
 
         <!-- SidebarSearch Form -->
         <!-- href be escaped -->
