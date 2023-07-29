@@ -28,6 +28,19 @@ $defaultImagePath = Yii::getAlias('@web') . '/assets/24427cba/img/user2-160x160.
             <td><?= Html::encode($user->email) ?></td>
         </tr>
         <tr>
+            <th>Role:</th>
+            <td>
+            <?php
+                $roles = Yii::$app->authManager->getRolesByUser($user->id);
+                $roleNames = [];
+                foreach ($roles as $role) {
+                    $roleNames[] = $role->name;
+                }
+                echo Html::encode(empty($roleNames) ? 'GUEST' : implode(', ', $roleNames));
+                ?>
+         </td>
+        </tr>
+        <tr>
             <th>Contact Number:</th>
             <td><?= Html::encode($user->contactNumber) ?></td>
         </tr>
@@ -39,10 +52,10 @@ $defaultImagePath = Yii::getAlias('@web') . '/assets/24427cba/img/user2-160x160.
             <th>Profile Picture:</th>
             <td>
                 <?php if ($user->profile_picture): ?>
-                    <?= Html::img(Url::to(['user-profile/get-profile-picture', 'fileName' => $user->profile_picture]), ['class' => 'img-thumbnail', 'style' => 'max-width: 200px']) ?>
+                    <?= Html::img(Url::to(['user-profile/get-profile-picture', 'fileName' => $user->profile_picture]), ['class' => 'img-circle elevation-2', 'style' => 'height: 200px; width: 200px']) ?>
                 <?php else: ?>
                     <!-- Display the custom default profile picture if no image is available -->
-                    <?= Html::img($defaultImagePath, ['class' => 'img-thumbnail', 'style' => 'max-width: 200px']) ?>
+                    <?= Html::img($defaultImagePath, ['class' => 'img-circle elevation-2', 'style' => 'height: 200px; width: 200px']) ?>
                 <?php endif; ?>
             </td>
         </tr>

@@ -6,6 +6,8 @@ use yii\widgets\ActiveForm;
 
 $this->registerCssFile(Url::to(['/css/custom.css']));
 
+
+
 $this->title = 'Update Profile';
 $this->params['breadcrumbs'][] = ['label' => 'User Profile', 'url' => ['view']];
 $this->params['breadcrumbs'][] = $this->title;
@@ -29,13 +31,15 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= $form->field($model, 'imageFile')->fileInput(['accept' => 'image/*']) // Add the image file input field ?>
 
     <!-- Show the current image preview -->
-    <?php if ($model->profile_picture): ?>
+    <?php if ($model->profile_picture):?>
         <h3>Current Profile Picture:</h3>
-        <?= Html::img(['/uploads/' . $model->profile_picture], ['class' => 'img-thumbnail', 'style' => 'max-width: 900px; max-height: 900px, margin-bottom: 10px', 'id' => 'current-image']) ?>
+        <?php   
+        $profilePicturePath = Url::to(['/user-profile/get-profile-picture', 'fileName' => $model->profile_picture]);
+        echo Html::img($profilePicturePath, ['class' => 'img-circle elevation-2', 'style' => 'height: 300px; width: 300px;', 'id' => 'current-image']); ?>
     <?php endif; ?>
     <br>
     <!-- Add an empty image tag for real-time preview -->
-    <img id="image-preview" src="#" alt="Image Preview" class="img-thumbnail" style="max-width: 900px; max-height: 900px; display: none; margin-bottom: 10px">
+    <img id="image-preview" src="#" alt="Image Preview" class="img-circle elevation-2" style="height: 300px; width: 300px; display: none; margin-bottom: 10px">
 
 
     <div class="form-group">
