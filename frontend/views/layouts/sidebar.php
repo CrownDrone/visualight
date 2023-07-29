@@ -38,7 +38,7 @@ $defaultImagePath = Yii::getAlias('@web') . '/assets/5c76938a/img/user2-160x160.
                 <!-- Show the user's profile picture -->
                 <?php
                 if ($model && $model->profile_picture) {
-                    $profilePicturePath = Url::to(['user-profile/get-profile-picture', 'fileName' => $model->profile_picture]);
+                    $profilePicturePath = Url::to(['/user-profile/get-profile-picture', 'fileName' => $model->profile_picture]);
                     echo Html::img($profilePicturePath, ['class' => 'img-circle elevation-2', 'style' => 'height: 50px; width: 50px;']);
                 } else {
                     echo Html::img($defaultImagePath, ['class' => 'img-circle elevation-2', 'style' => 'height: 50px; width: 50px;']);
