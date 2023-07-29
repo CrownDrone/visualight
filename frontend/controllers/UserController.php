@@ -2,6 +2,7 @@
 
 namespace frontend\controllers;
 
+use common\models\UserSearch;
 use Yii;
 use yii\web\Controller;
 use frontend\models\User;
@@ -28,18 +29,15 @@ class UserController extends Controller
     }
 
     public function actionIndex()
-{
-    // Your code to fetch and pass user data to the view
-    // For example:
-    $users = User::find()->all();
-
-    // Set the custom layout for this view
-    $this->layout = 'rbac';
-
-    return $this->render('index', [
-        'users' => $users,
-    ]);
-}
+    {
+        $searchModel = new UserSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+    
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
 public function actionCreate()
 {
     $model = new User(['scenario' => User::SCENARIO_CREATE]);

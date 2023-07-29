@@ -16,12 +16,24 @@ $defaultImagePath = Yii::getAlias('@web') . '/assets/24427cba/img/user2-160x160.
     </p>
     <table class="table table-bordered">
         <tr>
+            <th>Full Name:</th>
+            <td><?= Html::encode($user->fullName) ?></td>
+        </tr>
+        <tr>
             <th>Username:</th>
             <td><?= Html::encode($user->username) ?></td>
         </tr>
         <tr>
             <th>Email:</th>
             <td><?= Html::encode($user->email) ?></td>
+        </tr>
+        <tr>
+            <th>Contact Number:</th>
+            <td><?= Html::encode($user->contactNumber) ?></td>
+        </tr>
+        <tr>
+            <th>Address:</th>
+            <td><?= Html::encode($user->address) ?></td>
         </tr>
         <tr>
             <th>Profile Picture:</th>
