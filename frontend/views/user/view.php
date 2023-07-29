@@ -33,6 +33,18 @@ $this->params['breadcrumbs'][] = $this->title;
             <td><?= Html::encode($user->id) ?></td>
         </tr>
         <tr>
+            <th>Full Name</th>
+            <td><?= Html::encode($user->fullName) ?></td>
+        </tr>
+        <tr>
+            <th>Address</th>
+            <td><?= Html::encode($user->address) ?></td>
+        </tr>
+        <tr>
+            <th>Contact Number</th>
+            <td><?= Html::encode($user->contactNumber) ?></td>
+        </tr>
+        <tr>
             <th>Username</th>
             <td><?= Html::encode($user->username) ?></td>
         </tr>
