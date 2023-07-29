@@ -20,6 +20,12 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="user-create">
     <?php $form = ActiveForm::begin(); ?>
 
+    <?= $form->field($model, 'fullName')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'address')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'contactNumber')->textInput(['maxlength' => true]) ?>
+
     <?= $form->field($model, 'username')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>

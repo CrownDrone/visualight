@@ -101,7 +101,11 @@ class User extends ActiveRecord implements IdentityInterface
             // Validation rules for the update scenario
             [['existingPassword'], 'required', 'on' => self::SCENARIO_UPDATE],
             ['existingPassword', 'validateExistingPassword', 'on' => self::SCENARIO_UPDATE],
+
+            [['contactNumber'], 'integer'],
+            [['contactNumber'], 'string', 'length' => [11, 11], 'on' => self::SCENARIO_CREATE],
         ];
+
     }
 
 
@@ -117,6 +121,12 @@ class User extends ActiveRecord implements IdentityInterface
         // Include 'existingPassword' field for both create and update scenarios
         $scenarios[self::SCENARIO_CREATE][] = 'existingPassword';
         $scenarios[self::SCENARIO_UPDATE][] = 'existingPassword';
+        $scenarios[self::SCENARIO_CREATE][] = 'fullName';
+        $scenarios[self::SCENARIO_CREATE][] = 'address';
+        $scenarios[self::SCENARIO_CREATE][] = 'contactNumber';
+        $scenarios[self::SCENARIO_UPDATE][] = 'fullName';
+        $scenarios[self::SCENARIO_UPDATE][] = 'address';
+        $scenarios[self::SCENARIO_UPDATE][] = 'contactNumber';
 
         return $scenarios;
     }
