@@ -17,24 +17,24 @@ $this->title = '';
 
     /* header div css (Visualight logo and the "Dashboard text") */
 
-    .header {
+    /* .header {
         color: #0362BA;
         font-family: Poppins;
         font-size: 2rem;
         font-weight: 600;
         line-height: normal;
         letter-spacing: 3px;
-        border-bottom: solid 0.2vh;
-        display: flex;
+        border-top: solid 0.5vh;
+        display: flex;   
         justify-content: space-between;
 
-    }
+    } */
 
-    .header img {
+    /* .header img {
         float: right;
         height: 3rem;
         margin-bottom: 1rem;
-    }
+    } */
 
     /* Daily transaction css */
 
@@ -75,8 +75,8 @@ $this->title = '';
     }
 
     .deptransaction:hover {
-    transform: scale(1.1);
-    cursor: pointer; 
+        transform: scale(1.1);
+        cursor: pointer;
     }
 
     #valueIncrease {
@@ -106,40 +106,40 @@ $this->title = '';
     }
 
     /* graph div */
-    .graph
-    {
+    .graph {
         width: 100%;
         text-align: center;
         display: wrap;
     }
+
     .chart-container {
-            margin: 10px;
-            padding: 3em;
-            border-radius: 15px;
-            background-color: white;
-            display: inline-block;
-            height: 40vh;
-            width:40%;
-        }
+        margin: 10px;
+        padding: 3em;
+        border-radius: 15px;
+        background-color: white;
+        display: inline-block;
+        height: 40vh;
+        width: 40%;
+    }
 
-        body.dark-mode .chart-container {
-            background-color: black;
+    body.dark-mode .chart-container {
+        background-color: black;
 
-        }
-        body.dark-mode .chart-container canvas {
-            background-color: black;
-            color: white;
-        }
+    }
 
-        #reportTitle
-        {
-            color: #0362BA;
-            font-family: Poppins;
-            font-size: .875rem;
-            font-weight: 700;
-            letter-spacing: 2.1px;
-            
-        }
+    body.dark-mode .chart-container canvas {
+        background-color: black;
+        color: white;
+    }
+
+    #reportTitle {
+        color: #0362BA;
+        font-family: Poppins;
+        font-size: .875rem;
+        font-weight: 700;
+        letter-spacing: 2.1px;
+
+    }
 
     /* responsiveness */
 
@@ -152,26 +152,28 @@ $this->title = '';
 
 
         }
+
         .DailyTransaction {
-        height:auto;
+            height: auto;
         }
 
         .header {
             font-size: 1rem;
         }
 
-        .header img {
+        /* .header img {
             height: 2rem;
             margin-bottom: 1rem;
-        }
-            
+        } */
+
         /* graph responsiveness */
         @media (max-width: 900px) {
             .chart-container {
                 flex-basis: 100%;
                 max-width: 100%;
                 width: 100%;
-                display: block; /* Change to block to stack vertically */
+                display: block;
+                /* Change to block to stack vertically */
             }
         }
     }
@@ -213,13 +215,13 @@ if ($TandSdailytransincrease > 1) {
 
 
 ?>
-
+<!-- 
 <div class="header">
-    <!-- <div class="header-grid"> -->
+    <div class="header-grid">
     <p>Dashboard</p>
     <img src="/images/LogoVL.png" alt="visLogo">
-    <!-- </div> -->
-</div> <br>
+    </div>
+</div> <br> -->
 
 <div class="DailyTransaction">
     <p>Total Transactions Daily</p>
@@ -254,7 +256,7 @@ if ($TandSdailytransincrease > 1) {
 <?php
 //transactions data
 $SalesperDiv = [
-    'labels' => ['06/10/2023', '06/11/2023', '06/12/2023', '06/13/2023', '06/14/2023', '06/15/2023','06/16/2023'],
+    'labels' => ['06/10/2023', '06/11/2023', '06/12/2023', '06/13/2023', '06/14/2023', '06/15/2023', '06/16/2023'],
     'datasets' => [
         [
             'label' => 'NMD',
@@ -263,33 +265,33 @@ $SalesperDiv = [
         [
             'label' => 'STD',
             'data' => [200000, 80000, 400000, 500000, 120000, 230000, 300000],
-         
+
         ],
         [
             'label' => 'TSD',
             'data' => [450000, 80000, 350000, 120000, 410000, 120000, 280000],
-            
+
         ],
     ],
 ];
 $TransactionperDiv = [
-    'labels' => ['06/10/2023', '06/11/2023', '06/12/2023', '06/13/2023', '06/14/2023', '06/15/2023','06/16/2023'],
+    'labels' => ['06/10/2023', '06/11/2023', '06/12/2023', '06/13/2023', '06/14/2023', '06/15/2023', '06/16/2023'],
     'datasets' => [
         [
             'label' => 'NMD',
             'data' => [5, 1, 2, 4, 3, 2, 3],
-           
-            
+
+
         ],
         [
             'label' => 'STD',
             'data' => [1, 1, 3, 4, 2, 2, 2],
-         
+
         ],
         [
             'label' => 'TSD',
             'data' => [5, 1, 3, 1, 3, 1, 3],
-           
+
         ],
     ],
 ];
@@ -298,7 +300,7 @@ $TransactionperDiv = [
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.1"></script>
 <div class="graph">
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 
     <div class="chart-container">
@@ -321,13 +323,13 @@ $TransactionperDiv = [
         <p id="reportTitle"> Sales per Division</p>
         <canvas id="salesChart"></canvas>
     </div>
-    
+
     <!-- <div class="chart-container" >
         <p id="reportTitle"> Total transaction</p>
         <canvas id="barChart"></canvas>
     </div> -->
 
-    <div class="chart-container" >
+    <div class="chart-container">
         <p id="reportTitle"> Average Sales per Day </p>
         <canvas id="semiCircleChart"></canvas>
     </div>
@@ -337,7 +339,7 @@ $TransactionperDiv = [
     <script>
         // Reference datas
         const TransactionperDiv = <?php echo json_encode($TransactionperDiv); ?>;
-        const SalesperDiv = <?php echo json_encode($SalesperDiv); ?>; 
+        const SalesperDiv = <?php echo json_encode($SalesperDiv); ?>;
 
         // getting the sum of the transactions per day (from the data of $TransactionperDiv)
         const sumTransaction = TransactionperDiv.labels.map((label, index) => {
@@ -352,7 +354,7 @@ $TransactionperDiv = [
         const sumTransactionDataset = {
             label: 'Total Transaction',
             data: sumTransaction,
-           
+
         };
 
         // creating bar graph for the sumTransactionDataset
@@ -375,7 +377,7 @@ $TransactionperDiv = [
         //     }
         // });
 
-         // getting the sum of the sales per day (from the data of $SalesperDiv)
+        // getting the sum of the sales per day (from the data of $SalesperDiv)
         const sumSalesData = SalesperDiv.labels.map((label, index) => {
             let sum = 0;
             SalesperDiv.datasets.forEach(dataset => {
@@ -393,16 +395,15 @@ $TransactionperDiv = [
         //Creating a combined data using the sumTransactionDataset and sumSalesDataset (to be used/call in creating combined chart)
         const combinedData = {
             labels: TransactionperDiv.labels,
-            datasets: [
-                {
+            datasets: [{
                     ...sumSalesDataset,
                     type: 'line', // Use line type
                     backgroundColor: 'black',
                     borderColor: '#e75480',
                     yAxisID: 'lineY', // Assign the line chart to a specific y-axis
                     cubicInterpolationMode: 'monotone'
-                    
-    
+
+
                 },
                 {
                     ...sumTransactionDataset,
@@ -411,65 +412,61 @@ $TransactionperDiv = [
                     type: 'bar',
                     borderWidth: 1,
                     yAxisID: 'y-axis-bar', // Assign the line chart to a specific y-axis
-                    
+
                 },
             ]
         };
 
-         // Createing combined chart
-         const combinedCtx = document.getElementById('combinedChart').getContext('2d');
+        // Createing combined chart
+        const combinedCtx = document.getElementById('combinedChart').getContext('2d');
 
         const combinedChart = new Chart(combinedCtx, {
-         type: 'line', // Start as bar chart
-         data: combinedData,
+            type: 'line', // Start as bar chart
+            data: combinedData,
             options: {
-            maintainAspectRatio: false,
+                maintainAspectRatio: false,
                 scales: {
-                     y: 
-                        {
-                      beginAtZero: true,
-                      ticks: {
-                        stepSize: 1
-                    },
-                    grid: {
-                        display: false
-                    }   
-                         },
-                     'y-axis-bar':
-                        {
-                       position: 'right', // Show the primary y-axis on the left side (sumTransactionDataset)
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
                         },
-                     'lineY':
-                        {
+                        grid: {
+                            display: false
+                        }
+                    },
+                    'y-axis-bar': {
+                        position: 'right', // Show the primary y-axis on the left side (sumTransactionDataset)
+                    },
+                    'lineY': {
                         position: 'left', // Show the secondary y-axis on the right side (sumSalesDataset)
                         beginAtZero: true,
-                    ticks: {
-                        stepSize: 1 // Customize the step size as needed
+                        ticks: {
+                            stepSize: 1 // Customize the step size as needed
+                        },
+                        grid: {
+                            display: false
+                        }
                     },
-                    grid: {
-                        display: false
+                },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                },
+                responsive: true,
+                layout: {
+                    padding: {
+                        left: 15,
+                        right: 15,
+                        top: 15,
+                        bottom: 15
                     }
-                        },
-                        },
-                 plugins: {
-                      legend:
-                        {
-                         position: 'top',
-                        },
-        },
-        responsive: true,
-            layout: {
-                padding: {
-                    left: 15,
-                    right: 15,
-                    top: 15,
-                    bottom: 15
-                }
+                },
             },
-    },
-});
+        });
 
-      
+
 
         // Creating bar graphs
         const transactionCtx = document.getElementById('transactionChart').getContext('2d');
@@ -499,26 +496,26 @@ $TransactionperDiv = [
                 scales: {
                     y: {
                         beginAtZero: true,
-                        
-     
+
+
                     },
-                    
+
                 },
                 elements: {
-            line: {
-                borderColor: ['blue','#e75480','green'], // Change the color of the lines
-                borderWidth: 2, // Adjust the width of the lines
-            },
-            point: {
-                backgroundColor: 'red', // Change the color of the dots
-                borderColor: 'red', // Change the border color of the dots
-                borderWidth: 1, // Adjust the width of the border of the dots
-                radius: 4, // Adjust the size of the dots
-                hoverRadius: 6, // Adjust the size of the dots on hover
-            },
-        },
-               
-                
+                    line: {
+                        borderColor: ['blue', '#e75480', 'green'], // Change the color of the lines
+                        borderWidth: 2, // Adjust the width of the lines
+                    },
+                    point: {
+                        backgroundColor: 'red', // Change the color of the dots
+                        borderColor: 'red', // Change the border color of the dots
+                        borderWidth: 1, // Adjust the width of the border of the dots
+                        radius: 4, // Adjust the size of the dots
+                        hoverRadius: 6, // Adjust the size of the dots on hover
+                    },
+                },
+
+
             }
         });
 
@@ -531,8 +528,8 @@ $TransactionperDiv = [
 
         // Calculate the average of each dataset
         const salesAverage = SalesperDiv.datasets.map(dataset => ({
-          label: dataset.label,
-         average: calculateAverage(dataset.data),
+            label: dataset.label,
+            average: calculateAverage(dataset.data),
         }));
 
         // //data set
@@ -545,42 +542,42 @@ $TransactionperDiv = [
         //     }]
         //     };
 
-//             const salesAverage = [
-//   { label: 'NMD', average: 5 },
-//   { label: 'STD', average: 4 },
-//   { label: 'TSD', average: 3 },
-// ];
+        //             const salesAverage = [
+        //   { label: 'NMD', average: 5 },
+        //   { label: 'STD', average: 4 },
+        //   { label: 'TSD', average: 3 },
+        // ];
 
-const semiCircleCtx = document.getElementById('semiCircleChart').getContext('2d');
+        const semiCircleCtx = document.getElementById('semiCircleChart').getContext('2d');
 
-const semiCircleChart = new Chart(semiCircleCtx, {
-  type: 'doughnut',
-  data: {
-    labels: salesAverage.map(data => data.label),
-    datasets: [{
-      data: salesAverage.map(data => data.average),
-      backgroundColor: ['blue', 'green', 'pink'],
-      borderWidth: 1,
-    }]
-  },
-  options: {
-    responsive: true,
-    maintainAspectRatio: false,
-    cutout: '70%', // Adjust this value to control the size of the "doughnut hole" (semi-circle)
-    plugins: {
-      legend: {
-        display: true,
-        position: 'bottom', // Adjust legend position as needed
-      },
-      datalabels: {
-        color: 'white', // Set the color of data labels (values) inside each segment
-        font: {
-          size: 14, // Adjust the font size of data labels as needed
-        }
-      }
-    }
-  }
-});  
+        const semiCircleChart = new Chart(semiCircleCtx, {
+            type: 'doughnut',
+            data: {
+                labels: salesAverage.map(data => data.label),
+                datasets: [{
+                    data: salesAverage.map(data => data.average),
+                    backgroundColor: ['blue', 'green', 'pink'],
+                    borderWidth: 1,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '70%', // Adjust this value to control the size of the "doughnut hole" (semi-circle)
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'bottom', // Adjust legend position as needed
+                    },
+                    datalabels: {
+                        color: 'white', // Set the color of data labels (values) inside each segment
+                        font: {
+                            size: 14, // Adjust the font size of data labels as needed
+                        }
+                    }
+                }
+            }
+        });
 
         //creating horizontal bar graph (kaso ayaw lumabas HAHAHAHAH)
         // const horizontalCtx = document.getElementById('horizontalChart').getContext('2d');
@@ -598,8 +595,6 @@ const semiCircleChart = new Chart(semiCircleCtx, {
         //         }
         //     }
         // });
-
-
     </script>
 
 
@@ -607,7 +602,7 @@ const semiCircleChart = new Chart(semiCircleCtx, {
 
 
 
-<!-- <div class="container-fluid">
+    <!-- <div class="container-fluid">
     <div class="row">
         <div class="col-lg-6">
             <?= \hail812\adminlte\widgets\Alert::widget([

@@ -1,11 +1,13 @@
-<?php 
+<?php
+
 use mdm\admin\components\Helper;
 use yii\bootstrap5\Html;
 use yii\helpers\Url;
 
+
 $userName = Yii::$app->user->isGuest ? 'Guest' : ucfirst(Yii::$app->user->identity->username);
 $userRole = Yii::$app->authManager->getRolesByUser(Yii::$app->user->id);
- 
+
 // Assuming a user can have only one role (modify this part as needed).
 $userRoleName = isset($userRole) && !empty($userRole) ? reset($userRole)->name : 'Guest';
 $userName = ucfirst($userName); // Convert the first letter to uppercase.
@@ -19,13 +21,13 @@ $defaultImagePath = Yii::getAlias('@web') . '/images/user2.jpg';
 
 ?>
 
-
-<aside class="main-sidebar sidebar-dark-primary elevation-4" style="background-color: #2A2C2F;">
+<!-- <nav style="position: fixed; top: 0; height: 100%;"> -->
+<aside class="fixed-top main-sidebar sidebar-dark-primary elevation-4" style="background-color: #2A2C2F;">
     <!-- Brand Logo -->
     <div class="brand-link">
         <img src="/images/logo2.png" alt="Logo" class="brand-image" style="opacity: .8">
         <span class="brand-text font-weight-light">DOST-ITDI</span>
-</div>
+    </div>
 
     <!-- Sidebar -->
     <div class="sidebar">
@@ -70,16 +72,17 @@ $defaultImagePath = Yii::getAlias('@web') . '/images/user2.jpg';
             <?php
             echo hail812\adminlte\widgets\Menu::widget([
                 'items' => [
-                
-                    ['label' => 'Yii2 PROVIDED', 'header' => true,'visible' => Helper::checkRoute('/admin/index'),],
-                    ['label' => 'Login', 'url' => ['site/login'], 'icon' => 'sign-in-alt', 'visible' => Yii::$app->user->isGuest],
-                    ['label' => 'Gii',  'icon' => 'file-code', 'url' => ['/gii'], 'target' => '_blank', 'visible' => Helper::checkRoute('/admin/index'),'visible' => Helper::checkRoute('/admin/index'),],
-                    ['label' => 'Debug', 'icon' => 'bug', 'url' => ['/debug'], 'target' => '_blank','visible' => Helper::checkRoute('/admin/index'),],
-                    ['label' => 'RBAC', 'header' => true,'visible' => Helper::checkRoute('/admin/index'),],
-                      [
+
+                    ['label' => 'Yii2 PROVIDED', 'header' => true, 'visible' => Helper::checkRoute('/admin/index'),],
+                    ['label' => 'logout', 'url' => ['site/logout'], 'icon' => 'sign-in-alt', 'visible' => Yii::$app->user->isGuest],
+                    ['label' => 'Gii',  'icon' => 'file-code', 'url' => ['/gii'], 'target' => '_blank', 'visible' => Helper::checkRoute('/admin/index'), 'visible' => Helper::checkRoute('/admin/index'),],
+                    ['label' => 'Debug', 'icon' => 'bug', 'url' => ['/debug'], 'target' => '_blank', 'visible' => Helper::checkRoute('/admin/index'),],
+                    ['label' => 'RBAC', 'header' => true, 'visible' => Helper::checkRoute('/admin/index'),],
+                    [
                         'label' => 'RBAC',
                         'url' => ['/admin/index'],
                         'icon' => 'user',
+
                         'visible' => Helper::checkRoute('/admin/index'),
                         'items' => [
                             [
@@ -87,7 +90,7 @@ $defaultImagePath = Yii::getAlias('@web') . '/images/user2.jpg';
                                 'icon' => 'star',
                                 'url' => ['/user/index'],
                                 'active' => Yii::$app->controller->route === 'user/index',
-     
+
                             ],
                             [
                                 'label' => 'Assignment',
@@ -117,14 +120,18 @@ $defaultImagePath = Yii::getAlias('@web') . '/images/user2.jpg';
                         ],
                     ],
 
-                    ['label' => 'ChartJS', 'header' => true,'visible' => Helper::checkRoute('/chart/chart/index'),],
-                    ['label' => 'Chart',  'icon' => 'star', 'url' => ['/chart/chart/index'], 'visible' => Helper::checkRoute('/chart/chart/index'),],
-                    
+                    ['label' => 'ChartJS', 'header' => true, 'visible' => Helper::checkRoute('/chart/chart/index'),],
+                    ['label' => 'Chart',  'icon' => 'fas fa-chart-bar', 'url' => ['/chart/chart/index'], 'visible' => Helper::checkRoute('/chart/chart/index'),],
+                    ['label' => 'Dashboard',  'icon' => 'fas fa-chalkboard', 'url' => ["/site/index"], 'visible' => Helper::checkRoute('site/index'), 'visible' => Helper::checkRoute('site/index'),],
                 ],
             ]);
             ?>
+
+            <?=  Html::a('<i class="fas fa-sign-out-alt"></i> Log out', ['/site/logout'], ['data-method' => 'post', 'class' => 'nav-link']) ?>
         </nav>
         <!-- /.sidebar-menu -->
     </div>
     <!-- /.sidebar -->
 </aside>
+<!-- </nav> -->
+

@@ -121,6 +121,9 @@ $defaultImagePath = Yii::getAlias('@web') . '/images/user2.jpg';
 
                     ],
 
+                    ['label' => 'Dashboard',  'icon' => 'file-code', 'url' => ["site/index"], 'visible' => Helper::checkRoute('site/index'), 'visible' => Helper::checkRoute('site/index'),]
+
+
                 ],
             ]);
             ?>
