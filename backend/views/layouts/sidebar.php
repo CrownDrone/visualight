@@ -13,7 +13,7 @@ $userName = ucfirst($userName); // Convert the first letter to uppercase.
 $userId = Yii::$app->user->id;
 $model = \common\models\UserProfile::findOne(['id' => $userId]);
 
-$defaultImagePath = Yii::getAlias('@web') . '/assets/24427cba/img/user2-160x160.jpg';
+$defaultImagePath = Yii::getAlias('@web') . '/images/user2.jpg';
 
 
 

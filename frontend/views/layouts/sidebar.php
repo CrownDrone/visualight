@@ -15,7 +15,7 @@ $userName = ucfirst($userName); // Convert the first letter to uppercase.
 $userId = Yii::$app->user->id;
 $model = \common\models\UserProfile::findOne(['id' => $userId]);
 
-$defaultImagePath = Yii::getAlias('@web') . '/assets/5c76938a/img/user2-160x160.jpg';
+$defaultImagePath = Yii::getAlias('@web') . '/images/user2.jpg';
 
 
 
@@ -40,9 +40,9 @@ $defaultImagePath = Yii::getAlias('@web') . '/assets/5c76938a/img/user2-160x160.
                 if ($model && $model->profile_picture) {
                     $profilePicturePath = Url::to(['/user-profile/get-profile-picture', 'fileName' => $model->profile_picture]);
                     echo Html::img($profilePicturePath, ['class' => 'img-circle elevation-2', 'style' => 'height: 50px; width: 50px;']);
-                } else {
-                    echo Html::img($defaultImagePath, ['class' => 'img-circle elevation-2', 'style' => 'height: 50px; width: 50px;']);
-                }
+                } else  ?>
+                    <img src="/images/user2.jpg" alt="Logo" class="img-circle elevation-2" style="height: 50px; width: 50px;">
+               <?php
                 ?>
             </div>
             <div class="info d-flex flex-column justify-content-between ml-2">
