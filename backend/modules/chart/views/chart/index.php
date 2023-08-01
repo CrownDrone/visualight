@@ -71,21 +71,43 @@ use backend\modules\chart\controllers\ChartController;
     <div class="chart-container">
         <canvas id="pieChart"></canvas>
     </div>
-    
+
     <script>
         // Get the data from the canvas element data attribute for both bar and pie charts
-        const barChartData = (<?= json_encode($barChartData)?>);//eto rekta na tawag from array to json
-        const pieChartData = (<?= json_encode($pieChartData)?>);//di ma edit pag sa html declared yung canvas/chart
+        const barChartData = (<?= json_encode($barChartData) ?>); //eto rekta na tawag from array to json
+        const pieChartData = (<?= json_encode($pieChartData) ?>); //di ma edit pag sa html declared yung canvas/chart
         //testing lang extract
         const barLabelArray = barChartData.labels;
         const barDataArray = barChartData.datasets;
+        const x = 0;
         // Prepare the bar chart 
         const barCtx = document.getElementById('barChart').getContext('2d');
         const barChart = new Chart(barCtx, {
             type: 'bar',
             data: {
                 labels: barLabelArray,
-                datasets: barDataArray//reminder, filter this thing later at DOST it causes to post labels even without the labels:barLabelArray
+                datasets: [{
+                        label: barChartData.datasets[0].label,  
+                        data: [barChartData.datasets[0].data[2020],barChartData.datasets[0].data[2021],
+                        barChartData.datasets[0].data[2022],barChartData.datasets[0].data[2023],],
+                        backgroundColor: barChartData.datasets[0].backgroundColor,
+                    },
+                    {
+                        label: barChartData.datasets[1].label,  
+                        data: [barChartData.datasets[1].data[2020],barChartData.datasets[1].data[2021],
+                        barChartData.datasets[1].data[2022],barChartData.datasets[1].data[2023],],
+                        backgroundColor: barChartData.datasets[1].backgroundColor,
+                    },{
+                        label: barChartData.datasets[2].label,  
+                        data: [barChartData.datasets[2].data[2020],barChartData.datasets[2].data[2021],
+                        barChartData.datasets[2].data[2022],barChartData.datasets[2].data[2023],],
+                        backgroundColor: barChartData.datasets[2].backgroundColor,
+                    },{
+                        label: barChartData.datasets[3].label,  
+                        data: [barChartData.datasets[3].data[2020],barChartData.datasets[3].data[2021],
+                        barChartData.datasets[3].data[2022],barChartData.datasets[3].data[2023],],
+                        backgroundColor: barChartData.datasets[3].backgroundColor,
+                    },] //reminder, filter this thing later at DOST it causes to post labels even without the labels:barLabelArray
             },
             options: {
                 maintainAspectRatio: false,
@@ -160,24 +182,21 @@ use backend\modules\chart\controllers\ChartController;
 
         function filterData() {
             //logs to see if I am not hallucinating
-            const barLabel = [...barLabelArray];//duplicate array
+            const barLabel = [...barLabelArray]; //duplicate array
             console.log(barChartData);
-            const startDate = document.getElementById('startDate');//retrieve selected year
+            const startDate = document.getElementById('startDate'); //retrieve selected year
             const endDate = document.getElementById('endDate');
 
-            const pickStartDate = barLabel.indexOf(startDate.value);//pass selected year
+            const pickStartDate = barLabel.indexOf(startDate.value); //pass selected year
             const pickEndDate = barLabel.indexOf(endDate.value);
 
-            console.log(pickStartDate);
-            console.log(pickEndDate);
             //slice array based on selected year
             const filterDate = barLabel.slice(pickStartDate, pickEndDate + 1);
-            console.log(filterDate);
             //replace labels hopefully
             barChart.data.labels = filterDate;
 
             barChart.data.labels.splice(0, barChart.data.labels.length, ...filterDate);
-            
+
             barChart.update();
             pieChart.update();
         }
