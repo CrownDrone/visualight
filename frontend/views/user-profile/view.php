@@ -6,7 +6,7 @@ $this->title = 'User Profile';
 $this->params['breadcrumbs'][] = $this->title;
 
 // Generate the URL for the default image using the @web alias
-$defaultImagePath = Yii::getAlias('@web') . '/assets/24427cba/img/user2-160x160.jpg';
+$defaultImagePath = Yii::getAlias('@web') . '/images/user2.jpg';
 ?>
 
 <div class="user-profile-view">
