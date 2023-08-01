@@ -42,6 +42,9 @@ class UserProfile extends ActiveRecord
 
             [['imageFile'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg, jpeg, gif'],
 
+            [['contactNumber'], 'integer'],
+            [['contactNumber'], 'string', 'length' => [11, 11], 'on' => self::SCENARIO_UPDATE],
+
 
         ];
     }
@@ -88,6 +91,7 @@ class UserProfile extends ActiveRecord
     {
         $scenarios = parent::scenarios();
         $scenarios[self::SCENARIO_UPDATE] = ['username', 'email', 'existingEmail','newPassword','existingPassword'];
+        $scenarios[self::SCENARIO_UPDATE][] = 'contactNumber';
         return $scenarios;
     }
     public function beforeSave($insert)

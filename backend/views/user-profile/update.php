@@ -21,6 +21,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= $form->field($model, 'username')->textInput() ?>
 
     <?= $form->field($model, 'email')->textInput() ?>
+    
+    <?= $form->field($model, 'contactNumber')->textInput(['maxlength' => true]) ?>
 
     <?php $hasPasswordError = $model->hasErrors('existingPassword'); ?>
     <?= $form->field($model, 'existingPassword')->passwordInput()->hint($hasPasswordError ? '' : '   *Leave it blank if you dont want to change the password',['style' => 'color: green']) ?>
