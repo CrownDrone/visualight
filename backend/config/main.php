@@ -62,6 +62,7 @@ return [
             'rules' => [
                'profile' => 'user-profile/view',
                 'profile/update' => 'user-profile/update',
+                'terms' => 'terms/terms/index'
             ],
         ],
         'authManager' => [

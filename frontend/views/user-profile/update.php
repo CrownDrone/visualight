@@ -47,6 +47,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="form-group">
         <br>
         <?= Html::submitButton('Update', ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Back', ['view'], ['class' => 'btn btn-warning']) ?>
+
     </div>
 
     <?php ActiveForm::end(); ?>
