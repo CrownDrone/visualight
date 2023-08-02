@@ -179,80 +179,6 @@ $this->title = '';
     }
 </style>
 
-<?=
-$m = "";
-// metrology transaction
-$lastmettrans = 5;
-$todaymettrans = 3;
-$metdailytransincrease = (($todaymettrans - $lastmettrans) / $todaymettrans) * 100;
-$metdailytransincrease = number_format($metdailytransincrease, 2);
-if ($metdailytransincrease > 1) {
-    $metdailytransincrease = '+' . $metdailytransincrease . '%';
-} else {
-    $metdailytransincrease = $metdailytransincrease . '%';
-}
-
-//S&T transaction
-$lastSandTtrans = 2;
-$todaySandTtrans = 10;
-$SandTdailytransincrease = (($todaySandTtrans - $lastSandTtrans) / $todaySandTtrans) * 100;
-$SandTdailytransincrease = number_format($SandTdailytransincrease, 2);
-if ($SandTdailytransincrease > 1) {
-    $SandTdailytransincrease = '+' . $SandTdailytransincrease . '%';
-} else {
-    $metdailytransincrease = $metdailytransincrease . '%';
-}
-//T&S transaction
-$lastTandStrans = 6;
-$todayTandStrans = 100;
-$TandSdailytransincrease = (($todayTandStrans - $lastTandStrans) / $todayTandStrans) * 100;
-$TandSdailytransincrease = number_format($TandSdailytransincrease, 2);
-if ($TandSdailytransincrease > 1) {
-    $TandSdailytransincrease = '+' . $TandSdailytransincrease . '%';
-} else {
-    $metdailytransincrease = $metdailytransincrease . '%';
-}
-
-
-?>
-<!-- 
-<div class="header">
-    <div class="header-grid">
-    <p>Dashboard</p>
-    <img src="/images/LogoVL.png" alt="visLogo">
-    </div>
-</div> <br> -->
-
-<div class="DailyTransaction">
-    <p>Total Transactions Daily</p>
-
-    <div class="deptransaction">
-        <p>National Metrology</p>
-        <div class="grid">
-            <img src="/images/Pressure Gauge.png" alt="icon1">
-            <p id="dailyTrans"><?= $todaymettrans ?></p>
-            <p id="valueIncrease"><?= $metdailytransincrease ?></p>
-        </div>
-    </div>
-    <div class="deptransaction" style="background-color:#02A560;">
-        <p>Standards and Testing</p>
-        <div class="grid">
-            <img src="/images/Pass Fail.png" alt="icon2">
-            <p id="dailyTrans"><?= $todaySandTtrans ?></p>
-            <p id="valueIncrease"><?= $SandTdailytransincrease ?></p>
-        </div>
-    </div>
-    <div class="deptransaction" style="background-color:#F21A9C;">
-        <p>Technological Services</p>
-        <div class="grid">
-            <img src="/images/Service.png" alt="icon3">
-            <p id="dailyTrans"><?= $todayTandStrans ?></p>
-            <p id="valueIncrease"><?= $TandSdailytransincrease ?></p>
-        </div>
-    </div>
-
-</div> <br>
-
 <?php
 use yii\db\Query;
 
@@ -300,6 +226,7 @@ foreach ($salesData as $data) {
     }
 }
 
+
 // Prepare $TransactionperDiv array
 $TransactionperDiv = [
     'labels' => [],
@@ -331,7 +258,141 @@ foreach ($transactionData as $data) {
     }
 }
 
+
+
+$divisionColors = [
+    'National Metrology Department' => [
+        'backgroundColor' => 'rgba(54, 162, 255, 0.3)',
+        'borderColor' => 'rgba(54, 162, 255, 1)',
+        'borderWidth' => 2,
+    ],
+    'Standard and Testing Division' => [
+        'backgroundColor' => 'rgba(0, 128, 0, 0.3)',
+        'borderColor' => 'rgba(0, 128, 0, 1)', 
+        'borderWidth' => 2,
+    ],
+    'Technological Services Division' => [
+        'backgroundColor' => 'rgba(245, 40, 145, 0.2)',
+        'borderColor' => 'rgba(245, 40, 145, 1)', 
+        'borderWidth' => 2,
+    ],
+    // Add more division names and their corresponding colors with opacity and border color as needed
+];
+
+foreach ($SalesperDiv['datasets'] as &$dataset) {
+    $divisionName = $dataset['label'];
+    $dataset['backgroundColor'] = isset($divisionColors[$divisionName]['backgroundColor']) ? $divisionColors[$divisionName]['backgroundColor'] : '#EFF5FF'; // Default background color if division_name not found
+    $dataset['borderColor'] = isset($divisionColors[$divisionName]['borderColor']) ? $divisionColors[$divisionName]['borderColor'] : '#0362BA'; // Default border color if division_name not found
+    $dataset['borderWidth'] = isset($divisionColors[$divisionName]['borderWidth']) ? $divisionColors[$divisionName]['borderWidth'] : '#0362BA';
+}
+
+foreach ($TransactionperDiv['datasets'] as &$dataset) {
+    $divisionName = $dataset['label'];
+    $dataset['backgroundColor'] = isset($divisionColors[$divisionName]['backgroundColor']) ? $divisionColors[$divisionName]['backgroundColor'] : '#EFF5FF'; // Default background color if division_name not found
+    $dataset['borderColor'] = isset($divisionColors[$divisionName]['borderColor']) ? $divisionColors[$divisionName]['borderColor'] : '#0362BA'; // Default border color if division_name not found
+    $dataset['borderWidth'] = isset($divisionColors[$divisionName]['borderWidth']) ? $divisionColors[$divisionName]['borderWidth'] : '#0362BA';
+}
+
+
+
+//Metrology transaction
+$metlatestTransactions = (new Query())
+->select('COUNT(*)')
+->from('operational_report')
+->where([
+    'division_name' => 'National Metrology Department',
+    'transacton_date' => date('2023-06-16') // Assuming you want the number of transactions for today
+])
+->scalar();
+$lastmettrans = 5;
+$todaymettrans = $metlatestTransactions;
+$metdailytransincrease = (($todaymettrans - $lastmettrans) / $todaymettrans) * 100;
+$metdailytransincrease = number_format($metdailytransincrease, 2);
+if ($metdailytransincrease > 1) {
+    $metdailytransincrease = '+' . $metdailytransincrease . '%';
+} else {
+    $metdailytransincrease = $metdailytransincrease . '%';
+}
+
+//S&T transaction
+$SandTlatestTransactions = (new Query())
+->select('COUNT(*)')
+->from('operational_report')
+->where([
+    'division_name' => 'Standard and Testing Division',
+    'transacton_date' => date('2023-06-16') // Assuming you want the number of transactions for today
+])
+->scalar();
+
+$lastSandTtrans = 1;
+$todaySandTtrans = $SandTlatestTransactions ;
+$SandTdailytransincrease = (($todaySandTtrans - $lastSandTtrans) / $todaySandTtrans) * 100;
+$SandTdailytransincrease = number_format($SandTdailytransincrease, 2);
+if ($SandTdailytransincrease > 1) {
+    $SandTdailytransincrease = '+' . $SandTdailytransincrease . '%';
+} else {
+    $metdailytransincrease = $metdailytransincrease . '%';
+}
+//T&S transaction
+$TandSlatestTransactions = (new Query())
+->select('COUNT(*)')
+->from('operational_report')
+->where([
+    'division_name' => 'Standard and Testing Division',
+    'transacton_date' => date('2023-06-16') // Assuming you want the number of transactions for today
+])
+->scalar();
+$lastTandStrans = 1;
+$todayTandStrans = $TandSlatestTransactions;
+$TandSdailytransincrease = (($todayTandStrans - $lastTandStrans) / $todayTandStrans) * 100;
+$TandSdailytransincrease = number_format($TandSdailytransincrease, 2);
+if ($TandSdailytransincrease > 1) {
+    $TandSdailytransincrease = '+' . $TandSdailytransincrease . '%';
+} else {
+    $metdailytransincrease = $metdailytransincrease . '%';
+}
+
+
+
 ?>
+
+<!-- 
+<div class="header">
+    <div class="header-grid">
+    <p>Dashboard</p>
+    <img src="/images/LogoVL.png" alt="visLogo">
+    </div>
+</div> <br> -->
+
+<div class="DailyTransaction">
+    <p>Total Transactions Daily</p>
+
+    <div class="deptransaction">
+        <p>National Metrology</p>
+        <div class="grid">
+            <img src="/images/Pressure Gauge.png" alt="icon1">
+            <p id="dailyTrans"><?= $todaymettrans ?></p>
+            <p id="valueIncrease"><?= $metdailytransincrease ?></p>
+        </div>
+    </div>
+    <div class="deptransaction" style="background-color:#02A560;">
+        <p>Standards and Testing</p>
+        <div class="grid">
+            <img src="/images/Pass Fail.png" alt="icon2">
+            <p id="dailyTrans"><?= $todaySandTtrans ?></p>
+            <p id="valueIncrease"><?= $SandTdailytransincrease ?></p>
+        </div>
+    </div>
+    <div class="deptransaction" style="background-color:#F21A9C;">
+        <p>Technological Services</p>
+        <div class="grid">
+            <img src="/images/Service.png" alt="icon3">
+            <p id="dailyTrans"><?= $todayTandStrans ?></p>
+            <p id="valueIncrease"><?= $TandSdailytransincrease ?></p>
+        </div>
+    </div>
+
+</div> <br>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.1"></script>
 <div class="graph">
@@ -566,22 +627,6 @@ foreach ($transactionData as $data) {
             label: dataset.label,
             average: calculateAverage(dataset.data),
         }));
-
-        // //data set
-        // const salesAverageDataset = {
-        //  labels: salesAverage.map(data => data.label),
-        //  datasets: [{
-        //   data: salesAverage.map(data => data.average),
-        //  backgroundColor: ['blue', 'green', 'pink'], // Add colors for each dataset
-        //      label: 'Average Sales'
-        //     }]
-        //     };
-
-        //             const salesAverage = [
-        //   { label: 'NMD', average: 5 },
-        //   { label: 'STD', average: 4 },
-        //   { label: 'TSD', average: 3 },
-        // ];
 
         const semiCircleCtx = document.getElementById('semiCircleChart').getContext('2d');
 
