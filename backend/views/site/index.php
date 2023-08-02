@@ -254,47 +254,82 @@ if ($TandSdailytransincrease > 1) {
 </div> <br>
 
 <?php
-//transactions data
+use yii\db\Query;
+
+// Fetch sales data from the database
+$query = new Query();
+$salesData = $query->select(['division_name', 'transacton_date', 'SUM(amount) as total_amount'])
+    ->from('operational_report')
+    ->groupBy(['division_name', 'transacton_date'])
+    ->all();
+
+// Fetch transaction data from the database
+$transactionData = $query->select(['division_name', 'transacton_date', 'COUNT(*) as transaction_count'])
+    ->from('operational_report')
+    ->groupBy(['division_name', 'transacton_date'])
+    ->all();
+
+// Prepare $SalesperDiv array
 $SalesperDiv = [
-    'labels' => ['06/10/2023', '06/11/2023', '06/12/2023', '06/13/2023', '06/14/2023', '06/15/2023', '06/16/2023'],
-    'datasets' => [
-        [
-            'label' => 'NMD',
-            'data' => [500000, 80000, 270000, 100000, 410000, 120000, 200000],
-        ],
-        [
-            'label' => 'STD',
-            'data' => [200000, 80000, 400000, 500000, 120000, 230000, 300000],
-
-        ],
-        [
-            'label' => 'TSD',
-            'data' => [450000, 80000, 350000, 120000, 410000, 120000, 280000],
-
-        ],
-    ],
+    'labels' => [],
+    'datasets' => [],
 ];
+
+foreach ($salesData as $data) {
+    $divisionName = $data['division_name'];
+    $transactionDate = $data['transacton_date'];
+    $totalAmount = (float) $data['total_amount'];
+
+    // Add unique dates to the labels array
+    if (!in_array($transactionDate, $SalesperDiv['labels'])) {
+        $SalesperDiv['labels'][] = $transactionDate;
+    }
+
+    // Find the index of the division in the datasets array
+    $divisionIndex = array_search($divisionName, array_column($SalesperDiv['datasets'], 'label'));
+
+    if ($divisionIndex === false) {
+        // Add a new dataset for the division if not already present
+        $SalesperDiv['datasets'][] = [
+            'label' => $divisionName,
+            'data' => [$totalAmount],
+        ];
+    } else {
+        // If the dataset already exists, add the amount to the existing data
+        $SalesperDiv['datasets'][$divisionIndex]['data'][] = $totalAmount;
+    }
+}
+
+// Prepare $TransactionperDiv array
 $TransactionperDiv = [
-    'labels' => ['06/10/2023', '06/11/2023', '06/12/2023', '06/13/2023', '06/14/2023', '06/15/2023', '06/16/2023'],
-    'datasets' => [
-        [
-            'label' => 'NMD',
-            'data' => [5, 1, 2, 4, 3, 2, 3],
-
-
-        ],
-        [
-            'label' => 'STD',
-            'data' => [1, 1, 3, 4, 2, 2, 2],
-
-        ],
-        [
-            'label' => 'TSD',
-            'data' => [5, 1, 3, 1, 3, 1, 3],
-
-        ],
-    ],
+    'labels' => [],
+    'datasets' => [],
 ];
+
+foreach ($transactionData as $data) {
+    $divisionName = $data['division_name'];
+    $transactionDate = $data['transacton_date'];
+    $transactionCount = (int) $data['transaction_count'];
+
+    // Add unique dates to the labels array
+    if (!in_array($transactionDate, $TransactionperDiv['labels'])) {
+        $TransactionperDiv['labels'][] = $transactionDate;
+    }
+
+    // Find the index of the division in the datasets array
+    $divisionIndex = array_search($divisionName, array_column($TransactionperDiv['datasets'], 'label'));
+
+    if ($divisionIndex === false) {
+        // Add a new dataset for the division if not already present
+        $TransactionperDiv['datasets'][] = [
+            'label' => $divisionName,
+            'data' => [$transactionCount],
+        ];
+    } else {
+        // If the dataset already exists, add the transaction count to the existing data
+        $TransactionperDiv['datasets'][$divisionIndex]['data'][] = $transactionCount;
+    }
+}
 
 ?>
 
