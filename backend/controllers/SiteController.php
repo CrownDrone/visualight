@@ -7,6 +7,7 @@ use Yii;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use yii\web\Controller;
+use yii\web\ForbiddenHttpException;
 use yii\web\Response;
 
 /**
@@ -22,16 +23,23 @@ class SiteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::class,
+                'only' => ['login', 'logout', 'index'],
                 'rules' => [
                     [
-                        'actions' => ['login', 'error'],
                         'allow' => true,
-                    ],
-                    [
-                        'actions' => ['logout', 'index'],
-                        'allow' => true,
-                        'roles' => ['@'],
-                    ],
+                        'actions' => ['login'],
+                        'roles' => ['?'],
+                  ],
+                  [
+                      'allow' => true,
+                      'actions' => ['index'],
+                      'roles' => ['ADMIN'], //add only admin allowed
+                  ],
+                  [
+                    'allow' => true,
+                    'actions' => ['logout'],
+                    'roles' => ['@'], //add only admin allowed
+                ],
                 ],
             ],
             'verbs' => [
@@ -43,6 +51,7 @@ class SiteController extends Controller
         ];
     }
 
+    
     /**
      * {@inheritdoc}
      */

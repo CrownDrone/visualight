@@ -4,6 +4,7 @@
 namespace backend\modules\chart\controllers;
 
 // I-import natin yung kailangan nating class para ma-extend yung Yii Controller.
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\db\Query;
 
@@ -11,6 +12,22 @@ use yii\db\Query;
 class ChartController extends Controller
 {
 
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['login','index'],
+                'rules' => [
+                  [
+                      'allow' => true,
+                      'actions' => ['index'],
+                      'roles' => ['ADMINISTRATOR'], //add only admin allowed
+                  ]
+                ],
+            ],
+        ];
+    }
     
     // Ito yung pangunahing action na tatawagin kapag may nag-access sa page ng chart.
     public function actionIndex()
