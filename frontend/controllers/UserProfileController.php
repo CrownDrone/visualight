@@ -7,11 +7,45 @@ use yii\base\Security;
 use yii\helpers\FileHelper;
 use yii\web\Controller;
 use common\models\UserProfile;
+use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
 use yii\web\NotFoundHttpException;
 use yii\web\UploadedFile;
 
 class UserProfileController extends Controller
 {
+
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::class,
+                'only' => ['view','update'],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'actions' => ['view','update'],
+                        'roles' => ['ADMIN','USER'],
+                  ],
+                   [
+                           'allow' => true,
+                           'actions' => ['view','update'],
+                           'roles' => ['ADMIN','USER'],
+                   ],
+                  [
+                      'allow' => true,
+                      'actions' => ['logout'],
+                  ],
+                ],
+            ],
+            'verbs' => [
+                'class' => VerbFilter::class,
+                'actions' => [
+                    'logout' => ['post'],
+                ],
+            ],
+        ];
+    }
     public function actionView()
     {
         $user = Yii::$app->user->identity;

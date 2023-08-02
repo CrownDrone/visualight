@@ -31,21 +31,23 @@ class SiteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::class,
-                'only' => ['logout'],
+                'only' => ['logout', 'index'],
                 'rules' => [
                     [
                         'allow' => true,
                         'actions' => ['login'],
-                        'roles' => ['?'],
+                        'roles' => ['@'],
                   ],
                    [
                            'allow' => true,
                            'actions' => ['index'],
-                           'roles' => ['?'],
+                           'roles' => ['ADMIN','USER'],
                    ],
                   [
-                      'allow' => true,
-                      'actions' => ['logout'],
+                    'allow' => true,
+                    'actions' => ['logout'],
+                    'roles' => ['@'], 
+
                   ],
                 ],
             ],
