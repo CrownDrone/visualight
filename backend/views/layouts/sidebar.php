@@ -127,11 +127,9 @@ $defaultImagePath = Yii::getAlias('@web') . '/images/user2.jpg';
             ]);
             ?>
 
-            <?=  Html::a('<i class="fas fa-sign-out-alt"></i> Log out', ['/site/logout'], ['data-method' => 'post', 'class' => 'nav-link']) ?>
         </nav>
         <!-- /.sidebar-menu -->
     </div>
     <!-- /.sidebar -->
 </aside>
 <!-- </nav> -->
-
