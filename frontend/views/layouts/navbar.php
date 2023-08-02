@@ -12,7 +12,7 @@ use yii\helpers\Html;
         </li>
         <li class="nav-item d-none d-sm-inline-block">
             <!-- <a href="<?=\yii\helpers\Url::home()?>" class="nav-link">Home</a> -->
-            <img src="/images/LogoVL2.png" alt="visLogo" style="height: 39px; width: 204px;" class="Logo">
+            <img src="/images/LogoVL2.png" alt="visLogo" style="height: 39px; width: 250px;" class="Logo">
             
         </li>
       
