@@ -12,7 +12,7 @@ return [
     'controllerNamespace' => 'backend\controllers',
     'bootstrap' => ['log'],
     'modules' => [
-        'rbac' => [
+        'admin' => [
                     'class' => 'mdm\admin\Module',
                   ],
         'chart' => [

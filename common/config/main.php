@@ -5,11 +5,11 @@ return [
         '@npm'   => '@vendor/npm-asset',
     ],
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
-    'modules' => [
-        'admin' => [
-            'class' => 'mdm\admin\Module',
-        ]
-    ],
+    // 'modules' => [
+    //     'admin' => [
+    //         'class' => 'mdm\admin\Module',
+    //     ]
+    // ],
     'components' => [
         'cache' => [
             'class' => \yii\caching\FileCache::class,
