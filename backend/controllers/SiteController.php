@@ -81,7 +81,9 @@ class SiteController extends BaseController
      */
     public function actionLogin()
     {
+        // Check if the user is already logged in
         if (!Yii::$app->user->isGuest) {
+            // Redirect to the homepage or dashboard since the user is already logged in.
             return $this->goHome();
         }
 
@@ -89,7 +91,22 @@ class SiteController extends BaseController
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
+            // After successful login, check if the user has accepted the terms
+            $currentUser = Yii::$app->user->identity;
+            if ($currentUser !== null) {
+                // User is authenticated, check if they have accepted the terms
+                $termsAccepted = !empty($currentUser->tos);
+
+                // Redirect based on terms acceptance
+                if ($termsAccepted) {
+                    return $this->goHome(); // Redirect to homepage or dashboard
+                } else {
+                    return $this->redirect(['terms/index']); // Redirect to terms/index
+                }
+            } else {
+                // The user identity is null, handle the case appropriately
+                return $this->redirect(['site/login']); // Redirect to the login page
+            }
         }
 
         $model->password = '';
