@@ -151,7 +151,7 @@ $this->title = '';
                 flex-basis: 100%;
                 max-width: 100%;
                 width: 95%;
-                height:25rem;
+                height: 25rem;
                 display: block;
 
                 /* Change to block to stack vertically */
@@ -187,17 +187,13 @@ $this->title = '';
     }
 
     .date_dropdown {
+        z-index: 99;
         position: relative;
+        float: left;
         padding-left: 3.7rem;
         padding-right: 3.7rem;
         padding-top: 1.1rem;
         padding-bottom: 1.1rem;
-        float: left;
-        overflow: hidden;
-    }
-
-    .date_type {
-        border-radius: 0.5rem
     }
 
     .print_pdf {
@@ -236,6 +232,7 @@ $this->title = '';
 </style>
 
 <?php
+
 use yii\db\Query;
 
 // Fetch sales data from the database
@@ -326,12 +323,12 @@ $divisionColors = [
     ],
     'Standard and Testing Division' => [
         'backgroundColor' => 'rgba(0, 128, 0, 0.3)',
-        'borderColor' => 'rgba(0, 128, 0, 1)', 
+        'borderColor' => 'rgba(0, 128, 0, 1)',
         'borderWidth' => 2,
     ],
     'Technological Services Division' => [
         'backgroundColor' => 'rgba(245, 40, 145, 0.2)',
-        'borderColor' => 'rgba(245, 40, 145, 1)', 
+        'borderColor' => 'rgba(245, 40, 145, 1)',
         'borderWidth' => 2,
     ],
 ];
@@ -357,13 +354,13 @@ foreach ($TransactionperDiv['datasets'] as &$dataset) {
 //Metrology transaction
 //dito banda kukunin yung number of transaction tapos kung anong date
 $metlatestTransactions = (new Query())
-->select('COUNT(*)')
-->from('operational_report')
-->where([
-    'division_name' => 'National Metrology Department',
-    'transacton_date' => date('2023-06-16') // Assuming you want the number of transactions for today
-])
-->scalar();
+    ->select('COUNT(*)')
+    ->from('operational_report')
+    ->where([
+        'division_name' => 'National Metrology Department',
+        'transacton_date' => date('2023-06-16') // Assuming you want the number of transactions for today
+    ])
+    ->scalar();
 
 //dito magcocompute ng percentage ng increase or decrease ng number of past transaction at today's transaction (tinatype ko pa din yung sa last transaction kunwari kasi di pa ko marunong)
 $lastmettrans = 5;
@@ -379,16 +376,16 @@ if ($metdailytransincrease > 1) {
 //same scenario sa taas
 //S&T transaction
 $SandTlatestTransactions = (new Query())
-->select('COUNT(*)')
-->from('operational_report')
-->where([
-    'division_name' => 'Standard and Testing Division',
-    'transacton_date' => date('2023-06-16') // Assuming you want the number of transactions for today
-])
-->scalar();
+    ->select('COUNT(*)')
+    ->from('operational_report')
+    ->where([
+        'division_name' => 'Standard and Testing Division',
+        'transacton_date' => date('2023-06-16') // Assuming you want the number of transactions for today
+    ])
+    ->scalar();
 
 $lastSandTtrans = 1;
-$todaySandTtrans = $SandTlatestTransactions ;
+$todaySandTtrans = $SandTlatestTransactions;
 $SandTdailytransincrease = (($todaySandTtrans - $lastSandTtrans) / $todaySandTtrans) * 100;
 $SandTdailytransincrease = number_format($SandTdailytransincrease, 2);
 if ($SandTdailytransincrease > 1) {
@@ -399,13 +396,13 @@ if ($SandTdailytransincrease > 1) {
 
 //T&S transaction
 $TandSlatestTransactions = (new Query())
-->select('COUNT(*)')
-->from('operational_report')
-->where([
-    'division_name' => 'Standard and Testing Division',
-    'transacton_date' => date('2023-06-16') // Assuming you want the number of transactions for today
-])
-->scalar();
+    ->select('COUNT(*)')
+    ->from('operational_report')
+    ->where([
+        'division_name' => 'Standard and Testing Division',
+        'transacton_date' => date('2023-06-16') // Assuming you want the number of transactions for today
+    ])
+    ->scalar();
 $lastTandStrans = 1;
 $todayTandStrans = $TandSlatestTransactions;
 $TandSdailytransincrease = (($todayTandStrans - $lastTandStrans) / $todayTandStrans) * 100;
@@ -706,8 +703,8 @@ if ($TandSdailytransincrease > 1) {
         // }));
 
 
-     // Calculate the average of each dataset
-     const TransactionAverage = TransactionperDiv.datasets.map(dataset => ({
+        // Calculate the average of each dataset
+        const TransactionAverage = TransactionperDiv.datasets.map(dataset => ({
             label: dataset.label,
             average: calculateAverage(dataset.data),
         }));
@@ -720,75 +717,73 @@ if ($TandSdailytransincrease > 1) {
             data: [average.average], // Use the average value as data for each new dataset
             borderWidth: 1,
             circumference: (ctx) => {
-            console.log(ctx.dataset.data[0]);
-             return (ctx.dataset.data[0] / maxAverage) * 270; // Scale the circumference based on the maximum average value
-         },
+                console.log(ctx.dataset.data[0]);
+                return (ctx.dataset.data[0] / maxAverage) * 270; // Scale the circumference based on the maximum average value
+            },
         }));
 
         // Combine the existing datasets with the new datasets
         const allDatasets = [...TransactionAverage, ...newDatasets];
 
-            // Define the data for the doughnut chart
-            const data = {
-              datasets: allDatasets,
-            };
-            // const divisionName=
-            // {
-            //     id:'divisionName',
-            //     beforeDatasetsDraw(chart, args, pluginOptions)
-            //     {
-            //         const {ctx, data, scales}=chart;
-            //         ctx.save();
-            //         ctx.font='12px Poppins';
-            //         console.log(chart.getDatasetMeta(0))
-            //         const outerRadius=chart.getDatasetMeta(0).controller.outerRadius;
-            //         const innerRadius=chart.getDatasetMeta(0).controller.innerRadius;
-            //         ctx.fillText('text',x,y);
-            //     }
+        // Define the data for the doughnut chart
+        const data = {
+            datasets: allDatasets,
+        };
+        // const divisionName=
+        // {
+        //     id:'divisionName',
+        //     beforeDatasetsDraw(chart, args, pluginOptions)
+        //     {
+        //         const {ctx, data, scales}=chart;
+        //         ctx.save();
+        //         ctx.font='12px Poppins';
+        //         console.log(chart.getDatasetMeta(0))
+        //         const outerRadius=chart.getDatasetMeta(0).controller.outerRadius;
+        //         const innerRadius=chart.getDatasetMeta(0).controller.innerRadius;
+        //         ctx.fillText('text',x,y);
+        //     }
 
-            // } // tsaka ko na to tutuloy yawa walang wifi
+        // } // tsaka ko na to tutuloy yawa walang wifi
 
-            // Config for the doughnut chart
-            const config = {
+        // Config for the doughnut chart
+        const config = {
             type: 'doughnut',
             data,
             options: {
                 // cutout:'85%',
                 borderRadius: 10,
-                plugins:
-                {
-                    legend:
-                    {
+                plugins: {
+                    legend: {
                         display: false
                     }
                 },
                 // plugins:[divisionName] //to be continue
             }
-            };
+        };
 
-            // Render the doughnut chart
-            const myChart = new Chart(document.getElementById('myChart'), config);
+        // Render the doughnut chart
+        const myChart = new Chart(document.getElementById('myChart'), config);
 
-            // Instantly assign Chart.js version
-            const chartVersion = document.getElementById('chartVersion');
-            chartVersion.innerText = Chart.version;
+        // Instantly assign Chart.js version
+        const chartVersion = document.getElementById('chartVersion');
+        chartVersion.innerText = Chart.version;
 
-                    //creating horizontal bar graph (kaso ayaw lumabas HAHAHAHAH)
-                    // const horizontalCtx = document.getElementById('horizontalChart').getContext('2d');
+        //creating horizontal bar graph (kaso ayaw lumabas HAHAHAHAH)
+        // const horizontalCtx = document.getElementById('horizontalChart').getContext('2d');
 
-                    // const horizontalChart = new Chart(horizontalCtx, {
-                    //     type: 'bar',
-                    //     data: TotalTransaction,
-                    //     options: {
-                    //         responsive: true,
-                    //         maintainAspectRatio: false,
-                    //         scales: {
-                    //             y: {
-                    //                 beginAtZero: true
-                    //             }
-                    //         }
-                    //     }
-                    // });
+        // const horizontalChart = new Chart(horizontalCtx, {
+        //     type: 'bar',
+        //     data: TotalTransaction,
+        //     options: {
+        //         responsive: true,
+        //         maintainAspectRatio: false,
+        //         scales: {
+        //             y: {
+        //                 beginAtZero: true
+        //             }
+        //         }
+        //     }
+        // });
     </script>
 
 
