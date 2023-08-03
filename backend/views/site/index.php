@@ -29,7 +29,7 @@ $this->title = '';
         font-style: normal;
         font-weight: 600;
         line-height: normal;
-        letter-spacing: 2.4px;
+        letter-spacing: .15rem;
         display: wrap;
 
     }
@@ -45,7 +45,7 @@ $this->title = '';
         font-style: normal;
         font-weight: 700;
         line-height: normal;
-        letter-spacing: 2.4px;
+        letter-spacing: .15rem;
         display: inline-block;
     }
 
@@ -61,7 +61,7 @@ $this->title = '';
     #valueIncrease {
         font-size: 1.5rem;
         font-weight: 400;
-        letter-spacing: 3.6px;
+        letter-spacing: .15rem;
         grid-column: 3;
         text-align: right;
         padding-top: 2.5rem;
@@ -73,7 +73,7 @@ $this->title = '';
         font-style: normal;
         font-weight: 700;
         line-height: normal;
-        letter-spacing: 8.1px;
+        letter-spacing: .5rem;
     }
 
     .grid {
@@ -92,12 +92,12 @@ $this->title = '';
     }
 
     .chart-container {
-        margin: 10px;
+        margin: .62rem;
         padding: 3em;
-        border-radius: 15px;
+        border-radius: .93rem;
         background-color: white;
         display: inline-block;
-        height: 50vh;
+        height: 30rem;
         width: 45%;
     }
 
@@ -116,7 +116,7 @@ $this->title = '';
         font-family: Poppins;
         font-size: .875rem;
         font-weight: 700;
-        letter-spacing: 2.1px;
+        letter-spacing: .15rem;
 
     }
 
@@ -150,8 +150,10 @@ $this->title = '';
             .chart-container {
                 flex-basis: 100%;
                 max-width: 100%;
-                width: 100%;
+                width: 95%;
+                height:25rem;
                 display: block;
+
                 /* Change to block to stack vertically */
             }
         }
@@ -377,7 +379,7 @@ if ($TandSdailytransincrease > 1) {
 
 </div> <br>
 
-
+<!-- graph Div, holder of graphs -->
 <div class="graph">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -392,21 +394,12 @@ if ($TandSdailytransincrease > 1) {
         <canvas id="transactionChart"></canvas>
     </div>
 
-    <!-- <div class="chart-container">
-        <p id="reportTitle"> Sales per Division</p>
-        <canvas id="horizontalChart"></canvas>
-    </div> -->
-
 
     <div class="chart-container">
         <p id="reportTitle"> Sales per Division</p>
         <canvas id="salesChart"></canvas>
     </div>
 
-    <!-- <div class="chart-container" >
-        <p id="reportTitle"> Total transaction</p>
-        <canvas id="barChart"></canvas>
-    </div> -->
 
     <div class="chart-container">
         <p id="reportTitle"> Average Sales per Day </p>
