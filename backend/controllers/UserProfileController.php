@@ -11,7 +11,7 @@ use yii\filters\AccessControl;
 use yii\web\NotFoundHttpException;
 use yii\web\UploadedFile;
 
-class UserProfileController extends Controller
+class UserProfileController extends BaseController
 {
     public function behaviors()
     {

@@ -4,12 +4,13 @@
 namespace backend\modules\chart\controllers;
 
 // I-import natin yung kailangan nating class para ma-extend yung Yii Controller.
+use backend\controllers\BaseController;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\db\Query;
 
 // I-extend natin yung Controller class para makagawa tayo ng ating custom ChartController.
-class ChartController extends Controller
+class ChartController extends BaseController
 {
 
     public function behaviors()

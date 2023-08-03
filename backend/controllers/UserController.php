@@ -10,7 +10,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\AccessControl;
 use yii\base\InvalidParamException;
 
-class UserController extends Controller
+class UserController extends BaseController
 {
     public function behaviors()
     {
