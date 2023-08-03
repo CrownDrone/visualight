@@ -15,6 +15,27 @@ $this->title = '';
         font-size: 16px;
     }
 
+    /* header div css (Visualight logo and the "Dashboard text") */
+
+    /* .header {
+        color: #0362BA;
+        font-family: Poppins;
+        font-size: 2rem;
+        font-weight: 600;
+        line-height: normal;
+        letter-spacing: 3px;
+        border-top: solid 0.5vh;
+        display: flex;   
+        justify-content: space-between;
+
+    } */
+
+    /* .header img {
+        float: right;
+        height: 3rem;
+        margin-bottom: 1rem;
+    } */
+
     /* Daily transaction css */
 
     .DailyTransaction {

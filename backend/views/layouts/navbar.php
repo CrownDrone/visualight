@@ -5,7 +5,7 @@ use yii\helpers\Html;
 ?>
 <!-- Navbar -->
 <!-- <div style="position: relati; top: 0; width: 100%; z-index:50;"> -->
-<nav class="main-header navbar navbar-expand navbar-white navbar-light" style="border-bottom: solid 0.4vh; color: blue;">
+<nav class="main-header navbar navbar-expand navbar-white navbar-light" style="border-bottom: solid 0.4vh; color: #46aef0;">
     <!-- Left navbar links -->
     <ul class="navbar-nav">
         <li class="nav-item">

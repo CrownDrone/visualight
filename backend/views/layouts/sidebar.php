@@ -79,7 +79,7 @@ $defaultImagePath = Yii::getAlias('@web') . '/images/user2.jpg';
                     ['label' => 'Debug', 'icon' => 'bug', 'url' => ['/debug'], 'target' => '_blank', 'visible' => Helper::checkRoute('/admin/index'),],
                     ['label' => 'RBAC', 'header' => true, 'visible' => Helper::checkRoute('/admin/index'),],
                     [
-                        'label' => 'RBAC',
+                        'label' => 'Accounts',
                         'url' => ['/admin/index'],
                         'icon' => 'user',
 
@@ -123,7 +123,7 @@ $defaultImagePath = Yii::getAlias('@web') . '/images/user2.jpg';
                     ['label' => 'ChartJS', 'header' => true, 'visible' => Helper::checkRoute('/chart/chart/index'),],
                     ['label' => 'Chart',  'icon' => 'fas fa-chart-bar', 'url' => ['/chart/chart/index'], 'visible' => Helper::checkRoute('/chart/chart/index'),],
                     ['label' => 'Dashboard',  'icon' => 'fas fa-chalkboard', 'url' => ["/site/index"], 'visible' => Helper::checkRoute('site/index'), 'visible' => Helper::checkRoute('site/index'),],
-                    ['label' => 'Terms of Service',  'icon' => 'fas fa-chalkboard', 'url' => ["/terms/index"], 'visible' =>true],
+                    ['label' => 'Terms of Service',  'icon' => 'fas fa-file-contract', 'url' => ["/terms/index"], 'visible' =>true],
 
                 ],
             ]);
