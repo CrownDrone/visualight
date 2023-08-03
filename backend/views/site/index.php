@@ -118,8 +118,13 @@ $this->title = '';
         border-radius: .93rem;
         background-color: white;
         display: inline-block;
+<<<<<<< Updated upstream
         height: 40vh;
         width: 40%;
+=======
+        height: 28rem;
+        width: 45%;
+>>>>>>> Stashed changes
     }
 
     body.dark-mode .chart-container {
@@ -456,10 +461,9 @@ foreach ($transactionData as $data) {
         <canvas id="salesChart"></canvas>
     </div>
 
-
     <div class="chart-container">
         <p id="reportTitle"> Average Sales per Day </p>
-        <canvas id="semiCircleChart"></canvas>
+        <canvas id="myChart"></canvas>
     </div>
 
 
@@ -654,12 +658,22 @@ foreach ($transactionData as $data) {
             return Math.round(sum / array.length);
         };
 
-        // Calculate the average of each dataset
-        const salesAverage = SalesperDiv.datasets.map(dataset => ({
+        // // Calculate the average of each dataset
+        // const salesAverage = SalesperDiv.datasets.map(dataset => ({
+        //     label: dataset.label,
+        //     average: calculateAverage(dataset.data),
+        // }));
+
+
+     // Calculate the average of each dataset
+     const TransactionAverage = TransactionperDiv.datasets.map(dataset => ({
             label: dataset.label,
             average: calculateAverage(dataset.data),
         }));
+        // Find the maximum average value
+        const maxAverage = Math.max(...TransactionAverage.map((average) => average.average));
 
+<<<<<<< Updated upstream
         // //data set
         // const salesAverageDataset = {
         //  labels: salesAverage.map(data => data.label),
@@ -677,52 +691,83 @@ foreach ($transactionData as $data) {
         // ];
 
         const semiCircleCtx = document.getElementById('semiCircleChart').getContext('2d');
+=======
+        // Create a new dataset for each sales average
+        const newDatasets = TransactionAverage.map((average) => ({
+            label: `Average ${average.label}`,
+            data: [average.average], // Use the average value as data for each new dataset
+            borderWidth: 1,
+            circumference: (ctx) => {
+            console.log(ctx.dataset.data[0]);
+             return (ctx.dataset.data[0] / maxAverage) * 270; // Scale the circumference based on the maximum average value
+         },
+        }));
+>>>>>>> Stashed changes
 
-        const semiCircleChart = new Chart(semiCircleCtx, {
+        // Combine the existing datasets with the new datasets
+        const allDatasets = [...TransactionAverage, ...newDatasets];
+
+            // Define the data for the doughnut chart
+            const data = {
+              datasets: allDatasets,
+            };
+            // const divisionName=
+            // {
+            //     id:'divisionName',
+            //     beforeDatasetsDraw(chart, args, pluginOptions)
+            //     {
+            //         const {ctx, data, scales}=chart;
+            //         ctx.save();
+            //         ctx.font='12px Poppins';
+            //         console.log(chart.getDatasetMeta(0))
+            //         const outerRadius=chart.getDatasetMeta(0).controller.outerRadius;
+            //         const innerRadius=chart.getDatasetMeta(0).controller.innerRadius;
+            //         ctx.fillText('text',x,y);
+            //     }
+
+            // } // tsaka ko na to tutuloy yawa walang wifi
+
+            // Config for the doughnut chart
+            const config = {
             type: 'doughnut',
-            data: {
-                labels: salesAverage.map(data => data.label),
-                datasets: [{
-                    data: salesAverage.map(data => data.average),
-                    backgroundColor: ['blue', 'green', 'pink'],
-                    borderWidth: 1,
-                }]
-            },
+            data,
             options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                cutout: '70%', // Adjust this value to control the size of the "doughnut hole" (semi-circle)
-                plugins: {
-                    legend: {
-                        display: true,
-                        position: 'bottom', // Adjust legend position as needed
-                    },
-                    datalabels: {
-                        color: 'white', // Set the color of data labels (values) inside each segment
-                        font: {
-                            size: 14, // Adjust the font size of data labels as needed
-                        }
+                // cutout:'85%',
+                borderRadius: 10,
+                plugins:
+                {
+                    legend:
+                    {
+                        display: false
                     }
-                }
+                },
+                // plugins:[divisionName] //to be continue
             }
-        });
+            };
 
-        //creating horizontal bar graph (kaso ayaw lumabas HAHAHAHAH)
-        // const horizontalCtx = document.getElementById('horizontalChart').getContext('2d');
+            // Render the doughnut chart
+            const myChart = new Chart(document.getElementById('myChart'), config);
 
-        // const horizontalChart = new Chart(horizontalCtx, {
-        //     type: 'bar',
-        //     data: TotalTransaction,
-        //     options: {
-        //         responsive: true,
-        //         maintainAspectRatio: false,
-        //         scales: {
-        //             y: {
-        //                 beginAtZero: true
-        //             }
-        //         }
-        //     }
-        // });
+            // Instantly assign Chart.js version
+            const chartVersion = document.getElementById('chartVersion');
+            chartVersion.innerText = Chart.version;
+
+                    //creating horizontal bar graph (kaso ayaw lumabas HAHAHAHAH)
+                    // const horizontalCtx = document.getElementById('horizontalChart').getContext('2d');
+
+                    // const horizontalChart = new Chart(horizontalCtx, {
+                    //     type: 'bar',
+                    //     data: TotalTransaction,
+                    //     options: {
+                    //         responsive: true,
+                    //         maintainAspectRatio: false,
+                    //         scales: {
+                    //             y: {
+                    //                 beginAtZero: true
+                    //             }
+                    //         }
+                    //     }
+                    // });
     </script>
 
 
