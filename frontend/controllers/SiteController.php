@@ -24,7 +24,7 @@ use frontend\models\ContactForm;
 
 
 
-class SiteController extends Controller
+class SiteController extends BaseController
 {
     public function behaviors()
     {
@@ -60,6 +60,7 @@ class SiteController extends Controller
         ];
     }
 
+
     public function actions()
     {
         return [
@@ -73,44 +74,57 @@ class SiteController extends Controller
         ];
     }
 
-      public function actionIndex()
+    public function actionIndex()
     {
-        if (!Yii::$app->user->isGuest) {
-            return $this->render('index');
-        }
-
-        $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
-        }
-
-        // Set the layout to 'main-login' for the login page (optional)
-        $this->layout = 'main-login';
-
-        return $this->render('login', [
-            'model' => $model,
-        ]);
+        return $this->render('index');
     }
 
+    /**
+     * Login action.
+     *
+     * @return string|Response
+     */
     public function actionLogin()
     {
+        // Check if the user is already logged in
         if (!Yii::$app->user->isGuest) {
-            return $this->render('index');
+            // Redirect to the homepage or dashboard since the user is already logged in.
+            return $this->goHome();
         }
+
+        $this->layout = 'main-login';
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
+            // After successful login, check if the user has accepted the terms
+            $currentUser = Yii::$app->user->identity;
+            if ($currentUser !== null) {
+                // User is authenticated, check if they have accepted the terms
+                $termsAccepted = !empty($currentUser->tos);
+
+                // Redirect based on terms acceptance
+                if ($termsAccepted) {
+                    return $this->goHome(); // Redirect to homepage or dashboard
+                } else {
+                    return $this->redirect(['terms/index']); // Redirect to terms/index
+                }
+            } else {
+                // The user identity is null, handle the case appropriately
+                return $this->redirect(['site/login']); // Redirect to the login page
+            }
         }
 
-        // Set the layout to 'main-login' for the login page (optional)
-        $this->layout = 'main-login';
+        $model->password = '';
 
         return $this->render('login', [
             'model' => $model,
         ]);
     }
-
+    /**
+     * Logout action.
+     *
+     * @return Response
+     */
     public function actionLogout()
     {
         Yii::$app->user->logout();
