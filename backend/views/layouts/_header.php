@@ -81,4 +81,4 @@ use yii\bootstrap5\NavBar;
             . Html::endForm();
     }
     NavBar::end();
-    ?> -->
+    ?>

@@ -15,6 +15,27 @@ $this->title = '';
         font-size: 16px;
     }
 
+    /* header div css (Visualight logo and the "Dashboard text") */
+
+    /* .header {
+        color: #0362BA;
+        font-family: Poppins;
+        font-size: 2rem;
+        font-weight: 600;
+        line-height: normal;
+        letter-spacing: 3px;
+        border-top: solid 0.5vh;
+        display: flex;   
+        justify-content: space-between;
+
+    } */
+
+    /* .header img {
+        float: right;
+        height: 3rem;
+        margin-bottom: 1rem;
+    } */
+
     /* Daily transaction css */
 
     .DailyTransaction {
@@ -97,8 +118,8 @@ $this->title = '';
         border-radius: .93rem;
         background-color: white;
         display: inline-block;
-        height: 30rem;
-        width: 45%;
+        height: 40vh;
+        width: 40%;
     }
 
     body.dark-mode .chart-container {
@@ -158,9 +179,183 @@ $this->title = '';
             }
         }
     }
+
+    .dropdown {
+        position: relative;
+        display: inline-block;
+    }
+
+    .dropdown-content {
+        min-width: 8rem;
+        z-index: 1;
+        text-align: center;
+        border-radius: 0.5rem;
+    }
+
+    .dropdown_pdf_container {
+        position: relative;
+    }
+
+    .date_type_label {
+        font-style: Poppins;
+        color: #F8B200;
+        font-size: 1.3rem;
+    }
+
+    .date_filter {
+        display: grid;
+        grid-template-columns: auto auto;
+    }
+
+    .date_dropdown {
+        position: relative;
+        padding-left: 3.7rem;
+        padding-right: 3.7rem;
+        padding-top: 1.1rem;
+        padding-bottom: 1.1rem;
+        float: left;
+        overflow: hidden;
+    }
+
+    .date_type {
+        border-radius: 0.5rem
+    }
+
+    .print_pdf {
+        position: relative;
+        padding-left: 3.7rem;
+        padding-right: 3.7rem;
+        padding-top: 1.3rem;
+        padding-bottom: 1.1rem;
+        right: 3rem;
+    }
+
+    .print_pdf_label {
+        border-radius: 1rem;
+        background-color: #00BDB2;
+        font-size: .7rem;
+        text-align: center;
+        margin: auto;
+        padding: 0.2rem;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        color: white;
+        width: 6rem;
+    }
+
+    .datePicker {
+        font-size: .8rem;
+        margin: auto;
+    }
+
+    .datePicker_label {
+        border-radius: 0.5rem;
+        width: 8rem;
+        text-align: center;
+        font-size: 0.9rem;
+    }
 </style>
 
+<?=
+$m = "";
+// metrology transaction
+$lastmettrans = 5;
+$todaymettrans = 3;
+$metdailytransincrease = (($todaymettrans - $lastmettrans) / $todaymettrans) * 100;
+$metdailytransincrease = number_format($metdailytransincrease, 2);
+if ($metdailytransincrease > 1) {
+    $metdailytransincrease = '+' . $metdailytransincrease . '%';
+} else {
+    $metdailytransincrease = $metdailytransincrease . '%';
+}
+
+//S&T transaction
+$lastSandTtrans = 2;
+$todaySandTtrans = 10;
+$SandTdailytransincrease = (($todaySandTtrans - $lastSandTtrans) / $todaySandTtrans) * 100;
+$SandTdailytransincrease = number_format($SandTdailytransincrease, 2);
+if ($SandTdailytransincrease > 1) {
+    $SandTdailytransincrease = '+' . $SandTdailytransincrease . '%';
+} else {
+    $metdailytransincrease = $metdailytransincrease . '%';
+}
+//T&S transaction
+$lastTandStrans = 6;
+$todayTandStrans = 100;
+$TandSdailytransincrease = (($todayTandStrans - $lastTandStrans) / $todayTandStrans) * 100;
+$TandSdailytransincrease = number_format($TandSdailytransincrease, 2);
+if ($TandSdailytransincrease > 1) {
+    $TandSdailytransincrease = '+' . $TandSdailytransincrease . '%';
+} else {
+    $metdailytransincrease = $metdailytransincrease . '%';
+}
+
+
+?>
+<!-- 
+<div class="header">
+    <div class="header-grid">
+    <p>Dashboard</p>
+    <img src="/images/LogoVL.png" alt="visLogo">
+    </div>
+</div> <br> -->
+
+<div class="DailyTransaction">
+    <p>Total Transactions Daily</p>
+
+    <div class="deptransaction">
+        <p>National Metrology</p>
+        <div class="grid">
+            <img src="/images/Pressure Gauge.png" alt="icon1">
+            <p id="dailyTrans"><?= $todaymettrans ?></p>
+            <p id="valueIncrease"><?= $metdailytransincrease ?></p>
+        </div>
+    </div>
+    <div class="deptransaction" style="background-color:#02A560;">
+        <p>Standards and Testing</p>
+        <div class="grid">
+            <img src="/images/Pass Fail.png" alt="icon2">
+            <p id="dailyTrans"><?= $todaySandTtrans ?></p>
+            <p id="valueIncrease"><?= $SandTdailytransincrease ?></p>
+        </div>
+    </div>
+    <div class="deptransaction" style="background-color:#F21A9C;">
+        <p>Technological Services</p>
+        <div class="grid">
+            <img src="/images/Service.png" alt="icon3">
+            <p id="dailyTrans"><?= $todayTandStrans ?></p>
+            <p id="valueIncrease"><?= $TandSdailytransincrease ?></p>
+        </div>
+    </div>
+
+</div>
+<div class="date_filter">
+    <div class="dropdown_pdf_container">
+        <div class="date_dropdown">
+            <form>
+                <label for="date_type" class="date_type_label">
+                    <strong>D a t e &nbsp;&nbsp; F i l t e r :&nbsp;&nbsp;</strong></label>
+                <select name="date_type" id="date_type" class="dropdown-content">
+                    <option value="_day">Daily</option>
+                    <option value="_week">Weekly</option>
+                    <option value="_month">Monthly</option>
+                </select>
+            </form>
+        </div>
+        <div class="print_pdf">
+            <label class="print_pdf_label">Print or PDF</label>
+        </div>
+    </div>
+    <div class="datePicker">
+        <label>From: </label>
+        <input type="date" id="startDate" name="startDate" class="datePicker_label">
+        <label>To: </label>
+        <input type="date" id="endDate" name="endDate" class="datePicker_label">
+    </div>
+</div>
+
 <?php
+
 use yii\db\Query;
 
 // Fetch sales data from the database
@@ -170,19 +365,18 @@ $salesData = $query->select(['division_name', 'transacton_date', 'SUM(amount) as
     ->groupBy(['division_name', 'transacton_date'])
     ->all();
 
-// Fetch transaction data from the database (depends on how many transaction in same date and same div_name)
+// Fetch transaction data from the database
 $transactionData = $query->select(['division_name', 'transacton_date', 'COUNT(*) as transaction_count'])
     ->from('operational_report')
     ->groupBy(['division_name', 'transacton_date'])
     ->all();
 
-// Prepare $SalesperDiv array (null pa to)
+// Prepare $SalesperDiv array
 $SalesperDiv = [
     'labels' => [],
     'datasets' => [],
 ];
 
-//dito kukuha ng data for $SalesperDiv
 foreach ($salesData as $data) {
     $divisionName = $data['division_name'];
     $transactionDate = $data['transacton_date'];
@@ -208,14 +402,12 @@ foreach ($salesData as $data) {
     }
 }
 
-
-// Prepare $TransactionperDiv array (null pa// otw yung data HAHA)
+// Prepare $TransactionperDiv array
 $TransactionperDiv = [
     'labels' => [],
     'datasets' => [],
 ];
 
-//getting data for the $TransactionperDiv
 foreach ($transactionData as $data) {
     $divisionName = $data['division_name'];
     $transactionDate = $data['transacton_date'];
@@ -241,145 +433,9 @@ foreach ($transactionData as $data) {
     }
 }
 
-
-//setting default colors for each department
-$divisionColors = [
-    'National Metrology Department' => [
-        'backgroundColor' => 'rgba(54, 162, 255, 0.3)',
-        'borderColor' => 'rgba(54, 162, 255, 1)',
-        'borderWidth' => 2,
-    ],
-    'Standard and Testing Division' => [
-        'backgroundColor' => 'rgba(0, 128, 0, 0.3)',
-        'borderColor' => 'rgba(0, 128, 0, 1)', 
-        'borderWidth' => 2,
-    ],
-    'Technological Services Division' => [
-        'backgroundColor' => 'rgba(245, 40, 145, 0.2)',
-        'borderColor' => 'rgba(245, 40, 145, 1)', 
-        'borderWidth' => 2,
-    ],
-];
-
-//dito yung pag lalagay nung naka set na color
-foreach ($SalesperDiv['datasets'] as &$dataset) {
-    $divisionName = $dataset['label'];
-    $dataset['backgroundColor'] = isset($divisionColors[$divisionName]['backgroundColor']) ? $divisionColors[$divisionName]['backgroundColor'] : '#EFF5FF'; // Default background color if division_name not found
-    $dataset['borderColor'] = isset($divisionColors[$divisionName]['borderColor']) ? $divisionColors[$divisionName]['borderColor'] : '#0362BA'; // Default border color if division_name not found
-    $dataset['borderWidth'] = isset($divisionColors[$divisionName]['borderWidth']) ? $divisionColors[$divisionName]['borderWidth'] : '#0362BA';
-}
-
-foreach ($TransactionperDiv['datasets'] as &$dataset) {
-    $divisionName = $dataset['label'];
-    $dataset['backgroundColor'] = isset($divisionColors[$divisionName]['backgroundColor']) ? $divisionColors[$divisionName]['backgroundColor'] : '#EFF5FF'; // Default background color if division_name not found
-    $dataset['borderColor'] = isset($divisionColors[$divisionName]['borderColor']) ? $divisionColors[$divisionName]['borderColor'] : '#0362BA'; // Default border color if division_name not found
-    $dataset['borderWidth'] = isset($divisionColors[$divisionName]['borderWidth']) ? $divisionColors[$divisionName]['borderWidth'] : '#0362BA';
-}
-
-
-//Dito yung para sa Total ng Daily Transaction (tinatype ko pa yung date kasi di ako marunong nung rekta connected sa calendar HAHAHAH)
-
-//Metrology transaction
-//dito banda kukunin yung number of transaction tapos kung anong date
-$metlatestTransactions = (new Query())
-->select('COUNT(*)')
-->from('operational_report')
-->where([
-    'division_name' => 'National Metrology Department',
-    'transacton_date' => date('2023-06-16') // Assuming you want the number of transactions for today
-])
-->scalar();
-
-//dito magcocompute ng percentage ng increase or decrease ng number of past transaction at today's transaction (tinatype ko pa din yung sa last transaction kunwari kasi di pa ko marunong)
-$lastmettrans = 5;
-$todaymettrans = $metlatestTransactions;
-$metdailytransincrease = (($todaymettrans - $lastmettrans) / $todaymettrans) * 100;
-$metdailytransincrease = number_format($metdailytransincrease, 2);
-if ($metdailytransincrease > 1) {
-    $metdailytransincrease = '+' . $metdailytransincrease . '%';
-} else {
-    $metdailytransincrease = $metdailytransincrease . '%';
-}
-
-//same scenario sa taas
-//S&T transaction
-$SandTlatestTransactions = (new Query())
-->select('COUNT(*)')
-->from('operational_report')
-->where([
-    'division_name' => 'Standard and Testing Division',
-    'transacton_date' => date('2023-06-16') // Assuming you want the number of transactions for today
-])
-->scalar();
-
-$lastSandTtrans = 1;
-$todaySandTtrans = $SandTlatestTransactions ;
-$SandTdailytransincrease = (($todaySandTtrans - $lastSandTtrans) / $todaySandTtrans) * 100;
-$SandTdailytransincrease = number_format($SandTdailytransincrease, 2);
-if ($SandTdailytransincrease > 1) {
-    $SandTdailytransincrease = '+' . $SandTdailytransincrease . '%';
-} else {
-    $metdailytransincrease = $metdailytransincrease . '%';
-}
-
-//T&S transaction
-$TandSlatestTransactions = (new Query())
-->select('COUNT(*)')
-->from('operational_report')
-->where([
-    'division_name' => 'Standard and Testing Division',
-    'transacton_date' => date('2023-06-16') // Assuming you want the number of transactions for today
-])
-->scalar();
-$lastTandStrans = 1;
-$todayTandStrans = $TandSlatestTransactions;
-$TandSdailytransincrease = (($todayTandStrans - $lastTandStrans) / $todayTandStrans) * 100;
-$TandSdailytransincrease = number_format($TandSdailytransincrease, 2);
-if ($TandSdailytransincrease > 1) {
-    $TandSdailytransincrease = '+' . $TandSdailytransincrease . '%';
-} else {
-    $metdailytransincrease = $metdailytransincrease . '%';
-}
-
-
-
 ?>
 
-<!-- DailyTransaction Div, will hold the "Total Transaction Daily" -->
-<div class="DailyTransaction">
-    <p>Total Transactions Daily</p>
-
-    <div class="deptransaction">
-        <p>National Metrology</p>
-        <div class="grid">
-            <!-- Icon holder -->
-            <img src="/images/Pressure Gauge.png" alt="icon1">
-            <!-- Will call the variable set in the php above -->
-            <p id="dailyTrans"><?= $todaymettrans ?></p> 
-            <p id="valueIncrease"><?= $metdailytransincrease ?></p>
-        </div>
-    </div>
-    <div class="deptransaction" style="background-color:#02A560;">
-        <p>Standards and Testing</p>
-        <div class="grid">
-            <!-- same scenarios -->
-            <img src="/images/Pass Fail.png" alt="icon2">
-            <p id="dailyTrans"><?= $todaySandTtrans ?></p>
-            <p id="valueIncrease"><?= $SandTdailytransincrease ?></p>
-        </div>
-    </div>
-    <div class="deptransaction" style="background-color:#F21A9C;">
-        <p>Technological Services</p>
-        <div class="grid">
-            <img src="/images/Service.png" alt="icon3">
-            <p id="dailyTrans"><?= $todayTandStrans ?></p>
-            <p id="valueIncrease"><?= $TandSdailytransincrease ?></p>
-        </div>
-    </div>
-
-</div> <br>
-
-<!-- graph Div, holder of graphs -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.1"></script>
 <div class="graph">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -603,6 +659,22 @@ if ($TandSdailytransincrease > 1) {
             label: dataset.label,
             average: calculateAverage(dataset.data),
         }));
+
+        // //data set
+        // const salesAverageDataset = {
+        //  labels: salesAverage.map(data => data.label),
+        //  datasets: [{
+        //   data: salesAverage.map(data => data.average),
+        //  backgroundColor: ['blue', 'green', 'pink'], // Add colors for each dataset
+        //      label: 'Average Sales'
+        //     }]
+        //     };
+
+        //             const salesAverage = [
+        //   { label: 'NMD', average: 5 },
+        //   { label: 'STD', average: 4 },
+        //   { label: 'TSD', average: 3 },
+        // ];
 
         const semiCircleCtx = document.getElementById('semiCircleChart').getContext('2d');
 
