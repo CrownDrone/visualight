@@ -8,9 +8,9 @@ $this->registerCssFile(Url::to(['/css/custom.css']));
 
 
 
-$this->title = 'Update Profile';
-$this->params['breadcrumbs'][] = ['label' => 'User Profile', 'url' => ['view']];
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = '';
+// $this->params['breadcrumbs'][] = ['label' => 'User Profile', 'url' => ['view']];
+// $this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <div class="user-profile-update">
@@ -21,21 +21,22 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= $form->field($model, 'username')->textInput() ?>
 
     <?= $form->field($model, 'email')->textInput() ?>
-    
+
     <?= $form->field($model, 'contactNumber')->textInput(['maxlength' => true]) ?>
 
     <?php $hasPasswordError = $model->hasErrors('existingPassword'); ?>
-    <?= $form->field($model, 'existingPassword')->passwordInput()->hint($hasPasswordError ? '' : '   *Leave it blank if you dont want to change the password',['style' => 'color: green']) ?>
-   
-    <?php $hasPasswordError = $model->hasErrors('newPassword'); ?>
-    <?= $form->field($model, 'newPassword')->passwordInput()->hint($hasPasswordError ? '' : '   *Leave it blank if you dont want to change the password',['style' => 'color: green']) ?>
+    <?= $form->field($model, 'existingPassword')->passwordInput()->hint($hasPasswordError ? '' : '   *Leave it blank if you dont want to change the password', ['style' => 'color: green']) ?>
 
-    <?= $form->field($model, 'imageFile')->fileInput(['accept' => 'image/*']) // Add the image file input field ?>
+    <?php $hasPasswordError = $model->hasErrors('newPassword'); ?>
+    <?= $form->field($model, 'newPassword')->passwordInput()->hint($hasPasswordError ? '' : '   *Leave it blank if you dont want to change the password', ['style' => 'color: green']) ?>
+
+    <?= $form->field($model, 'imageFile')->fileInput(['accept' => 'image/*']) // Add the image file input field 
+    ?>
 
     <!-- Show the current image preview -->
-    <?php if ($model->profile_picture):?>
+    <?php if ($model->profile_picture) : ?>
         <h3>Current Profile Picture:</h3>
-        <?php   
+        <?php
         $profilePicturePath = Url::to(['/user-profile/get-profile-picture', 'fileName' => $model->profile_picture]);
         echo Html::img($profilePicturePath, ['class' => 'img-circle elevation-2', 'style' => 'height: 300px; width: 300px;', 'id' => 'current-image']); ?>
     <?php endif; ?>
@@ -59,7 +60,7 @@ $this->params['breadcrumbs'][] = $this->title;
 $this->registerJs("
 $(document).ready(function() {
     // Handler for the file input change event
-    $('#".Html::getInputId($model, 'imageFile')."').change(function() {
+    $('#" . Html::getInputId($model, 'imageFile') . "').change(function() {
         // Hide the current image preview (if available)
         $('#current-image').hide();
         
