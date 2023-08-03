@@ -15,27 +15,6 @@ $this->title = '';
         font-size: 16px;
     }
 
-    /* header div css (Visualight logo and the "Dashboard text") */
-
-    /* .header {
-        color: #0362BA;
-        font-family: Poppins;
-        font-size: 2rem;
-        font-weight: 600;
-        line-height: normal;
-        letter-spacing: 3px;
-        border-top: solid 0.5vh;
-        display: flex;   
-        justify-content: space-between;
-
-    } */
-
-    /* .header img {
-        float: right;
-        height: 3rem;
-        margin-bottom: 1rem;
-    } */
-
     /* Daily transaction css */
 
     .DailyTransaction {
@@ -118,13 +97,8 @@ $this->title = '';
         border-radius: .93rem;
         background-color: white;
         display: inline-block;
-<<<<<<< Updated upstream
-        height: 40vh;
-        width: 40%;
-=======
         height: 28rem;
         width: 45%;
->>>>>>> Stashed changes
     }
 
     body.dark-mode .chart-container {
@@ -261,11 +235,139 @@ $this->title = '';
     }
 </style>
 
-<?=
-$m = "";
-// metrology transaction
+<?php
+use yii\db\Query;
+
+// Fetch sales data from the database
+$query = new Query();
+$salesData = $query->select(['division_name', 'transacton_date', 'SUM(amount) as total_amount'])
+    ->from('operational_report')
+    ->groupBy(['division_name', 'transacton_date'])
+    ->all();
+
+// Fetch transaction data from the database (depends on how many transaction in same date and same div_name)
+$transactionData = $query->select(['division_name', 'transacton_date', 'COUNT(*) as transaction_count'])
+    ->from('operational_report')
+    ->groupBy(['division_name', 'transacton_date'])
+    ->all();
+
+// Prepare $SalesperDiv array (null pa to)
+$SalesperDiv = [
+    'labels' => [],
+    'datasets' => [],
+];
+
+//dito kukuha ng data for $SalesperDiv
+foreach ($salesData as $data) {
+    $divisionName = $data['division_name'];
+    $transactionDate = $data['transacton_date'];
+    $totalAmount = (float) $data['total_amount'];
+
+    // Add unique dates to the labels array
+    if (!in_array($transactionDate, $SalesperDiv['labels'])) {
+        $SalesperDiv['labels'][] = $transactionDate;
+    }
+
+    // Find the index of the division in the datasets array
+    $divisionIndex = array_search($divisionName, array_column($SalesperDiv['datasets'], 'label'));
+
+    if ($divisionIndex === false) {
+        // Add a new dataset for the division if not already present
+        $SalesperDiv['datasets'][] = [
+            'label' => $divisionName,
+            'data' => [$totalAmount],
+        ];
+    } else {
+        // If the dataset already exists, add the amount to the existing data
+        $SalesperDiv['datasets'][$divisionIndex]['data'][] = $totalAmount;
+    }
+}
+
+
+// Prepare $TransactionperDiv array (null pa// otw yung data HAHA)
+$TransactionperDiv = [
+    'labels' => [],
+    'datasets' => [],
+];
+
+//getting data for the $TransactionperDiv
+foreach ($transactionData as $data) {
+    $divisionName = $data['division_name'];
+    $transactionDate = $data['transacton_date'];
+    $transactionCount = (int) $data['transaction_count'];
+
+    // Add unique dates to the labels array
+    if (!in_array($transactionDate, $TransactionperDiv['labels'])) {
+        $TransactionperDiv['labels'][] = $transactionDate;
+    }
+
+    // Find the index of the division in the datasets array
+    $divisionIndex = array_search($divisionName, array_column($TransactionperDiv['datasets'], 'label'));
+
+    if ($divisionIndex === false) {
+        // Add a new dataset for the division if not already present
+        $TransactionperDiv['datasets'][] = [
+            'label' => $divisionName,
+            'data' => [$transactionCount],
+        ];
+    } else {
+        // If the dataset already exists, add the transaction count to the existing data
+        $TransactionperDiv['datasets'][$divisionIndex]['data'][] = $transactionCount;
+    }
+}
+
+
+//setting default colors for each department
+$divisionColors = [
+    'National Metrology Department' => [
+        'backgroundColor' => 'rgba(54, 162, 255, 0.3)',
+        'borderColor' => 'rgba(54, 162, 255, 1)',
+        'borderWidth' => 2,
+    ],
+    'Standard and Testing Division' => [
+        'backgroundColor' => 'rgba(0, 128, 0, 0.3)',
+        'borderColor' => 'rgba(0, 128, 0, 1)', 
+        'borderWidth' => 2,
+    ],
+    'Technological Services Division' => [
+        'backgroundColor' => 'rgba(245, 40, 145, 0.2)',
+        'borderColor' => 'rgba(245, 40, 145, 1)', 
+        'borderWidth' => 2,
+    ],
+];
+
+//dito yung pag lalagay nung naka set na color
+foreach ($SalesperDiv['datasets'] as &$dataset) {
+    $divisionName = $dataset['label'];
+    $dataset['backgroundColor'] = isset($divisionColors[$divisionName]['backgroundColor']) ? $divisionColors[$divisionName]['backgroundColor'] : '#EFF5FF'; // Default background color if division_name not found
+    $dataset['borderColor'] = isset($divisionColors[$divisionName]['borderColor']) ? $divisionColors[$divisionName]['borderColor'] : '#0362BA'; // Default border color if division_name not found
+    $dataset['borderWidth'] = isset($divisionColors[$divisionName]['borderWidth']) ? $divisionColors[$divisionName]['borderWidth'] : '#0362BA';
+}
+
+foreach ($TransactionperDiv['datasets'] as &$dataset) {
+    $divisionName = $dataset['label'];
+    $dataset['backgroundColor'] = isset($divisionColors[$divisionName]['backgroundColor']) ? $divisionColors[$divisionName]['backgroundColor'] : '#EFF5FF'; // Default background color if division_name not found
+    $dataset['borderColor'] = isset($divisionColors[$divisionName]['borderColor']) ? $divisionColors[$divisionName]['borderColor'] : '#0362BA'; // Default border color if division_name not found
+    $dataset['borderWidth'] = isset($divisionColors[$divisionName]['borderWidth']) ? $divisionColors[$divisionName]['borderWidth'] : '#0362BA';
+}
+
+
+//Dito yung para sa Total ng Daily Transaction (tinatype ko pa yung date kasi di ako marunong nung rekta connected sa calendar HAHAHAH)
+
+//Metrology transaction
+//dito banda kukunin yung number of transaction tapos kung anong date
+$metlatestTransactions = (new Query())
+->select('COUNT(*)')
+->from('operational_report')
+->where([
+    'division_name' => 'National Metrology Department',
+    'transacton_date' => date('2023-06-16') // Assuming you want the number of transactions for today
+])
+->scalar();
+
+//dito magcocompute ng percentage ng increase or decrease ng number of past transaction at today's transaction (tinatype ko pa din yung sa last transaction kunwari kasi di pa ko marunong)
 $lastmettrans = 5;
-$todaymettrans = 3;
+$todaymettrans = $metlatestTransactions;
 $metdailytransincrease = (($todaymettrans - $lastmettrans) / $todaymettrans) * 100;
 $metdailytransincrease = number_format($metdailytransincrease, 2);
 if ($metdailytransincrease > 1) {
@@ -274,9 +376,19 @@ if ($metdailytransincrease > 1) {
     $metdailytransincrease = $metdailytransincrease . '%';
 }
 
+//same scenario sa taas
 //S&T transaction
-$lastSandTtrans = 2;
-$todaySandTtrans = 10;
+$SandTlatestTransactions = (new Query())
+->select('COUNT(*)')
+->from('operational_report')
+->where([
+    'division_name' => 'Standard and Testing Division',
+    'transacton_date' => date('2023-06-16') // Assuming you want the number of transactions for today
+])
+->scalar();
+
+$lastSandTtrans = 1;
+$todaySandTtrans = $SandTlatestTransactions ;
 $SandTdailytransincrease = (($todaySandTtrans - $lastSandTtrans) / $todaySandTtrans) * 100;
 $SandTdailytransincrease = number_format($SandTdailytransincrease, 2);
 if ($SandTdailytransincrease > 1) {
@@ -284,9 +396,18 @@ if ($SandTdailytransincrease > 1) {
 } else {
     $metdailytransincrease = $metdailytransincrease . '%';
 }
+
 //T&S transaction
-$lastTandStrans = 6;
-$todayTandStrans = 100;
+$TandSlatestTransactions = (new Query())
+->select('COUNT(*)')
+->from('operational_report')
+->where([
+    'division_name' => 'Standard and Testing Division',
+    'transacton_date' => date('2023-06-16') // Assuming you want the number of transactions for today
+])
+->scalar();
+$lastTandStrans = 1;
+$todayTandStrans = $TandSlatestTransactions;
 $TandSdailytransincrease = (($todayTandStrans - $lastTandStrans) / $todayTandStrans) * 100;
 $TandSdailytransincrease = number_format($TandSdailytransincrease, 2);
 if ($TandSdailytransincrease > 1) {
@@ -294,6 +415,7 @@ if ($TandSdailytransincrease > 1) {
 } else {
     $metdailytransincrease = $metdailytransincrease . '%';
 }
+
 
 
 ?>
@@ -359,88 +481,7 @@ if ($TandSdailytransincrease > 1) {
     </div>
 </div>
 
-<?php
-
-use yii\db\Query;
-
-// Fetch sales data from the database
-$query = new Query();
-$salesData = $query->select(['division_name', 'transacton_date', 'SUM(amount) as total_amount'])
-    ->from('operational_report')
-    ->groupBy(['division_name', 'transacton_date'])
-    ->all();
-
-// Fetch transaction data from the database
-$transactionData = $query->select(['division_name', 'transacton_date', 'COUNT(*) as transaction_count'])
-    ->from('operational_report')
-    ->groupBy(['division_name', 'transacton_date'])
-    ->all();
-
-// Prepare $SalesperDiv array
-$SalesperDiv = [
-    'labels' => [],
-    'datasets' => [],
-];
-
-foreach ($salesData as $data) {
-    $divisionName = $data['division_name'];
-    $transactionDate = $data['transacton_date'];
-    $totalAmount = (float) $data['total_amount'];
-
-    // Add unique dates to the labels array
-    if (!in_array($transactionDate, $SalesperDiv['labels'])) {
-        $SalesperDiv['labels'][] = $transactionDate;
-    }
-
-    // Find the index of the division in the datasets array
-    $divisionIndex = array_search($divisionName, array_column($SalesperDiv['datasets'], 'label'));
-
-    if ($divisionIndex === false) {
-        // Add a new dataset for the division if not already present
-        $SalesperDiv['datasets'][] = [
-            'label' => $divisionName,
-            'data' => [$totalAmount],
-        ];
-    } else {
-        // If the dataset already exists, add the amount to the existing data
-        $SalesperDiv['datasets'][$divisionIndex]['data'][] = $totalAmount;
-    }
-}
-
-// Prepare $TransactionperDiv array
-$TransactionperDiv = [
-    'labels' => [],
-    'datasets' => [],
-];
-
-foreach ($transactionData as $data) {
-    $divisionName = $data['division_name'];
-    $transactionDate = $data['transacton_date'];
-    $transactionCount = (int) $data['transaction_count'];
-
-    // Add unique dates to the labels array
-    if (!in_array($transactionDate, $TransactionperDiv['labels'])) {
-        $TransactionperDiv['labels'][] = $transactionDate;
-    }
-
-    // Find the index of the division in the datasets array
-    $divisionIndex = array_search($divisionName, array_column($TransactionperDiv['datasets'], 'label'));
-
-    if ($divisionIndex === false) {
-        // Add a new dataset for the division if not already present
-        $TransactionperDiv['datasets'][] = [
-            'label' => $divisionName,
-            'data' => [$transactionCount],
-        ];
-    } else {
-        // If the dataset already exists, add the transaction count to the existing data
-        $TransactionperDiv['datasets'][$divisionIndex]['data'][] = $transactionCount;
-    }
-}
-
-?>
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.1"></script>
+<!-- graph Div, holder of graphs -->
 <div class="graph">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -673,25 +714,6 @@ foreach ($transactionData as $data) {
         // Find the maximum average value
         const maxAverage = Math.max(...TransactionAverage.map((average) => average.average));
 
-<<<<<<< Updated upstream
-        // //data set
-        // const salesAverageDataset = {
-        //  labels: salesAverage.map(data => data.label),
-        //  datasets: [{
-        //   data: salesAverage.map(data => data.average),
-        //  backgroundColor: ['blue', 'green', 'pink'], // Add colors for each dataset
-        //      label: 'Average Sales'
-        //     }]
-        //     };
-
-        //             const salesAverage = [
-        //   { label: 'NMD', average: 5 },
-        //   { label: 'STD', average: 4 },
-        //   { label: 'TSD', average: 3 },
-        // ];
-
-        const semiCircleCtx = document.getElementById('semiCircleChart').getContext('2d');
-=======
         // Create a new dataset for each sales average
         const newDatasets = TransactionAverage.map((average) => ({
             label: `Average ${average.label}`,
@@ -702,7 +724,6 @@ foreach ($transactionData as $data) {
              return (ctx.dataset.data[0] / maxAverage) * 270; // Scale the circumference based on the maximum average value
          },
         }));
->>>>>>> Stashed changes
 
         // Combine the existing datasets with the new datasets
         const allDatasets = [...TransactionAverage, ...newDatasets];
@@ -769,8 +790,6 @@ foreach ($transactionData as $data) {
                     //     }
                     // });
     </script>
-
-
 
 
 
