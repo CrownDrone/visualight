@@ -15,27 +15,6 @@ $this->title = '';
         font-size: 16px;
     }
 
-    /* header div css (Visualight logo and the "Dashboard text") */
-
-    /* .header {
-        color: #0362BA;
-        font-family: Poppins;
-        font-size: 2rem;
-        font-weight: 600;
-        line-height: normal;
-        letter-spacing: 3px;
-        border-top: solid 0.5vh;
-        display: flex;   
-        justify-content: space-between;
-
-    } */
-
-    /* .header img {
-        float: right;
-        height: 3rem;
-        margin-bottom: 1rem;
-    } */
-
     /* Daily transaction css */
 
     .DailyTransaction {
@@ -118,8 +97,8 @@ $this->title = '';
         border-radius: 15px;
         background-color: white;
         display: inline-block;
-        height: 40vh;
-        width: 40%;
+        height: 50vh;
+        width: 45%;
     }
 
     body.dark-mode .chart-container {
@@ -189,18 +168,19 @@ $salesData = $query->select(['division_name', 'transacton_date', 'SUM(amount) as
     ->groupBy(['division_name', 'transacton_date'])
     ->all();
 
-// Fetch transaction data from the database
+// Fetch transaction data from the database (depends on how many transaction in same date and same div_name)
 $transactionData = $query->select(['division_name', 'transacton_date', 'COUNT(*) as transaction_count'])
     ->from('operational_report')
     ->groupBy(['division_name', 'transacton_date'])
     ->all();
 
-// Prepare $SalesperDiv array
+// Prepare $SalesperDiv array (null pa to)
 $SalesperDiv = [
     'labels' => [],
     'datasets' => [],
 ];
 
+//dito kukuha ng data for $SalesperDiv
 foreach ($salesData as $data) {
     $divisionName = $data['division_name'];
     $transactionDate = $data['transacton_date'];
@@ -227,12 +207,13 @@ foreach ($salesData as $data) {
 }
 
 
-// Prepare $TransactionperDiv array
+// Prepare $TransactionperDiv array (null pa// otw yung data HAHA)
 $TransactionperDiv = [
     'labels' => [],
     'datasets' => [],
 ];
 
+//getting data for the $TransactionperDiv
 foreach ($transactionData as $data) {
     $divisionName = $data['division_name'];
     $transactionDate = $data['transacton_date'];
@@ -259,7 +240,7 @@ foreach ($transactionData as $data) {
 }
 
 
-
+//setting default colors for each department
 $divisionColors = [
     'National Metrology Department' => [
         'backgroundColor' => 'rgba(54, 162, 255, 0.3)',
@@ -276,9 +257,9 @@ $divisionColors = [
         'borderColor' => 'rgba(245, 40, 145, 1)', 
         'borderWidth' => 2,
     ],
-    // Add more division names and their corresponding colors with opacity and border color as needed
 ];
 
+//dito yung pag lalagay nung naka set na color
 foreach ($SalesperDiv['datasets'] as &$dataset) {
     $divisionName = $dataset['label'];
     $dataset['backgroundColor'] = isset($divisionColors[$divisionName]['backgroundColor']) ? $divisionColors[$divisionName]['backgroundColor'] : '#EFF5FF'; // Default background color if division_name not found
@@ -294,8 +275,10 @@ foreach ($TransactionperDiv['datasets'] as &$dataset) {
 }
 
 
+//Dito yung para sa Total ng Daily Transaction (tinatype ko pa yung date kasi di ako marunong nung rekta connected sa calendar HAHAHAH)
 
 //Metrology transaction
+//dito banda kukunin yung number of transaction tapos kung anong date
 $metlatestTransactions = (new Query())
 ->select('COUNT(*)')
 ->from('operational_report')
@@ -304,6 +287,8 @@ $metlatestTransactions = (new Query())
     'transacton_date' => date('2023-06-16') // Assuming you want the number of transactions for today
 ])
 ->scalar();
+
+//dito magcocompute ng percentage ng increase or decrease ng number of past transaction at today's transaction (tinatype ko pa din yung sa last transaction kunwari kasi di pa ko marunong)
 $lastmettrans = 5;
 $todaymettrans = $metlatestTransactions;
 $metdailytransincrease = (($todaymettrans - $lastmettrans) / $todaymettrans) * 100;
@@ -314,6 +299,7 @@ if ($metdailytransincrease > 1) {
     $metdailytransincrease = $metdailytransincrease . '%';
 }
 
+//same scenario sa taas
 //S&T transaction
 $SandTlatestTransactions = (new Query())
 ->select('COUNT(*)')
@@ -333,6 +319,7 @@ if ($SandTdailytransincrease > 1) {
 } else {
     $metdailytransincrease = $metdailytransincrease . '%';
 }
+
 //T&S transaction
 $TandSlatestTransactions = (new Query())
 ->select('COUNT(*)')
@@ -356,28 +343,24 @@ if ($TandSdailytransincrease > 1) {
 
 ?>
 
-<!-- 
-<div class="header">
-    <div class="header-grid">
-    <p>Dashboard</p>
-    <img src="/images/LogoVL.png" alt="visLogo">
-    </div>
-</div> <br> -->
-
+<!-- DailyTransaction Div, will hold the "Total Transaction Daily" -->
 <div class="DailyTransaction">
     <p>Total Transactions Daily</p>
 
     <div class="deptransaction">
         <p>National Metrology</p>
         <div class="grid">
+            <!-- Icon holder -->
             <img src="/images/Pressure Gauge.png" alt="icon1">
-            <p id="dailyTrans"><?= $todaymettrans ?></p>
+            <!-- Will call the variable set in the php above -->
+            <p id="dailyTrans"><?= $todaymettrans ?></p> 
             <p id="valueIncrease"><?= $metdailytransincrease ?></p>
         </div>
     </div>
     <div class="deptransaction" style="background-color:#02A560;">
         <p>Standards and Testing</p>
         <div class="grid">
+            <!-- same scenarios -->
             <img src="/images/Pass Fail.png" alt="icon2">
             <p id="dailyTrans"><?= $todaySandTtrans ?></p>
             <p id="valueIncrease"><?= $SandTdailytransincrease ?></p>
@@ -394,7 +377,7 @@ if ($TandSdailytransincrease > 1) {
 
 </div> <br>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.1"></script>
+
 <div class="graph">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
