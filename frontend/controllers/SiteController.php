@@ -110,7 +110,7 @@ class SiteController extends BaseController
                 }
             } else {
                 // The user identity is null, handle the case appropriately
-                return $this->redirect(['site/login']); // Redirect to the login page
+                return $this->redirect(['site/login']); // Redirect to the login pages
             }
         }
 
