@@ -38,7 +38,7 @@ class SiteController extends BaseController
                   [
                     'allow' => true,
                     'actions' => ['logout'],
-                    'roles' => ['@'], //add only admin allowed
+                    'roles' => ['@'], //everyone allowed
                 ],
                 ],
             ],
