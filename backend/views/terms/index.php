@@ -4,11 +4,12 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
-$this->title = 'Terms of Service';
-$this->params['breadcrumbs'][] = $this->title;
+// $this->title = 'Terms of Service';
+// $this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <div class="terms-and-conditions">
+    <h2>Terms of Service</h2>
     <p>Please read the following terms and conditions carefully before using our web application. By accessing or using our web application, you agree to be bound by these terms and conditions. If you do not agree with any part of these terms and conditions, you should not use our web application.</p>
 
     <ol>

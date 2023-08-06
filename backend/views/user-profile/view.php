@@ -25,10 +25,14 @@ $defaultImagePath = Yii::getAlias('@web') . '/images/user2.jpg';
                 <?= Html::img($defaultImagePath, ['class' => 'img-circle elevation-2', 'style' => 'height: 200px; width: 200px']) ?>
             <?php endif; ?>
         </div>
-
+        <!-- <div style="text-align: center;">
+            <span>
+                <strong>Full Name: </strong><?= Html::encode($user->fullName) ?>
+            </span>
+        </div> -->
     </div>
 
-    <table class="table table-bordered" style="overflow-x:auto; border-collapse: collapse;border-style:hidden;">
+    <table class="table table-bordered" style="overflow-x:auto; border-collapse: collapse; border-style:hidden; text-indent: 13rem; margin-top: 50px;">
         <td>
 
         </td>
