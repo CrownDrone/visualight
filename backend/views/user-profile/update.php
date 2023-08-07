@@ -60,7 +60,7 @@ $this->title = '';
             <?= Html::a('Back', ['view'], ['class' => 'btn btn-warning']) ?>
 
         </div>
-        <!-- end of right  -->
+        <!-- end of right column -->
     </div>
     <?php ActiveForm::end(); ?>
 </div>
