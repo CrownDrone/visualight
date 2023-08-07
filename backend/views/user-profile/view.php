@@ -38,9 +38,7 @@ $defaultImagePath = Yii::getAlias('@web') . '/images/user2.jpg';
             ?>
         </span>
         <br>
-        <span style="color: black; ">
-            <?= Html::encode($user->fullName) ?>
-        </span>
+        
     </div>
 
     <div style="margin: 2rem auto; border-top: 2px solid #000; width: 90%;"></div>
