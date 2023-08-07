@@ -5,6 +5,11 @@ use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
 $this->registerCssFile(Url::to(['/css/custom.css']));
+$defaultImagePath = Yii::getAlias('@web') . '/images/user2.jpg';
+
+$profilePicturePath = $model->profile_picture
+    ? Url::to(['/user-profile/get-profile-picture', 'fileName' => $model->profile_picture])
+    : $defaultImagePath;
 
 
 
@@ -33,11 +38,12 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= $form->field($model, 'imageFile')->fileInput(['accept' => 'image/*']) // Add the image file input field ?>
 
     <!-- Show the current image preview -->
-    <?php if ($model->profile_picture):?>
-        <h3>Current Profile Picture:</h3>
-        <?php   
-        $profilePicturePath = Url::to(['/user-profile/get-profile-picture', 'fileName' => $model->profile_picture]);
-        echo Html::img($profilePicturePath, ['class' => 'img-circle elevation-2', 'style' => 'height: 300px; width: 300px;', 'id' => 'current-image']); ?>
+    <?php if ($model->profile_picture): ?>
+    <h3>Current Profile Picture:</h3>
+    <?php echo Html::img($profilePicturePath, ['class' => 'img-circle elevation-2', 'style' => 'height: 300px; width: 300px;', 'id' => 'current-image']); ?>
+    <?php else: ?>
+        <h3>No Profile Picture Found</h3>
+        <?php echo Html::img($defaultImagePath, ['class' => 'img-circle elevation-2', 'style' => 'height: 300px; width: 300px;', 'id' => 'current-image']); ?>
     <?php endif; ?>
     <br>
     <!-- Add an empty image tag for real-time preview -->

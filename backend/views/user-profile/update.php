@@ -5,7 +5,12 @@ use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
 $this->registerCssFile(Url::to(['/css/custom.css']));
+$defaultImagePath = Yii::getAlias('@web') . '/images/user2.jpg';
 
+
+$profilePicturePath = $model->profile_picture
+    ? Url::to(['/user-profile/get-profile-picture', 'fileName' => $model->profile_picture])
+    : $defaultImagePath;
 
 
 $this->title = '';
@@ -20,14 +25,15 @@ $this->title = '';
     <div style="border-radius: 10px; background: #77bfc7; width: 100%; height: 670px; background-size: cover; ">
         <!-- Left column start  -->
         <!-- Show the current image preview -->
-        <?php if ($model->profile_picture) : ?>
-            <?php
-            $profilePicturePath = Url::to(['/user-profile/get-profile-picture', 'fileName' => $model->profile_picture]);
-            echo Html::img($profilePicturePath, ['class' => 'img-circle elevation-2', 'style' => 'height: 227px; width: 227px; margin-top: 14%; margin-left: 10%', 'id' => 'current-image']); ?>
+        <?php if ($model->profile_picture): ?>
+        <h3>Current Profile Picture:</h3>
+        <?php echo Html::img($profilePicturePath, ['class' => 'img-circle elevation-2', 'style' => 'height: 300px; width: 300px;', 'id' => 'current-image']); ?>
+        <?php else: ?>
+            <?php echo Html::img($defaultImagePath, ['class' => 'img-circle elevation-2', 'style' => 'height: 300px; width: 300px; margin-top: 13%; margin-left: 10% ', 'id' => 'current-image']); ?>
         <?php endif; ?>
         <br>
         <!-- Add an empty image tag for real-time preview -->
-        <img id="image-preview" src="#" alt="Image Preview" class="img-circle elevation-2" style="height: 227px; width: 227px; display: none; margin-top: 13%; margin-left: 10% ">
+        <img id="image-preview" src="#" alt="Image Preview" class="img-circle elevation-2" style="height: 300px; width: 300px; display: none; margin-top: 13%; margin-left: 10% ">
 
         <!-- End of left column  -->
 
