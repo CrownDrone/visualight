@@ -22,7 +22,7 @@ $this->title = '';
 <h4 style="color: #0362BA; font-family: Poppins; font-size: 24px; font-style: normal; font-weight: 600; line-height: normal; letter-spacing: 2.5px;">Edit Profile:</h4>
 
 <div class="user-profile-update">
-    <div style="border-radius: 10px; background: #77bfc7; width: 100%; height: 670px; background-size: cover; ">
+    <div style="border-radius: 10px; background: #cceeff; width: 100%; height: 670px; background-size: cover; ">
         <!-- Left column start  -->
         <!-- Show the current image preview -->
         <?php if ($model->profile_picture): ?>
