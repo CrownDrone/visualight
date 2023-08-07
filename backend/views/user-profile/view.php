@@ -38,13 +38,13 @@ $defaultImagePath = Yii::getAlias('@web') . '/images/user2.jpg';
             ?>
         </span>
         <br>
-        <span style="color: black;">
+        <span style="color: black; font-weight: 300; font-size: 40px;">
             <?= Html::encode($user->fullName) ?>
         </span>
     </div>
 
 
-    <div style="margin: 2rem auto; border-top: 1px solid #000; width: 90%;"></div>
+    <div style="margin: 2rem auto; border-top: 2px solid #000; width: 90%;"></div>
 
 
     <table class="table table-bordered" style="overflow-x:auto; border-collapse: collapse; border-style:hidden; text-indent: 13rem; margin-top: 1rem; ">
