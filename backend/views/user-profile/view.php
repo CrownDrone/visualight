@@ -27,7 +27,7 @@ $defaultImagePath = Yii::getAlias('@web') . '/images/user2.jpg';
     </div>
 
     <div style="text-align: center; margin-top: 4rem;">
-        <span style="color: #0362BA; font-family: Poppins; font-size: 20px; font-style: normal; font-weight: 300; line-height: normal; letter-spacing: 3px;">
+        <span style="color: #0362BA; font-family: Poppins; font-size: 15px; font-style: normal; font-weight: 300; line-height: normal; letter-spacing: 3px;">
             <?php
             $roles = Yii::$app->authManager->getRolesByUser($user->id);
             $roleNames = [];
