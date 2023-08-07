@@ -13,7 +13,7 @@ $defaultImagePath = Yii::getAlias('@web') . '/images/user2.jpg';
 <div class="user-profile-view">
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <?= Html::a('Edit Profile', ['update'], ['class' => 'btn btn-primary', 'style' => 'position:absolute; right: 5rem; top: 745px; font-weight: 600; ']) ?>
+    <?= Html::a('Edit Profile', ['update'], ['class' => 'btn btn-primary', 'style' => 'position:absolute; right: 5rem; top: 720px; font-weight: 600; ']) ?>
     <div style="background-image: url('/images/back_pic.png'); background-repeat: no-repeat; background-size: cover; width: 100%; height: 350px;">
 
         <div style="position: relative; top: 13em; text-align: center;">
@@ -38,7 +38,9 @@ $defaultImagePath = Yii::getAlias('@web') . '/images/user2.jpg';
             ?>
         </span>
         <br>
-        
+        <span style="color: black; font-weight: 300; width: 525px; height: 54px;">
+            <?= Html::encode($user->fullName) ?>
+        </span>
     </div>
 
     <div style="margin: 2rem auto; border-top: 2px solid #000; width: 90%;"></div>
