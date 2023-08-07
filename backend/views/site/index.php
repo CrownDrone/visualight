@@ -58,6 +58,22 @@ $this->title = '';
         cursor: pointer;
     }
 
+    .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-gap: .125rem;
+            grid-template-rows: auto auto;
+
+        }
+
+    #dailyTrans {
+            font-size: 3.375rem;
+            font-style: normal;
+            font-weight: 700;
+            line-height: normal;
+            letter-spacing: .5rem;
+        }
+
     #valueIncrease {
         font-size: 1.5rem;
         font-weight: 400;
@@ -68,21 +84,92 @@ $this->title = '';
 
     }
 
-    #dailyTrans {
-        font-size: 3.375rem;
-        font-style: normal;
-        font-weight: 700;
-        line-height: normal;
-        letter-spacing: .5rem;
+    
+    /* dropdown and datepicker */
+
+    .date_filter
+    {
+        width: 100%;
+        height: 5.8125rem;
+        display: wrap;
+        text-align: center;
     }
 
-    .grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        grid-gap: .125rem;
-        grid-template-rows: auto auto;
-
+    .containers
+    {
+        width: 45%;
+        height: 7.875rem;
+        display: inline-block;
     }
+
+    .dropdown_pdf_container 
+    {
+        position: relative;
+    }
+
+    .date_dropdown 
+    {
+        position: relative;
+        padding-top: 1.1rem;
+        padding-bottom: 1.1rem;
+        float: left;
+        overflow: hidden;
+        z-index: 99;
+    }
+    
+    .date_type_label 
+    {
+        font-style: Poppins;
+        color: #F8B200;
+        font-size: 1.3rem;
+        letter-spacing: .30rem;
+    }
+
+    .dropdown 
+    {
+        position: relative;
+        display: inline-block;
+    }
+
+    .dropdown-content 
+    {
+        min-width: 8rem;
+        z-index: 1;
+        text-align: center;
+        border-radius: 0.5rem;
+    }
+
+    .date_type 
+    {
+        border-radius: 0.5rem
+    }
+
+    .print_pdf {
+        padding-right: 8.7rem;
+        padding-top: 1.3rem;
+        padding-bottom: 1.1rem;
+        right: 1rem;
+    }
+
+    .print_pdf_label {
+        border-radius: 1rem;
+        background-color: #00BDB2;
+        font-size: .7rem;
+        text-align: center;
+        margin: auto;
+        padding: 0.2rem;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        color: white;
+        width: 7rem;
+    }
+
+    .datePicker_label {
+        border-radius: 0.5rem;
+        width: 8rem;
+        text-align: center;
+        font-size: 0.9rem;
+    } 
 
     /* graph div */
     .graph {
@@ -119,16 +206,17 @@ $this->title = '';
         letter-spacing: .15rem;
 
     }
+    
 
     /* responsiveness */
 
-    @media (max-width: 900px) {
+    /* daily transaction div */
+    @media (max-width: 900px) 
+    {
         .deptransaction {
             width: 80%;
-            display: justify;
-            /* Change to block to stack vertically */
+            display: justify; /* Change to block to stack vertically */
             margin: 0 auto 1rem;
-
 
         }
 
@@ -139,7 +227,9 @@ $this->title = '';
         .header {
             font-size: 1rem;
         }
+    }
 
+<<<<<<< Updated upstream
         /* .header img {
             height: 2rem;
             margin-bottom: 1rem;
@@ -156,36 +246,64 @@ $this->title = '';
 
                 /* Change to block to stack vertically */
             }
+=======
+    /* graph responsiveness */
+    @media (max-width: 900px) 
+    {
+        .chart-container 
+        {
+            flex-basis: 100%;
+            max-width: 100%;
+            width: 95%;
+            height:25rem;
+            display: block;
+>>>>>>> Stashed changes
         }
     }
 
-    .dropdown {
-        position: relative;
-        display: inline-block;
-    }
+    /* dropdown and date picker responsiveness */
+    /* tablet ui */
+    @media (min-width: 720),(max-width:1500px)
+    {
+        
+        .date_filter 
+        {
+        height: 2.8125rem;
+        }
 
-    .dropdown-content {
-        min-width: 8rem;
-        z-index: 1;
-        text-align: center;
-        border-radius: 0.5rem;
-    }
+        .containers
+        {
+            height: 2.875rem;
+        }
 
-    .dropdown_pdf_container {
-        position: relative;
-    }
+        .date_dropdown 
+        {
+            padding-right: 1rem;
+            padding-top: .5rem;
+            padding-bottom: .5rem;
+        }
 
-    .date_type_label {
-        font-style: Poppins;
-        color: #F8B200;
-        font-size: 1.3rem;
-    }
+        .date_type_label {
+            font-size: .8rem;
+            letter-spacing: 0.01rem;
+        }
 
-    .date_filter {
-        display: grid;
-        grid-template-columns: auto auto;
-    }
+        .dropdown-content 
+        {
+            z-index: 1;
+            text-align: center;
+            border-radius: 0.5rem;
+            width: 0.02rem;
+            height: 1.5rem;
+            font-size: .8rem;
+        }
+        
+        .date_type 
+        {
+            border-radius:1px;
+        }
 
+<<<<<<< Updated upstream
     .date_dropdown {
         z-index: 99;
         position: relative;
@@ -194,41 +312,102 @@ $this->title = '';
         padding-right: 3.7rem;
         padding-top: 1.1rem;
         padding-bottom: 1.1rem;
-    }
+=======
+        .print_pdf 
+        {
+            padding-right: 0rem;
+            padding-top:.5rem;
+            padding-bottom:.2rem;
+        }
 
-    .print_pdf {
-        position: relative;
-        padding-left: 3.7rem;
-        padding-right: 3.7rem;
-        padding-top: 1.3rem;
-        padding-bottom: 1.1rem;
-        right: 3rem;
+        .print_pdf_label 
+        {
+            border-radius: 1rem;
+            padding-left: 0rem;
+            padding-right: 0rem;
+            width: 6rem;
+        }
+        
+        .datePicker_label 
+        {
+            border-radius: 0.3rem;
+            width: 6rem;
+            font-size: .6rem;
+        } 
+>>>>>>> Stashed changes
     }
+        
+        /* phone ui */
+     @media (max-width: 719px) 
+    {
+        .date_filter 
+        {
+            height: 7.8125rem;
+            text-align: left;
 
-    .print_pdf_label {
-        border-radius: 1rem;
-        background-color: #00BDB2;
-        font-size: .7rem;
-        text-align: center;
-        margin: auto;
-        padding: 0.2rem;
-        padding-left: 1rem;
-        padding-right: 1rem;
-        color: white;
-        width: 6rem;
-    }
+        }
+        
+        .containers
+        {
+            height: 4.875rem;
+            display: justify;
+            width: 100%;
+        }
 
-    .datePicker {
-        font-size: .8rem;
-        margin: auto;
-    }
+        .date_dropdown 
+        {
+            padding-right: 3rem;
+            padding-top: .5rem;
+            padding-bottom: .5rem;         
+        }
 
-    .datePicker_label {
-        border-radius: 0.5rem;
-        width: 8rem;
-        text-align: center;
-        font-size: 0.9rem;
+        .date_type_label 
+        {
+            font-size: .8rem;
+            letter-spacing: 0.01rem;
+        }
+        
+        .dropdown-content 
+        {
+            width: 0.02rem;
+            height: 1.5rem;
+            font-size: .8rem;
+        }
+        
+        .date_type 
+        {
+            border-radius:1px;
+        }
+
+        .print_pdf 
+        {
+            padding-right: 0rem;
+            padding-top:.5rem;
+            padding-bottom:.2rem;
+        }
+
+        .print_pdf_label 
+        {
+            padding-left: 0rem;
+            padding-right: 0rem;
+            width: 6rem;
+        }
+
+        .datePicker 
+        {
+            font-size: .8rem;
+        }
+
+        .datePicker_label 
+        {
+            border-radius: 0.3rem;
+            width: 6rem;
+            height: 1rem;
+            text-align: center;
+            font-size: .6rem;
+        } 
     }
+        
 </style>
 
 <?php
@@ -453,12 +632,15 @@ if ($TandSdailytransincrease > 1) {
     </div>
 
 </div>
+
+<!-- Date Filter Div -->
 <div class="date_filter">
+    <div class="containers">
     <div class="dropdown_pdf_container">
         <div class="date_dropdown">
             <form>
                 <label for="date_type" class="date_type_label">
-                    <strong>D a t e &nbsp;&nbsp; F i l t e r :&nbsp;&nbsp;</strong></label>
+                    <strong>Date Filter:</strong></label>
                 <select name="date_type" id="date_type" class="dropdown-content">
                     <option value="_day">Daily</option>
                     <option value="_week">Weekly</option>
@@ -466,17 +648,24 @@ if ($TandSdailytransincrease > 1) {
                 </select>
             </form>
         </div>
-        <div class="print_pdf">
+        
+        <div class="print_pdf" >
             <label class="print_pdf_label">Print or PDF</label>
         </div>
     </div>
+    </div>
+    <div class="containers">
     <div class="datePicker">
         <label>From: </label>
         <input type="date" id="startDate" name="startDate" class="datePicker_label">
-        <label>To: </label>
+    <!-- </div>
+    <div class="datePicker"> -->
+        <label>&nbsp;&nbsp;&nbsp;&nbsp;To:</label>
         <input type="date" id="endDate" name="endDate" class="datePicker_label">
     </div>
-</div>
+    </div>
+    </div>
+
 
 <!-- graph Div, holder of graphs -->
 <div class="graph">
