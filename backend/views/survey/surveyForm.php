@@ -67,7 +67,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <br>
 
-<?= $form->field($model, 'comments')->textInput() ?>
+<?= $form->field($model, 'comments')->textarea(['rows' => 4]) ?>
 
 
 <div class="form-group">
