@@ -62,7 +62,9 @@ return [
             'rules' => [
                'profile' => 'user-profile/view',
                 'profile/update' => 'user-profile/update',
-                'terms' => 'terms/terms/index'
+                'terms' => 'terms/terms/index',
+                // 'survey/survey-form' => 'survey/default/survey-form',
+
             ],
         ],
         'authManager' => [
