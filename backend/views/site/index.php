@@ -382,17 +382,21 @@ $this->title = '';
 
 <?php
 use yii\db\Query;
-
 // Fetch sales data from the database
+// $fromDate = $_POST['startDate'];
+// $toDate = $_POST['endDate'];
+
 $query = new Query();
 $salesData = $query->select(['division_name', 'transacton_date', 'SUM(amount) as total_amount'])
     ->from('operational_report')
+    // ->where(['between', 'transaction_date', $fromDate, $toDate])
     ->groupBy(['division_name', 'transacton_date'])
     ->all();
 
 // Fetch transaction data from the database (depends on how many transaction in same date and same div_name)
 $transactionData = $query->select(['division_name', 'transacton_date', 'COUNT(*) as transaction_count'])
     ->from('operational_report')
+    // ->where(['between', 'transaction_date', $fromDate, $toDate])
     ->groupBy(['division_name', 'transacton_date'])
     ->all();
 
@@ -498,67 +502,97 @@ foreach ($TransactionperDiv['datasets'] as &$dataset) {
 
 
 //Dito yung para sa Total ng Daily Transaction (tinatype ko pa yung date kasi di ako marunong nung rekta connected sa calendar HAHAHAH)
-
+date_default_timezone_set('Asia/Manila'); 
 //Metrology transaction
 //dito banda kukunin yung number of transaction tapos kung anong date
-$metlatestTransactions = (new Query())
+$todaymettrans = (new Query())
 ->select('COUNT(*)')
 ->from('operational_report')
 ->where([
     'division_name' => 'National Metrology Department',
-    'transacton_date' => date('2023-06-16') // Assuming you want the number of transactions for today
+    'transacton_date' => date('Y-m-d') // Assuming you want the number of transactions for today
+])
+->scalar();
+
+$lastmettrans= (new Query())
+->select('COUNT(*)')
+->from('operational_report')
+->where([
+    'division_name' => 'National Metrology Department',
+    'transacton_date' => date('Y-m-d', strtotime('-1 day'))  
 ])
 ->scalar();
 
 //dito magcocompute ng percentage ng increase or decrease ng number of past transaction at today's transaction (tinatype ko pa din yung sa last transaction kunwari kasi di pa ko marunong)
-$lastmettrans = 5;
-$todaymettrans = $metlatestTransactions;
 $metdailytransincrease = (($todaymettrans - $lastmettrans) / $todaymettrans) * 100;
 $metdailytransincrease = number_format($metdailytransincrease, 2);
-if ($metdailytransincrease > 1) {
+if ($metdailytransincrease > 1) 
+{
     $metdailytransincrease = '+' . $metdailytransincrease . '%';
-} else {
+} 
+else 
+{
     $metdailytransincrease = $metdailytransincrease . '%';
 }
 
 //same scenario sa taas
+
+
+
 //S&T transaction
-$SandTlatestTransactions = (new Query())
+$todaySandTtrans = (new Query())
 ->select('COUNT(*)')
 ->from('operational_report')
 ->where([
     'division_name' => 'Standard and Testing Division',
-    'transacton_date' => date('2023-06-16') // Assuming you want the number of transactions for today
+    'transacton_date' => date('Y-m-d')
 ])
 ->scalar();
 
-$lastSandTtrans = 1;
-$todaySandTtrans = $SandTlatestTransactions ;
+$lastSandTtrans= (new Query())
+->select('COUNT(*)')
+->from('operational_report')
+->where([
+    'division_name' => 'Standard and Testing Division',
+    'transacton_date' => date('Y-m-d', strtotime('-1 day'))  
+])
+->scalar();
+
 $SandTdailytransincrease = (($todaySandTtrans - $lastSandTtrans) / $todaySandTtrans) * 100;
 $SandTdailytransincrease = number_format($SandTdailytransincrease, 2);
 if ($SandTdailytransincrease > 1) {
     $SandTdailytransincrease = '+' . $SandTdailytransincrease . '%';
 } else {
-    $metdailytransincrease = $metdailytransincrease . '%';
+    $SandTdailytransincrease = $SandTdailytransincrease . '%';
 }
 
 //T&S transaction
-$TandSlatestTransactions = (new Query())
+
+$todayTandStrans = (new Query())
 ->select('COUNT(*)')
 ->from('operational_report')
 ->where([
-    'division_name' => 'Standard and Testing Division',
-    'transacton_date' => date('2023-06-16') // Assuming you want the number of transactions for today
+    'division_name' => 'Technological Services Division',
+    'transacton_date' => date('Y-m-d')
 ])
 ->scalar();
-$lastTandStrans = 1;
-$todayTandStrans = $TandSlatestTransactions;
+
+$lastTandStrans= (new Query())
+->select('COUNT(*)')
+->from('operational_report')
+->where([
+    'division_name' => 'Technological Services Division',
+    'transacton_date' => date('Y-m-d', strtotime('-1 day'))  
+])
+->scalar();
+
 $TandSdailytransincrease = (($todayTandStrans - $lastTandStrans) / $todayTandStrans) * 100;
 $TandSdailytransincrease = number_format($TandSdailytransincrease, 2);
 if ($TandSdailytransincrease > 1) {
     $TandSdailytransincrease = '+' . $TandSdailytransincrease . '%';
-} else {
-    $metdailytransincrease = $metdailytransincrease . '%';
+} else 
+{
+    $TandSdailytransincrease = $TandSdailytransincrease . '%';
 }
 
 
@@ -604,6 +638,7 @@ if ($TandSdailytransincrease > 1) {
 
 <!-- Date Filter Div -->
 <div class="date_filter">
+    
     <div class="containers">
     <div class="dropdown_pdf_container">
         <div class="date_dropdown">
@@ -624,6 +659,7 @@ if ($TandSdailytransincrease > 1) {
     </div>
     </div>
     <div class="containers">
+    <!-- <form method="post" action="process_data.php"> Replace with your processing script -->
     <div class="datePicker">
         <label>From: </label>
         <input type="date" id="startDate" name="startDate" class="datePicker_label">
@@ -632,6 +668,8 @@ if ($TandSdailytransincrease > 1) {
         <label>&nbsp;&nbsp;&nbsp;&nbsp;To:</label>
         <input type="date" id="endDate" name="endDate" class="datePicker_label">
     </div>
+    <!-- <input type="submit" value="Filter"> -->
+<!-- </form> -->
     </div>
     </div>
 
@@ -661,6 +699,25 @@ if ($TandSdailytransincrease > 1) {
         <p id="reportTitle"> Average Sales per Day </p>
         <canvas id="myChart"></canvas>
     </div>
+
+
+    <div class="date_filter" style="text-align: left; padding-left: 8rem; padding-top: 3rem; padding-bottom: 2rem;">   
+    <div class="containers">
+        <div class="date_dropdown">
+            <form>
+                <label for="date_type" class="date_type_label">
+                    <strong>Chart Filter</strong></label>
+                <select name="date_type" id="date_type" class="dropdown-content">
+                    <option value="#">Doughnut</option>
+                    <option value="#">Line</option>
+                    <option value="#">Bar</option>
+                    <option value="#">Pie</option>
+                </select>
+            </form>
+        </div>
+    </div>
+    </div>
+
 
 
 
@@ -887,21 +944,21 @@ if ($TandSdailytransincrease > 1) {
             const data = {
               datasets: allDatasets,
             };
-            // const divisionName=
-            // {
-            //     id:'divisionName',
-            //     beforeDatasetsDraw(chart, args, pluginOptions)
-            //     {
-            //         const {ctx, data, scales}=chart;
-            //         ctx.save();
-            //         ctx.font='12px Poppins';
-            //         console.log(chart.getDatasetMeta(0))
-            //         const outerRadius=chart.getDatasetMeta(0).controller.outerRadius;
-            //         const innerRadius=chart.getDatasetMeta(0).controller.innerRadius;
-            //         ctx.fillText('text',x,y);
-            //     }
+            const divisionName=
+            {
+                id:'divisionName',
+                beforeDatasetsDraw(chart, args, pluginOptions)
+                {
+                    const {ctx, data, scales}=chart;
+                    ctx.save();
+                    ctx.font='12px Poppins';
+                    console.log(chart.getDatasetMeta(0))
+                    const outerRadius=chart.getDatasetMeta(0).controller.outerRadius;
+                    const innerRadius=chart.getDatasetMeta(0).controller.innerRadius;
+                    ctx.fillText('text',x,y);
+                }
 
-            // } // tsaka ko na to tutuloy yawa walang wifi
+            } // tsaka ko na to tutuloy yawa walang wifi
 
             // Config for the doughnut chart
             const config = {
