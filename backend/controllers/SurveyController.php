@@ -6,9 +6,46 @@ use Yii;
 use common\models\SurveyResponse;
 use yii\web\Controller;
 use yii\web\Response;
+use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
+
 
 class SurveyController extends BaseController
 {
+
+     public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::class,
+                'only' => ['login', 'logout', 'index'],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'actions' => ['login'],
+                        'roles' => ['?'],
+                  ],
+                  [
+                      'allow' => true,
+                      'actions' => ['index'],
+                      'roles' => ['ADMIN'], //add only admin allowed
+                  ],
+                  [
+                    'allow' => true,
+                    'actions' => ['logout'],
+                    'roles' => ['@'], //everyone allowed
+                ],
+                ],
+            ],
+            'verbs' => [
+                'class' => VerbFilter::class,
+                'actions' => [
+                    'logout' => ['post'],
+                ],
+            ],
+        ];
+    }
+
     public function actionIndex()
     {
         $model = new SurveyResponse();

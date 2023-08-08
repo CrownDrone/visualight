@@ -124,6 +124,8 @@ $defaultImagePath = Yii::getAlias('@web') . '/images/user2.jpg';
                     ['label' => 'Chart',  'icon' => 'fas fa-chart-bar', 'url' => ['/chart/chart/index'], 'visible' => Helper::checkRoute('/chart/chart/index'),],
                     ['label' => 'Dashboard',  'icon' => 'fas fa-chalkboard', 'url' => ["/site/index"], 'visible' => Helper::checkRoute('/site/index'), 'visible' => Helper::checkRoute('/site/index'),],
                     ['label' => 'Terms of Service',  'icon' => 'fas fa-file-contract', 'url' => ["/terms/index"], 'visible' => true],
+                    ['label' => 'Survey',  'icon' => 'fas fa-chalkboard', 'url' => ["/survey/index"], 'visible' => Helper::checkRoute('/site/index'), 'visible' => Helper::checkRoute('/site/index'),],
+
 
                 ],
             ]);
