@@ -20,60 +20,91 @@ $this->title = 'Users';
         <?= Html::a('Create User', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
-    <?= GridView::widget([
-    'dataProvider' => $dataProvider,
-    'filterModel' => $searchModel,
-    'columns' => [
-        [
-            'attribute' => 'id',
-            'headerOptions' => ['class' => 'bg-blue', 'style' => 'color: white; text-align: center;'],
-            'contentOptions' => ['style' => 'text-align: center;'],
-        ],
-        [
-            'attribute' => 'username',
-            'headerOptions' => ['class' => 'bg-blue', 'style' => 'color: white; text-align: center;'],
-            'contentOptions' => ['style' => 'text-align: center;'],
-        ],
-        [
-            'attribute' => 'email',
-            'headerOptions' => ['class' => 'bg-blue', 'style' => 'color: white; text-align: center;'],
-            'contentOptions' => ['style' => 'text-align: center;'],
-        ],
-        [
-            'attribute' => 'status',
-            'headerOptions' => ['class' => 'bg-blue', 'style' => 'color: white; text-align: center;'],
-            'contentOptions' => ['style' => 'text-align: center;'],
-            'value' => function ($model) {
-                return $model->getStatusLabel();
-            },
-            'filter' => User::getStatusOptions(),
-        ],
-        [
-            'class' => 'yii\grid\ActionColumn',
-            'header' => 'Actions',
-            'headerOptions' => ['class' => 'bg-blue', 'style' => 'color: white; text-align: center;'],
-            'contentOptions' => ['style' => 'text-align: center;'],
-            'template' => '{view} {update} {delete}', // Remove the button icons and use only text
-            'buttons' => [
-                'view' => function ($url, $model, $key) {
-                    return Html::a('View', ['view', 'id' => $model->id], ['class' => 'btn btn-primary']);
-                },
-                'update' => function ($url, $model, $key) {
-                    return Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-info']);
-                },
-                'delete' => function ($url, $model, $key) {
-                    return Html::a('Delete', ['delete', 'id' => $model->id], [
-                        'class' => 'btn btn-danger',
-                        'data' => [
-                            'confirm' => 'Are you sure you want to delete this item?',
-                            'method' => 'post',
-                        ],
-                    ]);
-                },
+    <div class="grid-view-container">
+        <?= GridView::widget([
+            'dataProvider' => $dataProvider,
+            'filterModel' => $searchModel,
+            'layout' => '{items}',
+            'tableOptions' => ['class' => 'table table-striped'],
+            'headerRowOptions' => ['class' => 'bg-blue'],
+            'columns' => [
+                [
+                    'attribute' => 'id',
+                    'label' => 'Id',
+                    'headerOptions' => ['class' => 'bg-blue white-text'],
+                    'contentOptions' => ['style' => 'text-align: center;'],
+                ],
+                [
+                    'attribute' => 'username',
+                    'label' => 'Username',
+                    'headerOptions' => ['class' => 'bg-blue white-text'],
+                    'contentOptions' => ['style' => 'text-align: center;'],
+                ],
+                [
+                    'attribute' => 'email',
+                    'label' => 'Email',
+                    'headerOptions' => ['class' => 'bg-blue white-text'],
+                    'contentOptions' => ['style' => 'text-align: center;'],
+                ],
+                [
+                    'attribute' => 'status',
+                    'label' => 'Status',
+                    'value' => function ($model) {
+                        return $model->getStatusLabel();
+                    },
+                    'filter' => User::getStatusOptions(),
+                    'headerOptions' => ['class' => 'bg-blue white-text'],
+                    'contentOptions' => ['style' => 'text-align: center;'],
+                ],
+                [
+                    'class' => 'yii\grid\ActionColumn',
+                    'header' => 'Actions',
+                    'template' => '{view} {update} {delete}',
+                    'headerOptions' => ['class' => 'bg-blue white-text'],
+                    'contentOptions' => ['style' => 'text-align: center;'],
+                    'buttons' => [
+                        'view' => function ($url, $model, $key) {
+                            return Html::a('View', ['view', 'id' => $model->id], ['class' => 'btn btn-primary btn-sm']);
+                        },
+                        'update' => function ($url, $model, $key) {
+                            return Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-info btn-sm']);
+                        },
+                        'delete' => function ($url, $model, $key) {
+                            return Html::a('Delete', ['delete', 'id' => $model->id], [
+                                'class' => 'btn btn-danger btn-sm',
+                                'data' => [
+                                    'confirm' => 'Are you sure you want to delete this item?',
+                                    'method' => 'post',
+                                ],
+                            ]);
+                        },
+                    ],
+                ],
             ],
-        ],
-    ],
-]); ?>
-
+        ]); ?>
+    </div>
 
 </div>
+
+<style>
+    .grid-view-container {
+        max-height: 670px;
+        overflow-y: auto;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 10px;
+    }
+
+    .table th,
+    .table td {
+        text-align: center;
+    }
+
+    .bg-blue {
+        background-color: blue;
+    }
+
+    .white-text {
+        color: white;
+    }
+</style>
