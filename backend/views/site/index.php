@@ -1304,35 +1304,18 @@ function downloadPDF() {
                                                     // Page 2
                                                     pdf.setFontSize(12);
                                                     pdf.setFont('helvetica', 'bold');
-                                                    pdf.setTextColor(255, 0, 0); // Red text color
+                                                    pdf.setTextColor(0, 122, 204); // Red text color
                                                     pdf.text('Average Sales Daily', 40, 25); // Title for the new chart
-
-                                                    pdf.setFont('helvetica', 'normal'); 
-                                                    pdf.setTextColor(0, 0, 0); 
-                                                    pdf.setFontSize(12);
 
                                                     // Add image and text to the second page
                                                     pdf.addImage(myChartImg, 'PNG', 40, 30, 130, 70);
 
-                                                    // Add another new chart and title on the second page
-                                                    pdf.setFont('helvetica', 'bold');
-                                                    pdf.setTextColor(0, 102, 0); // Green text color
                                                     pdf.text('Top 5 Customers', 40, 115); // Title for the new chart
-
-                                                    pdf.setFont('helvetica', 'normal'); 
-                                                    pdf.setTextColor(0, 0, 0); 
-                                                    pdf.setFontSize(12);
 
                                                     // Add the new chart and title
                                                     pdf.addImage(topCustomersChartImg, 'PNG', 40, 120, 130, 70);
 
-                                                    pdf.setFont('helvetica', 'bold');
-                                                    pdf.setTextColor(0, 102, 0); // Green text color
                                                     pdf.text('Total Customers per Province', 40, 215); // Title for the new chart
-
-                                                    pdf.setFont('helvetica', 'normal'); 
-                                                    pdf.setTextColor(0, 0, 0); 
-                                                    pdf.setFontSize(12);
 
                                                     // Add the new chart and title
                                                     pdf.addImage(provincesChartImg, 'PNG', 40, 225, 130, 70);
