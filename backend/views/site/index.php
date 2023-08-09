@@ -170,6 +170,10 @@ $this->title = '';
         text-align: center;
         font-size: 0.9rem;
     } 
+    .datePicker
+    {
+        text-align: right;
+    }
 
     /* graph div */
     .graph {
@@ -304,7 +308,8 @@ $this->title = '';
             border-radius: 0.3rem;
             width: 6rem;
             font-size: .6rem;
-        } 
+        }
+    
     }
         
         /* phone ui */
@@ -313,20 +318,20 @@ $this->title = '';
         .date_filter 
         {
             height: 7.8125rem;
-            text-align: left;
 
         }
         
         .containers
         {
             height: 4.875rem;
-            display: justify;
             width: 100%;
+            display: inline-block;
         }
+
 
         .date_dropdown 
         {
-            padding-right: 3rem;
+            /* padding-right: 3rem; */
             padding-top: .5rem;
             padding-bottom: .5rem;         
         }
@@ -351,7 +356,7 @@ $this->title = '';
 
         .print_pdf 
         {
-            padding-right: 0rem;
+            /* padding-right: 0rem; */
             padding-top:.5rem;
             padding-bottom:.2rem;
         }
@@ -366,6 +371,8 @@ $this->title = '';
         .datePicker 
         {
             font-size: .8rem;
+            text-align: left;
+
         }
 
         .datePicker_label 
@@ -377,6 +384,67 @@ $this->title = '';
             font-size: .6rem;
         } 
     }
+/* 
+    .date_filter 
+        {
+        height: 2.8125rem;
+        }
+
+        .containers
+        {
+            height: 2.875rem;
+        }
+
+        .date_dropdown 
+        {
+            padding-right: 1rem;
+            padding-top: .5rem;
+            padding-bottom: .5rem;
+        }
+
+        .date_type_label {
+            font-size: .8rem;
+            letter-spacing: 0.01rem;
+        }
+
+        .dropdown-content 
+        {
+            z-index: 1;
+            text-align: center;
+            border-radius: 0.5rem;
+            width: 0.02rem;
+            height: 1.5rem;
+            font-size: .8rem;
+        }
+        
+        .date_type 
+        {
+            border-radius:1px;
+        }
+
+        .print_pdf 
+        {
+            padding-right: 0rem;
+            padding-top:.5rem;
+            padding-bottom:.2rem;
+        }
+
+        .print_pdf_label 
+        {
+            border-radius: 1rem;
+            padding-left: 0rem;
+            padding-right: 0rem;
+            width: 6rem;
+        }
+        
+        .datePicker_label 
+        {
+            border-radius: 0.3rem;
+            width: 6rem;
+            font-size: .6rem;
+        }
+    
+    } */
         
 </style>
 
@@ -409,11 +477,12 @@ $topCustomers = $query->select(['last_name', 'COUNT(*) as transaction_count'])
     ->limit(5)
     ->all();
 
-$addressData = $query->select(['address', 'COUNT(*) as customer_count'])
+    $addressData = $query->select(['address', 'COUNT(*) as customer_count'])
     ->from('operational_report')
     // ->where(['between', 'transaction_date', $fromDate, $toDate])
     ->groupBy(['address'])
     ->orderBy(['customer_count' => SORT_DESC])
+    ->limit(100000)
     ->all();
 
     // Prepare data for the chart
@@ -706,7 +775,7 @@ if ($TandSdailytransincrease > 1) {
         </div>
         
         <div class="print_pdf" >
-            <Button class="print_pdf_label" onclick="downloadPDF()"> Download PDF</Button>
+        <Button class="print_pdf_label" onclick="downloadPDF()"> Download PDF</Button>
         </div>
     </div>
     </div>
@@ -1042,6 +1111,7 @@ const combinedChart = new Chart(combinedCtx, {
                             <option value="doughnut">Doughnut</option>
                             <option value="line">Line</option>
                             <option value="pie">Pie</option>
+                            <!-- <option value="horizontal_bar">Horizontal chart</option> -->
                             </select>  
             </div>
         </div>
@@ -1063,74 +1133,104 @@ const combinedChart = new Chart(combinedCtx, {
 <!-- scriptfor customers graph -->
 
 <script>
-   // Function to create and update the chart
-   function createChart(chartType, chartTitle, chartCanvas, labels, data) {
-        const canvas = document.getElementById(chartCanvas);
-        const ctx = canvas.getContext('2d');
+  document.addEventListener('DOMContentLoaded', function () {
+        // Get references to chart containers and the dropdown
+        const topCustomersChartContainer = document.getElementById('topCustomersChart');
+        const provincesChartContainer = document.getElementById('Provinces');
+        const chartTypeDropdown = document.getElementById('chart_type');
 
-        if (currentChart) {
-            currentChart.destroy();
-        }
 
-        currentChart = new Chart(ctx, {
-            type: chartType,
-            data: {
-                labels: labels,
-                datasets: [{
-                    data: data,
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.7)',
-                        'rgba(54, 162, 235, 0.7)',
-                        'rgba(75, 192, 192, 0.7)',
-                        'rgba(255, 205, 86, 0.7)',
-                        'rgba(153, 102, 255, 0.7)'
-                    ]
-                }]
-            },
-            options: {
-                indexAxis: 'y',
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
+        // Initialize charts (empty)
+        let topCustomersChart = null;
+        let provincesChart = null;
+
+        // Update charts based on selected chart type
+        function updateCharts() {
+            const selectedChartType = chartTypeDropdown.value;
+
+            // Destroy existing charts if they exist
+            if (topCustomersChart) {
+                topCustomersChart.destroy();
+            }
+            if (provincesChart) {
+                provincesChart.destroy();
+            }
+
+            // Create new charts based on selected chart type
+            topCustomersChart = new Chart(topCustomersChartContainer, {
+                type: selectedChartType,
+                options:  {indexAxis: 'y',
+                    scales: {
                     y: {
                         beginAtZero: true,
-                        grid: { drawOnChartArea: false }
+                        grid: {
+                            drawOnChartArea: false
+                        }
                     },
                     x: {
-                        grid: { drawOnChartArea: false }
-                    }
-                },
-                plugins: {
-                    legend: { display: false }
+                        grid: {
+                            display: false,
+                            drawOnChartArea: false
+                        }
+                       
+                    },
+                }},
+                        
+                data: {
+                    labels: <?php echo json_encode($lastNames); ?>,
+                    datasets: [{
+                        label: 'Transaction Count',
+                        data: <?php echo json_encode($transactionCounts); ?>,
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }],
                 }
-            }
-        });
+            });
 
-        document.getElementById(chartTitle).textContent = "Sales by Category";
-    }
+            provincesChart = new Chart(provincesChartContainer, {
+                type: selectedChartType,
+                options:
+                {
+                    scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            drawOnChartArea: false
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false,
+                            drawOnChartArea: false
+                        }
+                       
+                    },
+                }
 
-    const chartTypeSelect = document.getElementById("chart_type");
+                },
+                data: {
+                    labels: <?php echo json_encode($province); ?>,
+                    datasets: [{
+                        label: 'Customer Count',
+                        data: <?php echo json_encode($customersCounts); ?>,
+                        backgroundColor: 'rgba(255, 159, 64, 0.2)',
+                        borderColor: 'rgba(255, 159, 64, 1)',
+                        borderWidth: 1
+                    }]
+                },
+            });
+        }
 
-    // Initial chart creation
-    let currentChart = null;
-    const defaultChartType = "bar";
-    const lastNames = <?= json_encode($lastNames); ?>;
-    const transactionCounts = <?= json_encode($transactionCounts); ?>;
-    const province = <?= json_encode($province); ?>;
-    const customerCounts = <?= json_encode($customersCounts); ?>;
+        // Listen for changes in the dropdown and update charts
+        chartTypeDropdown.addEventListener('change', updateCharts);
 
-    function updateCharts(selectedChartType) {
-        createChart(selectedChartType, "reportTitle", "topCustomersChart", lastNames, transactionCounts);
-        createChart(selectedChartType, "reportTitle", "Provinces", province, customerCounts);
-    }
-
-    updateCharts(defaultChartType);
-
-    // Event listener for dropdown change
-    chartTypeSelect.addEventListener("change", () => {
-        const selectedChartType = chartTypeSelect.value;
-        updateCharts(selectedChartType);
+updateCharts(); 
     });
+
+
+
+
 </script>
 
 <script> //PDF
