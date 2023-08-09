@@ -706,7 +706,7 @@ if ($TandSdailytransincrease > 1) {
         </div>
         
         <div class="print_pdf" >
-            <label class="print_pdf_label">Print or PDF</label>
+            <Button class="print_pdf_label" onclick="downloadPDF()"> Download PDF</Button>
         </div>
     </div>
     </div>
@@ -729,6 +729,8 @@ if ($TandSdailytransincrease > 1) {
 <!-- graph Div, holder of graphs -->
 <div class="graph">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+     <script src ="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.9.179/pdf.min.js"></script>
+    <script src ="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.debug.js"></script>
 
 
     <div class="chart-container">
@@ -819,68 +821,63 @@ if ($TandSdailytransincrease > 1) {
         };
 
         // Createing combined chart
-        const combinedCtx = document.getElementById('combinedChart').getContext('2d');
+      const combinedCtx = document.getElementById('combinedChart').getContext('2d');
 
-        const combinedChart = new Chart(combinedCtx, {
-            type: 'line', // Start as bar chart
-            data: combinedData,
-            options: {
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            stepSize: 1
-                        },
-                        grid: {
-                            display: false,
-                            drawOnChartArea: false
-                        }
-                       
-                    },
-                    x: {
-                        grid: {
-                            display: false,
-                            drawOnChartArea: false
-                        }
-                       
-                    },
-                    'y-axis-bar': 
-                    {
-                        position: 'right', // Show the primary y-axis on the left side (sumTransactionDataset)
-    
-                        grid:{drawOnChartArea: false}
-        
-                        
-                    },
-                    'lineY': {
-                        
-                        beginAtZero: true,
-                        ticks: {
-                            stepSize: 1 // Customize the step size as needed
-                        },
-                        grid: {
-                            display: false,
-                            drawOnChartArea: false
-                        }
-                    },
+const combinedChart = new Chart(combinedCtx, {
+    type: 'line', // Start as bar chart
+    data: combinedData,
+    options: {
+        maintainAspectRatio: false,
+        scales: {
+            y: {
+                beginAtZero: true,
+                ticks: {
+                    stepSize: 1
                 },
-                plugins: {
-                    legend: {
-                        position: 'top',
-                    },
-                },
-                responsive: true,
-                layout: {
-                    padding: {
-                        left: 15,
-                        right: 15,
-                        top: 15,
-                        bottom: 15
-                    }
-                },
+                grid: {
+                    display: false,
+                    drawOnChartArea: false
+                }
             },
-        });
+            x: {
+                grid: {
+                    display: false,
+                    drawOnChartArea: false
+                }
+            },
+            'y-axis-bar': {
+                position: 'right', // Show the primary y-axis on the left side (sumTransactionDataset)
+                grid: { drawOnChartArea: false }
+            },
+            'lineY': {
+                beginAtZero: true,
+                ticks: {
+                    stepSize: 1 // Customize the step size as needed
+                },
+                grid: {
+                    display: false,
+                    drawOnChartArea: false
+                }
+            },
+        },
+        plugins: {
+            legend: {
+                position: 'top',
+            },
+        },
+        responsive: true,
+        layout: {
+            padding: {
+                left: 15,
+                right: 15,
+                top: 15,
+                bottom: 15
+            }
+        },
+
+    },
+});
+
 
 
 
@@ -1134,6 +1131,130 @@ if ($TandSdailytransincrease > 1) {
         const selectedChartType = chartTypeSelect.value;
         updateCharts(selectedChartType);
     });
+</script>
+
+<script> //PDF
+
+function downloadPDF() {
+    const combinedCanvas = document.getElementById('combinedChart');
+    const transactionCanvas = document.getElementById('transactionChart'); 
+    const salesCanvas = document.getElementById('salesChart');
+    const myCanvas = document.createElement('canvas'); // Create canvas for myChart
+    const tempCanvas = document.createElement('canvas');
+    const tempCtx = tempCanvas.getContext('2d');
+
+    // Calculate the total height including space between the charts
+    const totalHeight = combinedCanvas.height + transactionCanvas.height + salesCanvas.height + 300; // Adjust spacing as needed
+
+    // Set canvas dimensions to accommodate all charts with space
+    tempCanvas.width = Math.max(combinedCanvas.width, transactionCanvas.width, salesCanvas.width);
+    tempCanvas.height = totalHeight;
+
+    // Set the background color to white on the temporary canvas
+    tempCtx.fillStyle = 'white';
+    tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+
+    // Draw the text "Sales by Category" on top of the combined chart
+    tempCtx.font = 'bold 20px Helvetica';
+    tempCtx.fillStyle = 'rgb(0, 102, 153)';
+    tempCtx.fillText('Sales by Category', 183, 20); // Adjust horizontal and vertical position
+
+
+    // Draw combined chart on the temporary canvas
+    tempCtx.drawImage(combinedCanvas, 0, 20); // Adjust vertical position
+
+    // Draw transaction chart below the combined chart with space in between
+    const transactionY = combinedCanvas.height + 110; // Adjust vertical position
+    tempCtx.drawImage(transactionCanvas, 0, transactionY); // Adding space
+
+    // Draw the text "Transaction per Division" on top of the transaction chart
+    tempCtx.font = 'bold 20px Helvetica';
+    tempCtx.fillStyle = 'rgb(0, 102, 153)';
+    tempCtx.fillText('Transaction per Division', 180, transactionY - 15); // Adjust horizontal and vertical position
+
+    // Draw sales chart below the transaction chart with space in between
+    const salesY = combinedCanvas.height + transactionCanvas.height + 200; // Adjust vertical position
+    tempCtx.drawImage(salesCanvas, 0, salesY); // Adding space
+
+    // Draw the text "Sales per Division" on top of the sales chart
+    tempCtx.font = 'bold 20px Helvetica';
+    tempCtx.fillStyle = 'rgb(0, 102, 153)';
+    tempCtx.fillText('Sales per Division', 183, salesY - 15); // Draw the filled text
+
+    // Create the PDF
+    let pdf = new jsPDF();
+
+    // First page
+    const canvasImage = tempCanvas.toDataURL('image/jpeg', 1.0);
+    pdf.setFontSize(20);
+    pdf.addImage(canvasImage, 'JPEG', 35, 25, 140, totalHeight * (80 / tempCanvas.width)); // Adjust positioning and dimensions
+
+    // Draw the title "Visualight-Dashboard" using vector graphics
+    pdf.setFont('helvetica', 'bold'); // Set font to Helvetica (similar to Poppins)
+    pdf.setFontSize(14);
+    pdf.setTextColor(46, 46, 184); // Set text color to black
+    pdf.text(10, 15, "Visualight-Dashboard");
+
+    // Clean up the temporary canvas
+    tempCanvas.width = 0;
+    tempCanvas.height = 0;
+
+    // Create a new temporary canvas for the second page
+    tempCanvas.width = Math.max(transactionCanvas.width); // Changed from pieCanvas to transactionCanvas
+    tempCanvas.height = transactionCanvas.height; // Keep the height the same as the transactionCanvas
+
+    // Set the background color to white on the temporary canvas
+    tempCtx.fillStyle = 'white';
+    tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+
+    // Draw the chart with the id 'myChart' on the new temporary canvas
+    const myChartCanvas = document.getElementById('myChart'); // Get myChart canvas element
+    myCanvas.width = myChartCanvas.width;
+    myCanvas.height = myChartCanvas.height;
+    const myCtx = myCanvas.getContext('2d');
+    
+    // Set the background color to white on the myCanvas
+    myCtx.fillStyle = 'white';
+    myCtx.fillRect(0, 0, myCanvas.width, myCanvas.height);
+    
+    // Draw the text "My Chart" on top of the chart image
+    myCtx.font = 'bold 20px Helvetica';
+    myCtx.fillStyle = 'rgb(0, 102, 153)';
+    myCtx.fillText('Average Sales per Day', 147, 25); // Adjust horizontal and vertical position
+
+
+    // Draw the myChart image on myCanvas
+    myCtx.drawImage(myChartCanvas, 0, 0);
+
+    // Add the second page to the PDF
+    pdf.addPage('a4', 'portrait'); // Add a larger second page
+
+    // Draw the background rectangle on the second page
+    pdf.setFillColor(255, 255, 255);
+    pdf.rect(0, 0, pdf.internal.pageSize.width, pdf.internal.pageSize.height, 'F');
+
+    // Draw 'myChart' image on the second page
+    const canvasImageMyChart = myCanvas.toDataURL('image/jpeg', 1.0);
+    pdf.addImage(
+        canvasImageMyChart,
+        'JPEG',
+        35,
+        25, // Adjust vertical position
+        140, // Adjust width
+        (myCanvas.height + 40) * (80 / tempCanvas.width) // Adjust height
+    );
+
+    // Draw the title "My Chart" on the second page using the same options
+    pdf.setFont('helvetica', 'normal'); // Set font to Helvetica
+    pdf.setFontSize(12);
+
+    // Save the PDF
+    pdf.save('Visualight-Dashboard.pdf');
+}
+
+
+
+
 </script>
 
 

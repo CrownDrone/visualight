@@ -209,68 +209,68 @@ use backend\modules\chart\controllers\ChartController;
         }
 
 
-        function downloadPDF() {
-    const pieCanvas = document.getElementById('pieChart');
-    const barCanvas = document.getElementById('barChart');
-    const tempCanvas = document.createElement('canvas');
-    const tempCtx = tempCanvas.getContext('2d');
+    function downloadPDF() {
+        const pieCanvas = document.getElementById('pieChart');
+        const barCanvas = document.getElementById('barChart');
+        const tempCanvas = document.createElement('canvas');
+        const tempCtx = tempCanvas.getContext('2d');
 
-    // Calculate the total height including space between the charts
-    const totalHeight = pieCanvas.height + barCanvas.height + pieCanvas.height + barCanvas.height + 40; // Adding space between charts
+        // Calculate the total height including space between the charts
+        const totalHeight = pieCanvas.height + barCanvas.height + pieCanvas.height + barCanvas.height + 40; // Adding space between charts
 
-    // Set canvas dimensions to accommodate both charts with space
-    tempCanvas.width = Math.max(pieCanvas.width, barCanvas.width);
-    tempCanvas.height = totalHeight;
+        // Set canvas dimensions to accommodate both charts with space
+        tempCanvas.width = Math.max(pieCanvas.width, barCanvas.width);
+        tempCanvas.height = totalHeight;
 
-    // Set the background color to white on the temporary canvas
-    tempCtx.fillStyle = 'white';
-    tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+        // Set the background color to white on the temporary canvas
+        tempCtx.fillStyle = 'white';
+        tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
 
-    // Draw pie chart on the temporary canvas
-    tempCtx.drawImage(pieCanvas, 0, 0);
+        // Draw pie chart on the temporary canvas
+        tempCtx.drawImage(pieCanvas, 0, 0);
 
-    // Draw bar chart below the first pie chart with space in between
-    tempCtx.drawImage(barCanvas, 0, pieCanvas.height + 20); // Adding space
+        // Draw bar chart below the first pie chart with space in between
+        tempCtx.drawImage(barCanvas, 0, pieCanvas.height + 20); // Adding space
 
-    // Draw another copy of pie chart below the bar chart
-    tempCtx.drawImage(pieCanvas, 0, pieCanvas.height + barCanvas.height + 40); // Adding space
+        // Draw another copy of pie chart below the bar chart
+        tempCtx.drawImage(pieCanvas, 0, pieCanvas.height + barCanvas.height + 40); // Adding space
 
-    // Create the PDF
-    let pdf = new jsPDF();
+        // Create the PDF
+        let pdf = new jsPDF();
 
-    // First page
-    const canvasImage = tempCanvas.toDataURL('image/jpeg', 1.0);
-    pdf.setFontSize(20);
-    pdf.addImage(canvasImage, 'JPEG', 15, 15, 190, totalHeight * (190 / tempCanvas.width)); // Adjust positioning and dimensions
+        // First page
+        const canvasImage = tempCanvas.toDataURL('image/jpeg', 1.0);
+        pdf.setFontSize(20);
+        pdf.addImage(canvasImage, 'JPEG', 15, 15, 190, totalHeight * (190 / tempCanvas.width)); // Adjust positioning and dimensions
 
-    // Draw the title "Car Brands" using vector graphics
-    pdf.setFont('helvetica', 'normal'); // Set font to Helvetica (similar to Poppins)
-    pdf.setFontSize(16);
-    pdf.setTextColor(0, 0, 0); // Set text color to black
-    pdf.text(10, 10, "Car Brands");
+        // Draw the title "Car Brands" using vector graphics
+        pdf.setFont('helvetica', 'normal'); // Set font to Helvetica (similar to Poppins)
+        pdf.setFontSize(16);
+        pdf.setTextColor(0, 0, 0); // Set text color to black
+        pdf.text(10, 10, "Car Brands");
 
-    // Clean up the temporary canvas
-    tempCanvas.width = 0;
-    tempCanvas.height = 0;
+        // Clean up the temporary canvas
+        tempCanvas.width = 0;
+        tempCanvas.height = 0;
 
-    // Create a new temporary canvas for the second page
-    tempCanvas.width = Math.max(pieCanvas.width, barCanvas.width);
-    tempCanvas.height = totalHeight;
+        // Create a new temporary canvas for the second page
+        tempCanvas.width = Math.max(pieCanvas.width, barCanvas.width);
+        tempCanvas.height = totalHeight;
 
-    // Set the background color to white on the temporary canvas
-    tempCtx.fillStyle = 'white';
-    tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+        // Set the background color to white on the temporary canvas
+        tempCtx.fillStyle = 'white';
+        tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
 
-    // Draw the duplicated bar chart on the new temporary canvas
-    tempCtx.drawImage(barCanvas, 0, 0);
+        // Draw the duplicated bar chart on the new temporary canvas
+        tempCtx.drawImage(barCanvas, 0, 0);
 
-    // Add the second page with the duplicated bar chart
-    pdf.addPage();
-    const canvasImagePage2 = tempCanvas.toDataURL('image/jpeg', 1.0);
-    pdf.addImage(canvasImagePage2, 'JPEG', 15, 15, 190, totalHeight * (190 / tempCanvas.width)); // Adjust positioning and dimensions
+        // Add the second page with the duplicated bar chart
+        pdf.addPage();
+        const canvasImagePage2 = tempCanvas.toDataURL('image/jpeg', 1.0);
+        pdf.addImage(canvasImagePage2, 'JPEG', 15, 15, 190, totalHeight * (190 / tempCanvas.width)); // Adjust positioning and dimensions
 
-    // Save the PDF
-    pdf.save('sample.pdf');
+        // Save the PDF
+        pdf.save('sample.pdf');
 }
 
 
