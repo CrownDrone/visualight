@@ -775,7 +775,7 @@ if ($TandSdailytransincrease > 1) {
         </div>
         
         <div class="print_pdf" >
-           <Button class="print_pdf_label" onclick="downloadPDF()"> Chart PDF Download</Button>
+           <Button class="print_pdf_label" onclick="downloadPDF()"> Chart Download</Button>
         </div>
     </div>
     </div>
