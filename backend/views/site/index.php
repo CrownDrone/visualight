@@ -775,7 +775,7 @@ if ($TandSdailytransincrease > 1) {
         </div>
         
         <div class="print_pdf" >
-        <Button class="print_pdf_label" onclick="downloadPDF()"> Download PDF</Button>
+           <Button class="print_pdf_label" onclick="downloadPDF()"> Download PDF</Button>
         </div>
     </div>
     </div>
@@ -820,7 +820,7 @@ if ($TandSdailytransincrease > 1) {
 
     <div class="chart-container">
         <p id="reportTitle"> Average Sales per Day </p>
-        <canvas id="myChart"></canvas>
+        <canvas id="myChart" style="left: 0rem;"></canvas>
     </div>
 
 
@@ -1139,7 +1139,12 @@ const combinedChart = new Chart(combinedCtx, {
         const provincesChartContainer = document.getElementById('Provinces');
         const chartTypeDropdown = document.getElementById('chart_type');
 
+    //     function generateRandomColor() {
+    //   const randomColor = `rgb(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)})`;
+    //   return randomColor;
+    // }
 
+    // const randomColor = generateRandomColor();
         // Initialize charts (empty)
         let topCustomersChart = null;
         let provincesChart = null;
@@ -1181,9 +1186,17 @@ const combinedChart = new Chart(combinedCtx, {
                     datasets: [{
                         label: 'Transaction Count',
                         data: <?php echo json_encode($transactionCounts); ?>,
-                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                        borderColor: 'rgba(75, 192, 192, 1)',
-                        borderWidth: 1
+                        backgroundColor: ['rgba(75, 192, 192, 0.2)',
+                                            'rgba(20, 241, 56, 0.2)', 
+                                            'rgba(241, 61, 183, 0.2)',
+                                            'rgba(233, 241, 78, 0.2)',
+                                            'rgba(255, 159, 64, 0.2)'],
+                        borderColor: ['rgba(75, 192, 192, 1)',
+                                        'rgba(20, 241, 56, 1)',
+                                        'rgba(241, 61, 183,1)',
+                                        'rgba(233, 241, 78, 1)',
+                                        'rgba(255, 159, 64,1)' ],
+                        borderWidth: 2
                     }],
                 }
             });
