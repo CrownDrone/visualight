@@ -10,6 +10,7 @@ use yii\helpers\Url;
 $defaultImagePath = Yii::getAlias('@web') . '/images/user2.jpg';
 ?>
 
+
 <div class="user-profile-view">
     <h1><?= Html::encode($this->title) ?></h1>
 

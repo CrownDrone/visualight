@@ -387,6 +387,7 @@ use yii\db\Query;
 // $toDate = $_POST['endDate'];
 
 $query = new Query();
+
 $salesData = $query->select(['division_name', 'transacton_date', 'SUM(amount) as total_amount'])
     ->from('operational_report')
     // ->where(['between', 'transaction_date', $fromDate, $toDate])
@@ -400,11 +401,37 @@ $transactionData = $query->select(['division_name', 'transacton_date', 'COUNT(*)
     ->groupBy(['division_name', 'transacton_date'])
     ->all();
 
+$topCustomers = $query->select(['last_name', 'COUNT(*) as transaction_count'])
+    ->from('operational_report')
+    // ->where(['between', 'transaction_date', $fromDate, $toDate])
+    ->groupBy(['last_name'])
+    ->orderBy(['transaction_count' => SORT_DESC])
+    ->limit(5)
+    ->all();
+
+$addressData = $query->select(['address', 'COUNT(*) as customer_count'])
+    ->from('operational_report')
+    // ->where(['between', 'transaction_date', $fromDate, $toDate])
+    ->groupBy(['address'])
+    ->orderBy(['customer_count' => SORT_DESC])
+    ->all();
+
+    // Prepare data for the chart
+$province = [];
+$customersCounts = [];
+
+foreach ($addressData as $customeraddress) {
+    $province[] = $customeraddress['address'];
+    $customersCounts[] = $customeraddress['customer_count'];
+}
+
 // Prepare $SalesperDiv array (null pa to)
 $SalesperDiv = [
     'labels' => [],
     'datasets' => [],
 ];
+
+
 
 //dito kukuha ng data for $SalesperDiv
 foreach ($salesData as $data) {
@@ -465,6 +492,15 @@ foreach ($transactionData as $data) {
     }
 }
 
+// Prepare data for the chart
+$lastNames = [];
+$transactionCounts = [];
+
+foreach ($topCustomers as $customer) {
+    $lastNames[] = $customer['last_name'];
+    $transactionCounts[] = $customer['transaction_count'];
+}
+
 
 //setting default colors for each department
 $divisionColors = [
@@ -523,6 +559,11 @@ $lastmettrans= (new Query())
 ])
 ->scalar();
 
+if($todaymettrans==0)
+{
+    $metdailytransincrease=0;
+}
+else{
 //dito magcocompute ng percentage ng increase or decrease ng number of past transaction at today's transaction (tinatype ko pa din yung sa last transaction kunwari kasi di pa ko marunong)
 $metdailytransincrease = (($todaymettrans - $lastmettrans) / $todaymettrans) * 100;
 $metdailytransincrease = number_format($metdailytransincrease, 2);
@@ -534,7 +575,7 @@ else
 {
     $metdailytransincrease = $metdailytransincrease . '%';
 }
-
+}
 //same scenario sa taas
 
 
@@ -558,6 +599,12 @@ $lastSandTtrans= (new Query())
 ])
 ->scalar();
 
+if($todaymettrans==0)
+{
+    $SandTdailytransincrease=0;
+}
+else{
+
 $SandTdailytransincrease = (($todaySandTtrans - $lastSandTtrans) / $todaySandTtrans) * 100;
 $SandTdailytransincrease = number_format($SandTdailytransincrease, 2);
 if ($SandTdailytransincrease > 1) {
@@ -565,7 +612,7 @@ if ($SandTdailytransincrease > 1) {
 } else {
     $SandTdailytransincrease = $SandTdailytransincrease . '%';
 }
-
+}
 //T&S transaction
 
 $todayTandStrans = (new Query())
@@ -586,6 +633,11 @@ $lastTandStrans= (new Query())
 ])
 ->scalar();
 
+if($todaymettrans==0)
+{
+    $TandSdailytransincrease=0;
+}
+else{
 $TandSdailytransincrease = (($todayTandStrans - $lastTandStrans) / $todayTandStrans) * 100;
 $TandSdailytransincrease = number_format($TandSdailytransincrease, 2);
 if ($TandSdailytransincrease > 1) {
@@ -594,7 +646,7 @@ if ($TandSdailytransincrease > 1) {
 {
     $TandSdailytransincrease = $TandSdailytransincrease . '%';
 }
-
+}
 
 
 ?>
@@ -701,22 +753,6 @@ if ($TandSdailytransincrease > 1) {
     </div>
 
 
-    <div class="date_filter" style="text-align: left; padding-left: 8rem; padding-top: 3rem; padding-bottom: 2rem;">   
-    <div class="containers">
-        <div class="date_dropdown">
-            <form>
-                <label for="date_type" class="date_type_label">
-                    <strong>Chart Filter</strong></label>
-                <select name="date_type" id="date_type" class="dropdown-content">
-                    <option value="#">Doughnut</option>
-                    <option value="#">Line</option>
-                    <option value="#">Bar</option>
-                    <option value="#">Pie</option>
-                </select>
-            </form>
-        </div>
-    </div>
-    </div>
 
 
 
@@ -741,26 +777,6 @@ if ($TandSdailytransincrease > 1) {
             data: sumTransaction,
 
         };
-
-        // creating bar graph for the sumTransactionDataset
-        // const barCtx = document.getElementById('barChart').getContext('2d');
-
-        // const barChart = new Chart(barCtx, {
-        //     type: 'bar',
-        //     data: {
-        //         labels: TransactionperDiv.labels,
-        //         datasets: [sumTransactionDataset],
-        //     },
-        //     options: {
-        //         responsive: true,
-        //         maintainAspectRatio: false,
-        //         scales: {
-        //             y: {
-        //                 beginAtZero: true
-        //             }
-        //         }
-        //     }
-        // });
 
         // getting the sum of the sales per day (from the data of $SalesperDiv)
         const sumSalesData = SalesperDiv.labels.map((label, index) => {
@@ -817,20 +833,35 @@ if ($TandSdailytransincrease > 1) {
                             stepSize: 1
                         },
                         grid: {
-                            display: false
+                            display: false,
+                            drawOnChartArea: false
                         }
+                       
                     },
-                    'y-axis-bar': {
+                    x: {
+                        grid: {
+                            display: false,
+                            drawOnChartArea: false
+                        }
+                       
+                    },
+                    'y-axis-bar': 
+                    {
                         position: 'right', // Show the primary y-axis on the left side (sumTransactionDataset)
+    
+                        grid:{drawOnChartArea: false}
+        
+                        
                     },
                     'lineY': {
-                        position: 'left', // Show the secondary y-axis on the right side (sumSalesDataset)
+                        
                         beginAtZero: true,
                         ticks: {
                             stepSize: 1 // Customize the step size as needed
                         },
                         grid: {
-                            display: false
+                            display: false,
+                            drawOnChartArea: false
                         }
                     },
                 },
@@ -853,27 +884,37 @@ if ($TandSdailytransincrease > 1) {
 
 
 
-        // Creating bar graphs
+        // Creating horizontal bar graphs
         const transactionCtx = document.getElementById('transactionChart').getContext('2d');
-        const salesCtx = document.getElementById('salesChart').getContext('2d');
-
         const transactionChart = new Chart(transactionCtx, {
             type: 'bar',
             data: TransactionperDiv,
             options: {
+                indexAxis:'y',
                 responsive: true,
                 maintainAspectRatio: false,
                 scales: {
                     y: {
-                        beginAtZero: true
-                    }
+                        beginAtZero: true,
+                        grid: {
+                            drawOnChartArea: false
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false,
+                            drawOnChartArea: false
+                        }
+                       
+                    },
                 }
             }
         });
 
-        //creating line graph
+        //vertical bar graph
+        const salesCtx = document.getElementById('salesChart').getContext('2d');
         const salesChart = new Chart(salesCtx, {
-            type: 'line',
+            type: 'bar',
             data: SalesperDiv,
             options: {
                 responsive: true,
@@ -881,9 +922,14 @@ if ($TandSdailytransincrease > 1) {
                 scales: {
                     y: {
                         beginAtZero: true,
-
+                        grid:{drawOnChartArea: false}
 
                     },
+
+                    x: 
+                    {
+                        grid:{drawOnChartArea: false}
+                    }
 
                 },
                 elements: {
@@ -985,24 +1031,110 @@ if ($TandSdailytransincrease > 1) {
             const chartVersion = document.getElementById('chartVersion');
             chartVersion.innerText = Chart.version;
 
-                    //creating horizontal bar graph (kaso ayaw lumabas HAHAHAHAH)
-                    // const horizontalCtx = document.getElementById('horizontalChart').getContext('2d');
-
-                    // const horizontalChart = new Chart(horizontalCtx, {
-                    //     type: 'bar',
-                    //     data: TotalTransaction,
-                    //     options: {
-                    //         responsive: true,
-                    //         maintainAspectRatio: false,
-                    //         scales: {
-                    //             y: {
-                    //                 beginAtZero: true
-                    //             }
-                    //         }
-                    //     }
-                    // });
     </script>
 
+<!-- All about customer graphs -->
+<div class="customers_data">
+    <div class="date_filter" style="text-align: left; padding-left: 8rem; padding-top: 0rem; padding-bottom: 2rem;">   
+        <div class="containers">
+            <div class="date_dropdown">
+                <label for="chart_type" class="chart_type_label">
+                            <strong>Chart Filter</strong></label>
+                        <select name="chart_type" id="chart_type" class="dropdown-content">
+                            <option value="bar">Bar</option>
+                            <option value="doughnut">Doughnut</option>
+                            <option value="line">Line</option>
+                            <option value="pie">Pie</option>
+                            </select>  
+            </div>
+        </div>
+    </div>
+
+    <div class="graph">
+        <div class="chart-container">
+            <p id="reportTitle">Top 5 Customers</p>
+            <canvas id="topCustomersChart"></canvas>
+        </div>
+        <div class="chart-container">
+            <p id="reportTitle">Total Customers per Province</p>
+            <canvas id="Provinces"></canvas>
+        </div>
+    </div>
+</div>
+
+
+<!-- scriptfor customers graph -->
+
+<script>
+   // Function to create and update the chart
+   function createChart(chartType, chartTitle, chartCanvas, labels, data) {
+        const canvas = document.getElementById(chartCanvas);
+        const ctx = canvas.getContext('2d');
+
+        if (currentChart) {
+            currentChart.destroy();
+        }
+
+        currentChart = new Chart(ctx, {
+            type: chartType,
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: data,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.7)',
+                        'rgba(54, 162, 235, 0.7)',
+                        'rgba(75, 192, 192, 0.7)',
+                        'rgba(255, 205, 86, 0.7)',
+                        'rgba(153, 102, 255, 0.7)'
+                    ]
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { drawOnChartArea: false }
+                    },
+                    x: {
+                        grid: { drawOnChartArea: false }
+                    }
+                },
+                plugins: {
+                    legend: { display: false }
+                }
+            }
+        });
+
+        document.getElementById(chartTitle).textContent = "Sales by Category";
+    }
+
+    const chartTypeSelect = document.getElementById("chart_type");
+
+    // Initial chart creation
+    let currentChart = null;
+    const defaultChartType = "bar";
+    const lastNames = <?= json_encode($lastNames); ?>;
+    const transactionCounts = <?= json_encode($transactionCounts); ?>;
+    const province = <?= json_encode($province); ?>;
+    const customerCounts = <?= json_encode($customersCounts); ?>;
+
+    function updateCharts(selectedChartType) {
+        createChart(selectedChartType, "reportTitle", "topCustomersChart", lastNames, transactionCounts);
+        createChart(selectedChartType, "reportTitle", "Provinces", province, customerCounts);
+    }
+
+    updateCharts(defaultChartType);
+
+    // Event listener for dropdown change
+    chartTypeSelect.addEventListener("change", () => {
+        const selectedChartType = chartTypeSelect.value;
+        updateCharts(selectedChartType);
+    });
+</script>
 
 
 
