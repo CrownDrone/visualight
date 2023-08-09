@@ -300,7 +300,7 @@ $this->title = '';
             border-radius: 1rem;
             padding-left: 0rem;
             padding-right: 0rem;
-            width: 6rem;
+            width: 9rem;
         }
         
         .datePicker_label 
@@ -775,7 +775,7 @@ if ($TandSdailytransincrease > 1) {
         </div>
         
         <div class="print_pdf" >
-           <Button class="print_pdf_label" onclick="downloadPDF()"> Download PDF</Button>
+           <Button class="print_pdf_label" onclick="downloadPDF()"> Chart PDF Download</Button>
         </div>
     </div>
     </div>
