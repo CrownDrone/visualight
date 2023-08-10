@@ -3,32 +3,26 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 
-// $this->title = 'Update User';
-// $this->params['breadcrumbs'][] = $this->title;
-
-// Generate the URL for the default image using the @web alias
 $defaultImagePath = Yii::getAlias('@web') . '/images/user2.jpg';
 ?>
-
 
 <div class="user-profile-view">
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <?= Html::a('Edit Profile', ['update'], ['class' => 'btn btn-primary', 'style' => 'position:absolute; right: 5rem; top: 720px; font-weight: 600; ']) ?>
-    <div style="background-image: url('/images/back_pic.png'); background-repeat: no-repeat; background-size: cover; width: 100%; height: 350px;">
+    <?= Html::a('Edit Profile', ['update'], ['class' => 'btn btn-primary']) ?>
 
-        <div style="position: relative; top: 13em; text-align: center;">
+    <div class="profile-banner" style="background-image: url('/images/back_pic.png');">
+        <div class="profile-picture">
             <?php if ($user->profile_picture) : ?>
                 <?= Html::img(Url::to(['user-profile/get-profile-picture', 'fileName' => $user->profile_picture]), ['class' => 'img-circle elevation-2', 'style' => 'height: 200px; width: 200px']) ?>
             <?php else : ?>
-                <!-- Display the custom default profile picture if no image is available -->
                 <?= Html::img($defaultImagePath, ['class' => 'img-circle elevation-2', 'style' => 'height: 200px; width: 200px']) ?>
             <?php endif; ?>
         </div>
     </div>
 
-    <div style="text-align: center; margin-top: 4rem;">
-        <span style="color: #0362BA; font-family: Poppins; font-size: 15px; font-style: normal; font-weight: 300; line-height: normal; letter-spacing: 3px;">
+    <div class="user-info">
+        <span class="user-role">
             <?php
             $roles = Yii::$app->authManager->getRolesByUser($user->id);
             $roleNames = [];
@@ -39,55 +33,149 @@ $defaultImagePath = Yii::getAlias('@web') . '/images/user2.jpg';
             ?>
         </span>
         <br>
-        <span style="color: black; font-weight: 300; font-size: 40px;">
-            <?= Html::encode($user->fullName) ?>
-        </span>
+        <span class="user-name"><?= Html::encode($user->fullName) ?></span>
     </div>
 
-
-    <div style="margin: 2rem auto; border-top: 2px solid #000; width: 90%;"></div>
-
-
-    <table class="table table-bordered" style="overflow-x:auto; border-collapse: collapse; border-style:hidden; text-indent: 13rem; margin-top: 1rem; ">
-        <tr>
-            <!-- <td style="border-style: hidden;  padding: 5px 10px;"> <strong>Full Name: </strong><?= Html::encode($user->fullName) ?></td> -->
-        </tr>
-        <tr>
-            <!-- <td style="border-style: hidden; padding:5px 10px;"><strong>Username: </strong><?= Html::encode($user->username) ?></td> -->
-
-        </tr>
-        <tr>
-            <td style="border-style: hidden; padding:5px 10px;"><strong>Email: </strong><?= Html::encode($user->email) ?></td>
-        </tr>
-        <tr>
-            <td style="border-style: hidden; padding:5px 10px;"> <strong>Position: </strong>
-                <?php
-                $roles = Yii::$app->authManager->getRolesByUser($user->id);
-                $roleNames = [];
-                foreach ($roles as $role) {
-                    $roleNames[] = $role->name;
-                }
-                echo Html::encode(empty($roleNames) ? 'GUEST' : implode(', ', $roleNames));
-                ?>
-            </td>
-        </tr>
-        <tr>
-            <td style="border-style: hidden; padding:5px 10px;"> <strong>Contact Number: </strong>
-                <?= Html::encode($user->contactNumber) ?></td>
-        </tr>
-        <tr>
-            <td style="border-style: hidden; padding:5px 10px;"><strong>Address: </strong><?= Html::encode($user->address) ?></td>
-        </tr>
-        <tr>
-            <!-- <th>Profile Picture:</th> -->
-            <!-- <td> -->
-            <!-- <?php if ($user->profile_picture) : ?> -->
-            <!-- <?= Html::img(Url::to(['user-profile/get-profile-picture', 'fileName' => $user->profile_picture]), ['class' => 'img-circle elevation-2', 'style' => 'height: 200px; width: 200px']) ?> -->
-            <!-- <?php else : ?> -->
-            <!-- Display the custom default profile picture if no image is available -->
-            <!-- <?= Html::img($defaultImagePath, ['class' => 'img-circle elevation-2', 'style' => 'height: 200px; width: 200px']) ?>
-                <?php endif; ?> -->
-            </td>
-            <!-- </tr> -->
-    </table>
+    <div class="user-details">
+        <table class="table table-bordered">
+            <tr>
+                <td style="border-style: hidden;"><strong>Email: </strong><?= Html::encode($user->email) ?></td>
+            </tr>
+            <tr>
+                <td style="border-style: hidden;"><strong>Position: </strong>
+                    <?php
+                    $roles = Yii::$app->authManager->getRolesByUser($user->id);
+                    $roleNames = [];
+                    foreach ($roles as $role) {
+                        $roleNames[] = $role->name;
+                    }
+                    echo Html::encode(empty($roleNames) ? 'GUEST' : implode(', ', $roleNames));
+                    ?>
+                </td>
+            </tr>
+            <tr>
+                <td style="border-style: hidden;"><strong>Contact Number: </strong><?= Html::encode($user->contactNumber) ?></td>
+            </tr>
+            <tr>
+                <td style="border-style: hidden;"><strong>Address: </strong><?= Html::encode($user->address) ?></td>
+            </tr>
+        </table>
+    </div>
 </div>
+
+<style>
+    .profile-banner {
+        background-repeat: no-repeat;
+        background-size: cover;
+        width: 100%;
+        height: 350px;
+        margin-bottom: 1rem;
+        /* Add some spacing between sections */
+    }
+
+    .profile-picture {
+        position: relative;
+        top: 13em;
+        text-align: center;
+        margin: auto;
+    }
+
+    .user-info {
+        text-align: center;
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+        margin-top: 4rem;
+        /* Add some spacing between sections */
+    }
+
+    .user-role {
+        color: #0362BA;
+        font-family: Poppins;
+        font-size: 15px;
+        font-weight: 300;
+        line-height: normal;
+        letter-spacing: 3px;
+    }
+
+    .user-name {
+        color: black;
+        font-weight: 300;
+        font-size: 40px;
+    }
+
+    .user-details {
+        margin: 2rem auto;
+        border-top: 2px solid #000;
+        width: 90%;
+        overflow-x: auto;
+        text-align: left;
+
+        /* Center text on larger screens */
+    }
+
+    .user-details table {
+        width: 100%;
+        /* Set a fixed width for the table */
+        margin: 0 auto;
+        /* Center the table horizontally */
+    }
+
+    .user-details td {
+        padding: 10px;
+        /* Adjust cell padding as needed */
+        vertical-align: top;
+        /* Align cell content to the top */
+    }
+
+    .btn-primary {
+        position: absolute;
+        right: 5rem;
+        top: 765px;
+        font-weight: 600;
+    }
+
+
+    @media (max-width: 767px) {
+        .profile-picture {
+            top: 12.5rem;
+            margin-top: -100px;
+            /* Adjust as needed for better alignment */
+        }
+
+        .user-info {
+            margin-top: 3rem;
+        }
+
+        .user-name {
+            font-size: 32px;
+        }
+
+        .user-details {
+            text-align: center;
+            /* Center text on smaller screens like iPhone SE */
+            margin: 1rem auto;
+            /* Adjust spacing */
+        }
+
+        .user-details table {
+            text-align: left;
+            /* Align table content to the left */
+            width: auto;
+            overflow-x: auto;
+        }
+
+        .user-details td {
+            text-align: left;
+            /* Align cell content to the left */
+            padding: 5px 10px;
+            /* Adjust cell padding for smaller screens */
+        }
+
+        .btn-primary {
+            right: 8rem;
+            top: 590px;
+        }
+
+    }
+
+</style>
