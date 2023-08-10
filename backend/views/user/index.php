@@ -29,8 +29,8 @@ $this->title = 'Users';
             'headerRowOptions' => ['class' => 'bg-blue'],
             'columns' => [
                 [
-                    'attribute' => 'id',
-                    'label' => 'Id',
+                    'attribute' => 'fullName',
+                    'label' => 'Full Name',
                     'headerOptions' => ['class' => 'bg-blue white-text'],
                     'contentOptions' => ['style' => 'text-align: center;'],
                 ],
@@ -106,5 +106,16 @@ $this->title = 'Users';
 
     .white-text {
         color: white;
+    }
+
+    /* Responsive styles */
+    @media (max-width: 787px) {
+        .grid-view-container {
+            max-height: none;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
     }
 </style>
