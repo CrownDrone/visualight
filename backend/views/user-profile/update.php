@@ -128,7 +128,7 @@ $this->title = '';
     }
 
     /* Responsive styles for iPhone SE */
-    @media (max-width: 400px) {
+    @media (max-width: 600px) {
         .profile-container {
             padding: 10px;
             height: 890px;

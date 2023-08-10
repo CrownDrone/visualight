@@ -181,6 +181,7 @@ $this->title = '';
         text-align: center;
         display: wrap;
     }
+    
 
     .chart-container {
         margin: .62rem;
@@ -190,6 +191,23 @@ $this->title = '';
         display: inline-block;
         height: 28rem;
         width: 45%;
+    }
+     .graph2 {
+        width: 100%;
+        text-align: center;
+        display: wrap;
+        background-color: white;
+    }
+
+    .chart-container2 {
+        margin: .1rem;
+        padding-top: 3rem;
+        padding-bottom: 2rem;
+        border-radius: .93rem;
+        background-color: white;
+        display: inline-block;
+        height: 28rem;
+        width: 24%;
     }
 
     body.dark-mode .chart-container {
@@ -477,7 +495,7 @@ $topCustomers = $query->select(['last_name', 'COUNT(*) as transaction_count'])
     ->limit(5)
     ->all();
 
-    $addressData = $query->select(['address', 'COUNT(*) as customer_count'])
+$addressData = $query->select(['address', 'COUNT(*) as customer_count'])
     ->from('operational_report')
     // ->where(['between', 'transaction_date', $fromDate, $toDate])
     ->groupBy(['address'])
@@ -493,6 +511,69 @@ foreach ($addressData as $customeraddress) {
     $province[] = $customeraddress['address'];
     $customersCounts[] = $customeraddress['customer_count'];
 }
+
+$customerTypeData = $query->select(['customer_type', 'COUNT(*) as customer_count'])
+    ->from('operational_report')
+    // ->where(['between', 'transaction_date', $fromDate, $toDate])
+    ->groupBy(['customer_type'])
+    ->orderBy(['customer_count' => SORT_DESC])
+    ->limit(100000)
+    ->all();
+$customerType = [];
+$customerscounts = [];
+
+foreach ($customerTypeData as $customersType) {
+    $customerType[] = $customersType['customer_type'];
+    $customerscounts[] = $customersType['customer_count'];
+}
+
+$transactionTypeData = $query->select(['transaction_type', 'COUNT(*) as customer_count'])
+    ->from('operational_report')
+    // ->where(['between', 'transaction_date', $fromDate, $toDate])
+    ->groupBy(['transaction_type'])
+    ->orderBy(['customer_count' => SORT_DESC])
+    ->limit(100000)
+    ->all();
+$transactionType = [];
+$transactionTypecounts = [];
+
+foreach ($transactionTypeData as $type) {
+    $transactionType[] = $type['transaction_type'];
+    $transactionTypecounts[] = $type['customer_count'];
+}
+$transactionStatusData = $query->select(['transaction_status', 'COUNT(*) as customer_count'])
+    ->from('operational_report')
+    // ->where(['between', 'transaction_date', $fromDate, $toDate])
+    ->groupBy(['transaction_status'])
+    ->orderBy(['customer_count' => SORT_DESC])
+    ->limit(100000)
+    ->all();
+
+$transactionStatus = [];
+$transactionStatusDatacounts = [];
+
+foreach ($transactionStatusData as $status) {
+    $transactionStatus[] = $status['transaction_status'];
+    $transactionStatusDatacounts[] = $status['customer_count'];
+}
+
+$PaymentMethodData = $query->select(['payment_method', 'COUNT(*) as customer_count'])
+    ->from('operational_report')
+    ->where(['payment_method' => ['Check','Over the counter','Online Payment']])
+    // ->where(['between', 'transaction_date', $fromDate, $toDate])
+    ->groupBy(['payment_method'])
+    ->orderBy(['customer_count' => SORT_DESC])
+    ->limit(100000)
+    ->all();
+    
+$PaymentMethod = [];
+$PaymentMethodcounts = [];
+
+foreach ($PaymentMethodData as $method) {
+    $PaymentMethod[] = $method['payment_method'];
+    $PaymentMethodcounts[] = $method['customer_count'];
+}
+
 
 // Prepare $SalesperDiv array (null pa to)
 $SalesperDiv = [
@@ -1245,6 +1326,379 @@ updateCharts();
 
 
 
+
+</script>
+
+<!-- All about customer graphs -->
+<script src="path/to/Chart.min.js"></script>
+<div class="customers_data">
+    <div class="date_filter" style="text-align: left; padding-left: 8rem; padding-top: 0rem; padding-bottom: 2rem;">   
+        <div class="containers">
+            <div class="date_dropdown">
+                <label for="chart_type" class="chart_type_label">
+                            <strong>Chart Filter</strong></label>
+                        <select name="chart_type2" id="chart_type2" class="dropdown-content">
+                            <option value="doughnut">Doughnut</option>
+                            <option value="pie">Pie</option>
+                            <option value="bar">Bar</option>
+                            <option value="line">Line</option>
+                            
+                            <!-- <option value="horizontal_bar">Horizontal chart</option> -->
+                            </select>  
+            </div>
+        </div>
+    </div>
+
+    <div class="graph2">
+        <div class="chart-container2">
+            <p id="reportTitle">Transaction Status</p>
+            <canvas id="transactionStatus"></canvas>
+        </div>
+        <div class="chart-container2">
+            <p id="reportTitle">Payment Method</p>
+            <canvas id="paymendtMethod"></canvas>
+        </div>
+
+        <div class="chart-container2">
+            <p id="reportTitle">Type of Transaction</p>
+            <canvas id="transactionType"></canvas>
+        </div>
+
+        <div class="chart-container2">
+            <p id="reportTitle">Type of Customers</p>
+            <canvas id="customerType"></canvas>
+        </div>
+    </div>
+</div>
+
+
+<!-- scriptfor customers graph -->
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+        // Get references to chart containers and the dropdown
+        const transactionStatusChartContainer = document.getElementById('transactionStatus');
+        const paymendtMethodChartContainer = document.getElementById('paymendtMethod');
+        const transactionTypeChartContainer = document.getElementById('transactionType');
+        const customerTypeChartContainer = document.getElementById('customerType');
+        const chartTypeDropdown = document.getElementById('chart_type2');
+
+    //     function generateRandomColor() {
+    //   const randomColor = `rgb(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)})`;
+    //   return randomColor;
+    // }
+
+    // const randomColor = generateRandomColor();
+        // Initialize charts (empty)
+        let transactionStatusChart = null;
+        let paymendtMethodChart = null;
+        let transactionTypeChart = null;
+        let customerTypeChart = null;
+
+        // Update charts based on selected chart type
+        function updateCharts() {
+            const selectedChartType = chartTypeDropdown.value;
+
+            // Destroy existing charts if they exist
+            if (transactionStatusChart) {
+                transactionStatusChart.destroy();
+            }
+            if (paymendtMethodChart) {
+                paymendtMethodChart.destroy();
+            }
+            if (transactionTypeChart) {
+                transactionTypeChart.destroy();
+            }
+            if (customerTypeChart) {
+                customerTypeChart.destroy();
+            }
+
+            const doughnutPieOptions = {
+                plugins: {
+        legend: {
+            display: true,
+            position: 'top'
+            
+        },
+        datalabels: {
+            formatter: (value, context) => {
+                // Display the label based on the selected data (e.g., transaction type or payment method)
+                return context.chart.data.labels[context.dataIndex];
+            }
+        }
+    },
+    responsive: true,
+    maintainAspectRatio: false,
+    cutout: '70%', // Adjust the size of the doughnut hole
+
+            };
+            
+            if (selectedChartType === 'doughnut' || selectedChartType === 'pie') {
+             // For doughnut and pie charts, use the custom options
+                transactionStatusChart = new Chart(transactionStatusChartContainer, {
+                        type: selectedChartType,
+                        options: doughnutPieOptions,
+                        data: {
+                            labels: <?php echo json_encode($transactionStatus); ?>,
+                            datasets: [{
+                                data: <?php echo json_encode($transactionStatusDatacounts); ?>,
+                                backgroundColor: ['rgba(0, 215, 132, 0.2)',
+                                                'rgba(229, 247, 48, 0.2)', 
+                                                'rgba(241, 37, 150, 0.2)',
+                                            ],
+                            borderColor: ['rgba(0, 215, 132, 0.93)',
+                                            'rgba(229, 247, 48, 0.8)',
+                                            'rgba(241, 37, 150, 0.8)',
+                                            ],
+                                borderWidth: 2
+                            }],
+                        }
+                    });
+
+                    paymendtMethodChart = new Chart(paymendtMethodChartContainer, {
+                        type: selectedChartType,
+                        options: doughnutPieOptions,
+                        data: {
+                            labels: <?php echo json_encode($PaymentMethod); ?>,
+                            datasets: [{
+                                data: <?php echo json_encode($PaymentMethodcounts); ?>,
+                                backgroundColor:['rgba(0, 21, 215, 0.2)',
+                                                'rgba(0, 215, 132, 0.2)', 
+                                                'rgba(118, 0, 186, 0.2)',
+                                            ],
+                            borderColor: ['rgba(0, 21, 215, 0.93)',
+                                            'rgba(0, 215, 132, 1)',
+                                            'rgba(118, 0, 186, 0.93)',
+                                            ],
+                                borderWidth: 2
+                            }],
+                        }
+                    });
+                    transactionTypeChart = new Chart(transactionTypeChartContainer, {
+                        type: selectedChartType,
+                        options: doughnutPieOptions,
+                        data: {
+                            labels: <?php echo json_encode($transactionType); ?>,
+                            datasets: [{
+                                data: <?php echo json_encode($transactionTypecounts); ?>,
+                                backgroundColor: ['rgba(186, 0, 0, 0.2)',
+                                                'rgba(250, 154, 37, 0.2)', 
+                                                'rgba(37, 202, 247, 0.2)',
+                                                ],
+                                borderColor: ['rgba(186, 0, 0, 0.93)',
+                                            'rgba(250, 154, 37, 0.81)',
+                                            'rgba(37, 202, 247, 0.81)',
+                                        ],
+                                borderWidth: 2
+                            }],
+                        }
+                    });
+
+                    customerTypeChart = new Chart(customerTypeChartContainer, {
+                        type: selectedChartType,
+                        options: doughnutPieOptions,
+                        data: {
+                            labels: <?php echo json_encode($customerType); ?>,
+                            datasets: [{
+                                data: <?php echo json_encode($customerscounts); ?>,
+                                backgroundColor: ['rgba(247, 37, 149, 0.2)',
+                                                'rgba(166, 37, 247, 0.2)', 
+                                                'rgba(255, 155, 22, 0.2)',
+                                                'rgba(255, 213, 22, 0.2)',
+                                                'rgba(49, 255, 22, 0.2)',
+                                                'rgba(73, 0, 242, 0.2)',
+                                                'rgba(0, 220, 242, 0.2)'
+
+                                                ],
+                                borderColor: ['rgba(247, 37, 149, 0.81)',
+                                            'rgba(166, 37, 247, 0.83)',
+                                            'rgba(255, 155, 22, 0.83)',
+                                            'rgba(255, 213, 22, 0.83)',
+                                            'rgba(49, 255, 22, 0.83)',
+                                            'rgba(73, 0, 242, 0.83)',
+                                            'rgba(0, 220, 242, 0.83)'
+                                        ],
+                                borderWidth: 2
+                            }],
+                        }
+                    });}
+
+
+
+            else{
+
+                // Create new charts based on selected chart type
+                transactionStatusChart = new Chart(transactionStatusChartContainer, {
+                    type: selectedChartType,
+                    options:  {
+                        scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                drawOnChartArea: false
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false,
+                                drawOnChartArea: false
+                            }
+                        
+                        },
+                    }},
+                            
+                    data: {
+                        labels: <?php echo json_encode($transactionStatus); ?>,
+                        datasets: [{
+                            data: <?php echo json_encode($transactionStatusDatacounts); ?>,
+                            backgroundColor: ['rgba(0, 215, 132, 0.2)',
+                                                'rgba(229, 247, 48, 0.2)', 
+                                                'rgba(241, 37, 150, 0.2)',
+                                            ],
+                            borderColor: ['rgba(0, 215, 132, 0.93)',
+                                            'rgba(229, 247, 48, 0.8)',
+                                            'rgba(241, 37, 150, 0.8)',
+                                            ],
+                            borderWidth: 2
+                        }],
+                    }
+                });
+                
+
+                paymendtMethodChart = new Chart(paymendtMethodChartContainer, {
+                    type: selectedChartType,
+                    options:
+                    {
+                        scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                drawOnChartArea: false
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false,
+                                drawOnChartArea: false
+                            }
+                        
+                        },
+                    }
+
+                    },
+                    data: {
+                        labels: <?php echo json_encode($PaymentMethod); ?>,
+                        datasets: [{
+                            data: <?php echo json_encode($PaymentMethodcounts); ?>,
+                            backgroundColor: ['rgba(0, 21, 215, 0.2)',
+                                                'rgba(0, 215, 132, 0.2)', 
+                                                'rgba(118, 0, 186, 0.2)',
+                                            ],
+                            borderColor:  ['rgba(0, 21, 215, 0.93)',
+                                            'rgba(0, 215, 132, 1)',
+                                            'rgba(118, 0, 186, 0.93)',
+                                            ],
+                            borderWidth: 2
+                        }]
+                    },
+                });
+
+      
+                // Create new charts based on selected chart type
+                transactionTypeChart = new Chart(transactionTypeChartContainer, {
+                    type: selectedChartType,
+                    options:  {
+                        scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                drawOnChartArea: false
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false,
+                                drawOnChartArea: false
+                            }
+                        
+                        },
+                    }},
+                            
+                    data: {
+                        labels: <?php echo json_encode($transactionType); ?>,
+                        datasets: [{
+                            data: <?php echo json_encode($transactionTypecounts); ?>,
+                            backgroundColor: ['rgba(186, 0, 0, 0.2)',
+                                                'rgba(250, 154, 37, 0.2)', 
+                                                'rgba(37, 202, 247, 0.2)',
+                                                ],
+                            borderColor: ['rgba(186, 0, 0, 0.93)',
+                                            'rgba(250, 154, 37, 0.81)',
+                                            'rgba(37, 202, 247, 0.81)',
+                                        ],
+                            borderWidth: 2
+                        }],
+                    }
+                });
+
+                customerTypeChart = new Chart(customerTypeChartContainer, {
+                    type: selectedChartType,
+                    options:
+                    {
+                        scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                drawOnChartArea: false
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false,
+                                drawOnChartArea: false
+                            }
+                        
+                        },
+                    },
+
+
+                    },
+                    data: {
+                        labels: <?php echo json_encode($customerType); ?>,
+                        datasets: [{
+                            data: <?php echo json_encode($customerscounts); ?>,
+                            backgroundColor: ['rgba(247, 37, 149, 0.2)',
+                                                'rgba(166, 37, 247, 0.2)', 
+                                                'rgba(255, 155, 22, 0.2)',
+                                                'rgba(255, 213, 22, 0.2)',
+                                                'rgba(49, 255, 22, 0.2)',
+                                                'rgba(73, 0, 242, 0.2)',
+                                                'rgba(0, 220, 242, 0.2)'
+
+                                                ],
+                            borderColor: ['rgba(247, 37, 149, 0.81)',
+                                            'rgba(166, 37, 247, 0.83)',
+                                            'rgba(255, 155, 22, 0.83)',
+                                            'rgba(255, 213, 22, 0.83)',
+                                            'rgba(49, 255, 22, 0.83)',
+                                            'rgba(73, 0, 242, 0.83)',
+                                            'rgba(0, 220, 242, 0.83)'
+                                        ],
+                            borderWidth: 2
+                        }]
+                    },
+                    
+                });}
+        }
+        
+
+        // Listen for changes in the dropdown and update charts
+        chartTypeDropdown.addEventListener('change', updateCharts);
+
+updateCharts(); 
+    });
+
+// dashboard design end
 
 </script>
 
