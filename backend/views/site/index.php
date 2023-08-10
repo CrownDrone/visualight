@@ -11,6 +11,93 @@ $this->title = '';
 
     }
 
+/* Default styles */
+.chart-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.custom-text {
+    position: absolute;
+    top: 60%;
+    right: 3%;
+    transform: translateY(-50%);
+    text-align: right;
+}
+
+.uwu-text,
+.ehe-text {
+    background-color: #B526C2;
+    color: white;
+    width: 220px;
+    height: 130px;
+    border-radius: .635rem;
+    padding: 30px 10px 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.uwu-text {
+    background-color: #11A34C; /* Updated background color for .uwu-text */
+}
+
+.texty {
+    margin: 0;
+    font-weight: bold;
+    font-size: 16px;
+    font-family: Poppins;
+}
+
+.number {
+    margin: 0;
+    font-family: Poppins;
+    font-size: 45px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+#myChart {
+    position: absolute;
+    left: 10px;
+    top: 10%;
+}
+
+@media (max-width: 1200px) {
+    .custom-text {
+        position: relative;
+        top: auto;
+        right: auto;
+        transform: none;
+        text-align: center;
+        width: 50%; /* Set to 50% width to make them appear beside each other */
+        box-sizing: border-box; /* Include padding and border in the width */
+        padding: 15px; /* Add padding to create spacing between elements */
+        display: inline-block; /* Display elements inline */
+    }
+
+    .uwu-text,
+    .ehe-text {
+        width: 100%; /* Reset width to 100% to take up available space */
+        height: auto;
+        border-radius: .635rem;
+        padding: 15px;
+        margin-bottom: 15px;
+    }
+
+    #myChart {
+        position: absolute;
+        left: 50px;
+        top: 20%;
+    }
+}
+
+
     :root {
         font-size: 16px;
     }
@@ -190,7 +277,7 @@ $this->title = '';
         background-color: white;
         display: inline-block;
         height: 28rem;
-        width: 45%;
+        width: 47%;
     }
      .graph2 {
         width: 100%;
@@ -901,13 +988,21 @@ if ($TandSdailytransincrease > 1) {
         <canvas id="salesChart"></canvas>
     </div>
 
-    <div class="chart-container">
-        <p id="reportTitle"> Average Sales per Day </p>
-        <canvas id="myChart" style="left: 0rem;"></canvas>
+    <div class="chart-container" id="avgSales">
+    <p id="reportTitle"> Average Sales per Day </p>
+    <canvas id="myChart"></canvas>
+</div>
+
+  <div class="custom-text">
+        <div class="uwu-text">
+            <p class="texty"> Average Transactions </p>
+            <p class="number"> 33</p>
+        </div>
+        <div class="ehe-text">
+            <p class="texty"> Average Sales </p>
+            <p class="number"> 40 </p>
+        </div>
     </div>
-
-
-
 
 
 
