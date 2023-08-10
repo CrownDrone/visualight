@@ -805,7 +805,7 @@ if ($TandSdailytransincrease > 1) {
 
 
     <div class="chart-container">
-        <p id="reportTitle"> Physical Report of Operation</p>
+        <p id="reportTitle"> Total Transaction and Sales</p>
         <canvas id="combinedChart"></canvas>
     </div>
 
@@ -1284,7 +1284,7 @@ function downloadPDF() {
                                                     pdf.setFontSize(12);
                                                     pdf.setFont('helvetica', 'bold');
                                                     pdf.setTextColor(0, 122, 204);                            
-                                                    pdf.text('Physical Report Operation', 40, 25);
+                                                    pdf.text('Total Transaction and Sales', 40, 25);
                                                     pdf.text('Transaction per Division', 40, 115);
                                                     pdf.text('Sales per Division', 40, 215);
 
