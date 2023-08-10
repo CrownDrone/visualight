@@ -7,108 +7,183 @@ use yii\widgets\ActiveForm;
 $this->registerCssFile(Url::to(['/css/custom.css']));
 $defaultImagePath = Yii::getAlias('@web') . '/images/user2.jpg';
 
-
 $profilePicturePath = $model->profile_picture
     ? Url::to(['/user-profile/get-profile-picture', 'fileName' => $model->profile_picture])
     : $defaultImagePath;
 
-
 $this->title = '';
-// $this->params['breadcrumbs'][] = ['label' => 'User Profile', 'url' => ['view']];
-// $this->params['breadcrumbs'][] = $this->title;
 ?>
-
 
 <h4 style="color: #0362BA; font-family: Poppins; font-size: 24px; font-style: normal; font-weight: 600; line-height: normal; letter-spacing: 2.5px;">Edit Profile:</h4>
 
-<div class="user-profile-update ">
+<div class="user-profile-update">
     <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
-    <div style="border-radius: 10px; background: #cceeff; width: 100%; height: 670px; background-size: cover; ">
-        <!-- Left column start  -->
-        <!-- Show the current image preview -->
+    <div class="profile-container">
+
+        <!-- Left column start -->
         <?php if ($model->profile_picture) : ?>
-            <?php echo Html::img($profilePicturePath, ['class' => 'img-circle elevation-2', 'style' => 'height: 300px; width: 300px; margin-top: 9%; margin-left: 10%', 'id' => 'current-image']); ?>
+            <?php echo Html::img($profilePicturePath, ['class' => 'profile-picture', 'id' => 'current-image']); ?>
         <?php else : ?>
-            <?php echo Html::img($defaultImagePath, ['class' => 'img-circle elevation-2', 'style' => 'height: 300px; width: 300px; margin-top: 9%; margin-left: 10% ', 'id' => 'current-image']); ?>
+            <?php echo Html::img($defaultImagePath, ['class' => 'profile-picture', 'id' => 'current-image']); ?>
         <?php endif; ?>
-        <br>
-        <!-- Add an empty image tag for real-time preview -->
-        <img id="image-preview" src="#" alt="Image Preview" class="img-circle elevation-2" style="height: 300px; width: 300px; display: none; margin-top: 9%; margin-left: 10% ">
 
-        <div style="margin-top: 2rem; margin-left: 12.5rem;">
-            <label class="btn btn-primary" style="width: 200px; height:45px; background-color: #038EBA; color: #FFF; font-family: Poppins; font-size: 24px; font-style: normal; font-weight: 600; line-height: normal; display: block; text-align: center; overflow: hidden;">
-                <?= $form->field($model, 'imageFile')->fileInput(['accept' => 'image/*', 'style' => 'display: none;', 'label' => false])->label('Upload Picture') ?>
-            </label>
+        <img id="image-preview" src="#" alt="Image Preview" class="profile-picture" style="display: none;">
+
+        <div class="upload-btn-wrapper">
+            <?= $form->field($model, 'imageFile')->fileInput(['accept' => 'image/*', 'class' => 'upload-btn', 'label' => false])->label('Upload Picture') ?>
         </div>
 
+        <!-- End of left column -->
 
-        <!-- End of left column  -->
+        <div class="divider"></div>
 
-        <!-- Solid line  -->
-        <div style="border-left: 1px solid #03101C; height: 58.07%; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);"></div>
-
-        <!-- right column  -->
-        <div class="form-group" style="width: 30%; position: absolute; top: 45%; right: 12%; transform: translate(0, -50%); ">
-            <br>
-            <br>
-            <!-- <?= Html::submitButton('Update', ['class' => 'btn btn-primary']) ?> -->
-            <!-- <?= Html::a('Back', ['view'], ['class' => 'btn btn-warning']) ?> -->
-
-            <h1><?= Html::encode($this->title) ?></h1>
-
-
-
+        <!-- Right column -->
+        <div class="form-group right-column">
             <?= $form->field($model, 'username')->textInput() ?>
-
             <?= $form->field($model, 'email')->textInput() ?>
-
             <?= $form->field($model, 'contactNumber')->textInput(['maxlength' => true]) ?>
-
-            <?php $hasPasswordError = $model->hasErrors('existingPassword'); ?>
-            <?= $form->field($model, 'existingPassword')->passwordInput()->hint($hasPasswordError ? '' : '   *Leave it blank if you dont want to change the password', ['style' => 'color: black']) ?>
-
-            <?php $hasPasswordError = $model->hasErrors('newPassword'); ?>
-            <?= $form->field($model, 'newPassword')->passwordInput()->hint($hasPasswordError ? '' : '   *Leave it blank if you dont want to change the password', ['style' => 'color: black']) ?>
-
-            <?= Html::submitButton('Update Details', ['class' => 'btn btn-success', 'style' => 'background-color: green; position: absolute;  width: 31.77%; ']) ?>
+            <?= $form->field($model, 'existingPassword')->passwordInput()->hint($model->hasErrors('existingPassword') ? '' : '*Leave it blank if you dont want to change the password', ['style' => 'color: black']) ?>
+            <?= $form->field($model, 'newPassword')->passwordInput()->hint($model->hasErrors('newPassword') ? '' : '*Leave it blank if you dont want to change the password', ['style' => 'color: black']) ?>
+            <?= Html::submitButton('Update Details', ['class' => 'btn btn-success', 'style' => 'background-color: green;']) ?>
             <?= Html::a('Back', ['view'], ['class' => 'btn btn-warning', 'style' => ' width: 31.77%;  right: 1.5%; position: absolute;']) ?>
-
-           
-
         </div>
-        <!-- end of right column -->
+        <!-- End of right column -->
     </div>
     <?php ActiveForm::end(); ?>
 </div>
+<style>
+    .profile-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 3%;
+        background-color: #cceeff;
+        border-radius: 10px;
+        height: 85vh;
+        /* Use viewport height unit */
+    }
+
+    .profile-picture {
+        width: 40%;
+        /* Use percentage */
+        max-width: 230px;
+        /* Add max-width for responsiveness */
+        margin-top: 7%;
+        /* Use percentage */
+        margin-right: 65%;
+        /* Use percentage */
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    .upload-btn-wrapper {
+        width: 15%;
+        /* Use percentage */
+        height: 4vh;
+        /* Use viewport height unit */
+        background-color: #038EBA;
+        color: #FFF;
+        font-family: Poppins;
+        font-size: 1.5vw;
+        /* Use viewport width unit */
+        font-style: normal;
+        font-weight: 300;
+        line-height: normal;
+        display: block;
+        text-align: center;
+        overflow: hidden;
+        margin-right: 65%;
+        /* Use percentage */
+        margin-top: 2%;
+        /* Use percentage */
+
+    }
+
+    .upload-btn {
+        display: none;
+    }
+
+    .divider {
+        border-left: 2px solid #03101C;
+        height: 58.07%;
+        /* Use percentage */
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        /* Use percentage */
+        transform: translate(-50%, -50%);
+    }
+
+    .right-column {
+        width: 100%;
+        max-width: 30%;
+        /* Use percentage */
+        position: absolute;
+        top: 44%;
+        /* Use percentage */
+        right: 10%;
+        /* Use percentage */
+        transform: translate(0, -50%);
+        height: 55%;
+    }
+
+    /* Responsive styles for iPhone SE */
+    @media (max-width: 400px) {
+        .profile-container {
+            padding: 10px;
+            height: 890px;
+
+        }
+
+        .profile-picture {
+            width: 200px;
+            height: 200px;
+            margin-top: 10%;
+            margin-left: 55%;
+        }
+
+        .upload-btn-wrapper {
+            margin-top: 1rem;
+            margin-left: 55%;
+            font-size: 4.5vw;
+            height: 3vh;
+            width: 35%;
+            text-align: center;
+
+        }
+
+        .divider {
+            display: none;
+        }
+
+        .right-column {
+            width: 100%;
+            max-width: 250px;
+            position: absolute;
+            top: 70%;
+            right: 15%;
+            transform: translate(0, -50%);
+
+        }
+
+    }
+</style>
 
 <?php
-// JavaScript for real-time image preview
 $this->registerJs("
 $(document).ready(function() {
-    // Handler for the file input change event
     $('#" . Html::getInputId($model, 'imageFile') . "').change(function() {
-        // Hide the current image preview (if available)
         $('#current-image').hide();
-        
-        // Get the selected image file
         var file = $(this)[0].files[0];
-        
-        // Check if the file is an image
         if (file && file.type.startsWith('image/')) {
-            // Create a FileReader to read the image file
             var reader = new FileReader();
-            
-            // Set the FileReader onload event to update the image preview
             reader.onload = function(e) {
-                $('#current-image').hide(); // Hide the current image if there's a new image
+                $('#current-image').hide();
                 $('#image-preview').attr('src', e.target.result);
-                $('#image-preview').show(); // Show the new image preview
+                $('#image-preview').show();
             }
-            
-            // Read the image file as a data URL
             reader.readAsDataURL(file);
         }
     });
 });");
 ?>
-
