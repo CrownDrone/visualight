@@ -22,16 +22,15 @@ class UserProfileController extends BaseController
                 'class' => AccessControl::class,
                 'only' => ['view','update'],
                 'rules' => [
-                    [
-                        'allow' => true,
-                        'actions' => ['view','update'],
-                        'roles' => ['ADMIN','USER'],
-                  ],
                    [
                            'allow' => true,
                            'actions' => ['view','update'],
-                           'roles' => ['ADMIN','USER'],
+                           'roles' => ['@'],
                    ],
+                   [
+                    'allow' => false,
+                    'roles' => ['GUEST'],
+                    ],
                   [
                       'allow' => true,
                       'actions' => ['logout'],
