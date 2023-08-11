@@ -21,6 +21,9 @@ return [
        'userprofile' => [
                     'class' => 'common\modules\userprofile\Module',
                 ],
+        'nmd' => [
+                    'class' => 'app\modules\nmd\Module',
+                ],
     ],
     'components' => [
         'request' => [

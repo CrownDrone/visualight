@@ -970,6 +970,8 @@ if ($TandSdailytransincrease > 1) {
     <script src ="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.debug.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dom-to-image/2.6.0/dom-to-image.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/brain.js"></script>
+
 
 
     <div class="chart-container">
@@ -1067,7 +1069,7 @@ if ($TandSdailytransincrease > 1) {
             ]
         };
 
-        // Createing combined chart
+        // Creating combined chart
       const combinedCtx = document.getElementById('combinedChart').getContext('2d');
 
 const combinedChart = new Chart(combinedCtx, {
@@ -1275,7 +1277,13 @@ const combinedChart = new Chart(combinedCtx, {
             const chartVersion = document.getElementById('chartVersion');
             chartVersion.innerText = Chart.version;
 
+            var customerTypeData = <?php echo json_encode($customerTypeData); ?>;
+            var paragraphElement = document.getElementById('customerTypeParagraph');
+            paragraphElement.textContent = 'Customer Type: ' + customerTypeData;
+
+
     </script>
+
 
 <!-- All about customer graphs -->
 <div class="customers_data">
@@ -1294,6 +1302,7 @@ const combinedChart = new Chart(combinedCtx, {
             </div>
         </div>
     </div>
+
 
     <div class="graph">
         <div class="chart-container">
@@ -2018,3 +2027,5 @@ function downloadPDF() {
         </div>
     </div>
 </div> -->
+
+
