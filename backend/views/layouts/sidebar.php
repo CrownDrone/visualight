@@ -126,7 +126,6 @@ $defaultImagePath = Yii::getAlias('@web') . '/images/user2.jpg';
 
                     [
                         'label' => 'Division Charts',
-                        'url' => ['/admin/index'],
                         'icon' => 'user',
 
                         'visible' => Helper::checkRoute('/admin/index'),
@@ -135,7 +134,7 @@ $defaultImagePath = Yii::getAlias('@web') . '/images/user2.jpg';
                                 'label' => 'National Metrology',
                                 'icon' => 'star',
                                 'url' => ['/nmd/chart/index'],
-                                'active' => Yii::$app->controller->route === 'user/index',
+                                'active' => Yii::$app->controller->route === 'nmd/chart/index',
 
                             ],
                         ],
