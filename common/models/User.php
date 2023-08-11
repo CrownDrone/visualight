@@ -99,7 +99,6 @@ class User extends ActiveRecord implements IdentityInterface
             [['newPassword'], 'required', 'on' => self::SCENARIO_CREATE],
 
             // Validation rules for the update scenario
-            [['existingPassword'], 'required', 'on' => self::SCENARIO_UPDATE],
             ['existingPassword', 'validateExistingPassword', 'on' => self::SCENARIO_UPDATE],
 
             [['contactNumber'], 'integer'],
