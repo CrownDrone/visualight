@@ -289,7 +289,7 @@ $this->title = '';
     .chart-container2 {
         margin: .1rem;
         padding-top: 3rem;
-        padding-bottom: 2rem;
+        padding-bottom: 3rem;
         border-radius: .93rem;
         background-color: white;
         display: inline-block;
@@ -342,6 +342,14 @@ $this->title = '';
     @media (max-width: 900px) 
     {
         .chart-container 
+        {
+            flex-basis: 100%;
+            max-width: 100%;
+            width: 95%;
+            height:25rem;
+            display: block;
+        }
+        .chart-container2 
         {
             flex-basis: 100%;
             max-width: 100%;
@@ -564,6 +572,7 @@ $query = new Query();
 $salesData = $query->select(['division_name', 'transacton_date', 'SUM(amount) as total_amount'])
     ->from('operational_report')
     // ->where(['between', 'transaction_date', $fromDate, $toDate])
+    // ->where(['between', 'transacton_date', '2023-06-10', '2023-06-14'])
     ->groupBy(['division_name', 'transacton_date'])
     ->all();
 
@@ -836,7 +845,7 @@ $lastSandTtrans= (new Query())
 ])
 ->scalar();
 
-if($todaymettrans==0)
+if($todaySandTtrans==0)
 {
     $SandTdailytransincrease=0;
 }
@@ -870,7 +879,7 @@ $lastTandStrans= (new Query())
 ])
 ->scalar();
 
-if($todaymettrans==0)
+if($todayTandStrans==0)
 {
     $TandSdailytransincrease=0;
 }
