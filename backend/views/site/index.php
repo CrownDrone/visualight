@@ -1448,7 +1448,7 @@ updateCharts();
     <div class="date_filter" style="text-align: left; padding-left: 8rem; padding-top: 0rem; padding-bottom: 2rem;">   
         <div class="containers">
             <div class="date_dropdown">
-                <label for="chart_type" class="chart_type_label">
+                <label for="chart_type2" class="chart_type_label2">
                             <strong>Chart Filter</strong></label>
                         <select name="chart_type2" id="chart_type2" class="dropdown-content">
                             <option value="doughnut">Doughnut</option>
