@@ -1822,16 +1822,19 @@ function downloadPDF() {
     const salesChart = document.getElementById('salesChart');
     const myChart = document.getElementById('myChart');
     const topCustomersChart = document.getElementById('topCustomersChart');
-    const provincesChart = document.getElementById('Provinces');  // New chart element
+    const provincesChart = document.getElementById('Provinces');
+    const transactionStatusChart = document.getElementById('transactionStatus'); // New chart element
+    const paymentChart = document.getElementById('paymendtMethod'); // New chart element
+    const transactionTypeChart = document.getElementById('transactionType'); // New chart element
+    const customerTypeChart = document.getElementById('customerType'); // New chart element
 
-    // Set the options for dom-to-image
+
     const options = {
-        quality: 5, // Increase the quality (scale) of the captured image
-        width: 800, // Set the width of the captured image
-        height: 600 // Set the height of the captured image
+        quality: 5,
+        width: 800,
+        height: 600
     };
 
-    // Convert charts to images
     domtoimage.toPng(combinedChart, options)
         .then(function (combinedChartImg) {
             domtoimage.toPng(transactionChart, options)
@@ -1840,55 +1843,86 @@ function downloadPDF() {
                         .then(function (salesChartImg) {
                             domtoimage.toPng(myChart, options)
                                 .then(function (myChartImg) {
-                                    domtoimage.toPng(topCustomersChart, options) // Convert the new chart
+                                    domtoimage.toPng(topCustomersChart, options)
                                         .then(function (topCustomersChartImg) {
-                                             domtoimage.toPng(provincesChart, options) // Convert the new chart
+                                            domtoimage.toPng(provincesChart, options)
                                                 .then(function (provincesChartImg) {
-                                                // Create PDF document
-                                                    const pdf = new jsPDF();
+                                                    domtoimage.toPng(transactionStatusChart, options) 
+                                                        .then(function (transactionStatusChartImg) {
+                                                                    domtoimage.toPng(transactionTypeChart, options)
+                                                                        .then(function (transactionTypeChartImg) {
+                                                                            domtoimage.toPng(paymentChart, options)
+                                                                                .then(function (paymentChartImg) {
+                                                                                    domtoimage.toPng(customerTypeChart, options)
+                                                                                        .then(function (customerTypeChartImg) {
+                                                                            const pdf = new jsPDF();
 
-                                                    // Page 1
-                                                    pdf.setFontSize(12);
-                                                    pdf.setFont('helvetica', 'bold');
-                                                    pdf.setTextColor(0, 122, 204);                            
-                                                    pdf.text('Total Transaction and Sales', 40, 25);
-                                                    pdf.text('Transaction per Division', 40, 115);
-                                                    pdf.text('Sales per Division', 40, 215);
+                                                                            pdf.setFontSize(12);
+                                                                            pdf.setFont('helvetica', 'bold');
+                                                                            pdf.setTextColor(0, 122, 204);
+                                                                            pdf.text('Total Transaction and Sales', 40, 25);
+                                                                            pdf.text('Transaction per Division', 40, 115);
+                                                                            pdf.text('Sales per Division', 40, 215);
 
-                                                    pdf.setFont('helvetica', 'bold'); 
-                                                    pdf.setTextColor(0, 41, 102); 
-                                                    pdf.setFontSize(14);
-                                                    pdf.text('Visualight-Dashboard', 83, 10);
+                                                                            pdf.setFont('helvetica', 'bold');
+                                                                            pdf.setTextColor(0, 41, 102);
+                                                                            pdf.setFontSize(14);
+                                                                            pdf.text('Visualight-Dashboard', 83, 10);
 
-                                                    // Add images to the first page
-                                                    pdf.addImage(combinedChartImg, 'PNG', 40, 30, 130, 70);
-                                                    pdf.addImage(transactionChartImg, 'PNG', 40, 123, 130, 70);
-                                                    pdf.addImage(salesChartImg, 'PNG', 40, 220, 130, 70);
+                                                                            pdf.addImage(combinedChartImg, 'PNG', 40, 30, 130, 70);
+                                                                            pdf.addImage(transactionChartImg, 'PNG', 40, 123, 130, 70);
+                                                                            pdf.addImage(salesChartImg, 'PNG', 40, 220, 130, 70);
 
-                                                    // Add a new page
-                                                    pdf.addPage();
+                                                                            pdf.addPage();
 
-                                                    // Page 2
-                                                    pdf.setFontSize(12);
-                                                    pdf.setFont('helvetica', 'bold');
-                                                    pdf.setTextColor(0, 122, 204); // Red text color
-                                                    pdf.text('Average Sales Daily', 40, 25); // Title for the new chart
+                                                                            pdf.setFontSize(12);
+                                                                            pdf.setFont('helvetica', 'bold');
+                                                                            pdf.setTextColor(0, 122, 204);
+                                                                            pdf.text('Average Sales Daily', 40, 25);
 
-                                                    // Add image and text to the second page
-                                                    pdf.addImage(myChartImg, 'PNG', 40, 30, 130, 70);
+                                                                            pdf.addImage(myChartImg, 'PNG', 50, 20, 110, 70);
 
-                                                    pdf.text('Top 5 Customers', 40, 115); // Title for the new chart
+                                                                            pdf.text('Top 5 Customers', 40, 115);
 
-                                                    // Add the new chart and title
-                                                    pdf.addImage(topCustomersChartImg, 'PNG', 40, 120, 130, 70);
+                                                                            pdf.addImage(topCustomersChartImg, 'PNG', 40, 120, 130, 70);
 
-                                                    pdf.text('Total Customers per Province', 40, 215); // Title for the new chart
+                                                                            pdf.text('Total Customers per Province', 40, 215);
 
-                                                    // Add the new chart and title
-                                                    pdf.addImage(provincesChartImg, 'PNG', 40, 225, 130, 70);
+                                                                            pdf.addImage(provincesChartImg, 'PNG', 40, 225, 130, 70);
 
-                                                    // Save PDF
-                                                    pdf.save('Visualight-Dashboard.pdf');
+                                                                            pdf.addPage();
+
+                                                                            pdf.setFontSize(12);
+                                                                            pdf.setFont('helvetica', 'bold');
+                                                                            pdf.setTextColor(0, 122, 204);
+                                                                            pdf.text('Transaction Status', 40, 18);
+
+                                                                            pdf.addImage(transactionStatusChartImg, 'PNG', 60, 25, 100, 80);
+
+                                                                            pdf.text('Payment Method', 40, 115);
+
+                                                                            pdf.addImage(paymentChartImg, 'JPEG', 60, 115, 100, 80);
+
+                                                                            
+                                                                            pdf.text('Transaction Type', 40, 215);
+
+                                                                            pdf.addImage(transactionTypeChartImg, 'PNG', 60, 215, 100, 80);
+
+                                                                            pdf.addPage();
+
+                                                                            pdf.setFontSize(12);
+                                                                            pdf.setFont('helvetica', 'bold');
+                                                                            pdf.setTextColor(0, 122, 204);
+                                                                            pdf.text('Type of Customers', 40, 25);
+
+                                                                            pdf.addImage(customerTypeChartImg, 'PNG', 60, 30, 100, 80);
+                                            
+
+                                                                            pdf.save('Visualight-Dashboard.pdf');
+                                                                        });
+                                                                });
+                                                        });
+                                                    });
                                                 });
                                         });
                                 });
