@@ -1526,7 +1526,7 @@ updateCharts();
                 customerTypeChart.destroy();
             }
 
-            const doughnutPieOptions = {
+            const doughnutOptions = {
                 plugins: {
         legend: {
             display: true,
@@ -1546,11 +1546,11 @@ updateCharts();
 
             };
             
-            if (selectedChartType === 'doughnut' || selectedChartType === 'pie') {
+            if (selectedChartType === 'doughnut' ) {
              // For doughnut and pie charts, use the custom options
                 transactionStatusChart = new Chart(transactionStatusChartContainer, {
                         type: selectedChartType,
-                        options: doughnutPieOptions,
+                        options: doughnutOptions,
                         data: {
                             labels: <?php echo json_encode($transactionStatus); ?>,
                             datasets: [{
@@ -1570,7 +1570,7 @@ updateCharts();
 
                     paymendtMethodChart = new Chart(paymendtMethodChartContainer, {
                         type: selectedChartType,
-                        options: doughnutPieOptions,
+                        options: doughnutOptions,
                         data: {
                             labels: <?php echo json_encode($PaymentMethod); ?>,
                             datasets: [{
@@ -1589,7 +1589,7 @@ updateCharts();
                     });
                     transactionTypeChart = new Chart(transactionTypeChartContainer, {
                         type: selectedChartType,
-                        options: doughnutPieOptions,
+                        options: doughnutOptions,
                         data: {
                             labels: <?php echo json_encode($transactionType); ?>,
                             datasets: [{
@@ -1609,7 +1609,155 @@ updateCharts();
 
                     customerTypeChart = new Chart(customerTypeChartContainer, {
                         type: selectedChartType,
-                        options: doughnutPieOptions,
+                        options: doughnutOptions,
+                        data: {
+                            labels: <?php echo json_encode($customerType); ?>,
+                            datasets: [{
+                                data: <?php echo json_encode($customerscounts); ?>,
+                                backgroundColor: ['rgba(247, 37, 149, 0.2)',
+                                                'rgba(166, 37, 247, 0.2)', 
+                                                'rgba(255, 155, 22, 0.2)',
+                                                'rgba(255, 213, 22, 0.2)',
+                                                'rgba(49, 255, 22, 0.2)',
+                                                'rgba(73, 0, 242, 0.2)',
+                                                'rgba(0, 220, 242, 0.2)'
+
+                                                ],
+                                borderColor: ['rgba(247, 37, 149, 0.81)',
+                                            'rgba(166, 37, 247, 0.83)',
+                                            'rgba(255, 155, 22, 0.83)',
+                                            'rgba(255, 213, 22, 0.83)',
+                                            'rgba(49, 255, 22, 0.83)',
+                                            'rgba(73, 0, 242, 0.83)',
+                                            'rgba(0, 220, 242, 0.83)'
+                                        ],
+                                borderWidth: 2
+                            }],
+                        }
+                    });}
+
+            else if (selectedChartType === 'pie' )
+            {
+                transactionStatusChart = new Chart(transactionStatusChartContainer, {
+                        type: selectedChartType,
+                        options:  
+                            {plugins: {
+                            legend: {
+                                display: true,
+                                position: 'top'
+                                
+                            },
+                            datalabels: {
+                                formatter: (value, context) => {
+                                    // Display the label based on the selected data (e.g., transaction type or payment method)
+                                    return context.chart.data.labels[context.dataIndex];
+                                }
+                            }
+                            },
+                            responsive: true,
+                            maintainAspectRatio: false,},
+                        data: {
+                            labels: <?php echo json_encode($transactionStatus); ?>,
+                            datasets: [{
+                                data: <?php echo json_encode($transactionStatusDatacounts); ?>,
+                                backgroundColor: ['rgba(0, 215, 132, 0.2)',
+                                                'rgba(229, 247, 48, 0.2)', 
+                                                'rgba(241, 37, 150, 0.2)',
+                                            ],
+                            borderColor: ['rgba(0, 215, 132, 0.93)',
+                                            'rgba(229, 247, 48, 0.8)',
+                                            'rgba(241, 37, 150, 0.8)',
+                                            ],
+                                borderWidth: 2
+                            }],
+                        }
+                    });
+
+                    paymendtMethodChart = new Chart(paymendtMethodChartContainer, {
+                        type: selectedChartType,
+                        options:
+                            {plugins: {
+                            legend: {
+                                display: true,
+                                position: 'top'
+                                
+                            },
+                            datalabels: {
+                                formatter: (value, context) => {
+                                    // Display the label based on the selected data (e.g., transaction type or payment method)
+                                    return context.chart.data.labels[context.dataIndex];
+                                }
+                            }
+                            },
+                            responsive: true,
+                            maintainAspectRatio: false,},
+                        data: {
+                            labels: <?php echo json_encode($PaymentMethod); ?>,
+                            datasets: [{
+                                data: <?php echo json_encode($PaymentMethodcounts); ?>,
+                                backgroundColor:['rgba(0, 21, 215, 0.2)',
+                                                'rgba(0, 215, 132, 0.2)', 
+                                                'rgba(118, 0, 186, 0.2)',
+                                            ],
+                            borderColor: ['rgba(0, 21, 215, 0.93)',
+                                            'rgba(0, 215, 132, 1)',
+                                            'rgba(118, 0, 186, 0.93)',
+                                            ],
+                                borderWidth: 2
+                            }],
+                        }
+                    });
+                    transactionTypeChart = new Chart(transactionTypeChartContainer, {
+                        type: selectedChartType,
+                        options: {plugins: {
+                            legend: {
+                                display: true,
+                                position: 'top'
+                                
+                            },
+                            datalabels: {
+                                formatter: (value, context) => {
+                                    // Display the label based on the selected data (e.g., transaction type or payment method)
+                                    return context.chart.data.labels[context.dataIndex];
+                                }
+                            }
+                            },
+                            responsive: true,
+                            maintainAspectRatio: false,},
+                        data: {
+                            labels: <?php echo json_encode($transactionType); ?>,
+                            datasets: [{
+                                data: <?php echo json_encode($transactionTypecounts); ?>,
+                                backgroundColor: ['rgba(186, 0, 0, 0.2)',
+                                                'rgba(250, 154, 37, 0.2)', 
+                                                'rgba(37, 202, 247, 0.2)',
+                                                ],
+                                borderColor: ['rgba(186, 0, 0, 0.93)',
+                                            'rgba(250, 154, 37, 0.81)',
+                                            'rgba(37, 202, 247, 0.81)',
+                                        ],
+                                borderWidth: 2
+                            }],
+                        }
+                    });
+
+                    customerTypeChart = new Chart(customerTypeChartContainer, {
+                        type: selectedChartType,
+                        options: {plugins: {
+                            legend: {
+                                display: true,
+                                position: 'top'
+                                
+                            },
+                            datalabels: {
+                                formatter: (value, context) => {
+                                    // Display the label based on the selected data (e.g., transaction type or payment method)
+                                    return context.chart.data.labels[context.dataIndex];
+                                }
+                            }
+                            },
+                            responsive: true,
+                            maintainAspectRatio: false,},
                         data: {
                             labels: <?php echo json_encode($customerType); ?>,
                             datasets: [{
@@ -1637,7 +1785,6 @@ updateCharts();
                     });}
 
 
-
             else{
 
                 // Create new charts based on selected chart type
@@ -1658,6 +1805,7 @@ updateCharts();
                             }
                         
                         },
+                        
                     }},
                             
                     data: {
