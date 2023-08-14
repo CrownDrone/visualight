@@ -1399,36 +1399,48 @@ const combinedChart = new Chart(combinedCtx, {
 
             provincesChart = new Chart(provincesChartContainer, {
                 type: selectedChartType,
-                options:
-                {
+                options: {
                     scales: {
-                    y: {
-                        beginAtZero: true,
-                        grid: {
-                            drawOnChartArea: false
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                drawOnChartArea: false
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false,
+                                drawOnChartArea: false
+                            }
                         }
-                    },
-                    x: {
-                        grid: {
-                            display: false,
-                            drawOnChartArea: false
-                        }
-                       
-                    },
-                }
-
+                    }
                 },
                 data: {
                     labels: <?php echo json_encode($province); ?>,
                     datasets: [{
                         label: 'Customer Count',
                         data: <?php echo json_encode($customersCounts); ?>,
-                        backgroundColor: 'rgba(255, 159, 64, 0.2)',
-                        borderColor: 'rgba(255, 159, 64, 1)',
+                        backgroundColor: generateRandomColors(<?php echo count($customersCounts); ?>, 1), 
+                        borderColor: 'rgba(0, 0, 0, 0.2)',
                         borderWidth: 1
                     }]
                 },
-            });
+                });
+
+                function generateRandomColors(count, alpha) {
+                    const colors = [];
+                    for (let i = 0; i < count; i++) {
+                        colors.push(generateRandomColor(alpha));
+                    }
+                    return colors;
+                }
+
+                function generateRandomColor(alpha) {
+                    const r = Math.floor(Math.random() * 256);
+                    const g = Math.floor(Math.random() * 256);
+                    const b = Math.floor(Math.random() * 256);
+                    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+                }
         }
 
         // Listen for changes in the dropdown and update charts
