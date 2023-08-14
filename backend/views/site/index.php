@@ -1227,16 +1227,29 @@ const combinedChart = new Chart(combinedCtx, {
         // Find the maximum average value
         const maxAverage = Math.max(...TransactionAverage.map((average) => average.average));
 
-        // Create a new dataset for each sales average
-        const newDatasets = TransactionAverage.map((average) => ({
-            label: `Average ${average.label}`,
-            data: [average.average], // Use the average value as data for each new dataset
-            borderWidth: 1,
-            circumference: (ctx) => {
-            console.log(ctx.dataset.data[0]);
-             return (ctx.dataset.data[0] / maxAverage) * 270; // Scale the circumference based on the maximum average value
-         },
-        }));
+        const newDatasets = TransactionAverage.map((average, index) => {
+  const datasetColors = ["blue", "green", "pink"]; // Array of specific colors
+  const color = datasetColors[index % datasetColors.length]; // Assign color based on index
+
+  return {
+    label: `Average ${average.label}`,
+    data: [average.average],
+    borderWidth: 1,
+    circumference: (ctx) => ((ctx.dataset.data[0] / maxAverage) * 270),
+    backgroundColor: color,
+    borderColor: color,
+  };
+});
+        // // Create a new dataset for each sales average
+        // const newDatasets = TransactionAverage.map((average) => ({
+        //     label: `Average ${average.label}`,
+        //     data: [average.average], // Use the average value as data for each new dataset
+        //     borderWidth: 1,                 
+        //     circumference: (ctx) => {
+        //     console.log(ctx.dataset.data[0]);
+        //      return (ctx.dataset.data[0] / maxAverage) * 270; // Scale the circumference based on the maximum average value
+        //  },
+        // }));
 
         // Combine the existing datasets with the new datasets
         const allDatasets = [...TransactionAverage, ...newDatasets];
