@@ -853,17 +853,18 @@ if ($SalesIncreasePercent > 1) {
 } else {
     $SalesIncreasePercent = $SalesIncreasePercent . '%';
 }
-if($SalesToday>=1000)
+
+if($SalesToday>=1000 && $SalesToday<=999999)
 {
-    $SalesToday= ($SalesToday / 1000).'K';
+    $SalesToday= round(($SalesToday / 1000),2).'K';
 }
-else if($SalesToday>=1000000)
+else if($SalesToday>=1000000 && $SalesToday<=999999999)
 {
-    $SalesToday= ($SalesToday / 1000000).'M';
+    $SalesToday= round(($SalesToday / 1000000),2).'M';
 }
 else if($SalesToday>=1000000000)
 {
-    $SalesToday= ($SalesToday / 1000000000).'B';
+    $SalesToday=  round(($SalesToday / 1000000000),2).'B';
 }
 }
 
