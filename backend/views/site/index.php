@@ -563,6 +563,7 @@ $this->title = '';
 
 <?php
 use yii\db\Query;
+use yii\bootstrap5\Html;
 // Fetch sales data from the database
 // $fromDate = $_POST['startDate'];
 // $toDate = $_POST['endDate'];
@@ -1994,7 +1995,6 @@ function downloadPDF() {
     const transactionChart = document.getElementById('transactionChart');
     const salesChart = document.getElementById('salesChart');
     const myChart = document.getElementById('myChart');
-    const topCustomersChart = document.getElementById('topCustomersChart');
     const provincesChart = document.getElementById('Provinces');
     const transactionStatusChart = document.getElementById('transactionStatus'); // New chart element
     const paymentChart = document.getElementById('paymendtMethod'); // New chart element
@@ -2016,8 +2016,6 @@ function downloadPDF() {
                         .then(function (salesChartImg) {
                             domtoimage.toPng(myChart, options)
                                 .then(function (myChartImg) {
-                                    domtoimage.toPng(topCustomersChart, options)
-                                        .then(function (topCustomersChartImg) {
                                             domtoimage.toPng(provincesChart, options)
                                                 .then(function (provincesChartImg) {
                                                     domtoimage.toPng(transactionStatusChart, options) 
@@ -2055,9 +2053,9 @@ function downloadPDF() {
 
                                                                             pdf.addImage(myChartImg, 'PNG', 50, 20, 110, 70);
 
-                                                                            pdf.text('Top 5 Customers', 40, 115);
+                                                                            pdf.text('Type of Customers', 40, 115);
 
-                                                                            pdf.addImage(topCustomersChartImg, 'PNG', 40, 120, 130, 70);
+                                                                            pdf.addImage(customerTypeChartImg, 'PNG', 40, 120, 130, 70);
 
                                                                             pdf.text('Total Customers per Province', 40, 215);
 
@@ -2080,21 +2078,12 @@ function downloadPDF() {
                                                                             pdf.text('Transaction Type', 40, 215);
 
                                                                             pdf.addImage(transactionTypeChartImg, 'PNG', 60, 215, 100, 80);
-
-                                                                            pdf.addPage();
-
-                                                                            pdf.setFontSize(12);
-                                                                            pdf.setFont('helvetica', 'bold');
-                                                                            pdf.setTextColor(0, 122, 204);
-                                                                            pdf.text('Type of Customers', 40, 25);
-
-                                                                            pdf.addImage(customerTypeChartImg, 'PNG', 60, 30, 100, 80);
                                             
 
                                                                             pdf.save('Visualight-Dashboard.pdf');
                                                                         });
                                                                 });
-                                                        });
+                                                        
                                                     });
                                                 });
                                         });
@@ -2243,5 +2232,183 @@ function downloadPDF() {
         </div>
     </div>
 </div> -->
+
+<?php
+$latestTimestamp = (new \yii\db\Query())
+->select(['MAX(transacton_date) AS latest_timestamp'])
+->from('operational_report')
+->scalar();
+
+// Construct the Yii query
+$subquery = (new \yii\db\Query())
+->select(['DATE_ADD("2023-06-10", INTERVAL n DAY) AS date'])
+->from(['numbers' => '(
+    SELECT a.n + b.n * 10 + c.n * 100 AS n
+    FROM (
+        SELECT 0 AS n UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9
+    ) AS a,
+    (
+        SELECT 0 AS n UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9
+    ) AS b,
+    (
+        SELECT 0 AS n UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9
+    ) AS c
+)'])
+->where(['<=', 'DATE_ADD("2023-06-10", INTERVAL n DAY)', new \yii\db\Expression('NOW()')]);
+
+$query = (new \yii\db\Query())
+->select([
+    'dates.date AS transacton_date',
+    'IFNULL(COUNT(opr.transacton_date), 0) AS transaction_count',
+    'IFNULL(SUM(opr.amount), 0) AS total_sales'
+])
+->from([
+    'dates' => $subquery
+])
+->leftJoin('operational_report opr', 'dates.date = opr.transacton_date')
+->groupBy('dates.date')
+->orderBy(['dates.date' => SORT_ASC]);
+
+// Execute the query
+$transactions = $query->all();
+
+// Convert timestamps to Unix timestamps
+foreach ($transactions as &$transaction) {
+$transaction['transacton_date'] = strtotime($transaction['transacton_date']);
+}
+
+// Define $nextDayTimestamp using the latestTimestamp
+$nextDayTimestamp = strtotime('+1 day', strtotime($latestTimestamp));
+
+
+
+// Prepare data for prediction (transaction count)
+$timestampsForCount = array_column($transactions, 'transacton_date');
+$transactionCounts = array_column($transactions, 'transaction_count');
+
+// Calculate linear regression coefficients for transaction count prediction
+$n = count($timestampsForCount);
+$sumX = array_sum($timestampsForCount);
+$sumY = array_sum($transactionCounts);
+$sumXY = 0;
+$sumX2 = 0;
+
+for ($i = 0; $i < $n; $i++) {
+    $sumXY += $timestampsForCount[$i] * $transactionCounts[$i];
+    $sumX2 += $timestampsForCount[$i] * $timestampsForCount[$i];
+}
+
+$slopeForCount = ($n * $sumXY - $sumX * $sumY) / ($n * $sumX2 - $sumX * $sumX);
+$interceptForCount = ($sumY - $slopeForCount * $sumX) / $n;
+
+// Predict the next transaction count for the next day
+$predictedTransactionCount = $interceptForCount + $slopeForCount * $nextDayTimestamp;
+
+// Prepare data for prediction (total sales)
+$timestampsForSales = array_column($transactions, 'transacton_date');
+$totalSales = array_column($transactions, 'total_sales');
+
+// Calculate linear regression coefficients for total sales prediction
+$n = count($timestampsForSales);
+$sumX = array_sum($timestampsForSales);
+$sumY = array_sum($totalSales);
+$sumXY = 0;
+$sumX2 = 0;
+
+for ($i = 0; $i < $n; $i++) {
+    $sumXY += $timestampsForSales[$i] * $totalSales[$i];
+    $sumX2 += $timestampsForSales[$i] * $timestampsForSales[$i];
+}
+
+$slopeForSales = ($n * $sumXY - $sumX * $sumY) / ($n * $sumX2 - $sumX * $sumX);
+$interceptForSales = ($sumY - $slopeForSales * $sumX) / $n;
+
+$totalSalesSum = array_sum($totalSales);
+$averageSalesIncreasePerDay = $totalSalesSum / count($timestampsForSales);
+
+// Predict the next total sum of all total sales
+$predictedNextTotalSales = $totalSalesSum + $averageSalesIncreasePerDay;
+
+$totalTransactionCountSum = array_sum($transactionCounts);
+$averageTransactionCountIncreasePerDay = $totalTransactionCountSum / count($timestampsForCount);
+
+?>
+
+<div class="prediction-index">
+    <h1><?= Html::encode($this->title) ?></h1>
+    
+    <form id="prediction-form">
+        <label for="days">Enter the number of days for predictions:</label>
+        <input type="number" id="days" name="days"  value="">
+        <button type="submit">Compute Predictions</button>
+    </form>
+
+    <div id="predictions"></div>
+</div>
+
+<script>
+document.getElementById('prediction-form').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const days = parseInt(document.getElementById('days').value, 10);
+    
+    // Calculate the timestamps for the next day and the 30th day
+    const latestTimestamp = '<?= $latestTimestamp ?>';
+    const nextDayTimestamp = new Date('<?= date('Y-m-d', $nextDayTimestamp) ?>');
+    nextDayTimestamp.setDate(nextDayTimestamp.getDate() + days);
+
+    const totalSalesSum = <?= $totalSalesSum ?>;
+    const totalTransactionCountSum = <?= $totalTransactionCountSum ?>;
+
+    // Define JavaScript variables with the values of totalSalesSum, averageSalesIncreasePerDay,
+    // totalTransactionCountSum, and averageTransactionCountIncreasePerDay
+    const averageSalesIncreasePerDay = <?= $averageSalesIncreasePerDay ?>;
+    const averageTransactionCountIncreasePerDay = <?= $averageTransactionCountIncreasePerDay ?>;
+    
+    // Calculate historical averages based on the whole dataset
+    const historicalAverageSalesIncreasePerDay = totalSalesSum / <?= count($timestampsForSales) ?>;
+    const historicalAverageTransactionCountIncreasePerDay = totalTransactionCountSum / <?= count($timestampsForCount) ?>;
+    
+    // Calculate predictions for transaction count and total sales
+    const slopeForCount = <?= $slopeForCount ?>;
+    const interceptForCount = <?= $interceptForCount ?>;
+    const predictedTransactionCount = interceptForCount + slopeForCount * nextDayTimestamp.getTime() / 1000;
+    
+    const slopeForSales = <?= $slopeForSales ?>;
+    const interceptForSales = <?= $interceptForSales ?>;
+    const predictedTotalSales = interceptForSales + slopeForSales * nextDayTimestamp.getTime() / 1000;
+    
+    // Calculate predictions for total sum of all sales and total transaction count
+    const predictedNextTotalSales = totalSalesSum + historicalAverageSalesIncreasePerDay * days;
+    const predictedNextTotalTransactionCount = totalTransactionCountSum + historicalAverageTransactionCountIncreasePerDay * days;
+
+    // Calculate the average of the predicted total sum of all sales and total transaction count
+    const averagePredictedTotalSales = predictedNextTotalSales / days;
+    const averagePredictedTotalTransactionCount = predictedNextTotalTransactionCount / days;
+
+    const predictionsDiv = document.getElementById('predictions');
+    predictionsDiv.innerHTML = `
+        <p>Predicted transaction count on the ${days}th day: ${Math.round(predictedTransactionCount)}</p>
+        <p>Predicted sales amount on the ${days}th day: ${predictedTotalSales.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</p>
+        <p>Predicted total sum of all sales in ${days} days: ${predictedNextTotalSales.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</p>
+        <p>Predicted total sum of all transaction count in ${days} days: ${Math.round(predictedNextTotalTransactionCount)}</p>
+        <p>Average predicted total sum of all sales in ${days} days: ${averagePredictedTotalSales.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</p>
+        <p>Average predicted total sum of all transaction count in ${days} days: ${Math.round(averagePredictedTotalTransactionCount)}</p>
+    `;
+});
+</script>
+
+
+
+<script>
+// <p>Predicted next total sum of all total transaction count in ${days} days: ${Math.round(predictedNextTotalTransactionCount)}</p>
+//         <p>Average predicted total sum of all total transaction count in ${days} days: ${Math.round(averagePredictedTotalTransactionCount)}</p>
+
+//          <p>Predicted next total sum of all total sales in ${days} days: ${predictedNextTotalSales.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</p>
+//         <p>Average predicted total sum of all total sales in ${days} days: ${averagePredictedTotalSales.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</p>
+
+</script>
+
+
 
 
