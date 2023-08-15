@@ -748,6 +748,45 @@ foreach ($topCustomers as $customer) {
     $transactionCounts[] = $customer['transaction_count'];
 }
 
+$transactionPerday = (new Query())
+    ->select('transacton_date, COUNT(*) as transaction_count')
+    ->from('operational_report')
+    ->groupBy('transacton_date');
+    
+    $transactionPerday = $transactionPerday->all(); // Get the results with daily transaction counts
+    $totalDays = count($transactionPerday); // Total number of days
+    $totalTransactions = 0;
+    
+    foreach ($transactionPerday as $result) {
+        $totalTransactions += $result['transaction_count'];
+    }
+    $average =round ($totalTransactions / $totalDays); // Calculate the average
+    
+    $SalesAve = (new Query())
+    ->select('transacton_date, SUM(amount) as transaction_count')
+    ->from('operational_report')
+    ->groupBy('transacton_date');
+    
+    $SalesAve = $SalesAve->all(); // Get the results with daily transaction counts
+    $totalDays = count($SalesAve); // Total number of days
+    $totalTransactions = 0;
+    
+    foreach ($SalesAve as $result) {
+        $totalTransactions += $result['transaction_count'];
+    }
+    $saleaverage =round ($totalTransactions / $totalDays); // Calculate the average
+if($saleaverage>=1000 && $saleaverage<=999999 )
+{
+    $saleaverage= round(($saleaverage / 1000),2).'K';
+}
+else if($saleaverage>=1000000 && $saleaverage<=999999999)
+{
+    $saleaverage= round(($saleaverage / 1000000),2).'M';
+}
+else if($saleaverage>=1000000000)
+{
+    $saleaverage= round(($saleaverage / 1000000000),2).'B';
+}
 
 //setting default colors for each department
 $divisionColors = [
@@ -972,6 +1011,25 @@ if ($TandSdailytransincrease > 1) {
     </div>
     </div>
 
+    <script>
+
+        // Attach an event listener to the date picker fields
+    document.getElementById("startDate").addEventListener("change", updateFilteredData);
+    document.getElementById("endDate").addEventListener("change", updateFilteredData);
+
+    function updateFilteredData() {
+        const startDate = document.getElementById("startDate").value;
+        const endDate = document.getElementById("endDate").value;
+
+        // Convert the date format to match the database format (YYYY-MM-DD)
+        const formattedStartDate = new Date(startDate).toISOString().split('T')[0];
+        const formattedEndDate = new Date(endDate).toISOString().split('T')[0];
+
+        // Update the data using AJAX or fetch
+        // ...
+    }
+    </script>
+
 
 <!-- graph Div, holder of graphs -->
 <div class="graph">
@@ -981,6 +1039,7 @@ if ($TandSdailytransincrease > 1) {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dom-to-image/2.6.0/dom-to-image.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/brain.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 
 
@@ -1008,11 +1067,11 @@ if ($TandSdailytransincrease > 1) {
   <div class="custom-text">
         <div class="uwu-text">
             <p class="texty"> Average Transactions </p>
-            <p class="number"> 33</p>
+            <p class="number"> <?= $average ?> </p>
         </div>
         <div class="ehe-text">
             <p class="texty"> Average Sales </p>
-            <p class="number"> 40 </p>
+            <p class="number"> <?= $saleaverage ?> </p>
         </div>
     </div>
 
@@ -1060,8 +1119,8 @@ if ($TandSdailytransincrease > 1) {
             datasets: [{
                     ...sumSalesDataset,
                     type: 'line', // Use line type
-                    backgroundColor: 'black',
-                    borderColor: '#e75480',
+                    backgroundColor: '#ba2ee8',
+                    borderColor: '#00d498',
                     yAxisID: 'lineY', // Assign the line chart to a specific y-axis
                     cubicInterpolationMode: 'monotone'
 
@@ -1069,10 +1128,10 @@ if ($TandSdailytransincrease > 1) {
                 },
                 {
                     ...sumTransactionDataset,
-                    borderColor: 'black',
-                    backgroundColor: '#87CEEB',
+                    borderColor:  'rgba(127, 207, 250)',
+                    backgroundColor: 'rgba(127, 207, 250)',
                     type: 'bar',
-                    borderWidth: 1,
+                    borderWidth: 2,
                     yAxisID: 'y-axis-bar', // Assign the line chart to a specific y-axis
 
                 },
@@ -1086,6 +1145,7 @@ const combinedChart = new Chart(combinedCtx, {
     type: 'line', // Start as bar chart
     data: combinedData,
     options: {
+        responsive: true,
         maintainAspectRatio: false,
         scales: {
             y: {
@@ -1101,7 +1161,9 @@ const combinedChart = new Chart(combinedCtx, {
             x: {
                 grid: {
                     display: false,
-                    drawOnChartArea: false
+                    drawOnChartArea: false,
+                    type: 'category',
+                    display: 'auto', // Enable auto-scaling of x-axis labels
                 }
             },
             'y-axis-bar': {
@@ -1123,6 +1185,16 @@ const combinedChart = new Chart(combinedCtx, {
             legend: {
                 position: 'top',
             },
+            zoom: {
+                pan: {
+                    enabled: true,
+                    mode: 'x'
+                },
+                zoom: {
+                    enabled: true,
+                    mode: 'x'
+                }
+            }
         },
         responsive: true,
         layout: {
@@ -1221,36 +1293,27 @@ const combinedChart = new Chart(combinedCtx, {
 
 
      // Calculate the average of each dataset
-     const TransactionAverage = TransactionperDiv.datasets.map(dataset => ({
+     const TransactionAverage = SalesperDiv.datasets.map(dataset => ({
             label: dataset.label,
             average: calculateAverage(dataset.data),
         }));
         // Find the maximum average value
         const maxAverage = Math.max(...TransactionAverage.map((average) => average.average));
 
+        // Create a new dataset for each sales average
         const newDatasets = TransactionAverage.map((average, index) => {
-  const datasetColors = ["blue", "green", "pink"]; // Array of specific colors
-  const color = datasetColors[index % datasetColors.length]; // Assign color based on index
+        const datasetColors = ['rgba(0, 115, 199,1)', 'rgba(2, 165, 96,1)', 'rgba(242, 26, 156,1)']; // Array of specific colors
+        const color = datasetColors[index % datasetColors.length]; // Assign color based on index
 
-  return {
-    label: `Average ${average.label}`,
-    data: [average.average],
-    borderWidth: 1,
-    circumference: (ctx) => ((ctx.dataset.data[0] / maxAverage) * 270),
-    backgroundColor: color,
-    borderColor: color,
-  };
-});
-        // // Create a new dataset for each sales average
-        // const newDatasets = TransactionAverage.map((average) => ({
-        //     label: `Average ${average.label}`,
-        //     data: [average.average], // Use the average value as data for each new dataset
-        //     borderWidth: 1,                 
-        //     circumference: (ctx) => {
-        //     console.log(ctx.dataset.data[0]);
-        //      return (ctx.dataset.data[0] / maxAverage) * 270; // Scale the circumference based on the maximum average value
-        //  },
-        // }));
+        return {
+            label: `Average ${average.label}`,
+            data: [average.average],
+            borderWidth: 1,
+            circumference: (ctx) => ((ctx.dataset.data[0] / maxAverage) * 270),
+            backgroundColor: color,
+            borderColor: color,
+        };
+        });
 
         // Combine the existing datasets with the new datasets
         const allDatasets = [...TransactionAverage, ...newDatasets];
@@ -1289,6 +1352,7 @@ const combinedChart = new Chart(combinedCtx, {
                         display: false
                     }
                 },
+                
                 // plugins:[divisionName] //to be continue
             }
             };
