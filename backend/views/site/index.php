@@ -21,7 +21,7 @@ $this->title = '';
 
     .custom-text {
         position: absolute;
-        top: 50px;
+        top: 80px;
         right: 50px;
         text-align: center;
         width: 220px;
@@ -71,7 +71,7 @@ $this->title = '';
     @media (max-width: 900px) {
         .custom-text {
             position: absolute;
-            top: 50px;
+            top: 70px;
             right: 50px;
             text-align: center;
             width: 220px;
@@ -286,7 +286,7 @@ $this->title = '';
         background-color: white;
         display: inline-block;
         height: 28rem;
-        width: 24%;
+        width: 49%;
     }
 
     body.dark-mode .chart-container {
@@ -1013,7 +1013,7 @@ if ($todayTandStrans == 0) {
     </div>
 
     <div class="chart-container" id="avgSales">
-        <p id="reportTitle"></p>
+        <p id="reportTitle">Average sales per day</p>
         <canvas id="myChart"></canvas>
         <div class="custom-text">
             <div class="uwu-text">
@@ -1530,7 +1530,8 @@ if ($todayTandStrans == 0) {
                 <p id="reportTitle">Payment Method</p>
                 <canvas id="paymendtMethod"></canvas>
             </div>
-
+        </div>
+        <div class="graph2">
             <div class="chart-container2">
                 <p id="reportTitle">Type of Transaction</p>
                 <canvas id="transactionType"></canvas>
@@ -2132,16 +2133,16 @@ if ($todayTandStrans == 0) {
         }
     </script>
 
-<?php
-$latestTimestamp = (new \yii\db\Query())
-->select(['MAX(transacton_date) AS latest_timestamp'])
-->from('operational_report')
-->scalar();
+    <?php
+    $latestTimestamp = (new \yii\db\Query())
+        ->select(['MAX(transacton_date) AS latest_timestamp'])
+        ->from('operational_report')
+        ->scalar();
 
-// Construct the Yii query
-$subquery = (new \yii\db\Query())
-    ->select(['DATE_ADD("2023-06-10", INTERVAL n DAY) AS date'])
-    ->from(['numbers' => '(
+    // Construct the Yii query
+    $subquery = (new \yii\db\Query())
+        ->select(['DATE_ADD("2023-06-10", INTERVAL n DAY) AS date'])
+        ->from(['numbers' => '(
         SELECT a.n + b.n * 10 + c.n * 100 AS n
         FROM (
             SELECT 0 AS n UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9
@@ -2153,192 +2154,192 @@ $subquery = (new \yii\db\Query())
             SELECT 0 AS n UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9
         ) AS c
     )'])
-    ->where(['<=', 'DATE_ADD("2023-06-10", INTERVAL n DAY)', new \yii\db\Expression('NOW()')]);
+        ->where(['<=', 'DATE_ADD("2023-06-10", INTERVAL n DAY)', new \yii\db\Expression('NOW()')]);
 
-$query = (new \yii\db\Query())
-    ->select([
-        'dates.date AS transacton_date',
-        'IFNULL(COUNT(opr.transacton_date), 0) AS transaction_count',
-        'IFNULL(SUM(opr.amount), 0) AS total_sales'
-    ])
-    ->from([
-        'dates' => $subquery
-    ])
-    ->leftJoin('operational_report opr', 'dates.date = opr.transacton_date AND opr.transaction_status = "paid"')
-    ->groupBy('dates.date')
-    ->orderBy(['dates.date' => SORT_ASC]);
+    $query = (new \yii\db\Query())
+        ->select([
+            'dates.date AS transacton_date',
+            'IFNULL(COUNT(opr.transacton_date), 0) AS transaction_count',
+            'IFNULL(SUM(opr.amount), 0) AS total_sales'
+        ])
+        ->from([
+            'dates' => $subquery
+        ])
+        ->leftJoin('operational_report opr', 'dates.date = opr.transacton_date AND opr.transaction_status = "paid"')
+        ->groupBy('dates.date')
+        ->orderBy(['dates.date' => SORT_ASC]);
 
-$transactions = $query->all();
+    $transactions = $query->all();
 
-// Convert timestamps to Unix timestamps
-foreach ($transactions as &$transaction) {
-    $transaction['transacton_date'] = strtotime($transaction['transacton_date']);
-}
-
-// Define $nextDayTimestamp using the latestTimestamp
-$nextDayTimestamp = strtotime('+1 day', strtotime($latestTimestamp));
-
-
-// Prepare data for prediction (transaction count)
-$timestampsForCount = array_column($transactions, 'transacton_date');
-$transactionCounts = array_column($transactions, 'transaction_count');
-
-// Calculate linear regression coefficients for transaction count prediction
-$n = count($timestampsForCount);
-$sumX = array_sum($timestampsForCount);
-$sumY = array_sum($transactionCounts);
-$sumXY = 0;
-$sumX2 = 0;
-
-for ($i = 0; $i < $n; $i++) {
-    $sumXY += $timestampsForCount[$i] * $transactionCounts[$i];
-    $sumX2 += $timestampsForCount[$i] * $timestampsForCount[$i];
-}
-
-$slopeForCount = ($n * $sumXY - $sumX * $sumY) / ($n * $sumX2 - $sumX * $sumX);
-$interceptForCount = ($sumY - $slopeForCount * $sumX) / $n;
-
-// Predict the next transaction count for the next day
-$predictedTransactionCount = $interceptForCount + $slopeForCount * $nextDayTimestamp;
-
-// Prepare data for prediction (total sales)
-$timestampsForSales = array_column($transactions, 'transacton_date');
-$totalSales = array_column($transactions, 'total_sales');
-
-// Calculate linear regression coefficients for total sales prediction
-$n = count($timestampsForSales);
-$sumX = array_sum($timestampsForSales);
-$sumY = array_sum($totalSales);
-$sumXY = 0;
-$sumX2 = 0;
-
-for ($i = 0; $i < $n; $i++) {
-    $sumXY += $timestampsForSales[$i] * $totalSales[$i];
-    $sumX2 += $timestampsForSales[$i] * $timestampsForSales[$i];
-}
-
-$slopeForSales = ($n * $sumXY - $sumX * $sumY) / ($n * $sumX2 - $sumX * $sumX);
-$interceptForSales = ($sumY - $slopeForSales * $sumX) / $n;
-
-$totalSalesSum = array_sum($totalSales);
-$averageSalesIncreasePerDay = $totalSalesSum / count($timestampsForSales);
-
-// Predict the next total sum of all total sales
-$predictedNextTotalSales = $totalSalesSum + $averageSalesIncreasePerDay;
-
-$totalTransactionCountSum = array_sum($transactionCounts);
-$averageTransactionCountIncreasePerDay = $totalTransactionCountSum / count($timestampsForCount);
-
-$queryPerYear = (new \yii\db\Query())
-    ->select([
-        'all_years.year AS year',
-        'IFNULL(COUNT(opr.transacton_date), 0) AS transaction_count',
-        'IFNULL(SUM(opr.amount), 0) AS total_sales'
-    ])
-    ->from([
-        'all_years' => (new \yii\db\Query())
-            ->select(['DISTINCT YEAR(transacton_date) AS year'])
-            ->from('operational_report')
-            ->where(['>=', 'transacton_date', '2023-06-10'])
-            ->union((new \yii\db\Query())
-                ->select(['DISTINCT YEAR(transacton_date) AS year'])
-                ->from('operational_report')
-                ->where(['YEAR(transacton_date)' => new \yii\db\Expression('YEAR(NOW())')])
-            )
-    ])
-    ->leftJoin('operational_report opr', 'all_years.year = YEAR(opr.transacton_date) AND opr.transaction_status = "paid"')
-    ->groupBy('all_years.year')
-    ->orderBy(['all_years.year' => SORT_ASC]);
-
-$transactionsPerYear = $queryPerYear->all();
-
-// Prepare data for predictions (total paid transaction count and total paid sales)
-$years = array_column($transactionsPerYear, 'year');
-$transactionCountsPerYear = array_column($transactionsPerYear, 'transaction_count');
-$totalSalesPerYear = array_column($transactionsPerYear, 'total_sales');
-
-// Calculate historical averages based on the whole dataset for paid transaction count and total sales
-$totalTransactionCountSumPerYear = array_sum($transactionCountsPerYear);
-$averageTransactionCountIncreasePerYear = $totalTransactionCountSumPerYear / count($years);
-
-$totalSalesSumPerYear = array_sum($totalSalesPerYear);
-$averageSalesIncreasePerYear = $totalSalesSumPerYear / count($years);
-
-
-?>
-
-<div class="prediction-index">
-    <h1><?= Html::encode($this->title) ?></h1>
-    
-    <form id="prediction-form">
-        <label for="years">Enter the number of years for predictions:</label>
-        <input type="number" id="years" name="years" step="0.01" value="">
-        <button type="submit">Compute Predictions</button>
-    </form>
-
-    <div id="predictions" style="font-weight: bold; "></div>
-</div>
-
-<script>
-document.getElementById('prediction-form').addEventListener('submit', function(event) {
-    event.preventDefault();
-
-    const years = parseFloat(document.getElementById('years').value);
-    const days = Math.round(years * 365);
-    
-    // Calculate the timestamps for the next day and the predicted day
-    const latestTimestamp = '<?= $latestTimestamp ?>';
-    const nextDayTimestamp = new Date('<?= date('Y-m-d', $nextDayTimestamp) ?>');
-    nextDayTimestamp.setDate(nextDayTimestamp.getDate() + days);
-
-    const totalSalesSum = <?= $totalSalesSum ?>;
-    const totalTransactionCountSum = <?= $totalTransactionCountSum ?>;
-
-    // Define JavaScript variables with the values of totalSalesSum, averageSalesIncreasePerDay,
-    // totalTransactionCountSum, and averageTransactionCountIncreasePerDay
-    const averageSalesIncreasePerDay = <?= $averageSalesIncreasePerDay ?>;
-    const averageTransactionCountIncreasePerDay = <?= $averageTransactionCountIncreasePerDay ?>;
-    
-    // Calculate historical averages based on the whole dataset for paid transaction count and total sales
-    const totalTransactionCountSumPerYear = <?= $totalTransactionCountSumPerYear ?>;
-    const averageTransactionCountIncreasePerYear = <?= $averageTransactionCountIncreasePerYear ?>;
-    
-    const totalSalesSumPerYear = <?= $totalSalesSumPerYear ?>;
-    const averageSalesIncreasePerYear = <?= $averageSalesIncreasePerYear ?>;
-    
-    // Calculate predictions for paid transaction count and paid sales per year
-    const slopeForCountPerYear = <?= $slopeForCount ?>;
-    const interceptForCountPerYear = <?= $interceptForCount ?>;
-    
-    const slopeForSalesPerYear = <?= $slopeForSales ?>;
-    const interceptForSalesPerYear = <?= $interceptForSales ?>;
-    
-    const predictedTransactionCountPerYear = Math.round(interceptForCountPerYear + slopeForCountPerYear * nextDayTimestamp.getTime() / 1000);
-    const predictedTotalSalesPerYear = Math.round(interceptForSalesPerYear + slopeForSalesPerYear * nextDayTimestamp.getTime() / 1000);
-    
-    // Calculate predictions for total sum of paid transaction count and total paid sales per year
-    const predictedNextTotalTransactionCountPerYear = Math.round(totalTransactionCountSumPerYear + averageTransactionCountIncreasePerYear * days);
-    const predictedNextTotalSalesPerYear = Math.round(totalSalesSumPerYear + averageSalesIncreasePerYear * days);
-
-    // Calculate the average of the predicted total sum of paid transaction count and total paid sales per year
-    const averagePredictedTotalTransactionCountPerYear = Math.round(predictedNextTotalTransactionCountPerYear / days);
-    const averagePredictedTotalSalesPerYear = Math.round(predictedNextTotalSalesPerYear / days);
-
-    // Function to add commas every three numbers
-    function addCommas(number) {
-        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    // Convert timestamps to Unix timestamps
+    foreach ($transactions as &$transaction) {
+        $transaction['transacton_date'] = strtotime($transaction['transacton_date']);
     }
 
-    const predictionsDiv = document.getElementById('predictions');
-    predictionsDiv.innerHTML = `
+    // Define $nextDayTimestamp using the latestTimestamp
+    $nextDayTimestamp = strtotime('+1 day', strtotime($latestTimestamp));
+
+
+    // Prepare data for prediction (transaction count)
+    $timestampsForCount = array_column($transactions, 'transacton_date');
+    $transactionCounts = array_column($transactions, 'transaction_count');
+
+    // Calculate linear regression coefficients for transaction count prediction
+    $n = count($timestampsForCount);
+    $sumX = array_sum($timestampsForCount);
+    $sumY = array_sum($transactionCounts);
+    $sumXY = 0;
+    $sumX2 = 0;
+
+    for ($i = 0; $i < $n; $i++) {
+        $sumXY += $timestampsForCount[$i] * $transactionCounts[$i];
+        $sumX2 += $timestampsForCount[$i] * $timestampsForCount[$i];
+    }
+
+    $slopeForCount = ($n * $sumXY - $sumX * $sumY) / ($n * $sumX2 - $sumX * $sumX);
+    $interceptForCount = ($sumY - $slopeForCount * $sumX) / $n;
+
+    // Predict the next transaction count for the next day
+    $predictedTransactionCount = $interceptForCount + $slopeForCount * $nextDayTimestamp;
+
+    // Prepare data for prediction (total sales)
+    $timestampsForSales = array_column($transactions, 'transacton_date');
+    $totalSales = array_column($transactions, 'total_sales');
+
+    // Calculate linear regression coefficients for total sales prediction
+    $n = count($timestampsForSales);
+    $sumX = array_sum($timestampsForSales);
+    $sumY = array_sum($totalSales);
+    $sumXY = 0;
+    $sumX2 = 0;
+
+    for ($i = 0; $i < $n; $i++) {
+        $sumXY += $timestampsForSales[$i] * $totalSales[$i];
+        $sumX2 += $timestampsForSales[$i] * $timestampsForSales[$i];
+    }
+
+    $slopeForSales = ($n * $sumXY - $sumX * $sumY) / ($n * $sumX2 - $sumX * $sumX);
+    $interceptForSales = ($sumY - $slopeForSales * $sumX) / $n;
+
+    $totalSalesSum = array_sum($totalSales);
+    $averageSalesIncreasePerDay = $totalSalesSum / count($timestampsForSales);
+
+    // Predict the next total sum of all total sales
+    $predictedNextTotalSales = $totalSalesSum + $averageSalesIncreasePerDay;
+
+    $totalTransactionCountSum = array_sum($transactionCounts);
+    $averageTransactionCountIncreasePerDay = $totalTransactionCountSum / count($timestampsForCount);
+
+    $queryPerYear = (new \yii\db\Query())
+        ->select([
+            'all_years.year AS year',
+            'IFNULL(COUNT(opr.transacton_date), 0) AS transaction_count',
+            'IFNULL(SUM(opr.amount), 0) AS total_sales'
+        ])
+        ->from([
+            'all_years' => (new \yii\db\Query())
+                ->select(['DISTINCT YEAR(transacton_date) AS year'])
+                ->from('operational_report')
+                ->where(['>=', 'transacton_date', '2023-06-10'])
+                ->union((new \yii\db\Query())
+                        ->select(['DISTINCT YEAR(transacton_date) AS year'])
+                        ->from('operational_report')
+                        ->where(['YEAR(transacton_date)' => new \yii\db\Expression('YEAR(NOW())')])
+                )
+        ])
+        ->leftJoin('operational_report opr', 'all_years.year = YEAR(opr.transacton_date) AND opr.transaction_status = "paid"')
+        ->groupBy('all_years.year')
+        ->orderBy(['all_years.year' => SORT_ASC]);
+
+    $transactionsPerYear = $queryPerYear->all();
+
+    // Prepare data for predictions (total paid transaction count and total paid sales)
+    $years = array_column($transactionsPerYear, 'year');
+    $transactionCountsPerYear = array_column($transactionsPerYear, 'transaction_count');
+    $totalSalesPerYear = array_column($transactionsPerYear, 'total_sales');
+
+    // Calculate historical averages based on the whole dataset for paid transaction count and total sales
+    $totalTransactionCountSumPerYear = array_sum($transactionCountsPerYear);
+    $averageTransactionCountIncreasePerYear = $totalTransactionCountSumPerYear / count($years);
+
+    $totalSalesSumPerYear = array_sum($totalSalesPerYear);
+    $averageSalesIncreasePerYear = $totalSalesSumPerYear / count($years);
+
+
+    ?>
+
+    <div class="prediction-index">
+        <h1><?= Html::encode($this->title) ?></h1>
+
+        <form id="prediction-form">
+            <label for="years">Enter the number of years for predictions:</label>
+            <input type="number" id="years" name="years" step="0.01" value="">
+            <button type="submit">Compute Predictions</button>
+        </form>
+
+        <div id="predictions" style="font-weight: bold; "></div>
+    </div>
+
+    <script>
+        document.getElementById('prediction-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const years = parseFloat(document.getElementById('years').value);
+            const days = Math.round(years * 365);
+
+            // Calculate the timestamps for the next day and the predicted day
+            const latestTimestamp = '<?= $latestTimestamp ?>';
+            const nextDayTimestamp = new Date('<?= date('Y-m-d', $nextDayTimestamp) ?>');
+            nextDayTimestamp.setDate(nextDayTimestamp.getDate() + days);
+
+            const totalSalesSum = <?= $totalSalesSum ?>;
+            const totalTransactionCountSum = <?= $totalTransactionCountSum ?>;
+
+            // Define JavaScript variables with the values of totalSalesSum, averageSalesIncreasePerDay,
+            // totalTransactionCountSum, and averageTransactionCountIncreasePerDay
+            const averageSalesIncreasePerDay = <?= $averageSalesIncreasePerDay ?>;
+            const averageTransactionCountIncreasePerDay = <?= $averageTransactionCountIncreasePerDay ?>;
+
+            // Calculate historical averages based on the whole dataset for paid transaction count and total sales
+            const totalTransactionCountSumPerYear = <?= $totalTransactionCountSumPerYear ?>;
+            const averageTransactionCountIncreasePerYear = <?= $averageTransactionCountIncreasePerYear ?>;
+
+            const totalSalesSumPerYear = <?= $totalSalesSumPerYear ?>;
+            const averageSalesIncreasePerYear = <?= $averageSalesIncreasePerYear ?>;
+
+            // Calculate predictions for paid transaction count and paid sales per year
+            const slopeForCountPerYear = <?= $slopeForCount ?>;
+            const interceptForCountPerYear = <?= $interceptForCount ?>;
+
+            const slopeForSalesPerYear = <?= $slopeForSales ?>;
+            const interceptForSalesPerYear = <?= $interceptForSales ?>;
+
+            const predictedTransactionCountPerYear = Math.round(interceptForCountPerYear + slopeForCountPerYear * nextDayTimestamp.getTime() / 1000);
+            const predictedTotalSalesPerYear = Math.round(interceptForSalesPerYear + slopeForSalesPerYear * nextDayTimestamp.getTime() / 1000);
+
+            // Calculate predictions for total sum of paid transaction count and total paid sales per year
+            const predictedNextTotalTransactionCountPerYear = Math.round(totalTransactionCountSumPerYear + averageTransactionCountIncreasePerYear * days);
+            const predictedNextTotalSalesPerYear = Math.round(totalSalesSumPerYear + averageSalesIncreasePerYear * days);
+
+            // Calculate the average of the predicted total sum of paid transaction count and total paid sales per year
+            const averagePredictedTotalTransactionCountPerYear = Math.round(predictedNextTotalTransactionCountPerYear / days);
+            const averagePredictedTotalSalesPerYear = Math.round(predictedNextTotalSalesPerYear / days);
+
+            // Function to add commas every three numbers
+            function addCommas(number) {
+                return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            }
+
+            const predictionsDiv = document.getElementById('predictions');
+            predictionsDiv.innerHTML = `
         <p>Predicted transaction count on the <span style="color:#0080ff">${days}-day (${years} year(s))</span> mark: <span style="color:#00994d">${addCommas(predictedTransactionCountPerYear)}</span></p>
         <p>Predicted total transaction count on the <span style="color:#0080ff">${days}-day (${years} year(s))</span> mark: <span style="color:#00994d">${addCommas(averagePredictedTotalTransactionCountPerYear)}</span></p>
        <br>
         <p>Predicted income on the <span style="color:#0080ff">${days}-day (${years} year(s))</span> mark: <span style="color:#00994d">${addCommas(predictedTotalSalesPerYear)}</span></p>
         <p>Predicted total income on the <span style="color:#0080ff">${days}-day (${years} year(s))</span> mark: <span style="color:#00994d">${addCommas(averagePredictedTotalSalesPerYear)}</span></p>
     `;
-});
-</script>
+        });
+    </script>
 
 
 
