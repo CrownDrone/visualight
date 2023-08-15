@@ -2305,45 +2305,43 @@ $latestTimestamp = (new \yii\db\Query())
 
 // Construct the Yii query
 $subquery = (new \yii\db\Query())
-->select(['DATE_ADD("2023-06-10", INTERVAL n DAY) AS date'])
-->from(['numbers' => '(
-    SELECT a.n + b.n * 10 + c.n * 100 AS n
-    FROM (
-        SELECT 0 AS n UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9
-    ) AS a,
-    (
-        SELECT 0 AS n UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9
-    ) AS b,
-    (
-        SELECT 0 AS n UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9
-    ) AS c
-)'])
-->where(['<=', 'DATE_ADD("2023-06-10", INTERVAL n DAY)', new \yii\db\Expression('NOW()')]);
+    ->select(['DATE_ADD("2023-06-10", INTERVAL n DAY) AS date'])
+    ->from(['numbers' => '(
+        SELECT a.n + b.n * 10 + c.n * 100 AS n
+        FROM (
+            SELECT 0 AS n UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9
+        ) AS a,
+        (
+            SELECT 0 AS n UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9
+        ) AS b,
+        (
+            SELECT 0 AS n UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9
+        ) AS c
+    )'])
+    ->where(['<=', 'DATE_ADD("2023-06-10", INTERVAL n DAY)', new \yii\db\Expression('NOW()')]);
 
 $query = (new \yii\db\Query())
-->select([
-    'dates.date AS transacton_date',
-    'IFNULL(COUNT(opr.transacton_date), 0) AS transaction_count',
-    'IFNULL(SUM(opr.amount), 0) AS total_sales'
-])
-->from([
-    'dates' => $subquery
-])
-->leftJoin('operational_report opr', 'dates.date = opr.transacton_date')
-->groupBy('dates.date')
-->orderBy(['dates.date' => SORT_ASC]);
+    ->select([
+        'dates.date AS transacton_date',
+        'IFNULL(COUNT(opr.transacton_date), 0) AS transaction_count',
+        'IFNULL(SUM(opr.amount), 0) AS total_sales'
+    ])
+    ->from([
+        'dates' => $subquery
+    ])
+    ->leftJoin('operational_report opr', 'dates.date = opr.transacton_date AND opr.transaction_status = "paid"')
+    ->groupBy('dates.date')
+    ->orderBy(['dates.date' => SORT_ASC]);
 
-// Execute the query
 $transactions = $query->all();
 
 // Convert timestamps to Unix timestamps
 foreach ($transactions as &$transaction) {
-$transaction['transacton_date'] = strtotime($transaction['transacton_date']);
+    $transaction['transacton_date'] = strtotime($transaction['transacton_date']);
 }
 
 // Define $nextDayTimestamp using the latestTimestamp
 $nextDayTimestamp = strtotime('+1 day', strtotime($latestTimestamp));
-
 
 
 // Prepare data for prediction (transaction count)
@@ -2402,19 +2400,20 @@ $averageTransactionCountIncreasePerDay = $totalTransactionCountSum / count($time
     <h1><?= Html::encode($this->title) ?></h1>
     
     <form id="prediction-form">
-        <label for="days">Enter the number of days for predictions:</label>
-        <input type="number" id="days" name="days"  value="">
+        <label for="years">Enter the number of years for predictions:</label>
+        <input type="number" id="years" name="years" value="">
         <button type="submit">Compute Predictions</button>
     </form>
 
-    <div id="predictions"></div>
+    <div id="predictions" style="font-weight: bold; "></div>
 </div>
 
 <script>
 document.getElementById('prediction-form').addEventListener('submit', function(event) {
     event.preventDefault();
 
-    const days = parseInt(document.getElementById('days').value, 10);
+    const years = parseInt(document.getElementById('years').value, 10);
+    const days = years * 365;
     
     // Calculate the timestamps for the next day and the 30th day
     const latestTimestamp = '<?= $latestTimestamp ?>';
@@ -2452,24 +2451,19 @@ document.getElementById('prediction-form').addEventListener('submit', function(e
 
     const predictionsDiv = document.getElementById('predictions');
     predictionsDiv.innerHTML = `
-        <p>Predicted transaction count on the ${days}th day: ${Math.round(predictedTransactionCount)}</p>
-        <p>Predicted sales amount on the ${days}th day: ${predictedTotalSales.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</p>
-        <p>Predicted total sum of all sales in ${days} days: ${predictedNextTotalSales.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</p>
-        <p>Predicted total sum of all transaction count in ${days} days: ${Math.round(predictedNextTotalTransactionCount)}</p>
-        <p>Average predicted total sum of all sales in ${days} days: ${averagePredictedTotalSales.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</p>
-        <p>Average predicted total sum of all transaction count in ${days} days: ${Math.round(averagePredictedTotalTransactionCount)}</p>
+        <p>Predicted transaction count on the <span style="color:#0080ff"> ${days}-day(${years} year(s)) </span> mark: <span style="color:#00994d"> ${Math.round(predictedTransactionCount)} </span> </p>
+        <p>Predicted income amount on the <span style="color:#0080ff"> ${days}-day(${years} year(s)) </span> mark:<span style="color:#00994d">${predictedTotalSales.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')} </span> </p>
+
     `;
 });
 </script>
 
 
-
 <script>
-// <p>Predicted next total sum of all total transaction count in ${days} days: ${Math.round(predictedNextTotalTransactionCount)}</p>
-//         <p>Average predicted total sum of all total transaction count in ${days} days: ${Math.round(averagePredictedTotalTransactionCount)}</p>
-
-//          <p>Predicted next total sum of all total sales in ${days} days: ${predictedNextTotalSales.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</p>
-//         <p>Average predicted total sum of all total sales in ${days} days: ${averagePredictedTotalSales.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</p>
+//  <p>Predicted total sum of all sales in ${years} years: ${predictedNextTotalSales.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</p>
+//         <p>Predicted total sum of all transaction count in ${years} years: ${Math.round(predictedNextTotalTransactionCount)}</p>
+//         <p>Average predicted total sum of all sales in ${years} years: ${averagePredictedTotalSales.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</p>
+//         <p>Average predicted total sum of all transaction count in ${years} years: ${Math.round(averagePredictedTotalTransactionCount)}</p>
 
 </script>
 
