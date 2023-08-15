@@ -65,7 +65,7 @@ $this->title = '';
     #myChart {
         position: absolute;
         left: 50px;
-        top: 25px;
+        top: 45px;
     }
 
     @media (max-width: 900px) {
