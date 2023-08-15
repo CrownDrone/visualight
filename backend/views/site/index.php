@@ -13,88 +13,88 @@ $this->title = '';
 
     /* Default styles */
     .chart-container {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
 
-.custom-text {
-    position: absolute;
-    top: 50px;
-    right: 50px;
-    text-align: center;
-    width: 220px;
-}
-
-.uwu-text,
-.ehe-text {
-    background-color: #B526C2;
-    color: white;
-    width: 220px;
-    height: 130px;
-    border-radius: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    margin-bottom: 30px;
-}
-
-.uwu-text {
-    background-color: #11A34C;
-    /* Updated background color for .uwu-text */
-}
-
-.texty {
-    margin: 0;
-    font-weight: bold;
-    font-size: 16px;
-    font-family: Poppins;
-}
-
-.number {
-    margin: 0;
-    font-family: Poppins;
-    font-size: 45px;
-    font-weight: bold;
-    margin-bottom: 10px;
-}
-
-#myChart {
-    position: absolute;
-    left: 50px;
-    top: 25px;
-}
-
-@media (max-width: 900px) {
     .custom-text {
         position: absolute;
         top: 50px;
         right: 50px;
         text-align: center;
         width: 220px;
-        box-sizing: border-box;
-        padding: 15px;
-        display: inline-block;
     }
 
     .uwu-text,
     .ehe-text {
+        background-color: #B526C2;
+        color: white;
         width: 220px;
         height: 130px;
         border-radius: 20px;
-        padding: 15px;
-        margin-bottom: 15px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .uwu-text {
+        background-color: #11A34C;
+        /* Updated background color for .uwu-text */
+    }
+
+    .texty {
+        margin: 0;
+        font-weight: bold;
+        font-size: 16px;
+        font-family: Poppins;
+    }
+
+    .number {
+        margin: 0;
+        font-family: Poppins;
+        font-size: 45px;
+        font-weight: bold;
+        margin-bottom: 10px;
     }
 
     #myChart {
         position: absolute;
         left: 50px;
-        top: 100px;
+        top: 25px;
     }
-}
+
+    @media (max-width: 900px) {
+        .custom-text {
+            position: absolute;
+            top: 50px;
+            right: 50px;
+            text-align: center;
+            width: 220px;
+            box-sizing: border-box;
+            padding: 15px;
+            display: inline-block;
+        }
+
+        .uwu-text,
+        .ehe-text {
+            width: 220px;
+            height: 130px;
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        #myChart {
+            position: absolute;
+            left: 50px;
+            top: 100px;
+        }
+    }
 
 
     :root {
@@ -2131,142 +2131,6 @@ if ($todayTandStrans == 0) {
                 });
         }
     </script>
-
-
-
-
-
-
-    <!-- <div class="container-fluid">
-    <div class="row">
-        <div class="col-lg-6">
-            <?= \hail812\adminlte\widgets\Alert::widget([
-                'type' => 'success',
-                'body' => '<h3>Congratulations!</h3>',
-            ]) ?>
-            <?= \hail812\adminlte\widgets\Callout::widget([
-                'type' => 'danger',
-                'head' => 'I am a danger callout!',
-                'body' => 'There is a problem that we need to fix. A wonderful serenity has taken possession of my entire soul, like these sweet mornings of spring which I enjoy with my whole heart.'
-            ]) ?>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-12 col-sm-6 col-md-3">
-            <?= \hail812\adminlte\widgets\InfoBox::widget([
-                'text' => 'CPU Traffic',
-                'number' => '10 <small>%</small>',
-                'icon' => 'fas fa-cog',
-            ]) ?>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-md-4 col-sm-6 col-12">
-            <?= \hail812\adminlte\widgets\InfoBox::widget([
-                'text' => 'Messages',
-                'number' => '1,410',
-                'icon' => 'far fa-envelope',
-            ]) ?>
-        </div>
-        <div class="col-md-4 col-sm-6 col-12">
-            <?= \hail812\adminlte\widgets\InfoBox::widget([
-                'text' => 'Bookmarks',
-                'number' => '410',
-                'theme' => 'success',
-                'icon' => 'far fa-flag',
-            ]) ?>
-        </div>
-        <div class="col-md-4 col-sm-6 col-12">
-            <?= \hail812\adminlte\widgets\InfoBox::widget([
-                'text' => 'Uploads',
-                'number' => '13,648',
-                'theme' => 'gradient-warning',
-                'icon' => 'far fa-copy',
-            ]) ?>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-md-4 col-sm-6 col-12">
-            <?= \hail812\adminlte\widgets\InfoBox::widget([
-                'text' => 'Bookmarks',
-                'number' => '41,410',
-                'icon' => 'far fa-bookmark',
-                'progress' => [
-                    'width' => '70%',
-                    'description' => '70% Increase in 30 Days'
-                ]
-            ]) ?>
-        </div>
-        <div class="col-md-4 col-sm-6 col-12">
-            <?php $infoBox = \hail812\adminlte\widgets\InfoBox::begin([
-                'text' => 'Likes',
-                'number' => '41,410',
-                'theme' => 'success',
-                'icon' => 'far fa-thumbs-up',
-                'progress' => [
-                    'width' => '70%',
-                    'description' => '70% Increase in 30 Days'
-                ]
-            ]) ?>
-            <?= \hail812\adminlte\widgets\Ribbon::widget([
-                'id' => $infoBox->id . '-ribbon',
-                'text' => 'Ribbon',
-            ]) ?>
-            <?php \hail812\adminlte\widgets\InfoBox::end() ?>
-        </div>
-        <div class="col-md-4 col-sm-6 col-12">
-            <?= \hail812\adminlte\widgets\InfoBox::widget([
-                'text' => 'Events',
-                'number' => '41,410',
-                'theme' => 'gradient-warning',
-                'icon' => 'far fa-calendar-alt',
-                'progress' => [
-                    'width' => '70%',
-                    'description' => '70% Increase in 30 Days'
-                ],
-                'loadingStyle' => true
-            ]) ?>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-lg-4 col-md-6 col-sm-6 col-12">
-            <?= \hail812\adminlte\widgets\SmallBox::widget([
-                'title' => '150',
-                'text' => 'New Orders',
-                'icon' => 'fas fa-shopping-cart',
-            ]) ?>
-        </div>
-        <div class="col-lg-4 col-md-6 col-sm-6 col-12">
-            <?php $smallBox = \hail812\adminlte\widgets\SmallBox::begin([
-                'title' => '150',
-                'text' => 'New Orders',
-                'icon' => 'fas fa-shopping-cart',
-                'theme' => 'success'
-            ]) ?>
-            <?= \hail812\adminlte\widgets\Ribbon::widget([
-                'id' => $smallBox->id . '-ribbon',
-                'text' => 'Ribbon',
-                'theme' => 'warning',
-                'size' => 'lg',
-                'textSize' => 'lg'
-            ]) ?>
-            <?php \hail812\adminlte\widgets\SmallBox::end() ?>
-        </div>
-        <div class="col-lg-4 col-md-6 col-sm-6 col-12">
-            <?= \hail812\adminlte\widgets\SmallBox::widget([
-                'title' => '44',
-                'text' => 'User Registrations',
-                'icon' => 'fas fa-user-plus',
-                'theme' => 'gradient-success',
-                'loadingStyle' => true
-            ]) ?>
-        </div>
-    </div>
-</div> -->
 
     <?php
     $latestTimestamp = (new \yii\db\Query())
