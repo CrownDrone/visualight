@@ -2401,7 +2401,7 @@ $averageTransactionCountIncreasePerDay = $totalTransactionCountSum / count($time
     
     <form id="prediction-form">
         <label for="years">Enter the number of years for predictions:</label>
-        <input type="number" id="years" name="years" value="">
+        <input type="number" id="years" name="years" step="0.01" value="">
         <button type="submit">Compute Predictions</button>
     </form>
 
@@ -2412,10 +2412,10 @@ $averageTransactionCountIncreasePerDay = $totalTransactionCountSum / count($time
 document.getElementById('prediction-form').addEventListener('submit', function(event) {
     event.preventDefault();
 
-    const years = parseInt(document.getElementById('years').value, 10);
-    const days = years * 365;
+    const years = parseFloat(document.getElementById('years').value);
+    const days = Math.round(years * 365);
     
-    // Calculate the timestamps for the next day and the 30th day
+    // Calculate the timestamps for the next day and the predicted day
     const latestTimestamp = '<?= $latestTimestamp ?>';
     const nextDayTimestamp = new Date('<?= date('Y-m-d', $nextDayTimestamp) ?>');
     nextDayTimestamp.setDate(nextDayTimestamp.getDate() + days);
