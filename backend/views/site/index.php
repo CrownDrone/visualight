@@ -2276,7 +2276,8 @@ if ($todayTandStrans == 0) {
         </form>
 
         <div id="predictions" style="font-weight: bold; "></div> <br>
-        <div id="predictions1" style="font-weight: bold;"></div>
+        <div id="predictions1" style="font-weight: bold;"></div> <br>
+        <div id="predictions2" style="font-weight: bold;"></div>
 
     </div>
 
@@ -2592,6 +2593,238 @@ predictionsDiv1.innerHTML = `
         </span>
     </p>
     <p>Predicted total income of the NMD on the <span style="color:#0080ff">${days1}-day (${years1} year(s))</span> mark: 
+        <span style="color:${averagePredictedTotalSalesPerYear1 >= totalSales1[totalSales1.length - 1] ? 'green' : 'red'}">
+            ${addCommas(averagePredictedTotalSalesPerYear1)}
+            (${averagePredictedTotalSalesPerYear1 >= totalSales1[totalSales1.length - 1] ? 'Increased' : 'Decreased'})
+        </span>
+    </p>
+`;
+
+    });
+</script>
+
+
+<?php
+$latestTimestamp1 = (new \yii\db\Query())
+->select(['MAX(transacton_date) AS latest_timestamp'])
+->from('operational_report')
+->scalar();
+
+// Construct the new subquery
+$subquery1 = (new \yii\db\Query())
+->select(['DATE_ADD("2023-06-10", INTERVAL n DAY) AS date'])
+->from(['numbers' => '(
+    SELECT a.n + b.n * 10 + c.n * 100 AS n
+    FROM (
+        SELECT 0 AS n UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9
+    ) AS a,
+    (
+        SELECT 0 AS n UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9
+    ) AS b,
+    (
+        SELECT 0 AS n UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9
+    ) AS c
+)'])
+->where(['<=', 'DATE_ADD("2023-06-10", INTERVAL n DAY)', new \yii\db\Expression('NOW()')]);
+
+// New main query
+$query1 = (new \yii\db\Query())
+->select([
+    'all_dates.date AS transaction_date',
+    'IFNULL(COUNT(opr.transacton_date), 0) AS transaction_count',
+    'IFNULL(SUM(opr.amount), 0) AS total_sales'
+])
+->from([
+    'all_dates' => $subquery1
+])
+->leftJoin('operational_report opr', 'all_dates.date = opr.transacton_date AND opr.transaction_status = "paid" AND opr.division_name = "Standard and Testing Division"')
+->groupBy('all_dates.date')
+->orderBy(['all_dates.date' => SORT_ASC]);
+
+$transactions1 = $query1->all();
+
+// Convert timestamps to Unix timestamps
+foreach ($transactions1 as &$transaction1) {
+$transaction1['transaction_date'] = strtotime($transaction1['transaction_date']);
+}
+
+// Define $nextDayTimestamp using the latestTimestamp
+$nextDayTimestamp1 = strtotime('+1 day', strtotime($latestTimestamp1));
+
+
+// Prepare data for prediction (transaction count)
+$timestampsForCount1 = array_column($transactions1, 'transaction_date');
+$transactionCounts1 = array_column($transactions1, 'transaction_count');
+
+
+// Calculate linear regression coefficients for transaction count prediction
+$n1 = count($timestampsForCount1);
+$sumX1 = array_sum($timestampsForCount1);
+$sumY1 = array_sum($transactionCounts1);
+$sumXY1 = 0;
+$sumX21 = 0;
+
+for ($i = 0; $i < $n1; $i++) {
+    $sumXY1 += $timestampsForCount1[$i] * $transactionCounts1[$i];
+    $sumX21 += $timestampsForCount1[$i] * $timestampsForCount1[$i];
+}
+
+$slopeForCount1 = ($n1 * $sumXY1 - $sumX1 * $sumY1) / ($n1 * $sumX21 - $sumX1 * $sumX1);
+$interceptForCount1 = ($sumY1 - $slopeForCount1 * $sumX1) / $n1;
+
+// Predict the next transaction count for the next day
+$predictedTransactionCount1 = $interceptForCount1 + $slopeForCount1 * $nextDayTimestamp1;
+
+// Prepare data for prediction (total sales)
+$timestampsForSales1 = array_column($transactions1, 'transaction_date');
+$totalSales1 = array_column($transactions1, 'total_sales');
+
+// Calculate linear regression coefficients for total sales prediction
+$n1 = count($timestampsForSales1);
+$sumX1 = array_sum($timestampsForSales1);
+$sumY1 = array_sum($totalSales1);
+$sumXY1 = 0;
+$sumX21 = 0;
+
+for ($i = 0; $i < $n1; $i++) {
+    $sumXY1 += $timestampsForSales1[$i] * $totalSales1[$i];
+    $sumX21 += $timestampsForSales1[$i] * $timestampsForSales1[$i];
+}
+
+$slopeForSales1 = ($n1 * $sumXY1 - $sumX1 * $sumY1) / ($n1 * $sumX21 - $sumX1 * $sumX1);
+$interceptForSales1 = ($sumY1 - $slopeForSales1 * $sumX1) / $n1;
+
+$totalSalesSum1 = array_sum($totalSales1);
+$averageSalesIncreasePerDay1 = $totalSalesSum1 / count($timestampsForSales1);
+
+// Predict the next total sum of all total sales
+$predictedNextTotalSales1 = $totalSalesSum1 + $averageSalesIncreasePerDay1;
+
+$totalTransactionCountSum1 = array_sum($transactionCounts1);
+$averageTransactionCountIncreasePerDay1 = $totalTransactionCountSum1 / count($timestampsForCount1);
+
+$queryPerYear1 = (new \yii\db\Query())
+    ->select([
+        'all_years1.year AS year',
+        'IFNULL(COUNT(opr1.transacton_date), 0) AS transaction_count1',
+        'IFNULL(SUM(opr1.amount), 0) AS total_sales1'
+    ])
+    ->from([
+        'all_years1' => (new \yii\db\Query())
+            ->select(['DISTINCT YEAR(transacton_date) AS year'])
+            ->from('operational_report')
+            ->where(['>=', 'transacton_date', '2023-06-10'])
+            ->union((new \yii\db\Query())
+                    ->select(['DISTINCT YEAR(transacton_date) AS year'])
+                    ->from('operational_report')
+                    ->where(['YEAR(transacton_date)' => new \yii\db\Expression('YEAR(NOW())')])
+            )
+    ])
+    ->leftJoin('operational_report opr1', 'all_years1.year = YEAR(opr1.transacton_date) AND opr1.transaction_status = "paid" AND opr1.division_name = "Standard and Testing Division"')
+    ->groupBy('all_years1.year')
+    ->orderBy(['all_years1.year' => SORT_ASC]);
+
+$transactionsPerYear1 = $queryPerYear1->all();
+
+// Prepare data for predictions (total paid transaction count and total paid sales)
+$years1 = array_column($transactionsPerYear1, 'year');
+$transactionCountsPerYear1 = array_column($transactionsPerYear1, 'transaction_count1');
+$totalSalesPerYear1 = array_column($transactionsPerYear1, 'total_sales1');
+
+// Calculate historical averages based on the whole dataset for paid transaction count and total sales
+$totalTransactionCountSumPerYear1 = array_sum($transactionCountsPerYear1);
+$averageTransactionCountIncreasePerYear1 = $totalTransactionCountSumPerYear1 / count($years1);
+
+$totalSalesSumPerYear1 = array_sum($totalSalesPerYear1);
+$averageSalesIncreasePerYear1 = $totalSalesSumPerYear1 / count($years1);
+?>
+
+<script>
+    document.getElementById('prediction-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const years1 = parseFloat(document.getElementById('years').value);
+        const days1 = Math.round(years1 * 365);
+
+        // Calculate the timestamps for the next day and the predicted day
+        const latestTimestamp1 = '<?= $latestTimestamp1 ?>';
+        const nextDayTimestamp1 = new Date('<?= date('Y-m-d', $nextDayTimestamp1) ?>');
+        nextDayTimestamp1.setDate(nextDayTimestamp1.getDate() + days1);
+
+        const totalSalesSum1 = <?= $totalSalesSum1 ?>;
+        const totalTransactionCountSum1 = <?= $totalTransactionCountSum1 ?>;
+
+        // Define JavaScript variables with the values of totalSalesSum1, averageSalesIncreasePerDay1,
+        // totalTransactionCountSum1, and averageTransactionCountIncreasePerDay1
+        const averageSalesIncreasePerDay1 = <?= $averageSalesIncreasePerDay1 ?>;
+        const averageTransactionCountIncreasePerDay1 = <?= $averageTransactionCountIncreasePerDay1 ?>;
+
+        // Calculate historical averages based on the whole dataset for paid transaction count and total sales
+        const totalTransactionCountSumPerYear1 = <?= $totalTransactionCountSumPerYear1 ?>;
+        const averageTransactionCountIncreasePerYear1 = <?= $averageTransactionCountIncreasePerYear1 ?>;
+
+        const totalSalesSumPerYear1 = <?= $totalSalesSumPerYear1 ?>;
+        const averageSalesIncreasePerYear1 = <?= $averageSalesIncreasePerYear1 ?>;
+
+        // Calculate predictions for paid transaction count and paid sales per year
+
+        
+        const slopeForCountPerYear1 = <?= $slopeForCount1 ?>;
+        const interceptForCountPerYear1 = <?= $interceptForCount1 ?>;
+
+        const slopeForSalesPerYear1 = <?= $slopeForSales1 ?>;
+        const interceptForSalesPerYear1 = <?= $interceptForSales1 ?>;
+
+        const nextYearTimestamp1 = new Date();
+        nextYearTimestamp1.setFullYear(nextYearTimestamp1.getFullYear() + years1);
+
+        // Calculate predictions for transaction count and total sales for the next year
+        const predictedTransactionCountPerYear1 = Math.round(interceptForCountPerYear1 + slopeForCountPerYear1 * nextYearTimestamp1.getTime() / 1000);
+        const predictedTotalSalesPerYear1 = Math.round(interceptForSalesPerYear1 + slopeForSalesPerYear1 * nextYearTimestamp1.getTime() / 1000);
+
+        // Calculate predictions for total sum of paid transaction count and total paid sales per year
+        const predictedNextTotalTransactionCountPerYear1 = Math.round(totalTransactionCountSumPerYear1 + averageTransactionCountIncreasePerYear1 * years1);
+        const predictedNextTotalSalesPerYear1 = Math.round(totalSalesSumPerYear1 + averageSalesIncreasePerYear1 * years1);
+
+        // Calculate the average of the predicted total sum of paid transaction count and total paid sales per year
+        const averagePredictedTotalTransactionCountPerYear1 = Math.round(predictedNextTotalTransactionCountPerYear1 / years1);
+        const averagePredictedTotalSalesPerYear1 = Math.round(predictedNextTotalSalesPerYear1 / years1);
+
+
+        // Calculate the average of the predicted total sum of paid transaction count and total paid sales per year
+
+        // Function to add commas every three numbers
+        function addCommas(number) {
+            return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
+            const transactionCounts1 = <?= json_encode(array_column($transactions1, 'transaction_count')) ?>;
+
+            // Convert timestamps to Unix timestamps
+            const totalSales1 = <?= json_encode(array_column($transactions1, 'total_sales')) ?>;
+
+const predictionsDiv2 = document.getElementById('predictions2');
+predictionsDiv2.innerHTML = `
+<p>Predicted transaction count of the STD on the <span style="color:#0080ff">${days1}-day (${years1} year(s))</span> mark: 
+        <span style="color:${predictedTransactionCountPerYear1 >= transactionCounts1[transactionCounts1.length - 1] ? 'green' : 'red'}">
+            ${addCommas(predictedTransactionCountPerYear1)}
+            (${predictedTransactionCountPerYear1 >= transactionCounts1[transactionCounts1.length - 1] ? 'Increased' : 'Decreased'})
+        </span>
+    </p>
+    <p>Predicted total transaction count of the STD on the <span style="color:#0080ff">${days1}-day (${years1} year(s))</span> mark: 
+        <span style="color:${averagePredictedTotalTransactionCountPerYear1 >= transactionCounts1[transactionCounts1.length - 1] ? 'green' : 'red'}">
+            ${addCommas(averagePredictedTotalTransactionCountPerYear1)}
+            (${averagePredictedTotalTransactionCountPerYear1 >= transactionCounts1[transactionCounts1.length - 1] ? 'Increased' : 'Decreased '})
+        </span>
+    </p>
+    <br>
+    <p>Predicted income of the STD on the <span style="color:#0080ff">${days1}-day (${years1} year(s))</span> mark: 
+        <span style="color:${predictedTotalSalesPerYear1 >= totalSales1[totalSales1.length - 1] ? 'green' : 'red'}">
+            ${addCommas(predictedTotalSalesPerYear1)}
+            (${predictedTotalSalesPerYear1 >= totalSales1[totalSales1.length - 1] ? 'Increased' : 'Decreased'})
+        </span>
+    </p>
+    <p>Predicted total income of the STD on the <span style="color:#0080ff">${days1}-day (${years1} year(s))</span> mark: 
         <span style="color:${averagePredictedTotalSalesPerYear1 >= totalSales1[totalSales1.length - 1] ? 'green' : 'red'}">
             ${addCommas(averagePredictedTotalSalesPerYear1)}
             (${averagePredictedTotalSalesPerYear1 >= totalSales1[totalSales1.length - 1] ? 'Increased' : 'Decreased'})
