@@ -133,7 +133,7 @@ $this->title = '';
     }
 
     .deptransaction {
-        width: 30%;
+        width: 45%;
         height: 7.875rem;
         border-radius: .635rem;
         background: #0073C7;
@@ -265,6 +265,7 @@ $this->title = '';
         text-align: right;
     }
 
+   
     /* graph div */
     .graph {
         width: 100%;
@@ -280,7 +281,16 @@ $this->title = '';
         background-color: white;
         display: inline-block;
         height: 28rem;
-        width: 47%;
+        width: 100%;
+        max-width: 47%;
+        overflow-x: scroll;
+        overflow-y: hidden;
+        white-space: nowrap;
+    }
+    .containerBody
+    {
+        height: 100%;
+        width: 200%;
     }
 
     .graph2 {
@@ -319,6 +329,7 @@ $this->title = '';
         letter-spacing: .15rem;
 
     }
+
 
 
     /* responsiveness */
@@ -559,6 +570,7 @@ $salesData = $query->select(['division_name', 'transacton_date', 'SUM(amount) as
     // ->where(['between', 'transaction_date', $fromDate, $toDate])
     // ->where(['between', 'transacton_date', '2023-06-10', '2023-06-14'])
     ->groupBy(['division_name', 'transacton_date'])
+    ->orderBy(['transacton_date' => SORT_DESC])
     ->all();
 
 // Fetch transaction data from the database (depends on how many transaction in same date and same div_name)
@@ -566,15 +578,40 @@ $transactionData = $query->select(['division_name', 'transacton_date', 'COUNT(*)
     ->from('operational_report')
     // ->where(['between', 'transaction_date', $fromDate, $toDate])
     ->groupBy(['division_name', 'transacton_date'])
+    ->orderBy(['transacton_date' => SORT_DESC])
     ->all();
 
-$topCustomers = $query->select(['last_name', 'COUNT(*) as transaction_count'])
-    ->from('operational_report')
-    // ->where(['between', 'transaction_date', $fromDate, $toDate])
-    ->groupBy(['last_name'])
-    ->orderBy(['transaction_count' => SORT_DESC])
-    ->limit(5)
-    ->all();
+// Prepare $TransactionperDiv array (null pa// otw yung data HAHA)
+$TransactionperDiv = [
+    'labels' => [],
+    'datasets' => [],
+];
+
+//getting data for the $TransactionperDiv
+foreach ($transactionData as $data) {
+    $divisionName = $data['division_name'];
+    $transactionDate = $data['transacton_date'];
+    $transactionCount = (int) $data['transaction_count'];
+
+    // Add unique dates to the labels array
+    if (!in_array($transactionDate, $TransactionperDiv['labels'])) {
+        $TransactionperDiv['labels'][] = $transactionDate;
+    }
+
+    // Find the index of the division in the datasets array
+    $divisionIndex = array_search($divisionName, array_column($TransactionperDiv['datasets'], 'label'));
+
+    if ($divisionIndex === false) {
+        // Add a new dataset for the division if not already present
+        $TransactionperDiv['datasets'][] = [
+            'label' => $divisionName,
+            'data' => [$transactionCount],
+        ];
+    } else {
+        // If the dataset already exists, add the transaction count to the existing data
+        $TransactionperDiv['datasets'][$divisionIndex]['data'][] = $transactionCount;
+    }
+}
 
 $addressData = $query->select(['address', 'COUNT(*) as customer_count'])
     ->from('operational_report')
@@ -584,13 +621,32 @@ $addressData = $query->select(['address', 'COUNT(*) as customer_count'])
     ->limit(100000)
     ->all();
 
-// Prepare data for the chart
-$province = [];
-$customersCounts = [];
+// // Prepare data for the chart
+// $province = [];
+// $customersCounts = [];
+$provinces = [
+    'labels' => [],
+    'datasets' => [],
+];
 
 foreach ($addressData as $customeraddress) {
     $province[] = $customeraddress['address'];
     $customersCounts[] = $customeraddress['customer_count'];
+
+    if(!in_array($province, $provinces['labels'])) {
+        $provinces['labels'][] = $province;
+    }
+    $provinceIndex = array_search($province, array_column($provinces['datasets'], 'label'));
+    if ($provinceIndex === false) {
+        // Add a new dataset for the division if not already present
+        $provinces['datasets'][] = [
+            'label' => $province,
+            'data' => [$customersCounts],
+        ];
+    } else {
+        // If the dataset already exists, add the transaction count to the existing data
+        $provinces['datasets'][$provinceIndex]['data'][] = $customersCounts;
+    }
 }
 
 $customerTypeData = $query->select(['customer_type', 'COUNT(*) as customer_count'])
@@ -690,48 +746,6 @@ foreach ($salesData as $data) {
     }
 }
 
-
-// Prepare $TransactionperDiv array (null pa// otw yung data HAHA)
-$TransactionperDiv = [
-    'labels' => [],
-    'datasets' => [],
-];
-
-//getting data for the $TransactionperDiv
-foreach ($transactionData as $data) {
-    $divisionName = $data['division_name'];
-    $transactionDate = $data['transacton_date'];
-    $transactionCount = (int) $data['transaction_count'];
-
-    // Add unique dates to the labels array
-    if (!in_array($transactionDate, $TransactionperDiv['labels'])) {
-        $TransactionperDiv['labels'][] = $transactionDate;
-    }
-
-    // Find the index of the division in the datasets array
-    $divisionIndex = array_search($divisionName, array_column($TransactionperDiv['datasets'], 'label'));
-
-    if ($divisionIndex === false) {
-        // Add a new dataset for the division if not already present
-        $TransactionperDiv['datasets'][] = [
-            'label' => $divisionName,
-            'data' => [$transactionCount],
-        ];
-    } else {
-        // If the dataset already exists, add the transaction count to the existing data
-        $TransactionperDiv['datasets'][$divisionIndex]['data'][] = $transactionCount;
-    }
-}
-
-// Prepare data for the chart
-$lastNames = [];
-$transactionCounts = [];
-
-foreach ($topCustomers as $customer) {
-    $lastNames[] = $customer['last_name'];
-    $transactionCounts[] = $customer['transaction_count'];
-}
-
 $transactionPerday = (new Query())
     ->select('transacton_date, COUNT(*) as transaction_count')
     ->from('operational_report')
@@ -770,15 +784,11 @@ if ($saleaverage >= 1000 && $saleaverage <= 999999) {
 //setting default colors for each department
 $divisionColors = [
     'National Metrology Department' => [
-        'backgroundColor' => 'rgba(54, 162, 255, 1)',
+        'backgroundColor' => '#06d6a0',
         'borderWidth' => 2,
     ],
     'Standard and Testing Division' => [
-        'backgroundColor' => 'rgba(2, 165, 96, 1)',
-        'borderWidth' => 2,
-    ],
-    'Technological Services Division' => [
-        'backgroundColor' => 'rgba(245, 40, 145, 1)',
+        'backgroundColor' => '#7209b7',
         'borderWidth' => 2,
     ],
 ];
@@ -868,48 +878,9 @@ if ($todaySandTtrans == 0) {
         $SandTdailytransincrease = $SandTdailytransincrease . '%';
     }
 }
-//T&S transaction
-
-$todayTandStrans = (new Query())
-    ->select('COUNT(*)')
-    ->from('operational_report')
-    ->where([
-        'division_name' => 'Technological Services Division',
-        'transacton_date' => date('Y-m-d')
-    ])
-    ->scalar();
-
-$lastTandStrans = (new Query())
-    ->select('COUNT(*)')
-    ->from('operational_report')
-    ->where([
-        'division_name' => 'Technological Services Division',
-        'transacton_date' => date('Y-m-d', strtotime('-1 day'))
-    ])
-    ->scalar();
-
-if ($todayTandStrans == 0) {
-    $TandSdailytransincrease = 0;
-} else {
-    $TandSdailytransincrease = (($todayTandStrans - $lastTandStrans) / $todayTandStrans) * 100;
-    $TandSdailytransincrease = number_format($TandSdailytransincrease, 2);
-    if ($TandSdailytransincrease > 1) {
-        $TandSdailytransincrease = '+' . $TandSdailytransincrease . '%';
-    } else {
-        $TandSdailytransincrease = $TandSdailytransincrease . '%';
-    }
-}
 
 
 ?>
-<!-- 
-<div class="header">
-    <div class="header-grid">
-    <p>Dashboard</p>
-    <img src="/images/LogoVL.png" alt="visLogo">
-    </div>
-</div> <br> -->
-
 <div class="DailyTransaction">
     <p>Total Transactions Daily</p>
 
@@ -921,7 +892,7 @@ if ($todayTandStrans == 0) {
             <p id="valueIncrease"><?= $metdailytransincrease ?></p>
         </div>
     </div>
-    <div class="deptransaction" style="background-color:#02A560;">
+    <div class="deptransaction" style="background-color:#7209b7;">
         <p>Standards and Testing</p>
         <div class="grid">
             <img src="/images/Pass Fail.png" alt="icon2">
@@ -929,15 +900,6 @@ if ($todayTandStrans == 0) {
             <p id="valueIncrease"><?= $SandTdailytransincrease ?></p>
         </div>
     </div>
-    <div class="deptransaction" style="background-color:#F21A9C;">
-        <p>Technological Services</p>
-        <div class="grid">
-            <img src="/images/Service.png" alt="icon3">
-            <p id="dailyTrans"><?= $todayTandStrans ?></p>
-            <p id="valueIncrease"><?= $TandSdailytransincrease ?></p>
-        </div>
-    </div>
-
 </div>
 
 <!-- Date Filter Div -->
@@ -1010,19 +972,26 @@ if ($todayTandStrans == 0) {
 
     <div class="chart-container">
         <p id="reportTitle"> Total Transaction and Sales</p>
+        <div class="containerBody">
         <canvas id="combinedChart"></canvas>
+    </div>
     </div>
 
     <div class="chart-container">
         <p id="reportTitle"> Transaction Per Division</p>
+    <!-- <div class="containerBody"> -->
         <canvas id="transactionChart"></canvas>
+    <!-- </div> -->
     </div>
 
 
     <div class="chart-container">
         <p id="reportTitle"> Sales per Division</p>
+        <div class="containerBody">
         <canvas id="salesChart"></canvas>
+        </div>
     </div>
+
 
     <div class="chart-container" id="avgSales">
         <p id="reportTitle">Average sales per day</p>
@@ -1040,6 +1009,40 @@ if ($todayTandStrans == 0) {
             </div>
         </div>
     </div>
+
+ <!-- <div class="chart-container" id="avgSales">
+        <div class="aveChart" style="display: grid; grid-template-columns: repeat(2,1fr); grid-gap:.1rem; grid-template-rows: auto auto;">
+        <div class="chart"style="width: 90%; ">
+        <p id="reportTitle">Average sales per day</p>
+        <canvas id="myChart"></canvas>
+        </div>
+        <div class="label" style="width: 5%; padding-left:3rem; ">
+        <div class="custom-text">
+            <div class="uwu-text">
+                <p class="texty"> Average Transactions </p>
+                <p class="number"> <?= $average ?> </p>
+            </div>
+            <div class="ehe-text">
+                <p class="texty"> Average Sales </p>
+                <p class="number"> <?= $saleaverage ?> </p>
+            </div>
+        </div>
+        </div>
+        </div>
+    </div> -->
+
+    <!-- <div class="chart-container" style="max-width: 100%; height: 500px; overflow-x: scroll; text-align: center;">
+                <p id="reportTitle">Total Customers per Province</p>
+                <div class="ProvinceChart" style="display: grid; grid-template-columns: repeat(2,1fr); grid-gap:.1rem; grid-template-rows: auto auto;">
+                <div class="scaleContainer" style="width: 10%; text-align: justtify;">
+                <?php echo json_encode($customersCounts); ?>,
+                </div>
+                <div class="containerBody" style="width: 80%; height: 100%;">
+                    <canvas id="Provinces"></canvas>
+                </div>
+            </div>
+            </div> -->
+
 
 
 
@@ -1119,11 +1122,12 @@ if ($todayTandStrans == 0) {
                     y: {
                         beginAtZero: true,
                         ticks: {
-                            stepSize: 1
+                            display:false 
                         },
                         grid: {
                             display: false,
-                            drawOnChartArea: false
+                            drawOnChartArea: false,
+                            drawTicks:false,
                         }
                     },
                     x: {
@@ -1147,13 +1151,15 @@ if ($todayTandStrans == 0) {
                         },
                         grid: {
                             display: false,
-                            drawOnChartArea: false
+                            drawOnChartArea: false,
+                            drawTicks:false,
                         }
                     },
                 },
                 plugins: {
                     legend: {
                         position: 'top',
+                        // display: false //para sa kinacancel sa taas
                     },
                     zoom: {
                         pan: {
@@ -1169,10 +1175,10 @@ if ($todayTandStrans == 0) {
                 responsive: true,
                 layout: {
                     padding: {
-                        left: 15,
-                        right: 15,
-                        top: 15,
-                        bottom: 15
+                        left: 10,
+                        right: 10,
+                        top: 10,
+                        bottom: 10
                     }
                 },
 
@@ -1187,6 +1193,13 @@ if ($todayTandStrans == 0) {
         const transactionChart = new Chart(transactionCtx, {
             type: 'bar',
             data: TransactionperDiv,
+            // {
+            //     datasets: TransactionperDiv.datasets.map(dataset => ({
+            //         ...dataset,
+            //         data: dataset.data.slice(0, 7) // Display only the first 7 data points for each dataset
+            //     })),
+            //     labels: TransactionperDiv.labels.slice(0, 7)  // Assuming labels are defined in TransactionperDiv
+            // },
             options: {
                 indexAxis: 'y',
                 responsive: true,
@@ -1196,21 +1209,39 @@ if ($todayTandStrans == 0) {
                         beginAtZero: true,
                         grid: {
                             drawOnChartArea: false
-                        }
+                        },
+                        min:0,
+                        max:6,
                     },
                     x: {
                         grid: {
                             display: false,
                             drawOnChartArea: false
                         }
-
                     },
                 }
             }
         });
 
-        //vertical bar graph
-        const salesCtx = document.getElementById('salesChart').getContext('2d');
+        function scroller(scroll,chart)
+        {
+            console.log(scroll)
+
+            if(scroll.deltaY>0)
+            {
+                transactionChart.option.scales.y.min+=1;
+                transactionChart.option.scales.y.max+=1;
+            }
+            transactionChart.update();
+        }
+        //wheel is for the gilid scroll
+        transactionChart.canvas.addEventListener('wheel',(e)=>
+        {
+            scroller(e, transactionChart)
+        });
+
+         //vertical bar graph
+         const salesCtx = document.getElementById('salesChart').getContext('2d');
         const salesChart = new Chart(salesCtx, {
             type: 'bar',
             data: SalesperDiv,
@@ -1227,29 +1258,25 @@ if ($todayTandStrans == 0) {
                     },
 
                     x: {
+                        min:0,
+                        max:7,
                         grid: {
                             drawOnChartArea: false
                         }
                     }
 
                 },
-                elements: {
-                    line: {
-                        borderColor: ['blue', '#e75480', 'green'], // Change the color of the lines
-                        borderWidth: 2, // Adjust the width of the lines
-                    },
-                    point: {
-                        backgroundColor: 'red', // Change the color of the dots
-                        borderColor: 'red', // Change the border color of the dots
-                        borderWidth: 1, // Adjust the width of the border of the dots
-                        radius: 4, // Adjust the size of the dots
-                        hoverRadius: 6, // Adjust the size of the dots on hover
-                    },
-                },
-
 
             }
         });
+
+        // for scrolling
+        const containerBody= document.querySelector('.containerBody');
+        if(salesChart.data.labels.length>7)
+        {
+            containerBody.style.width='200%';
+        }
+
 
         // Function to calculate the average of an array of numbers
         const calculateAverage = (array) => {
@@ -1331,7 +1358,7 @@ if ($todayTandStrans == 0) {
                     } = chart;
 
                     ctx.save();
-                    ctx.font = 'bolder 13px Poppins';
+                    ctx.font = 'bolder 15px Poppins';
                     ctx.fillStyle = 'rgb(3, 98, 186, 1)';
                     ctx.textAlign = 'center';
                     ctx.fillText('Average sales per day', width / 2.1, height / 2 + top);
@@ -1373,17 +1400,14 @@ if ($todayTandStrans == 0) {
             </div>
         </div>
 
-
-        <div class="graph">
-            <div class="chart-container">
-                <p id="reportTitle">Top 5 Customers</p>
-                <canvas id="topCustomersChart"></canvas>
-            </div>
-            <div class="chart-container">
+            <div class="chart-container" style="max-width: 100%; height: 500px; overflow-x: scroll; text-align: center;">
                 <p id="reportTitle">Total Customers per Province</p>
-                <canvas id="Provinces"></canvas>
+                <div class="containerBody">
+                    <canvas id="Provinces"></canvas>
+                </div>
             </div>
-        </div>
+            </div>
+
     </div>
 
 
@@ -1392,10 +1416,9 @@ if ($todayTandStrans == 0) {
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Get references to chart containers and the dropdown
-            const topCustomersChartContainer = document.getElementById('topCustomersChart');
             const provincesChartContainer = document.getElementById('Provinces');
             const chartTypeDropdown = document.getElementById('chart_type');
-
+            const provinces = <?php echo json_encode($provinces); ?>;
             //     function generateRandomColor() {
             //   const randomColor = `rgb(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)})`;
             //   return randomColor;
@@ -1403,68 +1426,23 @@ if ($todayTandStrans == 0) {
 
             // const randomColor = generateRandomColor();
             // Initialize charts (empty)
-            let topCustomersChart = null;
             let provincesChart = null;
 
             // Update charts based on selected chart type
             function updateCharts() {
                 const selectedChartType = chartTypeDropdown.value;
 
-                // Destroy existing charts if they exist
-                if (topCustomersChart) {
-                    topCustomersChart.destroy();
-                }
                 if (provincesChart) {
                     provincesChart.destroy();
                 }
 
-                // Create new charts based on selected chart type
-                topCustomersChart = new Chart(topCustomersChartContainer, {
-                    type: selectedChartType,
-                    options: {
-                        indexAxis: 'y',
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                grid: {
-                                    drawOnChartArea: false
-                                }
-                            },
-                            x: {
-                                grid: {
-                                    display: false,
-                                    drawOnChartArea: false
-                                }
-
-                            },
-                        }
-                    },
-
-                    data: {
-                        labels: <?php echo json_encode($lastNames); ?>,
-                        datasets: [{
-                            label: 'Transaction Count',
-                            data: <?php echo json_encode($transactionCounts); ?>,
-                            backgroundColor: ['rgba(75, 192, 192, 0.2)',
-                                'rgba(20, 241, 56, 0.2)',
-                                'rgba(241, 61, 183, 0.2)',
-                                'rgba(233, 241, 78, 0.2)',
-                                'rgba(255, 159, 64, 0.2)'
-                            ],
-                            borderColor: ['rgba(75, 192, 192, 1)',
-                                'rgba(20, 241, 56, 1)',
-                                'rgba(241, 61, 183,1)',
-                                'rgba(233, 241, 78, 1)',
-                                'rgba(255, 159, 64,1)'
-                            ],
-                            borderWidth: 2
-                        }],
-                    }
-                });
+    
 
                 provincesChart = new Chart(provincesChartContainer, {
                     type: selectedChartType,
                     options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
                         scales: {
                             y: {
                                 beginAtZero: true,
@@ -1473,17 +1451,25 @@ if ($todayTandStrans == 0) {
                                 }
                             },
                             x: {
+                                min:0,
+                                max:6,
                                 grid: {
                                     display: false,
                                     drawOnChartArea: false
                                 }
+                            },
+                        },
+                        plugins:
+                        {
+                            legend:
+                            {
+                                display: false
                             }
                         }
-                    },
+                     },
                     data: {
                         labels: <?php echo json_encode($province); ?>,
                         datasets: [{
-                            label: 'Customer Count',
                             data: <?php echo json_encode($customersCounts); ?>,
                             backgroundColor: generateRandomColors(<?php echo count($customersCounts); ?>, 1),
                             borderColor: 'rgba(0, 0, 0, 0.2)',
@@ -1507,6 +1493,11 @@ if ($todayTandStrans == 0) {
                     return `rgba(${r}, ${g}, ${b}, ${alpha})`;
                 }
             }
+        // // Calculate and set the width of the chart container for scrolling
+        // const chartContainer = document.getElementById('.containerBody');
+        // if (Provinces.data.labels.length > 7) {
+        //     containerBody.style.width = '200%'; // Adjust as needed
+        // }
 
             // Listen for changes in the dropdown and update charts
             chartTypeDropdown.addEventListener('change', updateCharts);
