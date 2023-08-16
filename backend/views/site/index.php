@@ -2276,8 +2276,12 @@ if ($todayTandStrans == 0) {
         </form>
 
         <div id="predictions" style="font-weight: bold; "></div> <br>
-        <div id="predictions1" style="font-weight: bold;"></div> <br>
-        <div id="predictions2" style="font-weight: bold;"></div>
+        <div id="predictions1" style="font-weight: bold;"></div> 
+        <div id="predictions2" style="font-weight: bold;"></div> <br>
+        <div id="predictions3" style="font-weight: bold;"></div> 
+        <div id="predictions4" style="font-weight: bold;"></div><br>
+        <div id="predictions5" style="font-weight: bold;"></div>
+
 
     </div>
 
@@ -2352,7 +2356,6 @@ if ($todayTandStrans == 0) {
             (${averagePredictedTotalTransactionCountPerYear >= averageTransactionCountIncreasePerYear ? 'Increased' : 'Decreased'})
         </span>
     </p>
-    <br>
     <p>Predicted income on the <span style="color:#0080ff">${days}-day (${years} year(s))</span> mark: 
         <span style="color:${predictedTotalSalesPerYear >= totalSales[totalSales.length - 1] ? 'green' : 'red'}">
             ${addCommas(predictedTotalSalesPerYear)}
@@ -2573,26 +2576,29 @@ $averageSalesIncreasePerYear1 = $totalSalesSumPerYear1 / count($years1);
 
 const predictionsDiv1 = document.getElementById('predictions1');
 predictionsDiv1.innerHTML = `
-<p>Predicted transaction count of the NMD on the <span style="color:#0080ff">${days1}-day (${years1} year(s))</span> mark: 
+<p>Predicted transaction count of NMD on the <span style="color:#0080ff">${days1}-day (${years1} year(s))</span> mark: 
         <span style="color:${predictedTransactionCountPerYear1 >= transactionCounts1[transactionCounts1.length - 1] ? 'green' : 'red'}">
             ${addCommas(predictedTransactionCountPerYear1)}
             (${predictedTransactionCountPerYear1 >= transactionCounts1[transactionCounts1.length - 1] ? 'Increased' : 'Decreased'})
         </span>
     </p>
-    <p>Predicted total transaction count of the NMD on the <span style="color:#0080ff">${days1}-day (${years1} year(s))</span> mark: 
+    <p>Predicted total transaction count of NMD on the <span style="color:#0080ff">${days1}-day (${years1} year(s))</span> mark: 
         <span style="color:${averagePredictedTotalTransactionCountPerYear1 >= transactionCounts1[transactionCounts1.length - 1] ? 'green' : 'red'}">
             ${addCommas(averagePredictedTotalTransactionCountPerYear1)}
             (${averagePredictedTotalTransactionCountPerYear1 >= transactionCounts1[transactionCounts1.length - 1] ? 'Increased' : 'Decreased '})
         </span>
     </p>
-    <br>
-    <p>Predicted income of the NMD on the <span style="color:#0080ff">${days1}-day (${years1} year(s))</span> mark: 
+`;
+
+const predictionsDiv3 = document.getElementById('predictions3');
+predictionsDiv3.innerHTML = `
+    <p>Predicted income of NMD on the <span style="color:#0080ff">${days1}-day (${years1} year(s))</span> mark: 
         <span style="color:${predictedTotalSalesPerYear1 >= totalSales1[totalSales1.length - 1] ? 'green' : 'red'}">
             ${addCommas(predictedTotalSalesPerYear1)}
             (${predictedTotalSalesPerYear1 >= totalSales1[totalSales1.length - 1] ? 'Increased' : 'Decreased'})
         </span>
     </p>
-    <p>Predicted total income of the NMD on the <span style="color:#0080ff">${days1}-day (${years1} year(s))</span> mark: 
+    <p>Predicted total income of NMD on the <span style="color:#0080ff">${days1}-day (${years1} year(s))</span> mark: 
         <span style="color:${averagePredictedTotalSalesPerYear1 >= totalSales1[totalSales1.length - 1] ? 'green' : 'red'}">
             ${addCommas(averagePredictedTotalSalesPerYear1)}
             (${averagePredictedTotalSalesPerYear1 >= totalSales1[totalSales1.length - 1] ? 'Increased' : 'Decreased'})
@@ -2737,6 +2743,7 @@ $averageTransactionCountIncreasePerYear1 = $totalTransactionCountSumPerYear1 / c
 
 $totalSalesSumPerYear1 = array_sum($totalSalesPerYear1);
 $averageSalesIncreasePerYear1 = $totalSalesSumPerYear1 / count($years1);
+
 ?>
 
 <script>
@@ -2805,26 +2812,29 @@ $averageSalesIncreasePerYear1 = $totalSalesSumPerYear1 / count($years1);
 
 const predictionsDiv2 = document.getElementById('predictions2');
 predictionsDiv2.innerHTML = `
-<p>Predicted transaction count of the STD on the <span style="color:#0080ff">${days1}-day (${years1} year(s))</span> mark: 
+<p>Predicted transaction count of STD on the <span style="color:#0080ff">${days1}-day (${years1} year(s))</span> mark: 
         <span style="color:${predictedTransactionCountPerYear1 >= transactionCounts1[transactionCounts1.length - 1] ? 'green' : 'red'}">
             ${addCommas(predictedTransactionCountPerYear1)}
             (${predictedTransactionCountPerYear1 >= transactionCounts1[transactionCounts1.length - 1] ? 'Increased' : 'Decreased'})
         </span>
     </p>
-    <p>Predicted total transaction count of the STD on the <span style="color:#0080ff">${days1}-day (${years1} year(s))</span> mark: 
+    <p>Predicted total transaction count of STD on the <span style="color:#0080ff">${days1}-day (${years1} year(s))</span> mark: 
         <span style="color:${averagePredictedTotalTransactionCountPerYear1 >= transactionCounts1[transactionCounts1.length - 1] ? 'green' : 'red'}">
             ${addCommas(averagePredictedTotalTransactionCountPerYear1)}
             (${averagePredictedTotalTransactionCountPerYear1 >= transactionCounts1[transactionCounts1.length - 1] ? 'Increased' : 'Decreased '})
         </span>
     </p>
-    <br>
-    <p>Predicted income of the STD on the <span style="color:#0080ff">${days1}-day (${years1} year(s))</span> mark: 
+`;
+
+const predictionsDiv4 = document.getElementById('predictions4');
+predictionsDiv4.innerHTML = `
+    <p>Predicted income of STD on the <span style="color:#0080ff">${days1}-day (${years1} year(s))</span> mark: 
         <span style="color:${predictedTotalSalesPerYear1 >= totalSales1[totalSales1.length - 1] ? 'green' : 'red'}">
             ${addCommas(predictedTotalSalesPerYear1)}
             (${predictedTotalSalesPerYear1 >= totalSales1[totalSales1.length - 1] ? 'Increased' : 'Decreased'})
         </span>
     </p>
-    <p>Predicted total income of the STD on the <span style="color:#0080ff">${days1}-day (${years1} year(s))</span> mark: 
+    <p>Predicted total income of STD on the <span style="color:#0080ff">${days1}-day (${years1} year(s))</span> mark: 
         <span style="color:${averagePredictedTotalSalesPerYear1 >= totalSales1[totalSales1.length - 1] ? 'green' : 'red'}">
             ${addCommas(averagePredictedTotalSalesPerYear1)}
             (${averagePredictedTotalSalesPerYear1 >= totalSales1[totalSales1.length - 1] ? 'Increased' : 'Decreased'})
@@ -2834,3 +2844,7 @@ predictionsDiv2.innerHTML = `
 
     });
 </script>
+
+
+
+
