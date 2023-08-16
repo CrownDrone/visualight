@@ -78,7 +78,8 @@ $this->title = '';
         width: 50%; /* Set to 50% width to make them appear beside each other */
         box-sizing: border-box; /* Include padding and border in the width */
         padding: 15px; /* Add padding to create spacing between elements */
-        display: inline-block; Display elements inline */
+        display: inline-block; 
+        /* Display elements inline */
     }
 
     .uwu-text,
