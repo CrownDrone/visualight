@@ -1,10 +1,10 @@
 <?php
 
-namespace app\modules\nmd;
+namespace app\modules\predict;
 
 class Module extends \yii\base\Module
 {
-    public $controllerNamespace = 'backend\modules\nmd\controllers';
+    public $controllerNamespace = 'backend\modules\predict\controllers';
 
     public function init()
     {

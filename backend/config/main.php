@@ -24,6 +24,9 @@ return [
         'nmd' => [
                     'class' => 'app\modules\nmd\Module',
                 ],
+        'predict' => [
+                    'class' => 'app\modules\predict\Module',
+                ],
     ],
     'components' => [
         'request' => [

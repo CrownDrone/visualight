@@ -137,6 +137,14 @@ $defaultImagePath = Yii::getAlias('@web') . '/images/user2.jpg';
                                 'active' => Yii::$app->controller->route === 'nmd/chart/index',
 
                             ],
+
+                            [
+                                'label' => 'Predict Chart',
+                                'icon' => 'star',
+                                'url' => ['/predict/chart/index'],
+                                'active' => Yii::$app->controller->route === 'predict/chart/index',
+
+                            ],
                         ],
                     ],
                        ['label' => 'Terms of Service',  'icon' => 'fas fa-file-contract', 'url' => ["/terms/index"], 'visible' => true],
