@@ -136,7 +136,7 @@ $this->title = '';
         width: 45%;
         height: 7.875rem;
         border-radius: .635rem;
-        background: #0073C7;
+        background: #11A34C;
         color: #FFF;
         font-family: Poppins;
         font-size: 1rem;
