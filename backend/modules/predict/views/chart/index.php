@@ -65,24 +65,6 @@ use yii\web\View;
         <div id="predictions5" style="font-weight: bold;"></div><br>
         <div id="predictions6" style="font-weight: bold;"></div><br>
 
-        <div class="chart-container">
-        <canvas id="doughnutChart4"></canvas>
-    </div>
-
-    <div class="chart-container">
-        <canvas id="doughnutChart5"></canvas>
-    </div>
-
-    <div class="chart-container">
-        <canvas id="doughnutChart6"></canvas>
-    </div>
-
-    <div class="chart-container">
-        <canvas id="doughnutChart7"></canvas>
-    </div>
-
-
-
 
     </div>
 
@@ -224,26 +206,60 @@ use yii\web\View;
 
     
     <script>
+        document.getElementById('prediction-form').addEventListener('submit', function(event) {
+            event.preventDefault();
 
-            let doughnutChart, doughnutChart1, doughnutChart2, doughnutChart3;
+            const years = parseFloat(document.getElementById('years').value);
+            const days = Math.round(years * 365);
+            
+            const transactionCounts = <?= json_encode(array_column($transactions, 'transaction_count')) ?>;
 
-            // Function to update and recreate the charts
-            function updateCharts() {
-                // Destroy previous charts if they exist
-                if (doughnutChart) {
-                    doughnutChart.destroy();
-                }
-                if (doughnutChart1) {
-                    doughnutChart1.destroy();
-                }
-                if (doughnutChart2) {
-                    doughnutChart2.destroy();
-                }
-                if (doughnutChart3) {
-                    doughnutChart3.destroy();
-                }
+            // Convert timestamps to Unix timestamps
+            const totalSales = <?= json_encode(array_column($transactions, 'total_sales')) ?>;
 
-                const doughnutCanvas = document.getElementById('doughnutChart');            
+            // Calculate the timestamps for the next day and the predicted day
+            const latestTimestamp = '<?= $latestTimestamp ?>';
+            const nextDayTimestamp = new Date('<?= date('Y-m-d', $nextDayTimestamp) ?>');
+            nextDayTimestamp.setDate(nextDayTimestamp.getDate() + days);
+
+            const totalSalesSum = <?= $totalSalesSum ?>;
+            const totalTransactionCountSum = <?= $totalTransactionCountSum ?>;
+
+            // Define JavaScript variables with the values of totalSalesSum, averageSalesIncreasePerDay,
+            // totalTransactionCountSum, and averageTransactionCountIncreasePerDay
+            const averageSalesIncreasePerDay = <?= $averageSalesIncreasePerDay ?>;
+            const averageTransactionCountIncreasePerDay = <?= $averageTransactionCountIncreasePerDay ?>;
+
+            // Calculate historical averages based on the whole dataset for paid transaction count and total sales
+            const totalTransactionCountSumPerYear = <?= $totalTransactionCountSumPerYear ?>;
+            const averageTransactionCountIncreasePerYear = <?= $averageTransactionCountIncreasePerYear ?>;
+
+            const totalSalesSumPerYear = <?= $totalSalesSumPerYear ?>;
+            const averageSalesIncreasePerYear = <?= $averageSalesIncreasePerYear ?>;
+
+            const nextYearTimestamp = new Date();
+            nextYearTimestamp.setFullYear(nextYearTimestamp.getFullYear() + years);
+
+            const slopeForCountPerYear = <?= $slopeForCount ?>;
+            const interceptForCountPerYear = <?= $interceptForCount ?>;
+
+            const slopeForSalesPerYear = <?= $slopeForSales ?>;
+            const interceptForSalesPerYear = <?= $interceptForSales ?>;
+
+            const predictedTransactionCountPerYear = Math.round(interceptForCountPerYear + slopeForCountPerYear * nextDayTimestamp.getTime() / 1000);
+            const predictedTotalSalesPerYear = Math.round(interceptForSalesPerYear + slopeForSalesPerYear * nextDayTimestamp.getTime() / 1000);
+
+            console.log(transactionCounts[transactionCounts.length - 4])
+
+            // Calculate predictions for total sum of paid transaction count and total paid sales per year
+            const predictedNextTotalTransactionCountPerYear = Math.round(totalTransactionCountSumPerYear + averageTransactionCountIncreasePerYear * years);
+            const predictedNextTotalSalesPerYear = Math.round(totalSalesSumPerYear + averageSalesIncreasePerYear * years);
+
+            // Calculate the average of the predicted total sum of paid transaction count and total paid sales per year
+            const averagePredictedTotalTransactionCountPerYear = Math.round(predictedNextTotalTransactionCountPerYear / years);
+            const averagePredictedTotalSalesPerYear = Math.round(predictedNextTotalSalesPerYear / years);
+
+                    const doughnutCanvas = document.getElementById('doughnutChart');            
         // Create the doughnut chart
                     const doughnutChart = new Chart(doughnutCanvas, {
                         type: 'doughnut',
@@ -329,68 +345,7 @@ use yii\web\View;
                         }
                     });
 
-
-            }
-
-        document.getElementById('prediction-form').addEventListener('submit', function(event) {
-            event.preventDefault();
-
-            updateCharts();
-
-            const years = parseFloat(document.getElementById('years').value);
-            const days = Math.round(years * 365);
-            
-            const transactionCounts = <?= json_encode(array_column($transactions, 'transaction_count')) ?>;
-
-            // Convert timestamps to Unix timestamps
-            const totalSales = <?= json_encode(array_column($transactions, 'total_sales')) ?>;
-
-            // Calculate the timestamps for the next day and the predicted day
-            const latestTimestamp = '<?= $latestTimestamp ?>';
-            const nextDayTimestamp = new Date('<?= date('Y-m-d', $nextDayTimestamp) ?>');
-            nextDayTimestamp.setDate(nextDayTimestamp.getDate() + days);
-
-            updateCharts();
-
-
-            const totalSalesSum = <?= $totalSalesSum ?>;
-            const totalTransactionCountSum = <?= $totalTransactionCountSum ?>;
-
-            // Define JavaScript variables with the values of totalSalesSum, averageSalesIncreasePerDay,
-            // totalTransactionCountSum, and averageTransactionCountIncreasePerDay
-            const averageSalesIncreasePerDay = <?= $averageSalesIncreasePerDay ?>;
-            const averageTransactionCountIncreasePerDay = <?= $averageTransactionCountIncreasePerDay ?>;
-
-            // Calculate historical averages based on the whole dataset for paid transaction count and total sales
-            const totalTransactionCountSumPerYear = <?= $totalTransactionCountSumPerYear ?>;
-            const averageTransactionCountIncreasePerYear = <?= $averageTransactionCountIncreasePerYear ?>;
-
-            const totalSalesSumPerYear = <?= $totalSalesSumPerYear ?>;
-            const averageSalesIncreasePerYear = <?= $averageSalesIncreasePerYear ?>;
-
-            const nextYearTimestamp = new Date();
-            nextYearTimestamp.setFullYear(nextYearTimestamp.getFullYear() + years);
-
-            const slopeForCountPerYear = <?= $slopeForCount ?>;
-            const interceptForCountPerYear = <?= $interceptForCount ?>;
-
-            const slopeForSalesPerYear = <?= $slopeForSales ?>;
-            const interceptForSalesPerYear = <?= $interceptForSales ?>;
-
-            const predictedTransactionCountPerYear = Math.round(interceptForCountPerYear + slopeForCountPerYear * nextDayTimestamp.getTime() / 1000);
-            const predictedTotalSalesPerYear = Math.round(interceptForSalesPerYear + slopeForSalesPerYear * nextDayTimestamp.getTime() / 1000);
-
-            console.log(transactionCounts[transactionCounts.length - 4])
-
-            // Calculate predictions for total sum of paid transaction count and total paid sales per year
-            const predictedNextTotalTransactionCountPerYear = Math.round(totalTransactionCountSumPerYear + averageTransactionCountIncreasePerYear * years);
-            const predictedNextTotalSalesPerYear = Math.round(totalSalesSumPerYear + averageSalesIncreasePerYear * years);
-
-            // Calculate the average of the predicted total sum of paid transaction count and total paid sales per year
-            const averagePredictedTotalTransactionCountPerYear = Math.round(predictedNextTotalTransactionCountPerYear / years);
-            const averagePredictedTotalSalesPerYear = Math.round(predictedNextTotalSalesPerYear / years);
-            // Function to add commas every three numbers
-            function addCommas(number) {
+                    function addCommas(number) {
                 return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
             }
 
@@ -421,7 +376,7 @@ use yii\web\View;
             (${averagePredictedTotalSalesPerYear >= averageSalesIncreasePerYear ? 'Increased' : 'Decreased'})
         </span>
     </p>
-`;
+    `;
         });
     </script>
 
