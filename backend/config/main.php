@@ -26,6 +26,9 @@ return [
                 ],
         'predict' => [
                     'class' => 'app\modules\predict\Module',
+        ], 
+        'std' => [
+                    'class' => 'app\modules\std\Module',
                 ],
     ],
     'components' => [

@@ -32,11 +32,6 @@ $this->title = '';
         top: 80px;
         right: 50px;
         text-align: center;
-        width: 50%; /* Set to 50% width to make them appear beside each other */
-        box-sizing: border-box; /* Include padding and border in the width */
-        padding: 15px; /* Add padding to create spacing between elements */
-        display: inline-block; 
-        /* Display elements inline */
         width: 30%;
         display: inline-block;
     }
@@ -149,7 +144,7 @@ $this->title = '';
         width: 30%;
         height: 7.875rem;
         border-radius: .635rem;
-        background: #11A34C;
+        background: #7209b7;
         color: #FFF;
         font-family: Poppins;
         font-size: 1rem;
@@ -537,7 +532,7 @@ $salesData = $query->select(['division_name', 'transacton_date', 'SUM(amount) as
     // ->where(['between', 'transaction_date', $fromDate, $toDate])
     // ->where(['between', 'transacton_date', '2023-06-10', '2023-06-14'])
     ->where([
-        'division_name' => 'National Metrology Department',
+        'division_name' => 'Standard and Testing Division',
         'transaction_status' => ['Pending','Paid']
     ])
     ->groupBy(['division_name', 'transacton_date'])
@@ -582,7 +577,7 @@ $transactionData = $query->select(['division_name', 'transacton_date', 'COUNT(*)
     ->from('operational_report')
     // ->where(['between', 'transaction_date', $fromDate, $toDate])
     ->where([
-        'division_name' => 'National Metrology Department',
+        'division_name' => 'Standard and Testing Division',
         'transaction_status' => ['Pending','Paid']
     ])
     ->groupBy(['division_name', 'transacton_date'])
@@ -626,7 +621,7 @@ $addressData = $query->select(['address', 'COUNT(*) as customer_count'])
     ->from('operational_report')
     // ->where(['between', 'transaction_date', $fromDate, $toDate])
     ->where([
-        'division_name' => 'National Metrology Department',
+        'division_name' => 'Standard and Testing Division',
     ])
     ->groupBy(['address'])
     ->orderBy(['customer_count' => SORT_DESC])
@@ -665,7 +660,7 @@ $customerTypeData = $query->select(['customer_type', 'COUNT(*) as customer_count
     ->from('operational_report')
     // ->where(['between', 'transaction_date', $fromDate, $toDate])
     ->where([
-        'division_name' => 'National Metrology Department',
+        'division_name' => 'Standard and Testing Division',
         'transaction_status' => ['Pending','Paid']
     ])
     ->groupBy(['customer_type'])
@@ -684,7 +679,7 @@ $transactionTypeData = $query->select(['transaction_type', 'COUNT(*) as customer
     ->from('operational_report')
     // ->where(['between', 'transaction_date', $fromDate, $toDate])
     ->where([
-        'division_name' => 'National Metrology Department',
+        'division_name' => 'Standard and Testing Division',
         'transaction_status' => ['Pending','Paid']
     ])
     ->groupBy(['transaction_type'])
@@ -702,7 +697,7 @@ $transactionStatusData = $query->select(['transaction_status', 'COUNT(*) as cust
     ->from('operational_report')
     // ->where(['between', 'transaction_date', $fromDate, $toDate])
     ->where([
-        'division_name' => 'National Metrology Department',
+        'division_name' => 'Standard and Testing Division',
     ])
     ->groupBy(['transaction_status'])
     ->orderBy(['customer_count' => SORT_DESC])
@@ -722,7 +717,7 @@ $PaymentMethodData = $query->select(['payment_method', 'COUNT(*) as customer_cou
     ->where(['payment_method' => ['Check', 'Over the counter', 'Online Payment']])
     // ->where(['between', 'transaction_date', $fromDate, $toDate])
     ->where([
-        'division_name' => 'National Metrology Department',
+        'division_name' => 'Standard and Testing Division',
         'transaction_status' => 'Paid'
     ])
     ->groupBy(['payment_method'])
@@ -776,8 +771,8 @@ if ($saleaverage >= 1000 && $saleaverage <= 999999) {
 
 //setting default colors for each department
 $divisionColors = [
-    'National Metrology Department' => [
-        'backgroundColor' => '#06d6a0',
+    'Standard and Testing Division' => [
+        'backgroundColor' => '#7209b7',
         'borderWidth' => 2,
     ],
 ];
@@ -806,7 +801,7 @@ $todaymettrans = (new Query())
 ->select('COUNT(*)')
 ->from('operational_report')
 ->where([
-    'division_name' => 'National Metrology Department',
+    'division_name' => 'Standard and Testing Division',
     'transacton_date' => date('Y-m-d') // Assuming you want the number of transactions for today
 ])
 ->scalar();
@@ -815,7 +810,7 @@ $lastmettrans= (new Query())
 ->select('COUNT(*)')
 ->from('operational_report')
 ->where([
-    'division_name' => 'National Metrology Department',
+    'division_name' => 'Standard and Testing Division',
     'transacton_date' => date('Y-m-d', strtotime('-1 day'))  
 ])
 ->scalar();
@@ -845,7 +840,7 @@ $SalesToday = (new Query())
     ->select(['SUM(amount)'])
     ->from('operational_report')
     ->where([
-        'division_name' => 'National Metrology Department',
+        'division_name' => 'Standard and Testing Division',
         'transacton_date' => date('Y-m-d') // Using the current date in 'Y-m-d' format
     ])
     ->scalar();
@@ -854,7 +849,7 @@ $SalesYesterday = (new Query())
     ->select(['SUM(amount)'])
     ->from('operational_report')
     ->where([
-        'division_name' => 'National Metrology Department',
+        'division_name' => 'Standard and Testing Division',
         'transacton_date' => date('Y-m-d', strtotime('-1 day'))
     ])
     ->scalar();
@@ -894,7 +889,7 @@ $transactionPerday = (new Query())
     ->select('transacton_date, COUNT(*) as transaction_count')
     ->from('operational_report')
     ->where([
-        'division_name' => 'National Metrology Department',
+        'division_name' => 'Standard and Testing Division', 
     ])
     ->groupBy('transacton_date');
 
