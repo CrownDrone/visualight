@@ -136,7 +136,7 @@ $this->title = '';
         width: 45%;
         height: 7.875rem;
         border-radius: .635rem;
-        background: #11A34C;
+        background: #0073C7;
         color: #FFF;
         font-family: Poppins;
         font-size: 1rem;
@@ -265,25 +265,13 @@ $this->title = '';
         text-align: right;
     }
 
-   
+
     /* graph div */
     .graph {
         width: 100%;
         text-align: center;
         display: wrap;
     }
-    #container {
-    height: 500px;
-    min-width: 310px;
-    max-width: 800px;
-    margin: 0 auto;
-}
-
-.loading {
-    margin-top: 10em;
-    text-align: center;
-    color: gray;
-}
 
 
     .chart-container {
@@ -299,8 +287,8 @@ $this->title = '';
         overflow-y: hidden;
         white-space: nowrap;
     }
-    .containerBody
-    {
+
+    .containerBody {
         height: 100%;
         width: 200%;
     }
@@ -645,7 +633,7 @@ foreach ($addressData as $customeraddress) {
     $province[] = $customeraddress['address'];
     $customersCounts[] = $customeraddress['customer_count'];
 
-    if(!in_array($province, $provinces['labels'])) {
+    if (!in_array($province, $provinces['labels'])) {
         $provinces['labels'][] = $province;
     }
     $provinceIndex = array_search($province, array_column($provinces['datasets'], 'label'));
@@ -985,23 +973,22 @@ if ($todaySandTtrans == 0) {
     <div class="chart-container">
         <p id="reportTitle"> Total Transaction and Sales</p>
         <div class="containerBody">
-        <canvas id="combinedChart"></canvas>
-    </div>
+            <canvas id="combinedChart"></canvas>
+        </div>
     </div>
 
     <div class="chart-container">
         <p id="reportTitle"> Transaction Per Division</p>
-    <!-- <div class="containerBody"> -->
+        <!-- <div class="containerBody"> -->
         <canvas id="transactionChart"></canvas>
-    <!-- </div> -->
+        <!-- </div> -->
     </div>
 
 
     <div class="chart-container">
         <p id="reportTitle"> Sales per Division</p>
         <div class="containerBody">
-        <canvas id="salesChart"></canvas>
-        
+            <canvas id="salesChart"></canvas>
         </div>
     </div>
 
@@ -1023,7 +1010,7 @@ if ($todaySandTtrans == 0) {
         </div>
     </div>
 
- <!-- <div class="chart-container" id="avgSales">
+    <!-- <div class="chart-container" id="avgSales">
         <div class="aveChart" style="display: grid; grid-template-columns: repeat(2,1fr); grid-gap:.1rem; grid-template-rows: auto auto;">
         <div class="chart"style="width: 90%; ">
         <p id="reportTitle">Average sales per day</p>
@@ -1135,12 +1122,12 @@ if ($todaySandTtrans == 0) {
                     y: {
                         beginAtZero: true,
                         ticks: {
-                            display:false 
+                            display: false
                         },
                         grid: {
                             display: false,
                             drawOnChartArea: false,
-                            drawTicks:false,
+                            drawTicks: false,
                         }
                     },
                     x: {
@@ -1165,7 +1152,7 @@ if ($todaySandTtrans == 0) {
                         grid: {
                             display: false,
                             drawOnChartArea: false,
-                            drawTicks:false,
+                            drawTicks: false,
                         }
                     },
                 },
@@ -1223,8 +1210,8 @@ if ($todaySandTtrans == 0) {
                         grid: {
                             drawOnChartArea: false
                         },
-                        min:0,
-                        max:6,
+                        min: 0,
+                        max: 6,
                     },
                     x: {
                         grid: {
@@ -1236,25 +1223,22 @@ if ($todaySandTtrans == 0) {
             }
         });
 
-        function scroller(scroll,chart)
-        {
+        function scroller(scroll, chart) {
             console.log(scroll)
 
-            if(scroll.deltaY>0)
-            {
-                transactionChart.option.scales.y.min+=1;
-                transactionChart.option.scales.y.max+=1;
+            if (scroll.deltaY > 0) {
+                transactionChart.option.scales.y.min += 1;
+                transactionChart.option.scales.y.max += 1;
             }
             transactionChart.update();
         }
         //wheel is for the gilid scroll
-        transactionChart.canvas.addEventListener('wheel',(e)=>
-        {
+        transactionChart.canvas.addEventListener('wheel', (e) => {
             scroller(e, transactionChart)
         });
 
-         //vertical bar graph
-         const salesCtx = document.getElementById('salesChart').getContext('2d');
+        //vertical bar graph
+        const salesCtx = document.getElementById('salesChart').getContext('2d');
         const salesChart = new Chart(salesCtx, {
             type: 'bar',
             data: SalesperDiv,
@@ -1271,8 +1255,8 @@ if ($todaySandTtrans == 0) {
                     },
 
                     x: {
-                        min:0,
-                        max:7,
+                        min: 0,
+                        max: 7,
                         grid: {
                             drawOnChartArea: false
                         }
@@ -1284,10 +1268,9 @@ if ($todaySandTtrans == 0) {
         });
 
         // for scrolling
-        const containerBody= document.querySelector('.containerBody');
-        if(salesChart.data.labels.length>7)
-        {
-            containerBody.style.width='200%';
+        const containerBody = document.querySelector('.containerBody');
+        if (salesChart.data.labels.length > 7) {
+            containerBody.style.width = '200%';
         }
 
 
@@ -1396,8 +1379,6 @@ if ($todaySandTtrans == 0) {
 
 
     <!-- All about customer graphs -->
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-geo"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <div class="customers_data">
         <div class="date_filter" style="text-align: left; padding-left: 8rem; padding-top: 0rem; padding-bottom: 2rem;">
             <div class="containers">
@@ -1409,62 +1390,468 @@ if ($todaySandTtrans == 0) {
                         <option value="doughnut">Doughnut</option>
                         <option value="line">Line</option>
                         <option value="pie">Pie</option>
-                        <option value="scatter">Map</option>
                         <!-- <option value="horizontal_bar">Horizontal chart</option> -->
                     </select>
                 </div>
             </div>
         </div>
 
-            <div class="chart-container" style="max-width: 100%; height: 500px; overflow-x: scroll; text-align: center;">
-                <p id="reportTitle">Total Customers per Province</p>
-                <div class="containerBody">
-                    <canvas id="Provinces"></canvas>
-                </div>
+        <div class="chart-container" style="max-width: 100%; height: 500px; overflow-x: scroll; text-align: center;">
+            <p id="reportTitle">Total Customers per Province</p>
+            <div class="containerBody">
+                <canvas id="Provinces"></canvas>
             </div>
-            </div>
-
+        </div>
     </div>
 
+</div>
 
-    <!-- scriptfor customers graph -->
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Get references to chart containers and the dropdown
-            const provincesChartContainer = document.getElementById('Provinces');
-            const chartTypeDropdown = document.getElementById('chart_type');
-            const provinces = <?php echo json_encode($provinces); ?>;
-            //     function generateRandomColor() {
-            //   const randomColor = `rgb(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)})`;
-            //   return randomColor;
-            // }
-    
+<!-- scriptfor customers graph -->
 
-            // const randomColor = generateRandomColor();
-            // Initialize charts (empty)
-            let provincesChart = null;
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get references to chart containers and the dropdown
+        const provincesChartContainer = document.getElementById('Provinces');
+        const chartTypeDropdown = document.getElementById('chart_type');
+        const provinces = <?php echo json_encode($provinces); ?>;
+        //     function generateRandomColor() {
+        //   const randomColor = `rgb(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)})`;
+        //   return randomColor;
+        // }
 
-            // Update charts based on selected chart type
-            function updateCharts() {
-                const selectedChartType = chartTypeDropdown.value;
+        // const randomColor = generateRandomColor();
+        // Initialize charts (empty)
+        let provincesChart = null;
 
-                if (provincesChart) {
-                    provincesChart.destroy();
+        // Update charts based on selected chart type
+        function updateCharts() {
+            const selectedChartType = chartTypeDropdown.value;
+
+            if (provincesChart) {
+                provincesChart.destroy();
+            }
+
+
+
+            provincesChart = new Chart(provincesChartContainer, {
+                type: selectedChartType,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                drawOnChartArea: false
+                            }
+                        },
+                        x: {
+                            min: 0,
+                            max: 6,
+                            grid: {
+                                display: false,
+                                drawOnChartArea: false
+                            }
+                        },
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                },
+                data: {
+                    labels: <?php echo json_encode($province); ?>,
+                    datasets: [{
+                        data: <?php echo json_encode($customersCounts); ?>,
+                        backgroundColor: generateRandomColors(<?php echo count($customersCounts); ?>, 1),
+                        borderColor: 'rgba(0, 0, 0, 0.2)',
+                        borderWidth: 1
+                    }]
+                },
+            });
+
+            function generateRandomColors(count, alpha) {
+                const colors = [];
+                for (let i = 0; i < count; i++) {
+                    colors.push(generateRandomColor(alpha));
                 }
+                return colors;
+            }
 
-                if (selectedChartType === 'scatter')
-                {
-                    
-                }
+            function generateRandomColor(alpha) {
+                const r = Math.floor(Math.random() * 256);
+                const g = Math.floor(Math.random() * 256);
+                const b = Math.floor(Math.random() * 256);
+                return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+            }
+        }
+        // // Calculate and set the width of the chart container for scrolling
+        // const chartContainer = document.getElementById('.containerBody');
+        // if (Provinces.data.labels.length > 7) {
+        //     containerBody.style.width = '200%'; // Adjust as needed
+        // }
 
-                else{
+        // Listen for changes in the dropdown and update charts
+        chartTypeDropdown.addEventListener('change', updateCharts);
 
-                provincesChart = new Chart(provincesChartContainer, {
+        updateCharts();
+    });
+</script>
+
+<!-- All about customer graphs -->
+<script src="path/to/Chart.min.js"></script>
+<div class="customers_data">
+    <div class="date_filter" style="text-align: left; padding-left: 8rem; padding-top: 0rem; padding-bottom: 2rem;">
+        <div class="containers">
+            <div class="date_dropdown">
+                <label for="chart_type2" class="chart_type_label2">
+                    <strong>Chart Filter</strong></label>
+                <select name="chart_type2" id="chart_type2" class="dropdown-content">
+                    <option value="doughnut">Doughnut</option>
+                    <option value="pie">Pie</option>
+                    <option value="bar">Bar</option>
+                    <option value="line">Line</option>
+
+                    <!-- <option value="horizontal_bar">Horizontal chart</option> -->
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="graph2">
+        <div class="chart-container2">
+            <p id="reportTitle">Transaction Status</p>
+            <canvas id="transactionStatus"></canvas>
+        </div>
+        <div class="chart-container2">
+            <p id="reportTitle">Payment Method</p>
+            <canvas id="paymendtMethod"></canvas>
+        </div>
+    </div>
+    <div class="graph2">
+        <div class="chart-container2">
+            <p id="reportTitle">Type of Transaction</p>
+            <canvas id="transactionType"></canvas>
+        </div>
+
+        <div class="chart-container2">
+            <p id="reportTitle">Type of Customers</p>
+            <canvas id="customerType"></canvas>
+        </div>
+    </div>
+</div>
+
+
+<!-- scriptfor customers graph -->
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get references to chart containers and the dropdown
+        const transactionStatusChartContainer = document.getElementById('transactionStatus');
+        const paymendtMethodChartContainer = document.getElementById('paymendtMethod');
+        const transactionTypeChartContainer = document.getElementById('transactionType');
+        const customerTypeChartContainer = document.getElementById('customerType');
+        const chartTypeDropdown = document.getElementById('chart_type2');
+
+        //     function generateRandomColor() {
+        //   const randomColor = `rgb(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)})`;
+        //   return randomColor;
+        // }
+
+        // const randomColor = generateRandomColor();
+        // Initialize charts (empty)
+        let transactionStatusChart = null;
+        let paymendtMethodChart = null;
+        let transactionTypeChart = null;
+        let customerTypeChart = null;
+
+        // Update charts based on selected chart type
+        function updateCharts() {
+            const selectedChartType = chartTypeDropdown.value;
+
+            // Destroy existing charts if they exist
+            if (transactionStatusChart) {
+                transactionStatusChart.destroy();
+            }
+            if (paymendtMethodChart) {
+                paymendtMethodChart.destroy();
+            }
+            if (transactionTypeChart) {
+                transactionTypeChart.destroy();
+            }
+            if (customerTypeChart) {
+                customerTypeChart.destroy();
+            }
+
+            const doughnutOptions = {
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top'
+
+                    },
+                    datalabels: {
+                        formatter: (value, context) => {
+                            // Display the label based on the selected data (e.g., transaction type or payment method)
+                            return context.chart.data.labels[context.dataIndex];
+                        }
+                    }
+                },
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '70%', // Adjust the size of the doughnut hole
+
+            };
+
+            if (selectedChartType === 'doughnut') {
+                // For doughnut and pie charts, use the custom options
+                transactionStatusChart = new Chart(transactionStatusChartContainer, {
+                    type: selectedChartType,
+                    options: doughnutOptions,
+                    data: {
+                        labels: <?php echo json_encode($transactionStatus); ?>,
+                        datasets: [{
+                            data: <?php echo json_encode($transactionStatusDatacounts); ?>,
+                            backgroundColor: ['rgba(0, 215, 132, 0.2)',
+                                'rgba(229, 247, 48, 0.2)',
+                                'rgba(241, 37, 150, 0.2)',
+                            ],
+                            borderColor: ['rgba(0, 215, 132, 0.93)',
+                                'rgba(229, 247, 48, 0.8)',
+                                'rgba(241, 37, 150, 0.8)',
+                            ],
+                            borderWidth: 2
+                        }],
+                    }
+                });
+
+                paymendtMethodChart = new Chart(paymendtMethodChartContainer, {
+                    type: selectedChartType,
+                    options: doughnutOptions,
+                    data: {
+                        labels: <?php echo json_encode($PaymentMethod); ?>,
+                        datasets: [{
+                            data: <?php echo json_encode($PaymentMethodcounts); ?>,
+                            backgroundColor: ['rgba(0, 21, 215, 0.2)',
+                                'rgba(0, 215, 132, 0.2)',
+                                'rgba(118, 0, 186, 0.2)',
+                            ],
+                            borderColor: ['rgba(0, 21, 215, 0.93)',
+                                'rgba(0, 215, 132, 1)',
+                                'rgba(118, 0, 186, 0.93)',
+                            ],
+                            borderWidth: 2
+                        }],
+                    }
+                });
+                transactionTypeChart = new Chart(transactionTypeChartContainer, {
+                    type: selectedChartType,
+                    options: doughnutOptions,
+                    data: {
+                        labels: <?php echo json_encode($transactionType); ?>,
+                        datasets: [{
+                            data: <?php echo json_encode($transactionTypecounts); ?>,
+                            backgroundColor: ['rgba(186, 0, 0, 0.2)',
+                                'rgba(250, 154, 37, 0.2)',
+                                'rgba(37, 202, 247, 0.2)',
+                            ],
+                            borderColor: ['rgba(186, 0, 0, 0.93)',
+                                'rgba(250, 154, 37, 0.81)',
+                                'rgba(37, 202, 247, 0.81)',
+                            ],
+                            borderWidth: 2
+                        }],
+                    }
+                });
+
+                customerTypeChart = new Chart(customerTypeChartContainer, {
+                    type: selectedChartType,
+                    options: doughnutOptions,
+                    data: {
+                        labels: <?php echo json_encode($customerType); ?>,
+                        datasets: [{
+                            data: <?php echo json_encode($customerscounts); ?>,
+                            backgroundColor: ['rgba(247, 37, 149, 0.2)',
+                                'rgba(166, 37, 247, 0.2)',
+                                'rgba(255, 155, 22, 0.2)',
+                                'rgba(255, 213, 22, 0.2)',
+                                'rgba(49, 255, 22, 0.2)',
+                                'rgba(73, 0, 242, 0.2)',
+                                'rgba(0, 220, 242, 0.2)'
+
+                            ],
+                            borderColor: ['rgba(247, 37, 149, 0.81)',
+                                'rgba(166, 37, 247, 0.83)',
+                                'rgba(255, 155, 22, 0.83)',
+                                'rgba(255, 213, 22, 0.83)',
+                                'rgba(49, 255, 22, 0.83)',
+                                'rgba(73, 0, 242, 0.83)',
+                                'rgba(0, 220, 242, 0.83)'
+                            ],
+                            borderWidth: 2
+                        }],
+                    }
+                });
+            } else if (selectedChartType === 'pie') {
+                transactionStatusChart = new Chart(transactionStatusChartContainer, {
                     type: selectedChartType,
                     options: {
+                        plugins: {
+                            legend: {
+                                display: true,
+                                position: 'top'
+
+                            },
+                            datalabels: {
+                                formatter: (value, context) => {
+                                    // Display the label based on the selected data (e.g., transaction type or payment method)
+                                    return context.chart.data.labels[context.dataIndex];
+                                }
+                            }
+                        },
                         responsive: true,
                         maintainAspectRatio: false,
+                    },
+                    data: {
+                        labels: <?php echo json_encode($transactionStatus); ?>,
+                        datasets: [{
+                            data: <?php echo json_encode($transactionStatusDatacounts); ?>,
+                            backgroundColor: ['rgba(0, 215, 132, 0.2)',
+                                'rgba(229, 247, 48, 0.2)',
+                                'rgba(241, 37, 150, 0.2)',
+                            ],
+                            borderColor: ['rgba(0, 215, 132, 0.93)',
+                                'rgba(229, 247, 48, 0.8)',
+                                'rgba(241, 37, 150, 0.8)',
+                            ],
+                            borderWidth: 2
+                        }],
+                    }
+                });
+
+                paymendtMethodChart = new Chart(paymendtMethodChartContainer, {
+                    type: selectedChartType,
+                    options: {
+                        plugins: {
+                            legend: {
+                                display: true,
+                                position: 'top'
+
+                            },
+                            datalabels: {
+                                formatter: (value, context) => {
+                                    // Display the label based on the selected data (e.g., transaction type or payment method)
+                                    return context.chart.data.labels[context.dataIndex];
+                                }
+                            }
+                        },
+                        responsive: true,
+                        maintainAspectRatio: false,
+                    },
+                    data: {
+                        labels: <?php echo json_encode($PaymentMethod); ?>,
+                        datasets: [{
+                            data: <?php echo json_encode($PaymentMethodcounts); ?>,
+                            backgroundColor: ['rgba(0, 21, 215, 0.2)',
+                                'rgba(0, 215, 132, 0.2)',
+                                'rgba(118, 0, 186, 0.2)',
+                            ],
+                            borderColor: ['rgba(0, 21, 215, 0.93)',
+                                'rgba(0, 215, 132, 1)',
+                                'rgba(118, 0, 186, 0.93)',
+                            ],
+                            borderWidth: 2
+                        }],
+                    }
+                });
+                transactionTypeChart = new Chart(transactionTypeChartContainer, {
+                    type: selectedChartType,
+                    options: {
+                        plugins: {
+                            legend: {
+                                display: true,
+                                position: 'top'
+
+                            },
+                            datalabels: {
+                                formatter: (value, context) => {
+                                    // Display the label based on the selected data (e.g., transaction type or payment method)
+                                    return context.chart.data.labels[context.dataIndex];
+                                }
+                            }
+                        },
+                        responsive: true,
+                        maintainAspectRatio: false,
+                    },
+                    data: {
+                        labels: <?php echo json_encode($transactionType); ?>,
+                        datasets: [{
+                            data: <?php echo json_encode($transactionTypecounts); ?>,
+                            backgroundColor: ['rgba(186, 0, 0, 0.2)',
+                                'rgba(250, 154, 37, 0.2)',
+                                'rgba(37, 202, 247, 0.2)',
+                            ],
+                            borderColor: ['rgba(186, 0, 0, 0.93)',
+                                'rgba(250, 154, 37, 0.81)',
+                                'rgba(37, 202, 247, 0.81)',
+                            ],
+                            borderWidth: 2
+                        }],
+                    }
+                });
+
+                customerTypeChart = new Chart(customerTypeChartContainer, {
+                    type: selectedChartType,
+                    options: {
+                        plugins: {
+                            legend: {
+                                display: true,
+                                position: 'top'
+
+                            },
+                            datalabels: {
+                                formatter: (value, context) => {
+                                    // Display the label based on the selected data (e.g., transaction type or payment method)
+                                    return context.chart.data.labels[context.dataIndex];
+                                }
+                            }
+                        },
+                        responsive: true,
+                        maintainAspectRatio: false,
+                    },
+                    data: {
+                        labels: <?php echo json_encode($customerType); ?>,
+                        datasets: [{
+                            data: <?php echo json_encode($customerscounts); ?>,
+                            backgroundColor: ['rgba(247, 37, 149, 0.2)',
+                                'rgba(166, 37, 247, 0.2)',
+                                'rgba(255, 155, 22, 0.2)',
+                                'rgba(255, 213, 22, 0.2)',
+                                'rgba(49, 255, 22, 0.2)',
+                                'rgba(73, 0, 242, 0.2)',
+                                'rgba(0, 220, 242, 0.2)'
+
+                            ],
+                            borderColor: ['rgba(247, 37, 149, 0.81)',
+                                'rgba(166, 37, 247, 0.83)',
+                                'rgba(255, 155, 22, 0.83)',
+                                'rgba(255, 213, 22, 0.83)',
+                                'rgba(49, 255, 22, 0.83)',
+                                'rgba(73, 0, 242, 0.83)',
+                                'rgba(0, 220, 242, 0.83)'
+                            ],
+                            borderWidth: 2
+                        }],
+                    }
+                });
+            } else {
+
+                // Create new charts based on selected chart type
+                transactionStatusChart = new Chart(transactionStatusChartContainer, {
+                    type: selectedChartType,
+                    options: {
                         scales: {
                             y: {
                                 beginAtZero: true,
@@ -1473,1492 +1860,274 @@ if ($todaySandTtrans == 0) {
                                 }
                             },
                             x: {
-                                min:0,
-                                max:6,
                                 grid: {
                                     display: false,
                                     drawOnChartArea: false
                                 }
+
                             },
-                        },
-                        plugins:
-                        {
-                            legend:
-                            {
-                                display: false
-                            }
+
                         }
-                     },
+                    },
+
                     data: {
-                        labels: <?php echo json_encode($province); ?>,
+                        labels: <?php echo json_encode($transactionStatus); ?>,
                         datasets: [{
-                            data: <?php echo json_encode($customersCounts); ?>,
-                            backgroundColor: generateRandomColors(<?php echo count($customersCounts); ?>, 1),
-                            borderColor: 'rgba(0, 0, 0, 0.2)',
-                            borderWidth: 1
+                            data: <?php echo json_encode($transactionStatusDatacounts); ?>,
+                            backgroundColor: ['rgba(0, 215, 132, 0.2)',
+                                'rgba(229, 247, 48, 0.2)',
+                                'rgba(241, 37, 150, 0.2)',
+                            ],
+                            borderColor: ['rgba(0, 215, 132, 0.93)',
+                                'rgba(229, 247, 48, 0.8)',
+                                'rgba(241, 37, 150, 0.8)',
+                            ],
+                            borderWidth: 2
+                        }],
+                    }
+                });
+
+
+                paymendtMethodChart = new Chart(paymendtMethodChartContainer, {
+                    type: selectedChartType,
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                grid: {
+                                    drawOnChartArea: false
+                                }
+                            },
+                            x: {
+                                grid: {
+                                    display: false,
+                                    drawOnChartArea: false
+                                }
+
+                            },
+                        }
+
+                    },
+                    data: {
+                        labels: <?php echo json_encode($PaymentMethod); ?>,
+                        datasets: [{
+                            data: <?php echo json_encode($PaymentMethodcounts); ?>,
+                            backgroundColor: ['rgba(0, 21, 215, 0.2)',
+                                'rgba(0, 215, 132, 0.2)',
+                                'rgba(118, 0, 186, 0.2)',
+                            ],
+                            borderColor: ['rgba(0, 21, 215, 0.93)',
+                                'rgba(0, 215, 132, 1)',
+                                'rgba(118, 0, 186, 0.93)',
+                            ],
+                            borderWidth: 2
                         }]
                     },
-                });}
-
-                function generateRandomColors(count, alpha) {
-                    const colors = [];
-                    for (let i = 0; i < count; i++) {
-                        colors.push(generateRandomColor(alpha));
-                    }
-                    return colors;
-                }
-
-                function generateRandomColor(alpha) {
-                    const r = Math.floor(Math.random() * 256);
-                    const g = Math.floor(Math.random() * 256);
-                    const b = Math.floor(Math.random() * 256);
-                    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
-                }
-            }
-        // // Calculate and set the width of the chart container for scrolling
-        // const chartContainer = document.getElementById('.containerBody');
-        // if (Provinces.data.labels.length > 7) {
-        //     containerBody.style.width = '200%'; // Adjust as needed
-        // }
-
-            // Listen for changes in the dropdown and update charts
-            chartTypeDropdown.addEventListener('change', updateCharts);
-
-            updateCharts();
-        });
-    </script>
-
-    <!-- All about customer graphs -->
-    <script src="path/to/Chart.min.js"></script>
-    <div class="customers_data">
-        <div class="date_filter" style="text-align: left; padding-left: 8rem; padding-top: 0rem; padding-bottom: 2rem;">
-            <div class="containers">
-                <div class="date_dropdown">
-                    <label for="chart_type2" class="chart_type_label2">
-                        <strong>Chart Filter</strong></label>
-                    <select name="chart_type2" id="chart_type2" class="dropdown-content">
-                        <option value="doughnut">Doughnut</option>
-                        <option value="pie">Pie</option>
-                        <option value="bar">Bar</option>
-                        <option value="line">Line</option>
-
-                        <!-- <option value="horizontal_bar">Horizontal chart</option> -->
-                    </select>
-                </div>
-            </div>
-        </div>
-
-        <div class="graph2">
-            <div class="chart-container2">
-                <p id="reportTitle">Transaction Status</p>
-                <canvas id="transactionStatus"></canvas>
-            </div>
-            <div class="chart-container2">
-                <p id="reportTitle">Payment Method</p>
-                <canvas id="paymendtMethod"></canvas>
-            </div>
-        </div>
-        <div class="graph2">
-            <div class="chart-container2">
-                <p id="reportTitle">Type of Transaction</p>
-                <canvas id="transactionType"></canvas>
-            </div>
-
-            <div class="chart-container2">
-                <p id="reportTitle">Type of Customers</p>
-                <canvas id="customerType"></canvas>
-            </div>
-        </div>
-    </div>
+                });
 
 
-    <!-- scriptfor customers graph -->
+                // Create new charts based on selected chart type
+                transactionTypeChart = new Chart(transactionTypeChartContainer, {
+                    type: selectedChartType,
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                grid: {
+                                    drawOnChartArea: false
+                                }
+                            },
+                            x: {
+                                grid: {
+                                    display: false,
+                                    drawOnChartArea: false
+                                }
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Get references to chart containers and the dropdown
-            const transactionStatusChartContainer = document.getElementById('transactionStatus');
-            const paymendtMethodChartContainer = document.getElementById('paymendtMethod');
-            const transactionTypeChartContainer = document.getElementById('transactionType');
-            const customerTypeChartContainer = document.getElementById('customerType');
-            const chartTypeDropdown = document.getElementById('chart_type2');
-
-            //     function generateRandomColor() {
-            //   const randomColor = `rgb(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)})`;
-            //   return randomColor;
-            // }
-
-            // const randomColor = generateRandomColor();
-            // Initialize charts (empty)
-            let transactionStatusChart = null;
-            let paymendtMethodChart = null;
-            let transactionTypeChart = null;
-            let customerTypeChart = null;
-
-            // Update charts based on selected chart type
-            function updateCharts() {
-                const selectedChartType = chartTypeDropdown.value;
-
-                // Destroy existing charts if they exist
-                if (transactionStatusChart) {
-                    transactionStatusChart.destroy();
-                }
-                if (paymendtMethodChart) {
-                    paymendtMethodChart.destroy();
-                }
-                if (transactionTypeChart) {
-                    transactionTypeChart.destroy();
-                }
-                if (customerTypeChart) {
-                    customerTypeChart.destroy();
-                }
-
-                const doughnutOptions = {
-                    plugins: {
-                        legend: {
-                            display: true,
-                            position: 'top'
-
-                        },
-                        datalabels: {
-                            formatter: (value, context) => {
-                                // Display the label based on the selected data (e.g., transaction type or payment method)
-                                return context.chart.data.labels[context.dataIndex];
-                            }
+                            },
                         }
                     },
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    cutout: '70%', // Adjust the size of the doughnut hole
 
-                };
-
-                if (selectedChartType === 'doughnut') {
-                    // For doughnut and pie charts, use the custom options
-                    transactionStatusChart = new Chart(transactionStatusChartContainer, {
-                        type: selectedChartType,
-                        options: doughnutOptions,
-                        data: {
-                            labels: <?php echo json_encode($transactionStatus); ?>,
-                            datasets: [{
-                                data: <?php echo json_encode($transactionStatusDatacounts); ?>,
-                                backgroundColor: ['rgba(0, 215, 132, 0.2)',
-                                    'rgba(229, 247, 48, 0.2)',
-                                    'rgba(241, 37, 150, 0.2)',
-                                ],
-                                borderColor: ['rgba(0, 215, 132, 0.93)',
-                                    'rgba(229, 247, 48, 0.8)',
-                                    'rgba(241, 37, 150, 0.8)',
-                                ],
-                                borderWidth: 2
-                            }],
-                        }
-                    });
-
-                    paymendtMethodChart = new Chart(paymendtMethodChartContainer, {
-                        type: selectedChartType,
-                        options: doughnutOptions,
-                        data: {
-                            labels: <?php echo json_encode($PaymentMethod); ?>,
-                            datasets: [{
-                                data: <?php echo json_encode($PaymentMethodcounts); ?>,
-                                backgroundColor: ['rgba(0, 21, 215, 0.2)',
-                                    'rgba(0, 215, 132, 0.2)',
-                                    'rgba(118, 0, 186, 0.2)',
-                                ],
-                                borderColor: ['rgba(0, 21, 215, 0.93)',
-                                    'rgba(0, 215, 132, 1)',
-                                    'rgba(118, 0, 186, 0.93)',
-                                ],
-                                borderWidth: 2
-                            }],
-                        }
-                    });
-                    transactionTypeChart = new Chart(transactionTypeChartContainer, {
-                        type: selectedChartType,
-                        options: doughnutOptions,
-                        data: {
-                            labels: <?php echo json_encode($transactionType); ?>,
-                            datasets: [{
-                                data: <?php echo json_encode($transactionTypecounts); ?>,
-                                backgroundColor: ['rgba(186, 0, 0, 0.2)',
-                                    'rgba(250, 154, 37, 0.2)',
-                                    'rgba(37, 202, 247, 0.2)',
-                                ],
-                                borderColor: ['rgba(186, 0, 0, 0.93)',
-                                    'rgba(250, 154, 37, 0.81)',
-                                    'rgba(37, 202, 247, 0.81)',
-                                ],
-                                borderWidth: 2
-                            }],
-                        }
-                    });
-
-                    customerTypeChart = new Chart(customerTypeChartContainer, {
-                        type: selectedChartType,
-                        options: doughnutOptions,
-                        data: {
-                            labels: <?php echo json_encode($customerType); ?>,
-                            datasets: [{
-                                data: <?php echo json_encode($customerscounts); ?>,
-                                backgroundColor: ['rgba(247, 37, 149, 0.2)',
-                                    'rgba(166, 37, 247, 0.2)',
-                                    'rgba(255, 155, 22, 0.2)',
-                                    'rgba(255, 213, 22, 0.2)',
-                                    'rgba(49, 255, 22, 0.2)',
-                                    'rgba(73, 0, 242, 0.2)',
-                                    'rgba(0, 220, 242, 0.2)'
-
-                                ],
-                                borderColor: ['rgba(247, 37, 149, 0.81)',
-                                    'rgba(166, 37, 247, 0.83)',
-                                    'rgba(255, 155, 22, 0.83)',
-                                    'rgba(255, 213, 22, 0.83)',
-                                    'rgba(49, 255, 22, 0.83)',
-                                    'rgba(73, 0, 242, 0.83)',
-                                    'rgba(0, 220, 242, 0.83)'
-                                ],
-                                borderWidth: 2
-                            }],
-                        }
-                    });
-                } else if (selectedChartType === 'pie') {
-                    transactionStatusChart = new Chart(transactionStatusChartContainer, {
-                        type: selectedChartType,
-                        options: {
-                            plugins: {
-                                legend: {
-                                    display: true,
-                                    position: 'top'
-
-                                },
-                                datalabels: {
-                                    formatter: (value, context) => {
-                                        // Display the label based on the selected data (e.g., transaction type or payment method)
-                                        return context.chart.data.labels[context.dataIndex];
-                                    }
-                                }
-                            },
-                            responsive: true,
-                            maintainAspectRatio: false,
-                        },
-                        data: {
-                            labels: <?php echo json_encode($transactionStatus); ?>,
-                            datasets: [{
-                                data: <?php echo json_encode($transactionStatusDatacounts); ?>,
-                                backgroundColor: ['rgba(0, 215, 132, 0.2)',
-                                    'rgba(229, 247, 48, 0.2)',
-                                    'rgba(241, 37, 150, 0.2)',
-                                ],
-                                borderColor: ['rgba(0, 215, 132, 0.93)',
-                                    'rgba(229, 247, 48, 0.8)',
-                                    'rgba(241, 37, 150, 0.8)',
-                                ],
-                                borderWidth: 2
-                            }],
-                        }
-                    });
-
-                    paymendtMethodChart = new Chart(paymendtMethodChartContainer, {
-                        type: selectedChartType,
-                        options: {
-                            plugins: {
-                                legend: {
-                                    display: true,
-                                    position: 'top'
-
-                                },
-                                datalabels: {
-                                    formatter: (value, context) => {
-                                        // Display the label based on the selected data (e.g., transaction type or payment method)
-                                        return context.chart.data.labels[context.dataIndex];
-                                    }
-                                }
-                            },
-                            responsive: true,
-                            maintainAspectRatio: false,
-                        },
-                        data: {
-                            labels: <?php echo json_encode($PaymentMethod); ?>,
-                            datasets: [{
-                                data: <?php echo json_encode($PaymentMethodcounts); ?>,
-                                backgroundColor: ['rgba(0, 21, 215, 0.2)',
-                                    'rgba(0, 215, 132, 0.2)',
-                                    'rgba(118, 0, 186, 0.2)',
-                                ],
-                                borderColor: ['rgba(0, 21, 215, 0.93)',
-                                    'rgba(0, 215, 132, 1)',
-                                    'rgba(118, 0, 186, 0.93)',
-                                ],
-                                borderWidth: 2
-                            }],
-                        }
-                    });
-                    transactionTypeChart = new Chart(transactionTypeChartContainer, {
-                        type: selectedChartType,
-                        options: {
-                            plugins: {
-                                legend: {
-                                    display: true,
-                                    position: 'top'
-
-                                },
-                                datalabels: {
-                                    formatter: (value, context) => {
-                                        // Display the label based on the selected data (e.g., transaction type or payment method)
-                                        return context.chart.data.labels[context.dataIndex];
-                                    }
-                                }
-                            },
-                            responsive: true,
-                            maintainAspectRatio: false,
-                        },
-                        data: {
-                            labels: <?php echo json_encode($transactionType); ?>,
-                            datasets: [{
-                                data: <?php echo json_encode($transactionTypecounts); ?>,
-                                backgroundColor: ['rgba(186, 0, 0, 0.2)',
-                                    'rgba(250, 154, 37, 0.2)',
-                                    'rgba(37, 202, 247, 0.2)',
-                                ],
-                                borderColor: ['rgba(186, 0, 0, 0.93)',
-                                    'rgba(250, 154, 37, 0.81)',
-                                    'rgba(37, 202, 247, 0.81)',
-                                ],
-                                borderWidth: 2
-                            }],
-                        }
-                    });
-
-                    customerTypeChart = new Chart(customerTypeChartContainer, {
-                        type: selectedChartType,
-                        options: {
-                            plugins: {
-                                legend: {
-                                    display: true,
-                                    position: 'top'
-
-                                },
-                                datalabels: {
-                                    formatter: (value, context) => {
-                                        // Display the label based on the selected data (e.g., transaction type or payment method)
-                                        return context.chart.data.labels[context.dataIndex];
-                                    }
-                                }
-                            },
-                            responsive: true,
-                            maintainAspectRatio: false,
-                        },
-                        data: {
-                            labels: <?php echo json_encode($customerType); ?>,
-                            datasets: [{
-                                data: <?php echo json_encode($customerscounts); ?>,
-                                backgroundColor: ['rgba(247, 37, 149, 0.2)',
-                                    'rgba(166, 37, 247, 0.2)',
-                                    'rgba(255, 155, 22, 0.2)',
-                                    'rgba(255, 213, 22, 0.2)',
-                                    'rgba(49, 255, 22, 0.2)',
-                                    'rgba(73, 0, 242, 0.2)',
-                                    'rgba(0, 220, 242, 0.2)'
-
-                                ],
-                                borderColor: ['rgba(247, 37, 149, 0.81)',
-                                    'rgba(166, 37, 247, 0.83)',
-                                    'rgba(255, 155, 22, 0.83)',
-                                    'rgba(255, 213, 22, 0.83)',
-                                    'rgba(49, 255, 22, 0.83)',
-                                    'rgba(73, 0, 242, 0.83)',
-                                    'rgba(0, 220, 242, 0.83)'
-                                ],
-                                borderWidth: 2
-                            }],
-                        }
-                    });
-                } else {
-
-                    // Create new charts based on selected chart type
-                    transactionStatusChart = new Chart(transactionStatusChartContainer, {
-                        type: selectedChartType,
-                        options: {
-                            scales: {
-                                y: {
-                                    beginAtZero: true,
-                                    grid: {
-                                        drawOnChartArea: false
-                                    }
-                                },
-                                x: {
-                                    grid: {
-                                        display: false,
-                                        drawOnChartArea: false
-                                    }
-
-                                },
-
-                            }
-                        },
-
-                        data: {
-                            labels: <?php echo json_encode($transactionStatus); ?>,
-                            datasets: [{
-                                data: <?php echo json_encode($transactionStatusDatacounts); ?>,
-                                backgroundColor: ['rgba(0, 215, 132, 0.2)',
-                                    'rgba(229, 247, 48, 0.2)',
-                                    'rgba(241, 37, 150, 0.2)',
-                                ],
-                                borderColor: ['rgba(0, 215, 132, 0.93)',
-                                    'rgba(229, 247, 48, 0.8)',
-                                    'rgba(241, 37, 150, 0.8)',
-                                ],
-                                borderWidth: 2
-                            }],
-                        }
-                    });
-
-
-                    paymendtMethodChart = new Chart(paymendtMethodChartContainer, {
-                        type: selectedChartType,
-                        options: {
-                            scales: {
-                                y: {
-                                    beginAtZero: true,
-                                    grid: {
-                                        drawOnChartArea: false
-                                    }
-                                },
-                                x: {
-                                    grid: {
-                                        display: false,
-                                        drawOnChartArea: false
-                                    }
-
-                                },
-                            }
-
-                        },
-                        data: {
-                            labels: <?php echo json_encode($PaymentMethod); ?>,
-                            datasets: [{
-                                data: <?php echo json_encode($PaymentMethodcounts); ?>,
-                                backgroundColor: ['rgba(0, 21, 215, 0.2)',
-                                    'rgba(0, 215, 132, 0.2)',
-                                    'rgba(118, 0, 186, 0.2)',
-                                ],
-                                borderColor: ['rgba(0, 21, 215, 0.93)',
-                                    'rgba(0, 215, 132, 1)',
-                                    'rgba(118, 0, 186, 0.93)',
-                                ],
-                                borderWidth: 2
-                            }]
-                        },
-                    });
-
-
-                    // Create new charts based on selected chart type
-                    transactionTypeChart = new Chart(transactionTypeChartContainer, {
-                        type: selectedChartType,
-                        options: {
-                            scales: {
-                                y: {
-                                    beginAtZero: true,
-                                    grid: {
-                                        drawOnChartArea: false
-                                    }
-                                },
-                                x: {
-                                    grid: {
-                                        display: false,
-                                        drawOnChartArea: false
-                                    }
-
-                                },
-                            }
-                        },
-
-                        data: {
-                            labels: <?php echo json_encode($transactionType); ?>,
-                            datasets: [{
-                                data: <?php echo json_encode($transactionTypecounts); ?>,
-                                backgroundColor: ['rgba(186, 0, 0, 0.2)',
-                                    'rgba(250, 154, 37, 0.2)',
-                                    'rgba(37, 202, 247, 0.2)',
-                                ],
-                                borderColor: ['rgba(186, 0, 0, 0.93)',
-                                    'rgba(250, 154, 37, 0.81)',
-                                    'rgba(37, 202, 247, 0.81)',
-                                ],
-                                borderWidth: 2
-                            }],
-                        }
-                    });
-
-                    customerTypeChart = new Chart(customerTypeChartContainer, {
-                        type: selectedChartType,
-                        options: {
-                            scales: {
-                                y: {
-                                    beginAtZero: true,
-                                    grid: {
-                                        drawOnChartArea: false
-                                    }
-                                },
-                                x: {
-                                    grid: {
-                                        display: false,
-                                        drawOnChartArea: false
-                                    }
-
-                                },
-                            },
-
-
-                        },
-                        data: {
-                            labels: <?php echo json_encode($customerType); ?>,
-                            datasets: [{
-                                data: <?php echo json_encode($customerscounts); ?>,
-                                backgroundColor: ['rgba(247, 37, 149, 0.2)',
-                                    'rgba(166, 37, 247, 0.2)',
-                                    'rgba(255, 155, 22, 0.2)',
-                                    'rgba(255, 213, 22, 0.2)',
-                                    'rgba(49, 255, 22, 0.2)',
-                                    'rgba(73, 0, 242, 0.2)',
-                                    'rgba(0, 220, 242, 0.2)'
-
-                                ],
-                                borderColor: ['rgba(247, 37, 149, 0.81)',
-                                    'rgba(166, 37, 247, 0.83)',
-                                    'rgba(255, 155, 22, 0.83)',
-                                    'rgba(255, 213, 22, 0.83)',
-                                    'rgba(49, 255, 22, 0.83)',
-                                    'rgba(73, 0, 242, 0.83)',
-                                    'rgba(0, 220, 242, 0.83)'
-                                ],
-                                borderWidth: 2
-                            }]
-                        },
-
-                    });
-                }
-            }
-
-
-            // Listen for changes in the dropdown and update charts
-            chartTypeDropdown.addEventListener('change', updateCharts);
-
-            updateCharts();
-        });
-
-        // dashboard design end
-    </script>
-
-<script src="https://code.highcharts.com/maps/highmaps.js"></script>
-<script src="https://code.highcharts.com/maps/modules/exporting.js"></script>
-<div id="container"></div>
-<script>
-  (async () => {
-
-const topology = await fetch(
-    'https://code.highcharts.com/mapdata/countries/ph/ph-all.topo.json'
-).then(response => response.json());
-
-// Prepare demo data. The data is joined to map using value of 'hc-key'
-// property by default. See API docs for 'joinBy' for more info on linking
-// data and map.
-const data = [
-    ['ph-mn', 10], ['ph-4218', 11], ['ph-tt', 12], ['ph-bo', 13],
-    ['ph-cb', 14], ['ph-bs', 15], ['ph-2603', 16], ['ph-su', 17],
-    ['ph-aq', 18], ['ph-pl', 19], ['ph-ro', 20], ['ph-al', 21],
-    ['ph-cs', 22], ['ph-6999', 23], ['ph-bn', 24], ['ph-cg', 25],
-    ['ph-pn', 26], ['ph-bt', 27], ['ph-mc', 28], ['ph-qz', 29],
-    ['ph-es', 30], ['ph-le', 31], ['ph-sm', 32], ['ph-ns', 33],
-    ['ph-cm', 34], ['ph-di', 35], ['ph-ds', 36], ['ph-6457', 37],
-    ['ph-6985', 38], ['ph-ii', 39], ['ph-7017', 40], ['ph-7021', 41],
-    ['ph-lg', 42], ['ph-ri', 43], ['ph-ln', 44], ['ph-6991', 45],
-    ['ph-ls', 46], ['ph-nc', 47], ['ph-mg', 48], ['ph-sk', 49],
-    ['ph-sc', 50], ['ph-sg', 51], ['ph-an', 52], ['ph-ss', 53],
-    ['ph-as', 54], ['ph-do', 55], ['ph-dv', 56], ['ph-bk', 57],
-    ['ph-cl', 58], ['ph-6983', 59], ['ph-6984', 60], ['ph-6987', 61],
-    ['ph-6986', 62], ['ph-6988', 63], ['ph-6989', 64], ['ph-6990', 65],
-    ['ph-6992', 66], ['ph-6995', 67], ['ph-6996', 68], ['ph-6997', 69],
-    ['ph-6998', 70], ['ph-nv', 71], ['ph-7020', 72], ['ph-7018', 73],
-    ['ph-7022', 74], ['ph-1852', 75], ['ph-7000', 76], ['ph-7001', 77],
-    ['ph-7002', 78], ['ph-7003', 79], ['ph-7004', 80], ['ph-que', 81],
-    ['ph-7007', 82], ['ph-7008', 83], ['ph-7009', 84], ['ph-7010', 85],
-    ['ph-7011', 86], ['ph-7012', 87], ['ph-7013', 88], ['ph-7014', 89],
-    ['ph-7015', 90], ['ph-7016', 91], ['ph-7019', 92], ['ph-6456', 93],
-    ['ph-zs', 94], ['ph-nd', 95], ['ph-zn', 96], ['ph-md', 97],
-    ['ph-ab', 98], ['ph-2658', 99], ['ph-ap', 100], ['ph-au', 101],
-    ['ph-ib', 102], ['ph-if', 103], ['ph-mt', 104], ['ph-qr', 105],
-    ['ph-ne', 106], ['ph-pm', 107], ['ph-ba', 108], ['ph-bg', 109],
-    ['ph-zm', 110], ['ph-cv', 111], ['ph-bu', 112], ['ph-mr', 113],
-    ['ph-sq', 114], ['ph-gu', 115], ['ph-ct', 116], ['ph-mb', 117],
-    ['ph-mq', 118], ['ph-bi', 119], ['PH-SL', 150], ['ph-nr', 121],
-    ['ph-ak', 122], ['ph-cp', 123], ['ph-cn', 124], ['ph-sr', 125],
-    ['ph-in', 126], ['ph-is', 127], ['ph-tr', 128], ['ph-lu', 129]
-];
-
-// Create the chart
-Highcharts.mapChart('container', {
-    chart: {
-        map: topology
-    },
-
-    title: {
-        text: 'Highcharts Maps basic demo'
-    },
-
-    subtitle: {
-        text: 'Source map: <a href="http://code.highcharts.com/mapdata/countries/ph/ph-all.topo.json">Philippines</a>'
-    },
-
-    mapNavigation: {
-        enabled: true,
-        buttonOptions: {
-            verticalAlign: 'bottom'
-        }
-    },
-
-    colorAxis: {
-        min: 0
-    },
-
-    series: [{
-        data: data,
-        name: 'Random data',
-        states: {   
-            hover: {
-                color: '#BADA55'
-            }
-        },
-        dataLabels: {
-            enabled: true,
-            format: '{point.name}'
-        }
-    }]
-});
-
-})();
-</script>
-
-    <script>
-        function downloadPDF() {
-            const combinedChart = document.getElementById('combinedChart');
-            const transactionChart = document.getElementById('transactionChart');
-            const salesChart = document.getElementById('salesChart');
-            const myChart = document.getElementById('myChart');
-            const provincesChart = document.getElementById('Provinces');
-            const transactionStatusChart = document.getElementById('transactionStatus'); // New chart element
-            const paymentChart = document.getElementById('paymendtMethod'); // New chart element
-            const transactionTypeChart = document.getElementById('transactionType'); // New chart element
-            const customerTypeChart = document.getElementById('customerType'); // New chart element
-
-
-            const options = {
-                quality: 5,
-                width: 800,
-                height: 600
-            };
-
-            domtoimage.toPng(combinedChart, options)
-                .then(function(combinedChartImg) {
-                    domtoimage.toPng(transactionChart, options)
-                        .then(function(transactionChartImg) {
-                            domtoimage.toPng(salesChart, options)
-                                .then(function(salesChartImg) {
-                                    domtoimage.toPng(myChart, options)
-                                        .then(function(myChartImg) {
-                                            domtoimage.toPng(provincesChart, options)
-                                                .then(function(provincesChartImg) {
-                                                    domtoimage.toPng(transactionStatusChart, options)
-                                                        .then(function(transactionStatusChartImg) {
-                                                            domtoimage.toPng(transactionTypeChart, options)
-                                                                .then(function(transactionTypeChartImg) {
-                                                                    domtoimage.toPng(paymentChart, options)
-                                                                        .then(function(paymentChartImg) {
-                                                                            domtoimage.toPng(customerTypeChart, options)
-                                                                                .then(function(customerTypeChartImg) {
-                                                                                    const pdf = new jsPDF();
-
-                                                                                    pdf.setFontSize(12);
-                                                                                    pdf.setFont('helvetica', 'bold');
-                                                                                    pdf.setTextColor(0, 122, 204);
-                                                                                    pdf.text('Total Transaction and Sales', 40, 25);
-                                                                                    pdf.text('Transaction per Division', 40, 115);
-                                                                                    pdf.text('Sales per Division', 40, 215);
-
-                                                                                    pdf.setFont('helvetica', 'bold');
-                                                                                    pdf.setTextColor(0, 41, 102);
-                                                                                    pdf.setFontSize(14);
-                                                                                    pdf.text('Visualight-Dashboard', 83, 10);
-
-                                                                                    pdf.addImage(combinedChartImg, 'PNG', 40, 30, 130, 70);
-                                                                                    pdf.addImage(transactionChartImg, 'PNG', 40, 123, 130, 70);
-                                                                                    pdf.addImage(salesChartImg, 'PNG', 40, 220, 130, 70);
-
-                                                                                    pdf.addPage();
-
-                                                                                    pdf.setFontSize(12);
-                                                                                    pdf.setFont('helvetica', 'bold');
-                                                                                    pdf.setTextColor(0, 122, 204);
-                                                                                    pdf.text('Average Sales Daily', 40, 25);
-
-                                                                                    pdf.addImage(myChartImg, 'PNG', 50, 20, 110, 70);
-
-                                                                                    pdf.text('Type of Customers', 40, 115);
-
-                                                                                    pdf.addImage(customerTypeChartImg, 'PNG', 40, 120, 130, 70);
-
-                                                                                    pdf.text('Total Customers per Province', 40, 215);
-
-                                                                                    pdf.addImage(provincesChartImg, 'PNG', 40, 225, 130, 70);
-
-                                                                                    pdf.addPage();
-
-                                                                                    pdf.setFontSize(12);
-                                                                                    pdf.setFont('helvetica', 'bold');
-                                                                                    pdf.setTextColor(0, 122, 204);
-                                                                                    pdf.text('Transaction Status', 40, 18);
-
-                                                                                    pdf.addImage(transactionStatusChartImg, 'PNG', 60, 25, 100, 80);
-
-                                                                                    pdf.text('Payment Method', 40, 115);
-
-                                                                                    pdf.addImage(paymentChartImg, 'JPEG', 60, 115, 100, 80);
-
-
-                                                                                    pdf.text('Transaction Type', 40, 215);
-
-                                                                                    pdf.addImage(transactionTypeChartImg, 'PNG', 60, 215, 100, 80);
-
-
-                                                                                    pdf.save('Visualight-Dashboard.pdf');
-                                                                                });
-                                                                        });
-
-                                                                });
-                                                        });
-                                                });
-                                        });
-                                });
-                        });
-                })
-                .catch(function(error) {
-                    console.error('Error generating PDF:', error);
+                    data: {
+                        labels: <?php echo json_encode($transactionType); ?>,
+                        datasets: [{
+                            data: <?php echo json_encode($transactionTypecounts); ?>,
+                            backgroundColor: ['rgba(186, 0, 0, 0.2)',
+                                'rgba(250, 154, 37, 0.2)',
+                                'rgba(37, 202, 247, 0.2)',
+                            ],
+                            borderColor: ['rgba(186, 0, 0, 0.93)',
+                                'rgba(250, 154, 37, 0.81)',
+                                'rgba(37, 202, 247, 0.81)',
+                            ],
+                            borderWidth: 2
+                        }],
+                    }
                 });
+
+                customerTypeChart = new Chart(customerTypeChartContainer, {
+                    type: selectedChartType,
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                grid: {
+                                    drawOnChartArea: false
+                                }
+                            },
+                            x: {
+                                grid: {
+                                    display: false,
+                                    drawOnChartArea: false
+                                }
+
+                            },
+                        },
+
+
+                    },
+                    data: {
+                        labels: <?php echo json_encode($customerType); ?>,
+                        datasets: [{
+                            data: <?php echo json_encode($customerscounts); ?>,
+                            backgroundColor: ['rgba(247, 37, 149, 0.2)',
+                                'rgba(166, 37, 247, 0.2)',
+                                'rgba(255, 155, 22, 0.2)',
+                                'rgba(255, 213, 22, 0.2)',
+                                'rgba(49, 255, 22, 0.2)',
+                                'rgba(73, 0, 242, 0.2)',
+                                'rgba(0, 220, 242, 0.2)'
+
+                            ],
+                            borderColor: ['rgba(247, 37, 149, 0.81)',
+                                'rgba(166, 37, 247, 0.83)',
+                                'rgba(255, 155, 22, 0.83)',
+                                'rgba(255, 213, 22, 0.83)',
+                                'rgba(49, 255, 22, 0.83)',
+                                'rgba(73, 0, 242, 0.83)',
+                                'rgba(0, 220, 242, 0.83)'
+                            ],
+                            borderWidth: 2
+                        }]
+                    },
+
+                });
+            }
         }
-    </script>
 
-    <?php
-    $latestTimestamp = (new \yii\db\Query())
-        ->select(['MAX(transacton_date) AS latest_timestamp'])
-        ->from('operational_report')
-        ->scalar();
 
-    // Construct the Yii query
-    $subquery = (new \yii\db\Query())
-        ->select(['DATE_ADD("2023-06-10", INTERVAL n DAY) AS date'])
-        ->from(['numbers' => '(
-        SELECT a.n + b.n * 10 + c.n * 100 AS n
-        FROM (
-            SELECT 0 AS n UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9
-        ) AS a,
-        (
-            SELECT 0 AS n UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9
-        ) AS b,
-        (
-            SELECT 0 AS n UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9
-        ) AS c
-    )'])
-        ->where(['<=', 'DATE_ADD("2023-06-10", INTERVAL n DAY)', new \yii\db\Expression('NOW()')]);
+        // Listen for changes in the dropdown and update charts
+        chartTypeDropdown.addEventListener('change', updateCharts);
 
-    $query = (new \yii\db\Query())
-        ->select([
-            'dates.date AS transacton_date',
-            'IFNULL(COUNT(opr.transacton_date), 0) AS transaction_count',
-            'IFNULL(SUM(opr.amount), 0) AS total_sales'
-        ])
-        ->from([
-            'dates' => $subquery
-        ])
-        ->leftJoin('operational_report opr', 'dates.date = opr.transacton_date AND opr.transaction_status = "paid"')
-        ->groupBy('dates.date')
-        ->orderBy(['dates.date' => SORT_ASC]);
-
-    $transactions = $query->all();
-
-    // Convert timestamps to Unix timestamps
-    foreach ($transactions as &$transaction) {
-        $transaction['transacton_date'] = strtotime($transaction['transacton_date']);
-    }
-
-    // Define $nextDayTimestamp using the latestTimestamp
-    $nextDayTimestamp = strtotime('+1 day', strtotime($latestTimestamp));
-
-
-    // Prepare data for prediction (transaction count)
-    $timestampsForCount = array_column($transactions, 'transacton_date');
-    $transactionCounts = array_column($transactions, 'transaction_count');
-
-    // Calculate linear regression coefficients for transaction count prediction
-    $n = count($timestampsForCount);
-    $sumX = array_sum($timestampsForCount);
-    $sumY = array_sum($transactionCounts);
-    $sumXY = 0;
-    $sumX2 = 0;
-
-    for ($i = 0; $i < $n; $i++) {
-        $sumXY += $timestampsForCount[$i] * $transactionCounts[$i];
-        $sumX2 += $timestampsForCount[$i] * $timestampsForCount[$i];
-    }
-
-    $slopeForCount = ($n * $sumXY - $sumX * $sumY) / ($n * $sumX2 - $sumX * $sumX);
-    $interceptForCount = ($sumY - $slopeForCount * $sumX) / $n;
-
-    // Predict the next transaction count for the next day
-    $predictedTransactionCount = $interceptForCount + $slopeForCount * $nextDayTimestamp;
-
-    // Prepare data for prediction (total sales)
-    $timestampsForSales = array_column($transactions, 'transacton_date');
-    $totalSales = array_column($transactions, 'total_sales');
-
-    // Calculate linear regression coefficients for total sales prediction
-    $n = count($timestampsForSales);
-    $sumX = array_sum($timestampsForSales);
-    $sumY = array_sum($totalSales);
-    $sumXY = 0;
-    $sumX2 = 0;
-
-    for ($i = 0; $i < $n; $i++) {
-        $sumXY += $timestampsForSales[$i] * $totalSales[$i];
-        $sumX2 += $timestampsForSales[$i] * $timestampsForSales[$i];
-    }
-
-    $slopeForSales = ($n * $sumXY - $sumX * $sumY) / ($n * $sumX2 - $sumX * $sumX);
-    $interceptForSales = ($sumY - $slopeForSales * $sumX) / $n;
-
-    $totalSalesSum = array_sum($totalSales);
-    $averageSalesIncreasePerDay = $totalSalesSum / count($timestampsForSales);
-
-    // Predict the next total sum of all total sales
-    $predictedNextTotalSales = $totalSalesSum + $averageSalesIncreasePerDay;
-
-    $totalTransactionCountSum = array_sum($transactionCounts);
-    $averageTransactionCountIncreasePerDay = $totalTransactionCountSum / count($timestampsForCount);
-
-    $queryPerYear = (new \yii\db\Query())
-        ->select([
-            'all_years.year AS year',
-            'IFNULL(COUNT(opr.transacton_date), 0) AS transaction_count',
-            'IFNULL(SUM(opr.amount), 0) AS total_sales'
-        ])
-        ->from([
-            'all_years' => (new \yii\db\Query())
-                ->select(['DISTINCT YEAR(transacton_date) AS year'])
-                ->from('operational_report')
-                ->where(['>=', 'transacton_date', '2023-06-10'])
-                ->union((new \yii\db\Query())
-                        ->select(['DISTINCT YEAR(transacton_date) AS year'])
-                        ->from('operational_report')
-                        ->where(['YEAR(transacton_date)' => new \yii\db\Expression('YEAR(NOW())')])
-                )
-        ])
-        ->leftJoin('operational_report opr', 'all_years.year = YEAR(opr.transacton_date) AND opr.transaction_status = "paid"')
-        ->groupBy('all_years.year')
-        ->orderBy(['all_years.year' => SORT_ASC]);
-
-    $transactionsPerYear = $queryPerYear->all();
-
-    // Prepare data for predictions (total paid transaction count and total paid sales)
-    $years = array_column($transactionsPerYear, 'year');
-    $transactionCountsPerYear = array_column($transactionsPerYear, 'transaction_count');
-    $totalSalesPerYear = array_column($transactionsPerYear, 'total_sales');
-
-    // Calculate historical averages based on the whole dataset for paid transaction count and total sales
-    $totalTransactionCountSumPerYear = array_sum($transactionCountsPerYear);
-    $averageTransactionCountIncreasePerYear = $totalTransactionCountSumPerYear / count($years);
-
-    $totalSalesSumPerYear = array_sum($totalSalesPerYear);
-    $averageSalesIncreasePerYear = $totalSalesSumPerYear / count($years);
-    ?>
-
-    <div class="prediction-index">
-        <h1><?= Html::encode($this->title) ?></h1>
-
-        <form id="prediction-form">
-            <label for="years">Enter the number of years for predictions:</label>
-            <input type="number" id="years" name="years" step="0.01" value="">
-            <button type="submit">Compute Predictions</button>
-        </form>
-
-        <div id="predictions" style="font-weight: bold; "></div> <br>
-        <div id="predictions1" style="font-weight: bold;"></div> 
-        <div id="predictions2" style="font-weight: bold;"></div> <br>
-        <div id="predictions3" style="font-weight: bold;"></div> 
-        <div id="predictions4" style="font-weight: bold;"></div><br>
-        <div id="predictions5" style="font-weight: bold;"></div>
-
-
-    </div>
-
-    <script>
-        document.getElementById('prediction-form').addEventListener('submit', function(event) {
-            event.preventDefault();
-
-            const years = parseFloat(document.getElementById('years').value);
-            const days = Math.round(years * 365);
-
-            // Calculate the timestamps for the next day and the predicted day
-            const latestTimestamp = '<?= $latestTimestamp ?>';
-            const nextDayTimestamp = new Date('<?= date('Y-m-d', $nextDayTimestamp) ?>');
-            nextDayTimestamp.setDate(nextDayTimestamp.getDate() + days);
-
-            const totalSalesSum = <?= $totalSalesSum ?>;
-            const totalTransactionCountSum = <?= $totalTransactionCountSum ?>;
-
-            // Define JavaScript variables with the values of totalSalesSum, averageSalesIncreasePerDay,
-            // totalTransactionCountSum, and averageTransactionCountIncreasePerDay
-            const averageSalesIncreasePerDay = <?= $averageSalesIncreasePerDay ?>;
-            const averageTransactionCountIncreasePerDay = <?= $averageTransactionCountIncreasePerDay ?>;
-
-            // Calculate historical averages based on the whole dataset for paid transaction count and total sales
-            const totalTransactionCountSumPerYear = <?= $totalTransactionCountSumPerYear ?>;
-            const averageTransactionCountIncreasePerYear = <?= $averageTransactionCountIncreasePerYear ?>;
-
-            const totalSalesSumPerYear = <?= $totalSalesSumPerYear ?>;
-            const averageSalesIncreasePerYear = <?= $averageSalesIncreasePerYear ?>;
-
-            const nextYearTimestamp = new Date();
-            nextYearTimestamp.setFullYear(nextYearTimestamp.getFullYear() + years);
-
-            const slopeForCountPerYear = <?= $slopeForCount ?>;
-            const interceptForCountPerYear = <?= $interceptForCount ?>;
-
-            const slopeForSalesPerYear = <?= $slopeForSales ?>;
-            const interceptForSalesPerYear = <?= $interceptForSales ?>;
-
-            const predictedTransactionCountPerYear = Math.round(interceptForCountPerYear + slopeForCountPerYear * nextDayTimestamp.getTime() / 1000);
-            const predictedTotalSalesPerYear = Math.round(interceptForSalesPerYear + slopeForSalesPerYear * nextDayTimestamp.getTime() / 1000);
-
-            // Calculate predictions for total sum of paid transaction count and total paid sales per year
-            const predictedNextTotalTransactionCountPerYear = Math.round(totalTransactionCountSumPerYear + averageTransactionCountIncreasePerYear * years);
-            const predictedNextTotalSalesPerYear = Math.round(totalSalesSumPerYear + averageSalesIncreasePerYear * years);
-
-            // Calculate the average of the predicted total sum of paid transaction count and total paid sales per year
-            const averagePredictedTotalTransactionCountPerYear = Math.round(predictedNextTotalTransactionCountPerYear / years);
-            const averagePredictedTotalSalesPerYear = Math.round(predictedNextTotalSalesPerYear / years);
-
-            // Function to add commas every three numbers
-            function addCommas(number) {
-                return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-            }
-
-            const transactionCounts = <?= json_encode(array_column($transactions, 'transaction_count')) ?>;
-
-            // Convert timestamps to Unix timestamps
-            const totalSales = <?= json_encode(array_column($transactions, 'total_sales')) ?>;
-
-            const predictionsDiv = document.getElementById('predictions');
-            predictionsDiv.innerHTML = `
-            <p>Predicted transaction count on the <span style="color:#0080ff">${days}-day (${years} year(s))</span> mark: 
-        <span style="color:${predictedTransactionCountPerYear >= transactionCounts[transactionCounts.length - 1] ? 'green' : 'red'}">
-             ${addCommas(predictedTransactionCountPerYear)}
-            (${predictedTransactionCountPerYear >= transactionCounts[transactionCounts.length - 1] ? 'Increased' : 'Decreased'})
-        </span>
-    </p>
-    <p>Predicted total transaction count on the <span style="color:#0080ff">${days}-day (${years} year(s))</span> mark: 
-        <span style="color:${averagePredictedTotalTransactionCountPerYear >= averageTransactionCountIncreasePerYear ? 'green' : 'red'}">
-             ${addCommas(averagePredictedTotalTransactionCountPerYear)}
-            (${averagePredictedTotalTransactionCountPerYear >= averageTransactionCountIncreasePerYear ? 'Increased' : 'Decreased'})
-        </span>
-    </p>
-    <p>Predicted income on the <span style="color:#0080ff">${days}-day (${years} year(s))</span> mark: 
-        <span style="color:${predictedTotalSalesPerYear >= totalSales[totalSales.length - 1] ? 'green' : 'red'}">
-            ${addCommas(predictedTotalSalesPerYear)}
-            (${predictedTotalSalesPerYear >= totalSales[totalSales.length - 1] ? 'Increased' : 'Decreased'})
-        </span>
-    </p>
-    <p>Predicted total income on the <span style="color:#0080ff">${days}-day (${years} year(s))</span> mark: 
-        <span style="color:${averagePredictedTotalSalesPerYear >= averageSalesIncreasePerYear ? 'green' : 'red'}">
-            ${addCommas(averagePredictedTotalSalesPerYear)}
-            (${averagePredictedTotalSalesPerYear >= averageSalesIncreasePerYear ? 'Increased' : 'Decreased'})
-        </span>
-    </p>
-`;
-        });
-    </script>
-
-
-    <!-- NMD -->
-
-    <?php
-    $latestTimestamp1 = (new \yii\db\Query())
-        ->select(['MAX(transacton_date) AS latest_timestamp'])
-        ->from('operational_report')
-        ->scalar();
-
-    // Construct the new subquery
-    $subquery1 = (new \yii\db\Query())
-        ->select(['DATE_ADD("2023-06-10", INTERVAL n DAY) AS date'])
-        ->from(['numbers' => '(
-    SELECT a.n + b.n * 10 + c.n * 100 AS n
-    FROM (
-        SELECT 0 AS n UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9
-    ) AS a,
-    (
-        SELECT 0 AS n UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9
-    ) AS b,
-    (
-        SELECT 0 AS n UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9
-    ) AS c
-)'])
-        ->where(['<=', 'DATE_ADD("2023-06-10", INTERVAL n DAY)', new \yii\db\Expression('NOW()')]);
-
-    // New main query
-    $query1 = (new \yii\db\Query())
-        ->select([
-            'all_dates.date AS transaction_date',
-            'IFNULL(COUNT(opr.transacton_date), 0) AS transaction_count',
-            'IFNULL(SUM(opr.amount), 0) AS total_sales'
-        ])
-        ->from([
-            'all_dates' => $subquery1
-        ])
-        ->leftJoin('operational_report opr', 'all_dates.date = opr.transacton_date AND opr.transaction_status = "paid" AND opr.division_name = "National Metrology Department"')
-        ->groupBy('all_dates.date')
-        ->orderBy(['all_dates.date' => SORT_ASC]);
-
-    $transactions1 = $query1->all();
-
-    // Convert timestamps to Unix timestamps
-    foreach ($transactions1 as &$transaction1) {
-        $transaction1['transaction_date'] = strtotime($transaction1['transaction_date']);
-    }
-
-    // Define $nextDayTimestamp using the latestTimestamp
-    $nextDayTimestamp1 = strtotime('+1 day', strtotime($latestTimestamp1));
-
-
-    // Prepare data for prediction (transaction count)
-    $timestampsForCount1 = array_column($transactions1, 'transaction_date');
-    $transactionCounts1 = array_column($transactions1, 'transaction_count');
-
-
-    // Calculate linear regression coefficients for transaction count prediction
-    $n1 = count($timestampsForCount1);
-    $sumX1 = array_sum($timestampsForCount1);
-    $sumY1 = array_sum($transactionCounts1);
-    $sumXY1 = 0;
-    $sumX21 = 0;
-
-    for ($i = 0; $i < $n1; $i++) {
-        $sumXY1 += $timestampsForCount1[$i] * $transactionCounts1[$i];
-        $sumX21 += $timestampsForCount1[$i] * $timestampsForCount1[$i];
-    }
-
-    $slopeForCount1 = ($n1 * $sumXY1 - $sumX1 * $sumY1) / ($n1 * $sumX21 - $sumX1 * $sumX1);
-    $interceptForCount1 = ($sumY1 - $slopeForCount1 * $sumX1) / $n1;
-
-    // Predict the next transaction count for the next day
-    $predictedTransactionCount1 = $interceptForCount1 + $slopeForCount1 * $nextDayTimestamp1;
-
-    // Prepare data for prediction (total sales)
-    $timestampsForSales1 = array_column($transactions1, 'transaction_date');
-    $totalSales1 = array_column($transactions1, 'total_sales');
-
-    // Calculate linear regression coefficients for total sales prediction
-    $n1 = count($timestampsForSales1);
-    $sumX1 = array_sum($timestampsForSales1);
-    $sumY1 = array_sum($totalSales1);
-    $sumXY1 = 0;
-    $sumX21 = 0;
-
-    for ($i = 0; $i < $n1; $i++) {
-        $sumXY1 += $timestampsForSales1[$i] * $totalSales1[$i];
-        $sumX21 += $timestampsForSales1[$i] * $timestampsForSales1[$i];
-    }
-
-    $slopeForSales1 = ($n1 * $sumXY1 - $sumX1 * $sumY1) / ($n1 * $sumX21 - $sumX1 * $sumX1);
-    $interceptForSales1 = ($sumY1 - $slopeForSales1 * $sumX1) / $n1;
-
-    $totalSalesSum1 = array_sum($totalSales1);
-    $averageSalesIncreasePerDay1 = $totalSalesSum1 / count($timestampsForSales1);
-
-    // Predict the next total sum of all total sales
-    $predictedNextTotalSales1 = $totalSalesSum1 + $averageSalesIncreasePerDay1;
-
-    $totalTransactionCountSum1 = array_sum($transactionCounts1);
-    $averageTransactionCountIncreasePerDay1 = $totalTransactionCountSum1 / count($timestampsForCount1);
-
-    $queryPerYear1 = (new \yii\db\Query())
-        ->select([
-            'all_years1.year AS year',
-            'IFNULL(COUNT(opr1.transacton_date), 0) AS transaction_count1',
-            'IFNULL(SUM(opr1.amount), 0) AS total_sales1'
-        ])
-        ->from([
-            'all_years1' => (new \yii\db\Query())
-                ->select(['DISTINCT YEAR(transacton_date) AS year'])
-                ->from('operational_report')
-                ->where(['>=', 'transacton_date', '2023-06-10'])
-                ->union((new \yii\db\Query())
-                        ->select(['DISTINCT YEAR(transacton_date) AS year'])
-                        ->from('operational_report')
-                        ->where(['YEAR(transacton_date)' => new \yii\db\Expression('YEAR(NOW())')])
-                )
-        ])
-        ->leftJoin('operational_report opr1', 'all_years1.year = YEAR(opr1.transacton_date) AND opr1.transaction_status = "paid" AND opr1.division_name = "National Metrology Department"')
-        ->groupBy('all_years1.year')
-        ->orderBy(['all_years1.year' => SORT_ASC]);
-
-    $transactionsPerYear1 = $queryPerYear1->all();
-
-    // Prepare data for predictions (total paid transaction count and total paid sales)
-    $years1 = array_column($transactionsPerYear1, 'year');
-    $transactionCountsPerYear1 = array_column($transactionsPerYear1, 'transaction_count1');
-    $totalSalesPerYear1 = array_column($transactionsPerYear1, 'total_sales1');
-
-    // Calculate historical averages based on the whole dataset for paid transaction count and total sales
-    $totalTransactionCountSumPerYear1 = array_sum($transactionCountsPerYear1);
-    $averageTransactionCountIncreasePerYear1 = $totalTransactionCountSumPerYear1 / count($years1);
-
-    $totalSalesSumPerYear1 = array_sum($totalSalesPerYear1);
-    $averageSalesIncreasePerYear1 = $totalSalesSumPerYear1 / count($years1);
-    ?>
-
-    <script>
-        document.getElementById('prediction-form').addEventListener('submit', function(event) {
-            event.preventDefault();
-
-            const years1 = parseFloat(document.getElementById('years').value);
-            const days1 = Math.round(years1 * 365);
-
-            // Calculate the timestamps for the next day and the predicted day
-            const latestTimestamp1 = '<?= $latestTimestamp1 ?>';
-            const nextDayTimestamp1 = new Date('<?= date('Y-m-d', $nextDayTimestamp1) ?>');
-            nextDayTimestamp1.setDate(nextDayTimestamp1.getDate() + days1);
-
-            const totalSalesSum1 = <?= $totalSalesSum1 ?>;
-            const totalTransactionCountSum1 = <?= $totalTransactionCountSum1 ?>;
-
-            // Define JavaScript variables with the values of totalSalesSum1, averageSalesIncreasePerDay1,
-            // totalTransactionCountSum1, and averageTransactionCountIncreasePerDay1
-            const averageSalesIncreasePerDay1 = <?= $averageSalesIncreasePerDay1 ?>;
-            const averageTransactionCountIncreasePerDay1 = <?= $averageTransactionCountIncreasePerDay1 ?>;
-
-            // Calculate historical averages based on the whole dataset for paid transaction count and total sales
-            const totalTransactionCountSumPerYear1 = <?= $totalTransactionCountSumPerYear1 ?>;
-            const averageTransactionCountIncreasePerYear1 = <?= $averageTransactionCountIncreasePerYear1 ?>;
-
-            const totalSalesSumPerYear1 = <?= $totalSalesSumPerYear1 ?>;
-            const averageSalesIncreasePerYear1 = <?= $averageSalesIncreasePerYear1 ?>;
-
-            // Calculate predictions for paid transaction count and paid sales per year
-
-
-            const slopeForCountPerYear1 = <?= $slopeForCount1 ?>;
-            const interceptForCountPerYear1 = <?= $interceptForCount1 ?>;
-
-            const slopeForSalesPerYear1 = <?= $slopeForSales1 ?>;
-            const interceptForSalesPerYear1 = <?= $interceptForSales1 ?>;
-
-            const nextYearTimestamp1 = new Date();
-            nextYearTimestamp1.setFullYear(nextYearTimestamp1.getFullYear() + years1);
-
-            // Calculate predictions for transaction count and total sales for the next year
-            const predictedTransactionCountPerYear1 = Math.round(interceptForCountPerYear1 + slopeForCountPerYear1 * nextYearTimestamp1.getTime() / 1000);
-            const predictedTotalSalesPerYear1 = Math.round(interceptForSalesPerYear1 + slopeForSalesPerYear1 * nextYearTimestamp1.getTime() / 1000);
-
-            // Calculate predictions for total sum of paid transaction count and total paid sales per year
-            const predictedNextTotalTransactionCountPerYear1 = Math.round(totalTransactionCountSumPerYear1 + averageTransactionCountIncreasePerYear1 * years1);
-            const predictedNextTotalSalesPerYear1 = Math.round(totalSalesSumPerYear1 + averageSalesIncreasePerYear1 * years1);
-
-            // Calculate the average of the predicted total sum of paid transaction count and total paid sales per year
-            const averagePredictedTotalTransactionCountPerYear1 = Math.round(predictedNextTotalTransactionCountPerYear1 / years1);
-            const averagePredictedTotalSalesPerYear1 = Math.round(predictedNextTotalSalesPerYear1 / years1);
-
-
-            // Calculate the average of the predicted total sum of paid transaction count and total paid sales per year
-
-            // Function to add commas every three numbers
-            function addCommas(number) {
-                return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-            }
-
-            const transactionCounts1 = <?= json_encode(array_column($transactions1, 'transaction_count')) ?>;
-
-            // Convert timestamps to Unix timestamps
-            const totalSales1 = <?= json_encode(array_column($transactions1, 'total_sales')) ?>;
-
-const predictionsDiv1 = document.getElementById('predictions1');
-predictionsDiv1.innerHTML = `
-<p>Predicted transaction count of the NMD on the <span style="color:#0080ff">${days1}-day (${years1} year(s))</span> mark: 
-        <span style="color:${predictedTransactionCountPerYear1 >= transactionCounts1[transactionCounts1.length - 1] ? 'green' : 'red'}">
-            ${addCommas(predictedTransactionCountPerYear1)}
-            (${predictedTransactionCountPerYear1 >= transactionCounts1[transactionCounts1.length - 1] ? 'Increased' : 'Decreased'})
-        </span>
-    </p>
-    <p>Predicted total transaction count of NMD on the <span style="color:#0080ff">${days1}-day (${years1} year(s))</span> mark: 
-        <span style="color:${averagePredictedTotalTransactionCountPerYear1 >= transactionCounts1[transactionCounts1.length - 1] ? 'green' : 'red'}">
-            ${addCommas(averagePredictedTotalTransactionCountPerYear1)}
-            (${averagePredictedTotalTransactionCountPerYear1 >= transactionCounts1[transactionCounts1.length - 1] ? 'Increased' : 'Decreased '})
-        </span>
-    </p>
-`;
-
-const predictionsDiv3 = document.getElementById('predictions3');
-predictionsDiv3.innerHTML = `
-    <p>Predicted income of NMD on the <span style="color:#0080ff">${days1}-day (${years1} year(s))</span> mark: 
-        <span style="color:${predictedTotalSalesPerYear1 >= totalSales1[totalSales1.length - 1] ? 'green' : 'red'}">
-            ${addCommas(predictedTotalSalesPerYear1)}
-            (${predictedTotalSalesPerYear1 >= totalSales1[totalSales1.length - 1] ? 'Increased' : 'Decreased'})
-        </span>
-    </p>
-    <p>Predicted total income of NMD on the <span style="color:#0080ff">${days1}-day (${years1} year(s))</span> mark: 
-        <span style="color:${averagePredictedTotalSalesPerYear1 >= totalSales1[totalSales1.length - 1] ? 'green' : 'red'}">
-            ${addCommas(averagePredictedTotalSalesPerYear1)}
-            (${averagePredictedTotalSalesPerYear1 >= totalSales1[totalSales1.length - 1] ? 'Increased' : 'Decreased'})
-        </span>
-    </p>
-`;
-
-        });
-    </script>
-
-
-    <?php
-    $latestTimestamp1 = (new \yii\db\Query())
-        ->select(['MAX(transacton_date) AS latest_timestamp'])
-        ->from('operational_report')
-        ->scalar();
-
-    // Construct the new subquery
-    $subquery1 = (new \yii\db\Query())
-        ->select(['DATE_ADD("2023-06-10", INTERVAL n DAY) AS date'])
-        ->from(['numbers' => '(
-    SELECT a.n + b.n * 10 + c.n * 100 AS n
-    FROM (
-        SELECT 0 AS n UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9
-    ) AS a,
-    (
-        SELECT 0 AS n UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9
-    ) AS b,
-    (
-        SELECT 0 AS n UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9
-    ) AS c
-)'])
-        ->where(['<=', 'DATE_ADD("2023-06-10", INTERVAL n DAY)', new \yii\db\Expression('NOW()')]);
-
-    // New main query
-    $query1 = (new \yii\db\Query())
-        ->select([
-            'all_dates.date AS transaction_date',
-            'IFNULL(COUNT(opr.transacton_date), 0) AS transaction_count',
-            'IFNULL(SUM(opr.amount), 0) AS total_sales'
-        ])
-        ->from([
-            'all_dates' => $subquery1
-        ])
-        ->leftJoin('operational_report opr', 'all_dates.date = opr.transacton_date AND opr.transaction_status = "paid" AND opr.division_name = "Standard and Testing Division"')
-        ->groupBy('all_dates.date')
-        ->orderBy(['all_dates.date' => SORT_ASC]);
-
-    $transactions1 = $query1->all();
-
-    // Convert timestamps to Unix timestamps
-    foreach ($transactions1 as &$transaction1) {
-        $transaction1['transaction_date'] = strtotime($transaction1['transaction_date']);
-    }
-
-    // Define $nextDayTimestamp using the latestTimestamp
-    $nextDayTimestamp1 = strtotime('+1 day', strtotime($latestTimestamp1));
-
-
-    // Prepare data for prediction (transaction count)
-    $timestampsForCount1 = array_column($transactions1, 'transaction_date');
-    $transactionCounts1 = array_column($transactions1, 'transaction_count');
-
-
-    // Calculate linear regression coefficients for transaction count prediction
-    $n1 = count($timestampsForCount1);
-    $sumX1 = array_sum($timestampsForCount1);
-    $sumY1 = array_sum($transactionCounts1);
-    $sumXY1 = 0;
-    $sumX21 = 0;
-
-    for ($i = 0; $i < $n1; $i++) {
-        $sumXY1 += $timestampsForCount1[$i] * $transactionCounts1[$i];
-        $sumX21 += $timestampsForCount1[$i] * $timestampsForCount1[$i];
-    }
-
-    $slopeForCount1 = ($n1 * $sumXY1 - $sumX1 * $sumY1) / ($n1 * $sumX21 - $sumX1 * $sumX1);
-    $interceptForCount1 = ($sumY1 - $slopeForCount1 * $sumX1) / $n1;
-
-    // Predict the next transaction count for the next day
-    $predictedTransactionCount1 = $interceptForCount1 + $slopeForCount1 * $nextDayTimestamp1;
-
-    // Prepare data for prediction (total sales)
-    $timestampsForSales1 = array_column($transactions1, 'transaction_date');
-    $totalSales1 = array_column($transactions1, 'total_sales');
-
-    // Calculate linear regression coefficients for total sales prediction
-    $n1 = count($timestampsForSales1);
-    $sumX1 = array_sum($timestampsForSales1);
-    $sumY1 = array_sum($totalSales1);
-    $sumXY1 = 0;
-    $sumX21 = 0;
-
-    for ($i = 0; $i < $n1; $i++) {
-        $sumXY1 += $timestampsForSales1[$i] * $totalSales1[$i];
-        $sumX21 += $timestampsForSales1[$i] * $timestampsForSales1[$i];
-    }
-
-    $slopeForSales1 = ($n1 * $sumXY1 - $sumX1 * $sumY1) / ($n1 * $sumX21 - $sumX1 * $sumX1);
-    $interceptForSales1 = ($sumY1 - $slopeForSales1 * $sumX1) / $n1;
-
-    $totalSalesSum1 = array_sum($totalSales1);
-    $averageSalesIncreasePerDay1 = $totalSalesSum1 / count($timestampsForSales1);
-
-    // Predict the next total sum of all total sales
-    $predictedNextTotalSales1 = $totalSalesSum1 + $averageSalesIncreasePerDay1;
-
-    $totalTransactionCountSum1 = array_sum($transactionCounts1);
-    $averageTransactionCountIncreasePerDay1 = $totalTransactionCountSum1 / count($timestampsForCount1);
-
-    $queryPerYear1 = (new \yii\db\Query())
-        ->select([
-            'all_years1.year AS year',
-            'IFNULL(COUNT(opr1.transacton_date), 0) AS transaction_count1',
-            'IFNULL(SUM(opr1.amount), 0) AS total_sales1'
-        ])
-        ->from([
-            'all_years1' => (new \yii\db\Query())
-                ->select(['DISTINCT YEAR(transacton_date) AS year'])
-                ->from('operational_report')
-                ->where(['>=', 'transacton_date', '2023-06-10'])
-                ->union((new \yii\db\Query())
-                        ->select(['DISTINCT YEAR(transacton_date) AS year'])
-                        ->from('operational_report')
-                        ->where(['YEAR(transacton_date)' => new \yii\db\Expression('YEAR(NOW())')])
-                )
-        ])
-        ->leftJoin('operational_report opr1', 'all_years1.year = YEAR(opr1.transacton_date) AND opr1.transaction_status = "paid" AND opr1.division_name = "Standard and Testing Division"')
-        ->groupBy('all_years1.year')
-        ->orderBy(['all_years1.year' => SORT_ASC]);
-
-    $transactionsPerYear1 = $queryPerYear1->all();
-
-    // Prepare data for predictions (total paid transaction count and total paid sales)
-    $years1 = array_column($transactionsPerYear1, 'year');
-    $transactionCountsPerYear1 = array_column($transactionsPerYear1, 'transaction_count1');
-    $totalSalesPerYear1 = array_column($transactionsPerYear1, 'total_sales1');
-
-    // Calculate historical averages based on the whole dataset for paid transaction count and total sales
-    $totalTransactionCountSumPerYear1 = array_sum($transactionCountsPerYear1);
-    $averageTransactionCountIncreasePerYear1 = $totalTransactionCountSumPerYear1 / count($years1);
-
-$totalSalesSumPerYear1 = array_sum($totalSalesPerYear1);
-$averageSalesIncreasePerYear1 = $totalSalesSumPerYear1 / count($years1);
-?>
-
-    <script>
-        document.getElementById('prediction-form').addEventListener('submit', function(event) {
-            event.preventDefault();
-
-            const years1 = parseFloat(document.getElementById('years').value);
-            const days1 = Math.round(years1 * 365);
-
-            // Calculate the timestamps for the next day and the predicted day
-            const latestTimestamp1 = '<?= $latestTimestamp1 ?>';
-            const nextDayTimestamp1 = new Date('<?= date('Y-m-d', $nextDayTimestamp1) ?>');
-            nextDayTimestamp1.setDate(nextDayTimestamp1.getDate() + days1);
-
-            const totalSalesSum1 = <?= $totalSalesSum1 ?>;
-            const totalTransactionCountSum1 = <?= $totalTransactionCountSum1 ?>;
-
-            // Define JavaScript variables with the values of totalSalesSum1, averageSalesIncreasePerDay1,
-            // totalTransactionCountSum1, and averageTransactionCountIncreasePerDay1
-            const averageSalesIncreasePerDay1 = <?= $averageSalesIncreasePerDay1 ?>;
-            const averageTransactionCountIncreasePerDay1 = <?= $averageTransactionCountIncreasePerDay1 ?>;
-
-            // Calculate historical averages based on the whole dataset for paid transaction count and total sales
-            const totalTransactionCountSumPerYear1 = <?= $totalTransactionCountSumPerYear1 ?>;
-            const averageTransactionCountIncreasePerYear1 = <?= $averageTransactionCountIncreasePerYear1 ?>;
-
-            const totalSalesSumPerYear1 = <?= $totalSalesSumPerYear1 ?>;
-            const averageSalesIncreasePerYear1 = <?= $averageSalesIncreasePerYear1 ?>;
-
-            // Calculate predictions for paid transaction count and paid sales per year
-
-
-            const slopeForCountPerYear1 = <?= $slopeForCount1 ?>;
-            const interceptForCountPerYear1 = <?= $interceptForCount1 ?>;
-
-            const slopeForSalesPerYear1 = <?= $slopeForSales1 ?>;
-            const interceptForSalesPerYear1 = <?= $interceptForSales1 ?>;
-
-            const nextYearTimestamp1 = new Date();
-            nextYearTimestamp1.setFullYear(nextYearTimestamp1.getFullYear() + years1);
-
-            // Calculate predictions for transaction count and total sales for the next year
-            const predictedTransactionCountPerYear1 = Math.round(interceptForCountPerYear1 + slopeForCountPerYear1 * nextYearTimestamp1.getTime() / 1000);
-            const predictedTotalSalesPerYear1 = Math.round(interceptForSalesPerYear1 + slopeForSalesPerYear1 * nextYearTimestamp1.getTime() / 1000);
-
-            // Calculate predictions for total sum of paid transaction count and total paid sales per year
-            const predictedNextTotalTransactionCountPerYear1 = Math.round(totalTransactionCountSumPerYear1 + averageTransactionCountIncreasePerYear1 * years1);
-            const predictedNextTotalSalesPerYear1 = Math.round(totalSalesSumPerYear1 + averageSalesIncreasePerYear1 * years1);
-
-            // Calculate the average of the predicted total sum of paid transaction count and total paid sales per year
-            const averagePredictedTotalTransactionCountPerYear1 = Math.round(predictedNextTotalTransactionCountPerYear1 / years1);
-            const averagePredictedTotalSalesPerYear1 = Math.round(predictedNextTotalSalesPerYear1 / years1);
-
-
-            // Calculate the average of the predicted total sum of paid transaction count and total paid sales per year
-
-            // Function to add commas every three numbers
-            function addCommas(number) {
-                return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-            }
-
-            const transactionCounts1 = <?= json_encode(array_column($transactions1, 'transaction_count')) ?>;
-
-            // Convert timestamps to Unix timestamps
-            const totalSales1 = <?= json_encode(array_column($transactions1, 'total_sales')) ?>;
-
-const predictionsDiv2 = document.getElementById('predictions2');
-predictionsDiv2.innerHTML = `
-<p>Predicted transaction count of the STD on the <span style="color:#0080ff">${days1}-day (${years1} year(s))</span> mark: 
-        <span style="color:${predictedTransactionCountPerYear1 >= transactionCounts1[transactionCounts1.length - 1] ? 'green' : 'red'}">
-            ${addCommas(predictedTransactionCountPerYear1)}
-            (${predictedTransactionCountPerYear1 >= transactionCounts1[transactionCounts1.length - 1] ? 'Increased' : 'Decreased'})
-        </span>
-    </p>
-    <p>Predicted total transaction count of STD on the <span style="color:#0080ff">${days1}-day (${years1} year(s))</span> mark: 
-        <span style="color:${averagePredictedTotalTransactionCountPerYear1 >= transactionCounts1[transactionCounts1.length - 1] ? 'green' : 'red'}">
-            ${addCommas(averagePredictedTotalTransactionCountPerYear1)}
-            (${averagePredictedTotalTransactionCountPerYear1 >= transactionCounts1[transactionCounts1.length - 1] ? 'Increased' : 'Decreased '})
-        </span>
-    </p>
-`;
-
-const predictionsDiv4 = document.getElementById('predictions4');
-predictionsDiv4.innerHTML = `
-    <p>Predicted income of STD on the <span style="color:#0080ff">${days1}-day (${years1} year(s))</span> mark: 
-        <span style="color:${predictedTotalSalesPerYear1 >= totalSales1[totalSales1.length - 1] ? 'green' : 'red'}">
-            ${addCommas(predictedTotalSalesPerYear1)}
-            (${predictedTotalSalesPerYear1 >= totalSales1[totalSales1.length - 1] ? 'Increased' : 'Decreased'})
-        </span>
-    </p>
-    <p>Predicted total income of STD on the <span style="color:#0080ff">${days1}-day (${years1} year(s))</span> mark: 
-        <span style="color:${averagePredictedTotalSalesPerYear1 >= totalSales1[totalSales1.length - 1] ? 'green' : 'red'}">
-            ${addCommas(averagePredictedTotalSalesPerYear1)}
-            (${averagePredictedTotalSalesPerYear1 >= totalSales1[totalSales1.length - 1] ? 'Increased' : 'Decreased'})
-        </span>
-    </p>
-`;
-
+        updateCharts();
     });
+
+    // dashboard design end
 </script>
 
+<script>
+    function downloadPDF() {
+        const combinedChart = document.getElementById('combinedChart');
+        const transactionChart = document.getElementById('transactionChart');
+        const salesChart = document.getElementById('salesChart');
+        const myChart = document.getElementById('myChart');
+        const provincesChart = document.getElementById('Provinces');
+        const transactionStatusChart = document.getElementById('transactionStatus'); // New chart element
+        const paymentChart = document.getElementById('paymendtMethod'); // New chart element
+        const transactionTypeChart = document.getElementById('transactionType'); // New chart element
+        const customerTypeChart = document.getElementById('customerType'); // New chart element
 
 
+        const options = {
+            quality: 5,
+            width: 800,
+            height: 600
+        };
+
+        domtoimage.toPng(combinedChart, options)
+            .then(function(combinedChartImg) {
+                domtoimage.toPng(transactionChart, options)
+                    .then(function(transactionChartImg) {
+                        domtoimage.toPng(salesChart, options)
+                            .then(function(salesChartImg) {
+                                domtoimage.toPng(myChart, options)
+                                    .then(function(myChartImg) {
+                                        domtoimage.toPng(provincesChart, options)
+                                            .then(function(provincesChartImg) {
+                                                domtoimage.toPng(transactionStatusChart, options)
+                                                    .then(function(transactionStatusChartImg) {
+                                                        domtoimage.toPng(transactionTypeChart, options)
+                                                            .then(function(transactionTypeChartImg) {
+                                                                domtoimage.toPng(paymentChart, options)
+                                                                    .then(function(paymentChartImg) {
+                                                                        domtoimage.toPng(customerTypeChart, options)
+                                                                            .then(function(customerTypeChartImg) {
+                                                                                const pdf = new jsPDF();
+
+                                                                                pdf.setFontSize(12);
+                                                                                pdf.setFont('helvetica', 'bold');
+                                                                                pdf.setTextColor(0, 122, 204);
+                                                                                pdf.text('Total Transaction and Sales', 40, 25);
+                                                                                pdf.text('Transaction per Division', 40, 115);
+                                                                                pdf.text('Sales per Division', 40, 215);
+
+                                                                                pdf.setFont('helvetica', 'bold');
+                                                                                pdf.setTextColor(0, 41, 102);
+                                                                                pdf.setFontSize(14);
+                                                                                pdf.text('Visualight-Dashboard', 83, 10);
+
+                                                                                pdf.addImage(combinedChartImg, 'PNG', 40, 30, 130, 70);
+                                                                                pdf.addImage(transactionChartImg, 'PNG', 40, 123, 130, 70);
+                                                                                pdf.addImage(salesChartImg, 'PNG', 40, 220, 130, 70);
+
+                                                                                pdf.addPage();
+
+                                                                                pdf.setFontSize(12);
+                                                                                pdf.setFont('helvetica', 'bold');
+                                                                                pdf.setTextColor(0, 122, 204);
+                                                                                pdf.text('Average Sales Daily', 40, 25);
+
+                                                                                pdf.addImage(myChartImg, 'PNG', 50, 20, 110, 70);
+
+                                                                                pdf.text('Type of Customers', 40, 115);
+
+                                                                                pdf.addImage(customerTypeChartImg, 'PNG', 40, 120, 130, 70);
+
+                                                                                pdf.text('Total Customers per Province', 40, 215);
+
+                                                                                pdf.addImage(provincesChartImg, 'PNG', 40, 225, 130, 70);
+
+                                                                                pdf.addPage();
+
+                                                                                pdf.setFontSize(12);
+                                                                                pdf.setFont('helvetica', 'bold');
+                                                                                pdf.setTextColor(0, 122, 204);
+                                                                                pdf.text('Transaction Status', 40, 18);
+
+                                                                                pdf.addImage(transactionStatusChartImg, 'PNG', 60, 25, 100, 80);
+
+                                                                                pdf.text('Payment Method', 40, 115);
+
+                                                                                pdf.addImage(paymentChartImg, 'JPEG', 60, 115, 100, 80);
+
+
+                                                                                pdf.text('Transaction Type', 40, 215);
+
+                                                                                pdf.addImage(transactionTypeChartImg, 'PNG', 60, 215, 100, 80);
+
+
+                                                                                pdf.save('Visualight-Dashboard.pdf');
+                                                                            });
+                                                                    });
+
+                                                            });
+                                                    });
+                                            });
+                                    });
+                            });
+                    });
+            })
+            .catch(function(error) {
+                console.error('Error generating PDF:', error);
+            });
+    }
+</script>

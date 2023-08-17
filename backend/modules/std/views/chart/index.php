@@ -5,107 +5,77 @@ $this->title = '';
 
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title></title>
-        <meta name="description" content="">
-    
-        <style>
-    @font-face {
-        font-family: 'Poppins';
-        src: url('<?= Yii::$app->request->baseUrl ?>/fonts/Poppins-Light.ttf') format('truetype'),
-            url('<?= Yii::$app->request->baseUrl ?>/fonts/Poppins-Light.woff') format('woff');
 
-    }
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="description" content="">
 
-    /* Default styles */
-    .chart-container {
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
+    <style>
+        @font-face {
+            font-family: 'Poppins';
+            src: url('<?= Yii::$app->request->baseUrl ?>/fonts/Poppins-Light.ttf') format('truetype'),
+                url('<?= Yii::$app->request->baseUrl ?>/fonts/Poppins-Light.woff') format('woff');
 
-    .custom-text {
-        position: absolute;
-        top: 80px;
-        right: 50px;
-        text-align: center;
-        width: 30%;
-        display: inline-block;
-    }
+        }
 
-    .uwu-text,
-    .ehe-text {
-        background-color: #B526C2;
-        color: white;
-        width: 220px;
-        height: 130px;
-        border-radius: 20px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        margin-bottom: 30px;
-    }
+        /* Default styles */
+        .chart-container {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
-    .uwu-text {
-        background-color: #11A34C;
-        /* Updated background color for .uwu-text */
-    }
-
-    .texty {
-        margin: 0;
-        font-weight: bold;
-        font-size: 16px;
-        font-family: Poppins;
-    }
-
-    .number {
-        margin: 0;
-        font-family: Poppins;
-        font-size: 45px;
-        font-weight: bold;
-        margin-bottom: 10px;
-    }
-
-    #myChart {
-        position: absolute;
-        left: 50px;
-        top: 45px;
-    }
-
-    .asOne {
-        justify-content: space-between;
-        width: 60%;
-        right: 50%;
-    }
-
-    @media (max-width: 600px) {
         .custom-text {
             position: absolute;
-            top: 25%;
-            right: 10%;
-            box-sizing: border-box;
+            top: 80px;
+            right: 50px;
+            text-align: center;
+            width: 30%;
             display: inline-block;
         }
 
         .uwu-text,
         .ehe-text {
-            width: 120px;
-            height: 120px;
+            background-color: #B526C2;
+            color: white;
+            width: 220px;
+            height: 130px;
             border-radius: 20px;
-            padding: 15px;
-            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .uwu-text {
+            background-color: #11A34C;
+            /* Updated background color for .uwu-text */
+        }
+
+        .texty {
+            margin: 0;
+            font-weight: bold;
+            font-size: 16px;
+            font-family: Poppins;
+        }
+
+        .number {
+            margin: 0;
+            font-family: Poppins;
+            font-size: 45px;
+            font-weight: bold;
+            margin-bottom: 10px;
         }
 
         #myChart {
             position: absolute;
             left: 50px;
-            top: 150px;
-            justify-content: space-between;
+            top: 45px;
         }
 
         .asOne {
@@ -113,937 +83,957 @@ $this->title = '';
             width: 60%;
             right: 50%;
         }
-    }
 
+        @media (max-width: 600px) {
+            .custom-text {
+                position: absolute;
+                top: 25%;
+                right: 10%;
+                box-sizing: border-box;
+                display: inline-block;
+            }
 
+            .uwu-text,
+            .ehe-text {
+                width: 120px;
+                height: 120px;
+                border-radius: 20px;
+                padding: 15px;
+                margin-bottom: 15px;
+            }
 
-    :root {
-        font-size: 16px;
-    }
+            #myChart {
+                position: absolute;
+                left: 50px;
+                top: 150px;
+                justify-content: space-between;
+            }
 
-    /* Daily transaction css */
-
-    .DailyTransaction {
-        width: 100%;
-        height: 10.8125rem;
-        border-radius: .635rem;
-        background: #EFF5FF;
-        text-align: center;
-        color: #3A3835;
-        font-family: Poppins;
-        font-size: 1rem;
-        font-style: normal;
-        font-weight: 600;
-        line-height: normal;
-        letter-spacing: .15rem;
-        display: wrap;
-
-    }
-
-    .deptransaction {
-        width: 30%;
-        height: 7.875rem;
-        border-radius: .635rem;
-        background: #7209b7;
-        color: #FFF;
-        font-family: Poppins;
-        font-size: 1rem;
-        font-style: normal;
-        font-weight: 700;
-        line-height: normal;
-        letter-spacing: .15rem;
-        display: inline-block;
-    }
-
-    .deptransaction img {
-        margin-left: .625rem;
-    }
-
-    .deptransaction:hover {
-        transform: scale(1.1);
-        cursor: pointer;
-    }
-
-    .grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        grid-gap: .125rem;
-        grid-template-rows: auto auto;
-
-    }
-
-    #dailyTrans {
-        font-size: 3.375rem;
-        font-style: normal;
-        font-weight: 700;
-        line-height: normal;
-        letter-spacing: .5rem;
-    }
-
-    #valueIncrease {
-        font-size: 1.5rem;
-        font-weight: 400;
-        letter-spacing: .15rem;
-        grid-column: 3;
-        text-align: right;
-        padding-top: 2.5rem;
-
-    }
-
-
-    /* dropdown and datepicker */
-
-    .date_filter {
-        width: 100%;
-        height: 5.8125rem;
-        display: wrap;
-        text-align: center;
-    }
-
-    .containers {
-        width: 45%;
-        height: 7.875rem;
-        display: inline-block;
-    }
-
-    .dropdown_pdf_container {
-        position: relative;
-    }
-
-    .date_dropdown {
-        position: relative;
-        padding-top: 1.1rem;
-        padding-bottom: 1.1rem;
-        float: left;
-        overflow: hidden;
-        z-index: 99;
-    }
-
-    .date_type_label {
-        font-style: Poppins;
-        color: #F8B200;
-        font-size: 1.3rem;
-        letter-spacing: .30rem;
-    }
-
-    .dropdown {
-        position: relative;
-        display: inline-block;
-    }
-
-    .dropdown-content {
-        min-width: 8rem;
-        z-index: 1;
-        text-align: center;
-        border-radius: 0.5rem;
-    }
-
-    .date_type {
-        border-radius: 0.5rem
-    }
-
-    .print_pdf {
-        padding-right: 8.7rem;
-        padding-top: 1.3rem;
-        padding-bottom: 1.1rem;
-        right: 1rem;
-    }
-
-    .print_pdf_label {
-        border-radius: 1rem;
-        background-color: #00BDB2;
-        font-size: .7rem;
-        text-align: center;
-        margin: auto;
-        padding: 0.2rem;
-        padding-left: 1rem;
-        padding-right: 1rem;
-        color: white;
-        width: 7rem;
-    }
-
-    .datePicker_label {
-        border-radius: 0.5rem;
-        width: 8rem;
-        text-align: center;
-        font-size: 0.9rem;
-    }
-
-    .datePicker {
-        text-align: right;
-    }
-
-   
-    /* graph div */
-    .graph {
-        width: 100%;
-        text-align: center;
-        display: wrap;
-    }
-    #container {
-    height: 500px;
-    min-width: 310px;
-    max-width: 800px;
-    margin: 0 auto;
-}
-
-.loading {
-    margin-top: 10em;
-    text-align: center;
-    color: gray;
-}
-
-
-    .chart-container {
-        margin: .62rem;
-        padding: 3em;
-        border-radius: .93rem;
-        background-color: white;
-        display: inline-block;
-        height: 28rem;
-        width: 100%;
-        max-width: 47%;
-        overflow-x: scroll;
-        overflow-y: hidden;
-        white-space: nowrap;
-    }
-    .containerBody
-    {
-        height: 100%;
-        width: 200%;
-    }
-
-    .graph2 {
-        width: 100%;
-        text-align: center;
-        display: wrap;
-        background-color: white;
-    }
-
-    .chart-container2 {
-        margin: .1rem;
-        padding-top: 3rem;
-        padding-bottom: 3rem;
-        border-radius: .93rem;
-        background-color: white;
-        display: inline-block;
-        height: 28rem;
-        width: 49%;
-    }
-
-    body.dark-mode .chart-container {
-        background-color: black;
-
-    }
-
-    body.dark-mode .chart-container canvas {
-        background-color: black;
-        color: white;
-    }
-
-    #reportTitle {
-        color: #0362BA;
-        font-family: Poppins;
-        font-size: .875rem;
-        font-weight: 700;
-        letter-spacing: .15rem;
-
-    }
-
-
-
-    /* responsiveness */
-
-    /* daily transaction div */
-    @media (max-width: 900px) {
-        .deptransaction {
-            width: 80%;
-            display: justify;
-            /* Change to block to stack vertically */
-            margin: 0 auto 1rem;
-
+            .asOne {
+                justify-content: space-between;
+                width: 60%;
+                right: 50%;
+            }
         }
+
+
+
+        :root {
+            font-size: 16px;
+        }
+
+        /* Daily transaction css */
 
         .DailyTransaction {
-            height: auto;
-        }
-
-        .header {
+            width: 100%;
+            height: 10.8125rem;
+            border-radius: .635rem;
+            background: #EFF5FF;
+            text-align: center;
+            color: #3A3835;
+            font-family: Poppins;
             font-size: 1rem;
-        }
-    }
+            font-style: normal;
+            font-weight: 600;
+            line-height: normal;
+            letter-spacing: .15rem;
+            display: wrap;
 
-    /* graph responsiveness */
-    @media (max-width: 900px) {
-        .chart-container {
-            flex-basis: 100%;
-            max-width: 100%;
-            width: 95%;
-            height: 25rem;
-            display: block;
         }
 
-        .chart-container2 {
-            flex-basis: 100%;
-            max-width: 100%;
-            width: 95%;
-            height: 25rem;
-            display: block;
+        .deptransaction {
+            width: 30%;
+            height: 7.875rem;
+            border-radius: .635rem;
+            background: #7209b7;
+            color: #FFF;
+            font-family: Poppins;
+            font-size: 1rem;
+            font-style: normal;
+            font-weight: 700;
+            line-height: normal;
+            letter-spacing: .15rem;
+            display: inline-block;
         }
-    }
 
-    /* dropdown and date picker responsiveness */
-    /* tablet ui */
-    @media (min-width: 720),
-    (max-width:1500px) {
+        .deptransaction img {
+            margin-left: .625rem;
+        }
+
+        .deptransaction:hover {
+            transform: scale(1.1);
+            cursor: pointer;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-gap: .125rem;
+            grid-template-rows: auto auto;
+
+        }
+
+        #dailyTrans {
+            font-size: 3.375rem;
+            font-style: normal;
+            font-weight: 700;
+            line-height: normal;
+            letter-spacing: .5rem;
+        }
+
+        #valueIncrease {
+            font-size: 1.5rem;
+            font-weight: 400;
+            letter-spacing: .15rem;
+            grid-column: 3;
+            text-align: right;
+            padding-top: 2.5rem;
+
+        }
+
+
+        /* dropdown and datepicker */
 
         .date_filter {
-            height: 2.8125rem;
+            width: 100%;
+            height: 5.8125rem;
+            display: wrap;
+            text-align: center;
         }
 
         .containers {
-            height: 2.875rem;
+            width: 45%;
+            height: 7.875rem;
+            display: inline-block;
+        }
+
+        .dropdown_pdf_container {
+            position: relative;
         }
 
         .date_dropdown {
-            padding-right: 1rem;
-            padding-top: .5rem;
-            padding-bottom: .5rem;
+            position: relative;
+            padding-top: 1.1rem;
+            padding-bottom: 1.1rem;
+            float: left;
+            overflow: hidden;
+            z-index: 99;
         }
 
         .date_type_label {
-            font-size: .8rem;
-            letter-spacing: 0.01rem;
+            font-style: Poppins;
+            color: #F8B200;
+            font-size: 1.3rem;
+            letter-spacing: .30rem;
+        }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
         }
 
         .dropdown-content {
+            min-width: 8rem;
             z-index: 1;
             text-align: center;
             border-radius: 0.5rem;
-            width: 0.02rem;
-            height: 1.5rem;
-            font-size: .8rem;
         }
 
         .date_type {
-            border-radius: 1px;
+            border-radius: 0.5rem
         }
 
         .print_pdf {
-            padding-right: 0rem;
-            padding-top: .5rem;
-            padding-bottom: .2rem;
+            padding-right: 8.7rem;
+            padding-top: 1.3rem;
+            padding-bottom: 1.1rem;
+            right: 1rem;
         }
 
         .print_pdf_label {
             border-radius: 1rem;
-            padding-left: 0rem;
-            padding-right: 0rem;
-            width: 9rem;
+            background-color: #00BDB2;
+            font-size: .7rem;
+            text-align: center;
+            margin: auto;
+            padding: 0.2rem;
+            padding-left: 1rem;
+            padding-right: 1rem;
+            color: white;
+            width: 7rem;
         }
 
         .datePicker_label {
-            border-radius: 0.3rem;
-            width: 6rem;
-            font-size: .6rem;
-        }
-
-    }
-
-    /* phone ui */
-    @media (max-width: 719px) {
-        .date_filter {
-            height: 7.8125rem;
-
-        }
-
-        .containers {
-            height: 4.875rem;
-            width: 100%;
-            display: inline-block;
-        }
-
-
-        .date_dropdown {
-            /* padding-right: 3rem; */
-            padding-top: .5rem;
-            padding-bottom: .5rem;
-        }
-
-        .date_type_label {
-            font-size: .8rem;
-            letter-spacing: 0.01rem;
-        }
-
-        .dropdown-content {
-            width: 0.02rem;
-            height: 1.5rem;
-            font-size: .8rem;
-        }
-
-        .date_type {
-            border-radius: 1px;
-        }
-
-        .print_pdf {
-            /* padding-right: 0rem; */
-            padding-top: .5rem;
-            padding-bottom: .2rem;
-        }
-
-        .print_pdf_label {
-            padding-left: 0rem;
-            padding-right: 0rem;
-            width: 6rem;
+            border-radius: 0.5rem;
+            width: 8rem;
+            text-align: center;
+            font-size: 0.9rem;
         }
 
         .datePicker {
-            font-size: .8rem;
-            text-align: left;
-
+            text-align: right;
         }
 
-        .datePicker_label {
-            border-radius: 0.3rem;
-            width: 6rem;
-            height: 1rem;
+
+        /* graph div */
+        .graph {
+            width: 100%;
             text-align: center;
-            font-size: .6rem;
+            display: wrap;
+        }
+
+        #container {
+            height: 500px;
+            min-width: 310px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .loading {
+            margin-top: 10em;
+            text-align: center;
+            color: gray;
+        }
+
+
+        .chart-container {
+            margin: .62rem;
+            padding: 3em;
+            border-radius: .93rem;
+            background-color: white;
+            display: inline-block;
+            height: 28rem;
+            width: 100%;
+            max-width: 47%;
+            overflow-x: scroll;
+            overflow-y: hidden;
+            white-space: nowrap;
+        }
+
+        .containerBody {
+            height: 100%;
+            width: 200%;
+        }
+
+        .graph2 {
+            width: 100%;
+            text-align: center;
+            display: wrap;
+            background-color: white;
+        }
+
+        .chart-container2 {
+            margin: .1rem;
+            padding-top: 3rem;
+            padding-bottom: 3rem;
+            border-radius: .93rem;
+            background-color: white;
+            display: inline-block;
+            height: 28rem;
+            width: 49%;
+        }
+
+        body.dark-mode .chart-container {
+            background-color: black;
+
+        }
+
+        body.dark-mode .chart-container canvas {
+            background-color: black;
+            color: white;
+        }
+
+        #reportTitle {
+            color: #0362BA;
+            font-family: Poppins;
+            font-size: .875rem;
+            font-weight: 700;
+            letter-spacing: .15rem;
+
+        }
+
+
+
+        /* responsiveness */
+
+        /* daily transaction div */
+        @media (max-width: 900px) {
+            .deptransaction {
+                width: 80%;
+                display: justify;
+                /* Change to block to stack vertically */
+                margin: 0 auto 1rem;
+
+            }
+
+            .DailyTransaction {
+                height: auto;
+            }
+
+            .header {
+                font-size: 1rem;
+            }
+        }
+
+        /* graph responsiveness */
+        @media (max-width: 900px) {
+            .chart-container {
+                flex-basis: 100%;
+                max-width: 100%;
+                width: 95%;
+                height: 25rem;
+                display: block;
+            }
+
+            .chart-container2 {
+                flex-basis: 100%;
+                max-width: 100%;
+                width: 95%;
+                height: 25rem;
+                display: block;
+            }
+        }
+
+        /* dropdown and date picker responsiveness */
+        /* tablet ui */
+        @media (min-width: 720),
+        (max-width:1500px) {
+
+            .date_filter {
+                height: 2.8125rem;
+            }
+
+            .containers {
+                height: 2.875rem;
+            }
+
+            .date_dropdown {
+                padding-right: 1rem;
+                padding-top: .5rem;
+                padding-bottom: .5rem;
+            }
+
+            .date_type_label {
+                font-size: .8rem;
+                letter-spacing: 0.01rem;
+            }
+
+            .dropdown-content {
+                z-index: 1;
+                text-align: center;
+                border-radius: 0.5rem;
+                width: 0.02rem;
+                height: 1.5rem;
+                font-size: .8rem;
+            }
+
+            .date_type {
+                border-radius: 1px;
+            }
+
+            .print_pdf {
+                padding-right: 0rem;
+                padding-top: .5rem;
+                padding-bottom: .2rem;
+            }
+
+            .print_pdf_label {
+                border-radius: 1rem;
+                padding-left: 0rem;
+                padding-right: 0rem;
+                width: 9rem;
+            }
+
+            .datePicker_label {
+                border-radius: 0.3rem;
+                width: 6rem;
+                font-size: .6rem;
+            }
+
+        }
+
+        /* phone ui */
+        @media (max-width: 719px) {
+            .date_filter {
+                height: 7.8125rem;
+
+            }
+
+            .containers {
+                height: 4.875rem;
+                width: 100%;
+                display: inline-block;
+            }
+
+
+            .date_dropdown {
+                /* padding-right: 3rem; */
+                padding-top: .5rem;
+                padding-bottom: .5rem;
+            }
+
+            .date_type_label {
+                font-size: .8rem;
+                letter-spacing: 0.01rem;
+            }
+
+            .dropdown-content {
+                width: 0.02rem;
+                height: 1.5rem;
+                font-size: .8rem;
+            }
+
+            .date_type {
+                border-radius: 1px;
+            }
+
+            .print_pdf {
+                /* padding-right: 0rem; */
+                padding-top: .5rem;
+                padding-bottom: .2rem;
+            }
+
+            .print_pdf_label {
+                padding-left: 0rem;
+                padding-right: 0rem;
+                width: 6rem;
+            }
+
+            .datePicker {
+                font-size: .8rem;
+                text-align: left;
+
+            }
+
+            .datePicker_label {
+                border-radius: 0.3rem;
+                width: 6rem;
+                height: 1rem;
+                text-align: center;
+                font-size: .6rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+
+    <?php
+
+    use yii\db\Query;
+    use yii\bootstrap5\Html;
+    // Fetch sales data from the database
+    // $fromDate = $_POST['startDate'];
+    // $toDate = $_POST['endDate'];
+
+    $query = new Query();
+
+    $salesData = $query->select(['division_name', 'transacton_date', 'SUM(amount) as total_amount'])
+        ->from('operational_report')
+        // ->where(['between', 'transaction_date', $fromDate, $toDate])
+        // ->where(['between', 'transacton_date', '2023-06-10', '2023-06-14'])
+        ->where([
+            'division_name' => 'Standard and Testing Division',
+            'transaction_status' => ['Pending', 'Paid']
+        ])
+        ->groupBy(['division_name', 'transacton_date'])
+        ->orderBy(['transacton_date' => SORT_DESC])
+        ->all();
+    // Prepare $SalesperDiv array (null pa to)
+    $SalesperDiv = [
+        'labels' => [],
+        'datasets' => [],
+    ];
+
+
+
+    //dito kukuha ng data for $SalesperDiv
+    foreach ($salesData as $data) {
+        $divisionName = $data['division_name'];
+        $transactionDate = $data['transacton_date'];
+        $totalAmount = (float) $data['total_amount'];
+
+        // Add unique dates to the labels array
+        if (!in_array($transactionDate, $SalesperDiv['labels'])) {
+            $SalesperDiv['labels'][] = $transactionDate;
+        }
+
+        // Find the index of the division in the datasets array
+        $divisionIndex = array_search($divisionName, array_column($SalesperDiv['datasets'], 'label'));
+
+        if ($divisionIndex === false) {
+            // Add a new dataset for the division if not already present
+            $SalesperDiv['datasets'][] = [
+                'label' => $divisionName,
+                'data' => [$totalAmount],
+            ];
+        } else {
+            // If the dataset already exists, add the amount to the existing data
+            $SalesperDiv['datasets'][$divisionIndex]['data'][] = $totalAmount;
         }
     }
 
-</style>
-    </head>
-    <body>
+    // Fetch transaction data from the database (depends on how many transaction in same date and same div_name)
+    $transactionData = $query->select(['division_name', 'transacton_date', 'COUNT(*) as transaction_count'])
+        ->from('operational_report')
+        // ->where(['between', 'transaction_date', $fromDate, $toDate])
+        ->where([
+            'division_name' => 'Standard and Testing Division',
+            'transaction_status' => ['Pending', 'Paid']
+        ])
+        ->groupBy(['division_name', 'transacton_date'])
+        ->orderBy(['transacton_date' => SORT_DESC])
+        ->all();
 
+    // Prepare $TransactionperDiv array (null pa// otw yung data HAHA)
+    $TransactionperDiv = [
+        'labels' => [],
+        'datasets' => [],
+    ];
 
-<?php
+    //getting data for the $TransactionperDiv
+    foreach ($transactionData as $data) {
+        $divisionName = $data['division_name'];
+        $transactionDate = $data['transacton_date'];
+        $transactionCount = (int) $data['transaction_count'];
 
-use yii\db\Query;
-use yii\bootstrap5\Html;
-// Fetch sales data from the database
-// $fromDate = $_POST['startDate'];
-// $toDate = $_POST['endDate'];
+        // Add unique dates to the labels array
+        if (!in_array($transactionDate, $TransactionperDiv['labels'])) {
+            $TransactionperDiv['labels'][] = $transactionDate;
+        }
 
-$query = new Query();
+        // Find the index of the division in the datasets array
+        $divisionIndex = array_search($divisionName, array_column($TransactionperDiv['datasets'], 'label'));
 
-$salesData = $query->select(['division_name', 'transacton_date', 'SUM(amount) as total_amount'])
-    ->from('operational_report')
-    // ->where(['between', 'transaction_date', $fromDate, $toDate])
-    // ->where(['between', 'transacton_date', '2023-06-10', '2023-06-14'])
-    ->where([
-        'division_name' => 'Standard and Testing Division',
-        'transaction_status' => ['Pending','Paid']
-    ])
-    ->groupBy(['division_name', 'transacton_date'])
-    ->orderBy(['transacton_date' => SORT_DESC])
-    ->all();
-// Prepare $SalesperDiv array (null pa to)
-$SalesperDiv = [
-    'labels' => [],
-    'datasets' => [],
-];
-
-
-
-//dito kukuha ng data for $SalesperDiv
-foreach ($salesData as $data) {
-    $divisionName = $data['division_name'];
-    $transactionDate = $data['transacton_date'];
-    $totalAmount = (float) $data['total_amount'];
-
-    // Add unique dates to the labels array
-    if (!in_array($transactionDate, $SalesperDiv['labels'])) {
-        $SalesperDiv['labels'][] = $transactionDate;
+        if ($divisionIndex === false) {
+            // Add a new dataset for the division if not already present
+            $TransactionperDiv['datasets'][] = [
+                'label' => $divisionName,
+                'data' => [$transactionCount],
+            ];
+        } else {
+            // If the dataset already exists, add the transaction count to the existing data
+            $TransactionperDiv['datasets'][$divisionIndex]['data'][] = $transactionCount;
+        }
     }
 
-    // Find the index of the division in the datasets array
-    $divisionIndex = array_search($divisionName, array_column($SalesperDiv['datasets'], 'label'));
 
-    if ($divisionIndex === false) {
-        // Add a new dataset for the division if not already present
-        $SalesperDiv['datasets'][] = [
-            'label' => $divisionName,
-            'data' => [$totalAmount],
-        ];
+    $addressData = $query->select(['address', 'COUNT(*) as customer_count'])
+        ->from('operational_report')
+        // ->where(['between', 'transaction_date', $fromDate, $toDate])
+        ->where([
+            'division_name' => 'Standard and Testing Division',
+        ])
+        ->groupBy(['address'])
+        ->orderBy(['customer_count' => SORT_DESC])
+        ->limit(100000)
+        ->all();
+
+    // // Prepare data for the chart
+    // $province = [];
+    // $customersCounts = [];
+    $provinces = [
+        'labels' => [],
+        'datasets' => [],
+    ];
+
+    foreach ($addressData as $customeraddress) {
+        $province[] = $customeraddress['address'];
+        $customersCounts[] = $customeraddress['customer_count'];
+
+        if (!in_array($province, $provinces['labels'])) {
+            $provinces['labels'][] = $province;
+        }
+        $provinceIndex = array_search($province, array_column($provinces['datasets'], 'label'));
+        if ($provinceIndex === false) {
+            // Add a new dataset for the division if not already present
+            $provinces['datasets'][] = [
+                'label' => $province,
+                'data' => [$customersCounts],
+            ];
+        } else {
+            // If the dataset already exists, add the transaction count to the existing data
+            $provinces['datasets'][$provinceIndex]['data'][] = $customersCounts;
+        }
+    }
+
+    $customerTypeData = $query->select(['customer_type', 'COUNT(*) as customer_count'])
+        ->from('operational_report')
+        // ->where(['between', 'transaction_date', $fromDate, $toDate])
+        ->where([
+            'division_name' => 'Standard and Testing Division',
+            'transaction_status' => ['Pending', 'Paid']
+        ])
+        ->groupBy(['customer_type'])
+        ->orderBy(['customer_count' => SORT_DESC])
+        ->limit(100000)
+        ->all();
+    $customerType = [];
+    $customerscounts = [];
+
+    foreach ($customerTypeData as $customersType) {
+        $customerType[] = $customersType['customer_type'];
+        $customerscounts[] = $customersType['customer_count'];
+    }
+
+    $transactionTypeData = $query->select(['transaction_type', 'COUNT(*) as customer_count'])
+        ->from('operational_report')
+        // ->where(['between', 'transaction_date', $fromDate, $toDate])
+        ->where([
+            'division_name' => 'Standard and Testing Division',
+            'transaction_status' => ['Pending', 'Paid']
+        ])
+        ->groupBy(['transaction_type'])
+        ->orderBy(['customer_count' => SORT_DESC])
+        ->limit(100000)
+        ->all();
+    $transactionType = [];
+    $transactionTypecounts = [];
+
+    foreach ($transactionTypeData as $type) {
+        $transactionType[] = $type['transaction_type'];
+        $transactionTypecounts[] = $type['customer_count'];
+    }
+    $transactionStatusData = $query->select(['transaction_status', 'COUNT(*) as customer_count'])
+        ->from('operational_report')
+        // ->where(['between', 'transaction_date', $fromDate, $toDate])
+        ->where([
+            'division_name' => 'Standard and Testing Division',
+        ])
+        ->groupBy(['transaction_status'])
+        ->orderBy(['customer_count' => SORT_DESC])
+        ->limit(100000)
+        ->all();
+
+    $transactionStatus = [];
+    $transactionStatusDatacounts = [];
+
+    foreach ($transactionStatusData as $status) {
+        $transactionStatus[] = $status['transaction_status'];
+        $transactionStatusDatacounts[] = $status['customer_count'];
+    }
+
+    $PaymentMethodData = $query->select(['payment_method', 'COUNT(*) as customer_count'])
+        ->from('operational_report')
+        ->where(['payment_method' => ['Check', 'Over the counter', 'Online Payment']])
+        // ->where(['between', 'transaction_date', $fromDate, $toDate])
+        ->where([
+            'division_name' => 'Standard and Testing Division',
+            'transaction_status' => 'Paid'
+        ])
+        ->groupBy(['payment_method'])
+        ->orderBy(['customer_count' => SORT_DESC])
+        ->limit(100000)
+        ->all();
+
+    $PaymentMethod = [];
+    $PaymentMethodcounts = [];
+
+    foreach ($PaymentMethodData as $method) {
+        $PaymentMethod[] = $method['payment_method'];
+        $PaymentMethodcounts[] = $method['customer_count'];
+    }
+
+
+    $transactionPerday = (new Query())
+        ->select('transacton_date, COUNT(*) as transaction_count')
+        ->from('operational_report')
+        ->groupBy('transacton_date');
+
+    $transactionPerday = $transactionPerday->all(); // Get the results with daily transaction counts
+    $totalDays = count($transactionPerday); // Total number of days
+    $totalTransactions = 0;
+
+    foreach ($transactionPerday as $result) {
+        $totalTransactions += $result['transaction_count'];
+    }
+    $average = round($totalTransactions / $totalDays); // Calculate the average
+
+    $SalesAve = (new Query())
+        ->select('transacton_date, SUM(amount) as transaction_count')
+        ->from('operational_report')
+        ->groupBy('transacton_date');
+
+    $SalesAve = $SalesAve->all(); // Get the results with daily transaction counts
+    $totalDays = count($SalesAve); // Total number of days
+    $totalTransactions = 0;
+
+    foreach ($SalesAve as $result) {
+        $totalTransactions += $result['transaction_count'];
+    }
+    $saleaverage = round($totalTransactions / $totalDays); // Calculate the average
+    if ($saleaverage >= 1000 && $saleaverage <= 999999) {
+        $saleaverage = round(($saleaverage / 1000), 2) . 'K';
+    } else if ($saleaverage >= 1000000 && $saleaverage <= 999999999) {
+        $saleaverage = round(($saleaverage / 1000000), 2) . 'M';
+    } else if ($saleaverage >= 1000000000) {
+        $saleaverage = round(($saleaverage / 1000000000), 2) . 'B';
+    }
+
+    //setting default colors for each department
+    $divisionColors = [
+        'Standard and Testing Division' => [
+            'backgroundColor' => '#7209b7',
+            'borderWidth' => 2,
+        ],
+    ];
+
+    //dito yung pag lalagay nung naka set na color
+    foreach ($SalesperDiv['datasets'] as &$dataset) {
+        $divisionName = $dataset['label'];
+        $dataset['backgroundColor'] = isset($divisionColors[$divisionName]['backgroundColor']) ? $divisionColors[$divisionName]['backgroundColor'] : '#EFF5FF'; // Default background color if division_name not found
+        $dataset['borderColor'] = isset($divisionColors[$divisionName]['borderColor']) ? $divisionColors[$divisionName]['borderColor'] : '#0362BA'; // Default border color if division_name not found
+        // $dataset['borderWidth'] = isset($divisionColors[$divisionName]['borderWidth']) ? $divisionColors[$divisionName]['borderWidth'] : '#0362BA';
+    }
+
+    foreach ($TransactionperDiv['datasets'] as &$dataset) {
+        $divisionName = $dataset['label'];
+        $dataset['backgroundColor'] = isset($divisionColors[$divisionName]['backgroundColor']) ? $divisionColors[$divisionName]['backgroundColor'] : '#EFF5FF'; // Default background color if division_name not found
+        $dataset['borderColor'] = isset($divisionColors[$divisionName]['borderColor']) ? $divisionColors[$divisionName]['borderColor'] : '#0362BA'; // Default border color if division_name not found
+        // $dataset['borderWidth'] = isset($divisionColors[$divisionName]['borderWidth']) ? $divisionColors[$divisionName]['borderWidth'] : '#0362BA';
+    }
+
+
+    //Dito yung para sa Total ng Daily Transaction (tinatype ko pa yung date kasi di ako marunong nung rekta connected sa calendar HAHAHAH)
+    date_default_timezone_set('Asia/Manila');
+
+    //Total Transaction everyday changes depending on date
+    $todaymettrans = (new Query())
+        ->select('COUNT(*)')
+        ->from('operational_report')
+        ->where([
+            'division_name' => 'Standard and Testing Division',
+            'transacton_date' => date('Y-m-d') // Assuming you want the number of transactions for today
+        ])
+        ->scalar();
+
+    $lastmettrans = (new Query())
+        ->select('COUNT(*)')
+        ->from('operational_report')
+        ->where([
+            'division_name' => 'Standard and Testing Division',
+            'transacton_date' => date('Y-m-d', strtotime('-1 day'))
+        ])
+        ->scalar();
+
+    if ($todaymettrans == 0) {
+        $metdailytransincrease = 0;
     } else {
-        // If the dataset already exists, add the amount to the existing data
-        $SalesperDiv['datasets'][$divisionIndex]['data'][] = $totalAmount;
-    }
-}
-
-// Fetch transaction data from the database (depends on how many transaction in same date and same div_name)
-$transactionData = $query->select(['division_name', 'transacton_date', 'COUNT(*) as transaction_count'])
-    ->from('operational_report')
-    // ->where(['between', 'transaction_date', $fromDate, $toDate])
-    ->where([
-        'division_name' => 'Standard and Testing Division',
-        'transaction_status' => ['Pending','Paid']
-    ])
-    ->groupBy(['division_name', 'transacton_date'])
-    ->orderBy(['transacton_date' => SORT_DESC])
-    ->all();
-
-// Prepare $TransactionperDiv array (null pa// otw yung data HAHA)
-$TransactionperDiv = [
-    'labels' => [],
-    'datasets' => [],
-];
-
-//getting data for the $TransactionperDiv
-foreach ($transactionData as $data) {
-    $divisionName = $data['division_name'];
-    $transactionDate = $data['transacton_date'];
-    $transactionCount = (int) $data['transaction_count'];
-
-    // Add unique dates to the labels array
-    if (!in_array($transactionDate, $TransactionperDiv['labels'])) {
-        $TransactionperDiv['labels'][] = $transactionDate;
+        //dito magcocompute ng percentage ng increase or decrease ng number of past transaction at today's transaction (tinatype ko pa din yung sa last transaction kunwari kasi di pa ko marunong)
+        $metdailytransincrease = (($todaymettrans - $lastmettrans) / $todaymettrans) * 100;
+        $metdailytransincrease = number_format($metdailytransincrease, 2);
+        if ($metdailytransincrease > 1) {
+            $metdailytransincrease = '+' . $metdailytransincrease . '%';
+        } else {
+            $metdailytransincrease = $metdailytransincrease . '%';
+        }
     }
 
-    // Find the index of the division in the datasets array
-    $divisionIndex = array_search($divisionName, array_column($TransactionperDiv['datasets'], 'label'));
 
-    if ($divisionIndex === false) {
-        // Add a new dataset for the division if not already present
-        $TransactionperDiv['datasets'][] = [
-            'label' => $divisionName,
-            'data' => [$transactionCount],
-        ];
+
+    //Here should be the sum of total sales everyday
+    $SalesToday = (new Query())
+        ->select(['SUM(amount)'])
+        ->from('operational_report')
+        ->where([
+            'division_name' => 'Standard and Testing Division',
+            'transacton_date' => date('Y-m-d') // Using the current date in 'Y-m-d' format
+        ])
+        ->scalar();
+
+    $SalesYesterday = (new Query())
+        ->select(['SUM(amount)'])
+        ->from('operational_report')
+        ->where([
+            'division_name' => 'Standard and Testing Division',
+            'transacton_date' => date('Y-m-d', strtotime('-1 day'))
+        ])
+        ->scalar();
+
+    if ($SalesToday == 0) {
+        $SalesToday = 0;
+        $SalesIncreasePercent = 0;
     } else {
-        // If the dataset already exists, add the transaction count to the existing data
-        $TransactionperDiv['datasets'][$divisionIndex]['data'][] = $transactionCount;
+
+        $SalesIncreasePercent = (($SalesToday - $SalesYesterday) / $SalesToday) * 100;
+        $SalesIncreasePercent = number_format($SalesIncreasePercent, 2);
+        if ($SalesIncreasePercent > 1) {
+            $SalesIncreasePercent = '+' . $SalesIncreasePercent . '%';
+        } else {
+            $SalesIncreasePercent = $SalesIncreasePercent . '%';
+        }
+
+        if ($SalesToday >= 1000 && $SalesToday <= 999999) {
+            $SalesToday = round(($SalesToday / 1000), 2) . 'K';
+        } else if ($SalesToday >= 1000000 && $SalesToday <= 999999999) {
+            $SalesToday = round(($SalesToday / 1000000), 2) . 'M';
+        } else if ($SalesToday >= 1000000000) {
+            $SalesToday =  round(($SalesToday / 1000000000), 2) . 'B';
+        }
     }
-}
 
 
-$addressData = $query->select(['address', 'COUNT(*) as customer_count'])
-    ->from('operational_report')
-    // ->where(['between', 'transaction_date', $fromDate, $toDate])
-    ->where([
-        'division_name' => 'Standard and Testing Division',
-    ])
-    ->groupBy(['address'])
-    ->orderBy(['customer_count' => SORT_DESC])
-    ->limit(100000)
-    ->all();
+    //Here is the average transaction daily
+    $transactionPerday = (new Query())
+        ->select('transacton_date, COUNT(*) as transaction_count')
+        ->from('operational_report')
+        ->where([
+            'division_name' => 'Standard and Testing Division',
+        ])
+        ->groupBy('transacton_date');
 
-// // Prepare data for the chart
-// $province = [];
-// $customersCounts = [];
-$provinces = [
-    'labels' => [],
-    'datasets' => [],
-];
+    $transactionPerday = $transactionPerday->all(); // Get the results with daily transaction counts
+    $totalDays = count($transactionPerday); // Total number of days
+    $totalTransactions = 0;
 
-foreach ($addressData as $customeraddress) {
-    $province[] = $customeraddress['address'];
-    $customersCounts[] = $customeraddress['customer_count'];
-
-    if(!in_array($province, $provinces['labels'])) {
-        $provinces['labels'][] = $province;
+    foreach ($transactionPerday as $result) {
+        $totalTransactions += $result['transaction_count'];
     }
-    $provinceIndex = array_search($province, array_column($provinces['datasets'], 'label'));
-    if ($provinceIndex === false) {
-        // Add a new dataset for the division if not already present
-        $provinces['datasets'][] = [
-            'label' => $province,
-            'data' => [$customersCounts],
-        ];
-    } else {
-        // If the dataset already exists, add the transaction count to the existing data
-        $provinces['datasets'][$provinceIndex]['data'][] = $customersCounts;
-    }
-}
 
-$customerTypeData = $query->select(['customer_type', 'COUNT(*) as customer_count'])
-    ->from('operational_report')
-    // ->where(['between', 'transaction_date', $fromDate, $toDate])
-    ->where([
-        'division_name' => 'Standard and Testing Division',
-        'transaction_status' => ['Pending','Paid']
-    ])
-    ->groupBy(['customer_type'])
-    ->orderBy(['customer_count' => SORT_DESC])
-    ->limit(100000)
-    ->all();
-$customerType = [];
-$customerscounts = [];
+    $average = round($totalTransactions / $totalDays); // Calculate the average
 
-foreach ($customerTypeData as $customersType) {
-    $customerType[] = $customersType['customer_type'];
-    $customerscounts[] = $customersType['customer_count'];
-}
+    ?>
 
-$transactionTypeData = $query->select(['transaction_type', 'COUNT(*) as customer_count'])
-    ->from('operational_report')
-    // ->where(['between', 'transaction_date', $fromDate, $toDate])
-    ->where([
-        'division_name' => 'Standard and Testing Division',
-        'transaction_status' => ['Pending','Paid']
-    ])
-    ->groupBy(['transaction_type'])
-    ->orderBy(['customer_count' => SORT_DESC])
-    ->limit(100000)
-    ->all();
-$transactionType = [];
-$transactionTypecounts = [];
+    <div class="DailyTransaction">
+        <br>
 
-foreach ($transactionTypeData as $type) {
-    $transactionType[] = $type['transaction_type'];
-    $transactionTypecounts[] = $type['customer_count'];
-}
-$transactionStatusData = $query->select(['transaction_status', 'COUNT(*) as customer_count'])
-    ->from('operational_report')
-    // ->where(['between', 'transaction_date', $fromDate, $toDate])
-    ->where([
-        'division_name' => 'Standard and Testing Division',
-    ])
-    ->groupBy(['transaction_status'])
-    ->orderBy(['customer_count' => SORT_DESC])
-    ->limit(100000)
-    ->all();
-
-$transactionStatus = [];
-$transactionStatusDatacounts = [];
-
-foreach ($transactionStatusData as $status) {
-    $transactionStatus[] = $status['transaction_status'];
-    $transactionStatusDatacounts[] = $status['customer_count'];
-}
-
-$PaymentMethodData = $query->select(['payment_method', 'COUNT(*) as customer_count'])
-    ->from('operational_report')
-    ->where(['payment_method' => ['Check', 'Over the counter', 'Online Payment']])
-    // ->where(['between', 'transaction_date', $fromDate, $toDate])
-    ->where([
-        'division_name' => 'Standard and Testing Division',
-        'transaction_status' => 'Paid'
-    ])
-    ->groupBy(['payment_method'])
-    ->orderBy(['customer_count' => SORT_DESC])
-    ->limit(100000)
-    ->all();
-
-$PaymentMethod = [];
-$PaymentMethodcounts = [];
-
-foreach ($PaymentMethodData as $method) {
-    $PaymentMethod[] = $method['payment_method'];
-    $PaymentMethodcounts[] = $method['customer_count'];
-}
-
-
-$transactionPerday = (new Query())
-    ->select('transacton_date, COUNT(*) as transaction_count')
-    ->from('operational_report')
-    ->groupBy('transacton_date');
-
-$transactionPerday = $transactionPerday->all(); // Get the results with daily transaction counts
-$totalDays = count($transactionPerday); // Total number of days
-$totalTransactions = 0;
-
-foreach ($transactionPerday as $result) {
-    $totalTransactions += $result['transaction_count'];
-}
-$average = round($totalTransactions / $totalDays); // Calculate the average
-
-$SalesAve = (new Query())
-    ->select('transacton_date, SUM(amount) as transaction_count')
-    ->from('operational_report')
-    ->groupBy('transacton_date');
-
-$SalesAve = $SalesAve->all(); // Get the results with daily transaction counts
-$totalDays = count($SalesAve); // Total number of days
-$totalTransactions = 0;
-
-foreach ($SalesAve as $result) {
-    $totalTransactions += $result['transaction_count'];
-}
-$saleaverage = round($totalTransactions / $totalDays); // Calculate the average
-if ($saleaverage >= 1000 && $saleaverage <= 999999) {
-    $saleaverage = round(($saleaverage / 1000), 2) . 'K';
-} else if ($saleaverage >= 1000000 && $saleaverage <= 999999999) {
-    $saleaverage = round(($saleaverage / 1000000), 2) . 'M';
-} else if ($saleaverage >= 1000000000) {
-    $saleaverage = round(($saleaverage / 1000000000), 2) . 'B';
-}
-
-//setting default colors for each department
-$divisionColors = [
-    'Standard and Testing Division' => [
-        'backgroundColor' => '#7209b7',
-        'borderWidth' => 2,
-    ],
-];
-
-//dito yung pag lalagay nung naka set na color
-foreach ($SalesperDiv['datasets'] as &$dataset) {
-    $divisionName = $dataset['label'];
-    $dataset['backgroundColor'] = isset($divisionColors[$divisionName]['backgroundColor']) ? $divisionColors[$divisionName]['backgroundColor'] : '#EFF5FF'; // Default background color if division_name not found
-    $dataset['borderColor'] = isset($divisionColors[$divisionName]['borderColor']) ? $divisionColors[$divisionName]['borderColor'] : '#0362BA'; // Default border color if division_name not found
-    // $dataset['borderWidth'] = isset($divisionColors[$divisionName]['borderWidth']) ? $divisionColors[$divisionName]['borderWidth'] : '#0362BA';
-}
-
-foreach ($TransactionperDiv['datasets'] as &$dataset) {
-    $divisionName = $dataset['label'];
-    $dataset['backgroundColor'] = isset($divisionColors[$divisionName]['backgroundColor']) ? $divisionColors[$divisionName]['backgroundColor'] : '#EFF5FF'; // Default background color if division_name not found
-    $dataset['borderColor'] = isset($divisionColors[$divisionName]['borderColor']) ? $divisionColors[$divisionName]['borderColor'] : '#0362BA'; // Default border color if division_name not found
-    // $dataset['borderWidth'] = isset($divisionColors[$divisionName]['borderWidth']) ? $divisionColors[$divisionName]['borderWidth'] : '#0362BA';
-}
-
-
-//Dito yung para sa Total ng Daily Transaction (tinatype ko pa yung date kasi di ako marunong nung rekta connected sa calendar HAHAHAH)
-date_default_timezone_set('Asia/Manila'); 
-
-//Total Transaction everyday changes depending on date
-$todaymettrans = (new Query())
-->select('COUNT(*)')
-->from('operational_report')
-->where([
-    'division_name' => 'Standard and Testing Division',
-    'transacton_date' => date('Y-m-d') // Assuming you want the number of transactions for today
-])
-->scalar();
-
-$lastmettrans= (new Query())
-->select('COUNT(*)')
-->from('operational_report')
-->where([
-    'division_name' => 'Standard and Testing Division',
-    'transacton_date' => date('Y-m-d', strtotime('-1 day'))  
-])
-->scalar();
-
-if($todaymettrans==0)
-{
-    $metdailytransincrease=0;
-}
-else{
-//dito magcocompute ng percentage ng increase or decrease ng number of past transaction at today's transaction (tinatype ko pa din yung sa last transaction kunwari kasi di pa ko marunong)
-$metdailytransincrease = (($todaymettrans - $lastmettrans) / $todaymettrans) * 100;
-$metdailytransincrease = number_format($metdailytransincrease, 2);
-if ($metdailytransincrease > 1) 
-{
-    $metdailytransincrease = '+' . $metdailytransincrease . '%';
-} 
-else 
-{
-    $metdailytransincrease = $metdailytransincrease . '%';
-}
-}
-
-
-
-//Here should be the sum of total sales everyday
-$SalesToday = (new Query())
-    ->select(['SUM(amount)'])
-    ->from('operational_report')
-    ->where([
-        'division_name' => 'Standard and Testing Division',
-        'transacton_date' => date('Y-m-d') // Using the current date in 'Y-m-d' format
-    ])
-    ->scalar();
-
-$SalesYesterday = (new Query())
-    ->select(['SUM(amount)'])
-    ->from('operational_report')
-    ->where([
-        'division_name' => 'Standard and Testing Division',
-        'transacton_date' => date('Y-m-d', strtotime('-1 day'))
-    ])
-    ->scalar();
-
-if($SalesToday==0)
-{
-    $SalesToday=0;
-    $SalesIncreasePercent=0;
-}
-else{
-
-$SalesIncreasePercent = (($SalesToday - $SalesYesterday) / $SalesToday) * 100;
-$SalesIncreasePercent = number_format($SalesIncreasePercent, 2);
-if ($SalesIncreasePercent > 1) {
-    $SalesIncreasePercent = '+' . $SalesIncreasePercent . '%';
-} else {
-    $SalesIncreasePercent = $SalesIncreasePercent . '%';
-}
-
-if($SalesToday>=1000 && $SalesToday<=999999)
-{
-    $SalesToday= round(($SalesToday / 1000),2).'K';
-}
-else if($SalesToday>=1000000 && $SalesToday<=999999999)
-{
-    $SalesToday= round(($SalesToday / 1000000),2).'M';
-}
-else if($SalesToday>=1000000000)
-{
-    $SalesToday=  round(($SalesToday / 1000000000),2).'B';
-}
-}
-
-
-//Here is the average transaction daily
-$transactionPerday = (new Query())
-    ->select('transacton_date, COUNT(*) as transaction_count')
-    ->from('operational_report')
-    ->where([
-        'division_name' => 'Standard and Testing Division', 
-    ])
-    ->groupBy('transacton_date');
-
-$transactionPerday = $transactionPerday->all(); // Get the results with daily transaction counts
-$totalDays = count($transactionPerday); // Total number of days
-$totalTransactions = 0;
-
-foreach ($transactionPerday as $result) {
-    $totalTransactions += $result['transaction_count'];
-}
-
-$average =round ($totalTransactions / $totalDays); // Calculate the average
-
-?>
-
-<div class="DailyTransaction">
-    <br>
-
-    <div class="deptransaction">
-        <p>Total Transactions Daily</p>
-        <div class="grid">
-            <img src="/images/Total Sales.png" alt="icon1">
-            <p id="dailyTrans"><?= $todaymettrans ?></p>
-            <p id="valueIncrease"><?= $metdailytransincrease ?></p>
-        </div>
-    </div>
-    <div class="deptransaction">
-        <p>Total Sales Daily</p>
-        <div class="grid">
-            <img src="/images/Sales Performance.png" alt="icon2">
-            <p id="dailyTrans"><?= $SalesToday ?></p>
-            <p id="valueIncrease"><?= $SalesIncreasePercent ?></p>
-        </div>
-    </div>
-    <div class="deptransaction">
-        <p>Average Transaction Daily</p>
-        <div class="grid">
-            <img src="/images/Calculator.png" alt="icon3">
-            <p id="dailyTrans"><?= $average ?></p>
-        </div>
-    </div>
-
-</div>
-
-<!-- Date Filter Div -->
-<div class="date_filter">
-
-    <div class="containers">
-        <div class="dropdown_pdf_container">
-            <div class="date_dropdown">
-                <form>
-                    <label for="date_type" class="date_type_label">
-                        <strong>Date Filter:</strong></label>
-                    <select name="date_type" id="date_type" class="dropdown-content">
-                        <option value="_day">Daily</option>
-                        <option value="_week">Weekly</option>
-                        <option value="_month">Monthly</option>
-                    </select>
-                </form>
-            </div>
-
-            <div class="print_pdf">
-                <Button class="print_pdf_label" onclick="downloadPDF()"> Chart Download</Button>
+        <div class="deptransaction">
+            <p>Total Transactions Daily</p>
+            <div class="grid">
+                <img src="/images/Total Sales.png" alt="icon1">
+                <p id="dailyTrans"><?= $todaymettrans ?></p>
+                <p id="valueIncrease"><?= $metdailytransincrease ?></p>
             </div>
         </div>
+        <div class="deptransaction">
+            <p>Total Sales Daily</p>
+            <div class="grid">
+                <img src="/images/Sales Performance.png" alt="icon2">
+                <p id="dailyTrans"><?= $SalesToday ?></p>
+                <p id="valueIncrease"><?= $SalesIncreasePercent ?></p>
+            </div>
+        </div>
+        <div class="deptransaction">
+            <p>Average Transaction Daily</p>
+            <div class="grid">
+                <img src="/images/Calculator.png" alt="icon3">
+                <p id="dailyTrans"><?= $average ?></p>
+            </div>
+        </div>
+
     </div>
-    <div class="containers">
-        <!-- <form method="post" action="process_data.php"> Replace with your processing script -->
-        <div class="datePicker">
-            <label>From: </label>
-            <input type="date" id="startDate" name="startDate" class="datePicker_label">
-            <!-- </div>
+
+    <!-- Date Filter Div -->
+    <div class="date_filter">
+
+        <div class="containers">
+            <div class="dropdown_pdf_container">
+                <div class="date_dropdown">
+                    <form>
+                        <label for="date_type" class="date_type_label">
+                            <strong>Date Filter:</strong></label>
+                        <select name="date_type" id="date_type" class="dropdown-content">
+                            <option value="_day">Daily</option>
+                            <option value="_week">Weekly</option>
+                            <option value="_month">Monthly</option>
+                        </select>
+                    </form>
+                </div>
+
+                <div class="print_pdf">
+                    <Button class="print_pdf_label" onclick="downloadPDF()"> Chart Download</Button>
+                </div>
+            </div>
+        </div>
+        <div class="containers">
+            <!-- <form method="post" action="process_data.php"> Replace with your processing script -->
+            <div class="datePicker">
+                <label>From: </label>
+                <input type="date" id="startDate" name="startDate" class="datePicker_label">
+                <!-- </div>
     <div class="datePicker"> -->
-            <label>&nbsp;&nbsp;&nbsp;&nbsp;To:</label>
-            <input type="date" id="endDate" name="endDate" class="datePicker_label">
-        </div>
-        <!-- <input type="submit" value="Filter"> -->
-        <!-- </form> -->
-    </div>
-</div>
-
-<script>
-    // Attach an event listener to the date picker fields
-    document.getElementById("startDate").addEventListener("change", updateFilteredData);
-    document.getElementById("endDate").addEventListener("change", updateFilteredData);
-
-    function updateFilteredData() {
-        const startDate = document.getElementById("startDate").value;
-        const endDate = document.getElementById("endDate").value;
-
-        // Convert the date format to match the database format (YYYY-MM-DD)
-        const formattedStartDate = new Date(startDate).toISOString().split('T')[0];
-        const formattedEndDate = new Date(endDate).toISOString().split('T')[0];
-
-        // Update the data using AJAX or fetch
-        // ...
-    }
-</script>
-
-
-<!-- graph Div, holder of graphs -->
-<div class="graph">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.9.179/pdf.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.debug.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/dom-to-image/2.6.0/dom-to-image.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/brain.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-
-
-    <div class="chart-container">
-        <p id="reportTitle"> Total Transaction and Sales</p>
-        <div class="containerBody">
-        <canvas id="combinedChart"></canvas>
-    </div>
-    </div>
-
-    <div class="chart-container">
-        <p id="reportTitle"> Transaction Per Division</p>
-    <!-- <div class="containerBody"> -->
-        <canvas id="transactionChart"></canvas>
-    <!-- </div> -->
-    </div>
-
-
-    <div class="chart-container">
-        <p id="reportTitle"> Sales per Division</p>
-        <div class="containerBody">
-        <canvas id="salesChart"></canvas>
-        
+                <label>&nbsp;&nbsp;&nbsp;&nbsp;To:</label>
+                <input type="date" id="endDate" name="endDate" class="datePicker_label">
+            </div>
+            <!-- <input type="submit" value="Filter"> -->
+            <!-- </form> -->
         </div>
     </div>
 
+    <script>
+        // Attach an event listener to the date picker fields
+        document.getElementById("startDate").addEventListener("change", updateFilteredData);
+        document.getElementById("endDate").addEventListener("change", updateFilteredData);
 
-    <div class="chart-container" id="avgSales">
-        <p id="reportTitle">Average sales per day</p>
-        <div class="asOne">
-            <canvas id="myChart"></canvas>
-            <div class="custom-text">
-                <div class="uwu-text">
-                    <p class="texty"> Average Transactions </p>
-                    <p class="number"> <?= $average ?> </p>
-                </div>
-                <div class="ehe-text">
-                    <p class="texty"> Average Sales </p>
-                    <p class="number"> <?= $saleaverage ?> </p>
+        function updateFilteredData() {
+            const startDate = document.getElementById("startDate").value;
+            const endDate = document.getElementById("endDate").value;
+
+            // Convert the date format to match the database format (YYYY-MM-DD)
+            const formattedStartDate = new Date(startDate).toISOString().split('T')[0];
+            const formattedEndDate = new Date(endDate).toISOString().split('T')[0];
+
+            // Update the data using AJAX or fetch
+            // ...
+        }
+    </script>
+
+
+    <!-- graph Div, holder of graphs -->
+    <div class="graph">
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.9.179/pdf.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.debug.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/dom-to-image/2.6.0/dom-to-image.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/brain.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+
+        <div class="chart-container">
+            <p id="reportTitle"> Total Transaction and Sales</p>
+            <div class="containerBody">
+                <canvas id="combinedChart"></canvas>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <p id="reportTitle"> Transaction Per Division</p>
+            <!-- <div class="containerBody"> -->
+            <canvas id="transactionChart"></canvas>
+            <!-- </div> -->
+        </div>
+
+
+        <div class="chart-container">
+            <p id="reportTitle"> Sales per Division</p>
+            <div class="containerBody">
+                <canvas id="salesChart"></canvas>
+
+            </div>
+        </div>
+
+
+        <div class="chart-container" id="avgSales">
+            <p id="reportTitle">Average sales per day</p>
+            <div class="asOne">
+                <canvas id="myChart"></canvas>
+                <div class="custom-text">
+                    <div class="uwu-text">
+                        <p class="texty"> Average Transactions </p>
+                        <p class="number"> <?= $average ?> </p>
+                    </div>
+                    <div class="ehe-text">
+                        <p class="texty"> Average Sales </p>
+                        <p class="number"> <?= $saleaverage ?> </p>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
- <!-- <div class="chart-container" id="avgSales">
+        <!-- <div class="chart-container" id="avgSales">
         <div class="aveChart" style="display: grid; grid-template-columns: repeat(2,1fr); grid-gap:.1rem; grid-template-rows: auto auto;">
         <div class="chart"style="width: 90%; ">
         <p id="reportTitle">Average sales per day</p>
@@ -1064,7 +1054,7 @@ $average =round ($totalTransactions / $totalDays); // Calculate the average
         </div>
     </div> -->
 
-    <!-- <div class="chart-container" style="max-width: 100%; height: 500px; overflow-x: scroll; text-align: center;">
+        <!-- <div class="chart-container" style="max-width: 100%; height: 500px; overflow-x: scroll; text-align: center;">
                 <p id="reportTitle">Total Customers per Province</p>
                 <div class="ProvinceChart" style="display: grid; grid-template-columns: repeat(2,1fr); grid-gap:.1rem; grid-template-rows: auto auto;">
                 <div class="scaleContainer" style="width: 10%; text-align: justtify;">
@@ -1081,360 +1071,356 @@ $average =round ($totalTransactions / $totalDays); // Calculate the average
 
 
 
-    <script>
-        // Reference datas
-        const TransactionperDiv = <?php echo json_encode($TransactionperDiv); ?>;
-        const SalesperDiv = <?php echo json_encode($SalesperDiv); ?>;
+        <script>
+            // Reference datas
+            const TransactionperDiv = <?php echo json_encode($TransactionperDiv); ?>;
+            const SalesperDiv = <?php echo json_encode($SalesperDiv); ?>;
 
-        // getting the sum of the transactions per day (from the data of $TransactionperDiv)
-        const sumTransaction = TransactionperDiv.labels.map((label, index) => {
-            let sum = 0;
-            TransactionperDiv.datasets.forEach(dataset => {
-                sum += dataset.data[index];
+            // getting the sum of the transactions per day (from the data of $TransactionperDiv)
+            const sumTransaction = TransactionperDiv.labels.map((label, index) => {
+                let sum = 0;
+                TransactionperDiv.datasets.forEach(dataset => {
+                    sum += dataset.data[index];
+                });
+                return sum;
             });
-            return sum;
-        });
 
-        // Create a new data set named sumTransactionDataset from what we got from sumTransaction
-        const sumTransactionDataset = {
-            label: 'Total Transaction',
-            data: sumTransaction,
+            // Create a new data set named sumTransactionDataset from what we got from sumTransaction
+            const sumTransactionDataset = {
+                label: 'Total Transaction',
+                data: sumTransaction,
 
-        };
+            };
 
-        // getting the sum of the sales per day (from the data of $SalesperDiv)
-        const sumSalesData = SalesperDiv.labels.map((label, index) => {
-            let sum = 0;
-            SalesperDiv.datasets.forEach(dataset => {
-                sum += dataset.data[index];
+            // getting the sum of the sales per day (from the data of $SalesperDiv)
+            const sumSalesData = SalesperDiv.labels.map((label, index) => {
+                let sum = 0;
+                SalesperDiv.datasets.forEach(dataset => {
+                    sum += dataset.data[index];
+                });
+                return sum;
             });
-            return sum;
-        });
 
-        // Create a new data set named sumSalesDataset from what we got from sumSalesData
-        const sumSalesDataset = {
-            label: 'Total Sales',
-            data: sumSalesData,
-        };
+            // Create a new data set named sumSalesDataset from what we got from sumSalesData
+            const sumSalesDataset = {
+                label: 'Total Sales',
+                data: sumSalesData,
+            };
 
-        //Creating a combined data using the sumTransactionDataset and sumSalesDataset (to be used/call in creating combined chart)
-        const combinedData = {
-            labels: TransactionperDiv.labels,
-            datasets: [{
-                    ...sumSalesDataset,
-                    type: 'line', // Use line type
-                    backgroundColor: '#ba2ee8',
-                    borderColor: '#00d498',
-                    yAxisID: 'lineY', // Assign the line chart to a specific y-axis
-                    cubicInterpolationMode: 'monotone'
+            //Creating a combined data using the sumTransactionDataset and sumSalesDataset (to be used/call in creating combined chart)
+            const combinedData = {
+                labels: TransactionperDiv.labels,
+                datasets: [{
+                        ...sumSalesDataset,
+                        type: 'line', // Use line type
+                        backgroundColor: '#ba2ee8',
+                        borderColor: '#00d498',
+                        yAxisID: 'lineY', // Assign the line chart to a specific y-axis
+                        cubicInterpolationMode: 'monotone'
 
 
-                },
-                {
-                    ...sumTransactionDataset,
-                    borderColor: 'rgba(127, 207, 250)',
-                    backgroundColor: 'rgba(127, 207, 250)',
-                    type: 'bar',
-                    borderWidth: 2,
-                    yAxisID: 'y-axis-bar', // Assign the line chart to a specific y-axis
+                    },
+                    {
+                        ...sumTransactionDataset,
+                        borderColor: 'rgba(127, 207, 250)',
+                        backgroundColor: 'rgba(127, 207, 250)',
+                        type: 'bar',
+                        borderWidth: 2,
+                        yAxisID: 'y-axis-bar', // Assign the line chart to a specific y-axis
 
-                },
-            ]
-        };
+                    },
+                ]
+            };
 
-        // Creating combined chart
-        const combinedCtx = document.getElementById('combinedChart').getContext('2d');
+            // Creating combined chart
+            const combinedCtx = document.getElementById('combinedChart').getContext('2d');
 
-        const combinedChart = new Chart(combinedCtx, {
-            type: 'line', // Start as bar chart
-            data: combinedData,
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            display:false 
+            const combinedChart = new Chart(combinedCtx, {
+                type: 'line', // Start as bar chart
+                data: combinedData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                display: false
+                            },
+                            grid: {
+                                display: false,
+                                drawOnChartArea: false,
+                                drawTicks: false,
+                            }
                         },
-                        grid: {
-                            display: false,
-                            drawOnChartArea: false,
-                            drawTicks:false,
-                        }
-                    },
-                    x: {
-                        grid: {
-                            display: false,
-                            drawOnChartArea: false,
-                            type: 'category',
-                            display: 'auto', // Enable auto-scaling of x-axis labels
-                        }
-                    },
-                    'y-axis-bar': {
-                        position: 'right', // Show the primary y-axis on the left side (sumTransactionDataset)
-                        grid: {
-                            drawOnChartArea: false
-                        }
-                    },
-                    'lineY': {
-                        beginAtZero: true,
-                        ticks: {
-                            stepSize: 1 // Customize the step size as needed
+                        x: {
+                            grid: {
+                                display: false,
+                                drawOnChartArea: false,
+                                type: 'category',
+                                display: 'auto', // Enable auto-scaling of x-axis labels
+                            }
                         },
-                        grid: {
-                            display: false,
-                            drawOnChartArea: false,
-                            drawTicks:false,
-                        }
+                        'y-axis-bar': {
+                            position: 'right', // Show the primary y-axis on the left side (sumTransactionDataset)
+                            grid: {
+                                drawOnChartArea: false
+                            }
+                        },
+                        'lineY': {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1 // Customize the step size as needed
+                            },
+                            grid: {
+                                display: false,
+                                drawOnChartArea: false,
+                                drawTicks: false,
+                            }
+                        },
                     },
-                },
-                plugins: {
-                    legend: {
-                        position: 'top',
-                        // display: false //para sa kinacancel sa taas
-                    },
-                    zoom: {
-                        pan: {
-                            enabled: true,
-                            mode: 'x'
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            // display: false //para sa kinacancel sa taas
                         },
                         zoom: {
-                            enabled: true,
-                            mode: 'x'
+                            pan: {
+                                enabled: true,
+                                mode: 'x'
+                            },
+                            zoom: {
+                                enabled: true,
+                                mode: 'x'
+                            }
                         }
-                    }
+                    },
+                    responsive: true,
+                    layout: {
+                        padding: {
+                            left: 10,
+                            right: 10,
+                            top: 10,
+                            bottom: 10
+                        }
+                    },
+
                 },
-                responsive: true,
-                layout: {
-                    padding: {
-                        left: 10,
-                        right: 10,
-                        top: 10,
-                        bottom: 10
-                    }
-                },
-
-            },
-        });
+            });
 
 
 
 
-        // Creating horizontal bar graphs
-        const transactionCtx = document.getElementById('transactionChart').getContext('2d');
-        const transactionChart = new Chart(transactionCtx, {
-            type: 'bar',
-            data: TransactionperDiv,
-            // {
-            //     datasets: TransactionperDiv.datasets.map(dataset => ({
-            //         ...dataset,
-            //         data: dataset.data.slice(0, 7) // Display only the first 7 data points for each dataset
-            //     })),
-            //     labels: TransactionperDiv.labels.slice(0, 7)  // Assuming labels are defined in TransactionperDiv
-            // },
-            options: {
-                indexAxis: 'y',
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        grid: {
-                            drawOnChartArea: false
+            // Creating horizontal bar graphs
+            const transactionCtx = document.getElementById('transactionChart').getContext('2d');
+            const transactionChart = new Chart(transactionCtx, {
+                type: 'bar',
+                data: TransactionperDiv,
+                // {
+                //     datasets: TransactionperDiv.datasets.map(dataset => ({
+                //         ...dataset,
+                //         data: dataset.data.slice(0, 7) // Display only the first 7 data points for each dataset
+                //     })),
+                //     labels: TransactionperDiv.labels.slice(0, 7)  // Assuming labels are defined in TransactionperDiv
+                // },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                drawOnChartArea: false
+                            },
+                            min: 0,
+                            max: 6,
                         },
-                        min:0,
-                        max:6,
-                    },
-                    x: {
-                        grid: {
-                            display: false,
-                            drawOnChartArea: false
-                        }
-                    },
-                }
-            }
-        });
-
-        function scroller(scroll,chart)
-        {
-            console.log(scroll)
-
-            if(scroll.deltaY>0)
-            {
-                transactionChart.option.scales.y.min+=1;
-                transactionChart.option.scales.y.max+=1;
-            }
-            transactionChart.update();
-        }
-        //wheel is for the gilid scroll
-        transactionChart.canvas.addEventListener('wheel',(e)=>
-        {
-            scroller(e, transactionChart)
-        });
-
-         //vertical bar graph
-         const salesCtx = document.getElementById('salesChart').getContext('2d');
-        const salesChart = new Chart(salesCtx, {
-            type: 'bar',
-            data: SalesperDiv,
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        grid: {
-                            drawOnChartArea: false
-                        }
-
-                    },
-
-                    x: {
-                        min:0,
-                        max:7,
-                        grid: {
-                            drawOnChartArea: false
-                        }
+                        x: {
+                            grid: {
+                                display: false,
+                                drawOnChartArea: false
+                            }
+                        },
                     }
+                }
+            });
 
-                },
+            function scroller(scroll, chart) {
+                console.log(scroll)
 
+                if (scroll.deltaY > 0) {
+                    transactionChart.option.scales.y.min += 1;
+                    transactionChart.option.scales.y.max += 1;
+                }
+                transactionChart.update();
             }
-        });
+            //wheel is for the gilid scroll
+            transactionChart.canvas.addEventListener('wheel', (e) => {
+                scroller(e, transactionChart)
+            });
 
-        // for scrolling
-        const containerBody= document.querySelector('.containerBody');
-        if(salesChart.data.labels.length>7)
-        {
-            containerBody.style.width='200%';
-        }
+            //vertical bar graph
+            const salesCtx = document.getElementById('salesChart').getContext('2d');
+            const salesChart = new Chart(salesCtx, {
+                type: 'bar',
+                data: SalesperDiv,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                drawOnChartArea: false
+                            }
+
+                        },
+
+                        x: {
+                            min: 0,
+                            max: 7,
+                            grid: {
+                                drawOnChartArea: false
+                            }
+                        }
+
+                    },
+
+                }
+            });
+
+            // for scrolling
+            const containerBody = document.querySelector('.containerBody');
+            if (salesChart.data.labels.length > 7) {
+                containerBody.style.width = '200%';
+            }
 
 
-        // Function to calculate the average of an array of numbers
-        const calculateAverage = (array) => {
-            if (array.length === 0) return 0;
-            const sum = array.reduce((total, num) => total + num, 0);
-            return Math.round(sum / array.length);
-        };
-
-        // // Calculate the average of each dataset
-        // const salesAverage = SalesperDiv.datasets.map(dataset => ({
-        //     label: dataset.label,
-        //     average: calculateAverage(dataset.data),
-        // }));
-
-
-        // Calculate the average of each dataset
-        const TransactionAverage = SalesperDiv.datasets.map(dataset => ({
-            label: dataset.label,
-            average: calculateAverage(dataset.data),
-        }));
-        // Find the maximum average value
-        const maxAverage = Math.max(...TransactionAverage.map((average) => average.average));
-
-        // Create a new dataset for each sales average
-        const newDatasets = TransactionAverage.map((average, index) => {
-            const datasetColors = ['rgba(0, 115, 199,1)', 'rgba(2, 165, 96,1)', 'rgba(242, 26, 156,1)']; // Array of specific colors
-            const color = datasetColors[index % datasetColors.length]; // Assign color based on index
-
-            return {
-                label: `Average ${average.label}`,
-                data: [average.average],
-                borderWidth: 1,
-                circumference: (ctx) => ((ctx.dataset.data[0] / maxAverage) * 270),
-                backgroundColor: color,
-                borderColor: color,
+            // Function to calculate the average of an array of numbers
+            const calculateAverage = (array) => {
+                if (array.length === 0) return 0;
+                const sum = array.reduce((total, num) => total + num, 0);
+                return Math.round(sum / array.length);
             };
-        });
 
-        // Combine the existing datasets with the new datasets
-        const allDatasets = [...TransactionAverage, ...newDatasets];
-
-        // Define the data for the doughnut chart
-        const data = {
-            datasets: allDatasets,
-        };
-        const divisionName = {
+            // // Calculate the average of each dataset
+            // const salesAverage = SalesperDiv.datasets.map(dataset => ({
+            //     label: dataset.label,
+            //     average: calculateAverage(dataset.data),
+            // }));
 
 
-        } // tsaka ko na to tutuloy yawa walang wifi
+            // Calculate the average of each dataset
+            const TransactionAverage = SalesperDiv.datasets.map(dataset => ({
+                label: dataset.label,
+                average: calculateAverage(dataset.data),
+            }));
+            // Find the maximum average value
+            const maxAverage = Math.max(...TransactionAverage.map((average) => average.average));
 
-        // Config for the doughnut chart
-        const config = {
-            type: 'doughnut',
-            data,
-            options: {
-                // cutout:'85%',
-                borderRadius: 10,
-                plugins: {
-                    legend: {
-                        display: false
-                    }
-                },
+            // Create a new dataset for each sales average
+            const newDatasets = TransactionAverage.map((average, index) => {
+                const datasetColors = ['rgba(0, 115, 199,1)', 'rgba(2, 165, 96,1)', 'rgba(242, 26, 156,1)']; // Array of specific colors
+                const color = datasetColors[index % datasetColors.length]; // Assign color based on index
 
-                // plugins:[divisionName] //to be continue
-            },
-            plugins: [{
-                id: 'divisionName',
-                afterDatasetsDraw(chart, args, options) {
-                    const {
-                        ctx,
-                        data,
-                        scales,
-                        chartArea: {
-                            left,
-                            top,
-                            width,
-                            height
+                return {
+                    label: `Average ${average.label}`,
+                    data: [average.average],
+                    borderWidth: 1,
+                    circumference: (ctx) => ((ctx.dataset.data[0] / maxAverage) * 270),
+                    backgroundColor: color,
+                    borderColor: color,
+                };
+            });
+
+            // Combine the existing datasets with the new datasets
+            const allDatasets = [...TransactionAverage, ...newDatasets];
+
+            // Define the data for the doughnut chart
+            const data = {
+                datasets: allDatasets,
+            };
+            const divisionName = {
+
+
+            } // tsaka ko na to tutuloy yawa walang wifi
+
+            // Config for the doughnut chart
+            const config = {
+                type: 'doughnut',
+                data,
+                options: {
+                    // cutout:'85%',
+                    borderRadius: 10,
+                    plugins: {
+                        legend: {
+                            display: false
                         }
-                    } = chart;
+                    },
 
-                    ctx.save();
-                    ctx.font = 'bolder 15px Poppins';
-                    ctx.fillStyle = 'rgb(3, 98, 186, 1)';
-                    ctx.textAlign = 'center';
-                    ctx.fillText('Average sales per day', width / 2.1, height / 2 + top);
-                    console.log(chart.getDatasetMeta(0))
+                    // plugins:[divisionName] //to be continue
+                },
+                plugins: [{
+                    id: 'divisionName',
+                    afterDatasetsDraw(chart, args, options) {
+                        const {
+                            ctx,
+                            data,
+                            scales,
+                            chartArea: {
+                                left,
+                                top,
+                                width,
+                                height
+                            }
+                        } = chart;
 
-                }
+                        ctx.save();
+                        ctx.font = 'bolder 15px Poppins';
+                        ctx.fillStyle = 'rgb(3, 98, 186, 1)';
+                        ctx.textAlign = 'center';
+                        ctx.fillText('Average sales per day', width / 2.1, height / 2 + top);
+                        console.log(chart.getDatasetMeta(0))
 
-            }]
-        };
+                    }
 
-        // Render the doughnut chart
-        const myChart = new Chart(document.getElementById('myChart'), config);
+                }]
+            };
 
-        // Instantly assign Chart.js version
-        const chartVersion = document.getElementById('chartVersion');
-        chartVersion.innerText = Chart.version;
+            // Render the doughnut chart
+            const myChart = new Chart(document.getElementById('myChart'), config);
 
-        var customerTypeData = <?php echo json_encode($customerTypeData); ?>;
-        var paragraphElement = document.getElementById('customerTypeParagraph');
-        paragraphElement.textContent = 'Customer Type: ' + customerTypeData;
-    </script>
+            // Instantly assign Chart.js version
+            const chartVersion = document.getElementById('chartVersion');
+            chartVersion.innerText = Chart.version;
+
+            var customerTypeData = <?php echo json_encode($customerTypeData); ?>;
+            var paragraphElement = document.getElementById('customerTypeParagraph');
+            paragraphElement.textContent = 'Customer Type: ' + customerTypeData;
+        </script>
 
 
-    <!-- All about customer graphs -->
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-geo"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <div class="customers_data">
-        <div class="date_filter" style="text-align: left; padding-left: 8rem; padding-top: 0rem; padding-bottom: 2rem;">
-            <div class="containers">
-                <div class="date_dropdown">
-                    <label for="chart_type" class="chart_type_label">
-                        <strong>Chart Filter</strong></label>
-                    <select name="chart_type" id="chart_type" class="dropdown-content">
-                        <option value="bar">Bar</option>
-                        <option value="doughnut">Doughnut</option>
-                        <option value="line">Line</option>
-                        <option value="pie">Pie</option>
-                        <option value="scatter">Map</option>
-                        <!-- <option value="horizontal_bar">Horizontal chart</option> -->
-                    </select>
+        <!-- All about customer graphs -->
+        <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-geo"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <div class="customers_data">
+            <div class="date_filter" style="text-align: left; padding-left: 8rem; padding-top: 0rem; padding-bottom: 2rem;">
+                <div class="containers">
+                    <div class="date_dropdown">
+                        <label for="chart_type" class="chart_type_label">
+                            <strong>Chart Filter</strong></label>
+                        <select name="chart_type" id="chart_type" class="dropdown-content">
+                            <option value="bar">Bar</option>
+                            <option value="doughnut">Doughnut</option>
+                            <option value="line">Line</option>
+                            <option value="pie">Pie</option>
+                            <option value="scatter">Map</option>
+                            <!-- <option value="horizontal_bar">Horizontal chart</option> -->
+                        </select>
+                    </div>
                 </div>
             </div>
-        </div>
 
             <div class="chart-container" style="max-width: 100%; height: 500px; overflow-x: scroll; text-align: center;">
                 <p id="reportTitle">Total Customers per Province</p>
@@ -1455,7 +1441,7 @@ $average =round ($totalTransactions / $totalDays); // Calculate the average
                     <canvas id="TTProvinces"></canvas>
                 </div>
             </div>
-            </div>
+        </div>
 
     </div>
 
@@ -1472,7 +1458,7 @@ $average =round ($totalTransactions / $totalDays); // Calculate the average
             //   const randomColor = `rgb(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)})`;
             //   return randomColor;
             // }
-    
+
 
             // const randomColor = generateRandomColor();
             // Initialize charts (empty)
@@ -1509,18 +1495,16 @@ $average =round ($totalTransactions / $totalDays); // Calculate the average
                         type: selectedChartType,
                         options: doughnutOptions,
                         data: {
-                        labels: <?php echo json_encode($province); ?>,
-                        datasets: [{
-                            data: <?php echo json_encode($customersCounts); ?>,
-                            backgroundColor: generateRandomColors(<?php echo count($customersCounts); ?>, 1),
-                            borderColor: 'rgba(0, 0, 0, 0.2)',
-                            borderWidth: 1
-                        }]
+                            labels: <?php echo json_encode($province); ?>,
+                            datasets: [{
+                                data: <?php echo json_encode($customersCounts); ?>,
+                                backgroundColor: generateRandomColors(<?php echo count($customersCounts); ?>, 1),
+                                borderColor: 'rgba(0, 0, 0, 0.2)',
+                                borderWidth: 1
+                            }]
                         }
                     });
-                }
-
-                else if (selectedChartType === 'pie') {
+                } else if (selectedChartType === 'pie') {
                     provincesChart = new Chart(provincesChartContainer, {
                         type: selectedChartType,
                         options: {
@@ -1537,61 +1521,58 @@ $average =round ($totalTransactions / $totalDays); // Calculate the average
                                     }
                                 }
                             },
-                           
+
                         },
                         data: {
-                        labels: <?php echo json_encode($province); ?>,
-                        datasets: [{
-                            data: <?php echo json_encode($customersCounts); ?>,
-                            backgroundColor: generateRandomColors(<?php echo count($customersCounts); ?>, 1),
-                            borderColor: 'rgba(0, 0, 0, 0.2)',
-                            borderWidth: 1
-                        }]
+                            labels: <?php echo json_encode($province); ?>,
+                            datasets: [{
+                                data: <?php echo json_encode($customersCounts); ?>,
+                                backgroundColor: generateRandomColors(<?php echo count($customersCounts); ?>, 1),
+                                borderColor: 'rgba(0, 0, 0, 0.2)',
+                                borderWidth: 1
+                            }]
                         }
-                    });}
+                    });
+                } else {
 
+                    provincesChart = new Chart(provincesChartContainer, {
+                        type: selectedChartType,
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    grid: {
 
-                else{
+                                    }
+                                },
+                                x: {
+                                    min: 0,
+                                    max: 6,
+                                    grid: {
+                                        display: false,
 
-                provincesChart = new Chart(provincesChartContainer, {
-                    type: selectedChartType,
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                grid: {
-                                   
-                                }
+                                    }
+                                },
                             },
-                            x: {
-                                min:0,
-                                max:6,
-                                grid: {
-                                    display: false,
-                                    
+                            plugins: {
+                                legend: {
+                                    display: false
                                 }
-                            },
-                        },
-                        plugins:
-                        {
-                            legend:
-                            {
-                                display: false
                             }
-                        }
-                     },
-                    data: {
-                        labels: <?php echo json_encode($province); ?>,
-                        datasets: [{
-                            data: <?php echo json_encode($customersCounts); ?>,
-                            backgroundColor: generateRandomColors(<?php echo count($customersCounts); ?>, 1),
-                            borderColor: 'rgba(0, 0, 0, 0.2)',
-                            borderWidth: 1
-                        }]
-                    },
-                });}
+                        },
+                        data: {
+                            labels: <?php echo json_encode($province); ?>,
+                            datasets: [{
+                                data: <?php echo json_encode($customersCounts); ?>,
+                                backgroundColor: generateRandomColors(<?php echo count($customersCounts); ?>, 1),
+                                borderColor: 'rgba(0, 0, 0, 0.2)',
+                                borderWidth: 1
+                            }]
+                        },
+                    });
+                }
 
                 function generateRandomColors(count, alpha) {
                     const colors = [];
@@ -1608,11 +1589,11 @@ $average =round ($totalTransactions / $totalDays); // Calculate the average
                     return `rgba(${r}, ${g}, ${b}, ${alpha})`;
                 }
             }
-        // // Calculate and set the width of the chart container for scrolling
-        // const chartContainer = document.getElementById('.containerBody');
-        // if (Provinces.data.labels.length > 7) {
-        //     containerBody.style.width = '200%'; // Adjust as needed
-        // }
+            // // Calculate and set the width of the chart container for scrolling
+            // const chartContainer = document.getElementById('.containerBody');
+            // if (Provinces.data.labels.length > 7) {
+            //     containerBody.style.width = '200%'; // Adjust as needed
+            // }
 
             // Listen for changes in the dropdown and update charts
             chartTypeDropdown.addEventListener('change', updateCharts);
@@ -2145,94 +2126,184 @@ $average =round ($totalTransactions / $totalDays); // Calculate the average
         // dashboard design end
     </script>
 
-<script src="https://code.highcharts.com/maps/highmaps.js"></script>
-<script src="https://code.highcharts.com/maps/modules/exporting.js"></script>
-<div id="container"></div>
-<script>
-  (async () => {
+    <script src="https://code.highcharts.com/maps/highmaps.js"></script>
+    <script src="https://code.highcharts.com/maps/modules/exporting.js"></script>
+    <div id="container"></div>
+    <script>
+        (async () => {
 
-const topology = await fetch(
-    'https://code.highcharts.com/mapdata/countries/ph/ph-all.topo.json'
-).then(response => response.json());
+            const topology = await fetch(
+                'https://code.highcharts.com/mapdata/countries/ph/ph-all.topo.json'
+            ).then(response => response.json());
 
-// Prepare demo data. The data is joined to map using value of 'hc-key'
-// property by default. See API docs for 'joinBy' for more info on linking
-// data and map.
-const data = [
-    ['ph-mn', 10], ['ph-4218', 11], ['ph-tt', 12], ['ph-bo', 13],
-    ['ph-cb', 14], ['ph-bs', 15], ['ph-2603', 16], ['ph-su', 17],
-    ['ph-aq', 18], ['ph-pl', 19], ['ph-ro', 20], ['ph-al', 21],
-    ['ph-cs', 22], ['ph-6999', 23], ['ph-bn', 24], ['ph-cg', 25],
-    ['ph-pn', 26], ['ph-bt', 27], ['ph-mc', 28], ['ph-qz', 29],
-    ['ph-es', 30], ['ph-le', 31], ['ph-sm', 32], ['ph-ns', 33],
-    ['ph-cm', 34], ['ph-di', 35], ['ph-ds', 36], ['ph-6457', 37],
-    ['ph-6985', 38], ['ph-ii', 39], ['ph-7017', 40], ['ph-7021', 41],
-    ['ph-lg', 42], ['ph-ri', 43], ['ph-ln', 44], ['ph-6991', 45],
-    ['ph-ls', 46], ['ph-nc', 47], ['ph-mg', 48], ['ph-sk', 49],
-    ['ph-sc', 50], ['ph-sg', 51], ['ph-an', 52], ['ph-ss', 53],
-    ['ph-as', 54], ['ph-do', 55], ['ph-dv', 56], ['ph-bk', 57],
-    ['ph-cl', 58], ['ph-6983', 59], ['ph-6984', 60], ['ph-6987', 61],
-    ['ph-6986', 62], ['ph-6988', 63], ['ph-6989', 64], ['ph-6990', 65],
-    ['ph-6992', 66], ['ph-6995', 67], ['ph-6996', 68], ['ph-6997', 69],
-    ['ph-6998', 70], ['ph-nv', 71], ['ph-7020', 72], ['ph-7018', 73],
-    ['ph-7022', 74], ['ph-1852', 75], ['ph-7000', 76], ['ph-7001', 77],
-    ['ph-7002', 78], ['ph-7003', 79], ['ph-7004', 80], ['ph-que', 81],
-    ['ph-7007', 82], ['ph-7008', 83], ['ph-7009', 84], ['ph-7010', 85],
-    ['ph-7011', 86], ['ph-7012', 87], ['ph-7013', 88], ['ph-7014', 89],
-    ['ph-7015', 90], ['ph-7016', 91], ['ph-7019', 92], ['ph-6456', 93],
-    ['ph-zs', 94], ['ph-nd', 95], ['ph-zn', 96], ['ph-md', 97],
-    ['ph-ab', 98], ['ph-2658', 99], ['ph-ap', 100], ['ph-au', 101],
-    ['ph-ib', 102], ['ph-if', 103], ['ph-mt', 104], ['ph-qr', 105],
-    ['ph-ne', 106], ['ph-pm', 107], ['ph-ba', 108], ['ph-bg', 109],
-    ['ph-zm', 110], ['ph-cv', 111], ['ph-bu', 112], ['ph-mr', 113],
-    ['ph-sq', 114], ['ph-gu', 115], ['ph-ct', 116], ['ph-mb', 117],
-    ['ph-mq', 118], ['ph-bi', 119], ['PH-SL', 150], ['ph-nr', 121],
-    ['ph-ak', 122], ['ph-cp', 123], ['ph-cn', 124], ['ph-sr', 125],
-    ['ph-in', 126], ['ph-is', 127], ['ph-tr', 128], ['ph-lu', 129]
-];
+            // Prepare demo data. The data is joined to map using value of 'hc-key'
+            // property by default. See API docs for 'joinBy' for more info on linking
+            // data and map.
+            const data = [
+                ['ph-mn', 10],
+                ['ph-4218', 11],
+                ['ph-tt', 12],
+                ['ph-bo', 13],
+                ['ph-cb', 14],
+                ['ph-bs', 15],
+                ['ph-2603', 16],
+                ['ph-su', 17],
+                ['ph-aq', 18],
+                ['ph-pl', 19],
+                ['ph-ro', 20],
+                ['ph-al', 21],
+                ['ph-cs', 22],
+                ['ph-6999', 23],
+                ['ph-bn', 24],
+                ['ph-cg', 25],
+                ['ph-pn', 26],
+                ['ph-bt', 27],
+                ['ph-mc', 28],
+                ['ph-qz', 29],
+                ['ph-es', 30],
+                ['ph-le', 31],
+                ['ph-sm', 32],
+                ['ph-ns', 33],
+                ['ph-cm', 34],
+                ['ph-di', 35],
+                ['ph-ds', 36],
+                ['ph-6457', 37],
+                ['ph-6985', 38],
+                ['ph-ii', 39],
+                ['ph-7017', 40],
+                ['ph-7021', 41],
+                ['ph-lg', 42],
+                ['ph-ri', 43],
+                ['ph-ln', 44],
+                ['ph-6991', 45],
+                ['ph-ls', 46],
+                ['ph-nc', 47],
+                ['ph-mg', 48],
+                ['ph-sk', 49],
+                ['ph-sc', 50],
+                ['ph-sg', 51],
+                ['ph-an', 52],
+                ['ph-ss', 53],
+                ['ph-as', 54],
+                ['ph-do', 55],
+                ['ph-dv', 56],
+                ['ph-bk', 57],
+                ['ph-cl', 58],
+                ['ph-6983', 59],
+                ['ph-6984', 60],
+                ['ph-6987', 61],
+                ['ph-6986', 62],
+                ['ph-6988', 63],
+                ['ph-6989', 64],
+                ['ph-6990', 65],
+                ['ph-6992', 66],
+                ['ph-6995', 67],
+                ['ph-6996', 68],
+                ['ph-6997', 69],
+                ['ph-6998', 70],
+                ['ph-nv', 71],
+                ['ph-7020', 72],
+                ['ph-7018', 73],
+                ['ph-7022', 74],
+                ['ph-1852', 75],
+                ['ph-7000', 76],
+                ['ph-7001', 77],
+                ['ph-7002', 78],
+                ['ph-7003', 79],
+                ['ph-7004', 80],
+                ['ph-que', 81],
+                ['ph-7007', 82],
+                ['ph-7008', 83],
+                ['ph-7009', 84],
+                ['ph-7010', 85],
+                ['ph-7011', 86],
+                ['ph-7012', 87],
+                ['ph-7013', 88],
+                ['ph-7014', 89],
+                ['ph-7015', 90],
+                ['ph-7016', 91],
+                ['ph-7019', 92],
+                ['ph-6456', 93],
+                ['ph-zs', 94],
+                ['ph-nd', 95],
+                ['ph-zn', 96],
+                ['ph-md', 97],
+                ['ph-ab', 98],
+                ['ph-2658', 99],
+                ['ph-ap', 100],
+                ['ph-au', 101],
+                ['ph-ib', 102],
+                ['ph-if', 103],
+                ['ph-mt', 104],
+                ['ph-qr', 105],
+                ['ph-ne', 106],
+                ['ph-pm', 107],
+                ['ph-ba', 108],
+                ['ph-bg', 109],
+                ['ph-zm', 110],
+                ['ph-cv', 111],
+                ['ph-bu', 112],
+                ['ph-mr', 113],
+                ['ph-sq', 114],
+                ['ph-gu', 115],
+                ['ph-ct', 116],
+                ['ph-mb', 117],
+                ['ph-mq', 118],
+                ['ph-bi', 119],
+                ['PH-SL', 150],
+                ['ph-nr', 121],
+                ['ph-ak', 122],
+                ['ph-cp', 123],
+                ['ph-cn', 124],
+                ['ph-sr', 125],
+                ['ph-in', 126],
+                ['ph-is', 127],
+                ['ph-tr', 128],
+                ['ph-lu', 129]
+            ];
 
-// Create the chart
-Highcharts.mapChart('container', {
-    chart: {
-        map: topology
-    },
+            // Create the chart
+            Highcharts.mapChart('container', {
+                chart: {
+                    map: topology
+                },
 
-    title: {
-        text: 'Highcharts Maps basic demo'
-    },
+                title: {
+                    text: 'Highcharts Maps basic demo'
+                },
 
-    subtitle: {
-        text: 'Source map: <a href="http://code.highcharts.com/mapdata/countries/ph/ph-all.topo.json">Philippines</a>'
-    },
+                subtitle: {
+                    text: 'Source map: <a href="http://code.highcharts.com/mapdata/countries/ph/ph-all.topo.json">Philippines</a>'
+                },
 
-    mapNavigation: {
-        enabled: true,
-        buttonOptions: {
-            verticalAlign: 'bottom'
-        }
-    },
+                mapNavigation: {
+                    enabled: true,
+                    buttonOptions: {
+                        verticalAlign: 'bottom'
+                    }
+                },
 
-    colorAxis: {
-        min: 0
-    },
+                colorAxis: {
+                    min: 0
+                },
 
-    series: [{
-        data: data,
-        name: 'Random data',
-        states: {   
-            hover: {
-                color: '#BADA55'
-            }
-        },
-        dataLabels: {
-            enabled: true,
-            format: '{point.name}'
-        }
-    }]
-});
+                series: [{
+                    data: data,
+                    name: 'Random data',
+                    states: {
+                        hover: {
+                            color: '#BADA55'
+                        }
+                    },
+                    dataLabels: {
+                        enabled: true,
+                        format: '{point.name}'
+                    }
+                }]
+            });
 
-})();
-</script>
+        })();
+    </script>
 
     <script>
         function downloadPDF() {
@@ -2341,714 +2412,3 @@ Highcharts.mapChart('container', {
                 });
         }
     </script>
-
-    <?php
-    $latestTimestamp = (new \yii\db\Query())
-        ->select(['MAX(transacton_date) AS latest_timestamp'])
-        ->from('operational_report')
-        ->scalar();
-
-    // Construct the Yii query
-    $subquery = (new \yii\db\Query())
-        ->select(['DATE_ADD("2023-06-10", INTERVAL n DAY) AS date'])
-        ->from(['numbers' => '(
-        SELECT a.n + b.n * 10 + c.n * 100 AS n
-        FROM (
-            SELECT 0 AS n UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9
-        ) AS a,
-        (
-            SELECT 0 AS n UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9
-        ) AS b,
-        (
-            SELECT 0 AS n UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9
-        ) AS c
-    )'])
-        ->where(['<=', 'DATE_ADD("2023-06-10", INTERVAL n DAY)', new \yii\db\Expression('NOW()')]);
-
-    $query = (new \yii\db\Query())
-        ->select([
-            'dates.date AS transacton_date',
-            'IFNULL(COUNT(opr.transacton_date), 0) AS transaction_count',
-            'IFNULL(SUM(opr.amount), 0) AS total_sales'
-        ])
-        ->from([
-            'dates' => $subquery
-        ])
-        ->leftJoin('operational_report opr', 'dates.date = opr.transacton_date AND opr.transaction_status = "paid"')
-        ->groupBy('dates.date')
-        ->orderBy(['dates.date' => SORT_ASC]);
-
-    $transactions = $query->all();
-
-    // Convert timestamps to Unix timestamps
-    foreach ($transactions as &$transaction) {
-        $transaction['transacton_date'] = strtotime($transaction['transacton_date']);
-    }
-
-    // Define $nextDayTimestamp using the latestTimestamp
-    $nextDayTimestamp = strtotime('+1 day', strtotime($latestTimestamp));
-
-
-    // Prepare data for prediction (transaction count)
-    $timestampsForCount = array_column($transactions, 'transacton_date');
-    $transactionCounts = array_column($transactions, 'transaction_count');
-
-    // Calculate linear regression coefficients for transaction count prediction
-    $n = count($timestampsForCount);
-    $sumX = array_sum($timestampsForCount);
-    $sumY = array_sum($transactionCounts);
-    $sumXY = 0;
-    $sumX2 = 0;
-
-    for ($i = 0; $i < $n; $i++) {
-        $sumXY += $timestampsForCount[$i] * $transactionCounts[$i];
-        $sumX2 += $timestampsForCount[$i] * $timestampsForCount[$i];
-    }
-
-    $slopeForCount = ($n * $sumXY - $sumX * $sumY) / ($n * $sumX2 - $sumX * $sumX);
-    $interceptForCount = ($sumY - $slopeForCount * $sumX) / $n;
-
-    // Predict the next transaction count for the next day
-    $predictedTransactionCount = $interceptForCount + $slopeForCount * $nextDayTimestamp;
-
-    // Prepare data for prediction (total sales)
-    $timestampsForSales = array_column($transactions, 'transacton_date');
-    $totalSales = array_column($transactions, 'total_sales');
-
-    // Calculate linear regression coefficients for total sales prediction
-    $n = count($timestampsForSales);
-    $sumX = array_sum($timestampsForSales);
-    $sumY = array_sum($totalSales);
-    $sumXY = 0;
-    $sumX2 = 0;
-
-    for ($i = 0; $i < $n; $i++) {
-        $sumXY += $timestampsForSales[$i] * $totalSales[$i];
-        $sumX2 += $timestampsForSales[$i] * $timestampsForSales[$i];
-    }
-
-    $slopeForSales = ($n * $sumXY - $sumX * $sumY) / ($n * $sumX2 - $sumX * $sumX);
-    $interceptForSales = ($sumY - $slopeForSales * $sumX) / $n;
-
-    $totalSalesSum = array_sum($totalSales);
-    $averageSalesIncreasePerDay = $totalSalesSum / count($timestampsForSales);
-
-    // Predict the next total sum of all total sales
-    $predictedNextTotalSales = $totalSalesSum + $averageSalesIncreasePerDay;
-
-    $totalTransactionCountSum = array_sum($transactionCounts);
-    $averageTransactionCountIncreasePerDay = $totalTransactionCountSum / count($timestampsForCount);
-
-    $queryPerYear = (new \yii\db\Query())
-        ->select([
-            'all_years.year AS year',
-            'IFNULL(COUNT(opr.transacton_date), 0) AS transaction_count',
-            'IFNULL(SUM(opr.amount), 0) AS total_sales'
-        ])
-        ->from([
-            'all_years' => (new \yii\db\Query())
-                ->select(['DISTINCT YEAR(transacton_date) AS year'])
-                ->from('operational_report')
-                ->where(['>=', 'transacton_date', '2023-06-10'])
-                ->union((new \yii\db\Query())
-                        ->select(['DISTINCT YEAR(transacton_date) AS year'])
-                        ->from('operational_report')
-                        ->where(['YEAR(transacton_date)' => new \yii\db\Expression('YEAR(NOW())')])
-                )
-        ])
-        ->leftJoin('operational_report opr', 'all_years.year = YEAR(opr.transacton_date) AND opr.transaction_status = "paid"')
-        ->groupBy('all_years.year')
-        ->orderBy(['all_years.year' => SORT_ASC]);
-
-    $transactionsPerYear = $queryPerYear->all();
-
-    // Prepare data for predictions (total paid transaction count and total paid sales)
-    $years = array_column($transactionsPerYear, 'year');
-    $transactionCountsPerYear = array_column($transactionsPerYear, 'transaction_count');
-    $totalSalesPerYear = array_column($transactionsPerYear, 'total_sales');
-
-    // Calculate historical averages based on the whole dataset for paid transaction count and total sales
-    $totalTransactionCountSumPerYear = array_sum($transactionCountsPerYear);
-    $averageTransactionCountIncreasePerYear = $totalTransactionCountSumPerYear / count($years);
-
-    $totalSalesSumPerYear = array_sum($totalSalesPerYear);
-    $averageSalesIncreasePerYear = $totalSalesSumPerYear / count($years);
-    ?>
-
-    <div class="prediction-index">
-        <h1><?= Html::encode($this->title) ?></h1>
-
-        <form id="prediction-form">
-            <label for="years">Enter the number of years for predictions:</label>
-            <input type="number" id="years" name="years" step="0.01" value="">
-            <button type="submit">Compute Predictions</button>
-        </form>
-
-        <div id="predictions" style="font-weight: bold; "></div> <br>
-        <div id="predictions1" style="font-weight: bold;"></div> 
-        <div id="predictions2" style="font-weight: bold;"></div> <br>
-        <div id="predictions3" style="font-weight: bold;"></div> 
-        <div id="predictions4" style="font-weight: bold;"></div><br>
-        <div id="predictions5" style="font-weight: bold;"></div>
-
-
-    </div>
-
-    <script>
-        document.getElementById('prediction-form').addEventListener('submit', function(event) {
-            event.preventDefault();
-
-            const years = parseFloat(document.getElementById('years').value);
-            const days = Math.round(years * 365);
-
-            // Calculate the timestamps for the next day and the predicted day
-            const latestTimestamp = '<?= $latestTimestamp ?>';
-            const nextDayTimestamp = new Date('<?= date('Y-m-d', $nextDayTimestamp) ?>');
-            nextDayTimestamp.setDate(nextDayTimestamp.getDate() + days);
-
-            const totalSalesSum = <?= $totalSalesSum ?>;
-            const totalTransactionCountSum = <?= $totalTransactionCountSum ?>;
-
-            // Define JavaScript variables with the values of totalSalesSum, averageSalesIncreasePerDay,
-            // totalTransactionCountSum, and averageTransactionCountIncreasePerDay
-            const averageSalesIncreasePerDay = <?= $averageSalesIncreasePerDay ?>;
-            const averageTransactionCountIncreasePerDay = <?= $averageTransactionCountIncreasePerDay ?>;
-
-            // Calculate historical averages based on the whole dataset for paid transaction count and total sales
-            const totalTransactionCountSumPerYear = <?= $totalTransactionCountSumPerYear ?>;
-            const averageTransactionCountIncreasePerYear = <?= $averageTransactionCountIncreasePerYear ?>;
-
-            const totalSalesSumPerYear = <?= $totalSalesSumPerYear ?>;
-            const averageSalesIncreasePerYear = <?= $averageSalesIncreasePerYear ?>;
-
-            const nextYearTimestamp = new Date();
-            nextYearTimestamp.setFullYear(nextYearTimestamp.getFullYear() + years);
-
-            const slopeForCountPerYear = <?= $slopeForCount ?>;
-            const interceptForCountPerYear = <?= $interceptForCount ?>;
-
-            const slopeForSalesPerYear = <?= $slopeForSales ?>;
-            const interceptForSalesPerYear = <?= $interceptForSales ?>;
-
-            const predictedTransactionCountPerYear = Math.round(interceptForCountPerYear + slopeForCountPerYear * nextDayTimestamp.getTime() / 1000);
-            const predictedTotalSalesPerYear = Math.round(interceptForSalesPerYear + slopeForSalesPerYear * nextDayTimestamp.getTime() / 1000);
-
-            // Calculate predictions for total sum of paid transaction count and total paid sales per year
-            const predictedNextTotalTransactionCountPerYear = Math.round(totalTransactionCountSumPerYear + averageTransactionCountIncreasePerYear * years);
-            const predictedNextTotalSalesPerYear = Math.round(totalSalesSumPerYear + averageSalesIncreasePerYear * years);
-
-            // Calculate the average of the predicted total sum of paid transaction count and total paid sales per year
-            const averagePredictedTotalTransactionCountPerYear = Math.round(predictedNextTotalTransactionCountPerYear / years);
-            const averagePredictedTotalSalesPerYear = Math.round(predictedNextTotalSalesPerYear / years);
-
-            // Function to add commas every three numbers
-            function addCommas(number) {
-                return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-            }
-
-            const transactionCounts = <?= json_encode(array_column($transactions, 'transaction_count')) ?>;
-
-            // Convert timestamps to Unix timestamps
-            const totalSales = <?= json_encode(array_column($transactions, 'total_sales')) ?>;
-
-            const predictionsDiv = document.getElementById('predictions');
-            predictionsDiv.innerHTML = `
-            <p>Predicted transaction count on the <span style="color:#0080ff">${days}-day (${years} year(s))</span> mark: 
-        <span style="color:${predictedTransactionCountPerYear >= transactionCounts[transactionCounts.length - 1] ? 'green' : 'red'}">
-             ${addCommas(predictedTransactionCountPerYear)}
-            (${predictedTransactionCountPerYear >= transactionCounts[transactionCounts.length - 1] ? 'Increased' : 'Decreased'})
-        </span>
-    </p>
-    <p>Predicted total transaction count on the <span style="color:#0080ff">${days}-day (${years} year(s))</span> mark: 
-        <span style="color:${averagePredictedTotalTransactionCountPerYear >= averageTransactionCountIncreasePerYear ? 'green' : 'red'}">
-             ${addCommas(averagePredictedTotalTransactionCountPerYear)}
-            (${averagePredictedTotalTransactionCountPerYear >= averageTransactionCountIncreasePerYear ? 'Increased' : 'Decreased'})
-        </span>
-    </p>
-    <p>Predicted income on the <span style="color:#0080ff">${days}-day (${years} year(s))</span> mark: 
-        <span style="color:${predictedTotalSalesPerYear >= totalSales[totalSales.length - 1] ? 'green' : 'red'}">
-            ${addCommas(predictedTotalSalesPerYear)}
-            (${predictedTotalSalesPerYear >= totalSales[totalSales.length - 1] ? 'Increased' : 'Decreased'})
-        </span>
-    </p>
-    <p>Predicted total income on the <span style="color:#0080ff">${days}-day (${years} year(s))</span> mark: 
-        <span style="color:${averagePredictedTotalSalesPerYear >= averageSalesIncreasePerYear ? 'green' : 'red'}">
-            ${addCommas(averagePredictedTotalSalesPerYear)}
-            (${averagePredictedTotalSalesPerYear >= averageSalesIncreasePerYear ? 'Increased' : 'Decreased'})
-        </span>
-    </p>
-`;
-        });
-    </script>
-
-
-    <!-- NMD -->
-
-    <?php
-    $latestTimestamp1 = (new \yii\db\Query())
-        ->select(['MAX(transacton_date) AS latest_timestamp'])
-        ->from('operational_report')
-        ->scalar();
-
-    // Construct the new subquery
-    $subquery1 = (new \yii\db\Query())
-        ->select(['DATE_ADD("2023-06-10", INTERVAL n DAY) AS date'])
-        ->from(['numbers' => '(
-    SELECT a.n + b.n * 10 + c.n * 100 AS n
-    FROM (
-        SELECT 0 AS n UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9
-    ) AS a,
-    (
-        SELECT 0 AS n UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9
-    ) AS b,
-    (
-        SELECT 0 AS n UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9
-    ) AS c
-)'])
-        ->where(['<=', 'DATE_ADD("2023-06-10", INTERVAL n DAY)', new \yii\db\Expression('NOW()')]);
-
-    // New main query
-    $query1 = (new \yii\db\Query())
-        ->select([
-            'all_dates.date AS transaction_date',
-            'IFNULL(COUNT(opr.transacton_date), 0) AS transaction_count',
-            'IFNULL(SUM(opr.amount), 0) AS total_sales'
-        ])
-        ->from([
-            'all_dates' => $subquery1
-        ])
-        ->leftJoin('operational_report opr', 'all_dates.date = opr.transacton_date AND opr.transaction_status = "paid" AND opr.division_name = "National Metrology Department"')
-        ->groupBy('all_dates.date')
-        ->orderBy(['all_dates.date' => SORT_ASC]);
-
-    $transactions1 = $query1->all();
-
-    // Convert timestamps to Unix timestamps
-    foreach ($transactions1 as &$transaction1) {
-        $transaction1['transaction_date'] = strtotime($transaction1['transaction_date']);
-    }
-
-    // Define $nextDayTimestamp using the latestTimestamp
-    $nextDayTimestamp1 = strtotime('+1 day', strtotime($latestTimestamp1));
-
-
-    // Prepare data for prediction (transaction count)
-    $timestampsForCount1 = array_column($transactions1, 'transaction_date');
-    $transactionCounts1 = array_column($transactions1, 'transaction_count');
-
-
-    // Calculate linear regression coefficients for transaction count prediction
-    $n1 = count($timestampsForCount1);
-    $sumX1 = array_sum($timestampsForCount1);
-    $sumY1 = array_sum($transactionCounts1);
-    $sumXY1 = 0;
-    $sumX21 = 0;
-
-    for ($i = 0; $i < $n1; $i++) {
-        $sumXY1 += $timestampsForCount1[$i] * $transactionCounts1[$i];
-        $sumX21 += $timestampsForCount1[$i] * $timestampsForCount1[$i];
-    }
-
-    $slopeForCount1 = ($n1 * $sumXY1 - $sumX1 * $sumY1) / ($n1 * $sumX21 - $sumX1 * $sumX1);
-    $interceptForCount1 = ($sumY1 - $slopeForCount1 * $sumX1) / $n1;
-
-    // Predict the next transaction count for the next day
-    $predictedTransactionCount1 = $interceptForCount1 + $slopeForCount1 * $nextDayTimestamp1;
-
-    // Prepare data for prediction (total sales)
-    $timestampsForSales1 = array_column($transactions1, 'transaction_date');
-    $totalSales1 = array_column($transactions1, 'total_sales');
-
-    // Calculate linear regression coefficients for total sales prediction
-    $n1 = count($timestampsForSales1);
-    $sumX1 = array_sum($timestampsForSales1);
-    $sumY1 = array_sum($totalSales1);
-    $sumXY1 = 0;
-    $sumX21 = 0;
-
-    for ($i = 0; $i < $n1; $i++) {
-        $sumXY1 += $timestampsForSales1[$i] * $totalSales1[$i];
-        $sumX21 += $timestampsForSales1[$i] * $timestampsForSales1[$i];
-    }
-
-    $slopeForSales1 = ($n1 * $sumXY1 - $sumX1 * $sumY1) / ($n1 * $sumX21 - $sumX1 * $sumX1);
-    $interceptForSales1 = ($sumY1 - $slopeForSales1 * $sumX1) / $n1;
-
-    $totalSalesSum1 = array_sum($totalSales1);
-    $averageSalesIncreasePerDay1 = $totalSalesSum1 / count($timestampsForSales1);
-
-    // Predict the next total sum of all total sales
-    $predictedNextTotalSales1 = $totalSalesSum1 + $averageSalesIncreasePerDay1;
-
-    $totalTransactionCountSum1 = array_sum($transactionCounts1);
-    $averageTransactionCountIncreasePerDay1 = $totalTransactionCountSum1 / count($timestampsForCount1);
-
-    $queryPerYear1 = (new \yii\db\Query())
-        ->select([
-            'all_years1.year AS year',
-            'IFNULL(COUNT(opr1.transacton_date), 0) AS transaction_count1',
-            'IFNULL(SUM(opr1.amount), 0) AS total_sales1'
-        ])
-        ->from([
-            'all_years1' => (new \yii\db\Query())
-                ->select(['DISTINCT YEAR(transacton_date) AS year'])
-                ->from('operational_report')
-                ->where(['>=', 'transacton_date', '2023-06-10'])
-                ->union((new \yii\db\Query())
-                        ->select(['DISTINCT YEAR(transacton_date) AS year'])
-                        ->from('operational_report')
-                        ->where(['YEAR(transacton_date)' => new \yii\db\Expression('YEAR(NOW())')])
-                )
-        ])
-        ->leftJoin('operational_report opr1', 'all_years1.year = YEAR(opr1.transacton_date) AND opr1.transaction_status = "paid" AND opr1.division_name = "National Metrology Department"')
-        ->groupBy('all_years1.year')
-        ->orderBy(['all_years1.year' => SORT_ASC]);
-
-    $transactionsPerYear1 = $queryPerYear1->all();
-
-    // Prepare data for predictions (total paid transaction count and total paid sales)
-    $years1 = array_column($transactionsPerYear1, 'year');
-    $transactionCountsPerYear1 = array_column($transactionsPerYear1, 'transaction_count1');
-    $totalSalesPerYear1 = array_column($transactionsPerYear1, 'total_sales1');
-
-    // Calculate historical averages based on the whole dataset for paid transaction count and total sales
-    $totalTransactionCountSumPerYear1 = array_sum($transactionCountsPerYear1);
-    $averageTransactionCountIncreasePerYear1 = $totalTransactionCountSumPerYear1 / count($years1);
-
-    $totalSalesSumPerYear1 = array_sum($totalSalesPerYear1);
-    $averageSalesIncreasePerYear1 = $totalSalesSumPerYear1 / count($years1);
-    ?>
-
-    <script>
-        document.getElementById('prediction-form').addEventListener('submit', function(event) {
-            event.preventDefault();
-
-            const years1 = parseFloat(document.getElementById('years').value);
-            const days1 = Math.round(years1 * 365);
-
-            // Calculate the timestamps for the next day and the predicted day
-            const latestTimestamp1 = '<?= $latestTimestamp1 ?>';
-            const nextDayTimestamp1 = new Date('<?= date('Y-m-d', $nextDayTimestamp1) ?>');
-            nextDayTimestamp1.setDate(nextDayTimestamp1.getDate() + days1);
-
-            const totalSalesSum1 = <?= $totalSalesSum1 ?>;
-            const totalTransactionCountSum1 = <?= $totalTransactionCountSum1 ?>;
-
-            // Define JavaScript variables with the values of totalSalesSum1, averageSalesIncreasePerDay1,
-            // totalTransactionCountSum1, and averageTransactionCountIncreasePerDay1
-            const averageSalesIncreasePerDay1 = <?= $averageSalesIncreasePerDay1 ?>;
-            const averageTransactionCountIncreasePerDay1 = <?= $averageTransactionCountIncreasePerDay1 ?>;
-
-            // Calculate historical averages based on the whole dataset for paid transaction count and total sales
-            const totalTransactionCountSumPerYear1 = <?= $totalTransactionCountSumPerYear1 ?>;
-            const averageTransactionCountIncreasePerYear1 = <?= $averageTransactionCountIncreasePerYear1 ?>;
-
-            const totalSalesSumPerYear1 = <?= $totalSalesSumPerYear1 ?>;
-            const averageSalesIncreasePerYear1 = <?= $averageSalesIncreasePerYear1 ?>;
-
-            // Calculate predictions for paid transaction count and paid sales per year
-
-
-            const slopeForCountPerYear1 = <?= $slopeForCount1 ?>;
-            const interceptForCountPerYear1 = <?= $interceptForCount1 ?>;
-
-            const slopeForSalesPerYear1 = <?= $slopeForSales1 ?>;
-            const interceptForSalesPerYear1 = <?= $interceptForSales1 ?>;
-
-            const nextYearTimestamp1 = new Date();
-            nextYearTimestamp1.setFullYear(nextYearTimestamp1.getFullYear() + years1);
-
-            // Calculate predictions for transaction count and total sales for the next year
-            const predictedTransactionCountPerYear1 = Math.round(interceptForCountPerYear1 + slopeForCountPerYear1 * nextYearTimestamp1.getTime() / 1000);
-            const predictedTotalSalesPerYear1 = Math.round(interceptForSalesPerYear1 + slopeForSalesPerYear1 * nextYearTimestamp1.getTime() / 1000);
-
-            // Calculate predictions for total sum of paid transaction count and total paid sales per year
-            const predictedNextTotalTransactionCountPerYear1 = Math.round(totalTransactionCountSumPerYear1 + averageTransactionCountIncreasePerYear1 * years1);
-            const predictedNextTotalSalesPerYear1 = Math.round(totalSalesSumPerYear1 + averageSalesIncreasePerYear1 * years1);
-
-            // Calculate the average of the predicted total sum of paid transaction count and total paid sales per year
-            const averagePredictedTotalTransactionCountPerYear1 = Math.round(predictedNextTotalTransactionCountPerYear1 / years1);
-            const averagePredictedTotalSalesPerYear1 = Math.round(predictedNextTotalSalesPerYear1 / years1);
-
-
-            // Calculate the average of the predicted total sum of paid transaction count and total paid sales per year
-
-            // Function to add commas every three numbers
-            function addCommas(number) {
-                return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-            }
-
-            const transactionCounts1 = <?= json_encode(array_column($transactions1, 'transaction_count')) ?>;
-
-            // Convert timestamps to Unix timestamps
-            const totalSales1 = <?= json_encode(array_column($transactions1, 'total_sales')) ?>;
-
-const predictionsDiv1 = document.getElementById('predictions1');
-predictionsDiv1.innerHTML = `
-<p>Predicted transaction count of the NMD on the <span style="color:#0080ff">${days1}-day (${years1} year(s))</span> mark: 
-        <span style="color:${predictedTransactionCountPerYear1 >= transactionCounts1[transactionCounts1.length - 1] ? 'green' : 'red'}">
-            ${addCommas(predictedTransactionCountPerYear1)}
-            (${predictedTransactionCountPerYear1 >= transactionCounts1[transactionCounts1.length - 1] ? 'Increased' : 'Decreased'})
-        </span>
-    </p>
-    <p>Predicted total transaction count of NMD on the <span style="color:#0080ff">${days1}-day (${years1} year(s))</span> mark: 
-        <span style="color:${averagePredictedTotalTransactionCountPerYear1 >= transactionCounts1[transactionCounts1.length - 1] ? 'green' : 'red'}">
-            ${addCommas(averagePredictedTotalTransactionCountPerYear1)}
-            (${averagePredictedTotalTransactionCountPerYear1 >= transactionCounts1[transactionCounts1.length - 1] ? 'Increased' : 'Decreased '})
-        </span>
-    </p>
-`;
-
-const predictionsDiv3 = document.getElementById('predictions3');
-predictionsDiv3.innerHTML = `
-    <p>Predicted income of NMD on the <span style="color:#0080ff">${days1}-day (${years1} year(s))</span> mark: 
-        <span style="color:${predictedTotalSalesPerYear1 >= totalSales1[totalSales1.length - 1] ? 'green' : 'red'}">
-            ${addCommas(predictedTotalSalesPerYear1)}
-            (${predictedTotalSalesPerYear1 >= totalSales1[totalSales1.length - 1] ? 'Increased' : 'Decreased'})
-        </span>
-    </p>
-    <p>Predicted total income of NMD on the <span style="color:#0080ff">${days1}-day (${years1} year(s))</span> mark: 
-        <span style="color:${averagePredictedTotalSalesPerYear1 >= totalSales1[totalSales1.length - 1] ? 'green' : 'red'}">
-            ${addCommas(averagePredictedTotalSalesPerYear1)}
-            (${averagePredictedTotalSalesPerYear1 >= totalSales1[totalSales1.length - 1] ? 'Increased' : 'Decreased'})
-        </span>
-    </p>
-`;
-
-        });
-    </script>
-
-
-    <?php
-    $latestTimestamp1 = (new \yii\db\Query())
-        ->select(['MAX(transacton_date) AS latest_timestamp'])
-        ->from('operational_report')
-        ->scalar();
-
-    // Construct the new subquery
-    $subquery1 = (new \yii\db\Query())
-        ->select(['DATE_ADD("2023-06-10", INTERVAL n DAY) AS date'])
-        ->from(['numbers' => '(
-    SELECT a.n + b.n * 10 + c.n * 100 AS n
-    FROM (
-        SELECT 0 AS n UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9
-    ) AS a,
-    (
-        SELECT 0 AS n UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9
-    ) AS b,
-    (
-        SELECT 0 AS n UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9
-    ) AS c
-)'])
-        ->where(['<=', 'DATE_ADD("2023-06-10", INTERVAL n DAY)', new \yii\db\Expression('NOW()')]);
-
-    // New main query
-    $query1 = (new \yii\db\Query())
-        ->select([
-            'all_dates.date AS transaction_date',
-            'IFNULL(COUNT(opr.transacton_date), 0) AS transaction_count',
-            'IFNULL(SUM(opr.amount), 0) AS total_sales'
-        ])
-        ->from([
-            'all_dates' => $subquery1
-        ])
-        ->leftJoin('operational_report opr', 'all_dates.date = opr.transacton_date AND opr.transaction_status = "paid" AND opr.division_name = "Standard and Testing Division"')
-        ->groupBy('all_dates.date')
-        ->orderBy(['all_dates.date' => SORT_ASC]);
-
-    $transactions1 = $query1->all();
-
-    // Convert timestamps to Unix timestamps
-    foreach ($transactions1 as &$transaction1) {
-        $transaction1['transaction_date'] = strtotime($transaction1['transaction_date']);
-    }
-
-    // Define $nextDayTimestamp using the latestTimestamp
-    $nextDayTimestamp1 = strtotime('+1 day', strtotime($latestTimestamp1));
-
-
-    // Prepare data for prediction (transaction count)
-    $timestampsForCount1 = array_column($transactions1, 'transaction_date');
-    $transactionCounts1 = array_column($transactions1, 'transaction_count');
-
-
-    // Calculate linear regression coefficients for transaction count prediction
-    $n1 = count($timestampsForCount1);
-    $sumX1 = array_sum($timestampsForCount1);
-    $sumY1 = array_sum($transactionCounts1);
-    $sumXY1 = 0;
-    $sumX21 = 0;
-
-    for ($i = 0; $i < $n1; $i++) {
-        $sumXY1 += $timestampsForCount1[$i] * $transactionCounts1[$i];
-        $sumX21 += $timestampsForCount1[$i] * $timestampsForCount1[$i];
-    }
-
-    $slopeForCount1 = ($n1 * $sumXY1 - $sumX1 * $sumY1) / ($n1 * $sumX21 - $sumX1 * $sumX1);
-    $interceptForCount1 = ($sumY1 - $slopeForCount1 * $sumX1) / $n1;
-
-    // Predict the next transaction count for the next day
-    $predictedTransactionCount1 = $interceptForCount1 + $slopeForCount1 * $nextDayTimestamp1;
-
-    // Prepare data for prediction (total sales)
-    $timestampsForSales1 = array_column($transactions1, 'transaction_date');
-    $totalSales1 = array_column($transactions1, 'total_sales');
-
-    // Calculate linear regression coefficients for total sales prediction
-    $n1 = count($timestampsForSales1);
-    $sumX1 = array_sum($timestampsForSales1);
-    $sumY1 = array_sum($totalSales1);
-    $sumXY1 = 0;
-    $sumX21 = 0;
-
-    for ($i = 0; $i < $n1; $i++) {
-        $sumXY1 += $timestampsForSales1[$i] * $totalSales1[$i];
-        $sumX21 += $timestampsForSales1[$i] * $timestampsForSales1[$i];
-    }
-
-    $slopeForSales1 = ($n1 * $sumXY1 - $sumX1 * $sumY1) / ($n1 * $sumX21 - $sumX1 * $sumX1);
-    $interceptForSales1 = ($sumY1 - $slopeForSales1 * $sumX1) / $n1;
-
-    $totalSalesSum1 = array_sum($totalSales1);
-    $averageSalesIncreasePerDay1 = $totalSalesSum1 / count($timestampsForSales1);
-
-    // Predict the next total sum of all total sales
-    $predictedNextTotalSales1 = $totalSalesSum1 + $averageSalesIncreasePerDay1;
-
-    $totalTransactionCountSum1 = array_sum($transactionCounts1);
-    $averageTransactionCountIncreasePerDay1 = $totalTransactionCountSum1 / count($timestampsForCount1);
-
-    $queryPerYear1 = (new \yii\db\Query())
-        ->select([
-            'all_years1.year AS year',
-            'IFNULL(COUNT(opr1.transacton_date), 0) AS transaction_count1',
-            'IFNULL(SUM(opr1.amount), 0) AS total_sales1'
-        ])
-        ->from([
-            'all_years1' => (new \yii\db\Query())
-                ->select(['DISTINCT YEAR(transacton_date) AS year'])
-                ->from('operational_report')
-                ->where(['>=', 'transacton_date', '2023-06-10'])
-                ->union((new \yii\db\Query())
-                        ->select(['DISTINCT YEAR(transacton_date) AS year'])
-                        ->from('operational_report')
-                        ->where(['YEAR(transacton_date)' => new \yii\db\Expression('YEAR(NOW())')])
-                )
-        ])
-        ->leftJoin('operational_report opr1', 'all_years1.year = YEAR(opr1.transacton_date) AND opr1.transaction_status = "paid" AND opr1.division_name = "Standard and Testing Division"')
-        ->groupBy('all_years1.year')
-        ->orderBy(['all_years1.year' => SORT_ASC]);
-
-    $transactionsPerYear1 = $queryPerYear1->all();
-
-    // Prepare data for predictions (total paid transaction count and total paid sales)
-    $years1 = array_column($transactionsPerYear1, 'year');
-    $transactionCountsPerYear1 = array_column($transactionsPerYear1, 'transaction_count1');
-    $totalSalesPerYear1 = array_column($transactionsPerYear1, 'total_sales1');
-
-    // Calculate historical averages based on the whole dataset for paid transaction count and total sales
-    $totalTransactionCountSumPerYear1 = array_sum($transactionCountsPerYear1);
-    $averageTransactionCountIncreasePerYear1 = $totalTransactionCountSumPerYear1 / count($years1);
-
-$totalSalesSumPerYear1 = array_sum($totalSalesPerYear1);
-$averageSalesIncreasePerYear1 = $totalSalesSumPerYear1 / count($years1);
-?>
-
-    <script>
-        document.getElementById('prediction-form').addEventListener('submit', function(event) {
-            event.preventDefault();
-
-            const years1 = parseFloat(document.getElementById('years').value);
-            const days1 = Math.round(years1 * 365);
-
-            // Calculate the timestamps for the next day and the predicted day
-            const latestTimestamp1 = '<?= $latestTimestamp1 ?>';
-            const nextDayTimestamp1 = new Date('<?= date('Y-m-d', $nextDayTimestamp1) ?>');
-            nextDayTimestamp1.setDate(nextDayTimestamp1.getDate() + days1);
-
-            const totalSalesSum1 = <?= $totalSalesSum1 ?>;
-            const totalTransactionCountSum1 = <?= $totalTransactionCountSum1 ?>;
-
-            // Define JavaScript variables with the values of totalSalesSum1, averageSalesIncreasePerDay1,
-            // totalTransactionCountSum1, and averageTransactionCountIncreasePerDay1
-            const averageSalesIncreasePerDay1 = <?= $averageSalesIncreasePerDay1 ?>;
-            const averageTransactionCountIncreasePerDay1 = <?= $averageTransactionCountIncreasePerDay1 ?>;
-
-            // Calculate historical averages based on the whole dataset for paid transaction count and total sales
-            const totalTransactionCountSumPerYear1 = <?= $totalTransactionCountSumPerYear1 ?>;
-            const averageTransactionCountIncreasePerYear1 = <?= $averageTransactionCountIncreasePerYear1 ?>;
-
-            const totalSalesSumPerYear1 = <?= $totalSalesSumPerYear1 ?>;
-            const averageSalesIncreasePerYear1 = <?= $averageSalesIncreasePerYear1 ?>;
-
-            // Calculate predictions for paid transaction count and paid sales per year
-
-
-            const slopeForCountPerYear1 = <?= $slopeForCount1 ?>;
-            const interceptForCountPerYear1 = <?= $interceptForCount1 ?>;
-
-            const slopeForSalesPerYear1 = <?= $slopeForSales1 ?>;
-            const interceptForSalesPerYear1 = <?= $interceptForSales1 ?>;
-
-            const nextYearTimestamp1 = new Date();
-            nextYearTimestamp1.setFullYear(nextYearTimestamp1.getFullYear() + years1);
-
-            // Calculate predictions for transaction count and total sales for the next year
-            const predictedTransactionCountPerYear1 = Math.round(interceptForCountPerYear1 + slopeForCountPerYear1 * nextYearTimestamp1.getTime() / 1000);
-            const predictedTotalSalesPerYear1 = Math.round(interceptForSalesPerYear1 + slopeForSalesPerYear1 * nextYearTimestamp1.getTime() / 1000);
-
-            // Calculate predictions for total sum of paid transaction count and total paid sales per year
-            const predictedNextTotalTransactionCountPerYear1 = Math.round(totalTransactionCountSumPerYear1 + averageTransactionCountIncreasePerYear1 * years1);
-            const predictedNextTotalSalesPerYear1 = Math.round(totalSalesSumPerYear1 + averageSalesIncreasePerYear1 * years1);
-
-            // Calculate the average of the predicted total sum of paid transaction count and total paid sales per year
-            const averagePredictedTotalTransactionCountPerYear1 = Math.round(predictedNextTotalTransactionCountPerYear1 / years1);
-            const averagePredictedTotalSalesPerYear1 = Math.round(predictedNextTotalSalesPerYear1 / years1);
-
-
-            // Calculate the average of the predicted total sum of paid transaction count and total paid sales per year
-
-            // Function to add commas every three numbers
-            function addCommas(number) {
-                return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-            }
-
-            const transactionCounts1 = <?= json_encode(array_column($transactions1, 'transaction_count')) ?>;
-
-            // Convert timestamps to Unix timestamps
-            const totalSales1 = <?= json_encode(array_column($transactions1, 'total_sales')) ?>;
-
-const predictionsDiv2 = document.getElementById('predictions2');
-predictionsDiv2.innerHTML = `
-<p>Predicted transaction count of the STD on the <span style="color:#0080ff">${days1}-day (${years1} year(s))</span> mark: 
-        <span style="color:${predictedTransactionCountPerYear1 >= transactionCounts1[transactionCounts1.length - 1] ? 'green' : 'red'}">
-            ${addCommas(predictedTransactionCountPerYear1)}
-            (${predictedTransactionCountPerYear1 >= transactionCounts1[transactionCounts1.length - 1] ? 'Increased' : 'Decreased'})
-        </span>
-    </p>
-    <p>Predicted total transaction count of STD on the <span style="color:#0080ff">${days1}-day (${years1} year(s))</span> mark: 
-        <span style="color:${averagePredictedTotalTransactionCountPerYear1 >= transactionCounts1[transactionCounts1.length - 1] ? 'green' : 'red'}">
-            ${addCommas(averagePredictedTotalTransactionCountPerYear1)}
-            (${averagePredictedTotalTransactionCountPerYear1 >= transactionCounts1[transactionCounts1.length - 1] ? 'Increased' : 'Decreased '})
-        </span>
-    </p>
-`;
-
-const predictionsDiv4 = document.getElementById('predictions4');
-predictionsDiv4.innerHTML = `
-    <p>Predicted income of STD on the <span style="color:#0080ff">${days1}-day (${years1} year(s))</span> mark: 
-        <span style="color:${predictedTotalSalesPerYear1 >= totalSales1[totalSales1.length - 1] ? 'green' : 'red'}">
-            ${addCommas(predictedTotalSalesPerYear1)}
-            (${predictedTotalSalesPerYear1 >= totalSales1[totalSales1.length - 1] ? 'Increased' : 'Decreased'})
-        </span>
-    </p>
-    <p>Predicted total income of STD on the <span style="color:#0080ff">${days1}-day (${years1} year(s))</span> mark: 
-        <span style="color:${averagePredictedTotalSalesPerYear1 >= totalSales1[totalSales1.length - 1] ? 'green' : 'red'}">
-            ${addCommas(averagePredictedTotalSalesPerYear1)}
-            (${averagePredictedTotalSalesPerYear1 >= totalSales1[totalSales1.length - 1] ? 'Increased' : 'Decreased'})
-        </span>
-    </p>
-`;
-
-    });
-</script>
