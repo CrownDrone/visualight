@@ -8,6 +8,14 @@ use yii\helpers\Html;
         <!-- <p class="login-box-msg">Sign in to start your session UwU</p> -->
         <img src="/images/LogoVL.png" alt="qwerty" style="width: 100%">
 
+        <?php if (Yii::$app->session->hasFlash('error')): ?>
+            <div class="alert alert-danger">
+                <?= Yii::$app->session->getFlash('error') ?>
+            </div>
+        <?php endif; ?>
+
+<!-- Your login form code -->
+
 
 
         <?php $form = \yii\bootstrap5\ActiveForm::begin(['id' => 'login-form']) ?>

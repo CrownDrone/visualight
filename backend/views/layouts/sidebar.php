@@ -153,7 +153,7 @@ $defaultImagePath = Yii::getAlias('@web') . '/images/user2.jpg';
                         ],
                     ],
                     
-                       ['label' => 'Terms of Service',  'icon' => 'fas fa-file-contract', 'url' => ["/terms/index"], 'visible' => true],
+                       ['label' => 'Terms of Service',  'icon' => 'fas fa-file-contract', 'url' => ["/terms/index"], 'visible' => Helper::checkRoute('/terms/index')],
                     // ['label' => 'Survey',  'icon' => 'fas fa-chalkboard', 'url' => ["/survey/index"], 'visible' => Helper::checkRoute('/site/index'), 'visible' => Helper::checkRoute('/site/index'),],
 
 

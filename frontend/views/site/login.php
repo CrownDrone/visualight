@@ -8,6 +8,12 @@ use yii\helpers\Html;
 
         <?php $form = \yii\bootstrap4\ActiveForm::begin(['id' => 'login-form']) ?>
 
+        <?php if (Yii::$app->session->hasFlash('error')): ?>
+            <div class="alert alert-danger">
+                <?= Yii::$app->session->getFlash('error') ?>
+            </div>
+        <?php endif; ?>
+
         <?= $form->field($model,'username', [
             'options' => ['class' => 'form-group has-feedback'],
             'template' => '{beginWrapper}{input}{error}{endWrapper}',

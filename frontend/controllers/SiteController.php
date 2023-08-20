@@ -95,6 +95,7 @@ class SiteController extends BaseController
         $this->layout = 'main-login';
 
         $model = new LoginForm();
+
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
             // After successful login, check if the user has accepted the terms
             $currentUser = Yii::$app->user->identity;
@@ -102,15 +103,28 @@ class SiteController extends BaseController
                 // User is authenticated, check if they have accepted the terms
                 $termsAccepted = !empty($currentUser->tos);
 
-                // Redirect based on terms acceptance
-                if ($termsAccepted) {
-                    return $this->goHome(); // Redirect to homepage or dashboard
+                // Check if the user has the role 'ADMIN' or 'USER'
+                if (Yii::$app->user->can('ADMIN') || Yii::$app->user->can('USER')) {
+                    // Redirect based on terms acceptance
+                    if ($termsAccepted) {
+                        return $this->goHome(); // Redirect to homepage or dashboard
+                    } else {
+                        return $this->redirect(['terms/index']); // Redirect to terms/index
+                    }
                 } else {
-                    return $this->redirect(['terms/index']); // Redirect to terms/index
+                    // Log out users without ADMIN or USER roles and terminate their session
+                    Yii::$app->user->logout();
+                    Yii::$app->session->destroy();
+
+                    // Set an error flash message
+                    Yii::$app->session->setFlash('error', 'You are not authorized to access this site.');
+
+                    // Redirect to the login page
+                    return $this->redirect(['/site/login']);
                 }
             } else {
                 // The user identity is null, handle the case appropriately
-                return $this->redirect(['site/login']); // Redirect to the login pages
+                return $this->redirect(['/site/login']); // Redirect to the login page
             }
         }
 
