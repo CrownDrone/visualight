@@ -23,6 +23,8 @@ return [
         ],
         'authManager' => [
             'class' => 'mdm\admin\components\DbManager', // Removed the extra comma (,) after the class definition
+            'db' => 'db_rbac',
+
         ],
         'user' => [
             'identityClass' => 'mdm\admin\models\User',

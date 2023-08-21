@@ -126,7 +126,7 @@ $defaultImagePath = Yii::getAlias('@web') . '/images/user2.jpg';
                     [
                         'label' => 'Division Charts',
                         'icon' => 'user',
-                        'visible' => Helper::checkRoute('/admin/index'),
+                        'visible' => Helper::checkRoute('/chart/*'),
                         'items' => [
                             [
                                 'label' => 'Predict Chart',
@@ -141,13 +141,11 @@ $defaultImagePath = Yii::getAlias('@web') . '/images/user2.jpg';
                                 'active' => Yii::$app->controller->route === 'nmd/chart/index',
 
                             ],
-
-                            
                             [
                                 'label' => 'Standard and Testing',
                                 'icon' => 'star',
                                 'url' => ['/std/chart/index'],
-                                'active' => Yii::$app->controller->route === '/std/chart/index'
+                                'active' => Yii::$app->controller->route === 'std/chart/index',
 
                             ],
                         ],
