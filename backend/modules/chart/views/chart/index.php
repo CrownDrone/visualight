@@ -123,11 +123,6 @@ $monthLabel = (new Query())
                     data: {}
                 },
                 {
-                    backgroundColor: "rgba(54, 162, 235, 0.7)",
-                    label: 'TSD',
-                    data: {}
-                },
-                {
                     backgroundColor: "rgba(153, 102, 255, 0.7)",
                     label: 'STD',
                     data: {}
@@ -144,10 +139,8 @@ $monthLabel = (new Query())
                 var sampo = parseInt(queryAllDates[x].datasets);
                 if (queryAllDates[x].label == 'NMD') {
                     dataCon.datasets[0].data[samp] = sampo;
-                } else if (queryAllDates[x].label == 'TSD') {
+                }else {
                     dataCon.datasets[1].data[samp] = sampo;
-                } else {
-                    dataCon.datasets[2].data[samp] = sampo;
                 }
                 x++
             }
@@ -173,11 +166,6 @@ $monthLabel = (new Query())
                     data: {}
                 },
                 {
-                    backgroundColor: "rgba(54, 162, 235, 0.7)",
-                    label: 'TSD',
-                    data: {}
-                },
-                {
                     backgroundColor: "rgba(153, 102, 255, 0.7)",
                     label: 'STD',
                     data: {}
@@ -193,10 +181,8 @@ $monthLabel = (new Query())
                 var sampo = parseInt(queryAllMonth[x].datasets);
                 if (queryAllMonth[x].label == 'NMD') {
                     monthDataCon.datasets[0].data[samp] = sampo;
-                } else if (queryAllMonth[x].label == 'TSD') {
-                    monthDataCon.datasets[1].data[samp] = sampo;
                 } else {
-                    monthDataCon.datasets[2].data[samp] = sampo;
+                    monthDataCon.datasets[1].data[samp] = sampo;
                 }
                 x++
             }
@@ -238,7 +224,7 @@ $monthLabel = (new Query())
         monthChartLoad();
         monthLabelLoad();
         dateFilterRefresh();
-
+        console.log(dataCon.datasets)
         const pieChartData = (<?= json_encode($pieChartData) ?>); //di ma edit pag sa html declared yung canvas/chart
         //Prepare the bar chart 
         const barCtx = document.getElementById('barChart').getContext('2d');
@@ -263,7 +249,8 @@ $monthLabel = (new Query())
                     x: {
                         ticks: {
                             autoSkip: true,
-                            //maxTicksLimit: 10,
+                            // minTicksLimit: 1,
+                            // maxTicksLimit: 8,
                         },
                         grid: {
                             display: false,
@@ -386,7 +373,7 @@ $monthLabel = (new Query())
         var newDataCon = {
             datasets: []
         };
-        newDataCon.datasets = JSON.parse(JSON.stringify(barChart.config.data.datasets)); //will server as a json to be modified fetched from chart data
+        newDataCon.datasets = JSON.parse(JSON.stringify(dataCon.datasets)); //will server as a json to be modified fetched from chart data
         const cacheDataCon = {
             datasets: []
         };
@@ -471,6 +458,7 @@ $monthLabel = (new Query())
                     datasets.data = newDataLog;
                 });
                 barChart.config.data.datasets = newDataCon.datasets; //replace the current chart dataset
+                console.log(newLabels)
                 barChart.update(); //udpate the chart
                 newDataCon = JSON.parse(JSON.stringify(cacheDataCon)); //reverts the value of the newdataCon prior to modification
 
