@@ -17,8 +17,6 @@ use yii\web\View;
             border-radius: 1rem;
             background-color: white;
             display: inline-block;
-            height: 25rem;
-            width: 40%;
         }
 
         /* .chart-container canvas {
@@ -49,22 +47,93 @@ use yii\web\View;
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+
    <div class="prediction-index">
         <h1><?= Html::encode($this->title) ?></h1>
 
         <form id="prediction-form">
             <label for="years">Enter the number of years for predictions:</label>
-            <input type="number" id="years" name="years" step="0.001" value="">
+            <input type="number" id="years" name="years" step="0.01" value="">
             <button type="submit">Compute Predictions</button>
         </form>
 
-        <div id="predictions" style="font-weight: bold; "></div> <br>
-        <div id="predictions1" style="font-weight: bold;"></div> 
-        <div id="predictions2" style="font-weight: bold;"></div> <br>
-        <div id="predictions3" style="font-weight: bold;"></div> 
-        <div id="predictions4" style="font-weight: bold;"></div><br>
-        <div id="predictions5" style="font-weight: bold;"></div><br>
-        <div id="predictions6" style="font-weight: bold;"></div><br>
+        
+<!-- Total -->
+<h3> Total Transaction Counts per Month </h3>
+
+<div class="chart-container">
+<p style="display: flex; justify-content: center; align-items: center;"> National Metrology Division </p>
+    <canvas id="transaction-chart4" style="width: 30rem; height: 20rem;" ></canvas>
+</div>
+
+<div class="chart-container">
+<p style="display: flex; justify-content: center; align-items: center;"> Standards and Testing Division </p>
+    <canvas id="transaction-chart8" style="width: 30rem; height: 20rem;" ></canvas>
+</div>
+
+<div class="chart-container">
+    <canvas id="transaction-chart" style="width: 65rem; height: 20rem;" ></canvas>
+</div>
+<br>
+
+
+
+<h3> Total Transaction Counts  </h3>
+<div class="chart-container">
+<p style="display: flex; justify-content: center; align-items: center;"> National Metrology Division </p>
+    <canvas id="transaction-chart5" style="width: 30rem; height: 20rem;" ></canvas>
+</div>
+
+<div class="chart-container">
+<p style="display: flex; justify-content: center; align-items: center;"> Standards and Testing Division </p>
+    <canvas id="transaction-chart9" style="width: 30rem; height: 20rem;" ></canvas>
+</div>
+<div class="chart-container " style="width: 69rem; height: 30rem;display: flex; justify-content: center; align-items: center;">
+    <canvas id="transaction-chart1" style="width: 30rem; height: 20rem;" ></canvas>
+</div>
+<br>
+
+
+<h3> Total Transaction Income per Month </h3>
+<div class="chart-container">
+    <p style="display: flex; justify-content: center; align-items: center;"> National Metrology Division </p>
+    <canvas id="transaction-chart6" style="width: 30rem; height: 20rem;" ></canvas>
+</div>
+
+<div class="chart-container">
+<p style="display: flex; justify-content: center; align-items: center;"> Standards and Testing Division </p>
+    <canvas id="transaction-chart10" style="width: 30rem; height: 20rem;" ></canvas>
+</div>
+<div class="chart-container">
+    <canvas id="transaction-chart2" style="width: 65rem; height: 20rem;" ></canvas>
+</div>
+<br> 
+
+
+
+<h3> Total Transaction Income</h3>
+<div class="chart-container">
+    <p style="display: flex; justify-content: center; align-items: center;"> National Metrology Division </p>
+    <canvas id="transaction-chart7" style="width: 30rem; height: 20rem;" ></canvas>
+</div>
+
+<div class="chart-container">
+<p style="display: flex; justify-content: center; align-items: center;"> Standards and Testing Division </p>
+    <canvas id="transaction-chart11" style="width: 30rem; height: 20rem;" ></canvas>
+</div>
+
+<div class="chart-container " style="width: 69rem; height: 30rem;display: flex; justify-content: center; align-items: center;">
+    <canvas id="transaction-chart3" style="width: 30rem; height: 20rem;" ></canvas>
+</div>
+
+
+
+        <div id="prediction-results"> </div>
+        <div id="prediction-results1"></div>
+        <div id="prediction-results2"></div>
+        <div id="prediction-results3"></div>
+        <div id="prediction-results4"></div>
+        <div id="prediction-results5"></div>
 
 
     </div>
@@ -72,884 +141,568 @@ use yii\web\View;
 
 <?php
 
-// $chartDb = Yii::$app->db_data;
+$chartDb = Yii::$app->db_data;
 
 
-// $sql = "
-//     WITH RECURSIVE AllMonths AS (
-//         SELECT MAX(DATE_FORMAT(transaction_date, '%Y-%m-01')) AS last_month
-//         FROM transaction
-//         UNION ALL
-//         SELECT DATE_FORMAT(DATE_ADD(last_month, INTERVAL -1 MONTH), '%Y-%m-01')
-//         FROM AllMonths
-//         WHERE last_month >= DATE_FORMAT(DATE_ADD(CURDATE(), INTERVAL -11 MONTH), '%Y-%m-01')  -- Show last 12 months
-//     )
-//     SELECT
-//         AllMonths.last_month AS month_date,
-//         IFNULL(SUM(CASE WHEN t.transaction_status = 1 OR t.transaction_status = 3 THEN 1 ELSE 0 END), 0) AS paid_and_pending_count
-//     FROM AllMonths
-//     LEFT JOIN transaction t ON DATE_FORMAT(t.transaction_date, '%Y-%m-01') = AllMonths.last_month
-//     GROUP BY AllMonths.last_month
-//     ORDER BY AllMonths.last_month;
-// ";
+$sql1 = "
+    WITH RECURSIVE AllMonths AS (
+        SELECT MAX(DATE_FORMAT(transaction_date, '%Y-%m-01')) AS last_month
+        FROM transaction
+        UNION ALL
+        SELECT DATE_FORMAT(DATE_ADD(last_month, INTERVAL -1 MONTH), '%Y-%m-01')
+        FROM AllMonths
+        WHERE last_month >= DATE_FORMAT(DATE_ADD(CURDATE(), INTERVAL -11 MONTH), '%Y-%m-01')  -- Show last 12 months
+    )
+    SELECT
+        AllMonths.last_month AS month_date,
+        IFNULL(SUM(CASE WHEN t.transaction_status = 1 OR t.transaction_status = 3 THEN 1 ELSE 0 END), 0) AS paid_and_pending_count
+    FROM AllMonths
+    LEFT JOIN transaction t ON DATE_FORMAT(t.transaction_date, '%Y-%m-01') = AllMonths.last_month
+    GROUP BY AllMonths.last_month
+    ORDER BY AllMonths.last_month;
+";
 
-// $transactions = $chartDb->createCommand($sql)->queryAll();
+$transactions = $chartDb->createCommand($sql1)->queryAll();
 
-// var_dump($transactions);
+$sql2 = "
+    WITH RECURSIVE AllMonths AS (
+        SELECT MAX(DATE_FORMAT(transaction_date, '%Y-%m-01')) AS last_month
+        FROM transaction
+        UNION ALL
+        SELECT DATE_FORMAT(DATE_ADD(last_month, INTERVAL -1 MONTH), '%Y-%m-01')
+        FROM AllMonths
+        WHERE last_month >= DATE_FORMAT(DATE_ADD(CURDATE(), INTERVAL -11 MONTH), '%Y-%m-01')  -- Show last 12 months
+    )
+    SELECT
+        AllMonths.last_month AS month_date,
+        ROUND(IFNULL(SUM(CASE WHEN t.transaction_status = 1 THEN t.amount ELSE 0 END), 0)) AS total_amount_paid
+    FROM AllMonths
+    LEFT JOIN transaction t ON DATE_FORMAT(t.transaction_date, '%Y-%m-01') = AllMonths.last_month
+    GROUP BY AllMonths.last_month
+    ORDER BY AllMonths.last_month;
 
+
+";
+
+$transactions2 = $chartDb->createCommand($sql2)->queryAll();
+
+// NMD
+
+$sql3 = "
+    WITH RECURSIVE AllMonths AS (
+        SELECT MAX(DATE_FORMAT(transaction_date, '%Y-%m-01')) AS last_month
+        FROM transaction
+        UNION ALL
+        SELECT DATE_FORMAT(DATE_ADD(last_month, INTERVAL -1 MONTH), '%Y-%m-01')
+        FROM AllMonths
+        WHERE last_month >= DATE_FORMAT(DATE_ADD(CURDATE(), INTERVAL -11 MONTH), '%Y-%m-01')  -- Show last 12 months
+    )
+    SELECT
+        AllMonths.last_month AS month_date,
+        IFNULL(SUM(CASE WHEN t.transaction_status = 1 OR t.transaction_status = 3 THEN 1 ELSE 0 END), 0) AS paid_and_pending_count
+    FROM AllMonths
+    LEFT JOIN transaction t ON DATE_FORMAT(t.transaction_date, '%Y-%m-01') = AllMonths.last_month AND t.division = (SELECT id FROM division WHERE division_code = 'NMD')
+    GROUP BY AllMonths.last_month
+    ORDER BY AllMonths.last_month;
+
+
+";
+
+$transactions3 = $chartDb->createCommand($sql3)->queryAll();
+
+$sql4 = "
+WITH RECURSIVE AllMonths AS (
+    SELECT MAX(DATE_FORMAT(transaction_date, '%Y-%m-01')) AS last_month
+    FROM transaction
+    UNION ALL
+    SELECT DATE_FORMAT(DATE_ADD(last_month, INTERVAL -1 MONTH), '%Y-%m-01')
+    FROM AllMonths
+    WHERE last_month >= DATE_FORMAT(DATE_ADD(CURDATE(), INTERVAL -11 MONTH), '%Y-%m-01')  -- Show last 12 months
+)
+SELECT
+    AllMonths.last_month AS month_date,
+    ROUND(IFNULL(SUM(CASE WHEN t.transaction_status = 1 THEN t.amount ELSE 0 END), 0)) AS total_amount_paid
+FROM AllMonths
+LEFT JOIN transaction t ON DATE_FORMAT(t.transaction_date, '%Y-%m-01') = AllMonths.last_month AND t.division = (SELECT id FROM division WHERE division_code = 'NMD')
+GROUP BY AllMonths.last_month
+ORDER BY AllMonths.last_month;
+
+";
+
+$transactions4 = $chartDb->createCommand($sql4)->queryAll();
+
+// STD
+
+$sql5 = "
+    WITH RECURSIVE AllMonths AS (
+        SELECT MAX(DATE_FORMAT(transaction_date, '%Y-%m-01')) AS last_month
+        FROM transaction
+        UNION ALL
+        SELECT DATE_FORMAT(DATE_ADD(last_month, INTERVAL -1 MONTH), '%Y-%m-01')
+        FROM AllMonths
+        WHERE last_month >= DATE_FORMAT(DATE_ADD(CURDATE(), INTERVAL -11 MONTH), '%Y-%m-01')  -- Show last 12 months
+    )
+    SELECT
+        AllMonths.last_month AS month_date,
+        IFNULL(SUM(CASE WHEN t.transaction_status = 1 OR t.transaction_status = 3 THEN 1 ELSE 0 END), 0) AS paid_and_pending_count
+    FROM AllMonths
+    LEFT JOIN transaction t ON DATE_FORMAT(t.transaction_date, '%Y-%m-01') = AllMonths.last_month AND t.division = (SELECT id FROM division WHERE division_code = 'STD')
+    GROUP BY AllMonths.last_month
+    ORDER BY AllMonths.last_month;
+
+
+";
+
+$transactions5 = $chartDb->createCommand($sql5)->queryAll();
+
+$sql6 = "
+WITH RECURSIVE AllMonths AS (
+    SELECT MAX(DATE_FORMAT(transaction_date, '%Y-%m-01')) AS last_month
+    FROM transaction
+    UNION ALL
+    SELECT DATE_FORMAT(DATE_ADD(last_month, INTERVAL -1 MONTH), '%Y-%m-01')
+    FROM AllMonths
+    WHERE last_month >= DATE_FORMAT(DATE_ADD(CURDATE(), INTERVAL -11 MONTH), '%Y-%m-01')  -- Show last 12 months
+)
+SELECT
+    AllMonths.last_month AS month_date,
+    ROUND(IFNULL(SUM(CASE WHEN t.transaction_status = 1 THEN t.amount ELSE 0 END), 0)) AS total_amount_paid
+FROM AllMonths
+LEFT JOIN transaction t ON DATE_FORMAT(t.transaction_date, '%Y-%m-01') = AllMonths.last_month AND t.division = (SELECT id FROM division WHERE division_code = 'STD')
+GROUP BY AllMonths.last_month
+ORDER BY AllMonths.last_month;
+
+";
+
+$transactions6 = $chartDb->createCommand($sql6)->queryAll();
 
 
 ?>
+<script>
 
-
-
-<?php
-
- //$chartDb = Yii::$app->db_data;
-
-//  $sql = "
-//     SELECT 
-//         dates.date AS transacton_date,
-//         IFNULL(COUNT(opr.transacton_date), 0) AS transaction_count,
-//         IFNULL(SUM(opr.amount), 0) AS total_sales
-//     FROM (
-//         SELECT DATE_ADD('2023-06-10', INTERVAL a.n + b.n * 10 + c.n * 100 DAY) AS date
-//         FROM (
-//             SELECT 0 AS n UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9
-//         ) AS a,
-//         (
-//             SELECT 0 AS n UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9
-//         ) AS b,
-//         (
-//             SELECT 0 AS n UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9
-//         ) AS c
-//     ) AS dates
-//     LEFT JOIN operational_report opr ON dates.date = opr.transacton_date AND opr.transaction_status = 'paid'
-//     GROUP BY dates.date
-//     ORDER BY dates.date ASC
-// ";
-
-//  $transactions = $chartDb->createCommand($sql)->queryAll();
-
-// // Convert timestamps to Unix timestamps
-// foreach ($transactions as &$transaction) {
-//     $transaction['transacton_date'] = strtotime($transaction['transacton_date']);
-// }
-
-// $latestTimestamp = end($transactions)['transacton_date'];
-
-// // Define $nextDayTimestamp using the latestTimestamp
-// $nextDayTimestamp = strtotime('+1 day', $latestTimestamp);
-
-// // Prepare data for prediction (transaction count)
-// $timestampsForCount = array_column($transactions, 'transacton_date');
-// $transactionCounts = array_column($transactions, 'transaction_count');
-//     // Calculate linear regression coefficients for transaction count prediction
-//     $n = count($timestampsForCount);
-//     $sumX = array_sum($timestampsForCount);
-//     $sumY = array_sum($transactionCounts);
-//     $sumXY = 0;
-//     $sumX2 = 0;
-
-//     for ($i = 0; $i < $n; $i++) {
-//         $sumXY += $timestampsForCount[$i] * $transactionCounts[$i];
-//         $sumX2 += $timestampsForCount[$i] * $timestampsForCount[$i];
-//     }
-
-
-
-//     $slopeForCount = ($n * $sumXY - $sumX * $sumY) / ($n * $sumX2 - $sumX * $sumX);
-//     $interceptForCount = ($sumY - $slopeForCount * $sumX) / $n;
-    
-//     // Predict the next transaction count for the next day
-//     $predictedTransactionCount = $interceptForCount + $slopeForCount * $nextDayTimestamp;
-
-//     // Prepare data for prediction (total sales)
-//     $timestampsForSales = array_column($transactions, 'transacton_date');
-//     $totalSales = array_column($transactions, 'total_sales');
-
-//     // Calculate linear regression coefficients for total sales prediction
-//     $n = count($timestampsForSales);
-//     $sumX = array_sum($timestampsForSales);
-//     $sumY = array_sum($totalSales);
-//     $sumXY = 0;
-//     $sumX2 = 0;
-
-//     for ($i = 0; $i < $n; $i++) {
-//         $sumXY += $timestampsForSales[$i] * $totalSales[$i];
-//         $sumX2 += $timestampsForSales[$i] * $timestampsForSales[$i];
-//     }
-
-//     $slopeForSales = ($n * $sumXY - $sumX * $sumY) / ($n * $sumX2 - $sumX * $sumX);
-//     $interceptForSales = ($sumY - $slopeForSales * $sumX) / $n;
-
-//     $totalSalesSum = array_sum($totalSales);
-//     $averageSalesIncreasePerDay = $totalSalesSum / count($timestampsForSales);
-
-//     // Predict the next total sum of all total sales
-//     $predictedNextTotalSales = $totalSalesSum + $averageSalesIncreasePerDay;
-
-//     $totalTransactionCountSum = array_sum($transactionCounts);
-//     $averageTransactionCountIncreasePerDay = $totalTransactionCountSum / count($timestampsForCount);
-
-//     $queryPerYear = "SELECT
-//     all_years.year AS year,
-//     IFNULL(COUNT(opr.transacton_date), 0) AS transaction_count,
-//     IFNULL(SUM(opr.amount), 0) AS total_sales
-//     FROM
-//         (
-//             SELECT DISTINCT YEAR(transacton_date) AS year
-//             FROM operational_report
-//             WHERE transacton_date >= '2023-06-10'
-            
-//             UNION
-            
-//             SELECT DISTINCT YEAR(transacton_date) AS year
-//             FROM operational_report
-//             WHERE YEAR(transacton_date) = YEAR(NOW())
-//         ) AS all_years
-//     LEFT JOIN operational_report opr ON all_years.year = YEAR(opr.transacton_date) AND opr.transaction_status = 'paid'
-//     GROUP BY all_years.year
-//     ORDER BY all_years.year ASC;
-//     ";
-
-//     $transactionsPerYear = $chartDb->createCommand($queryPerYear)->queryAll();
-
-//     // Prepare data for predictions (total paid transaction count and total paid sales)
-//     $years = array_column($transactionsPerYear, 'year');
-//     $transactionCountsPerYear = array_column($transactionsPerYear, 'transaction_count');
-//     $totalSalesPerYear = array_column($transactionsPerYear, 'total_sales');
-
-//     // Calculate historical averages based on the whole dataset for paid transaction count and total sales
-//     $totalTransactionCountSumPerYear = array_sum($transactionCountsPerYear);
-//     $averageTransactionCountIncreasePerYear = $totalTransactionCountSumPerYear / count($years);
-
-//     $totalSalesSumPerYear = array_sum($totalSalesPerYear);
-//     $averageSalesIncreasePerYear = $totalSalesSumPerYear / count($years);
-    ?>
-
-    
-    <!-- <script>
-        document.getElementById('prediction-form').addEventListener('submit', function(event) {
-            event.preventDefault();
-
-            let years = parseFloat(document.getElementById('years').value);
-            let days = Math.round(years * 365);
-            
-            let transactionCounts = <?php //json_encode(array_column($transactions, 'transaction_count')) ?>;
-
-            // Convert timestamps to Unix timestamps
-            let totalSales = <?php //json_encode(array_column($transactions, 'total_sales')) ?>;
-
-            // Calculate the timestamps for the next day and the predicted day
-            let latestTimestamp = '<?php //$latestTimestamp ?>';
-            let nextDayTimestamp = new Date('<?php //date('Y-m-d', $nextDayTimestamp) ?>');
-            nextDayTimestamp.setDate(nextDayTimestamp.getDate() + days);
-
-            let totalSalesSum = <?php //$totalSalesSum ?>;
-            let totalTransactionCountSum = <?php //$totalTransactionCountSum ?>;
-
-            // Define JavaScript variables with the values of totalSalesSum, averageSalesIncreasePerDay,
-            // totalTransactionCountSum, and averageTransactionCountIncreasePerDay
-            let averageSalesIncreasePerDay = <?php //$averageSalesIncreasePerDay ?>;
-            let averageTransactionCountIncreasePerDay = <?php //$averageTransactionCountIncreasePerDay ?>;
-
-            // Calculate historical averages based on the whole dataset for paid transaction count and total sales
-            let totalTransactionCountSumPerYear = <?php //$totalTransactionCountSumPerYear ?>;
-            let averageTransactionCountIncreasePerYear = <?php //$averageTransactionCountIncreasePerYear ?>;
-
-            let totalSalesSumPerYear = <?php //$totalSalesSumPerYear ?>;
-            let averageSalesIncreasePerYear = <?php //$averageSalesIncreasePerYear ?>;
-
-            let nextYearTimestamp = new Date();
-            nextYearTimestamp.setFullYear(nextYearTimestamp.getFullYear() + years);
-
-            let slopeForCountPerYear = <?php //$slopeForCount ?>;
-            let interceptForCountPerYear = <?php //$interceptForCount ?>;
-
-            let slopeForSalesPerYear = <?php //$slopeForSales ?>;
-            let interceptForSalesPerYear = <?php //$interceptForSales ?>;
-
-            let predictedTransactionCountPerYear = Math.round(interceptForCountPerYear + slopeForCountPerYear * nextDayTimestamp.getTime() / 1000);
-            let predictedTotalSalesPerYear = Math.round(interceptForSalesPerYear + slopeForSalesPerYear * nextDayTimestamp.getTime() / 1000);
-
-            console.log(transactionCounts[transactionCounts.length - 4])
-
-            // Calculate predictions for total sum of paid transaction count and total paid sales per year
-            let predictedNextTotalTransactionCountPerYear = Math.round(totalTransactionCountSumPerYear + averageTransactionCountIncreasePerYear * years);
-            let predictedNextTotalSalesPerYear = Math.round(totalSalesSumPerYear + averageSalesIncreasePerYear * years);
-
-            // Calculate the average of the predicted total sum of paid transaction count and total paid sales per year
-            let averagePredictedTotalTransactionCountPerYear = Math.round(predictedNextTotalTransactionCountPerYear / years);
-            let averagePredictedTotalSalesPerYear = Math.round(predictedNextTotalSalesPerYear / years);
-                    
-            function addCommas(number) {
-                return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+     var ctx = document.getElementById('transaction-chart').getContext('2d');
+     var transactionChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: [],
+            datasets: [{
+                label: 'Predicted Transaction Counts',
+                data: [],
+                borderColor: 'rgb(0, 115, 230)',
+                backgroundColor: 'rgb(0, 115, 230)',
+                fill: true
+            }]
+        },
+        options: {
+            scales: {
+                x: {
+                    display: true, // Display the X-axis
+                    grid: {
+                        display: false // Hide x-axis gridlines
+                    }
+                },
+                y: {
+                    display: true, // Display the Y-axis
+                    beginAtZero: true, // Start Y-axis at 0
+                     grid: {
+                        display: false // Hide x-axis gridlines
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: true, // Display the legend
+                }
             }
-
-            let predictionsDiv = document.getElementById('predictions');
-            predictionsDiv.innerHTML = `
-            <p>Predicted transaction count on the <span style="color:#0080ff">${days}-day (${years} year(s))</span> mark: 
-        <span style="color:${predictedTransactionCountPerYear >= transactionCounts[transactionCounts.length - 1] ? 'green' : 'red'}">
-             ${addCommas(predictedTransactionCountPerYear)}
-            (${predictedTransactionCountPerYear >= transactionCounts[transactionCounts.length - 1] ? 'Increased' : 'Decreased'})
-        </span>
-    </p>
-    <p>Predicted total transaction count on the <span style="color:#0080ff">${days}-day (${years} year(s))</span> mark: 
-        <span style="color:${averagePredictedTotalTransactionCountPerYear >= averageTransactionCountIncreasePerYear ? 'green' : 'red'}">
-             ${addCommas(averagePredictedTotalTransactionCountPerYear)}
-            (${averagePredictedTotalTransactionCountPerYear >= averageTransactionCountIncreasePerYear ? 'Increased' : 'Decreased'})
-        </span>
-    </p>
-    <p>Predicted income on the <span style="color:#0080ff">${days}-day (${years} year(s))</span> mark: 
-        <span style="color:${predictedTotalSalesPerYear >= totalSales[totalSales.length - 1] ? 'green' : 'red'}">
-            ${addCommas(predictedTotalSalesPerYear)}
-            (${predictedTotalSalesPerYear >= totalSales[totalSales.length - 1] ? 'Increased' : 'Decreased'})
-        </span>
-    </p>
-    <p>Predicted total income on the <span style="color:#0080ff">${days}-day (${years} year(s))</span> mark: 
-        <span style="color:${averagePredictedTotalSalesPerYear >= averageSalesIncreasePerYear ? 'green' : 'red'}">
-            ${addCommas(averagePredictedTotalSalesPerYear)}
-            (${averagePredictedTotalSalesPerYear >= averageSalesIncreasePerYear ? 'Increased' : 'Decreased'})
-        </span>
-    </p>
-    `;
-
-    var doughnutCanvas = document.getElementById('doughnutChart');            
-        // Create the doughnut chart
-                    var doughnutChart = new Chart(doughnutCanvas, {
-                        type: 'doughnut',
-                        data: {
-                            labels: ['Predicted Total Transaction Count Daily in ' + years +' year(s)', ' Current Total Average Transaction Count Daily'],
-                            datasets: [{
-                                data: [predictedTransactionCountPerYear,transactionCounts[transactionCounts.length - 1]], // 100 - predictedTotalSalesPerYear1 represents the remaining portion
-                                backgroundColor: ['#0080ff', '#e0e0e0'] // You can set your desired colors here
-                            }]
-                        },
-                        options: {
-                            responsive: true,
-                            cutoutPercentage: 70, // Adjust the cutout percentage as needed
-                            legend: {
-                                display: true,
-                                position: 'bottom'
-                            }
-                        }
-                    });
-
-                    var doughnutCanvas1 = document.getElementById('doughnutChart1');            
-        // Create the doughnut chart
-                    var doughnutChart1 = new Chart(doughnutCanvas1, {
-                        type: 'doughnut',
-                        data: {
-                            labels: ['Predicted Total Average Transaction Count in ' + years +' year(s)', ' Current Total Average Transaction Count'],
-                            datasets: [{
-                                data: [averagePredictedTotalTransactionCountPerYear,averageTransactionCountIncreasePerYear], // 100 - predictedTotalSalesPerYear1 represents the remaining portion
-                                backgroundColor: ['#0080ff', '#e0e0e0'] // You can set your desired colors here
-                            }]
-                        },
-                        options: {
-                            responsive: true,
-                            cutoutPercentage: 70, // Adjust the cutout percentage as needed
-                            legend: {
-                                display: true,
-                                position: 'bottom'
-                            }
-                        }
-                    });
+        }
+    });
 
 
+    function updateChart(labels, data) {
+        transactionChart.data.labels = labels;
+        transactionChart.data.datasets[0].data = data;
+        transactionChart.update();
+    }
 
-                    const doughnutCanvas2 = document.getElementById('doughnutChart2');            
-        // Create the doughnut chart
-                    const doughnutChart2 = new Chart(doughnutCanvas2, {
-                        type: 'doughnut',
-                        data: {
-                            labels: ['Predicted Total Sales Daily in ' + years +' year(s)', ' Current Total Average Sales '],
-                            datasets: [{
-                                data: [predictedTotalSalesPerYear,totalSales[totalSales.length - 1]], // 100 - predictedTotalSalesPerYear1 represents the remaining portion
-                                backgroundColor: ['#0080ff', '#e0e0e0'] // You can set your desired colors here
-                            }]
-                        },
-                        options: {
-                            responsive: true,
-                            cutoutPercentage: 70, // Adjust the cutout percentage as needed
-                            legend: {
-                                display: true,
-                                position: 'bottom'
-                            }
-                        }
-                    });
+    
+    var ctx1 = document.getElementById('transaction-chart1').getContext('2d');
+    var transactionChart1 = new Chart(ctx1, {
+        type: 'doughnut',
+        data: {
+            labels: ['Predicted Transaction Sum', 'Current Transaction Sum'],
+            datasets: [{
+                data: [],
+                backgroundColor: ['rgb(0, 115, 230)', 'rgb(255, 119, 51)'],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            plugins: {
+                legend: {
+                    display: true,
+                }
+            }
+        }
+    });
 
-                    const doughnutCanvas3 = document.getElementById('doughnutChart3');            
-        // Create the doughnut chart
-                    const doughnutChart3 = new Chart(doughnutCanvas3, {
-                        type: 'doughnut',
-                        data: {
-                            labels: ['Predicted Total Average Sales ' + years +' year(s)', ' Current Total Average Sales'],
-                            datasets: [{
-                                data: [averagePredictedTotalSalesPerYear,averageSalesIncreasePerYear], // 100 - predictedTotalSalesPerYear1 represents the remaining portion
-                                backgroundColor: ['#0080ff', '#e0e0e0'] // You can set your desired colors here
-                            }]
-                        },
-                        options: {
-                            responsive: true,
-                            cutoutPercentage: 70, // Adjust the cutout percentage as needed
-                            legend: {
-                                display: true,
-                                position: 'bottom'
-                            }
-                        }
-                    });
-
-        });
+function updateChart1(data) {
+    transactionChart1.data.datasets[0].data = data;
+    transactionChart1.update();
+}
+    document.getElementById('prediction-form').addEventListener('submit', function(event) {
+        event.preventDefault();
         
-    </script> -->
-
-
-    <!-- NMD -->
-
-    <?php
-    $latestTimestamp2 = (new \yii\db\Query())
-    ->select(['MAX(transacton_date) AS latest_timestamp'])
-    ->from('operational_report')
-    ->scalar();
-
-// Construct the new subquery
-$subquery2 = (new \yii\db\Query())
-    ->select(['DATE_ADD("2023-06-10", INTERVAL n DAY) AS date'])
-    ->from(['numbers' => '(
-SELECT a.n + b.n * 10 + c.n * 100 AS n
-FROM (
-    SELECT 0 AS n UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9
-) AS a,
-(
-    SELECT 0 AS n UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9
-) AS b,
-(
-    SELECT 0 AS n UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9
-) AS c
-)'])
-    ->where(['<=', 'DATE_ADD("2023-06-10", INTERVAL n DAY)', new \yii\db\Expression('NOW()')]);
-
-// New main query
-$query2 = (new \yii\db\Query())
-    ->select([
-        'all_dates.date AS transaction_date',
-        'IFNULL(COUNT(opr.transacton_date), 0) AS transaction_count',
-        'IFNULL(SUM(opr.amount), 0) AS total_sales'
-    ])
-    ->from([
-        'all_dates' => $subquery2
-    ])
-    ->leftJoin('operational_report opr', 'all_dates.date = opr.transacton_date AND opr.transaction_status = "paid" AND opr.division_name = "National Metrology Department"')
-    ->groupBy('all_dates.date')
-    ->orderBy(['all_dates.date' => SORT_ASC]);
-
-$transactions2 = $query2->all();
-
-// Convert timestamps to Unix timestamps
-foreach ($transactions2 as &$transaction2) {
-    $transaction2['transaction_date'] = strtotime($transaction2['transaction_date']);
-}
-
-// Define $nextDayTimestamp using the latestTimestamp
-$nextDayTimestamp2 = strtotime('+1 day', strtotime($latestTimestamp2));
-
-// Prepare data for prediction (transaction count)
-$timestampsForCount2 = array_column($transactions2, 'transaction_date');
-$transactionCounts2 = array_column($transactions2, 'transaction_count');
-
-// Calculate linear regression coefficients for transaction count prediction
-$n2 = count($timestampsForCount2);
-$sumX2 = array_sum($timestampsForCount2);
-$sumY2 = array_sum($transactionCounts2);
-$sumXY2 = 0;
-$sumX22 = 0;
-
-for ($i = 0; $i < $n2; $i++) {
-    $sumXY2 += $timestampsForCount2[$i] * $transactionCounts2[$i];
-    $sumX22 += $timestampsForCount2[$i] * $timestampsForCount2[$i];
-}
-
-$slopeForCount2 = ($n2 * $sumXY2 - $sumX2 * $sumY2) / ($n2 * $sumX22 - $sumX2 * $sumX2);
-$interceptForCount2 = ($sumY2 - $slopeForCount2 * $sumX2) / $n2;
-
-// Predict the next transaction count for the next day
-$predictedTransactionCount2 = $interceptForCount2 + $slopeForCount2 * $nextDayTimestamp2;
-
-// Prepare data for prediction (total sales)
-$timestampsForSales2 = array_column($transactions2, 'transaction_date');
-$totalSales2 = array_column($transactions2, 'total_sales');
-
-// Calculate linear regression coefficients for total sales prediction
-$n2 = count($timestampsForSales2);
-$sumX2 = array_sum($timestampsForSales2);
-$sumY2 = array_sum($totalSales2);
-$sumXY2 = 0;
-$sumX22 = 0;
-
-for ($i = 0; $i < $n2; $i++) {
-    $sumXY2 += $timestampsForSales2[$i] * $totalSales2[$i];
-    $sumX22 += $timestampsForSales2[$i] * $timestampsForSales2[$i];
-}
-
-$slopeForSales2 = ($n2 * $sumXY2 - $sumX2 * $sumY2) / ($n2 * $sumX22 - $sumX2 * $sumX2);
-$interceptForSales2 = ($sumY2 - $slopeForSales2 * $sumX2) / $n2;
-
-$totalSalesSum2 = array_sum($totalSales2);
-$averageSalesIncreasePerDay2 = $totalSalesSum2 / count($timestampsForSales2);
-
-// Predict the next total sum of all total sales
-$predictedNextTotalSales2 = $totalSalesSum2 + $averageSalesIncreasePerDay2;
-
-$totalTransactionCountSum2 = array_sum($transactionCounts2);
-$averageTransactionCountIncreasePerDay2 = $totalTransactionCountSum2 / count($timestampsForCount2);
-
-$queryPerYear2 = (new \yii\db\Query())
-    ->select([
-        'all_years2.year AS year',
-        'IFNULL(COUNT(opr2.transacton_date), 0) AS transaction_count2',
-        'IFNULL(SUM(opr2.amount), 0) AS total_sales2'
-    ])
-    ->from([
-        'all_years2' => (new \yii\db\Query())
-            ->select(['DISTINCT YEAR(transacton_date) AS year'])
-            ->from('operational_report')
-            ->where(['>=', 'transacton_date', '2023-06-10'])
-            ->union((new \yii\db\Query())
-                    ->select(['DISTINCT YEAR(transacton_date) AS year'])
-                    ->from('operational_report')
-                    ->where(['YEAR(transacton_date)' => new \yii\db\Expression('YEAR(NOW())')])
-            )
-    ])
-    ->leftJoin('operational_report opr2', 'all_years2.year = YEAR(opr2.transacton_date) AND opr2.transaction_status = "paid" AND opr2.division_name = "National Metrology Department"')
-    ->groupBy('all_years2.year')
-    ->orderBy(['all_years2.year' => SORT_ASC]);
-
-$transactionsPerYear2 = $queryPerYear2->all();
-
-// Prepare data for predictions (total paid transaction count and total paid sales)
-$years2 = array_column($transactionsPerYear2, 'year');
-$transactionCountsPerYear2 = array_column($transactionsPerYear2, 'transaction_count2');
-$totalSalesPerYear2 = array_column($transactionsPerYear2, 'total_sales2');
-
-// Calculate historical averages based on the whole dataset for paid transaction count and total sales
-$totalTransactionCountSumPerYear2 = array_sum($transactionCountsPerYear2);
-$averageTransactionCountIncreasePerYear2 = $totalTransactionCountSumPerYear2 / count($years2);
-
-$totalSalesSumPerYear2 = array_sum($totalSalesPerYear2);
-$averageSalesIncreasePerYear2 = $totalSalesSumPerYear2 / count($years2);
-    ?>
-
-    <script>
-        document.getElementById('prediction-form').addEventListener('submit', function(event) {
-            event.preventDefault();
-
-        const years2 = parseFloat(document.getElementById('years').value);
-        const days2 = Math.round(years2 * 365);
-
-        const transactionCounts2 = <?= json_encode(array_column($transactions2, 'transaction_count')) ?>;
-        const totalSales2 = <?= json_encode(array_column($transactions2, 'total_sales')) ?>;
-        // Calculate the timestamps for the next day and the predicted day
-        const latestTimestamp2 = '<?= $latestTimestamp2 ?>';
-        const nextDayTimestamp2 = new Date('<?= date('Y-m-d', $nextDayTimestamp2) ?>');
-        nextDayTimestamp2.setDate(nextDayTimestamp2.getDate() + days2);
-
-        const totalSalesSum2 = <?= $totalSalesSum2 ?>;
-        const totalTransactionCountSum2 = <?= $totalTransactionCountSum2 ?>;
-
-        // Define JavaScript variables with the values of totalSalesSum2, averageSalesIncreasePerDay2,
-        // totalTransactionCountSum2, and averageTransactionCountIncreasePerDay2
-        const averageSalesIncreasePerDay2 = <?= $averageSalesIncreasePerDay2 ?>;
-        const averageTransactionCountIncreasePerDay2 = <?= $averageTransactionCountIncreasePerDay2 ?>;
-
-        // Calculate historical averages based on the whole dataset for paid transaction count and total sales
-        const totalTransactionCountSumPerYear2 = <?= $totalTransactionCountSumPerYear2 ?>;
-        const averageTransactionCountIncreasePerYear2 = <?= $averageTransactionCountIncreasePerYear2 ?>;
-
-        const totalSalesSumPerYear2 = <?= $totalSalesSumPerYear2 ?>;
-        const averageSalesIncreasePerYear2 = <?= $averageSalesIncreasePerYear2 ?>;
-
-        // Calculate predictions for paid transaction count and paid sales per year
-        const slopeForCountPerYear2 = <?= $slopeForCount2 ?>;
-        const interceptForCountPerYear2 = <?= $interceptForCount2 ?>;
-
-        const slopeForSalesPerYear2 = <?= $slopeForSales2 ?>;
-        const interceptForSalesPerYear2 = <?= $interceptForSales2 ?>;
-
-        const nextYearTimestamp2 = new Date();
-        nextYearTimestamp2.setFullYear(nextYearTimestamp2.getFullYear() + years2);
-
-        // Calculate predictions for transaction count and total sales for the next year
-        const predictedTransactionCountPerYear2 = Math.round(interceptForCountPerYear2 + slopeForCountPerYear2 * nextYearTimestamp2.getTime() / 1000);
-        const predictedTotalSalesPerYear2 = Math.round(interceptForSalesPerYear2 + slopeForSalesPerYear2 * nextYearTimestamp2.getTime() / 1000);
-
-        // Calculate predictions for total sum of paid transaction count and total paid sales per year
-        const predictedNextTotalTransactionCountPerYear2 = Math.round(totalTransactionCountSumPerYear2 + averageTransactionCountIncreasePerYear2 * years2);
-        const predictedNextTotalSalesPerYear2 = Math.round(totalSalesSumPerYear2 + averageSalesIncreasePerYear2 * years2);
-
-        // Calculate the average of the predicted total sum of paid transaction count and total paid sales per year
-        const averagePredictedTotalTransactionCountPerYear2 = Math.round(predictedNextTotalTransactionCountPerYear2 / years2);
-        const averagePredictedTotalSalesPerYear2 = Math.round(predictedNextTotalSalesPerYear2 / years2);
-
+        var years = parseFloat(document.getElementById('years').value);
+    
+    // Prepare the historical data for linear regression
+    var dataPoints = [];
+    <?php foreach ($transactions as $transaction) { ?>
+        dataPoints.push([<?php echo strtotime($transaction['month_date']) * 1000; ?>, <?php echo $transaction['paid_and_pending_count']; ?>]);
+    <?php } ?>
+    
+    // Perform linear regression using a simple linear model (y = mx + b)
+    function linearRegression(data) {
+        var sumX = 0, sumY = 0, sumXY = 0, sumX2 = 0;
+        var n = data.length;
         
-        const doughnutCanvas4 = document.getElementById('doughnutChart4');            
-        // Create the doughnut chart
-                    const doughnutChart4 = new Chart(doughnutCanvas4, {
-                        type: 'doughnut',
-                        data: {
-                            labels: ['Predicted Total Transaction Count Daily for NMD in ' + years +' year(s)', ' Current Total Average Transaction Count Daily for NMD'],
-                            datasets: [{
-                                data: [predictedTransactionCountPerYear2,transactionCounts2[transactionCounts2.length - 1]], // 100 - predictedTotalSalesPerYear1 represents the remaining portion
-                                backgroundColor: ['#0080ff', '#e0e0e0'] // You can set your desired colors here
-                            }]
-                        },
-                        options: {
-                            responsive: true,
-                            cutoutPercentage: 70, // Adjust the cutout percentage as needed
-                            legend: {
-                                display: true,
-                                position: 'bottom'
-                            }
-                        }
-                    });
+        for (var i = 0; i < n; i++) {
+            sumX += data[i][0];
+            sumY += data[i][1];
+            sumXY += data[i][0] * data[i][1];
+            sumX2 += data[i][0] * data[i][0];
+        }
+        
+        var m = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
+        var b = (sumY - m * sumX) / n;
+        
+        return [m, b];
+    }
+    
+    // Calculate linear regression coefficients
+    var regressionCoefficients = linearRegression(dataPoints);
+    
+    // Calculate the predicted transaction count for the entered number of years
+    var predictedCounts = [];
+    var totalPredictedSum = 0; // To calculate the total sum of predicted counts
+    var lastTimestamp = dataPoints[dataPoints.length - 1][0];
+    var predictedLabels = []; // Array to hold labels for predicted months
+    var predictedValues = []; // Array to hold predicted transaction counts
+    for (var i = 1; i <= years * 12; i++) {
+        var futureTimestamp = lastTimestamp + (i * 2592000000); // 30 days in milliseconds
+        var predictedCount = Math.round(regressionCoefficients[0] * futureTimestamp + regressionCoefficients[1]);
+        predictedLabels.push(new Date(futureTimestamp).toDateString());
+        predictedValues.push(predictedCount);
+        totalPredictedSum += predictedCount; // Add to the total sum
+    }
+    
+    // Calculate the current transaction sum
+    var currentTransactionSum = 0;
+    <?php foreach ($transactions as $transaction) { ?>
+        currentTransactionSum += <?php echo $transaction['paid_and_pending_count']; ?>;
+    <?php } ?>
+    
+    // Display the predictions
+    var resultsDiv = document.getElementById('prediction-results');
+    for (var j = 0; j < predictedCounts.length; j++) {
+        var prediction = predictedCounts[j];
+        var predictionDate = new Date(prediction.timestamp);
+        resultsDiv.innerHTML += '<p>' + predictionDate.toDateString() + ': ' + prediction.count + ' transactions</p>';
+    }
+    updateChart(predictedLabels, predictedValues);
+    updateChart1([totalPredictedSum, currentTransactionSum]);
 
-                    const doughnutCanvas5 = document.getElementById('doughnutChart5');            
-        // Create the doughnut chart
-                    const doughnutChart5 = new Chart(doughnutCanvas5, {
-                        type: 'doughnut',
-                        data: {
-                            labels: ['Predicted Total Average Transaction Count for NMD in ' + years2 +' year(s)', ' Current Total Average Transaction Count for NMD'],
-                            datasets: [{
-                                data: [averagePredictedTotalTransactionCountPerYear2,averageTransactionCountIncreasePerYear2], // 100 - predictedTotalSalesPerYear1 represents the remaining portion
-                                backgroundColor: ['#0080ff', '#e0e0e0'] // You can set your desired colors here
-                            }]
-                        },
-                        options: {
-                            responsive: true,
-                            cutoutPercentage: 70, // Adjust the cutout percentage as needed
-                            legend: {
-                                display: true,
-                                position: 'bottom'
-                            }
-                        }
-                    });
+    });
+
+    
+</script>
+
+<script>
+    var ctx2 = document.getElementById('transaction-chart2').getContext('2d');
+     var transactionChart2 = new Chart(ctx2, {
+        type: 'line',
+        data: {
+            labels: [],
+            datasets: [{
+                label: 'Predicted Transaction Income',
+                data: [],
+                borderColor: 'rgb(0, 115, 230)',
+                backgroundColor: 'rgba(0, 0, 0, 0)',
+                fill: true,
+                cubicInterpolationMode: 'monotone'
+            }]
+        },
+        options: {
+            scales: {
+                x: {
+                    display: true, // Display the X-axis
+                    grid: {
+                        display: false // Hide x-axis gridlines
+                    }
+                },
+                y: {
+                    display: true, // Display the Y-axis
+                    beginAtZero: true, // Start Y-axis at 0
+                     grid: {
+                        display: false // Hide x-axis gridlines
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: true, // Display the legend
+                }
+            }
+        }
+    });
+    
+    // Function to update the chart data
+    function updateChart2(labels, data) {
+        transactionChart2.data.labels = labels;
+        transactionChart2.data.datasets[0].data = data;
+        transactionChart2.update();
+    }
 
 
+    var ctx3 = document.getElementById('transaction-chart3').getContext('2d');
+    var transactionChart3 = new Chart(ctx3, {
+        type: 'doughnut',
+        data: {
+            labels: ['Predicted Transaction Sum', 'Current Transaction Sum'],
+            datasets: [{
+                data: [],
+                backgroundColor: ['rgb(0, 115, 230)', 'rgb(255, 119, 51)'],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            plugins: {
+                legend: {
+                    display: true,
+                }
+            }
+        }
+    });
 
-                    const doughnutCanvas6 = document.getElementById('doughnutChart6');            
-        // Create the doughnut chart
-                    const doughnutChart6 = new Chart(doughnutCanvas6, {
-                        type: 'doughnut',
-                        data: {
-                            labels: ['Predicted Total Sales Daily for NMD in ' + years2 +' year(s)', ' Current Total Average Sales for NMD '],
-                            datasets: [{
-                                data: [predictedTotalSalesPerYear2,totalSales2[totalSales2.length - 1]], // 100 - predictedTotalSalesPerYear1 represents the remaining portion
-                                backgroundColor: ['#0080ff', '#e0e0e0'] // You can set your desired colors here
-                            }]
-                        },
-                        options: {
-                            responsive: true,
-                            cutoutPercentage: 70, // Adjust the cutout percentage as needed
-                            legend: {
-                                display: true,
-                                position: 'bottom'
-                            }
-                        }
-                    });
+function updateChart3(data) {
+    transactionChart3.data.datasets[0].data = data;
+    transactionChart3.update();
+}
 
-                    const doughnutCanvas7 = document.getElementById('doughnutChart7');            
-        // Create the doughnut chart
-                    const doughnutChart7 = new Chart(doughnutCanvas7, {
-                        type: 'doughnut',
-                        data: {
-                            labels: ['Predicted Total Average Sales for NMD in ' + years2 +' year(s)', ' Current Total Average Sales for NMD'],
-                            datasets: [{
-                                data: [averagePredictedTotalSalesPerYear2,averageSalesIncreasePerYear2], // 100 - predictedTotalSalesPerYear1 represents the remaining portion
-                                backgroundColor: ['#0080ff', '#e0e0e0'] // You can set your desired colors here
-                            }]
-                        },
-                        options: {
-                            responsive: true,
-                            cutoutPercentage: 70, // Adjust the cutout percentage as needed
-                            legend: {
-                                display: true,
-                                position: 'bottom'
-                            }
-                        }
-                    });
+    function formatNumber(number) {
+        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+    var alpha = 0.2; // Smoothing factor (0 < alpha < 1)
+    var totalPredictedIncome = 0; // Total predicted income sum
 
-
-        // Function to add commas every three numbers
-        function addCommas(number) {
-            return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    document.getElementById('prediction-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        
+       var years = parseFloat(document.getElementById('years').value);
+        
+        // Prepare the historical data for linear regression
+        var dataPoints = [];
+        <?php foreach ($transactions2 as $transaction) { ?>
+            dataPoints.push([<?php  echo strtotime($transaction['month_date']) * 1000; ?>, <?php echo $transaction['total_amount_paid']; ?>]);
+        <?php } ?>
+        
+        // Perform linear regression using a simple linear model (y = mx + b)
+        function linearRegression(data) {
+            var sumX = 0, sumY = 0, sumXY = 0, sumX2 = 0;
+            var n = data.length;
+            
+            for (var i = 0; i < n; i++) {
+                sumX += data[i][0];
+                sumY += data[i][1];
+                sumXY += data[i][0] * data[i][1];
+                sumX2 += data[i][0] * data[i][0];
+            }
+            
+            var m = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
+            var b = (sumY - m * sumX) / n;
+            
+            return [m, b];
+        }
+        
+        // Calculate linear regression coefficients
+        var regressionCoefficients = linearRegression(dataPoints);
+        
+        // Calculate the predicted income amount for the entered number of years
+        var predictedIncomeLabels = [];
+        var predictedIncomeValues = [];
+        var lastTimestamp = dataPoints[dataPoints.length - 1][0];
+        for (var i = 1; i <= years * 12; i++) {
+            var futureTimestamp = lastTimestamp + (i * 2592000000); // 30 days in milliseconds
+            var predictedAmount = regressionCoefficients[0] * futureTimestamp + regressionCoefficients[1];
+            
+            // Apply exponential smoothing to predicted amounts (adjust alpha value as needed)
+            if (predictedIncomeValues.length > 0) {
+                predictedAmount = alpha * predictedAmount + (1 - alpha) * predictedIncomeValues[predictedIncomeValues.length - 1];
+            }
+            
+            predictedIncomeLabels.push(new Date(futureTimestamp).toDateString());
+            predictedIncomeValues.push(predictedAmount);
+            totalPredictedIncome += predictedAmount; // Add to the total sum
         }
 
-        const predictionsDiv1 = document.getElementById('predictions1');
-        predictionsDiv1.innerHTML = `
-        <p>Predicted transaction count of the NMD on the <span style="color:#0080ff">${days2}-day (${years2} year(s))</span> mark: 
-                <span style="color:${predictedTransactionCountPerYear2 >= transactionCounts2[transactionCounts2.length - 1] ? 'green' : 'red'}">
-                    ${addCommas(predictedTransactionCountPerYear2)}
-                    (${predictedTransactionCountPerYear2 >= transactionCounts2[transactionCounts2.length - 1] ? 'Increased' : 'Decreased'})
-                </span>
-            </p>
-            <p>Predicted total transaction count of NMD on the <span style="color:#0080ff">${days2}-day (${years2} year(s))</span> mark: 
-                <span style="color:${averagePredictedTotalTransactionCountPerYear2 >= transactionCounts2[transactionCounts2.length - 1] ? 'green' : 'red'}">
-                    ${addCommas(averagePredictedTotalTransactionCountPerYear2)}
-                    (${averagePredictedTotalTransactionCountPerYear2 >= transactionCounts2[transactionCounts2.length - 1] ? 'Increased' : 'Decreased '})
-                </span>
-            </p>
-        `;
+         var currentTotalIncome = 0;
+        <?php foreach ($transactions2 as $transaction) { ?>
+            currentTotalIncome += <?php echo $transaction['total_amount_paid']; ?>;
+        <?php } ?>
 
-        const predictionsDiv3 = document.getElementById('predictions3');
-        predictionsDiv3.innerHTML = `
-            <p>Predicted income of NMD on the <span style="color:#0080ff">${days2}-day (${years2} year(s))</span> mark: 
-                <span style="color:${predictedTotalSalesPerYear2 >= totalSales2[totalSales2.length - 1] ? 'green' : 'red'}">
-                    ${addCommas(predictedTotalSalesPerYear2)}
-                    (${predictedTotalSalesPerYear2 >= totalSales2[totalSales2.length - 1] ? 'Increased' : 'Decreased'})
-                </span>
-            </p>
-            <p>Predicted total income of NMD on the <span style="color:#0080ff">${days2}-day (${years2} year(s))</span> mark: 
-                <span style="color:${averagePredictedTotalSalesPerYear2 >= totalSales2[totalSales2.length - 1] ? 'green' : 'red'}">
-                    ${addCommas(averagePredictedTotalSalesPerYear2)}
-                    (${averagePredictedTotalSalesPerYear2 >= totalSales2[totalSales2.length - 1] ? 'Increased' : 'Decreased'})
-                </span>
-            </p>
-        `;
+        // Display the predictions for income
+        var resultsDiv = document.getElementById('prediction-results1');
+        var totalPredictedIncomeLoop = 0; // Initialize the total
 
-                });
-            </script>
+        // Loop to display predicted income and calculate total
+        for (var j = 0; j < predictedIncomeLabels.length; j++) {
+            var predictionDate = new Date(predictedIncomeLabels[j]);
+            var predictedValue = parseFloat(predictedIncomeValues[j].toFixed(0));
+            totalPredictedIncomeLoop += predictedValue; // Add to the total
+        }
 
-<!-- STD -->
+        updateChart2(predictedIncomeLabels, predictedIncomeValues)
 
-    <?php
-    $latestTimestamp1 = (new \yii\db\Query())
-        ->select(['MAX(transacton_date) AS latest_timestamp'])
-        ->from('operational_report')
-        ->scalar();
-
-    // Construct the new subquery
-    $subquery1 = (new \yii\db\Query())
-        ->select(['DATE_ADD("2023-06-10", INTERVAL n DAY) AS date'])
-        ->from(['numbers' => '(
-    SELECT a.n + b.n * 10 + c.n * 100 AS n
-    FROM (
-        SELECT 0 AS n UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9
-    ) AS a,
-    (
-        SELECT 0 AS n UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9
-    ) AS b,
-    (
-        SELECT 0 AS n UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9
-    ) AS c
-)'])
-        ->where(['<=', 'DATE_ADD("2023-06-10", INTERVAL n DAY)', new \yii\db\Expression('NOW()')]);
-
-    // New main query
-    $query1 = (new \yii\db\Query())
-        ->select([
-            'all_dates.date AS transaction_date',
-            'IFNULL(COUNT(opr.transacton_date), 0) AS transaction_count',
-            'IFNULL(SUM(opr.amount), 0) AS total_sales'
-        ])
-        ->from([
-            'all_dates' => $subquery1
-        ])
-        ->leftJoin('operational_report opr', 'all_dates.date = opr.transacton_date AND opr.transaction_status = "paid" AND opr.division_name = "Standard and Testing Division"')
-        ->groupBy('all_dates.date')
-        ->orderBy(['all_dates.date' => SORT_ASC]);
-
-    $transactions1 = $query1->all();
-
-    // Convert timestamps to Unix timestamps
-    foreach ($transactions1 as &$transaction1) {
-        $transaction1['transaction_date'] = strtotime($transaction1['transaction_date']);
-    }
-
-    // Define $nextDayTimestamp using the latestTimestamp
-    $nextDayTimestamp1 = strtotime('+1 day', strtotime($latestTimestamp1));
+        updateChart3([totalPredictedIncomeLoop, currentTotalIncome]);
+    });
+</script>
 
 
-    // Prepare data for prediction (transaction count)
-    $timestampsForCount1 = array_column($transactions1, 'transaction_date');
-    $transactionCounts1 = array_column($transactions1, 'transaction_count');
+<!-- NMD -->
 
+<script>
 
-    // Calculate linear regression coefficients for transaction count prediction
-    $n1 = count($timestampsForCount1);
-    $sumX1 = array_sum($timestampsForCount1);
-    $sumY1 = array_sum($transactionCounts1);
-    $sumXY1 = 0;
-    $sumX21 = 0;
-
-    for ($i = 0; $i < $n1; $i++) {
-        $sumXY1 += $timestampsForCount1[$i] * $transactionCounts1[$i];
-        $sumX21 += $timestampsForCount1[$i] * $timestampsForCount1[$i];
-    }
-
-    $slopeForCount1 = ($n1 * $sumXY1 - $sumX1 * $sumY1) / ($n1 * $sumX21 - $sumX1 * $sumX1);
-    $interceptForCount1 = ($sumY1 - $slopeForCount1 * $sumX1) / $n1;
-
-    // Predict the next transaction count for the next day
-    $predictedTransactionCount1 = $interceptForCount1 + $slopeForCount1 * $nextDayTimestamp1;
-
-    // Prepare data for prediction (total sales)
-    $timestampsForSales1 = array_column($transactions1, 'transaction_date');
-    $totalSales1 = array_column($transactions1, 'total_sales');
-
-    // Calculate linear regression coefficients for total sales prediction
-    $n1 = count($timestampsForSales1);
-    $sumX1 = array_sum($timestampsForSales1);
-    $sumY1 = array_sum($totalSales1);
-    $sumXY1 = 0;
-    $sumX21 = 0;
-
-    for ($i = 0; $i < $n1; $i++) {
-        $sumXY1 += $timestampsForSales1[$i] * $totalSales1[$i];
-        $sumX21 += $timestampsForSales1[$i] * $timestampsForSales1[$i];
-    }
-
-    $slopeForSales1 = ($n1 * $sumXY1 - $sumX1 * $sumY1) / ($n1 * $sumX21 - $sumX1 * $sumX1);
-    $interceptForSales1 = ($sumY1 - $slopeForSales1 * $sumX1) / $n1;
-
-    $totalSalesSum1 = array_sum($totalSales1);
-    $averageSalesIncreasePerDay1 = $totalSalesSum1 / count($timestampsForSales1);
-
-    // Predict the next total sum of all total sales
-    $predictedNextTotalSales1 = $totalSalesSum1 + $averageSalesIncreasePerDay1;
-
-    $totalTransactionCountSum1 = array_sum($transactionCounts1);
-    $averageTransactionCountIncreasePerDay1 = $totalTransactionCountSum1 / count($timestampsForCount1);
-
-    $queryPerYear1 = (new \yii\db\Query())
-        ->select([
-            'all_years1.year AS year',
-            'IFNULL(COUNT(opr1.transacton_date), 0) AS transaction_count1',
-            'IFNULL(SUM(opr1.amount), 0) AS total_sales1'
-        ])
-        ->from([
-            'all_years1' => (new \yii\db\Query())
-                ->select(['DISTINCT YEAR(transacton_date) AS year'])
-                ->from('operational_report')
-                ->where(['>=', 'transacton_date', '2023-06-10'])
-                ->union((new \yii\db\Query())
-                        ->select(['DISTINCT YEAR(transacton_date) AS year'])
-                        ->from('operational_report')
-                        ->where(['YEAR(transacton_date)' => new \yii\db\Expression('YEAR(NOW())')])
-                )
-        ])
-        ->leftJoin('operational_report opr1', 'all_years1.year = YEAR(opr1.transacton_date) AND opr1.transaction_status = "paid" AND opr1.division_name = "Standard and Testing Division"')
-        ->groupBy('all_years1.year')
-        ->orderBy(['all_years1.year' => SORT_ASC]);
-
-    $transactionsPerYear1 = $queryPerYear1->all();
-
-    // Prepare data for predictions (total paid transaction count and total paid sales)
-    $years1 = array_column($transactionsPerYear1, 'year');
-    $transactionCountsPerYear1 = array_column($transactionsPerYear1, 'transaction_count1');
-    $totalSalesPerYear1 = array_column($transactionsPerYear1, 'total_sales1');
-
-    // Calculate historical averages based on the whole dataset for paid transaction count and total sales
-    $totalTransactionCountSumPerYear1 = array_sum($transactionCountsPerYear1);
-    $averageTransactionCountIncreasePerYear1 = $totalTransactionCountSumPerYear1 / count($years1);
-
-$totalSalesSumPerYear1 = array_sum($totalSalesPerYear1);
-$averageSalesIncreasePerYear1 = $totalSalesSumPerYear1 / count($years1);
-?>
-
-    <script>
-        document.getElementById('prediction-form').addEventListener('submit', function(event) {
-            event.preventDefault();
-
-            const years1 = parseFloat(document.getElementById('years').value);
-            const days1 = Math.round(years1 * 365);
-
-            const transactionCounts1 = <?= json_encode(array_column($transactions1, 'transaction_count')) ?>;
-
-            // Convert timestamps to Unix timestamps
-            const totalSales1 = <?= json_encode(array_column($transactions1, 'total_sales')) ?>;
-            // Calculate the timestamps for the next day and the predicted day
-            const latestTimestamp1 = '<?= $latestTimestamp1 ?>';
-            const nextDayTimestamp1 = new Date('<?= date('Y-m-d', $nextDayTimestamp1) ?>');
-            nextDayTimestamp1.setDate(nextDayTimestamp1.getDate() + days1);
-
-            const totalSalesSum1 = <?= $totalSalesSum1 ?>;
-            const totalTransactionCountSum1 = <?= $totalTransactionCountSum1 ?>;
-
-            // Define JavaScript variables with the values of totalSalesSum1, averageSalesIncreasePerDay1,
-            // totalTransactionCountSum1, and averageTransactionCountIncreasePerDay1
-            const averageSalesIncreasePerDay1 = <?= $averageSalesIncreasePerDay1 ?>;
-            const averageTransactionCountIncreasePerDay1 = <?= $averageTransactionCountIncreasePerDay1 ?>;
-
-            // Calculate historical averages based on the whole dataset for paid transaction count and total sales
-            const totalTransactionCountSumPerYear1 = <?= $totalTransactionCountSumPerYear1 ?>;
-            const averageTransactionCountIncreasePerYear1 = <?= $averageTransactionCountIncreasePerYear1 ?>;
-
-            const totalSalesSumPerYear1 = <?= $totalSalesSumPerYear1 ?>;
-            const averageSalesIncreasePerYear1 = <?= $averageSalesIncreasePerYear1 ?>;
-
-            // Calculate predictions for paid transaction count and paid sales per year
-
-
-            const slopeForCountPerYear1 = <?= $slopeForCount1 ?>;
-            const interceptForCountPerYear1 = <?= $interceptForCount1 ?>;
-
-            const slopeForSalesPerYear1 = <?= $slopeForSales1 ?>;
-            const interceptForSalesPerYear1 = <?= $interceptForSales1 ?>;
-
-            const nextYearTimestamp1 = new Date();
-            nextYearTimestamp1.setFullYear(nextYearTimestamp1.getFullYear() + years1);
-
-            // Calculate predictions for transaction count and total sales for the next year
-            const predictedTransactionCountPerYear1 = Math.round(interceptForCountPerYear1 + slopeForCountPerYear1 * nextYearTimestamp1.getTime() / 1000);
-            const predictedTotalSalesPerYear1 = Math.round(interceptForSalesPerYear1 + slopeForSalesPerYear1 * nextYearTimestamp1.getTime() / 1000);
-
-            // Calculate predictions for total sum of paid transaction count and total paid sales per year
-            const predictedNextTotalTransactionCountPerYear1 = Math.round(totalTransactionCountSumPerYear1 + averageTransactionCountIncreasePerYear1 * years1);
-            const predictedNextTotalSalesPerYear1 = Math.round(totalSalesSumPerYear1 + averageSalesIncreasePerYear1 * years1);
-
-            // Calculate the average of the predicted total sum of paid transaction count and total paid sales per year
-            const averagePredictedTotalTransactionCountPerYear1 = Math.round(predictedNextTotalTransactionCountPerYear1 / years1);
-            const averagePredictedTotalSalesPerYear1 = Math.round(predictedNextTotalSalesPerYear1 / years1);
-                        // Calculate the average of the predicted total sum of paid transaction count and total paid sales per year
-
-            // Function to add commas every three numbers
-            function addCommas(number) {
-                return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+     var ctx4 = document.getElementById('transaction-chart4').getContext('2d');
+     var transactionChart4 = new Chart(ctx4, {
+        type: 'bar',
+        data: {
+            labels: [],
+            datasets: [{
+                label: 'Predicted Transaction Counts NMD',
+                data: [],
+                borderColor: 'rgb(6, 214, 160)',
+                backgroundColor: 'rgb(6, 214, 160)',
+                fill: true
+            }]
+        },
+        options: {
+            scales: {
+                x: {
+                    display: true, // Display the X-axis
+                    grid: {
+                        display: false // Hide x-axis gridlines
+                    }
+                },
+                y: {
+                    display: true, // Display the Y-axis
+                    beginAtZero: true, // Start Y-axis at 0
+                     grid: {
+                        display: false // Hide x-axis gridlines
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: true, // Display the legend
+                }
             }
+        }
+    });
 
 
-const predictionsDiv2 = document.getElementById('predictions2');
-predictionsDiv2.innerHTML = `
-<p>Predicted transaction count of the STD on the <span style="color:#0080ff">${days1}-day (${years1} year(s))</span> mark: 
-        <span style="color:${predictedTransactionCountPerYear1 >= transactionCounts1[transactionCounts1.length - 1] ? 'green' : 'red'}">
-            ${addCommas(predictedTransactionCountPerYear1)}
-            (${predictedTransactionCountPerYear1 >= transactionCounts1[transactionCounts1.length - 1] ? 'Increased' : 'Decreased'})
-        </span>
-    </p>
-    <p>Predicted total transaction count of STD on the <span style="color:#0080ff">${days1}-day (${years1} year(s))</span> mark: 
-        <span style="color:${averagePredictedTotalTransactionCountPerYear1 >= transactionCounts1[transactionCounts1.length - 1] ? 'green' : 'red'}">
-            ${addCommas(averagePredictedTotalTransactionCountPerYear1)}
-            (${averagePredictedTotalTransactionCountPerYear1 >= transactionCounts1[transactionCounts1.length - 1] ? 'Increased' : 'Decreased '})
-        </span>
-    </p>
-`;
+    function updateChart4(labels, data) {
+        transactionChart4.data.labels = labels;
+        transactionChart4.data.datasets[0].data = data;
+        transactionChart4.update();
+    }
 
-const predictionsDiv4 = document.getElementById('predictions4');
-predictionsDiv4.innerHTML = `
-    <p>Predicted income of STD on the <span style="color:#0080ff">${days1}-day (${years1} year(s))</span> mark: 
-        <span style="color:${predictedTotalSalesPerYear1 >= totalSales1[totalSales1.length - 1] ? 'green' : 'red'}">
-            ${addCommas(predictedTotalSalesPerYear1)}
-            (${predictedTotalSalesPerYear1 >= totalSales1[totalSales1.length - 1] ? 'Increased' : 'Decreased'})
-        </span>
-    </p>
-    <p>Predicted total income of STD on the <span style="color:#0080ff">${days1}-day (${years1} year(s))</span> mark: 
-        <span style="color:${averagePredictedTotalSalesPerYear1 >= totalSales1[totalSales1.length - 1] ? 'green' : 'red'}">
-            ${addCommas(averagePredictedTotalSalesPerYear1)}
-            (${averagePredictedTotalSalesPerYear1 >= totalSales1[totalSales1.length - 1] ? 'Increased' : 'Decreased'})
-        </span>
-    </p>
-`;
+    
+    var ctx5 = document.getElementById('transaction-chart5').getContext('2d');
+    var transactionChart5 = new Chart(ctx5, {
+        type: 'doughnut',
+        data: {
+            labels: ['Predicted Transaction Sum NMD', 'Current Transaction Sum NMD'],
+            datasets: [{
+                data: [],
+                backgroundColor: ['rgb(6, 214, 160)', 'rgb(255, 214, 51)'],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            plugins: {
+                legend: {
+                    display: true,
+                }
+            }
+        }
+    });
+
+function updateChart5(data) {
+    transactionChart5.data.datasets[0].data = data;
+    transactionChart5.update();
+}
+
+
+    document.getElementById('prediction-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        
+        var years = parseFloat(document.getElementById('years').value);
+    
+    // Prepare the historical data for linear regression
+    var dataPoints = [];
+    <?php foreach ($transactions3 as $transaction) { ?>
+        dataPoints.push([<?php echo strtotime($transaction['month_date']) * 1000; ?>, <?php echo $transaction['paid_and_pending_count']; ?>]);
+    <?php } ?>
+    
+    // Perform linear regression using a simple linear model (y = mx + b)
+    function linearRegression(data) {
+        var sumX = 0, sumY = 0, sumXY = 0, sumX2 = 0;
+        var n = data.length;
+        
+        for (var i = 0; i < n; i++) {
+            sumX += data[i][0];
+            sumY += data[i][1];
+            sumXY += data[i][0] * data[i][1];
+            sumX2 += data[i][0] * data[i][0];
+        }
+        
+        var m = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
+        var b = (sumY - m * sumX) / n;
+        
+        return [m, b];
+    }
+    
+    // Calculate linear regression coefficients
+    var regressionCoefficients = linearRegression(dataPoints);
+    
+    // Calculate the predicted transaction count for the entered number of years
+    var predictedCounts = [];
+    var totalPredictedSum = 0; // To calculate the total sum of predicted counts
+    var lastTimestamp = dataPoints[dataPoints.length - 1][0];
+    var predictedLabels = []; // Array to hold labels for predicted months
+    var predictedValues = []; // Array to hold predicted transaction counts
+    for (var i = 1; i <= years * 12; i++) {
+        var futureTimestamp = lastTimestamp + (i * 2592000000); // 30 days in milliseconds
+        var predictedCount = Math.round(regressionCoefficients[0] * futureTimestamp + regressionCoefficients[1]);
+        predictedLabels.push(new Date(futureTimestamp).toDateString());
+        predictedValues.push(predictedCount);
+        totalPredictedSum += predictedCount; // Add to the total sum
+    }
+    
+    // Calculate the current transaction sum
+    var currentTransactionSum = 0;
+    <?php foreach ($transactions3 as $transaction) { ?>
+        currentTransactionSum += <?php echo $transaction['paid_and_pending_count']; ?>;
+    <?php } ?>
+    
+    // Display the predictions
+    var resultsDiv = document.getElementById('prediction-results2');
+    for (var j = 0; j < predictedCounts.length; j++) {
+        var prediction = predictedCounts[j];
+        var predictionDate = new Date(prediction.timestamp);
+    }
+    updateChart4(predictedLabels, predictedValues);
+        
+    updateChart5([totalPredictedSum, currentTransactionSum]);
 
     });
 
@@ -957,42 +710,451 @@ predictionsDiv4.innerHTML = `
 </script>
 
 
+<script>
+    var ctx6 = document.getElementById('transaction-chart6').getContext('2d');
+     var transactionChart6 = new Chart(ctx6, {
+        type: 'line',
+        data: {
+            labels: [],
+            datasets: [{
+                label: 'Predicted Transaction Income NMD',
+                data: [],
+                borderColor: 'rgb(6, 214, 160)',
+                backgroundColor: 'rgb(255, 255, 255)',
+                fill: true,
+                cubicInterpolationMode: 'monotone'
+            }]
+        },
+        options: {
+            scales: {
+                x: {
+                    display: true, // Display the X-axis
+                    grid: {
+                        display: false // Hide x-axis gridlines
+                    }
+                },
+                y: {
+                    display: true, // Display the Y-axis
+                    beginAtZero: true, // Start Y-axis at 0
+                     grid: {
+                        display: false // Hide x-axis gridlines
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: true, // Display the legend
+                }
+            }
+        }
+    });
+    
+    // Function to update the chart data
+    function updateChart6(labels, data) {
+        transactionChart6.data.labels = labels;
+        transactionChart6.data.datasets[0].data = data;
+        transactionChart6.update();
+    }
 
-<div class="chart-container">
-        <canvas id="doughnutChart"></canvas>
-    </div>
 
-    <div class="chart-container">
-        <canvas id="doughnutChart1"></canvas>
-    </div>
+    var ctx7 = document.getElementById('transaction-chart7').getContext('2d');
+    var transactionChart7 = new Chart(ctx7, {
+        type: 'doughnut',
+        data: {
+            labels: ['Predicted Transaction Sum NMD', 'Current Transaction Sum NMD'],
+            datasets: [{
+                data: [],
+                backgroundColor: ['rgb(6, 214, 160)', 'rgb(255, 214, 51)'],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            plugins: {
+                legend: {
+                    display: true,
+                }
+            }
+        }
+    });
 
-    <div class="chart-container">
-        <canvas id="doughnutChart2"></canvas>
-    </div>
+function updateChart7(data) {
+    transactionChart7.data.datasets[0].data = data;
+    transactionChart7.update();
+}
 
-    <div class="chart-container">
-        <canvas id="doughnutChart3"></canvas>
-    </div>
+    function formatNumber(number) {
+        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+    var alpha = 0.2; // Smoothing factor (0 < alpha < 1)
+    var totalPredictedIncome = 0; // Total predicted income sum
 
+    document.getElementById('prediction-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        
+        // Get the user input for years
+        var years = parseFloat(document.getElementById('years').value);
+        
+        // Prepare the historical data for linear regression
+        var dataPoints = [];
+        <?php foreach ($transactions4 as $transaction) { ?>
+            dataPoints.push([<?php  echo strtotime($transaction['month_date']) * 1000; ?>, <?php echo $transaction['total_amount_paid']; ?>]);
+        <?php } ?>
+        
+        // Perform linear regression using a simple linear model (y = mx + b)
+        function linearRegression(data) {
+            var sumX = 0, sumY = 0, sumXY = 0, sumX2 = 0;
+            var n = data.length;
+            
+            for (var i = 0; i < n; i++) {
+                sumX += data[i][0];
+                sumY += data[i][1];
+                sumXY += data[i][0] * data[i][1];
+                sumX2 += data[i][0] * data[i][0];
+            }
+            
+            var m = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
+            var b = (sumY - m * sumX) / n;
+            
+            return [m, b];
+        }
+        
+        // Calculate linear regression coefficients
+        var regressionCoefficients = linearRegression(dataPoints);
+        
+        // Calculate the predicted income amount for the entered number of years
+        var predictedIncomeLabels = [];
+        var predictedIncomeValues = [];
+        var lastTimestamp = dataPoints[dataPoints.length - 1][0];
+        for (var i = 1; i <= years * 12; i++) {
+            var futureTimestamp = lastTimestamp + (i * 2592000000); // 30 days in milliseconds
+            var predictedAmount = regressionCoefficients[0] * futureTimestamp + regressionCoefficients[1];
+            
+            // Apply exponential smoothing to predicted amounts (adjust alpha value as needed)
+            if (predictedIncomeValues.length > 0) {
+                predictedAmount = alpha * predictedAmount + (1 - alpha) * predictedIncomeValues[predictedIncomeValues.length - 1];
+            }
+            
+            predictedIncomeLabels.push(new Date(futureTimestamp).toDateString());
+            predictedIncomeValues.push(predictedAmount);
+            totalPredictedIncome += predictedAmount; // Add to the total sum
+        }
+
+         var currentTotalIncome = 0;
+        <?php foreach ($transactions4 as $transaction) { ?>
+            currentTotalIncome += <?php echo $transaction['total_amount_paid']; ?>;
+        <?php } ?>
+
+        // Display the predictions for income
+        var resultsDiv = document.getElementById('prediction-results3');
+        var totalPredictedIncomeLoop = 0; // Initialize the total
+
+        // Loop to display predicted income and calculate total
+        for (var j = 0; j < predictedIncomeLabels.length; j++) {
+            var predictionDate = new Date(predictedIncomeLabels[j]);
+            var predictedValue = parseFloat(predictedIncomeValues[j].toFixed(0));
+            totalPredictedIncomeLoop += predictedValue; // Add to the total
+        }
+        updateChart6(predictedIncomeLabels, predictedIncomeValues)
+
+        updateChart7([totalPredictedIncomeLoop, currentTotalIncome]);
+    });
+</script>
+
+
+
+<!-- STD -->
+
+<script>
+
+     var ctx8 = document.getElementById('transaction-chart8').getContext('2d');
+     var transactionChart8 = new Chart(ctx8, {
+        type: 'bar',
+        data: {
+            labels: [],
+            datasets: [{
+                label: 'Predicted Transaction Counts STD',
+                data: [],
+                borderColor: 'rgb(114, 9, 183)',
+                backgroundColor: 'rgb(114, 9, 183)',
+                fill: true
+            }]
+        },
+        options: {
+            scales: {
+                x: {
+                    display: true, // Display the X-axis
+                    grid: {
+                        display: false // Hide x-axis gridlines
+                    }
+                },
+                y: {
+                    display: true, // Display the Y-axis
+                    beginAtZero: true, // Start Y-axis at 0
+                     grid: {
+                        display: false // Hide x-axis gridlines
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: true, // Display the legend
+                }
+            }
+        }
+    });
+
+
+    function updateChart8(labels, data) {
+        transactionChart8.data.labels = labels;
+        transactionChart8.data.datasets[0].data = data;
+        transactionChart8.update();
+    }
 
     
-<div class="chart-container">
-        <canvas id="doughnutChart4"></canvas>
-    </div>
+    var ctx9 = document.getElementById('transaction-chart9').getContext('2d');
+    var transactionChart9 = new Chart(ctx9, {
+        type: 'doughnut',
+        data: {
+            labels: ['Predicted Transaction Sum STD', 'Current Transaction Sum STD'],
+            datasets: [{
+                data: [],
+                backgroundColor: ['rgb(114, 9, 183)', 'rgb(255, 77, 166)'],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            plugins: {
+                legend: {
+                    display: true,
+                }
+            }
+        }
+    });
 
-    <div class="chart-container">
-        <canvas id="doughnutChart5"></canvas>
-    </div>
-
-    <div class="chart-container">
-        <canvas id="doughnutChart6"></canvas>
-    </div>
-
-    <div class="chart-container">
-        <canvas id="doughnutChart7"></canvas>
-    </div>
+function updateChart9(data) {
+    transactionChart9.data.datasets[0].data = data;
+    transactionChart9.update();
+}
 
 
+    document.getElementById('prediction-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        
+        var years = parseFloat(document.getElementById('years').value);
+    
+    // Prepare the historical data for linear regression
+    var dataPoints = [];
+    <?php foreach ($transactions5 as $transaction) { ?>
+        dataPoints.push([<?php echo strtotime($transaction['month_date']) * 1000; ?>, <?php echo $transaction['paid_and_pending_count']; ?>]);
+    <?php } ?>
+    
+    // Perform linear regression using a simple linear model (y = mx + b)
+    function linearRegression(data) {
+        var sumX = 0, sumY = 0, sumXY = 0, sumX2 = 0;
+        var n = data.length;
+        
+        for (var i = 0; i < n; i++) {
+            sumX += data[i][0];
+            sumY += data[i][1];
+            sumXY += data[i][0] * data[i][1];
+            sumX2 += data[i][0] * data[i][0];
+        }
+        
+        var m = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
+        var b = (sumY - m * sumX) / n;
+        
+        return [m, b];
+    }
+    
+    // Calculate linear regression coefficients
+    var regressionCoefficients = linearRegression(dataPoints);
+    
+    // Calculate the predicted transaction count for the entered number of years
+    var predictedCounts = [];
+    var totalPredictedSum = 0; // To calculate the total sum of predicted counts
+    var lastTimestamp = dataPoints[dataPoints.length - 1][0];
+    var predictedLabels = []; // Array to hold labels for predicted months
+    var predictedValues = []; // Array to hold predicted transaction counts
+    for (var i = 1; i <= years * 12; i++) {
+        var futureTimestamp = lastTimestamp + (i * 2592000000); // 30 days in milliseconds
+        var predictedCount = Math.round(regressionCoefficients[0] * futureTimestamp + regressionCoefficients[1]);
+        predictedLabels.push(new Date(futureTimestamp).toDateString());
+        predictedValues.push(predictedCount);
+        totalPredictedSum += predictedCount; // Add to the total sum
+    }
+    
+    // Calculate the current transaction sum
+    var currentTransactionSum = 0;
+    <?php foreach ($transactions5 as $transaction) { ?>
+        currentTransactionSum += <?php echo $transaction['paid_and_pending_count']; ?>;
+    <?php } ?>
+    
+    // Display the predictions
+    var resultsDiv = document.getElementById('prediction-results4');
+    for (var j = 0; j < predictedCounts.length; j++) {
+        var prediction = predictedCounts[j];
+        var predictionDate = new Date(prediction.timestamp);
+    }
+    updateChart8(predictedLabels, predictedValues);
+        
+     updateChart9([totalPredictedSum, currentTransactionSum]);
+
+    });
+
+    
+</script>
+
+
+<script>
+    var ctx10 = document.getElementById('transaction-chart10').getContext('2d');
+     var transactionChart10 = new Chart(ctx10, {
+        type: 'line',
+        data: {
+            labels: [],
+            datasets: [{
+                label: 'Predicted Transaction Income STD',
+                data: [],
+                borderColor: 'rgb(114, 9, 183)',
+                backgroundColor: 'rgba(0, 0, 0, 0)',
+                fill: true,
+                cubicInterpolationMode: 'monotone'
+            }]
+        },
+        options: {
+            scales: {
+                x: {
+                    display: true, // Display the X-axis
+                    grid: {
+                        display: false // Hide x-axis gridlines
+                    }
+                },
+                y: {
+                    display: true, // Display the Y-axis
+                    beginAtZero: true, // Start Y-axis at 0
+                     grid: {
+                        display: false // Hide x-axis gridlines
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: true, // Display the legend
+                }
+            }
+        }
+    });
+    
+    // Function to update the chart data
+    function updateChart10(labels, data) {
+        transactionChart10.data.labels = labels;
+        transactionChart10.data.datasets[0].data = data;
+        transactionChart10.update();
+    }
+
+
+    var ctx11 = document.getElementById('transaction-chart11').getContext('2d');
+    var transactionChart11 = new Chart(ctx11, {
+        type: 'doughnut',
+        data: {
+            labels: ['Predicted Transaction Sum STD', 'Current Transaction Sum STD'],
+            datasets: [{
+                data: [],
+                backgroundColor: ['rgb(114, 9, 183)', 'rgb(255, 77, 166)'],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            plugins: {
+                legend: {
+                    display: true,
+                }
+            }
+        }
+    });
+
+function updateChart11(data) {
+    transactionChart11.data.datasets[0].data = data;
+    transactionChart11.update();
+}
+
+    function formatNumber(number) {
+        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+    var alpha = 0.2; // Smoothing factor (0 < alpha < 1)
+    var totalPredictedIncome = 0; // Total predicted income sum
+
+    document.getElementById('prediction-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        
+        // Get the user input for years
+        var years = parseFloat(document.getElementById('years').value);
+        
+        // Prepare the historical data for linear regression
+        var dataPoints = [];
+        <?php foreach ($transactions6 as $transaction) { ?>
+            dataPoints.push([<?php  echo strtotime($transaction['month_date']) * 1000; ?>, <?php echo $transaction['total_amount_paid']; ?>]);
+        <?php } ?>
+        
+        // Perform linear regression using a simple linear model (y = mx + b)
+        function linearRegression(data) {
+            var sumX = 0, sumY = 0, sumXY = 0, sumX2 = 0;
+            var n = data.length;
+            
+            for (var i = 0; i < n; i++) {
+                sumX += data[i][0];
+                sumY += data[i][1];
+                sumXY += data[i][0] * data[i][1];
+                sumX2 += data[i][0] * data[i][0];
+            }
+            
+            var m = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
+            var b = (sumY - m * sumX) / n;
+            
+            return [m, b];
+        }
+        
+        // Calculate linear regression coefficients
+        var regressionCoefficients = linearRegression(dataPoints);
+        
+        // Calculate the predicted income amount for the entered number of years
+        var predictedIncomeLabels = [];
+        var predictedIncomeValues = [];
+        var lastTimestamp = dataPoints[dataPoints.length - 1][0];
+        for (var i = 1; i <= years * 12; i++) {
+            var futureTimestamp = lastTimestamp + (i * 2592000000); // 30 days in milliseconds
+            var predictedAmount = regressionCoefficients[0] * futureTimestamp + regressionCoefficients[1];
+            
+            // Apply exponential smoothing to predicted amounts (adjust alpha value as needed)
+            if (predictedIncomeValues.length > 0) {
+                predictedAmount = alpha * predictedAmount + (1 - alpha) * predictedIncomeValues[predictedIncomeValues.length - 1];
+            }
+            
+            predictedIncomeLabels.push(new Date(futureTimestamp).toDateString());
+            predictedIncomeValues.push(predictedAmount);
+            totalPredictedIncome += predictedAmount; // Add to the total sum
+        }
+
+         var currentTotalIncome = 0;
+        <?php foreach ($transactions6 as $transaction) { ?>
+            currentTotalIncome += <?php echo $transaction['total_amount_paid']; ?>;
+        <?php } ?>
+
+        // Display the predictions for income
+        var resultsDiv = document.getElementById('prediction-results5');
+        var totalPredictedIncomeLoop = 0; // Initialize the total
+
+        // Loop to display predicted income and calculate total
+        for (var j = 0; j < predictedIncomeLabels.length; j++) {
+            var predictionDate = new Date(predictedIncomeLabels[j]);
+            var predictedValue = parseFloat(predictedIncomeValues[j].toFixed(0));
+            totalPredictedIncomeLoop += predictedValue; // Add to the total
+        }
+
+        updateChart10(predictedIncomeLabels, predictedIncomeValues)
+
+        updateChart11([totalPredictedIncomeLoop, currentTotalIncome]);
+    });
+</script>
 
 
 
