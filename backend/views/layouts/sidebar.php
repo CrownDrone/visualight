@@ -73,7 +73,7 @@ $defaultImagePath = Yii::getAlias('@web') . '/images/user2.jpg';
             echo hail812\adminlte\widgets\Menu::widget([
                 'items' => [
 
-                    ['label' => 'Yii2 PROVIDED', 'header' => true, 'visible' => Helper::checkRoute('/admin/index'),],
+                    ['label' => 'Development', 'header' => true, 'visible' => Helper::checkRoute('/admin/index'),],
                     ['label' => 'logout', 'url' => ['site/logout'], 'icon' => 'sign-in-alt', 'visible' => Yii::$app->user->isGuest],
                     ['label' => 'Gii',  'icon' => 'file-code', 'url' => ['/gii'], 'target' => '_blank', 'visible' => Helper::checkRoute('/admin/index'), 'visible' => Helper::checkRoute('/admin/index'),],
                     ['label' => 'Debug', 'icon' => 'bug', 'url' => ['/debug'], 'target' => '_blank', 'visible' => Helper::checkRoute('/admin/index'),],
