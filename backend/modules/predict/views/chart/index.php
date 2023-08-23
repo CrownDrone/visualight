@@ -94,7 +94,7 @@ use yii\web\View;
 <br>
 
 
-<h3> Total Transaction Income per Month </h3>
+<h3> Total Income per Month </h3>
 <div class="chart-container">
     <p style="display: flex; justify-content: center; align-items: center;"> National Metrology Division </p>
     <canvas id="transaction-chart6" style="width: 30rem; height: 20rem;" ></canvas>
@@ -111,7 +111,7 @@ use yii\web\View;
 
 
 
-<h3> Total Transaction Income</h3>
+<h3> Total Income</h3>
 <div class="chart-container">
     <p style="display: flex; justify-content: center; align-items: center;"> National Metrology Division </p>
     <canvas id="transaction-chart7" style="width: 30rem; height: 20rem;" ></canvas>
@@ -286,7 +286,7 @@ $transactions6 = $chartDb->createCommand($sql6)->queryAll();
         data: {
             labels: [],
             datasets: [{
-                label: 'Predicted Transaction Counts',
+                label: 'Predicted Transaction Total per Month',
                 data: [],
                 borderColor: 'rgb(0, 115, 230)',
                 backgroundColor: 'rgb(0, 115, 230)',
@@ -329,7 +329,7 @@ $transactions6 = $chartDb->createCommand($sql6)->queryAll();
     var transactionChart1 = new Chart(ctx1, {
         type: 'doughnut',
         data: {
-            labels: ['Predicted Transaction Sum', 'Current Transaction Sum'],
+            labels: ['Predicted Total Transaction ', 'Current Total Transaction'],
             datasets: [{
                 data: [],
                 backgroundColor: ['rgb(0, 115, 230)', 'rgb(255, 119, 51)'],
@@ -383,33 +383,37 @@ function updateChart1(data) {
     
     // Calculate the predicted transaction count for the entered number of years
     var predictedCounts = [];
-    var totalPredictedSum = 0; // To calculate the total sum of predicted counts
-    var lastTimestamp = dataPoints[dataPoints.length - 1][0];
-    var predictedLabels = []; // Array to hold labels for predicted months
-    var predictedValues = []; // Array to hold predicted transaction counts
-    for (var i = 1; i <= years * 12; i++) {
-        var futureTimestamp = lastTimestamp + (i * 2592000000); // 30 days in milliseconds
-        var predictedCount = Math.round(regressionCoefficients[0] * futureTimestamp + regressionCoefficients[1]);
-        predictedLabels.push(new Date(futureTimestamp).toDateString());
-        predictedValues.push(predictedCount);
-        totalPredictedSum += predictedCount; // Add to the total sum
+var totalPredictedSum = 0; // To calculate the total sum of predicted counts
+var lastTimestamp = dataPoints[dataPoints.length - 1][0];
+var predictedLabels = []; // Array to hold labels for predicted months
+var predictedValues = []; // Array to hold predicted transaction counts
+for (var i = 1; i <= years * 12; i++) {
+    var futureTimestamp = lastTimestamp + (i * 2592000000); // 30 days in milliseconds
+    var predictedCount = Math.round(regressionCoefficients[0] * futureTimestamp + regressionCoefficients[1]);
+
+    // Avoid negative predicted counts
+    if (predictedCount < 0) {
+        predictedCount = 0;
     }
-    
-    // Calculate the current transaction sum
-    var currentTransactionSum = 0;
-    <?php foreach ($transactions as $transaction) { ?>
-        currentTransactionSum += <?php echo $transaction['paid_and_pending_count']; ?>;
-    <?php } ?>
-    
-    // Display the predictions
-    var resultsDiv = document.getElementById('prediction-results');
-    for (var j = 0; j < predictedCounts.length; j++) {
-        var prediction = predictedCounts[j];
-        var predictionDate = new Date(prediction.timestamp);
-        resultsDiv.innerHTML += '<p>' + predictionDate.toDateString() + ': ' + prediction.count + ' transactions</p>';
-    }
-    updateChart(predictedLabels, predictedValues);
-    updateChart1([totalPredictedSum, currentTransactionSum]);
+
+    predictedLabels.push(new Date(futureTimestamp).toDateString());
+    predictedValues.push(predictedCount);
+    totalPredictedSum += predictedCount; // Add to the total sum
+}
+
+// Calculate the current transaction sum
+var currentTransactionSum = 0;
+<?php foreach ($transactions as $transaction) { ?>
+    currentTransactionSum += <?php echo $transaction['paid_and_pending_count']; ?>;
+<?php } ?>
+
+// Display the predictions
+var resultsDiv = document.getElementById('prediction-results');
+for (var j = 0; j < predictedLabels.length; j++) {
+    var predictionDate = new Date(predictedLabels[j]);
+}
+updateChart(predictedLabels, predictedValues);
+updateChart1([totalPredictedSum, currentTransactionSum]);
 
     });
 
@@ -423,7 +427,7 @@ function updateChart1(data) {
         data: {
             labels: [],
             datasets: [{
-                label: 'Predicted Transaction Income',
+                label: 'Predicted Total Income per Month',
                 data: [],
                 borderColor: 'rgb(0, 115, 230)',
                 backgroundColor: 'rgba(0, 0, 0, 0)',
@@ -465,9 +469,9 @@ function updateChart1(data) {
 
     var ctx3 = document.getElementById('transaction-chart3').getContext('2d');
     var transactionChart3 = new Chart(ctx3, {
-        type: 'doughnut',
+        type: 'pie',
         data: {
-            labels: ['Predicted Transaction Sum', 'Current Transaction Sum'],
+            labels: ['Predicted Total Income ', 'Current Total Income '],
             datasets: [{
                 data: [],
                 backgroundColor: ['rgb(0, 115, 230)', 'rgb(255, 119, 51)'],
@@ -557,7 +561,11 @@ function updateChart3(data) {
         for (var j = 0; j < predictedIncomeLabels.length; j++) {
             var predictionDate = new Date(predictedIncomeLabels[j]);
             var predictedValue = parseFloat(predictedIncomeValues[j].toFixed(0));
-            totalPredictedIncomeLoop += predictedValue; // Add to the total
+            
+            if (predictedValue > 0) {
+                // Only add non-zero predicted values to the total
+                totalPredictedIncomeLoop += predictedValue; // Add to the total
+            }
         }
 
         updateChart2(predictedIncomeLabels, predictedIncomeValues)
@@ -577,7 +585,7 @@ function updateChart3(data) {
         data: {
             labels: [],
             datasets: [{
-                label: 'Predicted Transaction Counts NMD',
+                label: 'Predicted Transaction Total of NMD per Month',
                 data: [],
                 borderColor: 'rgb(6, 214, 160)',
                 backgroundColor: 'rgb(6, 214, 160)',
@@ -620,7 +628,7 @@ function updateChart3(data) {
     var transactionChart5 = new Chart(ctx5, {
         type: 'doughnut',
         data: {
-            labels: ['Predicted Transaction Sum NMD', 'Current Transaction Sum NMD'],
+            labels: ['Predicted Total Transaction NMD', 'Current Total Transaction NMD'],
             datasets: [{
                 data: [],
                 backgroundColor: ['rgb(6, 214, 160)', 'rgb(255, 214, 51)'],
@@ -676,33 +684,37 @@ function updateChart5(data) {
     
     // Calculate the predicted transaction count for the entered number of years
     var predictedCounts = [];
-    var totalPredictedSum = 0; // To calculate the total sum of predicted counts
-    var lastTimestamp = dataPoints[dataPoints.length - 1][0];
-    var predictedLabels = []; // Array to hold labels for predicted months
-    var predictedValues = []; // Array to hold predicted transaction counts
-    for (var i = 1; i <= years * 12; i++) {
-        var futureTimestamp = lastTimestamp + (i * 2592000000); // 30 days in milliseconds
-        var predictedCount = Math.round(regressionCoefficients[0] * futureTimestamp + regressionCoefficients[1]);
-        predictedLabels.push(new Date(futureTimestamp).toDateString());
-        predictedValues.push(predictedCount);
-        totalPredictedSum += predictedCount; // Add to the total sum
+var totalPredictedSum = 0; // To calculate the total sum of predicted counts
+var lastTimestamp = dataPoints[dataPoints.length - 1][0];
+var predictedLabels = []; // Array to hold labels for predicted months
+var predictedValues = []; // Array to hold predicted transaction counts
+for (var i = 1; i <= years * 12; i++) {
+    var futureTimestamp = lastTimestamp + (i * 2592000000); // 30 days in milliseconds
+    var predictedCount = Math.round(regressionCoefficients[0] * futureTimestamp + regressionCoefficients[1]);
+
+    // Avoid negative predicted counts
+    if (predictedCount < 0) {
+        predictedCount = 0;
     }
-    
-    // Calculate the current transaction sum
-    var currentTransactionSum = 0;
-    <?php foreach ($transactions3 as $transaction) { ?>
-        currentTransactionSum += <?php echo $transaction['paid_and_pending_count']; ?>;
-    <?php } ?>
-    
-    // Display the predictions
-    var resultsDiv = document.getElementById('prediction-results2');
-    for (var j = 0; j < predictedCounts.length; j++) {
-        var prediction = predictedCounts[j];
-        var predictionDate = new Date(prediction.timestamp);
-    }
-    updateChart4(predictedLabels, predictedValues);
-        
-    updateChart5([totalPredictedSum, currentTransactionSum]);
+
+    predictedLabels.push(new Date(futureTimestamp).toDateString());
+    predictedValues.push(predictedCount);
+    totalPredictedSum += predictedCount; // Add to the total sum
+}
+
+// Calculate the current transaction sum
+var currentTransactionSum = 0;
+<?php foreach ($transactions3 as $transaction) { ?>
+    currentTransactionSum += <?php echo $transaction['paid_and_pending_count']; ?>;
+<?php } ?>
+
+// Display the predictions
+var resultsDiv = document.getElementById('prediction-results');
+for (var j = 0; j < predictedLabels.length; j++) {
+    var predictionDate = new Date(predictedLabels[j]);
+}
+updateChart4(predictedLabels, predictedValues);
+updateChart5([totalPredictedSum, currentTransactionSum]);
 
     });
 
@@ -717,7 +729,7 @@ function updateChart5(data) {
         data: {
             labels: [],
             datasets: [{
-                label: 'Predicted Transaction Income NMD',
+                label: 'Predicted NMD Total Income per Month',
                 data: [],
                 borderColor: 'rgb(6, 214, 160)',
                 backgroundColor: 'rgb(255, 255, 255)',
@@ -759,9 +771,9 @@ function updateChart5(data) {
 
     var ctx7 = document.getElementById('transaction-chart7').getContext('2d');
     var transactionChart7 = new Chart(ctx7, {
-        type: 'doughnut',
+        type: 'pie',
         data: {
-            labels: ['Predicted Transaction Sum NMD', 'Current Transaction Sum NMD'],
+            labels: ['Predicted Total Income NMD', 'Current Total Income  NMD'],
             datasets: [{
                 data: [],
                 backgroundColor: ['rgb(6, 214, 160)', 'rgb(255, 214, 51)'],
@@ -852,7 +864,11 @@ function updateChart7(data) {
         for (var j = 0; j < predictedIncomeLabels.length; j++) {
             var predictionDate = new Date(predictedIncomeLabels[j]);
             var predictedValue = parseFloat(predictedIncomeValues[j].toFixed(0));
-            totalPredictedIncomeLoop += predictedValue; // Add to the total
+            
+            if (predictedValue > 0) {
+                // Only add non-zero predicted values to the total
+                totalPredictedIncomeLoop += predictedValue; // Add to the total
+            }
         }
         updateChart6(predictedIncomeLabels, predictedIncomeValues)
 
@@ -872,7 +888,7 @@ function updateChart7(data) {
         data: {
             labels: [],
             datasets: [{
-                label: 'Predicted Transaction Counts STD',
+                label: 'Predicted Transaction Total of STD per Month',
                 data: [],
                 borderColor: 'rgb(114, 9, 183)',
                 backgroundColor: 'rgb(114, 9, 183)',
@@ -915,7 +931,7 @@ function updateChart7(data) {
     var transactionChart9 = new Chart(ctx9, {
         type: 'doughnut',
         data: {
-            labels: ['Predicted Transaction Sum STD', 'Current Transaction Sum STD'],
+            labels: ['Predicted Total Transaction STD', 'Current Total Transaction STD'],
             datasets: [{
                 data: [],
                 backgroundColor: ['rgb(114, 9, 183)', 'rgb(255, 77, 166)'],
@@ -971,33 +987,37 @@ function updateChart9(data) {
     
     // Calculate the predicted transaction count for the entered number of years
     var predictedCounts = [];
-    var totalPredictedSum = 0; // To calculate the total sum of predicted counts
-    var lastTimestamp = dataPoints[dataPoints.length - 1][0];
-    var predictedLabels = []; // Array to hold labels for predicted months
-    var predictedValues = []; // Array to hold predicted transaction counts
-    for (var i = 1; i <= years * 12; i++) {
-        var futureTimestamp = lastTimestamp + (i * 2592000000); // 30 days in milliseconds
-        var predictedCount = Math.round(regressionCoefficients[0] * futureTimestamp + regressionCoefficients[1]);
-        predictedLabels.push(new Date(futureTimestamp).toDateString());
-        predictedValues.push(predictedCount);
-        totalPredictedSum += predictedCount; // Add to the total sum
+var totalPredictedSum = 0; // To calculate the total sum of predicted counts
+var lastTimestamp = dataPoints[dataPoints.length - 1][0];
+var predictedLabels = []; // Array to hold labels for predicted months
+var predictedValues = []; // Array to hold predicted transaction counts
+for (var i = 1; i <= years * 12; i++) {
+    var futureTimestamp = lastTimestamp + (i * 2592000000); // 30 days in milliseconds
+    var predictedCount = Math.round(regressionCoefficients[0] * futureTimestamp + regressionCoefficients[1]);
+
+    // Avoid negative predicted counts
+    if (predictedCount < 0) {
+        predictedCount = 0;
     }
-    
-    // Calculate the current transaction sum
-    var currentTransactionSum = 0;
-    <?php foreach ($transactions5 as $transaction) { ?>
-        currentTransactionSum += <?php echo $transaction['paid_and_pending_count']; ?>;
-    <?php } ?>
-    
-    // Display the predictions
-    var resultsDiv = document.getElementById('prediction-results4');
-    for (var j = 0; j < predictedCounts.length; j++) {
-        var prediction = predictedCounts[j];
-        var predictionDate = new Date(prediction.timestamp);
-    }
-    updateChart8(predictedLabels, predictedValues);
-        
-     updateChart9([totalPredictedSum, currentTransactionSum]);
+
+    predictedLabels.push(new Date(futureTimestamp).toDateString());
+    predictedValues.push(predictedCount);
+    totalPredictedSum += predictedCount; // Add to the total sum
+}
+
+// Calculate the current transaction sum
+var currentTransactionSum = 0;
+<?php foreach ($transactions5 as $transaction) { ?>
+    currentTransactionSum += <?php echo $transaction['paid_and_pending_count']; ?>;
+<?php } ?>
+
+// Display the predictions
+var resultsDiv = document.getElementById('prediction-results');
+for (var j = 0; j < predictedLabels.length; j++) {
+    var predictionDate = new Date(predictedLabels[j]);
+}
+updateChart8(predictedLabels, predictedValues);
+updateChart9([totalPredictedSum, currentTransactionSum]);
 
     });
 
@@ -1012,7 +1032,7 @@ function updateChart9(data) {
         data: {
             labels: [],
             datasets: [{
-                label: 'Predicted Transaction Income STD',
+                label: 'Predicted STD Total Income per Month',
                 data: [],
                 borderColor: 'rgb(114, 9, 183)',
                 backgroundColor: 'rgba(0, 0, 0, 0)',
@@ -1054,9 +1074,9 @@ function updateChart9(data) {
 
     var ctx11 = document.getElementById('transaction-chart11').getContext('2d');
     var transactionChart11 = new Chart(ctx11, {
-        type: 'doughnut',
+        type: 'pie',
         data: {
-            labels: ['Predicted Transaction Sum STD', 'Current Transaction Sum STD'],
+            labels: ['Predicted Total Income STD', 'Current Total Income STD'],
             datasets: [{
                 data: [],
                 backgroundColor: ['rgb(114, 9, 183)', 'rgb(255, 77, 166)'],
@@ -1147,9 +1167,12 @@ function updateChart11(data) {
         for (var j = 0; j < predictedIncomeLabels.length; j++) {
             var predictionDate = new Date(predictedIncomeLabels[j]);
             var predictedValue = parseFloat(predictedIncomeValues[j].toFixed(0));
-            totalPredictedIncomeLoop += predictedValue; // Add to the total
+            
+            if (predictedValue > 0) {
+                // Only add non-zero predicted values to the total
+                totalPredictedIncomeLoop += predictedValue; // Add to the total
+            }
         }
-
         updateChart10(predictedIncomeLabels, predictedIncomeValues)
 
         updateChart11([totalPredictedIncomeLoop, currentTotalIncome]);
