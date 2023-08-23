@@ -4,8 +4,8 @@ namespace backend\controllers;
 
 use common\models\UserSearch;
 use Yii;
-use common\models\User;
 use yii\web\Controller;
+use frontend\models\User;
 use yii\web\NotFoundHttpException;
 use yii\filters\AccessControl;
 use yii\base\InvalidParamException;
@@ -38,7 +38,6 @@ class UserController extends BaseController
             'dataProvider' => $dataProvider,
         ]);
     }
-
 public function actionCreate()
 {
     $model = new User(['scenario' => User::SCENARIO_CREATE]);
@@ -127,8 +126,5 @@ protected function findModel($id)
 
     throw new NotFoundHttpException('The requested page does not exist.');
 }
-
-
-
 
 }

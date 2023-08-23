@@ -23,17 +23,17 @@ class SiteController extends BaseController
         return [
             'access' => [
                 'class' => AccessControl::class,
-                'only' => ['login', 'logout', 'index'],
+                'only' => ['logout', 'index'],
                 'rules' => [
                     [
                         'allow' => true,
                         'actions' => ['login'],
-                        'roles' => ['?'],
+                        'roles' => ['@'],
                   ],
                   [
                       'allow' => true,
                       'actions' => ['index'],
-                      'roles' => ['ADMIN'], //add only admin allowed
+                      'roles' => ['ADMIN','USER'], //add only admin allowed
                   ],
                   [
                     'allow' => true,
@@ -99,7 +99,7 @@ class SiteController extends BaseController
                 $termsAccepted = !empty($currentUser->tos);
 
                 // Check if the user has the role 'ADMIN'
-                if (Yii::$app->user->can('ADMIN')) {
+                if (Yii::$app->user->can('ADMIN') || Yii::$app->user->can('USER')) {
                     // Redirect based on terms acceptance
                     if ($termsAccepted) {
                         return $this->goHome(); // Redirect to homepage or dashboard

@@ -43,7 +43,7 @@ class UserProfile extends ActiveRecord
             [['imageFile'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg, jpeg, gif'],
 
             [['contactNumber'], 'integer'],
-            [['contactNumber'], 'string', 'length' => [11, 11], 'on' => self::SCENARIO_UPDATE],
+            [['contactNumber'], 'string', 'on' => self::SCENARIO_UPDATE],
 
 
         ];
