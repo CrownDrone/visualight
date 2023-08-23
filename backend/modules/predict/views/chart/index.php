@@ -344,67 +344,66 @@ function updateChart1(data) {
         event.preventDefault();
         
         var years = parseFloat(document.getElementById('years').value);
-    
-    // Prepare the historical data for linear regression
-    var dataPoints = [];
-    <?php foreach ($transactions as $transaction) { ?>
-        dataPoints.push([<?php echo strtotime($transaction['month_date']) * 1000; ?>, <?php echo $transaction['paid_and_pending_count']; ?>]);
-    <?php } ?>
-    
-    // Perform linear regression using a simple linear model (y = mx + b)
-    function linearRegression(data) {
-        var sumX = 0, sumY = 0, sumXY = 0, sumX2 = 0;
-        var n = data.length;
-        
-        for (var i = 0; i < n; i++) {
-            sumX += data[i][0];
-            sumY += data[i][1];
-            sumXY += data[i][0] * data[i][1];
-            sumX2 += data[i][0] * data[i][0];
+
+// Prepare the historical data for linear regression
+        var dataPoints = [];
+        <?php foreach ($transactions as $transaction) { ?>
+            dataPoints.push([<?php echo strtotime($transaction['month_date']) * 1000; ?>, <?php echo $transaction['paid_and_pending_count']; ?>]);
+        <?php } ?>
+
+        // Perform linear regression using a simple linear model (y = mx + b)
+        function linearRegression(data) {
+            var sumX = 0, sumY = 0, sumXY = 0, sumX2 = 0;
+            var n = data.length;
+            
+            for (var i = 0; i < n; i++) {
+                sumX += data[i][0];
+                sumY += data[i][1];
+                sumXY += data[i][0] * data[i][1];
+                sumX2 += data[i][0] * data[i][0];
+            }
+            
+            var m = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
+            var b = (sumY - m * sumX) / n;
+            
+            return [m, b];
         }
-        
-        var m = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
-        var b = (sumY - m * sumX) / n;
-        
-        return [m, b];
-    }
-    
-    // Calculate linear regression coefficients
-    var regressionCoefficients = linearRegression(dataPoints);
-    
-    // Calculate the predicted transaction count for the entered number of years
-    var predictedCounts = [];
-var totalPredictedSum = 0; // To calculate the total sum of predicted counts
-var lastTimestamp = dataPoints[dataPoints.length - 1][0];
-var predictedLabels = []; // Array to hold labels for predicted months
-var predictedValues = []; // Array to hold predicted transaction counts
-for (var i = 1; i <= years * 12; i++) {
-    var futureTimestamp = lastTimestamp + (i * 2592000000); // 30 days in milliseconds
-    var predictedCount = Math.round(regressionCoefficients[0] * futureTimestamp + regressionCoefficients[1]);
 
-    // Avoid negative predicted counts
-    if (predictedCount < 0) {
-        predictedCount = 0;
-    }
+        // Calculate linear regression coefficients
+        var regressionCoefficients = linearRegression(dataPoints);
 
-    predictedLabels.push(new Date(futureTimestamp).toDateString());
-    predictedValues.push(predictedCount);
-    totalPredictedSum += predictedCount; // Add to the total sum
-}
+        console.log(dataPoints);
 
-// Calculate the current transaction sum
-var currentTransactionSum = 0;
-<?php foreach ($transactions as $transaction) { ?>
-    currentTransactionSum += <?php echo $transaction['paid_and_pending_count']; ?>;
-<?php } ?>
+        // Calculate the predicted transaction count for the entered number of years starting from next month
+        var predictedCounts = [];
+        var totalPredictedSum = 0; // To calculate the total sum of predicted counts
+        var nextMonthTimestamp = dataPoints[dataPoints.length - 1][0] + 2592000000; // Next month in milliseconds
+        var predictedLabels = []; // Array to hold labels for predicted months
+        var predictedValues = []; // Array to hold predicted transaction counts
+        for (var i = 1; i <= years * 12; i++) {
+            var futureTimestamp = nextMonthTimestamp + (i * 2592000000); // 30 days in milliseconds
+            var predictedCount = Math.round(regressionCoefficients[0] * futureTimestamp + regressionCoefficients[1]);
 
-// Display the predictions
-var resultsDiv = document.getElementById('prediction-results');
-for (var j = 0; j < predictedLabels.length; j++) {
-    var predictionDate = new Date(predictedLabels[j]);
-}
-updateChart(predictedLabels, predictedValues);
-updateChart1([totalPredictedSum, currentTransactionSum]);
+            predictedLabels.push(new Date(futureTimestamp).toDateString());
+            predictedValues.push(predictedCount);
+            totalPredictedSum += predictedCount; // Add to the total sum
+        }
+
+        // Calculate the current transaction sum
+        var currentTransactionSum = 0;
+        <?php foreach ($transactions as $transaction) { ?>
+            currentTransactionSum += <?php echo $transaction['paid_and_pending_count']; ?>;
+        <?php } ?>
+
+        // Display the predictions
+        var resultsDiv = document.getElementById('prediction-results');
+        for (var j = 0; j < predictedLabels.length; j++) {
+            var predictionDate = new Date(predictedLabels[j]);
+        }
+
+        updateChart(predictedLabels, predictedValues);
+        updateChart1([totalPredictedSum, currentTransactionSum]);
+
 
     });
 
@@ -492,14 +491,14 @@ function updateChart3(data) {
     document.getElementById('prediction-form').addEventListener('submit', function(event) {
         event.preventDefault();
         
-       var years = parseFloat(document.getElementById('years').value);
-        
+        var years = parseFloat(document.getElementById('years').value);
+
         // Prepare the historical data for linear regression
         var dataPoints = [];
         <?php foreach ($transactions2 as $transaction) { ?>
             dataPoints.push([<?php  echo strtotime($transaction['month_date']) * 1000; ?>, <?php echo $transaction['total_amount_paid']; ?>]);
         <?php } ?>
-        
+
         // Perform linear regression using a simple linear model (y = mx + b)
         function linearRegression(data) {
             var sumX = 0, sumY = 0, sumXY = 0, sumX2 = 0;
@@ -517,16 +516,16 @@ function updateChart3(data) {
             
             return [m, b];
         }
-        
+
         // Calculate linear regression coefficients
         var regressionCoefficients = linearRegression(dataPoints);
-        
-        // Calculate the predicted income amount for the entered number of years
+
+        // Calculate the predicted income amount for the entered number of years starting from next month
         var predictedIncomeLabels = [];
         var predictedIncomeValues = [];
-        var lastTimestamp = dataPoints[dataPoints.length - 1][0];
+        var nextMonthTimestamp = dataPoints[dataPoints.length - 1][0] + 2592000000; // Next month in milliseconds
         for (var i = 1; i <= years * 12; i++) {
-            var futureTimestamp = lastTimestamp + (i * 2592000000); // 30 days in milliseconds
+            var futureTimestamp = nextMonthTimestamp + (i * 2592000000); // 30 days in milliseconds
             var predictedAmount = regressionCoefficients[0] * futureTimestamp + regressionCoefficients[1];
             
             // Apply exponential smoothing to predicted amounts (adjust alpha value as needed)
@@ -539,7 +538,7 @@ function updateChart3(data) {
             totalPredictedIncome += predictedAmount; // Add to the total sum
         }
 
-         var currentTotalIncome = 0;
+        var currentTotalIncome = 0;
         <?php foreach ($transactions2 as $transaction) { ?>
             currentTotalIncome += <?php echo $transaction['total_amount_paid']; ?>;
         <?php } ?>
@@ -644,68 +643,66 @@ function updateChart5(data) {
     document.getElementById('prediction-form').addEventListener('submit', function(event) {
         event.preventDefault();
         
-        var years = parseFloat(document.getElementById('years').value);
-    
-    // Prepare the historical data for linear regression
-    var dataPoints = [];
-    <?php foreach ($transactions3 as $transaction) { ?>
-        dataPoints.push([<?php echo strtotime($transaction['month_date']) * 1000; ?>, <?php echo $transaction['paid_and_pending_count']; ?>]);
-    <?php } ?>
-    
-    // Perform linear regression using a simple linear model (y = mx + b)
-    function linearRegression(data) {
-        var sumX = 0, sumY = 0, sumXY = 0, sumX2 = 0;
-        var n = data.length;
-        
-        for (var i = 0; i < n; i++) {
-            sumX += data[i][0];
-            sumY += data[i][1];
-            sumXY += data[i][0] * data[i][1];
-            sumX2 += data[i][0] * data[i][0];
+       var years = parseFloat(document.getElementById('years').value);
+
+// Prepare the historical data for linear regression
+        var dataPoints = [];
+        <?php foreach ($transactions3 as $transaction) { ?>
+            dataPoints.push([<?php echo strtotime($transaction['month_date']) * 1000; ?>, <?php echo $transaction['paid_and_pending_count']; ?>]);
+        <?php } ?>
+
+        // Perform linear regression using a simple linear model (y = mx + b)
+        function linearRegression(data) {
+            var sumX = 0, sumY = 0, sumXY = 0, sumX2 = 0;
+            var n = data.length;
+            
+            for (var i = 0; i < n; i++) {
+                sumX += data[i][0];
+                sumY += data[i][1];
+                sumXY += data[i][0] * data[i][1];
+                sumX2 += data[i][0] * data[i][0];
+            }
+            
+            var m = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
+            var b = (sumY - m * sumX) / n;
+            
+            return [m, b];
         }
-        
-        var m = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
-        var b = (sumY - m * sumX) / n;
-        
-        return [m, b];
-    }
-    
-    // Calculate linear regression coefficients
-    var regressionCoefficients = linearRegression(dataPoints);
-    
-    // Calculate the predicted transaction count for the entered number of years
-    var predictedCounts = [];
-var totalPredictedSum = 0; // To calculate the total sum of predicted counts
-var lastTimestamp = dataPoints[dataPoints.length - 1][0];
-var predictedLabels = []; // Array to hold labels for predicted months
-var predictedValues = []; // Array to hold predicted transaction counts
-for (var i = 1; i <= years * 12; i++) {
-    var futureTimestamp = lastTimestamp + (i * 2592000000); // 30 days in milliseconds
-    var predictedCount = Math.round(regressionCoefficients[0] * futureTimestamp + regressionCoefficients[1]);
 
-    // Avoid negative predicted counts
-    if (predictedCount < 0) {
-        predictedCount = 0;
-    }
+        // Calculate linear regression coefficients
+        var regressionCoefficients = linearRegression(dataPoints);
 
-    predictedLabels.push(new Date(futureTimestamp).toDateString());
-    predictedValues.push(predictedCount);
-    totalPredictedSum += predictedCount; // Add to the total sum
-}
+        console.log(dataPoints);
 
-// Calculate the current transaction sum
-var currentTransactionSum = 0;
-<?php foreach ($transactions3 as $transaction) { ?>
-    currentTransactionSum += <?php echo $transaction['paid_and_pending_count']; ?>;
-<?php } ?>
+        // Calculate the predicted transaction count for the entered number of years starting from next month
+        var predictedCounts = [];
+        var totalPredictedSum = 0; // To calculate the total sum of predicted counts
+        var nextMonthTimestamp = dataPoints[dataPoints.length - 1][0] + 2592000000; // Next month in milliseconds
+        var predictedLabels = []; // Array to hold labels for predicted months
+        var predictedValues = []; // Array to hold predicted transaction counts
+        for (var i = 1; i <= years * 12; i++) {
+            var futureTimestamp = nextMonthTimestamp + (i * 2592000000); // 30 days in milliseconds
+            var predictedCount = Math.round(regressionCoefficients[0] * futureTimestamp + regressionCoefficients[1]);
 
-// Display the predictions
-var resultsDiv = document.getElementById('prediction-results');
-for (var j = 0; j < predictedLabels.length; j++) {
-    var predictionDate = new Date(predictedLabels[j]);
-}
-updateChart4(predictedLabels, predictedValues);
-updateChart5([totalPredictedSum, currentTransactionSum]);
+            predictedLabels.push(new Date(futureTimestamp).toDateString());
+            predictedValues.push(predictedCount);
+            totalPredictedSum += predictedCount; // Add to the total sum
+        }
+
+        // Calculate the current transaction sum
+        var currentTransactionSum = 0;
+        <?php foreach ($transactions3 as $transaction) { ?>
+            currentTransactionSum += <?php echo $transaction['paid_and_pending_count']; ?>;
+        <?php } ?>
+
+        // Display the predictions
+        var resultsDiv = document.getElementById('prediction-results');
+        for (var j = 0; j < predictedLabels.length; j++) {
+            var predictionDate = new Date(predictedLabels[j]);
+        }
+
+        updateChart4(predictedLabels, predictedValues);
+        updateChart5([totalPredictedSum, currentTransactionSum]);
 
     });
 
@@ -794,15 +791,14 @@ function updateChart7(data) {
     document.getElementById('prediction-form').addEventListener('submit', function(event) {
         event.preventDefault();
         
-        // Get the user input for years
         var years = parseFloat(document.getElementById('years').value);
-        
+
         // Prepare the historical data for linear regression
         var dataPoints = [];
         <?php foreach ($transactions4 as $transaction) { ?>
             dataPoints.push([<?php  echo strtotime($transaction['month_date']) * 1000; ?>, <?php echo $transaction['total_amount_paid']; ?>]);
         <?php } ?>
-        
+
         // Perform linear regression using a simple linear model (y = mx + b)
         function linearRegression(data) {
             var sumX = 0, sumY = 0, sumXY = 0, sumX2 = 0;
@@ -820,16 +816,16 @@ function updateChart7(data) {
             
             return [m, b];
         }
-        
+
         // Calculate linear regression coefficients
         var regressionCoefficients = linearRegression(dataPoints);
-        
-        // Calculate the predicted income amount for the entered number of years
+
+        // Calculate the predicted income amount for the entered number of years starting from next month
         var predictedIncomeLabels = [];
         var predictedIncomeValues = [];
-        var lastTimestamp = dataPoints[dataPoints.length - 1][0];
+        var nextMonthTimestamp = dataPoints[dataPoints.length - 1][0] + 2592000000; // Next month in milliseconds
         for (var i = 1; i <= years * 12; i++) {
-            var futureTimestamp = lastTimestamp + (i * 2592000000); // 30 days in milliseconds
+            var futureTimestamp = nextMonthTimestamp + (i * 2592000000); // 30 days in milliseconds
             var predictedAmount = regressionCoefficients[0] * futureTimestamp + regressionCoefficients[1];
             
             // Apply exponential smoothing to predicted amounts (adjust alpha value as needed)
@@ -842,13 +838,13 @@ function updateChart7(data) {
             totalPredictedIncome += predictedAmount; // Add to the total sum
         }
 
-         var currentTotalIncome = 0;
+        var currentTotalIncome = 0;
         <?php foreach ($transactions4 as $transaction) { ?>
             currentTotalIncome += <?php echo $transaction['total_amount_paid']; ?>;
         <?php } ?>
 
         // Display the predictions for income
-        var resultsDiv = document.getElementById('prediction-results3');
+        var resultsDiv = document.getElementById('prediction-results1');
         var totalPredictedIncomeLoop = 0; // Initialize the total
 
         // Loop to display predicted income and calculate total
@@ -861,6 +857,7 @@ function updateChart7(data) {
                 totalPredictedIncomeLoop += predictedValue; // Add to the total
             }
         }
+
         updateChart6(predictedIncomeLabels, predictedIncomeValues)
 
         updateChart7([totalPredictedIncomeLoop, currentTotalIncome]);
@@ -948,67 +945,64 @@ function updateChart9(data) {
         event.preventDefault();
         
         var years = parseFloat(document.getElementById('years').value);
-    
-    // Prepare the historical data for linear regression
-    var dataPoints = [];
-    <?php foreach ($transactions5 as $transaction) { ?>
-        dataPoints.push([<?php echo strtotime($transaction['month_date']) * 1000; ?>, <?php echo $transaction['paid_and_pending_count']; ?>]);
-    <?php } ?>
-    
-    // Perform linear regression using a simple linear model (y = mx + b)
-    function linearRegression(data) {
-        var sumX = 0, sumY = 0, sumXY = 0, sumX2 = 0;
-        var n = data.length;
-        
-        for (var i = 0; i < n; i++) {
-            sumX += data[i][0];
-            sumY += data[i][1];
-            sumXY += data[i][0] * data[i][1];
-            sumX2 += data[i][0] * data[i][0];
+
+// Prepare the historical data for linear regression
+        var dataPoints = [];
+        <?php foreach ($transactions5 as $transaction) { ?>
+            dataPoints.push([<?php echo strtotime($transaction['month_date']) * 1000; ?>, <?php echo $transaction['paid_and_pending_count']; ?>]);
+        <?php } ?>
+
+        // Perform linear regression using a simple linear model (y = mx + b)
+        function linearRegression(data) {
+            var sumX = 0, sumY = 0, sumXY = 0, sumX2 = 0;
+            var n = data.length;
+            
+            for (var i = 0; i < n; i++) {
+                sumX += data[i][0];
+                sumY += data[i][1];
+                sumXY += data[i][0] * data[i][1];
+                sumX2 += data[i][0] * data[i][0];
+            }
+            
+            var m = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
+            var b = (sumY - m * sumX) / n;
+            
+            return [m, b];
         }
-        
-        var m = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
-        var b = (sumY - m * sumX) / n;
-        
-        return [m, b];
-    }
-    
-    // Calculate linear regression coefficients
-    var regressionCoefficients = linearRegression(dataPoints);
-    
-    // Calculate the predicted transaction count for the entered number of years
-    var predictedCounts = [];
-var totalPredictedSum = 0; // To calculate the total sum of predicted counts
-var lastTimestamp = dataPoints[dataPoints.length - 1][0];
-var predictedLabels = []; // Array to hold labels for predicted months
-var predictedValues = []; // Array to hold predicted transaction counts
-for (var i = 1; i <= years * 12; i++) {
-    var futureTimestamp = lastTimestamp + (i * 2592000000); // 30 days in milliseconds
-    var predictedCount = Math.round(regressionCoefficients[0] * futureTimestamp + regressionCoefficients[1]);
 
-    // Avoid negative predicted counts
-    if (predictedCount < 0) {
-        predictedCount = 0;
-    }
+        // Calculate linear regression coefficients
+        var regressionCoefficients = linearRegression(dataPoints);
 
-    predictedLabels.push(new Date(futureTimestamp).toDateString());
-    predictedValues.push(predictedCount);
-    totalPredictedSum += predictedCount; // Add to the total sum
-}
+        console.log(dataPoints);
 
-// Calculate the current transaction sum
-var currentTransactionSum = 0;
-<?php foreach ($transactions5 as $transaction) { ?>
-    currentTransactionSum += <?php echo $transaction['paid_and_pending_count']; ?>;
-<?php } ?>
+        // Calculate the predicted transaction count for the entered number of years starting from next month
+        var predictedCounts = [];
+        var totalPredictedSum = 0; // To calculate the total sum of predicted counts
+        var nextMonthTimestamp = dataPoints[dataPoints.length - 1][0] + 2592000000; // Next month in milliseconds
+        var predictedLabels = []; // Array to hold labels for predicted months
+        var predictedValues = []; // Array to hold predicted transaction counts
+        for (var i = 1; i <= years * 12; i++) {
+            var futureTimestamp = nextMonthTimestamp + (i * 2592000000); // 30 days in milliseconds
+            var predictedCount = Math.round(regressionCoefficients[0] * futureTimestamp + regressionCoefficients[1]);
 
-// Display the predictions
-var resultsDiv = document.getElementById('prediction-results');
-for (var j = 0; j < predictedLabels.length; j++) {
-    var predictionDate = new Date(predictedLabels[j]);
-}
-updateChart8(predictedLabels, predictedValues);
-updateChart9([totalPredictedSum, currentTransactionSum]);
+            predictedLabels.push(new Date(futureTimestamp).toDateString());
+            predictedValues.push(predictedCount);
+            totalPredictedSum += predictedCount; // Add to the total sum
+        }
+
+        // Calculate the current transaction sum
+        var currentTransactionSum = 0;
+        <?php foreach ($transactions5 as $transaction) { ?>
+            currentTransactionSum += <?php echo $transaction['paid_and_pending_count']; ?>;
+        <?php } ?>
+
+        // Display the predictions
+        var resultsDiv = document.getElementById('prediction-results');
+        for (var j = 0; j < predictedLabels.length; j++) {
+            var predictionDate = new Date(predictedLabels[j]);
+        }
+        updateChart8(predictedLabels, predictedValues);
+        updateChart9([totalPredictedSum, currentTransactionSum]);
 
     });
 
@@ -1097,15 +1091,14 @@ function updateChart11(data) {
     document.getElementById('prediction-form').addEventListener('submit', function(event) {
         event.preventDefault();
         
-        // Get the user input for years
         var years = parseFloat(document.getElementById('years').value);
-        
+
         // Prepare the historical data for linear regression
         var dataPoints = [];
         <?php foreach ($transactions6 as $transaction) { ?>
             dataPoints.push([<?php  echo strtotime($transaction['month_date']) * 1000; ?>, <?php echo $transaction['total_amount_paid']; ?>]);
         <?php } ?>
-        
+
         // Perform linear regression using a simple linear model (y = mx + b)
         function linearRegression(data) {
             var sumX = 0, sumY = 0, sumXY = 0, sumX2 = 0;
@@ -1123,16 +1116,16 @@ function updateChart11(data) {
             
             return [m, b];
         }
-        
+
         // Calculate linear regression coefficients
         var regressionCoefficients = linearRegression(dataPoints);
-        
-        // Calculate the predicted income amount for the entered number of years
+
+        // Calculate the predicted income amount for the entered number of years starting from next month
         var predictedIncomeLabels = [];
         var predictedIncomeValues = [];
-        var lastTimestamp = dataPoints[dataPoints.length - 1][0];
+        var nextMonthTimestamp = dataPoints[dataPoints.length - 1][0] + 2592000000; // Next month in milliseconds
         for (var i = 1; i <= years * 12; i++) {
-            var futureTimestamp = lastTimestamp + (i * 2592000000); // 30 days in milliseconds
+            var futureTimestamp = nextMonthTimestamp + (i * 2592000000); // 30 days in milliseconds
             var predictedAmount = regressionCoefficients[0] * futureTimestamp + regressionCoefficients[1];
             
             // Apply exponential smoothing to predicted amounts (adjust alpha value as needed)
@@ -1145,13 +1138,13 @@ function updateChart11(data) {
             totalPredictedIncome += predictedAmount; // Add to the total sum
         }
 
-         var currentTotalIncome = 0;
+        var currentTotalIncome = 0;
         <?php foreach ($transactions6 as $transaction) { ?>
             currentTotalIncome += <?php echo $transaction['total_amount_paid']; ?>;
         <?php } ?>
 
         // Display the predictions for income
-        var resultsDiv = document.getElementById('prediction-results5');
+        var resultsDiv = document.getElementById('prediction-results1');
         var totalPredictedIncomeLoop = 0; // Initialize the total
 
         // Loop to display predicted income and calculate total
@@ -1164,6 +1157,7 @@ function updateChart11(data) {
                 totalPredictedIncomeLoop += predictedValue; // Add to the total
             }
         }
+
         updateChart10(predictedIncomeLabels, predictedIncomeValues)
 
         updateChart11([totalPredictedIncomeLoop, currentTotalIncome]);
