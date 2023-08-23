@@ -127,15 +127,6 @@ use yii\web\View;
 </div>
 
 
-
-        <div id="prediction-results"> </div>
-        <div id="prediction-results1"></div>
-        <div id="prediction-results2"></div>
-        <div id="prediction-results3"></div>
-        <div id="prediction-results4"></div>
-        <div id="prediction-results5"></div>
-
-
     </div>
 
 
