@@ -574,11 +574,9 @@ function updateChart3(data) {
         for (var j = 0; j < predictedIncomeLabels.length; j++) {
             var predictionDate = new Date(predictedIncomeLabels[j]);
             var predictedValue = parseFloat(predictedIncomeValues[j].toFixed(0));
-            
-            if (predictedValue > 0) {
-                // Only add non-zero predicted values to the total
+
                 totalPredictedIncomeLoop += predictedValue; // Add to the total
-            }
+            
         }
 
         updateChart2(predictedIncomeLabels, predictedIncomeValues)
@@ -875,10 +873,8 @@ function updateChart7(data) {
             var predictionDate = new Date(predictedIncomeLabels[j]);
             var predictedValue = parseFloat(predictedIncomeValues[j].toFixed(0));
             
-            if (predictedValue > 0) {
-                // Only add non-zero predicted values to the total
-                totalPredictedIncomeLoop += predictedValue; // Add to the total
-            }
+            totalPredictedIncomeLoop += predictedValue; // Add to the total
+            
         }
 
         updateChart6(predictedIncomeLabels, predictedIncomeValues)
@@ -1175,10 +1171,8 @@ function updateChart11(data) {
             var predictionDate = new Date(predictedIncomeLabels[j]);
             var predictedValue = parseFloat(predictedIncomeValues[j].toFixed(0));
             
-            if (predictedValue > 0) {
-                // Only add non-zero predicted values to the total
                 totalPredictedIncomeLoop += predictedValue; // Add to the total
-            }
+            
         }
 
         updateChart10(predictedIncomeLabels, predictedIncomeValues)
