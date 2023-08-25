@@ -205,9 +205,6 @@ GROUP BY AllMonths.first_month
 ORDER BY AllMonths.first_month;
 
 
-
-
-
 ";
 
 $transactions3 = $chartDb->createCommand($sql3)->queryAll();
