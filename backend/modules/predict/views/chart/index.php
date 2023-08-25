@@ -137,40 +137,46 @@ $chartDb = Yii::$app->db_data;
 
 $sql1 = "
     WITH RECURSIVE AllMonths AS (
-        SELECT MAX(DATE_FORMAT(transaction_date, '%Y-%m-01')) AS last_month
-        FROM transaction
-        UNION ALL
-        SELECT DATE_FORMAT(DATE_ADD(last_month, INTERVAL -1 MONTH), '%Y-%m-01')
-        FROM AllMonths
-        WHERE last_month >= DATE_FORMAT(DATE_ADD(CURDATE(), INTERVAL -11 MONTH), '%Y-%m-01')  -- Show last 12 months
-    )
-    SELECT
-        AllMonths.last_month AS month_date,
-        IFNULL(SUM(CASE WHEN t.transaction_status = 1 OR t.transaction_status = 3 THEN 1 ELSE 0 END), 0) AS paid_and_pending_count
+    SELECT MIN(DATE_FORMAT(transaction_date, '%Y-%m-01')) AS first_month,
+           MAX(DATE_FORMAT(transaction_date, '%Y-%m-01')) AS max_month
+    FROM transaction
+    UNION ALL
+    SELECT DATE_FORMAT(DATE_ADD(first_month, INTERVAL 1 MONTH), '%Y-%m-01'),
+           max_month
     FROM AllMonths
-    LEFT JOIN transaction t ON DATE_FORMAT(t.transaction_date, '%Y-%m-01') = AllMonths.last_month
-    GROUP BY AllMonths.last_month
-    ORDER BY AllMonths.last_month;
+    WHERE DATE_FORMAT(DATE_ADD(first_month, INTERVAL 1 MONTH), '%Y-%m-01') <= max_month
+)
+SELECT
+    AllMonths.first_month AS month_date,
+    IFNULL(SUM(CASE WHEN t.transaction_status = 1 OR t.transaction_status = 3 THEN 1 ELSE 0 END), 0) AS paid_and_pending_count
+FROM AllMonths
+LEFT JOIN transaction t ON DATE_FORMAT(t.transaction_date, '%Y-%m-01') = AllMonths.first_month
+GROUP BY AllMonths.first_month
+ORDER BY AllMonths.first_month;
+
+
 ";
 
 $transactions = $chartDb->createCommand($sql1)->queryAll();
 
 $sql2 = "
-    WITH RECURSIVE AllMonths AS (
-        SELECT MAX(DATE_FORMAT(transaction_date, '%Y-%m-01')) AS last_month
-        FROM transaction
-        UNION ALL
-        SELECT DATE_FORMAT(DATE_ADD(last_month, INTERVAL -1 MONTH), '%Y-%m-01')
-        FROM AllMonths
-        WHERE last_month >= DATE_FORMAT(DATE_ADD(CURDATE(), INTERVAL -11 MONTH), '%Y-%m-01')  -- Show last 12 months
-    )
-    SELECT
-        AllMonths.last_month AS month_date,
-        ROUND(IFNULL(SUM(CASE WHEN t.transaction_status = 1 THEN t.amount ELSE 0 END), 0)) AS total_amount_paid
+WITH RECURSIVE AllMonths AS (
+    SELECT MIN(DATE_FORMAT(transaction_date, '%Y-%m-01')) AS first_month,
+           MAX(DATE_FORMAT(transaction_date, '%Y-%m-01')) AS max_month
+    FROM transaction
+    UNION ALL
+    SELECT DATE_FORMAT(DATE_ADD(first_month, INTERVAL 1 MONTH), '%Y-%m-01'),
+           max_month
     FROM AllMonths
-    LEFT JOIN transaction t ON DATE_FORMAT(t.transaction_date, '%Y-%m-01') = AllMonths.last_month
-    GROUP BY AllMonths.last_month
-    ORDER BY AllMonths.last_month;
+    WHERE DATE_FORMAT(DATE_ADD(first_month, INTERVAL 1 MONTH), '%Y-%m-01') <= max_month
+)
+SELECT
+    AllMonths.first_month AS month_date,
+    ROUND(IFNULL(SUM(CASE WHEN t.transaction_status = 1 THEN t.amount ELSE 0 END), 0)) AS total_amount_paid
+FROM AllMonths
+LEFT JOIN transaction t ON DATE_FORMAT(t.transaction_date, '%Y-%m-01') = AllMonths.first_month
+GROUP BY AllMonths.first_month
+ORDER BY AllMonths.first_month;
 
 
 ";
@@ -199,29 +205,30 @@ GROUP BY AllMonths.first_month
 ORDER BY AllMonths.first_month;
 
 
-
-
-
 ";
 
 $transactions3 = $chartDb->createCommand($sql3)->queryAll();
 
 $sql4 = "
 WITH RECURSIVE AllMonths AS (
-    SELECT MAX(DATE_FORMAT(transaction_date, '%Y-%m-01')) AS last_month
+    SELECT MIN(DATE_FORMAT(transaction_date, '%Y-%m-01')) AS first_month,
+           MAX(DATE_FORMAT(transaction_date, '%Y-%m-01')) AS max_month
     FROM transaction
     UNION ALL
-    SELECT DATE_FORMAT(DATE_ADD(last_month, INTERVAL -1 MONTH), '%Y-%m-01')
+    SELECT DATE_FORMAT(DATE_ADD(first_month, INTERVAL 1 MONTH), '%Y-%m-01'),
+           max_month
     FROM AllMonths
-    WHERE last_month >= DATE_FORMAT(DATE_ADD(CURDATE(), INTERVAL -11 MONTH), '%Y-%m-01')  -- Show last 12 months
+    WHERE DATE_FORMAT(DATE_ADD(first_month, INTERVAL 1 MONTH), '%Y-%m-01') <= max_month
 )
 SELECT
     AllMonths.first_month AS month_date,
     ROUND(IFNULL(SUM(CASE WHEN t.transaction_status = 1 THEN t.amount ELSE 0 END), 0)) AS total_amount_paid
 FROM AllMonths
-LEFT JOIN transaction t ON DATE_FORMAT(t.transaction_date, '%Y-%m-01') = AllMonths.last_month AND t.division = (SELECT id FROM division WHERE division_code = 'NMD')
-GROUP BY AllMonths.last_month
-ORDER BY AllMonths.last_month;
+LEFT JOIN transaction t ON DATE_FORMAT(t.transaction_date, '%Y-%m-01') = AllMonths.first_month AND t.division = (SELECT id FROM division WHERE division_code = 'NMD')
+GROUP BY AllMonths.first_month
+ORDER BY AllMonths.first_month;
+
+
 
 ";
 
@@ -230,21 +237,25 @@ $transactions4 = $chartDb->createCommand($sql4)->queryAll();
 // STD
 
 $sql5 = "
-    WITH RECURSIVE AllMonths AS (
-        SELECT MAX(DATE_FORMAT(transaction_date, '%Y-%m-01')) AS last_month
-        FROM transaction
-        UNION ALL
-        SELECT DATE_FORMAT(DATE_ADD(last_month, INTERVAL -1 MONTH), '%Y-%m-01')
-        FROM AllMonths
-        WHERE last_month >= DATE_FORMAT(DATE_ADD(CURDATE(), INTERVAL -11 MONTH), '%Y-%m-01')  -- Show last 12 months
-    )
-    SELECT
-        AllMonths.last_month AS month_date,
-        IFNULL(SUM(CASE WHEN t.transaction_status = 1 OR t.transaction_status = 3 THEN 1 ELSE 0 END), 0) AS paid_and_pending_count
+WITH RECURSIVE AllMonths AS (
+    SELECT MIN(DATE_FORMAT(transaction_date, '%Y-%m-01')) AS first_month,
+           MAX(DATE_FORMAT(transaction_date, '%Y-%m-01')) AS max_month
+    FROM transaction
+    UNION ALL
+    SELECT DATE_FORMAT(DATE_ADD(first_month, INTERVAL 1 MONTH), '%Y-%m-01'),
+           max_month
     FROM AllMonths
-    LEFT JOIN transaction t ON DATE_FORMAT(t.transaction_date, '%Y-%m-01') = AllMonths.last_month AND t.division = (SELECT id FROM division WHERE division_code = 'STD')
-    GROUP BY AllMonths.last_month
-    ORDER BY AllMonths.last_month;
+    WHERE DATE_FORMAT(DATE_ADD(first_month, INTERVAL 1 MONTH), '%Y-%m-01') <= max_month
+)
+SELECT
+    AllMonths.first_month AS month_date,
+    IFNULL(SUM(CASE WHEN t.transaction_status = 1 OR t.transaction_status = 3 THEN 1 ELSE 0 END), 0) AS paid_and_pending_count
+FROM AllMonths
+LEFT JOIN transaction t ON DATE_FORMAT(t.transaction_date, '%Y-%m-01') = AllMonths.first_month AND t.division = (SELECT id FROM division WHERE division_code = 'STD')
+GROUP BY AllMonths.first_month
+ORDER BY AllMonths.first_month;
+
+
 
 
 ";
@@ -253,20 +264,24 @@ $transactions5 = $chartDb->createCommand($sql5)->queryAll();
 
 $sql6 = "
 WITH RECURSIVE AllMonths AS (
-    SELECT MAX(DATE_FORMAT(transaction_date, '%Y-%m-01')) AS last_month
+    SELECT MIN(DATE_FORMAT(transaction_date, '%Y-%m-01')) AS first_month,
+           MAX(DATE_FORMAT(transaction_date, '%Y-%m-01')) AS max_month
     FROM transaction
     UNION ALL
-    SELECT DATE_FORMAT(DATE_ADD(last_month, INTERVAL -1 MONTH), '%Y-%m-01')
+    SELECT DATE_FORMAT(DATE_ADD(first_month, INTERVAL 1 MONTH), '%Y-%m-01'),
+           max_month
     FROM AllMonths
-    WHERE last_month >= DATE_FORMAT(DATE_ADD(CURDATE(), INTERVAL -11 MONTH), '%Y-%m-01')  -- Show last 12 months
+    WHERE DATE_FORMAT(DATE_ADD(first_month, INTERVAL 1 MONTH), '%Y-%m-01') <= max_month
 )
 SELECT
     AllMonths.first_month AS month_date,
     ROUND(IFNULL(SUM(CASE WHEN t.transaction_status = 1 THEN t.amount ELSE 0 END), 0)) AS total_amount_paid
 FROM AllMonths
-LEFT JOIN transaction t ON DATE_FORMAT(t.transaction_date, '%Y-%m-01') = AllMonths.last_month AND t.division = (SELECT id FROM division WHERE division_code = 'STD')
-GROUP BY AllMonths.last_month
-ORDER BY AllMonths.last_month;
+LEFT JOIN transaction t ON DATE_FORMAT(t.transaction_date, '%Y-%m-01') = AllMonths.first_month AND t.division = (SELECT id FROM division WHERE division_code = 'STD')
+GROUP BY AllMonths.first_month
+ORDER BY AllMonths.first_month;
+
+
 
 ";
 
