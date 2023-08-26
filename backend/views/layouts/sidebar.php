@@ -126,18 +126,20 @@ $defaultImagePath = Yii::getAlias('@web') . '/images/user2.jpg';
                     [
                         'label' => 'Division Charts',
                         'icon' => 'user',
-                        'visible' => Helper::checkRoute('/chart/*'),
+                        'visible' => Helper::checkRoute('/site/index'),
                         'items' => [
                             [
                                 'label' => 'Predict Chart',
                                 'icon' => 'star',
                                 'url' => ['/predict/chart/index'],
+                                'visible' => Helper::checkRoute('/predict/chart/index'),
                                 'active' => Yii::$app->controller->route === 'predict/chart/index',
                             ],
                                 [
                                 'label' => 'National Metrology',
                                 'icon' => 'star',
                                 'url' => ['/nmd/chart/index'],
+                                'visible' => Helper::checkRoute('/nmd/chart/index'),
                                 'active' => Yii::$app->controller->route === 'nmd/chart/index',
 
                             ],
@@ -145,6 +147,7 @@ $defaultImagePath = Yii::getAlias('@web') . '/images/user2.jpg';
                                 'label' => 'Standard and Testing',
                                 'icon' => 'star',
                                 'url' => ['/std/chart/index'],
+                                'visible' => Helper::checkRoute('/std/chart/index'),
                                 'active' => Yii::$app->controller->route === 'std/chart/index',
 
                             ],

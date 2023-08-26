@@ -4,7 +4,7 @@ namespace app\modules\std;
 
 class Module extends \yii\base\Module
 {
-    public $controllerNamespace = 'backend\modules\chart\controllers';
+    public $controllerNamespace = 'backend\modules\std\controllers';
 
     public function init()
     {
