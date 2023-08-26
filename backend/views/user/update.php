@@ -24,7 +24,7 @@ $this->params['breadcrumbs'][] = 'Update';
     
     <?= $form->field($model, 'fullName')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'address')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'address')->textarea(['rows' => 4]) ?>
 
     <?= $form->field($model, 'contactNumber')->textInput(['maxlength' => true]) ?>
 

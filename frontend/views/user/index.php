@@ -27,22 +27,22 @@ $this->title = 'Users';
         [
             'attribute' => 'id',
             'headerOptions' => ['class' => 'bg-blue', 'style' => 'color: white; text-align: center;'],
-            'contentOptions' => ['style' => 'text-align: center;'],
+            'contentOptions' => ['style' => 'text-align: center; background-color: white;'],
         ],
         [
             'attribute' => 'username',
             'headerOptions' => ['class' => 'bg-blue', 'style' => 'color: white; text-align: center;'],
-            'contentOptions' => ['style' => 'text-align: center;'],
+            'contentOptions' => ['style' => 'text-align: center; background-color: white;'],
         ],
         [
             'attribute' => 'email',
             'headerOptions' => ['class' => 'bg-blue', 'style' => 'color: white; text-align: center;'],
-            'contentOptions' => ['style' => 'text-align: center;'],
+            'contentOptions' => ['style' => 'text-align: center; background-color: white;'],
         ],
         [
             'attribute' => 'status',
             'headerOptions' => ['class' => 'bg-blue', 'style' => 'color: white; text-align: center;'],
-            'contentOptions' => ['style' => 'text-align: center;'],
+            'contentOptions' => ['style' => 'text-align: center; background-color: white;'],
             'value' => function ($model) {
                 return $model->getStatusLabel();
             },
@@ -52,7 +52,7 @@ $this->title = 'Users';
             'class' => 'yii\grid\ActionColumn',
             'header' => 'Actions',
             'headerOptions' => ['class' => 'bg-blue', 'style' => 'color: white; text-align: center;'],
-            'contentOptions' => ['style' => 'text-align: center;'],
+            'contentOptions' => ['style' => 'text-align: center; background: white;'],
             'template' => '{view} {update} {delete}', // Remove the button icons and use only text
             'buttons' => [
                 'view' => function ($url, $model, $key) {
