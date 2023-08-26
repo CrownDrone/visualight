@@ -135,19 +135,19 @@ $this->title = '';
     @media (max-width: 600px) {
         .profile-container {
             padding: 10px;
-            height: 890px;
+            height: 1020px;
 
         }
 
         .profile-picture {
             width: 200px;
             height: 200px;
-            margin-top: 10%;
+            margin-top: 20%;
             margin-left: 66%;
         }
 
         .upload-btn-wrapper {
-            margin-top: 1rem;
+            margin-top: 2rem;
             margin-left: 66%;
             font-size: 4.5vw;
             height: 5vh;
