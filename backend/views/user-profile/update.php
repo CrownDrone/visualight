@@ -38,7 +38,7 @@ $this->title = '';
         <div class="divider"></div>
 
         <!-- Right column -->
-        <div class="form-group right-column">
+        <div class="form-group right-column" style="margin-top: 15px;">
             <?= $form->field($model, 'username')->textInput() ?>
             <?= $form->field($model, 'email')->textInput() ?>
             <?= $form->field($model, 'contactNumber')->textInput(['maxlength' => true]) ?>
@@ -57,9 +57,10 @@ $this->title = '';
         flex-direction: column;
         align-items: center;
         padding: 3%;
-        background-color: #cceeff;
+        background-color:  #e6eeff;
         border-radius: 10px;
-        height: 85vh;
+        height: 80vh;
+        box-shadow: -4px 4px 8px rgba(0, 0, 0, 0.4), 0 6px 20px 0 rgba(0, 0, 0, 0.25);
         /* Use viewport height unit */
     }
 
@@ -142,15 +143,15 @@ $this->title = '';
             width: 200px;
             height: 200px;
             margin-top: 10%;
-            margin-left: 55%;
+            margin-left: 66%;
         }
 
         .upload-btn-wrapper {
             margin-top: 1rem;
-            margin-left: 55%;
+            margin-left: 66%;
             font-size: 4.5vw;
-            height: 3vh;
-            width: 35%;
+            height: 5vh;
+            width: 45%;
             text-align: center;
 
         }
@@ -163,10 +164,50 @@ $this->title = '';
             width: 100%;
             max-width: 250px;
             position: absolute;
-            top: 70%;
+            top: 74%;
             right: 15%;
             transform: translate(0, -50%);
 
+        }
+
+    }
+
+    @media (max-width: 300px) {
+        .profile-container {
+            padding: 10px;
+            height: 890px;
+
+        }
+
+        .profile-picture {
+            width: 200px;
+            height: 200px;
+            margin-top: 10%;
+            margin-left: 66%;
+        }
+
+        .upload-btn-wrapper {
+            margin-top: 1rem;
+            margin-left: 66%;
+            font-size: 4.5vw;
+            height: 5vh;
+            width: 45%;
+            text-align: center;
+
+        }
+
+        .divider {
+            display: none;
+        }
+
+        .right-column {
+            width: 100%;
+            max-width: 250px;
+            position: absolute;
+            top: 74%;
+            right: 15%;
+            transform: translate(0, -50%);
+            left:5%;
         }
 
     }

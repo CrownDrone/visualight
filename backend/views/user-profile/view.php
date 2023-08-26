@@ -79,7 +79,6 @@ $defaultImagePath = Yii::getAlias('@web') . '/images/user2.jpg';
         text-align: center;
         margin: auto;
     }
-
     .pf{
         object-fit: cover;
     }
@@ -133,13 +132,15 @@ $defaultImagePath = Yii::getAlias('@web') . '/images/user2.jpg';
 
     .btn-primary {
         position: absolute;
-        right: 5rem;
-        top: 765px;
-        font-weight: 600;
+        bottom: -55px; /* Adjust this value as needed */
+        right: 20px;
+        width: 180px;
+        max-height: 2000px;
+
     }
 
 
-    @media (max-width: 767px) {
+    @media (max-width: 700px) {
         .profile-picture {
             top: 12.5rem;
             margin-top: -100px;
@@ -147,7 +148,7 @@ $defaultImagePath = Yii::getAlias('@web') . '/images/user2.jpg';
         }
 
         .user-info {
-            margin-top: 3rem;
+            margin-top: 4rem;
         }
 
         .user-name {
@@ -176,10 +177,15 @@ $defaultImagePath = Yii::getAlias('@web') . '/images/user2.jpg';
         }
 
         .btn-primary {
-            right: 8rem;
-            top: 590px;
+            position:absolute;
+            bottom: -55px;
+            right: 10px;
+            max-width: 180px;
+            
         }
-
+        
     }
+    
+    
 
 </style>
