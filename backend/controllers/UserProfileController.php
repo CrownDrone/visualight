@@ -27,10 +27,6 @@ class UserProfileController extends BaseController
                            'actions' => ['view','update'],
                            'roles' => ['@'],
                    ],
-                   [
-                    'allow' => false,
-                    'roles' => ['GUEST'],
-                    ],
                   [
                       'allow' => true,
                       'actions' => ['logout'],

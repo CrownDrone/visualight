@@ -5,7 +5,7 @@ namespace backend\controllers;
 use common\models\UserSearch;
 use Yii;
 use yii\web\Controller;
-use frontend\models\User;
+use common\models\User;
 use yii\web\NotFoundHttpException;
 use yii\filters\AccessControl;
 use yii\base\InvalidParamException;
@@ -38,37 +38,38 @@ class UserController extends BaseController
             'dataProvider' => $dataProvider,
         ]);
     }
-public function actionCreate()
-{
-    $model = new User(['scenario' => User::SCENARIO_CREATE]);
-
-    if ($model->load(Yii::$app->request->post())) {
-        // Validate the model before saving
-        if ($model->validate()) {
-            // Check if a password is provided
-            if (empty($model->newPassword)) {
-                Yii::$app->session->setFlash('error', 'Password is required.');
-            } else {
-                // Save the user data
-                $model->setPassword($model->newPassword);
-                $model->generateAuthKey();
-                $model->generateEmailVerificationToken();
-                $model->status = User::STATUS_ACTIVE;
-
-                if ($model->save()) {
-                    Yii::$app->session->setFlash('success', 'User created successfully.');
-                    return $this->redirect(['index']);
+    public function actionCreate()
+    {
+        $model = new User(['scenario' => User::SCENARIO_CREATE]);
+    
+        if ($model->load(Yii::$app->request->post())) {
+            // Validate the model before saving
+            if ($model->validate()) {
+                // Check if a password is provided
+                if (empty($model->newPassword)) {
+                    Yii::$app->session->setFlash('error', 'Password is required.');
                 } else {
-                    Yii::$app->session->setFlash('error', 'Error saving user data.');
+                    // Save the user data
+                    $model->setPassword($model->newPassword);
+                    $model->generateAuthKey();
+                    $model->generateEmailVerificationToken();
+                    $model->status = User::STATUS_ACTIVE;
+    
+                    if ($model->save()) {
+                        Yii::$app->session->setFlash('success', 'User created successfully.');
+                        return $this->redirect(['index']);
+                    } else {
+                        Yii::$app->session->setFlash('error', 'Error saving user data.');
+                    }
                 }
             }
         }
+    
+        return $this->render('create', [
+            'model' => $model,
+        ]);
     }
-
-    return $this->render('create', [
-        'model' => $model,
-    ]);
-}
+    
 
 public function actionUpdate($id)
 {
