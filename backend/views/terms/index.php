@@ -8,7 +8,7 @@ use yii\widgets\ActiveForm;
 // $this->params['breadcrumbs'][] = $this->title;
 ?>
 
-<div class="terms-and-conditions">
+<div class="terms-and-conditions" style = "background: white; padding: 1rem; border-radius: 20px; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
     <h2>Terms of Service</h2>
     <p>Please read the following terms and conditions carefully before using our web application. By accessing or using our web application, you agree to be bound by these terms and conditions. If you do not agree with any part of these terms and conditions, you should not use our web application.</p>
 
@@ -30,15 +30,10 @@ use yii\widgets\ActiveForm;
             <p>We are not liable for any damages arising from the use of our services, even if we have been advised of the possibility of such damages.</p>
         </li>
         <li>
-        <strong>Contact Information</strong> 
-            <p>If you have any questions or concerns, please contact our Data Protection Officer at [Contact Information].</p>
-        </li>
-        <li>
         <strong>Modifications to the Agreement</strong> 
             <p>We may modify this Agreement at any time without prior notice. It is your responsibility to review the Agreement periodically for any changes.</p>
         </li>
     </ol>
-</div>
 
 <br>
 <br>
@@ -61,7 +56,7 @@ $recordExists = !empty($model->tos);
 
     <?php ActiveForm::end(); ?>
 </div>
-
+</div>
 <?php
 // Add JavaScript code to handle form submission and disable checkbox when clicked
 $js = <<< JS
