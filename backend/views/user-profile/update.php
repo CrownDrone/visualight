@@ -22,12 +22,12 @@ $this->title = '';
 
         <!-- Left column start -->
         <?php if ($model->profile_picture) : ?>
-            <?php echo Html::img($profilePicturePath, ['class' => 'profile-picture', 'id' => 'current-image']); ?>
+            <?php echo Html::img($profilePicturePath, ['class' => 'profile-picture img-circle elevation-2', 'id' => 'current-image', 'style' => 'height: 250px; width: 320px' ]); ?>
         <?php else : ?>
-            <?php echo Html::img($defaultImagePath, ['class' => 'profile-picture', 'id' => 'current-image']); ?>
+            <?php echo Html::img($defaultImagePath, ['class' => 'profile-picture img-circle elevation-2', 'id' => 'current-image', 'style' => 'height: 250px; width: 320px']); ?>
         <?php endif; ?>
 
-        <img id="image-preview" src="#" alt="Image Preview" class="profile-picture" style="display: none;">
+        <img id="image-preview" src="#" alt="Image Preview" class="profile-picture" style="display: none; height: 250px; width: 320px">
 
         <div class="upload-btn-wrapper">
             <?= $form->field($model, 'imageFile')->fileInput(['accept' => 'image/*', 'class' => 'upload-btn', 'label' => false])->label('Upload Picture') ?>
@@ -66,7 +66,7 @@ $this->title = '';
     .profile-picture {
         width: 40%;
         /* Use percentage */
-        max-width: 230px;
+        max-width: 260px;
         /* Add max-width for responsiveness */
         margin-top: 7%;
         /* Use percentage */
@@ -77,9 +77,10 @@ $this->title = '';
     }
 
     .upload-btn-wrapper {
-        width: 15%;
+        width: 18%;
         /* Use percentage */
-        height: 4vh;
+        height: 6vh;
+        padding-top: 6px;
         /* Use viewport height unit */
         background-color: #038EBA;
         color: #FFF;
@@ -95,6 +96,8 @@ $this->title = '';
         margin-right: 65%;
         /* Use percentage */
         margin-top: 2%;
+
+        border-radius: 10px;
         /* Use percentage */
 
     }

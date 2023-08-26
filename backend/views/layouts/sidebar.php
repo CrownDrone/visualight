@@ -21,6 +21,14 @@ $defaultImagePath = Yii::getAlias('@web') . '/images/user2.jpg';
 
 ?>
 
+<style>
+
+.pf{
+        object-fit: cover;
+    }
+
+</style>
+
 <!-- <nav style="position: fixed; top: 0; height: 100%;"> -->
 <aside class="fixed-top main-sidebar sidebar-dark-primary elevation-4" style="background-color: #2A2C2F;">
     <!-- Brand Logo -->
@@ -38,9 +46,9 @@ $defaultImagePath = Yii::getAlias('@web') . '/images/user2.jpg';
                 <?php
                 if ($model && $model->profile_picture) {
                     $profilePicturePath = Url::to(['/user-profile/get-profile-picture', 'fileName' => $model->profile_picture]);
-                    echo Html::img($profilePicturePath, ['class' => 'img-circle elevation-2', 'style' => 'height: 50px; width: 50px;']);
+                    echo Html::img($profilePicturePath, ['class' => 'pf img-circle elevation-2', 'style' => 'height: 50px; width: 50px;']);
                 } else {
-                    echo Html::img($defaultImagePath, ['class' => 'img-circle elevation-2', 'style' => 'height: 50px; width: 50px;']);
+                    echo Html::img($defaultImagePath, ['class' => 'pf img-circle elevation-2', 'style' => 'height: 50px; width: 50px;']);
                 }
                 ?>
             </div>

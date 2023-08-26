@@ -14,9 +14,9 @@ $defaultImagePath = Yii::getAlias('@web') . '/images/user2.jpg';
     <div class="profile-banner" style="background-image: url('/images/back_pic.png');">
         <div class="profile-picture">
             <?php if ($user->profile_picture) : ?>
-                <?= Html::img(Url::to(['user-profile/get-profile-picture', 'fileName' => $user->profile_picture]), ['class' => 'img-circle elevation-2', 'style' => 'height: 200px; width: 200px']) ?>
+                <?= Html::img(Url::to(['user-profile/get-profile-picture', 'fileName' => $user->profile_picture]), ['class' => 'pf img-circle elevation-2', 'style' => 'height: 200px; width: 200px']) ?>
             <?php else : ?>
-                <?= Html::img($defaultImagePath, ['class' => 'img-circle elevation-2', 'style' => 'height: 200px; width: 200px']) ?>
+                <?= Html::img($defaultImagePath, ['class' => 'pf img-circle elevation-2', 'style' => 'height: 200px; width: 200px']) ?>
             <?php endif; ?>
         </div>
     </div>
@@ -78,6 +78,10 @@ $defaultImagePath = Yii::getAlias('@web') . '/images/user2.jpg';
         top: 13em;
         text-align: center;
         margin: auto;
+    }
+
+    .pf{
+        object-fit: cover;
     }
 
     .user-info {
