@@ -60,7 +60,7 @@ $this->title = '';
         background-color:  #e6eeff;
         border-radius: 10px;
         height: 80vh;
-        box-shadow: -4px 4px 8px rgba(0, 0, 0, 0.4), 0 6px 20px 0 rgba(0, 0, 0, 0.25);
+        box-shadow: -4px 4px 8px rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.15);
         /* Use viewport height unit */
     }
 
