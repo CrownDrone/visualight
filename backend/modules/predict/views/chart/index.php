@@ -138,7 +138,7 @@ $chartDb = Yii::$app->db_data;
 $sql1 = "
     WITH RECURSIVE AllMonths AS (
     SELECT MIN(DATE_FORMAT(transaction_date, '%Y-%m-01')) AS first_month,
-           MAX(DATE_FORMAT(transaction_date, '%Y-%m-01')) AS max_month
+           DATE_FORMAT(CURDATE(), '%Y-%m-01') AS max_month
     FROM transaction
     UNION ALL
     SELECT DATE_FORMAT(DATE_ADD(first_month, INTERVAL 1 MONTH), '%Y-%m-01'),
@@ -162,7 +162,7 @@ $transactions = $chartDb->createCommand($sql1)->queryAll();
 $sql2 = "
 WITH RECURSIVE AllMonths AS (
     SELECT MIN(DATE_FORMAT(transaction_date, '%Y-%m-01')) AS first_month,
-           MAX(DATE_FORMAT(transaction_date, '%Y-%m-01')) AS max_month
+           DATE_FORMAT(CURDATE(), '%Y-%m-01') AS max_month
     FROM transaction
     UNION ALL
     SELECT DATE_FORMAT(DATE_ADD(first_month, INTERVAL 1 MONTH), '%Y-%m-01'),
@@ -188,7 +188,7 @@ $transactions2 = $chartDb->createCommand($sql2)->queryAll();
 $sql3 = "
 WITH RECURSIVE AllMonths AS (
     SELECT MIN(DATE_FORMAT(transaction_date, '%Y-%m-01')) AS first_month,
-           MAX(DATE_FORMAT(transaction_date, '%Y-%m-01')) AS max_month
+           DATE_FORMAT(CURDATE(), '%Y-%m-01') AS max_month
     FROM transaction
     UNION ALL
     SELECT DATE_FORMAT(DATE_ADD(first_month, INTERVAL 1 MONTH), '%Y-%m-01'),
@@ -212,7 +212,7 @@ $transactions3 = $chartDb->createCommand($sql3)->queryAll();
 $sql4 = "
 WITH RECURSIVE AllMonths AS (
     SELECT MIN(DATE_FORMAT(transaction_date, '%Y-%m-01')) AS first_month,
-           MAX(DATE_FORMAT(transaction_date, '%Y-%m-01')) AS max_month
+           DATE_FORMAT(CURDATE(), '%Y-%m-01') AS max_month
     FROM transaction
     UNION ALL
     SELECT DATE_FORMAT(DATE_ADD(first_month, INTERVAL 1 MONTH), '%Y-%m-01'),
@@ -239,7 +239,7 @@ $transactions4 = $chartDb->createCommand($sql4)->queryAll();
 $sql5 = "
 WITH RECURSIVE AllMonths AS (
     SELECT MIN(DATE_FORMAT(transaction_date, '%Y-%m-01')) AS first_month,
-           MAX(DATE_FORMAT(transaction_date, '%Y-%m-01')) AS max_month
+           DATE_FORMAT(CURDATE(), '%Y-%m-01') AS max_month
     FROM transaction
     UNION ALL
     SELECT DATE_FORMAT(DATE_ADD(first_month, INTERVAL 1 MONTH), '%Y-%m-01'),
@@ -265,7 +265,7 @@ $transactions5 = $chartDb->createCommand($sql5)->queryAll();
 $sql6 = "
 WITH RECURSIVE AllMonths AS (
     SELECT MIN(DATE_FORMAT(transaction_date, '%Y-%m-01')) AS first_month,
-           MAX(DATE_FORMAT(transaction_date, '%Y-%m-01')) AS max_month
+           DATE_FORMAT(CURDATE(), '%Y-%m-01') AS max_month
     FROM transaction
     UNION ALL
     SELECT DATE_FORMAT(DATE_ADD(first_month, INTERVAL 1 MONTH), '%Y-%m-01'),
