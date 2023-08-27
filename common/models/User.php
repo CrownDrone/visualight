@@ -34,6 +34,7 @@ class User extends ActiveRecord implements IdentityInterface
 
     public $newPassword;
     public $passwordInput;
+    public $password_repeat; 
     public $updatedPassword;
     public $plainPassword;
     public $existingPassword; // Add the existingPassword property
@@ -94,6 +95,8 @@ class User extends ActiveRecord implements IdentityInterface
             ['username', 'unique'],
             ['newPassword', 'string', 'min' => 6],
             ['newPassword', 'validatePasswordComplexity'],
+            ['password_repeat', 'compare', 'compareAttribute' => 'newPassword'],
+
 
             // Validation rules for the create scenario
             [['newPassword'], 'required', 'on' => self::SCENARIO_CREATE],
@@ -333,5 +336,6 @@ public function setPassword($password)
     }
 
     return false;
-}
+    }
+
 }

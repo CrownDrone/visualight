@@ -25,7 +25,8 @@
         "2amigos/yii2-chartjs-widget": "~2.0",
         "practically/yii2-chartjs": "^1.1",
         "bower-asset/chart-js": "^4.3",
-        "php-ai/php-ml": "^0.10.0"
+        "php-ai/php-ml": "^0.10.0",
+        "yiisoft/yii2-swiftmailer": "*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",

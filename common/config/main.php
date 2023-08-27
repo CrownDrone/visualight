@@ -40,6 +40,18 @@ return [
                 'settings/update' => 'userprofile/settings/update',
             ],
         ],
+        'mailer' => [
+            'class' => 'yii\swiftmailer\Mailer',
+            'transport' => [
+                'class' => 'Swift_SmtpTransport',
+                'host' => 'smtp.gmail.com',  // E.g., smtp.gmail.com for Gmail
+                'username' => 'visualight2023@gmail.com',
+                'password' => 'cudmndnxnwrgqzda',
+                'port' => '465',  // Port for TLS
+                'encryption' => 'tls',  // Use 'tls' or 'ssl' based on your SMTP server
+            ],
+            'useFileTransport' => false, // Set this to false to send real emails
+        ],
         'defaultRoute' => 'site/login',
         'controllerNamespace' => 'backend\controllers',
     ],
