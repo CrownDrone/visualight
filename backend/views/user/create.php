@@ -15,7 +15,7 @@ $this->registerCssFile(Url::to(['/css/custom.css']));
  </head>
 <div class="user-create"  style = "background: white; padding: 1rem; border-radius: 20px; box-shadow: -4px 4px 8px rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.25);">
     <?php $form = ActiveForm::begin(); ?>
-    <h2 style = "padding-bottom: 10px;"> Create User </h2>
+    <h2 style = "padding-bottom: 10px; color: #0362BA;"> Create User </h2>
 
     <?= $form->field($model, 'fullName')->textInput(['maxlength' => true]) ?>
 
