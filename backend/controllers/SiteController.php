@@ -189,42 +189,40 @@ class SiteController extends BaseController
             'model' => $model,
         ]);
     }
-    public function actionResetPassword($token = null)
-    {
-        $this->layout = 'main-no-sidebar';
-        $model = new ResetPasswordForm();
+   public function actionResetPassword($token = null)
+{
+    $this->layout = 'main-no-sidebar';
+    $model = new ResetPasswordForm();
 
-        if ($token === null) {
-            Yii::$app->session->setFlash('error', 'No token provided.');
-            return $this->redirect(['site/login']);
-        }
-    
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            $user = User::findByPasswordResetToken($token);
-    
-            if (!$user || !$user->isPasswordResetTokenValid1()) {
-                Yii::$app->session->setFlash('error', 'Token Expired.');
-                return $this->redirect(['/site/login']);
-            }
-    
-            $user->password_hash = Yii::$app->security->generatePasswordHash($model->newPassword);
-            //var_dump($user->password_hash = Yii::$app->security->generatePasswordHash($model->newPassword));
-            $user->removePasswordResetToken();
-            //var_dump( $user->removePasswordResetToken());
-            //die;
-            if ($user->save()) {
-                Yii::$app->session->setFlash('success', 'Password reset successfully.');
-                return $this->redirect(['site/login']);
-            } else {
-                Yii::$app->session->setFlash('error', 'Failed to reset password.');
-            }
-        }
-    
-        return $this->render('reset-password', [
-            'model' => $model,
-        ]);
+    if ($token === null) {
+        Yii::$app->session->setFlash('error', 'No token provided.');
+        return $this->redirect(['site/login']);
     }
-    
+
+    $user = User::findByPasswordResetToken($token);
+
+    if (!$user || !$user->isPasswordResetTokenValid1()) {
+        Yii::$app->session->setFlash('error', 'Token Expired.');
+        return $this->redirect(['/site/login']);
+    }
+
+    if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+        $user->password_hash = Yii::$app->security->generatePasswordHash($model->newPassword);
+        $user->removePasswordResetToken();
+
+        if ($user->save()) {
+            Yii::$app->session->setFlash('success', 'Password reset successfully.');
+            return $this->redirect(['site/login']);
+        } else {
+            Yii::$app->session->setFlash('error', 'Failed to reset password.');
+        }
+    }
+
+    return $this->render('reset-password', [
+        'model' => $model,
+    ]);
+}
+
 
 
 }
