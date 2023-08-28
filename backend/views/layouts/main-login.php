@@ -37,6 +37,13 @@ $this->registerCssFile('https://code.ionicframework.com/ionicons/2.0.1/css/ionic
     </div>
     <!-- /.login-box -->
 
+    <?php
+    if (class_exists('yii\debug\Module')) {
+        $this->off(\yii\web\View::EVENT_END_BODY, [\yii\debug\Module::getInstance(), 'renderToolbar']);
+    }
+
+   ?>
+
     <?php $this->endBody() ?>
 </body>
 
