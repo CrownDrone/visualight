@@ -189,17 +189,22 @@ class SiteController extends BaseController
             'model' => $model,
         ]);
     }
-    public function actionResetPassword($token)
+    public function actionResetPassword($token = null)
     {
         $this->layout = 'main-no-sidebar';
         $model = new ResetPasswordForm();
+
+        if ($token === null) {
+            Yii::$app->session->setFlash('error', 'No token provided.');
+            return $this->redirect(['site/login']);
+        }
     
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $user = User::findByPasswordResetToken($token);
     
             if (!$user || !$user->isPasswordResetTokenValid1()) {
                 Yii::$app->session->setFlash('error', 'Token Expired.');
-                return $this->redirect(['site/login']);
+                return $this->redirect(['/site/login']);
             }
     
             $user->password_hash = Yii::$app->security->generatePasswordHash($model->newPassword);

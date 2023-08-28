@@ -14,6 +14,12 @@ use yii\helpers\Html;
             </div>
         <?php endif; ?>
 
+        <?php if (Yii::$app->session->hasFlash('success')): ?>
+            <div class="alert alert-success">
+                <?= Yii::$app->session->getFlash('success') ?>
+            </div>
+        <?php endif; ?>
+
 <!-- Your login form code -->
 
 
