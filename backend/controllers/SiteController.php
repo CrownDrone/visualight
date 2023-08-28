@@ -170,6 +170,7 @@ class SiteController extends BaseController
                         ->send();
                     if ($mailer) {
                         Yii::$app->session->setFlash('success', 'Check your email for further instructions.');
+                        return $this->redirect('https://mail.google.com');
 
                     } else {
                         Yii::$app->session->setFlash('error', 'Failed to send reset email.');
