@@ -9,16 +9,12 @@ use yii\widgets\ActiveForm;
 
 $this->registerCssFile(Url::to(['/css/custom.css']));
 
-
-$this->title = 'Update User: ' . $model->username;
-$this->params['breadcrumbs'][] = ['label' => 'User List', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->username, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = 'Update';
 ?>
 
 <head><link href="path/to/font-awesome/css/all.min.css" rel="stylesheet">
  </head>
-<div class="user-update">
+<div class="user-update" style = "background: white; padding: 1rem; border-radius: 20px; box-shadow: -4px 4px 8px rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.25);">
+    <h2 style = "padding-bottom: 10px;"> Update User </h2>
 
     <?php $form = ActiveForm::begin(); ?>
     
@@ -31,10 +27,6 @@ $this->params['breadcrumbs'][] = 'Update';
     <?= $form->field($model, 'username')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'existingPassword')->passwordInput() ?>
-
-    <?= $form->field($model, 'newPassword')->passwordInput() ?>
 
     <?= $form->field($model, 'status')->dropDownList([
         $model::STATUS_ACTIVE => 'Active',

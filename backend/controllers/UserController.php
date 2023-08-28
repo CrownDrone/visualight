@@ -71,29 +71,40 @@ class UserController extends BaseController
     }
     
 
-public function actionUpdate($id)
-{
-    $model = User::findOne($id);
-
-    if (!$model) {
-        throw new NotFoundHttpException('The requested page does not exist.');
+    public function actionUpdate($id)
+    {
+        $model = User::findOne($id);
+    
+        if (!$model) {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+    
+        // Store the existing password for later use
+        $existingPassword = $model->password;
+    
+        // Set the scenario to SCENARIO_UPDATE after loading the model data
+        $model->scenario = User::SCENARIO_UPDATE;
+    
+        // Clear the password attributes to prevent them from being displayed in the form
+        $model->password = '';
+        $model->newPassword = '';    
+        if ($model->load(Yii::$app->request->post())) {
+            // Restore the existing password if it wasn't changed
+            if (empty($model->newPassword)) {
+                $model->password = $existingPassword;
+            }
+    
+            if ($model->save()) {
+                Yii::$app->session->setFlash('success', 'User updated successfully.');
+                return $this->redirect(['index']); // Change 'index' to your desired destination
+            }
+        }
+    
+        return $this->render('update', [
+            'model' => $model,
+        ]);
     }
-
-    // Set the scenario to SCENARIO_UPDATE after loading the model data
-    $model->scenario = User::SCENARIO_UPDATE;
-
-    // Unset the existingPassword attribute to prevent it from being displayed in the form
-    $model->existingPassword = '';
-
-    if ($model->load(Yii::$app->request->post()) && $model->save()) {
-        Yii::$app->session->setFlash('success', 'User updated successfully.');
-        return $this->redirect(['index']); // Change 'index' to your desired destination
-    }
-
-    return $this->render('update', [
-        'model' => $model,
-    ]);
-}
+    
 public function actionDelete($id)
 {
     $user = User::findOne($id);

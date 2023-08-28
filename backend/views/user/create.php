@@ -9,16 +9,13 @@ use yii\widgets\ActiveForm;
 
 $this->registerCssFile(Url::to(['/css/custom.css']));
 
-
-$this->title = 'Create User';
-$this->params['breadcrumbs'][] = ['label' => 'User List', 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
 ?>
 
     <head><link href="path/to/font-awesome/css/all.min.css" rel="stylesheet">
  </head>
-<div class="user-create">
+<div class="user-create"  style = "background: white; padding: 1rem; border-radius: 20px; box-shadow: -4px 4px 8px rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.25);">
     <?php $form = ActiveForm::begin(); ?>
+    <h2 style = "padding-bottom: 10px;"> Create User </h2>
 
     <?= $form->field($model, 'fullName')->textInput(['maxlength' => true]) ?>
 
