@@ -195,7 +195,7 @@ class SiteController extends BaseController
     $model = new ResetPasswordForm();
 
     if ($token === null) {
-        Yii::$app->session->setFlash('error', 'No token provided.');
+        Yii::$app->session->setFlash('error', 'Cant access the page. No token provided.  ');
         return $this->redirect(['site/login']);
     }
 
