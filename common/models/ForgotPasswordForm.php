@@ -17,4 +17,11 @@ class ForgotPasswordForm extends Model
             ['email', 'email'],
         ];
     }
+
+    public function generatePasswordResetToken()
+    {
+        $this->password_reset_token = Yii::$app->security->generateRandomString() . '_' . time();
+        $this->token_created_at = time(); // Store the token creation timestamp
+    }
+
 }

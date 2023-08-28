@@ -32,4 +32,6 @@ class ResetPasswordForm extends Model
             $this->addError($attribute, 'Password must contain special characters.');
         }
     }
+
+    
 }

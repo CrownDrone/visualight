@@ -154,6 +154,7 @@ class SiteController extends BaseController
 
     public function actionForgotPassword()
     {
+        $this->layout = 'main-no-sidebar';
         $model = new ForgotPasswordForm();
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
@@ -190,13 +191,15 @@ class SiteController extends BaseController
     }
     public function actionResetPassword($token)
     {
+        $this->layout = 'main-no-sidebar';
         $model = new ResetPasswordForm();
     
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $user = User::findByPasswordResetToken($token);
     
-            if (!$user) {
-                throw new NotFoundHttpException('Invalid password reset token.');
+            if (!$user || !$user->isPasswordResetTokenValid1()) {
+                Yii::$app->session->setFlash('error', 'Token Expired.');
+                return $this->redirect(['site/login']);
             }
     
             $user->password_hash = Yii::$app->security->generatePasswordHash($model->newPassword);
