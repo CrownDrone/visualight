@@ -189,26 +189,25 @@ class SiteController extends BaseController
     }
     public function actionResetPassword($token)
     {
-        $user = User::findByPasswordResetToken($token);
-    
-        if (!$user) {
-            throw new NotFoundHttpException('Invalid password reset token.');
-        }
-    
         $model = new ResetPasswordForm();
     
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            $user->setPassword($model->newPassword);
-            $user->removePasswordResetToken();
+            $user = User::findByPasswordResetToken($token);
     
-            // Explicitly validate and save the user model
-            if ($user->validate() && $user->save()) {
+            if (!$user) {
+                throw new NotFoundHttpException('Invalid password reset token.');
+            }
+    
+            $user->password_hash = Yii::$app->security->generatePasswordHash($model->newPassword);
+            //var_dump($user->password_hash = Yii::$app->security->generatePasswordHash($model->newPassword));
+            $user->removePasswordResetToken();
+            //var_dump( $user->removePasswordResetToken());
+            //die;
+            if ($user->save()) {
                 Yii::$app->session->setFlash('success', 'Password reset successfully.');
                 return $this->redirect(['site/login']);
             } else {
                 Yii::$app->session->setFlash('error', 'Failed to reset password.');
-                // Debug validation and save errors
-                var_dump($user->getErrors());
             }
         }
     
@@ -217,5 +216,6 @@ class SiteController extends BaseController
         ]);
     }
     
+
 
 }
