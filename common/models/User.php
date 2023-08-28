@@ -224,14 +224,17 @@ class User extends ActiveRecord implements IdentityInterface
         return $timestamp + $expire >= time();
     }
 
-     public function isPasswordResetTokenValid1()
+    public static function isPasswordResetTokenValid1($token)
     {
-        if (!$this->password_reset_token) {
+        if (empty($token)) {
             return false;
         }
-        $timestamp = (int) explode('_', $this->password_reset_token)[1];
-        return $timestamp + 120 > time(); // Check if token is valid for 2 minutes (120 seconds)
+    
+        $timestamp = (int)substr($token, strrpos($token, '_') + 1);
+        $expire = 120; // 2 minutes in seconds
+        return $timestamp + $expire >= time();
     }
+    
 
     /**
      * {@inheritdoc}

@@ -200,7 +200,7 @@ class SiteController extends BaseController
     
         $user = User::findByPasswordResetToken($token);
     
-        if (!$user || !$user->isPasswordResetTokenValid1()) {
+        if (!$user || !$user->isPasswordResetTokenValid1($token)) {
             if ($user) {
                 // Token expired and not used, set it to null
                 $user->password_reset_token = null;
