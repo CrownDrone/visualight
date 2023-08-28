@@ -46,9 +46,9 @@ use yii\helpers\Html;
                     'uncheck' => null
                 ]) ?>
             </div>
-            <div class="col-4">
                 <?= Html::submitButton('Sign In', ['class' => 'btn btn-primary btn-block']) ?>
-            </div>
+                <p style="width: 100%; display: inline-block; text-align: center; margin-top: 15px;"><?= Html::a('Forgot Password?', ['/site/forgot-password']) ?></p>
+
         </div>
 
         <?php \yii\bootstrap5\ActiveForm::end(); ?>
