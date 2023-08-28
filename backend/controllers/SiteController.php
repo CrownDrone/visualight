@@ -166,7 +166,7 @@ class SiteController extends BaseController
                     $mailer = Yii::$app->mailer->compose()
                         ->setTo($user->email)
                         ->setFrom([Yii::$app->params['adminEmail'] => 'Visualight Team'])
-                        ->setSubject('Password reset for ' . Yii::$app->name)
+                        ->setSubject('Password reset for Account')
                         ->setTextBody("To reset your password, click on this link: $resetLink. Password token will expire in 2 minutes.")
                         ->send();
                     if ($mailer) {
