@@ -170,8 +170,9 @@ class SiteController extends BaseController
                         ->setTextBody("To reset your password, click on this link: $resetLink. Password token will expire in 2 minutes.")
                         ->send();
                     if ($mailer) {
-                        return $this->redirect('https://mail.google.com');
-
+                        Yii::$app->session->setFlash('success', 'Check your email to reset password.');
+                        return $this->redirect(['site/login']);
+                        
                     } else {
                         Yii::$app->session->setFlash('error', 'Failed to send reset email.');
                         die;
