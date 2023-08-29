@@ -49,6 +49,7 @@ class SiteController extends BaseController
                     'actions' => ['logout'],
                     'roles' => ['@'], //everyone allowed
                 ],
+                
                 ],
             ],
             'verbs' => [
@@ -170,8 +171,7 @@ class SiteController extends BaseController
                         ->setTextBody("To reset your password, click on this link: $resetLink. Password token will expire in 2 minutes.")
                         ->send();
                     if ($mailer) {
-                        Yii::$app->session->setFlash('success', 'Check your email to reset password.');
-                        return $this->redirect(['site/login']);
+                        return $this->redirect(['site/success']);
                         
                     } else {
                         Yii::$app->session->setFlash('error', 'Failed to send reset email.');
@@ -226,6 +226,12 @@ class SiteController extends BaseController
         return $this->render('reset-password', [
             'model' => $model,
         ]);
+    }
+
+    public function actionSuccess()
+    {
+        $this->layout = 'main-no-sidebar'; // Set the layout for this action
+        return $this->render('success');
     }
     
 

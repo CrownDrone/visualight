@@ -84,6 +84,7 @@ return [
                'profile' => 'user-profile/view',
                 'profile/update' => 'user-profile/update',
                 'terms' => 'terms/terms/index',
+                'site/success' => 'site/success',
                 // 'survey/survey-form' => 'survey/default/survey-form',
 
             ],
