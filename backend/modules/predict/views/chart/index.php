@@ -422,6 +422,11 @@ function updateChart1(data) {
         }
 
         updateChart(predictedLabels, predictedValues);
+
+        if(totalPredictedSum <= 0){
+            totalPredictedSum = 0;
+        }
+
         updateChart1([totalPredictedSum, currentTransactionSum]);
 
 
@@ -578,6 +583,10 @@ function updateChart3(data) {
 
         updateChart2(predictedIncomeLabels, predictedIncomeValues)
 
+        if(totalPredictedIncomeLoop <= 0){
+            totalPredictedIncomeLoop = 0;
+        }
+
         updateChart3([totalPredictedIncomeLoop, currentTotalIncome]);
     });
 </script>
@@ -720,6 +729,10 @@ function updateChart5(data) {
         }
 
         updateChart4(predictedLabels, predictedValues);
+
+        if(totalPredictedSum <= 0){
+            totalPredictedSum = 0;
+        }
         updateChart5([totalPredictedSum, currentTransactionSum]);
 
     });
@@ -876,6 +889,10 @@ function updateChart7(data) {
 
         updateChart6(predictedIncomeLabels, predictedIncomeValues)
 
+        if(totalPredictedIncomeLoop <= 0){
+            totalPredictedIncomeLoop = 0;
+        }
+
         updateChart7([totalPredictedIncomeLoop, currentTotalIncome]);
     });
 </script>
@@ -1018,6 +1035,11 @@ function updateChart9(data) {
             var predictionDate = new Date(predictedLabels[j]);
         }
         updateChart8(predictedLabels, predictedValues);
+
+        if(totalPredictedSum <= 0){
+            totalPredictedSum = 0;
+        }
+
         updateChart9([totalPredictedSum, currentTransactionSum]);
 
     });
@@ -1173,6 +1195,11 @@ function updateChart11(data) {
         }
 
         updateChart10(predictedIncomeLabels, predictedIncomeValues)
+
+        if(totalPredictedIncomeLoop <= 0){
+            totalPredictedIncomeLoop = 0;
+        }
+
 
         updateChart11([totalPredictedIncomeLoop, currentTotalIncome]);
     });
