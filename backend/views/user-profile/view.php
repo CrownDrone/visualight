@@ -132,8 +132,8 @@ $defaultImagePath = Yii::getAlias('@web') . '/images/user2.jpg';
 
     .btn-primary {
         position: absolute;
-        bottom: -55px; /* Adjust this value as needed */
-        right: 20px;
+        bottom: 35px; /* Adjust this value as needed */
+        right: 5%;
         width: 180px;
         max-height: 2000px;
 
@@ -178,8 +178,8 @@ $defaultImagePath = Yii::getAlias('@web') . '/images/user2.jpg';
 
         .btn-primary {
             position:absolute;
-            bottom: -55px;
-            right: 10px;
+            bottom: 5px;
+            right: 25%;
             max-width: 180px;
             
         }
