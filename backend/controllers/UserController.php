@@ -57,7 +57,7 @@ class UserController extends BaseController
     
                     if ($model->save()) {
                         Yii::$app->session->setFlash('success', 'User created successfully.');
-                        return $this->redirect(['index']);
+                        return $this->redirect(['/admin/assignment/view', 'id' => $model->id]);
                     } else {
                         Yii::$app->session->setFlash('error', 'Error saving user data.');
                     }
