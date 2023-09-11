@@ -15,21 +15,25 @@ return [
         'admin' => [
                     'class' => 'mdm\admin\Module',
                   ],
+        'nmd' => [
+                    'class' => 'app\modules\nmd\Module',
+                ],
+        'predict' => [
+                    'class' => 'app\modules\predict\Module',
+                ], 
+        'std' => [
+                    'class' => 'app\modules\std\Module',
+                ],
+                'test' => [
+                    'class' => 'app\modules\test\Module',
+                ],
         'chart' => [
                     'class' => 'app\modules\chart\Module',
                 ],
        'userprofile' => [
                     'class' => 'common\modules\userprofile\Module',
                 ],
-        'nmd' => [
-                    'class' => 'app\modules\nmd\Module',
-                ],
-        'predict' => [
-                    'class' => 'app\modules\predict\Module',
-        ], 
-        'std' => [
-                    'class' => 'app\modules\std\Module',
-                ],
+      
     ],
     'components' => [
         'mailer' => [
