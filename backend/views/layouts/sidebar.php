@@ -116,11 +116,6 @@ $defaultImagePath = Yii::getAlias('@web') . '/images/user2.jpg';
                                 'active' => Yii::$app->controller->id == 'permission',
                             ],
                             [
-                                'label' => 'Rule',
-                                'url'   => ['/admin/rule/index'],
-                                'active' => Yii::$app->controller->id == 'rule',
-                            ],
-                            [
                                 'label' => 'Route',
                                 'url'   => ['/admin/route/index'],
                                 'active' => Yii::$app->controller->id == 'route',
