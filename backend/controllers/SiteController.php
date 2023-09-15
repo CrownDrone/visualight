@@ -168,7 +168,7 @@ class SiteController extends BaseController
                         ->setTo($user->email)
                         ->setFrom([Yii::$app->params['adminEmail'] => 'Visualight Team'])
                         ->setSubject('Password reset for Account')
-                        ->setTextBody("To reset your password, click on this link: $resetLink. Password token will expire in 2 minutes.")
+                        ->setTextBody("To reset your password, click on this link: $resetLink. Password token will expire in 10 minutes.")
                         ->send();
                     if ($mailer) {
                         return $this->redirect(['site/success']);

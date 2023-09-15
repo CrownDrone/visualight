@@ -231,7 +231,7 @@ class User extends ActiveRecord implements IdentityInterface
         }
     
         $timestamp = (int)substr($token, strrpos($token, '_') + 1);
-        $expire = 120; // 2 minutes in seconds
+        $expire = 600; // 10 minutes in seconds
         return $timestamp + $expire >= time();
     }
     
