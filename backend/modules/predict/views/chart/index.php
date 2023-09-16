@@ -134,7 +134,7 @@ use yii\web\View;
 
 $chartDb = Yii::$app->db_data;
 
-
+//uwu
 $sql1 = "
 WITH RECURSIVE AllMonths AS (
     SELECT MIN(DATE_FORMAT(transaction_date, '%Y-%m-01')) AS first_month,
