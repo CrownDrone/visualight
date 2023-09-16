@@ -4,32 +4,43 @@ namespace app\modules\test\controllers;
 
 use app\modules\test\models\Transaction;
 use app\modules\test\models\TransactionSearch;
+use backend\controllers\BaseController;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
+
 
 /**
  * TransactionController implements the CRUD actions for Transaction model.
  */
-class TransactionController extends Controller
+class TransactionController extends BaseController
 {
     /**
      * @inheritDoc
      */
-    public function behaviors()
-    {
-        return array_merge(
-            parent::behaviors(),
-            [
-                'verbs' => [
-                    'class' => VerbFilter::className(),
-                    'actions' => [
-                        'delete' => ['POST'],
-                    ],
+public function behaviors()
+{
+    return [
+        'verbs' => [
+            'class' => VerbFilter::className(),
+            'actions' => [
+                'delete' => ['POST'],
+            ],
+        ],
+        'access' => [
+            'class' => AccessControl::className(),
+            'only' => ['index', 'login'], // List the actions you want to restrict
+            'rules' => [
+                [
+                    'allow' => true,
+                    'actions' => ['index', 'login'], // Actions to apply this rule to
+                    'roles' => ['ADMIN'], // Role(s) that are allowed to access these actions
                 ],
-            ]
-        );
-    }
+            ],
+        ],
+    ];
+}
 
     /**
      * Lists all Transaction models.
