@@ -1,9 +1,11 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 
 /** @var yii\web\View $this */
 /** @var app\modules\dbeditor\Models\Customer $model */
+$this->registerCssFile(Url::to(['/css/custom.css']));
 
 $this->title = 'Update Customer: ' . $model->id;
 $this->params['breadcrumbs'][] = ['label' => 'Customers', 'url' => ['index']];

@@ -17,7 +17,7 @@ return [ //routes, if you cannot see your created route gamitin nyo this sa term
             'class' => 'app\modules\dbeditor\Module',
         ],
         'test' => [//aka transaction, si duke kasi test nilagay
-            'class' => 'app\modules\test\Module',
+            'class' => 'app\modules\dbeditor\Module',
         ],
         'gii' => [//prevents users from accessing gii dev
             'class' => 'yii\gii\Module',
@@ -33,9 +33,6 @@ return [ //routes, if you cannot see your created route gamitin nyo this sa term
         ],
         'std' => [
             'class' => 'app\modules\std\Module',
-        ],
-        'test' => [
-            'class' => 'app\modules\test\Module',
         ],
         'chart' => [
             'class' => 'app\modules\chart\Module',

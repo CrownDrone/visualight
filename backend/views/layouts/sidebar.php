@@ -87,44 +87,50 @@ $defaultImagePath = Yii::getAlias('@web') . '/images/user2.jpg';
                     [
                         'label' => 'Database Editor',
                         'icon' => 'address-card',
-
                         'visible' => Helper::checkRoute('/admin/index'),
                         'items' => [
                             [
                                 'label' => 'Customer',
                                 'url' => ['/dbeditor/customer'],
-                                'active' => Yii::$app->controller->route === '/dbeditor/controllers/CustomerController',
+                                'visible' => Helper::checkRoute('dbeditor/customer'),
+                                'active' => Yii::$app->controller->getUniqueID() === 'dbeditor/customer',
 
                             ],
                             [
                                 'label' => 'Customer Type',
                                 'url'   => ['/dbeditor/customer-type'],
-                                'active' => Yii::$app->controller->id === '/dbeditor/controllers/CustomerTypeController',
+                                'visible' => Helper::checkRoute('dbeditor/customer-type'),
+                                'active' => Yii::$app->controller->getUniqueID() === 'dbeditor/customer-type',
                             ],
                             [
                                 'label' => 'Division',
                                 'url'   => ['/dbeditor/division'],
-                                'active' => Yii::$app->controller->id === '/dbeditor/controllers/DivisionController',
+                                'visible' => Helper::checkRoute('dbeditor/division'),
+                                'active' => Yii::$app->controller->getUniqueID() === 'dbeditor/division',
                             ],
                             [
                                 'label' => 'Payment Method',
                                 'url'   => ['/dbeditor/payment-method'],
-                                'active' => Yii::$app->controller->id === '/dbeditor/controllers/PaymentMethodController',
+                                'visible' => Helper::checkRoute('dbeditor/payment-method'),
+                                'active' => Yii::$app->controller->getUniqueID() === 'dbeditor/payment-method',
                             ],
                             [
                                 'label' => 'Transactions',
-                                'url'   => ['/test/transaction'],
-                                'active' => Yii::$app->controller->id === '/test/controllers/TransactionStatusController',
+                                'url'   => ['/dbeditor/transaction'],
+                                'visible' => Helper::checkRoute('dbeditor/transaction'),
+                                'active' => Yii::$app->controller->getUniqueID() === 'dbeditor/transaction',
                             ],
                             [
                                 'label' => 'Transaction Status',
                                 'url'   => ['/dbeditor/transaction-status'],
-                                'active' => Yii::$app->controller->id === '/dbeditor/controllers/TransactionStatusController',
+                                'visible' => Helper::checkRoute('dbeditor/transaction-status'),
+                                'active' => Yii::$app->controller->getUniqueID() === 'dbeditor/transaction-status',
                             ],
                             [
                                 'label' => 'Transaction Type',
                                 'url'   => ['/dbeditor/transaction-type'],
-                                'active' => Yii::$app->controller->id === '/dbeditor/controllers/TransactionTypeController',
+                                'visible' => Helper::checkRoute('dbeditor/transaction-type'),
+                                'active' => Yii::$app->controller->getUniqueID() === 'dbeditor/transaction-type',
                             ],
                         ],
                     ],

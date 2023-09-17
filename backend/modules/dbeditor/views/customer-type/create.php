@@ -4,6 +4,7 @@ use yii\helpers\Html;
 
 /** @var yii\web\View $this */
 /** @var app\modules\dbeditor\Models\CustomerType $model */
+$this->registerCssFile(\yii\helpers\Url::to(['/css/custom.css']));
 
 $this->title = 'Create Customer Type';
 $this->params['breadcrumbs'][] = ['label' => 'Customer Types', 'url' => ['index']];

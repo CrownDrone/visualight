@@ -4,6 +4,7 @@ use yii\helpers\Html;
 
 /** @var yii\web\View $this */
 /** @var app\modules\dbeditor\Models\Division $model */
+$this->registerCssFile(\yii\helpers\Url::to(['/css/custom.css']));
 
 $this->title = 'Create Division';
 $this->params['breadcrumbs'][] = ['label' => 'Divisions', 'url' => ['index']];

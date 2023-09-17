@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\test\Models;
+namespace app\modules\dbeditor\Models;
 
 use Yii;
 
@@ -42,7 +42,7 @@ class Transaction extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['transaction_number', 'customer_id', 'amount', 'transaction_type', 'transaction_date', 'transaction_status', 'division'], 'required'],
+            [['transaction_number', 'customer_id', 'amount', 'transaction_type', 'transaction_date', 'transaction_status','payment_method','payment_date' ,'division'], 'required'],
             [['transaction_number', 'customer_id', 'transaction_type', 'transaction_status', 'payment_method', 'division'], 'integer'],
             [['amount'], 'number'],
             [['transaction_date', 'payment_date'], 'safe'],

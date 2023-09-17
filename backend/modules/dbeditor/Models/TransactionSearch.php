@@ -1,10 +1,10 @@
 <?php
 
-namespace app\modules\test\models;
+namespace app\modules\dbeditor\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\modules\test\models\Transaction;
+use app\modules\dbeditor\models\Transaction;
 
 /**
  * TransactionSearch represents the model behind the search form of `app\modules\test\models\Transaction`.

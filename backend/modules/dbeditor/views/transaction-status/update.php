@@ -4,6 +4,7 @@ use yii\helpers\Html;
 
 /** @var yii\web\View $this */
 /** @var app\modules\dbeditor\Models\TransactionStatus $model */
+$this->registerCssFile(\yii\helpers\Url::to(['/css/custom.css']));
 
 $this->title = 'Update Transaction Status: ' . $model->id;
 $this->params['breadcrumbs'][] = ['label' => 'Transaction Statuses', 'url' => ['index']];

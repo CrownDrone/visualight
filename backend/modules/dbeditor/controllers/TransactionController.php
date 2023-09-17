@@ -1,9 +1,9 @@
 <?php
 
-namespace app\modules\test\controllers;
+namespace app\modules\dbeditor\controllers;
 
-use app\modules\test\models\Transaction;
-use app\modules\test\models\TransactionSearch;
+use app\modules\dbeditor\models\TransactionSearch;
+use app\modules\dbeditor\models\Transaction;
 use backend\controllers\BaseController;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;

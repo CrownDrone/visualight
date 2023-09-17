@@ -4,6 +4,7 @@ use yii\helpers\Html;
 
 /** @var yii\web\View $this */
 /** @var app\modules\dbeditor\Models\TransactionType $model */
+$this->registerCssFile(\yii\helpers\Url::to(['/css/custom.css']));
 
 $this->title = 'Update Transaction Type: ' . $model->id;
 $this->params['breadcrumbs'][] = ['label' => 'Transaction Types', 'url' => ['index']];

@@ -1,6 +1,6 @@
 <?php
 
-use app\modules\test\models\Transaction;
+use app\modules\dbeditor\models\Transaction;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;

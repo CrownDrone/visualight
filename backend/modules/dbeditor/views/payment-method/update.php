@@ -4,6 +4,7 @@ use yii\helpers\Html;
 
 /** @var yii\web\View $this */
 /** @var app\modules\dbeditor\Models\PaymentMethod $model */
+$this->registerCssFile(\yii\helpers\Url::to(['/css/custom.css']));
 
 $this->title = 'Update Payment Method: ' . $model->id;
 $this->params['breadcrumbs'][] = ['label' => 'Payment Methods', 'url' => ['index']];
