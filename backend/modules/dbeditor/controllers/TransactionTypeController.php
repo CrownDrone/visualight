@@ -4,6 +4,7 @@ namespace app\modules\dbeditor\controllers;
 
 use app\modules\dbeditor\Models\TransactionType;
 use app\modules\dbeditor\Models\TransactionTypeSearch;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -18,18 +19,27 @@ class TransactionTypeController extends Controller
      */
     public function behaviors()
     {
-        return array_merge(
-            parent::behaviors(),
-            [
-                'verbs' => [
-                    'class' => VerbFilter::className(),
-                    'actions' => [
-                        'delete' => ['POST'],
+        return [
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'delete' => ['POST'],
+                ],
+            ],
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['index', 'login'], // List the actions you want to restrict
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'actions' => ['index', 'login'], // Actions to apply this rule to
+                        'permissions' => ['TransactionType_Permission','dbPermission'] // Role(s) that are allowed to access these actions
                     ],
                 ],
-            ]
-        );
+            ],
+        ];
     }
+    
 
     /**
      * Lists all TransactionType models.

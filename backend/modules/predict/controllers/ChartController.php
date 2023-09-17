@@ -23,7 +23,7 @@ class ChartController extends BaseController
                   [
                       'allow' => true,
                       'actions' => ['index'],
-                      'roles' => ['ADMIN','TOP MANAGEMENT'], //add only admin allowed
+                      'permissions' => ['canPredict'], //add only admin allowed
                   ]
                 ],
             ],

@@ -23,7 +23,7 @@ class ChartController extends BaseController
                   [
                       'allow' => true,
                       'actions' => ['index'],
-                      'roles' => ['ADMIN','STD-DIVISION HEAD'], 
+                      'permissions' => ['STDpermission'], 
                   ]
                 ],
             ],

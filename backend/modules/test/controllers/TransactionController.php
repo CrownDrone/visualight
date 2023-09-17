@@ -35,7 +35,7 @@ public function behaviors()
                 [
                     'allow' => true,
                     'actions' => ['index', 'login'], // Actions to apply this rule to
-                    'roles' => ['ADMIN'], // Role(s) that are allowed to access these actions
+                    'permissions' => ['Transaction_Permission','dbPermission'] // Role(s) that are allowed to access these actions
                 ],
             ],
         ],

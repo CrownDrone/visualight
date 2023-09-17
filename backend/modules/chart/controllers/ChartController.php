@@ -23,7 +23,7 @@ class ChartController extends BaseController
                   [
                       'allow' => true,
                       'actions' => ['index'],
-                      'roles' => ['ADMIN','USER'], //add only admin allowed
+                      'permissions' => ['practiceChart'], //add only admin allowed
                   ]
                 ],
             ],

@@ -23,7 +23,7 @@ class ChartController extends BaseController
                   [
                       'allow' => true,
                       'actions' => ['index'],
-                      'roles' => ['ADMIN','NMD-DIVISION HEAD'], //add only admin allowed
+                      'permissions' => ['NMDpermission'], //add only admin allowed
                   ]
                 ],
             ],
