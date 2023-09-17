@@ -6,34 +6,44 @@ $params = array_merge(
     require __DIR__ . '/params-local.php'
 );
 
-return [
+return [ //routes, if you cannot see your created route gamitin nyo this sa terminal oh my gosh "php yii cache/flush-all" without quote
     'id' => 'app-backend',
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'backend\controllers',
     'bootstrap' => ['log'],
     'modules' => [
+
+        'dbeditor' => [
+            'class' => 'app\modules\dbeditor\Module',
+        ],
+        'test' => [//aka transaction, si duke kasi test nilagay
+            'class' => 'app\modules\test\Module',
+        ],
+        'gii' => [//prevents users from accessing gii dev
+            'class' => 'yii\gii\Module',
+        ],
         'admin' => [
-                    'class' => 'mdm\admin\Module',
-                  ],
+            'class' => 'mdm\admin\Module',
+        ],
         'nmd' => [
-                    'class' => 'app\modules\nmd\Module',
-                ],
+            'class' => 'app\modules\nmd\Module',
+        ],
         'predict' => [
-                    'class' => 'app\modules\predict\Module',
-                ], 
+            'class' => 'app\modules\predict\Module',
+        ],
         'std' => [
-                    'class' => 'app\modules\std\Module',
-                ],
-                'test' => [
-                    'class' => 'app\modules\test\Module',
-                ],
+            'class' => 'app\modules\std\Module',
+        ],
+        'test' => [
+            'class' => 'app\modules\test\Module',
+        ],
         'chart' => [
-                    'class' => 'app\modules\chart\Module',
-                ],
-       'userprofile' => [
-                    'class' => 'common\modules\userprofile\Module',
-                ],
-      
+            'class' => 'app\modules\chart\Module',
+        ],
+        'userprofile' => [
+            'class' => 'common\modules\userprofile\Module',
+        ],
+
     ],
     'components' => [
         'mailer' => [
@@ -83,15 +93,17 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-        
+
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-               'profile' => 'user-profile/view',
+                'gii' => 'gii',
+                'profile' => 'user-profile/view',
                 'profile/update' => 'user-profile/update',
                 'terms' => 'terms/terms/index',
                 'site/success' => 'site/success',
+                'dbeditor' => 'dbeditor/default/index',
                 // 'survey/survey-form' => 'survey/default/survey-form',
 
             ],
@@ -103,7 +115,7 @@ return [
             'assignmentTable' => 'auth_assignment',
             'ruleTable' => 'auth_rule',
         ],
-        
+
     ],
     'params' => $params,
 ];

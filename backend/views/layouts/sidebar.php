@@ -82,7 +82,53 @@ $defaultImagePath = Yii::getAlias('@web') . '/images/user2.jpg';
                 'items' => [
 
                     ['label' => 'logout', 'url' => ['site/logout'], 'icon' => 'sign-in-alt', 'visible' => Yii::$app->user->isGuest],
-                    ['label' => 'Accounts', 'header' => true, 'visible' => Helper::checkRoute('/admin/index'),],
+                    // ['label' => 'CUSTOM', 'header' => true, 'visible' => Helper::checkRoute('/admin/index'),], kung may maisip kayo ilagay palitan nyo yun CUSTOM
+
+                    [
+                        'label' => 'Database Editor',
+                        'icon' => 'address-card',
+
+                        'visible' => Helper::checkRoute('/admin/index'),
+                        'items' => [
+                            [
+                                'label' => 'Customer',
+                                'url' => ['/dbeditor/customer'],
+                                'active' => Yii::$app->controller->route === '/dbeditor/controllers/CustomerController',
+
+                            ],
+                            [
+                                'label' => 'Customer Type',
+                                'url'   => ['/dbeditor/customer-type'],
+                                'active' => Yii::$app->controller->id === '/dbeditor/controllers/CustomerTypeController',
+                            ],
+                            [
+                                'label' => 'Division',
+                                'url'   => ['/dbeditor/division'],
+                                'active' => Yii::$app->controller->id === '/dbeditor/controllers/DivisionController',
+                            ],
+                            [
+                                'label' => 'Payment Method',
+                                'url'   => ['/dbeditor/payment-method'],
+                                'active' => Yii::$app->controller->id === '/dbeditor/controllers/PaymentMethodController',
+                            ],
+                            [
+                                'label' => 'Transactions',
+                                'url'   => ['/test/transaction'],
+                                'active' => Yii::$app->controller->id === '/test/controllers/TransactionStatusController',
+                            ],
+                            [
+                                'label' => 'Transaction Status',
+                                'url'   => ['/dbeditor/transaction-status'],
+                                'active' => Yii::$app->controller->id === '/dbeditor/controllers/TransactionStatusController',
+                            ],
+                            [
+                                'label' => 'Transaction Type',
+                                'url'   => ['/dbeditor/transaction-type'],
+                                'active' => Yii::$app->controller->id === '/dbeditor/controllers/TransactionTypeController',
+                            ],
+                        ],
+                    ],
+
                     [
                         'label' => 'Accounts',
                         'url' => ['/admin/index'],
@@ -95,27 +141,26 @@ $defaultImagePath = Yii::getAlias('@web') . '/images/user2.jpg';
                                 'icon' => 'star',
                                 'url' => ['/user/index'],
                                 'active' => Yii::$app->controller->route === 'user/index',
-
                             ],
                             [
                                 'label' => 'Assignment',
                                 'url'   => ['/admin/assignment/index'],
-                                'active' => Yii::$app->controller->id == 'assignment',
+                                'active' => Yii::$app->controller->id === 'assignment',
                             ],
                             [
                                 'label' => 'Role',
                                 'url'   => ['/admin/role/index'],
-                                'active' => Yii::$app->controller->id == 'role',
+                                'active' => Yii::$app->controller->id === 'role',
                             ],
                             [
                                 'label' => 'Permission',
                                 'url'   => ['/admin/permission/index'],
-                                'active' => Yii::$app->controller->id == 'permission',
+                                'active' => Yii::$app->controller->id === 'permission',
                             ],
                             [
                                 'label' => 'Route',
                                 'url'   => ['/admin/route/index'],
-                                'active' => Yii::$app->controller->id == 'route',
+                                'active' => Yii::$app->controller->id === 'route',
                             ],
                         ],
                     ],
