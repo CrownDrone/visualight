@@ -137,9 +137,7 @@ $defaultImagePath = Yii::getAlias('@web') . '/images/user2.jpg';
 
                     [
                         'label' => 'Accounts',
-                        'url' => ['/admin/index'],
                         'icon' => 'user',
-
                         'visible' => Helper::checkRoute('/admin/index'),
                         'items' => [
                             [
