@@ -28,6 +28,12 @@ class User extends ActiveRecord implements IdentityInterface
     const STATUS_DELETED = 0;
     const STATUS_INACTIVE = 9;
     const STATUS_ACTIVE = 10;
+
+    const STATUS_EMAIL_NOT_VERIFIED = 5;
+
+    const STATUS_NON_VERIFIED_EMAIL = 15;
+    
+
     const SCENARIO_UPDATE = 'update';
     const SCENARIO_CREATE = 'create';
 
@@ -38,6 +44,8 @@ class User extends ActiveRecord implements IdentityInterface
     public $updatedPassword;
     public $plainPassword;
     public $existingPassword; // Add the existingPassword property
+
+    public $email_verified;
 
     /**
      * {@inheritdoc}
@@ -56,6 +64,19 @@ class User extends ActiveRecord implements IdentityInterface
             TimestampBehavior::class,
         ];
     }
+    /**
+     * Finds a user by their username or email.
+     *
+     * @param string $usernameOrEmail The username or email to search for.
+     * @return User|null The User model, or null if not found.
+     */
+
+       public static function findByUsernameOrEmail($usernameOrEmail)
+    {
+        return static::find()
+            ->where(['or', ['username' => $usernameOrEmail], ['email' => $usernameOrEmail]])
+            ->one();
+    }
 
     // common\models\User.php
 
@@ -65,6 +86,8 @@ class User extends ActiveRecord implements IdentityInterface
             self::STATUS_ACTIVE => 'Active',
             self::STATUS_INACTIVE => 'Inactive',
             self::STATUS_DELETED => 'Deleted',
+             self::STATUS_EMAIL_NOT_VERIFIED => 'Email Not Verified', // Status label for non-verified email accounts
+            self::STATUS_NON_VERIFIED_EMAIL => 'Non-Verified Email',
         ];
     }
 
@@ -88,8 +111,8 @@ class User extends ActiveRecord implements IdentityInterface
         return [
             // Other rules...
             [['username', 'email','fullName','address','contactNumber'], 'required'],
-            ['status', 'default', 'value' => self::STATUS_INACTIVE],
-            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE, self::STATUS_DELETED]],
+            ['status', 'default', 'value' => self::STATUS_EMAIL_NOT_VERIFIED],
+            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE, self::STATUS_DELETED, self::STATUS_EMAIL_NOT_VERIFIED]],
             ['email', 'email'],
             ['email', 'unique'],
             ['username', 'unique'],
@@ -162,9 +185,10 @@ class User extends ActiveRecord implements IdentityInterface
      * @return static|null
      */
     public static function findByUsername($username)
-    {
-        return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
-    }
+        {
+            return static::findOne(['username' => $username, 'status' => [self::STATUS_ACTIVE]]);
+        }
+
 
     /**
      * Finds user by password reset token
@@ -177,13 +201,13 @@ class User extends ActiveRecord implements IdentityInterface
         if (!static::isPasswordResetTokenValid($token)) {
             return null;
         }
-
+    
         return static::findOne([
             'password_reset_token' => $token,
-            'status' => self::STATUS_ACTIVE,
+            'status' => [self::STATUS_ACTIVE ],
         ]);
     }
-
+    
     public function validatePasswordComplexity($attribute, $params)
     {
         // Regular expression to check if the password contains special characters
@@ -203,8 +227,13 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return static::findOne([
             'verification_token' => $token,
-            'status' => self::STATUS_INACTIVE,
+            'status' => self::STATUS_EMAIL_NOT_VERIFIED,
         ]);
+    }
+
+    public function removeEmailVerificationToken()
+    {
+        $this->verification_token = null;
     }
 
     /**
@@ -328,13 +357,21 @@ public function setPassword($password)
 
     public static function findByEmail($email)
     {
-        return static::findOne(['email' => $email, 'status' => self::STATUS_ACTIVE]);
+        return static::findOne([
+            'email' => $email,
+            'status' => [self::STATUS_ACTIVE, self::STATUS_EMAIL_NOT_VERIFIED],
+        ]);
     }
 
+
     public static function findIdentity($id)
-    {
-        return static::findOne(['id' => $id, 'status' => self::STATUS_ACTIVE]);
-    }
+{
+    return static::findOne([
+        'id' => $id,
+        'status' => [self::STATUS_ACTIVE, self::STATUS_EMAIL_NOT_VERIFIED],
+    ]);
+}
+
 
     public function beforeSave($insert)
 {

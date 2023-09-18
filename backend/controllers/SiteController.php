@@ -96,21 +96,31 @@ class SiteController extends BaseController
             // Redirect to the homepage or dashboard since the user is already logged in.
             return $this->goHome();
         }
-
+    
         $this->layout = 'main-login';
-
+    
         $model = new LoginForm();
-
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            // After successful login, check if the user has accepted the terms
-            $currentUser = Yii::$app->user->identity;
-            if ($currentUser !== null) {
-                // User is authenticated, check if they have accepted the terms
-                $termsAccepted = !empty($currentUser->tos);
-
-                // Check if the user has the role 'ADMIN'
+    
+        if ($model->load(Yii::$app->request->post())) {
+            // Find the user by their username or email
+            $user = User::findByUsernameOrEmail($model->username);
+    
+            if ($user && $user->validatePassword($model->password)) {
+                // Check if the user's email is verified
+                if ($user->status == User::STATUS_EMAIL_NOT_VERIFIED) {
+                    // User's email is not verified, display an error message
+                    Yii::$app->session->setFlash('error', 'Email is not yet verified. Please check your email for verification instructions.');
+                    return $this->goHome(); // Redirect to the login page with an error message
+                }
+    
+                // Log in the user
+                Yii::$app->user->login($user, $model->rememberMe ? 3600 * 24 * 30 : 0);
+    
+                // Redirect based on roles and terms acceptance
                 if (Yii::$app->user->can('ADMIN') || Yii::$app->user->can('USER')) {
-                    // Redirect based on terms acceptance
+                    // After successful login, check if the user has accepted the terms
+                    $termsAccepted = !empty($user->tos);
+    
                     if ($termsAccepted) {
                         return $this->goHome(); // Redirect to homepage or dashboard
                     } else {
@@ -120,26 +130,26 @@ class SiteController extends BaseController
                     // Log out non-ADMIN users and terminate their session
                     Yii::$app->user->logout();
                     Yii::$app->session->destroy();
-
+    
                     // Set an error flash message
                     Yii::$app->session->setFlash('error', 'You are not authorized to access this site.');
-
+    
                     // Redirect to the login page
                     return $this->redirect(['/site/login']);
                 }
             } else {
-                // The user identity is null, handle the case appropriately
-                return $this->redirect(['/site/login']); // Redirect to the login page
+                // Invalid username or password, display an error message
+                Yii::$app->session->setFlash('error', 'Invalid username or password.');
             }
         }
-
-        $model->password = '';
-
+    
         return $this->render('login', [
             'model' => $model,
         ]);
     }
-
+    
+    
+    
     /**
      * Logout action.
      *
@@ -174,7 +184,7 @@ class SiteController extends BaseController
                         return $this->redirect(['site/success']);
                         
                     } else {
-                        Yii::$app->session->setFlash('error', 'Failed to send reset email.');
+                        Yii::$app->session->setFlash('error', 'Failed to send reset Password.');
                         die;
                     }
                 } else {
@@ -233,6 +243,24 @@ class SiteController extends BaseController
         $this->layout = 'main-no-sidebar'; // Set the layout for this action
         return $this->render('success');
     }
+
+    public function actionVerifyEmail($token)
+{
+    $user = User::findByVerificationToken($token);
+
+    if ($user !== null) {
+        $user->status = User::STATUS_ACTIVE; // Mark the account as verified
+        $user->removeEmailVerificationToken(); // Remove the verification token
+        $user->save(false); // Save the user without validation
+
+        Yii::$app->session->setFlash('success', 'Your email has been verified. You can now log in.');
+    } else {
+        Yii::$app->session->setFlash('error', 'Invalid verification token.');
+    }
+
+    return $this->redirect(['site/login']); // Redirect to the login page
+}
+
     
 
 

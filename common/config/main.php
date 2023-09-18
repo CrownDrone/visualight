@@ -38,6 +38,8 @@ return [
                 'profile/update' => 'userprofile/profile/update',
                 'settings' => 'userprofile/settings/view',
                 'settings/update' => 'userprofile/settings/update',
+                'assignment/view/<id:\d+>' => 'assignment/view',
+
             ],
         ],
         'mailer' => [

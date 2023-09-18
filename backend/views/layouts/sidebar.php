@@ -140,6 +140,12 @@ $defaultImagePath = Yii::getAlias('@web') . '/images/user2.jpg';
                         'icon' => 'user',
                         'visible' => Helper::checkRoute('/admin/index'),
                         'items' => [
+                             [
+                                'label' => 'Resend Email Verification',
+                                'icon' => 'star',
+                                'url' => ['/user/send-verification-code'],
+                                'active' => Yii::$app->controller->route === 'user/send-verification-code',
+                            ],
                             [
                                 'label' => 'User',
                                 'icon' => 'star',

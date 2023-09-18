@@ -101,6 +101,8 @@ return [ //routes, if you cannot see your created route gamitin nyo this sa term
                 'terms' => 'terms/terms/index',
                 'site/success' => 'site/success',
                 'dbeditor' => 'dbeditor/default/index',
+                'assignment/view/<id:\d+>' => 'assignment/view',
+
                 // 'survey/survey-form' => 'survey/default/survey-form',
 
             ],

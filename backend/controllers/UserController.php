@@ -4,6 +4,7 @@ namespace backend\controllers;
 
 use common\models\UserSearch;
 use Yii;
+use yii\helpers\Url;
 use yii\web\Controller;
 use common\models\User;
 use yii\web\NotFoundHttpException;
@@ -19,7 +20,7 @@ class UserController extends BaseController
                 'class' => AccessControl::class,
                 'rules' => [
                     [
-                        'actions' => ['index', 'view', 'create', 'update', 'delete','gii'],
+                        'actions' => ['index', 'view', 'create', 'update', 'delete','send-verification-code'],
                         'allow' => true,
                         'roles' => ['admin'],
                     ],
@@ -41,6 +42,7 @@ class UserController extends BaseController
     public function actionCreate()
     {
         $model = new User(['scenario' => User::SCENARIO_CREATE]);
+        
 
         if ($model->load(Yii::$app->request->post())) {
             // Validate the model before saving
@@ -49,15 +51,27 @@ class UserController extends BaseController
                 if (empty($model->newPassword)) {
                     Yii::$app->session->setFlash('error', 'Password is required.');
                 } else {
+
                     // Save the user data
                     $model->setPassword($model->newPassword);
                     $model->generateAuthKey();
                     $model->generateEmailVerificationToken();
-                    $model->status = User::STATUS_ACTIVE;
-
+                    $model->status = User::STATUS_EMAIL_NOT_VERIFIED;
+                    
                     if ($model->save()) {
-                        Yii::$app->session->setFlash('success', 'User created successfully.');
-                        return $this->redirect(['/admin/assignment/view', 'id' => $model->id]);
+                        $verificationLink = Url::to(['site/verify-email', 'token' => $model->verification_token], true);
+                        $mailer = Yii::$app->mailer->compose()
+                        ->setTo($model->email)
+                        ->setFrom([Yii::$app->params['adminEmail'] => 'Visualight Team'])
+                        ->setSubject('Email Verification')
+                        ->setTextBody("Please click the following link to verify your email: $verificationLink")
+                        ->send();
+                        if ($mailer) {
+                            Yii::$app->session->setFlash('success', 'User created successfully. Please check your email for verification instructions.');
+                            return $this->redirect(['/admin/assignment/view', 'id' => $model->id]);
+                        }else {
+                            Yii::$app->session->setFlash('error', 'Failed to send the verification email.');
+                        }
                     } else {
                         Yii::$app->session->setFlash('error', 'Error saving user data.');
                     }
@@ -69,6 +83,54 @@ class UserController extends BaseController
             'model' => $model,
         ]);
     }
+
+
+  public function actionSendVerificationCode()
+{
+    $model = new User(['scenario' => User::SCENARIO_CREATE]);
+
+    if ($model->load(Yii::$app->request->post())) {
+        // Check if the provided email exists in the database
+        $existingUser = User::findByEmail($model->email);
+
+        if ($existingUser !== null) {
+            if ($existingUser->status === User::STATUS_ACTIVE) {
+                Yii::$app->session->setFlash('info', 'That account is already verified.');
+            } else {
+                // Generate and set a new verification token
+                $existingUser->generateEmailVerificationToken();
+                if ($existingUser->save()) {
+                    // Send the verification email
+                    $verificationLink = Url::to(['site/verify-email', 'token' => $existingUser->verification_token], true);
+                    $mailer = Yii::$app->mailer->compose()
+                        ->setTo($existingUser->email)
+                        ->setFrom([Yii::$app->params['adminEmail'] => 'Visualight Team'])
+                        ->setSubject('Email Verification')
+                        ->setTextBody("Please click the following link to verify your email: $verificationLink")
+                        ->send();
+
+                    if ($mailer) {
+                        Yii::$app->session->setFlash('success', 'Verification email has been resent successfully. Please check your email for instructions.');
+                    } else {
+                        Yii::$app->session->setFlash('error', 'Failed to resend the verification email.');
+                    }
+                } else {
+                    Yii::$app->session->setFlash('error', 'Error generating verification code.');
+                }
+            }
+        } else {
+            Yii::$app->session->setFlash('error', 'Email address not found.');
+        }
+    }
+
+    return $this->render('send-verification-code', [
+        'model' => $model,
+    ]);
+}
+
+    
+    
+
 
 
     public function actionUpdate($id)
@@ -137,6 +199,23 @@ class UserController extends BaseController
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    public function actionVerifyEmail($token)
+    {
+        $user = User::findByVerificationToken($token);
+
+        if ($user !== null) {
+            $user->status = User::STATUS_ACTIVE; // Mark the account as verified
+            $user->removeEmailVerificationToken(); // Remove the verification token
+            $user->save(false); // Save the user without validation
+
+            Yii::$app->session->setFlash('success', 'Your email has been verified. You can now log in.');
+        } else {
+            Yii::$app->session->setFlash('error', 'Invalid verification token.');
+        }
+
+        return $this->redirect(['site/login']); // Redirect to the login page
     }
 
     
