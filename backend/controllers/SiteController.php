@@ -42,7 +42,7 @@ class SiteController extends BaseController
                   [
                       'allow' => true,
                       'actions' => ['index'],
-                      'roles' => ['ADMIN','USER'], 
+                      'roles' => ['ADMIN','USERS'], 
                   ],
                   [
                     'allow' => true,
@@ -104,43 +104,51 @@ class SiteController extends BaseController
         if ($model->load(Yii::$app->request->post())) {
             // Find the user by their username or email
             $user = User::findByUsernameOrEmail($model->username);
-    
-            if ($user && $user->validatePassword($model->password)) {
+        
+            if (!$user) {
+                // User account doesn't exist, display an error message
+                Yii::$app->session->setFlash('error', 'Account doesn\'t exist. Please contact the Administrator to create an account.');
+            } elseif ($user->validatePassword($model->password)) {
                 // Check if the user's email is verified
                 if ($user->status == User::STATUS_EMAIL_NOT_VERIFIED) {
                     // User's email is not verified, display an error message
                     Yii::$app->session->setFlash('error', 'Email is not yet verified. Please check your email for verification instructions.');
-                    return $this->goHome(); // Redirect to the login page with an error message
-                }
-    
-                // Log in the user
-                Yii::$app->user->login($user, $model->rememberMe ? 3600 * 24 * 30 : 0);
-    
-                // Redirect based on roles and terms acceptance
-                if (Yii::$app->user->can('ADMIN') || Yii::$app->user->can('USER')) {
-                    // After successful login, check if the user has accepted the terms
-                    $termsAccepted = !empty($user->tos);
-    
-                    if ($termsAccepted) {
-                        return $this->goHome(); // Redirect to homepage or dashboard
-                    } else {
-                        return $this->redirect(['terms/index']); // Redirect to terms/index
-                    }
+                } elseif ($user->status == User::STATUS_INACTIVE) {
+                    // User's email is not verified, display an error message
+                    Yii::$app->session->setFlash('error', 'Please contact the Administrator to reactivate your account.');
                 } else {
-                    // Log out non-ADMIN users and terminate their session
-                    Yii::$app->user->logout();
-                    Yii::$app->session->destroy();
-    
-                    // Set an error flash message
-                    Yii::$app->session->setFlash('error', 'You are not authorized to access this site.');
-    
-                    // Redirect to the login page
-                    return $this->redirect(['/site/login']);
+                    // Log in the user
+                    Yii::$app->user->login($user, $model->rememberMe ? 3600 * 24 * 30 : 0);
+        
+                    // Redirect based on roles and terms acceptance
+                    if (Yii::$app->user->can('ADMIN') || Yii::$app->user->can('USERS')) {
+                        // After successful login, check if the user has accepted the terms
+                        $termsAccepted = !empty($user->tos);
+        
+                        if ($termsAccepted) {
+                            return $this->goHome(); // Redirect to homepage or dashboard
+                        } else {
+                            return $this->redirect(['terms/index']); // Redirect to terms/index
+                        }
+                    } else {
+                        // Log out non-ADMIN users and terminate their session
+                        Yii::$app->user->logout();
+                        Yii::$app->session->destroy();
+        
+                        // Set an error flash message
+                        Yii::$app->session->setFlash('error', 'You are not authorized to access this site.');
+        
+                        // Redirect to the login page
+                        return $this->redirect(['/site/login']);
+                    }
                 }
             } else {
                 // Invalid username or password, display an error message
                 Yii::$app->session->setFlash('error', 'Invalid username or password.');
             }
+        
+        // Continue with the rest of your code as needed.
+        
         }
     
         return $this->render('login', [
