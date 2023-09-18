@@ -226,7 +226,12 @@ class SiteController extends BaseController
             $user->removePasswordResetToken();
     
             if ($user->save()) {
+
+                if (!Yii::$app->user->isGuest) {
+                    Yii::$app->user->logout(); // Log out the current user
+                }
                 Yii::$app->session->setFlash('success', 'Password reset successfully.');
+
                 return $this->redirect(['site/login']);
             } else {
                 Yii::$app->session->setFlash('error', 'Failed to reset password.');
@@ -246,6 +251,12 @@ class SiteController extends BaseController
 
     public function actionVerifyEmail($token)
 {
+
+    if (!Yii::$app->user->isGuest) {
+        Yii::$app->user->logout(); // Log out the current user
+    }
+
+    
     $user = User::findByVerificationToken($token);
 
     if ($user !== null) {
