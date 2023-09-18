@@ -4,6 +4,7 @@ namespace app\modules\dbeditor\controllers;
 
 use app\modules\dbeditor\Models\TransactionStatus;
 use app\modules\dbeditor\Models\TransactionStatusSearch;
+use backend\controllers\BaseController;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -12,7 +13,7 @@ use yii\filters\VerbFilter;
 /**
  * TransactionStatusController implements the CRUD actions for TransactionStatus model.
  */
-class TransactionStatusController extends Controller
+class TransactionStatusController extends BaseController
 {
     /**
      * @inheritDoc

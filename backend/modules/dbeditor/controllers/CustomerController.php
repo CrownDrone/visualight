@@ -4,6 +4,7 @@ namespace app\modules\dbeditor\controllers;
 
 use app\modules\dbeditor\Models\Customer;
 use app\modules\dbeditor\Models\CustomerSearch;
+use backend\controllers\BaseController;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -12,7 +13,7 @@ use yii\filters\VerbFilter;
 /**
  * CustomerController implements the CRUD actions for Customer model.
  */
-class CustomerController extends Controller
+class CustomerController extends BaseController
 {
     /**
      * @inheritDoc

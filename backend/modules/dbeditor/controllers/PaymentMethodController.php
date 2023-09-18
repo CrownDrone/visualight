@@ -4,6 +4,7 @@ namespace app\modules\dbeditor\controllers;
 
 use app\modules\dbeditor\Models\PaymentMethod;
 use app\modules\dbeditor\Models\PaymentMethodSearch;
+use backend\controllers\BaseController;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -12,7 +13,7 @@ use yii\filters\VerbFilter;
 /**
  * PaymentMethodController implements the CRUD actions for PaymentMethod model.
  */
-class PaymentMethodController extends Controller
+class PaymentMethodController extends BaseController
 {
     /**
      * @inheritDoc

@@ -4,6 +4,7 @@ namespace app\modules\dbeditor\controllers;
 
 use app\modules\dbeditor\Models\TransactionType;
 use app\modules\dbeditor\Models\TransactionTypeSearch;
+use backend\controllers\BaseController;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -12,7 +13,7 @@ use yii\filters\VerbFilter;
 /**
  * TransactionTypeController implements the CRUD actions for TransactionType model.
  */
-class TransactionTypeController extends Controller
+class TransactionTypeController extends BaseController
 {
     /**
      * @inheritDoc

@@ -4,6 +4,7 @@ namespace app\modules\dbeditor\controllers;
 
 use app\modules\dbeditor\Models\Division;
 use app\modules\dbeditor\Models\DivisionSearch;
+use backend\controllers\BaseController;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -12,7 +13,7 @@ use yii\filters\VerbFilter;
 /**
  * DivisionController implements the CRUD actions for Division model.
  */
-class DivisionController extends Controller
+class DivisionController extends BaseController
 {
     /**
      * @inheritDoc
