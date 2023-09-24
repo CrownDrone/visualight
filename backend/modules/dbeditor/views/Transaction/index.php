@@ -34,11 +34,11 @@ $this->params['breadcrumbs'][] = $this->title;
             'customer_id',
             'amount',
             'transaction_type',
-            //'transaction_date',
-            //'transaction_status',
-            //'payment_method',
-            //'payment_date',
-            //'division',
+            'transaction_date',
+            'transaction_status',
+            'payment_method',
+            'payment_date',
+            'division',
             [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, Transaction $model, $key, $index, $column) {

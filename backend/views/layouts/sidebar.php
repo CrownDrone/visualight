@@ -87,8 +87,15 @@ $defaultImagePath = Yii::getAlias('@web') . '/images/user2.jpg';
                     [
                         'label' => 'Database Editor',
                         'icon' => 'address-card',
-                        'visible' => Helper::checkRoute('/admin/index'),
+                        'visible' => Helper::checkRoute('/dbeditor/index'),
                         'items' => [
+                            [
+                                'label' => 'Query',
+                                'url' => ['/dbeditor/query'],
+                                'visible' => Helper::checkRoute('dbeditor/query'),
+                                'active' => Yii::$app->controller->getUniqueID() === 'dbeditor/query',
+
+                            ],
                             [
                                 'label' => 'Customer',
                                 'url' => ['/dbeditor/customer'],
