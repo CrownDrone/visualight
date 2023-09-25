@@ -27,7 +27,7 @@ $this->title = 'Send PDF';
 
 <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
 
-<?= $form->field($model, 'pdfFile')->fileInput() ?>
+<?= $form->field($model, 'pdfFile[]')->fileInput(['multiple' => true]) ?>
 
  <?= $form->field($model, 'selectedRole')->dropDownList(
     ArrayHelper::map(Yii::$app->authManager->getRoles(), 'name', 'name'),

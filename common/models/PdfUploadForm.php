@@ -16,7 +16,7 @@ class PdfUploadForm extends Model
     {
         return [
             [['pdfFile', 'selectedRole'], 'required'], // Make sure to add selectedRole to the required rule
-            [['pdfFile'], 'file', 'extensions' => 'pdf'],
+            [['pdfFile'], 'file', 'extensions' => 'pdf', 'maxFiles' => 10], // Allow up to 10 PDF files
         ];
     }
     

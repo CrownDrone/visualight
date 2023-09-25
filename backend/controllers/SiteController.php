@@ -287,60 +287,54 @@ public function actionUploadPdf()
     $model = new PdfUploadForm();
 
     if (Yii::$app->request->isPost) {
-        $model->pdfFile = UploadedFile::getInstances($model, 'pdfFile'); // Use getInstances to get an array of files
+        $model->pdfFile = UploadedFile::getInstances($model, 'pdfFile');
 
         $uploadSuccessful = true;
-
-        // Create an array to store file paths
         $filePaths = [];
 
         foreach ($model->pdfFile as $file) {
-            // Generate a unique filename for each file
             $fileName = time() . '_' . $file->name;
-
-            // Save the file to a temporary directory or your desired location
             $uploadPath = 'C:/xampp/htdocs/visualight/common/temp_pdf/' . $fileName;
+
             if (!$file->saveAs($uploadPath)) {
                 $uploadSuccessful = false;
                 Yii::$app->session->setFlash('error', 'Error while uploading one or more files.');
                 break;
             }
 
-            // Add the file path to the array
             $filePaths[] = $uploadPath;
         }
 
         if ($uploadSuccessful) {
-            // Get the list of users with the "TOP MANAGEMENT" role
-            $topManagers = Yii::$app->authManager->getUserIdsByRole($model->selectedRole = Yii::$app->request->post('PdfUploadForm')['selectedRole']); // Get the selected role from the form
+            // Retrieve the selected role from POST data as a single string
+            $selectedRole = Yii::$app->request->post('PdfUploadForm')['selectedRole'];
+
+            $topManagers = Yii::$app->authManager->getUserIdsByRole($selectedRole);
 
             foreach ($topManagers as $managerId) {
                 $user = User::findOne($managerId); // Replace 'User' with your user model class
 
                 if ($user) {
-                    // Send each uploaded file as an email attachment
                     $message = Yii::$app->mailer->compose()
                         ->setFrom([Yii::$app->params['adminEmail'] => 'Visualight Team'])
                         ->setTo($user->email)
                         ->setSubject('PDF Files')
                         ->setTextBody('Please find attached the PDF files.');
 
-                    // Attach all the uploaded files
+                    // Attach all the uploaded files to the email
                     foreach ($filePaths as $filePath) {
                         $message->attach($filePath);
                     }
 
-                    // Send the email
                     if (!$message->send()) {
                         Yii::$app->session->setFlash('error', 'Error while sending one or more emails.');
-                        break; // Stop sending emails if an error occurs
+                        break;
                     }
                 }
             }
 
             if (!Yii::$app->session->hasFlash('error')) {
                 Yii::$app->session->setFlash('success', 'PDF files uploaded and emails sent successfully.');
-                return $this->redirect(['site/upload-pdf']);
             }
         }
     }
