@@ -335,6 +335,9 @@ public function actionUploadPdf()
 
             if (!Yii::$app->session->hasFlash('error')) {
                 Yii::$app->session->setFlash('success', 'PDF files uploaded and emails sent successfully.');
+
+                // Redirect to prevent repeated form submissions
+                return $this->redirect(['site/upload-pdf']);
             }
         }
     }
