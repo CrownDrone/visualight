@@ -184,6 +184,7 @@ $defaultImagePath = Yii::getAlias('@web') . '/images/user2.jpg';
 
                     // ['label' => 'ChartJS', 'header' => true, 'visible' => Helper::checkRoute('/chart/chart/index'),],
                     ['label' => 'Chart',  'icon' => 'fas fa-chart-bar', 'url' => ['/chart/chart/index'], 'visible' => Helper::checkRoute('/chart/chart/index'),],
+                    ['label' => 'Send PDF',  'icon' => 'fas fa-chart-bar', 'url' => ["/site/upload-pdf"], 'visible' => Helper::checkRoute('/site/upload-pdf'),],
                     ['label' => 'Dashboard',  'icon' => 'fas fa-chalkboard', 'url' => ["/site/index"], 'visible' => Helper::checkRoute('/site/index'),],                    
                     [
                         'label' => 'Division Charts',

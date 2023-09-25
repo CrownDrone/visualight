@@ -282,33 +282,73 @@ class SiteController extends BaseController
     return $this->redirect(['site/login']); // Redirect to the login page
 }
 
-
 public function actionUploadPdf()
 {
-    $model = new PdfUploadForm(); // Replace PdfUploadForm with your actual model name
+    $model = new PdfUploadForm();
 
     if (Yii::$app->request->isPost) {
-        $model->pdfFile = UploadedFile::getInstance($model, 'pdfFile');
+        $model->pdfFile = UploadedFile::getInstances($model, 'pdfFile'); // Use getInstances to get an array of files
 
-        if ($model->upload()) {
-            // Retrieve users with the "top management" role
-            $topManagementRole = Yii::$app->authManager->getRole('top management');
-            $topManagers = Yii::$app->authManager->getUserIdsByRole($topManagementRole->name);
+        $uploadSuccessful = true;
 
-            foreach ($topManagers as $managerId) {
-                // Send the PDF to each top manager (you should implement this part)
-                // You can use Yii2 mailer or any other method to send the PDF
+        // Create an array to store file paths
+        $filePaths = [];
+
+        foreach ($model->pdfFile as $file) {
+            // Generate a unique filename for each file
+            $fileName = time() . '_' . $file->name;
+
+            // Save the file to a temporary directory or your desired location
+            $uploadPath = 'C:/xampp/htdocs/visualight/common/temp_pdf/' . $fileName;
+            if (!$file->saveAs($uploadPath)) {
+                $uploadSuccessful = false;
+                Yii::$app->session->setFlash('error', 'Error while uploading one or more files.');
+                break;
             }
 
-            Yii::$app->session->setFlash('success', 'PDF uploaded and sent to top management.');
-            return $this->redirect(['site/index']); // Redirect to the desired page
+            // Add the file path to the array
+            $filePaths[] = $uploadPath;
+        }
+
+        if ($uploadSuccessful) {
+            // Get the list of users with the "TOP MANAGEMENT" role
+            $topManagers = Yii::$app->authManager->getUserIdsByRole($model->selectedRole = Yii::$app->request->post('PdfUploadForm')['selectedRole']); // Get the selected role from the form
+
+            foreach ($topManagers as $managerId) {
+                $user = User::findOne($managerId); // Replace 'User' with your user model class
+
+                if ($user) {
+                    // Send each uploaded file as an email attachment
+                    $message = Yii::$app->mailer->compose()
+                        ->setFrom([Yii::$app->params['adminEmail'] => 'Visualight Team'])
+                        ->setTo($user->email)
+                        ->setSubject('PDF Files')
+                        ->setTextBody('Please find attached the PDF files.');
+
+                    // Attach all the uploaded files
+                    foreach ($filePaths as $filePath) {
+                        $message->attach($filePath);
+                    }
+
+                    // Send the email
+                    if (!$message->send()) {
+                        Yii::$app->session->setFlash('error', 'Error while sending one or more emails.');
+                        break; // Stop sending emails if an error occurs
+                    }
+                }
+            }
+
+            if (!Yii::$app->session->hasFlash('error')) {
+                Yii::$app->session->setFlash('success', 'PDF files uploaded and emails sent successfully.');
+                return $this->redirect(['site/upload-pdf']);
+            }
         }
     }
 
     return $this->render('upload-pdf', ['model' => $model]);
 }
 
-    
+
 
 
 }
