@@ -4,6 +4,7 @@ namespace backend\controllers;
 
 use common\models\ForgotPasswordForm;
 use common\models\LoginForm;
+use common\models\PdfUploadForm;
 use common\models\ResetPasswordForm;
 use Yii;
 use yii\base\InvalidParamException;
@@ -17,6 +18,7 @@ use yii\web\NotFoundHttpException;
 use yii\web\Response;
 use yii\db\ActiveRecord;
 use common\models\User;
+use yii\web\UploadedFile;
 
 
 /**
@@ -278,6 +280,32 @@ class SiteController extends BaseController
     }
 
     return $this->redirect(['site/login']); // Redirect to the login page
+}
+
+
+public function actionUploadPdf()
+{
+    $model = new PdfUploadForm(); // Replace PdfUploadForm with your actual model name
+
+    if (Yii::$app->request->isPost) {
+        $model->pdfFile = UploadedFile::getInstance($model, 'pdfFile');
+
+        if ($model->upload()) {
+            // Retrieve users with the "top management" role
+            $topManagementRole = Yii::$app->authManager->getRole('top management');
+            $topManagers = Yii::$app->authManager->getUserIdsByRole($topManagementRole->name);
+
+            foreach ($topManagers as $managerId) {
+                // Send the PDF to each top manager (you should implement this part)
+                // You can use Yii2 mailer or any other method to send the PDF
+            }
+
+            Yii::$app->session->setFlash('success', 'PDF uploaded and sent to top management.');
+            return $this->redirect(['site/index']); // Redirect to the desired page
+        }
+    }
+
+    return $this->render('upload-pdf', ['model' => $model]);
 }
 
     

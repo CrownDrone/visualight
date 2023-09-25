@@ -1109,6 +1109,28 @@ if ($todaySandTtrans == 0) {
             ]
         };
 
+        const bgColor = {
+            id:'bgColor',
+            beforeDraw: (chart, steps, options) => {
+                const {ctx, width, height } = chart;
+                ctx.fillStyle = options.backgroundColor;
+                ctx.fillRect( 0, 0, width, height)
+                ctx.restore();
+            }
+
+        };
+
+        const bgColor1 = {
+            id:'bgColor',
+            beforeDraw: (chart, steps, options) => {
+                const {ctx, width, height } = chart;
+                ctx.fillStyle = options.backgroundColor;
+                ctx.fillRect( 0, 0, width, height)
+                ctx.restore();
+            }
+
+        };
+
         // Creating combined chart
         const combinedCtx = document.getElementById('combinedChart').getContext('2d');
 
@@ -1170,6 +1192,10 @@ if ($todaySandTtrans == 0) {
                             enabled: true,
                             mode: 'x'
                         }
+                    },
+
+                    bgColor:{
+                        backgroundColor: 'white'
                     }
                 },
                 responsive: true,
@@ -1183,6 +1209,9 @@ if ($todaySandTtrans == 0) {
                 },
 
             },
+            plugins:[bgColor],
+
+
         });
 
 
@@ -1219,8 +1248,14 @@ if ($todaySandTtrans == 0) {
                             drawOnChartArea: false
                         }
                     },
-                }
-            }
+                },
+                plugins: {
+                    bgColor:{
+                        backgroundColor: 'white'
+                    }
+                },
+            },
+             plugins:[bgColor],
         });
 
         function scroller(scroll, chart) {
@@ -1264,7 +1299,14 @@ if ($todaySandTtrans == 0) {
 
                 },
 
-            }
+                 plugins: {
+                    bgColor:{
+                        backgroundColor: 'white'
+                    }
+                },
+
+            },
+              plugins:[bgColor],
         });
 
         // for scrolling
@@ -1333,12 +1375,17 @@ if ($todaySandTtrans == 0) {
                 plugins: {
                     legend: {
                         display: false
+                    },
+                    bgColor:{
+                        backgroundColor: 'white'
                     }
+
+
                 },
 
                 // plugins:[divisionName] //to be continue
             },
-            plugins: [{
+            plugins: [bgColor1,{
                 id: 'divisionName',
                 afterDatasetsDraw(chart, args, options) {
                     const {
@@ -1360,9 +1407,10 @@ if ($todaySandTtrans == 0) {
                     ctx.fillText('Average sales per day', width / 2.1, height / 2 + top);
                     console.log(chart.getDatasetMeta(0))
 
-                }
+                },
 
-            }]
+            }],
+            
         };
 
         // Render the doughnut chart
@@ -1458,9 +1506,13 @@ if ($todaySandTtrans == 0) {
                     plugins: {
                         legend: {
                             display: false
-                        }
+                        },
+                          bgColor:{
+                        backgroundColor: 'white'
+                    }
                     }
                 },
+                plugins:[bgColor],
                 data: {
                     labels: <?php echo json_encode($province); ?>,
                     datasets: [{
@@ -1592,6 +1644,9 @@ if ($todaySandTtrans == 0) {
                         position: 'top'
 
                     },
+                      bgColor:{
+                        backgroundColor: 'white'
+                    },
                     datalabels: {
                         formatter: (value, context) => {
                             // Display the label based on the selected data (e.g., transaction type or payment method)
@@ -1624,7 +1679,8 @@ if ($todaySandTtrans == 0) {
                             ],
                             borderWidth: 2
                         }],
-                    }
+                    },
+                    plugins:[bgColor],
                 });
 
                 paymendtMethodChart = new Chart(paymendtMethodChartContainer, {
@@ -1644,7 +1700,8 @@ if ($todaySandTtrans == 0) {
                             ],
                             borderWidth: 2
                         }],
-                    }
+                    },
+                    plugins:[bgColor],
                 });
                 transactionTypeChart = new Chart(transactionTypeChartContainer, {
                     type: selectedChartType,
@@ -1663,7 +1720,8 @@ if ($todaySandTtrans == 0) {
                             ],
                             borderWidth: 2
                         }],
-                    }
+                    },
+                    plugins:[bgColor],
                 });
 
                 customerTypeChart = new Chart(customerTypeChartContainer, {
@@ -1692,7 +1750,8 @@ if ($todaySandTtrans == 0) {
                             ],
                             borderWidth: 2
                         }],
-                    }
+                    },
+                    plugins:[bgColor],
                 });
             } else if (selectedChartType === 'pie') {
                 transactionStatusChart = new Chart(transactionStatusChartContainer, {
@@ -1704,6 +1763,10 @@ if ($todaySandTtrans == 0) {
                                 position: 'top'
 
                             },
+                            bgColor:{
+                        backgroundColor: 'white'
+                    },
+
                             datalabels: {
                                 formatter: (value, context) => {
                                     // Display the label based on the selected data (e.g., transaction type or payment method)
@@ -1713,7 +1776,7 @@ if ($todaySandTtrans == 0) {
                         },
                         responsive: true,
                         maintainAspectRatio: false,
-                    },
+                    },plugins:[bgColor],
                     data: {
                         labels: <?php echo json_encode($transactionStatus); ?>,
                         datasets: [{
@@ -1740,6 +1803,10 @@ if ($todaySandTtrans == 0) {
                                 position: 'top'
 
                             },
+                              bgColor:{
+                        backgroundColor: 'white'
+                    },
+
                             datalabels: {
                                 formatter: (value, context) => {
                                     // Display the label based on the selected data (e.g., transaction type or payment method)
@@ -1749,7 +1816,7 @@ if ($todaySandTtrans == 0) {
                         },
                         responsive: true,
                         maintainAspectRatio: false,
-                    },
+                    },plugins:[bgColor],
                     data: {
                         labels: <?php echo json_encode($PaymentMethod); ?>,
                         datasets: [{
@@ -1780,11 +1847,17 @@ if ($todaySandTtrans == 0) {
                                     // Display the label based on the selected data (e.g., transaction type or payment method)
                                     return context.chart.data.labels[context.dataIndex];
                                 }
-                            }
-                        },
+                            },
+
+                            bgColor:{
+                                backgroundColor: 'white'
+                                },
                         responsive: true,
                         maintainAspectRatio: false,
+                    },  
                     },
+                    plugins:[bgColor],
+
                     data: {
                         labels: <?php echo json_encode($transactionType); ?>,
                         datasets: [{
@@ -1816,11 +1889,15 @@ if ($todaySandTtrans == 0) {
                                     // Display the label based on the selected data (e.g., transaction type or payment method)
                                     return context.chart.data.labels[context.dataIndex];
                                 }
-                            }
+                            },
+                              bgColor:{
+                        backgroundColor: 'white'
+                    }
+
                         },
                         responsive: true,
                         maintainAspectRatio: false,
-                    },
+                    },plugins:[bgColor],
                     data: {
                         labels: <?php echo json_encode($customerType); ?>,
                         datasets: [{
@@ -1867,9 +1944,15 @@ if ($todaySandTtrans == 0) {
 
                             },
 
-                        }
-                    },
+                        },
+                        plugins: {
 
+                        bgColor:{
+                            backgroundColor: 'white'
+
+                                }
+                    },
+                },plugins:[bgColor],
                     data: {
                         labels: <?php echo json_encode($transactionStatus); ?>,
                         datasets: [{
@@ -1905,9 +1988,16 @@ if ($todaySandTtrans == 0) {
                                 }
 
                             },
-                        }
+                        },
+                         plugins: {
 
+                        bgColor:{
+                            backgroundColor: 'white'
+
+                                }
                     },
+
+                    },plugins:[bgColor],
                     data: {
                         labels: <?php echo json_encode($PaymentMethod); ?>,
                         datasets: [{
@@ -1944,9 +2034,16 @@ if ($todaySandTtrans == 0) {
                                 }
 
                             },
-                        }
-                    },
+                        },
+                           plugins: {
 
+                        bgColor:{
+                            backgroundColor: 'white'
+
+                                }
+                    },
+                    },
+                    plugins:[bgColor],
                     data: {
                         labels: <?php echo json_encode($transactionType); ?>,
                         datasets: [{
@@ -1982,9 +2079,14 @@ if ($todaySandTtrans == 0) {
 
                             },
                         },
+                        plugins: {
 
+                            bgColor:{
+                                backgroundColor: 'white'
 
-                    },
+                                    }
+                            },
+                    },plugins:[bgColor],
                     data: {
                         labels: <?php echo json_encode($customerType); ?>,
                         datasets: [{
@@ -2038,28 +2140,28 @@ if ($todaySandTtrans == 0) {
 
 
         const options = {
-            quality: 5,
+            quality: 2,
             width: 800,
             height: 600
         };
 
-        domtoimage.toPng(combinedChart, options)
+        domtoimage.toJpeg(combinedChart, options)
             .then(function(combinedChartImg) {
-                domtoimage.toPng(transactionChart, options)
+                domtoimage.toJpeg(transactionChart, options)
                     .then(function(transactionChartImg) {
-                        domtoimage.toPng(salesChart, options)
+                        domtoimage.toJpeg(salesChart, options)
                             .then(function(salesChartImg) {
-                                domtoimage.toPng(myChart, options)
+                                domtoimage.toJpeg(myChart, options)
                                     .then(function(myChartImg) {
-                                        domtoimage.toPng(provincesChart, options)
+                                        domtoimage.toJpeg(provincesChart, options)
                                             .then(function(provincesChartImg) {
-                                                domtoimage.toPng(transactionStatusChart, options)
+                                                domtoimage.toJpeg(transactionStatusChart, options)
                                                     .then(function(transactionStatusChartImg) {
-                                                        domtoimage.toPng(transactionTypeChart, options)
+                                                        domtoimage.toJpeg(transactionTypeChart, options)
                                                             .then(function(transactionTypeChartImg) {
-                                                                domtoimage.toPng(paymentChart, options)
+                                                                domtoimage.toJpeg(paymentChart, options)
                                                                     .then(function(paymentChartImg) {
-                                                                        domtoimage.toPng(customerTypeChart, options)
+                                                                        domtoimage.toJpeg(customerTypeChart, options)
                                                                             .then(function(customerTypeChartImg) {
                                                                                 const pdf = new jsPDF();
 
@@ -2075,9 +2177,9 @@ if ($todaySandTtrans == 0) {
                                                                                 pdf.setFontSize(14);
                                                                                 pdf.text('Visualight-Dashboard', 83, 10);
 
-                                                                                pdf.addImage(combinedChartImg, 'PNG', 40, 30, 130, 70);
-                                                                                pdf.addImage(transactionChartImg, 'PNG', 40, 123, 130, 70);
-                                                                                pdf.addImage(salesChartImg, 'PNG', 40, 220, 130, 70);
+                                                                                pdf.addImage(combinedChartImg, 'JPEG', 40, 30, 130, 70);
+                                                                                pdf.addImage(transactionChartImg, 'JPEG', 40, 123, 130, 70);
+                                                                                pdf.addImage(salesChartImg, 'JPEG', 40, 220, 130, 70);
 
                                                                                 pdf.addPage();
 
@@ -2086,15 +2188,15 @@ if ($todaySandTtrans == 0) {
                                                                                 pdf.setTextColor(0, 122, 204);
                                                                                 pdf.text('Average Sales Daily', 40, 25);
 
-                                                                                pdf.addImage(myChartImg, 'PNG', 50, 20, 110, 70);
+                                                                                pdf.addImage(myChartImg, 'JPEG', 50, 20, 110, 70);
 
                                                                                 pdf.text('Type of Customers', 40, 115);
 
-                                                                                pdf.addImage(customerTypeChartImg, 'PNG', 40, 120, 130, 70);
+                                                                                pdf.addImage(customerTypeChartImg, 'JPEG', 40, 120, 130, 70);
 
                                                                                 pdf.text('Total Customers per Province', 40, 215);
 
-                                                                                pdf.addImage(provincesChartImg, 'PNG', 40, 225, 130, 70);
+                                                                                pdf.addImage(provincesChartImg, 'JPEG', 40, 225, 130, 70);
 
                                                                                 pdf.addPage();
 
@@ -2103,7 +2205,7 @@ if ($todaySandTtrans == 0) {
                                                                                 pdf.setTextColor(0, 122, 204);
                                                                                 pdf.text('Transaction Status', 40, 18);
 
-                                                                                pdf.addImage(transactionStatusChartImg, 'PNG', 60, 25, 100, 80);
+                                                                                pdf.addImage(transactionStatusChartImg, 'JPEG', 60, 25, 100, 80);
 
                                                                                 pdf.text('Payment Method', 40, 115);
 
@@ -2112,7 +2214,7 @@ if ($todaySandTtrans == 0) {
 
                                                                                 pdf.text('Transaction Type', 40, 215);
 
-                                                                                pdf.addImage(transactionTypeChartImg, 'PNG', 60, 215, 100, 80);
+                                                                                pdf.addImage(transactionTypeChartImg, 'JPEG', 60, 215, 100, 80);
 
 
                                                                                 pdf.save('Visualight-Dashboard.pdf');

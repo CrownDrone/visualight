@@ -114,6 +114,7 @@ return [ //routes, if you cannot see your created route gamitin nyo this sa term
             'assignmentTable' => 'auth_assignment',
             'ruleTable' => 'auth_rule',
         ],
+        
 
     ],
     'params' => $params,
