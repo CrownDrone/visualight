@@ -13,6 +13,8 @@ use yii\grid\GridView;
 $this->title = 'Users';
 
 ?>
+
+
 <div class="user-index">
 
     <!-- Create User button -->
@@ -32,19 +34,31 @@ $this->title = 'Users';
                     'attribute' => 'fullName',
                     'label' => 'Full Name',
                     'headerOptions' => ['class' => 'bg-blue white-text'],
-                    'contentOptions' => ['style' => 'text-align: center;'],
+                    'contentOptions' => function ($model, $key, $index, $column) {
+                        return [
+                            'style' => 'text-align: center; background-color: ' . getStatusBackgroundColor($model->status),
+                        ];
+                    },
                 ],
                 [
                     'attribute' => 'username',
                     'label' => 'Username',
                     'headerOptions' => ['class' => 'bg-blue white-text'],
-                    'contentOptions' => ['style' => 'text-align: center;'],
+                    'contentOptions' => function ($model, $key, $index, $column) {
+                        return [
+                            'style' => 'text-align: center; background-color: ' . getStatusBackgroundColor($model->status),
+                        ];
+                    },
                 ],
                 [
                     'attribute' => 'email',
                     'label' => 'Email',
                     'headerOptions' => ['class' => 'bg-blue white-text'],
-                    'contentOptions' => ['style' => 'text-align: center;'],
+                    'contentOptions' => function ($model, $key, $index, $column) {
+                        return [
+                            'style' => 'text-align: center; background-color: ' . getStatusBackgroundColor($model->status),
+                        ];
+                    },
                 ],
                 [
                     'attribute' => 'status',
@@ -54,14 +68,22 @@ $this->title = 'Users';
                     },
                     'filter' => User::getStatusOptions(),
                     'headerOptions' => ['class' => 'bg-blue white-text'],
-                    'contentOptions' => ['style' => 'text-align: center;'],
+                    'contentOptions' => function ($model, $key, $index, $column) {
+                        return [
+                            'style' => 'text-align: center; background-color: ' . getStatusBackgroundColor($model->status),
+                        ];
+                    },
                 ],
                 [
                     'class' => 'yii\grid\ActionColumn',
                     'header' => 'Actions',
-                    'template' => '{view} {update} {delete}',
                     'headerOptions' => ['class' => 'bg-blue white-text'],
-                    'contentOptions' => ['style' => 'text-align: center;'],
+                    'contentOptions' => function ($model, $key, $index, $column) {
+                        return [
+                            'style' => 'text-align: center; background-color: ' . getStatusBackgroundColor($model->status),
+                        ];
+                    },
+                    'template' => '{view} {update} {delete}',
                     'buttons' => [
                         'view' => function ($url, $model, $key) {
                             return Html::a('View', ['view', 'id' => $model->id], ['class' => 'btn btn-primary btn-sm']);
@@ -85,6 +107,27 @@ $this->title = 'Users';
     </div>
 
 </div>
+
+<?php
+
+function getStatusBackgroundColor($status)
+{
+    switch ($status) {
+        case User::STATUS_ACTIVE:
+            return 'rgba(141, 242, 203, 0.8)'; // Green
+        case User::STATUS_INACTIVE:
+            return 'lightcoral'; // Red
+        case User::STATUS_EMAIL_NOT_VERIFIED:
+            return 'rgb(255, 255, 150)'; // Yellow
+        default:
+            return ''; // No background color for other statuses
+    }
+}
+
+
+?>
+
+
 
 <style>
     .grid-view-container {

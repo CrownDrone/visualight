@@ -25,13 +25,10 @@ use yii\web\IdentityInterface;
  */
 class User extends ActiveRecord implements IdentityInterface
 {
-    const STATUS_DELETED = 0;
     const STATUS_INACTIVE = 9;
     const STATUS_ACTIVE = 10;
 
     const STATUS_EMAIL_NOT_VERIFIED = 5;
-
-    const STATUS_NON_VERIFIED_EMAIL = 15;
     
 
     const SCENARIO_UPDATE = 'update';
@@ -85,9 +82,7 @@ class User extends ActiveRecord implements IdentityInterface
         return [
             self::STATUS_ACTIVE => 'Active',
             self::STATUS_INACTIVE => 'Inactive',
-            self::STATUS_DELETED => 'Deleted',
              self::STATUS_EMAIL_NOT_VERIFIED => 'Email Not Verified', // Status label for non-verified email accounts
-            self::STATUS_NON_VERIFIED_EMAIL => 'Non-Verified Email',
         ];
     }
 
@@ -112,7 +107,7 @@ class User extends ActiveRecord implements IdentityInterface
             // Other rules...
             [['username', 'email','fullName','address','contactNumber'], 'required'],
             ['status', 'default', 'value' => self::STATUS_EMAIL_NOT_VERIFIED],
-            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE, self::STATUS_DELETED, self::STATUS_EMAIL_NOT_VERIFIED]],
+            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE, self::STATUS_EMAIL_NOT_VERIFIED]],
             ['email', 'email'],
             ['email', 'unique'],
             ['username', 'unique'],

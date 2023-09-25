@@ -31,6 +31,7 @@ $this->registerCssFile(Url::to(['/css/custom.css']));
     <?= $form->field($model, 'status')->dropDownList([
         $model::STATUS_ACTIVE => 'Active',
         $model::STATUS_INACTIVE => 'Inactive',
+        $model::STATUS_EMAIL_NOT_VERIFIED => 'Email Not Verified',
     ]) ?>
     <?php if ($model->hasErrors('status')): ?>
         <div class="alert alert-danger"><?= $model->getFirstError('status') ?></div>
