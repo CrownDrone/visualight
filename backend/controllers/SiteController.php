@@ -306,29 +306,31 @@ public function actionUploadPdf()
         }
 
         if ($uploadSuccessful) {
-            // Retrieve the selected role from POST data as a single string
-            $selectedRole = Yii::$app->request->post('PdfUploadForm')['selectedRole'];
+            // Retrieve the selected roles from POST data as an array
+            $selectedRoles = Yii::$app->request->post('PdfUploadForm')['selectedRoles'];
 
-            $topManagers = Yii::$app->authManager->getUserIdsByRole($selectedRole);
+            foreach ($selectedRoles as $selectedRole) {
+                $topManagers = Yii::$app->authManager->getUserIdsByRole($selectedRole);
 
-            foreach ($topManagers as $managerId) {
-                $user = User::findOne($managerId); // Replace 'User' with your user model class
+                foreach ($topManagers as $managerId) {
+                    $user = User::findOne($managerId); // Replace 'User' with your user model class
 
-                if ($user) {
-                    $message = Yii::$app->mailer->compose()
-                        ->setFrom([Yii::$app->params['adminEmail'] => 'Visualight Team'])
-                        ->setTo($user->email)
-                        ->setSubject('PDF Files')
-                        ->setTextBody('Please find attached the PDF files.');
+                    if ($user) {
+                        $message = Yii::$app->mailer->compose()
+                            ->setFrom([Yii::$app->params['adminEmail'] => 'Visualight Team'])
+                            ->setTo($user->email)
+                            ->setSubject('PDF Files')
+                            ->setTextBody('Please find attached the PDF files.');
 
-                    // Attach all the uploaded files to the email
-                    foreach ($filePaths as $filePath) {
-                        $message->attach($filePath);
-                    }
+                        // Attach all the uploaded files to the email
+                        foreach ($filePaths as $filePath) {
+                            $message->attach($filePath);
+                        }
 
-                    if (!$message->send()) {
-                        Yii::$app->session->setFlash('error', 'Error while sending one or more emails.');
-                        break;
+                        if (!$message->send()) {
+                            Yii::$app->session->setFlash('error', 'Error while sending one or more emails.');
+                            break;
+                        }
                     }
                 }
             }
@@ -345,6 +347,27 @@ public function actionUploadPdf()
     return $this->render('upload-pdf', ['model' => $model]);
 }
 
+
+public function actionUpload()
+{
+    $model = new PdfUploadForm();
+
+    if (Yii::$app->request->isPost) {
+        $model->pdfFile = UploadedFile::getInstances($model, 'pdfFile');
+
+        if ($model->upload()) {
+            // File(s) uploaded successfully
+            Yii::$app->session->setFlash('success', 'PDF file(s) uploaded successfully.');
+        } else {
+            // Error in file upload
+            Yii::$app->session->setFlash('error', 'Error while uploading PDF file(s).');
+        }
+
+        return $this->redirect(['site/upload-pdf']);
+    }
+
+    return $this->render('upload-pdf', ['model' => $model]);
+}
 
 
 

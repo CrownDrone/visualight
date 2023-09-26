@@ -3,6 +3,8 @@
 namespace app\modules\dbeditor\controllers;
 
 use app\modules\dbeditor\Models\Query;
+use backend\controllers\BaseController;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -17,24 +19,32 @@ use function PHPUnit\Framework\isEmpty;
 /**
  * QueryController implements the CRUD actions for Query model.
  */
-class QueryController extends Controller
+class QueryController extends BaseController
 {
     /**
      * @inheritDoc
      */
     public function behaviors()
     {
-        return array_merge(
-            parent::behaviors(),
-            [
-                'verbs' => [
-                    'class' => VerbFilter::className(),
-                    'actions' => [
-                        'delete' => ['POST'],
+        return [
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'delete' => ['POST'],
+                ],
+            ],
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['index', 'login'], // List the actions you want to restrict
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'actions' => ['index', 'login'], // Actions to apply this rule to
+                        'permissions' => ['dbQuery'] // Role(s) that are allowed to access these actions
                     ],
                 ],
-            ]
-        );
+            ],
+        ];
     }
 
     /**

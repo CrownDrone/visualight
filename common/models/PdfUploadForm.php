@@ -9,23 +9,27 @@ use yii\helpers\ArrayHelper;
 
 class PdfUploadForm extends Model
 {
-    public $pdfFile; // This should match the name attribute in your file input field in the form
-    public $selectedRole; // Add the selectedRole property
+    public $pdfFile;
+    public $selectedRoles;
 
     public function rules()
     {
         return [
-            [['pdfFile', 'selectedRole'], 'required'], // Make sure to add selectedRole to the required rule
+            [['pdfFile', 'selectedRoles'], 'required'], // Make sure to add selectedRoles to the required rule
             [['pdfFile'], 'file', 'extensions' => 'pdf', 'maxFiles' => 10], // Allow up to 10 PDF files
+            ['selectedRoles', 'validateSelectedRoles'],
         ];
     }
-    
+
+    public function validateSelectedRoles($attribute, $params)
+    {
+        if (empty($this->$attribute)) {
+            $this->addError($attribute, 'Please select at least one role.');
+        }
+    }
+
     public function getRolesList()
     {
         return ArrayHelper::map(Yii::$app->authManager->getRoles(), 'name', 'name');
     }
-
-    
 }
-
-

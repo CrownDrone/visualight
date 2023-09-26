@@ -4,6 +4,9 @@ use yii\widgets\ActiveForm;
 use yii\helpers\ArrayHelper;
 
 $this->title = 'Send PDF';
+
+$this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position' => \yii\web\View::POS_HEAD]);
+
 ?>
 
 
@@ -29,10 +32,9 @@ $this->title = 'Send PDF';
 
 <?= $form->field($model, 'pdfFile[]')->fileInput(['multiple' => true]) ?>
 
- <?= $form->field($model, 'selectedRole')->dropDownList(
-    ArrayHelper::map(Yii::$app->authManager->getRoles(), 'name', 'name'),
-    ['prompt' => 'Select a Role']
-) ?> 
+<?= $form->field($model, 'selectedRoles')->checkboxList(
+    ArrayHelper::map(Yii::$app->authManager->getRoles(), 'name', 'name')
+) ?>
 
 <div class="form-group">
     <?= Html::submitButton('Send Email', ['class' => 'btn btn-primary']) ?>
@@ -40,3 +42,6 @@ $this->title = 'Send PDF';
 
 
 <?php ActiveForm::end(); ?>
+
+
+

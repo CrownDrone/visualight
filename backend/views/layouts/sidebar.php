@@ -87,56 +87,56 @@ $defaultImagePath = Yii::getAlias('@web') . '/images/user2.jpg';
                     [
                         'label' => 'Database Editor',
                         'icon' => 'address-card',
-                        'visible' => Helper::checkRoute('/dbeditor/index'),
+                        'visible' => Helper::checkRoute('/admin/index'),
                         'items' => [
                             [
                                 'label' => 'Query',
                                 'url' => ['/dbeditor/query'],
-                                'visible' => Helper::checkRoute('dbeditor/query'),
+                                'visible' => Helper::checkRoute('/dbeditor/query'),
                                 'active' => Yii::$app->controller->getUniqueID() === 'dbeditor/query',
 
                             ],
                             [
                                 'label' => 'Customer',
                                 'url' => ['/dbeditor/customer'],
-                                'visible' => Helper::checkRoute('dbeditor/customer'),
+                                'visible' => Helper::checkRoute('/dbeditor/customer'),
                                 'active' => Yii::$app->controller->getUniqueID() === 'dbeditor/customer',
 
                             ],
                             [
                                 'label' => 'Customer Type',
                                 'url'   => ['/dbeditor/customer-type'],
-                                'visible' => Helper::checkRoute('dbeditor/customer-type'),
+                                'visible' => Helper::checkRoute('/dbeditor/customer-type'),
                                 'active' => Yii::$app->controller->getUniqueID() === 'dbeditor/customer-type',
                             ],
                             [
                                 'label' => 'Division',
                                 'url'   => ['/dbeditor/division'],
-                                'visible' => Helper::checkRoute('dbeditor/division'),
+                                'visible' => Helper::checkRoute('/dbeditor/division'),
                                 'active' => Yii::$app->controller->getUniqueID() === 'dbeditor/division',
                             ],
                             [
                                 'label' => 'Payment Method',
                                 'url'   => ['/dbeditor/payment-method'],
-                                'visible' => Helper::checkRoute('dbeditor/payment-method'),
+                                'visible' => Helper::checkRoute('/dbeditor/payment-method'),
                                 'active' => Yii::$app->controller->getUniqueID() === 'dbeditor/payment-method',
                             ],
                             [
                                 'label' => 'Transactions',
                                 'url'   => ['/dbeditor/transaction'],
-                                'visible' => Helper::checkRoute('dbeditor/transaction'),
+                                'visible' => Helper::checkRoute('/dbeditor/transaction'),
                                 'active' => Yii::$app->controller->getUniqueID() === 'dbeditor/transaction',
                             ],
                             [
                                 'label' => 'Transaction Status',
                                 'url'   => ['/dbeditor/transaction-status'],
-                                'visible' => Helper::checkRoute('dbeditor/transaction-status'),
+                                'visible' => Helper::checkRoute('/dbeditor/transaction-status'),
                                 'active' => Yii::$app->controller->getUniqueID() === 'dbeditor/transaction-status',
                             ],
                             [
                                 'label' => 'Transaction Type',
                                 'url'   => ['/dbeditor/transaction-type'],
-                                'visible' => Helper::checkRoute('dbeditor/transaction-type'),
+                                'visible' => Helper::checkRoute('/dbeditor/transaction-type'),
                                 'active' => Yii::$app->controller->getUniqueID() === 'dbeditor/transaction-type',
                             ],
                         ],
