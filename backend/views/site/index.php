@@ -596,6 +596,24 @@ $TransactionperDiv = [
     'datasets' => [],
 ];
 
+
+$lotMapping = [
+    "1" => "National Metrology Division",
+    "2" => "Standards and Testing Division",
+];
+
+foreach ($transactionData as &$item) {
+    if (isset($item['division']) && isset($lotMapping[$item['division']])) {
+        $item['division'] = $lotMapping[$item['division']];
+    }
+}
+
+foreach ($salesData as &$item) {
+    if (isset($item['division']) && isset($lotMapping[$item['division']])) {
+        $item['division'] = $lotMapping[$item['division']];
+    }
+}
+
 //getting data for the $TransactionperDiv
 foreach ($transactionData as $data) {
     $divisionName = $data['division'];
@@ -956,6 +974,8 @@ Yii::$app->set('db', [ //revert default connection
 </div>
 
 <script>
+    var transactionDatas =<?php echo json_encode($transactionData); ?>;
+    console.log(transactionDatas);//3bm60 log to console
     // Attach an event listener to the date picker fields
     document.getElementById("startDate").addEventListener("change", updateFilteredData);
     document.getElementById("endDate").addEventListener("change", updateFilteredData);
@@ -1275,7 +1295,7 @@ Yii::$app->set('db', [ //revert default connection
         });
 
         function scroller(scroll, chart) {
-            console.log(scroll)
+            //console.log(scroll)
 
             if (scroll.deltaY > 0) {
                 transactionChart.option.scales.y.min += 1;
@@ -1421,7 +1441,7 @@ Yii::$app->set('db', [ //revert default connection
                     ctx.fillStyle = 'rgb(3, 98, 186, 1)';
                     ctx.textAlign = 'center';
                     ctx.fillText('Average sales per day', width / 2.1, height / 2 + top);
-                    console.log(chart.getDatasetMeta(0))
+                    //console.log(chart.getDatasetMeta(0))
 
                 },
 
