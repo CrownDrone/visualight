@@ -563,22 +563,31 @@ use yii\bootstrap5\Html;
 // $fromDate = $_POST['startDate'];
 // $toDate = $_POST['endDate'];
 
+Yii::$app->set('db', [ //reroute default connection 
+    'class' => \yii\db\Connection::class,
+            'dsn' => 'mysql:host=localhost;dbname=visualight2data',
+            'username' => 'root',
+            'password' => '',
+            'charset' => 'utf8',
+]);
+
+
 $query = new Query();
 
-$salesData = $query->select(['division_name', 'transacton_date', 'SUM(amount) as total_amount'])
-    ->from('operational_report')
+$salesData = $query->select(['division', 'transaction_date', 'SUM(amount) as total_amount'])
+    ->from('transaction')
     // ->where(['between', 'transaction_date', $fromDate, $toDate])
-    // ->where(['between', 'transacton_date', '2023-06-10', '2023-06-14'])
-    ->groupBy(['division_name', 'transacton_date'])
-    ->orderBy(['transacton_date' => SORT_DESC])
+    // ->where(['between', 'transaction_date', '2023-06-10', '2023-06-14'])
+    ->groupBy(['division', 'transaction_date'])
+    ->orderBy(['transaction_date' => SORT_DESC])
     ->all();
 
 // Fetch transaction data from the database (depends on how many transaction in same date and same div_name)
-$transactionData = $query->select(['division_name', 'transacton_date', 'COUNT(*) as transaction_count'])
-    ->from('operational_report')
+$transactionData = $query->select(['division', 'transaction_date', 'COUNT(*) as transaction_count'])
+    ->from('transaction')
     // ->where(['between', 'transaction_date', $fromDate, $toDate])
-    ->groupBy(['division_name', 'transacton_date'])
-    ->orderBy(['transacton_date' => SORT_DESC])
+    ->groupBy(['division', 'transaction_date'])
+    ->orderBy(['transaction_date' => SORT_DESC])
     ->all();
 
 // Prepare $TransactionperDiv array (null pa// otw yung data HAHA)
@@ -589,8 +598,8 @@ $TransactionperDiv = [
 
 //getting data for the $TransactionperDiv
 foreach ($transactionData as $data) {
-    $divisionName = $data['division_name'];
-    $transactionDate = $data['transacton_date'];
+    $divisionName = $data['division'];
+    $transactionDate = $data['transaction_date'];
     $transactionCount = (int) $data['transaction_count'];
 
     // Add unique dates to the labels array
@@ -614,7 +623,7 @@ foreach ($transactionData as $data) {
 }
 
 $addressData = $query->select(['address', 'COUNT(*) as customer_count'])
-    ->from('operational_report')
+    ->from('customer')
     // ->where(['between', 'transaction_date', $fromDate, $toDate])
     ->groupBy(['address'])
     ->orderBy(['customer_count' => SORT_DESC])
@@ -650,7 +659,7 @@ foreach ($addressData as $customeraddress) {
 }
 
 $customerTypeData = $query->select(['customer_type', 'COUNT(*) as customer_count'])
-    ->from('operational_report')
+    ->from('customer')
     // ->where(['between', 'transaction_date', $fromDate, $toDate])
     ->groupBy(['customer_type'])
     ->orderBy(['customer_count' => SORT_DESC])
@@ -665,7 +674,7 @@ foreach ($customerTypeData as $customersType) {
 }
 
 $transactionTypeData = $query->select(['transaction_type', 'COUNT(*) as customer_count'])
-    ->from('operational_report')
+    ->from('transaction')
     // ->where(['between', 'transaction_date', $fromDate, $toDate])
     ->groupBy(['transaction_type'])
     ->orderBy(['customer_count' => SORT_DESC])
@@ -679,7 +688,7 @@ foreach ($transactionTypeData as $type) {
     $transactionTypecounts[] = $type['customer_count'];
 }
 $transactionStatusData = $query->select(['transaction_status', 'COUNT(*) as customer_count'])
-    ->from('operational_report')
+    ->from('transaction')
     // ->where(['between', 'transaction_date', $fromDate, $toDate])
     ->groupBy(['transaction_status'])
     ->orderBy(['customer_count' => SORT_DESC])
@@ -695,8 +704,8 @@ foreach ($transactionStatusData as $status) {
 }
 
 $PaymentMethodData = $query->select(['payment_method', 'COUNT(*) as customer_count'])
-    ->from('operational_report')
-    ->where(['payment_method' => ['Check', 'Over the counter', 'Online Payment']])
+    ->from('transaction')
+    ->where(['payment_method' => ['1', '2', '3']])
     // ->where(['between', 'transaction_date', $fromDate, $toDate])
     ->groupBy(['payment_method'])
     ->orderBy(['customer_count' => SORT_DESC])
@@ -722,8 +731,8 @@ $SalesperDiv = [
 
 //dito kukuha ng data for $SalesperDiv
 foreach ($salesData as $data) {
-    $divisionName = $data['division_name'];
-    $transactionDate = $data['transacton_date'];
+    $divisionName = $data['division'];
+    $transactionDate = $data['transaction_date'];
     $totalAmount = (float) $data['total_amount'];
 
     // Add unique dates to the labels array
@@ -747,9 +756,9 @@ foreach ($salesData as $data) {
 }
 
 $transactionPerday = (new Query())
-    ->select('transacton_date, COUNT(*) as transaction_count')
-    ->from('operational_report')
-    ->groupBy('transacton_date');
+    ->select('transaction_date, COUNT(*) as transaction_count')
+    ->from('transaction')
+    ->groupBy('transaction_date');
 
 $transactionPerday = $transactionPerday->all(); // Get the results with daily transaction counts
 $totalDays = count($transactionPerday); // Total number of days
@@ -761,9 +770,9 @@ foreach ($transactionPerday as $result) {
 $average = round($totalTransactions / $totalDays); // Calculate the average
 
 $SalesAve = (new Query())
-    ->select('transacton_date, SUM(amount) as transaction_count')
-    ->from('operational_report')
-    ->groupBy('transacton_date');
+    ->select('transaction_date, SUM(amount) as transaction_count')
+    ->from('transaction')
+    ->groupBy('transaction_date');
 
 $SalesAve = $SalesAve->all(); // Get the results with daily transaction counts
 $totalDays = count($SalesAve); // Total number of days
@@ -796,15 +805,15 @@ $divisionColors = [
 //dito yung pag lalagay nung naka set na color
 foreach ($SalesperDiv['datasets'] as &$dataset) {
     $divisionName = $dataset['label'];
-    $dataset['backgroundColor'] = isset($divisionColors[$divisionName]['backgroundColor']) ? $divisionColors[$divisionName]['backgroundColor'] : '#EFF5FF'; // Default background color if division_name not found
-    $dataset['borderColor'] = isset($divisionColors[$divisionName]['borderColor']) ? $divisionColors[$divisionName]['borderColor'] : '#0362BA'; // Default border color if division_name not found
+    $dataset['backgroundColor'] = isset($divisionColors[$divisionName]['backgroundColor']) ? $divisionColors[$divisionName]['backgroundColor'] : '#EFF5FF'; // Default background color if division not found
+    $dataset['borderColor'] = isset($divisionColors[$divisionName]['borderColor']) ? $divisionColors[$divisionName]['borderColor'] : '#0362BA'; // Default border color if division not found
     // $dataset['borderWidth'] = isset($divisionColors[$divisionName]['borderWidth']) ? $divisionColors[$divisionName]['borderWidth'] : '#0362BA';
 }
 
 foreach ($TransactionperDiv['datasets'] as &$dataset) {
     $divisionName = $dataset['label'];
-    $dataset['backgroundColor'] = isset($divisionColors[$divisionName]['backgroundColor']) ? $divisionColors[$divisionName]['backgroundColor'] : '#EFF5FF'; // Default background color if division_name not found
-    $dataset['borderColor'] = isset($divisionColors[$divisionName]['borderColor']) ? $divisionColors[$divisionName]['borderColor'] : '#0362BA'; // Default border color if division_name not found
+    $dataset['backgroundColor'] = isset($divisionColors[$divisionName]['backgroundColor']) ? $divisionColors[$divisionName]['backgroundColor'] : '#EFF5FF'; // Default background color if division not found
+    $dataset['borderColor'] = isset($divisionColors[$divisionName]['borderColor']) ? $divisionColors[$divisionName]['borderColor'] : '#0362BA'; // Default border color if division not found
     // $dataset['borderWidth'] = isset($divisionColors[$divisionName]['borderWidth']) ? $divisionColors[$divisionName]['borderWidth'] : '#0362BA';
 }
 
@@ -815,19 +824,19 @@ date_default_timezone_set('Asia/Manila');
 //dito banda kukunin yung number of transaction tapos kung anong date
 $todaymettrans = (new Query())
     ->select('COUNT(*)')
-    ->from('operational_report')
+    ->from('transaction')
     ->where([
-        'division_name' => 'National Metrology Department',
-        'transacton_date' => date('Y-m-d') // Assuming you want the number of transactions for today
+        'division' => '1',
+        'transaction_date' => date('Y-m-d') // Assuming you want the number of transactions for today
     ])
     ->scalar();
 
 $lastmettrans = (new Query())
     ->select('COUNT(*)')
-    ->from('operational_report')
+    ->from('transaction')
     ->where([
-        'division_name' => 'National Metrology Department',
-        'transacton_date' => date('Y-m-d', strtotime('-1 day'))
+        'division' => '1',
+        'transaction_date' => date('Y-m-d', strtotime('-1 day'))
     ])
     ->scalar();
 
@@ -850,19 +859,19 @@ if ($todaymettrans == 0) {
 //S&T transaction
 $todaySandTtrans = (new Query())
     ->select('COUNT(*)')
-    ->from('operational_report')
+    ->from('transaction')
     ->where([
-        'division_name' => 'Standard and Testing Division',
-        'transacton_date' => date('Y-m-d')
+        'division' => '2',
+        'transaction_date' => date('Y-m-d')
     ])
     ->scalar();
 
 $lastSandTtrans = (new Query())
     ->select('COUNT(*)')
-    ->from('operational_report')
+    ->from('transaction')
     ->where([
-        'division_name' => 'Standard and Testing Division',
-        'transacton_date' => date('Y-m-d', strtotime('-1 day'))
+        'division' => '2',
+        'transaction_date' => date('Y-m-d', strtotime('-1 day'))
     ])
     ->scalar();
 
@@ -879,6 +888,13 @@ if ($todaySandTtrans == 0) {
     }
 }
 
+Yii::$app->set('db', [ //revert default connection 
+    'class' => \yii\db\Connection::class,
+            'dsn' => 'mysql:host=localhost;dbname=visualight2user',
+            'username' => 'root',
+            'password' => '',
+            'charset' => 'utf8',
+]);
 
 ?>
 <div class="DailyTransaction">
