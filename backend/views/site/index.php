@@ -810,7 +810,7 @@ if ($saleaverage >= 1000 && $saleaverage <= 999999) {
 
 //setting default colors for each department
 $divisionColors = [
-    'National Metrology Department' => [
+    'National Metrology Division' => [
         'backgroundColor' => '#06d6a0',
         'borderWidth' => 2,
     ],
