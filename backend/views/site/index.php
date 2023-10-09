@@ -1403,51 +1403,45 @@ Yii::$app->set('db', [ //revert default connection
 
         // Config for the doughnut chart
         const config = {
-            type: 'doughnut',
-            data,
-            options: {
-                // cutout:'85%',
-                borderRadius: 10,
-                plugins: {
-                    legend: {
-                        display: false
+                type: 'doughnut',
+                data,
+                options: {
+                    // cutout:'85%',
+                    borderRadius: 10,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
                     },
-                    bgColor:{
-                        backgroundColor: 'white'
+
+                    // plugins:[divisionName] //to be continue
+                },
+                plugins: [{
+                    id: 'divisionName',
+                    afterDatasetsDraw(chart, args, options) {
+                        const {
+                            ctx,
+                            data,
+                            scales,
+                            chartArea: {
+                                left,
+                                top,
+                                width,
+                                height
+                            }
+                        } = chart;
+
+                        ctx.save();
+                        ctx.font = 'bolder 15px Poppins';
+                        ctx.fillStyle = 'rgb(3, 98, 186, 1)';
+                        ctx.textAlign = 'center';
+                        ctx.fillText('Average sales per day', width / 2.1, height / 2 + top);
+                        console.log(chart.getDatasetMeta(0))
+
                     }
 
-
-                },
-
-                // plugins:[divisionName] //to be continue
-            },
-            plugins: [bgColor1,{
-                id: 'divisionName',
-                afterDatasetsDraw(chart, args, options) {
-                    const {
-                        ctx,
-                        data,
-                        scales,
-                        chartArea: {
-                            left,
-                            top,
-                            width,
-                            height
-                        }
-                    } = chart;
-
-                    ctx.save();
-                    ctx.font = 'bolder 15px Poppins';
-                    ctx.fillStyle = 'rgb(3, 98, 186, 1)';
-                    ctx.textAlign = 'center';
-                    ctx.fillText('Average sales per day', width / 2.1, height / 2 + top);
-                    //console.log(chart.getDatasetMeta(0))
-
-                },
-
-            }],
-            
-        };
+                }]
+            };
 
         // Render the doughnut chart
         const myChart = new Chart(document.getElementById('myChart'), config);
