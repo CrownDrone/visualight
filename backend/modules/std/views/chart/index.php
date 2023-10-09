@@ -2354,11 +2354,11 @@ $this->title = '';
                                                                                     pdf.setFont('helvetica', 'bold');
                                                                                     pdf.setTextColor(0, 41, 102);
                                                                                     pdf.setFontSize(14);
-                                                                                    pdf.text('Visualight-Dashboard', 83, 10);
+                                                                                    pdf.text('Visualight-STD', 83, 10);
 
-                                                                                    pdf.addImage(combinedChartImg, 'PNG', 40, 30, 130, 70);
-                                                                                    pdf.addImage(transactionChartImg, 'PNG', 40, 123, 130, 70);
-                                                                                    pdf.addImage(salesChartImg, 'PNG', 40, 220, 130, 70);
+                                                                                    pdf.addImage(combinedChartImg, 'JPEG', 40, 30, 130, 70, undefined, 'FAST');
+                                                                                    pdf.addImage(transactionChartImg, 'JPEG', 40, 123, 130, 70, undefined, 'FAST');
+                                                                                    pdf.addImage(salesChartImg, 'JPEG', 40, 220, 130, 70, undefined, 'FAST');
 
                                                                                     pdf.addPage();
 
@@ -2367,15 +2367,15 @@ $this->title = '';
                                                                                     pdf.setTextColor(0, 122, 204);
                                                                                     pdf.text('Average Sales Daily', 40, 25);
 
-                                                                                    pdf.addImage(myChartImg, 'PNG', 50, 20, 110, 70);
+                                                                                    pdf.addImage(myChartImg, 'JPEG', 50, 20, 110, 70, undefined, 'FAST');
 
                                                                                     pdf.text('Type of Customers', 40, 115);
 
-                                                                                    pdf.addImage(customerTypeChartImg, 'PNG', 40, 120, 130, 70);
+                                                                                    pdf.addImage(customerTypeChartImg, 'JPEG', 40, 120, 130, 70, undefined, 'FAST');
 
                                                                                     pdf.text('Total Customers per Province', 40, 215);
 
-                                                                                    pdf.addImage(provincesChartImg, 'PNG', 40, 225, 130, 70);
+                                                                                    pdf.addImage(provincesChartImg, 'JPEG', 40, 225, 130, 70, undefined, 'FAST');
 
                                                                                     pdf.addPage();
 
@@ -2384,19 +2384,19 @@ $this->title = '';
                                                                                     pdf.setTextColor(0, 122, 204);
                                                                                     pdf.text('Transaction Status', 40, 18);
 
-                                                                                    pdf.addImage(transactionStatusChartImg, 'PNG', 60, 25, 100, 80);
+                                                                                    pdf.addImage(transactionStatusChartImg, 'JPEG', 60, 25, 100, 80, undefined, 'FAST');
 
                                                                                     pdf.text('Payment Method', 40, 115);
 
-                                                                                    pdf.addImage(paymentChartImg, 'JPEG', 60, 115, 100, 80);
+                                                                                    pdf.addImage(paymentChartImg, 'JPEG', 60, 115, 100, 80, undefined, 'FAST');
 
 
                                                                                     pdf.text('Transaction Type', 40, 215);
 
-                                                                                    pdf.addImage(transactionTypeChartImg, 'PNG', 60, 215, 100, 80);
+                                                                                    pdf.addImage(transactionTypeChartImg, 'JPEG', 60, 215, 100, 80, undefined, 'FAST');
 
 
-                                                                                    pdf.save('Visualight-Dashboard.pdf');
+                                                                                    pdf.save('Visualight-STD.pdf');
                                                                                 });
                                                                         });
 
