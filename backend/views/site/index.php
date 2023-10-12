@@ -1,3 +1,4 @@
+@@ -1,2272 +1,2273 @@
 <?php
 
 $this->title = '';
@@ -686,7 +687,22 @@ $customerTypeData = $query->select(['customer_type', 'COUNT(*) as customer_count
 $customerType = [];
 $customerscounts = [];
 
+$customerType_name = [
+    "1" => "Student",
+    "2" => "Individual",
+    "3" => "Private",
+    "4" => "Government",
+    "5" => "Internal",
+    "6" => "Academe",
+    "7" => "Not Applicable",
+];
+
+
 foreach ($customerTypeData as $customersType) {
+    if (isset($customersType['customer_type']) && isset($customerType_name[$customersType['customer_type']]))
+    {
+        $customersType['customer_type']=$customerType_name[$customersType['customer_type']];
+    }
     $customerType[] = $customersType['customer_type'];
     $customerscounts[] = $customersType['customer_count'];
 }
@@ -701,10 +717,22 @@ $transactionTypeData = $query->select(['transaction_type', 'COUNT(*) as customer
 $transactionType = [];
 $transactionTypecounts = [];
 
+$transactionType_name = [
+    "1" => "Technical Services",
+    "2" => "National Laboratory Information Management System",
+    "3" => "Unified Laboratory Information Management System",
+];
+
 foreach ($transactionTypeData as $type) {
+    if (isset($type['transaction_type']) && isset($transactionType_name[$type['transaction_type']]))
+    {
+        $type['transaction_type']=$transactionType_name[$type['transaction_type']];
+    }
+
     $transactionType[] = $type['transaction_type'];
     $transactionTypecounts[] = $type['customer_count'];
 }
+
 $transactionStatusData = $query->select(['transaction_status', 'COUNT(*) as customer_count'])
     ->from('transaction')
     // ->where(['between', 'transaction_date', $fromDate, $toDate])
@@ -716,9 +744,21 @@ $transactionStatusData = $query->select(['transaction_status', 'COUNT(*) as cust
 $transactionStatus = [];
 $transactionStatusDatacounts = [];
 
+$transactionStatus_name = [
+    "1" => "Paid",
+    "2" => "Cancelled",
+    "3" => "Pending",
+];
+
+
 foreach ($transactionStatusData as $status) {
+    if (isset($status['transaction_status']) && isset($transactionStatus_name[$status['transaction_status']]))
+    {
+        $status['transaction_status']=$transactionStatus_name[$status['transaction_status']];
+    }
     $transactionStatus[] = $status['transaction_status'];
     $transactionStatusDatacounts[] = $status['customer_count'];
+
 }
 
 $PaymentMethodData = $query->select(['payment_method', 'COUNT(*) as customer_count'])
@@ -733,7 +773,18 @@ $PaymentMethodData = $query->select(['payment_method', 'COUNT(*) as customer_cou
 $PaymentMethod = [];
 $PaymentMethodcounts = [];
 
+
+$paymentmethod_name = [
+    "1" => "Over the Counter",
+    "2" => "Online Payment",
+    "3" => "Cheque",
+];
+
 foreach ($PaymentMethodData as $method) {
+    if (isset($method['payment_method']) && isset($paymentmethod_name[$method['payment_method']]))
+    {
+        $method['payment_method']=$paymentmethod_name[$method['payment_method']];
+    }
     $PaymentMethod[] = $method['payment_method'];
     $PaymentMethodcounts[] = $method['customer_count'];
 }
@@ -814,7 +865,6 @@ $divisionColors = [
         'backgroundColor' => '#06d6a0',
         'borderWidth' => 2,
     ],
-    'Standard and Testing Division' => [
         'backgroundColor' => '#7209b7',
         'borderWidth' => 2,
     ],
@@ -1649,6 +1699,7 @@ Yii::$app->set('db', [ //revert default connection
         let transactionTypeChart = null;
         let customerTypeChart = null;
 
+
         // Update charts based on selected chart type
         function updateCharts() {
             const selectedChartType = chartTypeDropdown.value;
@@ -2252,15 +2303,16 @@ Yii::$app->set('db', [ //revert default connection
                                                                                 });
                                                                         });
 
-                                                                });
-                                                        });
-                                                });
-                                        });
-                                });
-                        });
-                })
-                .catch(function(error) {
                     console.error('Error generating PDF:', error);
-                });
-        }
-    </script>
+                                                            });
+                                                    });
+                                            });
+                                    });
+                            });
+                    });
+            })
+            .catch(function(error) {
+                console.error('Error generating PDF:', error);
+            });
+    }
+</script>
