@@ -865,6 +865,7 @@ $divisionColors = [
         'backgroundColor' => '#06d6a0',
         'borderWidth' => 2,
     ],
+    'Standards and Testing Division' => [
         'backgroundColor' => '#7209b7',
         'borderWidth' => 2,
     ],
@@ -2303,7 +2304,6 @@ Yii::$app->set('db', [ //revert default connection
                                                                                 });
                                                                         });
 
-                    console.error('Error generating PDF:', error);
                                                             });
                                                     });
                                             });
