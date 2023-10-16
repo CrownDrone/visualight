@@ -704,7 +704,6 @@ foreach ($customerTypeData as $customersType) {
         $customersType['customer_type']=$customerType_name[$customersType['customer_type']];
     }
     $customerType[] = $customersType['customer_type'];
-    $customerscounts[] = $customersType['customer_count'];
 }
 
 $transactionTypeData = $query->select(['transaction_type', 'COUNT(*) as customer_count'])

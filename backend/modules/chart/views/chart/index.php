@@ -224,7 +224,8 @@ $monthLabel = (new Query())
         monthChartLoad();
         monthLabelLoad();
         dateFilterRefresh();
-        console.log(dataCon.datasets)
+        console.log(queryAllDates);
+        console.log(dataCon);
         const pieChartData = (<?= json_encode($pieChartData) ?>); //di ma edit pag sa html declared yung canvas/chart
         //Prepare the bar chart 
         const barCtx = document.getElementById('barChart').getContext('2d');
@@ -458,7 +459,7 @@ $monthLabel = (new Query())
                     datasets.data = newDataLog;
                 });
                 barChart.config.data.datasets = newDataCon.datasets; //replace the current chart dataset
-                console.log(newLabels)
+                console.log(queryAllLabel)
                 barChart.update(); //udpate the chart
                 newDataCon = JSON.parse(JSON.stringify(cacheDataCon)); //reverts the value of the newdataCon prior to modification
 

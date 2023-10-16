@@ -6,6 +6,7 @@ use common\models\ForgotPasswordForm;
 use common\models\LoginForm;
 use common\models\PdfUploadForm;
 use common\models\ResetPasswordForm;
+use common\models\Site;
 use Yii;
 use yii\base\InvalidParamException;
 use yii\filters\VerbFilter;
@@ -19,6 +20,8 @@ use yii\web\Response;
 use yii\db\ActiveRecord;
 use common\models\User;
 use yii\web\UploadedFile;
+use yii\db\Query;
+use DateTime;
 
 
 /**
@@ -40,18 +43,18 @@ class SiteController extends BaseController
                         'allow' => true,
                         'actions' => ['login'],
                         'roles' => ['@'],
-                  ],
-                  [
-                      'allow' => true,
-                      'actions' => ['index'],
-                      'roles' => ['ADMIN','USERS'], 
-                  ],
-                  [
-                    'allow' => true,
-                    'actions' => ['logout'],
-                    'roles' => ['@'], //everyone allowed
-                ],
-                
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['index'],
+                        'roles' => ['ADMIN', 'USERS'],
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['logout'],
+                        'roles' => ['@'], //everyone allowed
+                    ],
+
                 ],
             ],
             'verbs' => [
@@ -63,7 +66,7 @@ class SiteController extends BaseController
         ];
     }
 
-    
+
     /**
      * {@inheritdoc}
      */
@@ -81,8 +84,66 @@ class SiteController extends BaseController
      *
      * @return string
      */
-    public function actionIndex()
+    public function actionIndex() //this is for the dashboard keme keme chemerut
     {
+        $queryAllDate = (new Query()) //daily record seperated by division, Y axis for the chart
+            ->select(['transaction_date AS labels', 'COUNT(*) AS datasets', 'division AS label'])
+            ->from('visualight2data.transaction') //from visualight2data database within transaction table
+            ->groupBy('transaction_date, division')
+            ->orderBy('transaction_date')
+            ->all();
+
+        $dailyMapping = [ //to be used on renaming divisions
+            "1" => "National Metrology Division",
+            "2" => "Standards and Testing Division",
+        ];
+
+        foreach ($queryAllDate as &$item) { //to change division 1 & 2 into actual division name
+            if (isset($item['label']) && isset($dailyMapping[$item['label']])) {
+                $item['label'] = $dailyMapping[$item['label']];
+            }
+        }
+
+        $queryAllDate2 = (new Query()) //daily record, separated kasi eto yung total transaction of 2 divisions
+            ->select([
+                'transaction_date AS labels',
+                'COUNT(*) AS datasets',
+                new \yii\db\Expression("CASE WHEN division IS NOT NULL THEN 'Total' ELSE NULL END AS label")
+            ])
+            ->from('visualight2data.transaction')
+            ->groupBy('transaction_date')
+            ->orderBy('transaction_date')
+            ->all();
+
+        array_splice($queryAllDate, 2, 0, $queryAllDate2); //separates array to insert new value
+
+        $queryAllDate = array_values($queryAllDate); //re-index the array
+
+        $currentYear = date('Y');//gets year in YYYY format
+        $startDate = "$currentYear-01-01";//first date of the current year
+        $endDate = "$currentYear-12-31";//last date of the current year
+
+        $dateRange = [];
+        $currentDate = new DateTime($startDate);
+        while ($currentDate->format('Y-m-d') <= $endDate) {//formats the date into like 2023-12-31
+            $dateRange[] = $currentDate->format('Y-m-d');
+            $currentDate->modify('+1 day');
+        }
+
+        $existingDates = Site::find()//looks for existing date(YYY-MM-DD) record
+            ->select('date')
+            ->where(['between', 'date', $startDate, $endDate])
+            ->asArray()
+            ->column();
+
+
+        $chartLabel = (new Query()) //YYYY-MM-DD will serve as label for the chart, the X axis if you may
+            ->select('transDate AS labels')
+            ->from('mock_data')
+            ->groupBy('transDate')
+            ->orderBy('transDate')
+            ->all();
+
         return $this->render('index');
     }
 
@@ -98,15 +159,15 @@ class SiteController extends BaseController
             // Redirect to the homepage or dashboard since the user is already logged in.
             return $this->goHome();
         }
-    
+
         $this->layout = 'main-login';
-    
+
         $model = new LoginForm();
-    
+
         if ($model->load(Yii::$app->request->post())) {
             // Find the user by their username or email
             $user = User::findByUsernameOrEmail($model->username);
-        
+
             if (!$user) {
                 // User account doesn't exist, display an error message
                 Yii::$app->session->setFlash('error', 'Account doesn\'t exist. Please contact the Administrator to create an account.');
@@ -121,12 +182,12 @@ class SiteController extends BaseController
                 } else {
                     // Log in the user
                     Yii::$app->user->login($user, $model->rememberMe ? 3600 * 24 * 30 : 0);
-        
+
                     // Redirect based on roles and terms acceptance
                     if (Yii::$app->user->can('ADMIN') || Yii::$app->user->can('USERS')) {
                         // After successful login, check if the user has accepted the terms
                         $termsAccepted = !empty($user->tos);
-        
+
                         if ($termsAccepted) {
                             return $this->goHome(); // Redirect to homepage or dashboard
                         } else {
@@ -136,10 +197,10 @@ class SiteController extends BaseController
                         // Log out non-ADMIN users and terminate their session
                         Yii::$app->user->logout();
                         Yii::$app->session->destroy();
-        
+
                         // Set an error flash message
                         Yii::$app->session->setFlash('error', 'You are not authorized to access this site.');
-        
+
                         // Redirect to the login page
                         return $this->redirect(['/site/login']);
                     }
@@ -148,18 +209,18 @@ class SiteController extends BaseController
                 // Invalid username or password, display an error message
                 Yii::$app->session->setFlash('error', 'Invalid username or password.');
             }
-        
-        // Continue with the rest of your code as needed.
-        
+
+            // Continue with the rest of your code as needed.
+
         }
-    
+
         return $this->render('login', [
             'model' => $model,
         ]);
     }
-    
-    
-    
+
+
+
     /**
      * Logout action.
      *
@@ -192,7 +253,6 @@ class SiteController extends BaseController
                         ->send();
                     if ($mailer) {
                         return $this->redirect(['site/success']);
-                        
                     } else {
                         Yii::$app->session->setFlash('error', 'Failed to send reset Password.');
                         die;
@@ -213,14 +273,14 @@ class SiteController extends BaseController
     {
         $this->layout = 'main-no-sidebar';
         $model = new ResetPasswordForm();
-    
+
         if ($token === null) {
             Yii::$app->session->setFlash('error', 'Cant access the page. No token provided.');
             return $this->redirect(['site/login']);
         }
-    
+
         $user = User::findByPasswordResetToken($token);
-    
+
         if (!$user || !$user->isPasswordResetTokenValid1($token)) {
             if ($user) {
                 // Token expired and not used, set it to null
@@ -230,11 +290,11 @@ class SiteController extends BaseController
             Yii::$app->session->setFlash('error', 'Token Expired.');
             return $this->redirect(['/site/login']);
         }
-    
+
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $user->password_hash = Yii::$app->security->generatePasswordHash($model->newPassword);
             $user->removePasswordResetToken();
-    
+
             if ($user->save()) {
 
                 if (!Yii::$app->user->isGuest) {
@@ -247,7 +307,7 @@ class SiteController extends BaseController
                 Yii::$app->session->setFlash('error', 'Failed to reset password.');
             }
         }
-    
+
         return $this->render('reset-password', [
             'model' => $model,
         ]);
@@ -260,115 +320,112 @@ class SiteController extends BaseController
     }
 
     public function actionVerifyEmail($token)
-{
+    {
 
-    if (!Yii::$app->user->isGuest) {
-        Yii::$app->user->logout(); // Log out the current user
-    }
-
-    
-    $user = User::findByVerificationToken($token);
-
-    if ($user !== null) {
-        $user->status = User::STATUS_ACTIVE; // Mark the account as verified
-        $user->removeEmailVerificationToken(); // Remove the verification token
-        $user->save(false); // Save the user without validation
-
-        Yii::$app->session->setFlash('success', 'Your email has been verified. You can now log in.');
-    } else {
-        Yii::$app->session->setFlash('error', 'Invalid verification token.');
-    }
-
-    return $this->redirect(['site/login']); // Redirect to the login page
-}
-
-public function actionUploadPdf()
-{
-    $model = new PdfUploadForm();
-
-    if (Yii::$app->request->isPost) {
-        $model->pdfFile = UploadedFile::getInstances($model, 'pdfFile');
-
-        $uploadSuccessful = true;
-        $filePaths = [];
-
-        foreach ($model->pdfFile as $file) {
-            $fileName = time() . '_' . $file->name;
-            $uploadPath = 'C:/xampp/htdocs/visualight/common/temp_pdf/' . $fileName;
-
-            if (!$file->saveAs($uploadPath)) {
-                $uploadSuccessful = false;
-                Yii::$app->session->setFlash('error', 'Error while uploading one or more files.');
-                break;
-            }
-
-            $filePaths[] = $uploadPath;
+        if (!Yii::$app->user->isGuest) {
+            Yii::$app->user->logout(); // Log out the current user
         }
 
-        if ($uploadSuccessful) {
-            // Retrieve the selected roles from POST data as an array
-            $selectedRoles = Yii::$app->request->post('PdfUploadForm')['selectedRoles'];
 
-            foreach ($selectedRoles as $selectedRole) {
-                $topManagers = Yii::$app->authManager->getUserIdsByRole($selectedRole);
+        $user = User::findByVerificationToken($token);
 
-                foreach ($topManagers as $managerId) {
-                    $user = User::findOne($managerId); // Replace 'User' with your user model class
+        if ($user !== null) {
+            $user->status = User::STATUS_ACTIVE; // Mark the account as verified
+            $user->removeEmailVerificationToken(); // Remove the verification token
+            $user->save(false); // Save the user without validation
 
-                    if ($user) {
-                        $message = Yii::$app->mailer->compose()
-                            ->setFrom([Yii::$app->params['adminEmail'] => 'Visualight Team'])
-                            ->setTo($user->email)
-                            ->setSubject('PDF Files')
-                            ->setTextBody('Please find attached the PDF files.');
+            Yii::$app->session->setFlash('success', 'Your email has been verified. You can now log in.');
+        } else {
+            Yii::$app->session->setFlash('error', 'Invalid verification token.');
+        }
 
-                        // Attach all the uploaded files to the email
-                        foreach ($filePaths as $filePath) {
-                            $message->attach($filePath);
-                        }
+        return $this->redirect(['site/login']); // Redirect to the login page
+    }
 
-                        if (!$message->send()) {
-                            Yii::$app->session->setFlash('error', 'Error while sending one or more emails.');
-                            break;
+    public function actionUploadPdf()
+    {
+        $model = new PdfUploadForm();
+
+        if (Yii::$app->request->isPost) {
+            $model->pdfFile = UploadedFile::getInstances($model, 'pdfFile');
+
+            $uploadSuccessful = true;
+            $filePaths = [];
+
+            foreach ($model->pdfFile as $file) {
+                $fileName = time() . '_' . $file->name;
+                $uploadPath = 'C:/xampp/htdocs/visualight/common/temp_pdf/' . $fileName;
+
+                if (!$file->saveAs($uploadPath)) {
+                    $uploadSuccessful = false;
+                    Yii::$app->session->setFlash('error', 'Error while uploading one or more files.');
+                    break;
+                }
+
+                $filePaths[] = $uploadPath;
+            }
+
+            if ($uploadSuccessful) {
+                // Retrieve the selected roles from POST data as an array
+                $selectedRoles = Yii::$app->request->post('PdfUploadForm')['selectedRoles'];
+
+                foreach ($selectedRoles as $selectedRole) {
+                    $topManagers = Yii::$app->authManager->getUserIdsByRole($selectedRole);
+
+                    foreach ($topManagers as $managerId) {
+                        $user = User::findOne($managerId); // Replace 'User' with your user model class
+
+                        if ($user) {
+                            $message = Yii::$app->mailer->compose()
+                                ->setFrom([Yii::$app->params['adminEmail'] => 'Visualight Team'])
+                                ->setTo($user->email)
+                                ->setSubject('PDF Files')
+                                ->setTextBody('Please find attached the PDF files.');
+
+                            // Attach all the uploaded files to the email
+                            foreach ($filePaths as $filePath) {
+                                $message->attach($filePath);
+                            }
+
+                            if (!$message->send()) {
+                                Yii::$app->session->setFlash('error', 'Error while sending one or more emails.');
+                                break;
+                            }
                         }
                     }
                 }
-            }
 
-            if (!Yii::$app->session->hasFlash('error')) {
-                Yii::$app->session->setFlash('success', 'PDF files uploaded and emails sent successfully.');
+                if (!Yii::$app->session->hasFlash('error')) {
+                    Yii::$app->session->setFlash('success', 'PDF files uploaded and emails sent successfully.');
 
-                // Redirect to prevent repeated form submissions
-                return $this->redirect(['site/upload-pdf']);
+                    // Redirect to prevent repeated form submissions
+                    return $this->redirect(['site/upload-pdf']);
+                }
             }
         }
+
+        return $this->render('upload-pdf', ['model' => $model]);
     }
 
-    return $this->render('upload-pdf', ['model' => $model]);
-}
 
+    public function actionUpload()
+    {
+        $model = new PdfUploadForm();
 
-public function actionUpload()
-{
-    $model = new PdfUploadForm();
+        if (Yii::$app->request->isPost) {
+            $model->pdfFile = UploadedFile::getInstances($model, 'pdfFile');
 
-    if (Yii::$app->request->isPost) {
-        $model->pdfFile = UploadedFile::getInstances($model, 'pdfFile');
+            if ($model->upload()) {
+                // File(s) uploaded successfully
+                Yii::$app->session->setFlash('success', 'PDF file(s) uploaded successfully.');
+            } else {
+                // Error in file upload
+                Yii::$app->session->setFlash('error', 'Error while uploading PDF file(s).');
+            }
 
-        if ($model->upload()) {
-            // File(s) uploaded successfully
-            Yii::$app->session->setFlash('success', 'PDF file(s) uploaded successfully.');
-        } else {
-            // Error in file upload
-            Yii::$app->session->setFlash('error', 'Error while uploading PDF file(s).');
+            return $this->redirect(['site/upload-pdf']);
         }
 
-        return $this->redirect(['site/upload-pdf']);
+        return $this->render('upload-pdf', ['model' => $model]);
     }
-
-    return $this->render('upload-pdf', ['model' => $model]);
-}
-
-
-
 }
