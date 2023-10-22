@@ -37,8 +37,8 @@ $this->title = '';
             display: inline-block;
         }
 
-        .uwu-text,
-        .ehe-text {
+        .transactionAverage,
+        .salesAverage {
             background-color: #B526C2;
             color: white;
             width: 220px;
@@ -52,9 +52,9 @@ $this->title = '';
             margin-bottom: 30px;
         }
 
-        .uwu-text {
+        .transactionAverage {
             background-color: #11A34C;
-            /* Updated background color for .uwu-text */
+            /* Updated background color for .transactionAverage */
         }
 
         .texty {
@@ -93,8 +93,8 @@ $this->title = '';
                 display: inline-block;
             }
 
-            .uwu-text,
-            .ehe-text {
+            .transactionAverage,
+            .salesAverage {
                 width: 120px;
                 height: 120px;
                 border-radius: 20px;
@@ -302,18 +302,11 @@ $this->title = '';
             border-radius: .93rem;
             background-color: white;
             display: inline-block;
-            height: 28rem;
+            height: 30rem;
             width: 100%;
-            max-width: 47%;
-            overflow-x: scroll;
-            overflow-y: hidden;
-            white-space: nowrap;
+            
         }
 
-        .containerBody {
-            height: 100%;
-            width: 200%;
-        }
 
         .graph2 {
             width: 100%;
@@ -527,31 +520,47 @@ $this->title = '';
     // $fromDate = $_POST['startDate'];
     // $toDate = $_POST['endDate'];
 
+    Yii::$app->set('db', [ //reroute default connection 
+        'class' => \yii\db\Connection::class,
+        'dsn' => 'mysql:host=localhost;dbname=visualight2data',
+        'username' => 'root',
+        'password' => '',
+        'charset' => 'utf8',
+    ]);
+
     $query = new Query();
 
-    $salesData = $query->select(['division_name', 'transacton_date', 'SUM(amount) as total_amount'])
-        ->from('operational_report')
+    $salesData = $query->select(['division', 'transaction_date', 'SUM(amount) as total_amount'])
+        ->from('transaction')
         // ->where(['between', 'transaction_date', $fromDate, $toDate])
-        // ->where(['between', 'transacton_date', '2023-06-10', '2023-06-14'])
+        // ->where(['between', 'transaction_date', '2023-06-10', '2023-06-14'])
         ->where([
-            'division_name' => 'Standard and Testing Division',
-            'transaction_status' => ['Pending', 'Paid']
+            'division' => '2',
+            'transaction_status' => ['1'] //videlle bakit mo sinasama pending sa sales? Di pa nga bayad yon eh
         ])
-        ->groupBy(['division_name', 'transacton_date'])
-        ->orderBy(['transacton_date' => SORT_DESC])
+        ->groupBy(['division', 'transaction_date'])
+        ->orderBy(['transaction_date' => SORT_DESC])
         ->all();
     // Prepare $SalesperDiv array (null pa to)
     $SalesperDiv = [
         'labels' => [],
         'datasets' => [],
     ];
-
-
+    
+    $divMapping = [
+        "2" => "Standard and Testing Division",
+    ];
+    
+    foreach ($salesData as &$item) { //this renames division into actual division name
+        if (isset($item['division']) && isset($divMapping[$item['division']])) {
+            $item['division'] = $divMapping[$item['division']];
+        }
+    }
 
     //dito kukuha ng data for $SalesperDiv
     foreach ($salesData as $data) {
-        $divisionName = $data['division_name'];
-        $transactionDate = $data['transacton_date'];
+        $divisionName = $data['division'];
+        $transactionDate = $data['transaction_date'];
         $totalAmount = (float) $data['total_amount'];
 
         // Add unique dates to the labels array
@@ -574,17 +583,23 @@ $this->title = '';
         }
     }
 
-    // Fetch transaction data from the database (depends on how many transaction in same date and same div_name)
-    $transactionData = $query->select(['division_name', 'transacton_date', 'COUNT(*) as transaction_count'])
-        ->from('operational_report')
+    $query = new Query();
+    // Fetch transaction data from the database 
+    $transactionData = $query->select(['division', 'transaction_date', 'COUNT(*) as transaction_count'])
+        ->from('transaction')
         // ->where(['between', 'transaction_date', $fromDate, $toDate])
         ->where([
-            'division_name' => 'Standard and Testing Division',
-            'transaction_status' => ['Pending', 'Paid']
+             'division' => '2'
         ])
-        ->groupBy(['division_name', 'transacton_date'])
-        ->orderBy(['transacton_date' => SORT_DESC])
+        ->groupBy(['division', 'transaction_date'])
+        ->orderBy(['transaction_date' => SORT_DESC])
         ->all();
+
+    foreach ($transactionData as &$item) { //this renames division into actual division name
+        if (isset($item['division']) && isset($divMapping[$item['division']])) {
+            $item['division'] = $divMapping[$item['division']];
+        }
+    }
 
     // Prepare $TransactionperDiv array (null pa// otw yung data HAHA)
     $TransactionperDiv = [
@@ -594,8 +609,8 @@ $this->title = '';
 
     //getting data for the $TransactionperDiv
     foreach ($transactionData as $data) {
-        $divisionName = $data['division_name'];
-        $transactionDate = $data['transacton_date'];
+        $divisionName = $data['division'];
+        $transactionDate = $data['transaction_date'];
         $transactionCount = (int) $data['transaction_count'];
 
         // Add unique dates to the labels array
@@ -619,15 +634,13 @@ $this->title = '';
     }
 
 
-    $addressData = $query->select(['address', 'COUNT(*) as customer_count'])
-        ->from('operational_report')
-        // ->where(['between', 'transaction_date', $fromDate, $toDate])
-        ->where([
-            'division_name' => 'Standard and Testing Division',
-        ])
-        ->groupBy(['address'])
-        ->orderBy(['customer_count' => SORT_DESC])
-        ->limit(100000)
+    $query = new Query();
+    $addressData = $query->select(['c.address as address', 'COUNT(*) as customer_count']) //joined table of transaction and customer, 
+        ->from('transaction bs')                                              //since both have id in their columns, aliases are used (bs and c)
+        ->innerJoin('customer c', 'bs.customer_id = c.id')
+        ->where(['bs.division' => ['1']])
+        ->groupBy('c.address')
+        ->orderBy('bs.transaction_date')
         ->all();
 
     // // Prepare data for the chart
@@ -637,7 +650,7 @@ $this->title = '';
         'labels' => [],
         'datasets' => [],
     ];
-
+    
     foreach ($addressData as $customeraddress) {
         $province[] = $customeraddress['address'];
         $customersCounts[] = $customeraddress['customer_count'];
@@ -657,89 +670,152 @@ $this->title = '';
             $provinces['datasets'][$provinceIndex]['data'][] = $customersCounts;
         }
     }
+    function debug_to_console($data) {
+        $output = $data;
+        if (is_array($output))
+            $output = implode(', ', $output[0]);
+    
+        echo "<script>console.log('Debug Objects: " . $output . "' );</script>";
+    }
+    debug_to_console($addressData);
 
-    $customerTypeData = $query->select(['customer_type', 'COUNT(*) as customer_count'])
-        ->from('operational_report')
-        // ->where(['between', 'transaction_date', $fromDate, $toDate])
+
+    $query = new Query();
+    $customerTypeData = $query->select([
+        'c.customer_type',
+        'customer_count' => new \yii\db\Expression('COUNT(*)')
+    ])
+        ->from('transaction bs')
+        ->innerJoin(['customer c'], 'bs.customer_id = c.id')
         ->where([
-            'division_name' => 'Standard and Testing Division',
-            'transaction_status' => ['Pending', 'Paid']
+            'bs.division' => 1
         ])
-        ->groupBy(['customer_type'])
-        ->orderBy(['customer_count' => SORT_DESC])
-        ->limit(100000)
+        ->groupBy('c.customer_type')
+        ->orderBy('bs.transaction_date')
         ->all();
+
+    $customerType_name = [
+        "1" => "Student",
+        "2" => "Individual",
+        "3" => "Private",
+        "4" => "Government",
+        "5" => "Internal",
+        "6" => "Academe",
+        "7" => "Not Applicable",
+    ];
+
     $customerType = [];
     $customerscounts = [];
-
+    
     foreach ($customerTypeData as $customersType) {
+        if (isset($customersType['customer_type']) && isset($customerType_name[$customersType['customer_type']])) {
+            $customersType['customer_type'] = $customerType_name[$customersType['customer_type']];
+        }
         $customerType[] = $customersType['customer_type'];
         $customerscounts[] = $customersType['customer_count'];
     }
 
+    $query = new Query();
     $transactionTypeData = $query->select(['transaction_type', 'COUNT(*) as customer_count'])
-        ->from('operational_report')
+        ->from('transaction')
         // ->where(['between', 'transaction_date', $fromDate, $toDate])
         ->where([
-            'division_name' => 'Standard and Testing Division',
-            'transaction_status' => ['Pending', 'Paid']
+             'division' => '2',
+            //'transaction_status' => ['1']
         ])
         ->groupBy(['transaction_type'])
         ->orderBy(['customer_count' => SORT_DESC])
-        ->limit(100000)
         ->all();
+
     $transactionType = [];
     $transactionTypecounts = [];
 
+    $transactionType_name = [
+        "1" => "Technical Services",
+        "2" => "National Laboratory Information Management System",
+        "3" => "Unified Laboratory Information Management System",
+    ];
+
     foreach ($transactionTypeData as $type) {
+        if (isset($type['transaction_type']) && isset($transactionType_name[$type['transaction_type']]))
+        {
+            $type['transaction_type']=$transactionType_name[$type['transaction_type']];
+        }
+    
         $transactionType[] = $type['transaction_type'];
         $transactionTypecounts[] = $type['customer_count'];
     }
+    
+    $query = new Query();
     $transactionStatusData = $query->select(['transaction_status', 'COUNT(*) as customer_count'])
-        ->from('operational_report')
+        ->from('transaction')
         // ->where(['between', 'transaction_date', $fromDate, $toDate])
         ->where([
-            'division_name' => 'Standard and Testing Division',
+             'division' => '2',
         ])
         ->groupBy(['transaction_status'])
         ->orderBy(['customer_count' => SORT_DESC])
-        ->limit(100000)
         ->all();
 
     $transactionStatus = [];
     $transactionStatusDatacounts = [];
 
+    $transactionStatus_name = [
+        "1" => "Paid",
+        "2" => "Cancelled",
+        "3" => "Pending",
+    ];
+
+
     foreach ($transactionStatusData as $status) {
+        if (isset($status['transaction_status']) && isset($transactionStatus_name[$status['transaction_status']]))
+        {
+            $status['transaction_status']=$transactionStatus_name[$status['transaction_status']];
+        }
         $transactionStatus[] = $status['transaction_status'];
         $transactionStatusDatacounts[] = $status['customer_count'];
+    
     }
 
+    $query = new Query();
     $PaymentMethodData = $query->select(['payment_method', 'COUNT(*) as customer_count'])
-        ->from('operational_report')
-        ->where(['payment_method' => ['Check', 'Over the counter', 'Online Payment']])
+        ->from('transaction')
+        ->where(['payment_method' => ['1', '2', '3']])
         // ->where(['between', 'transaction_date', $fromDate, $toDate])
         ->where([
-            'division_name' => 'Standard and Testing Division',
-            'transaction_status' => 'Paid'
+             'division' => '2',
+            'transaction_status' => '1'
         ])
         ->groupBy(['payment_method'])
         ->orderBy(['customer_count' => SORT_DESC])
-        ->limit(100000)
         ->all();
 
     $PaymentMethod = [];
     $PaymentMethodcounts = [];
 
+    $paymentmethod_name = [
+        "1" => "Over the Counter",
+        "2" => "Online Payment",
+        "3" => "Cheque",
+    ];
+
     foreach ($PaymentMethodData as $method) {
+        if (isset($method['payment_method']) && isset($paymentmethod_name[$method['payment_method']]))
+        {
+            $method['payment_method']=$paymentmethod_name[$method['payment_method']];
+        }
         $PaymentMethod[] = $method['payment_method'];
         $PaymentMethodcounts[] = $method['customer_count'];
     }
 
-
     $transactionPerday = (new Query())
-        ->select('transacton_date, COUNT(*) as transaction_count')
-        ->from('operational_report')
-        ->groupBy('transacton_date');
+        ->select('transaction_date, COUNT(*) as transaction_count')
+        ->from('transaction')
+        ->where([
+            'division' => '2',
+           'transaction_status' => '1'
+       ])
+        ->groupBy('transaction_date');
 
     $transactionPerday = $transactionPerday->all(); // Get the results with daily transaction counts
     $totalDays = count($transactionPerday); // Total number of days
@@ -751,9 +827,13 @@ $this->title = '';
     $average = round($totalTransactions / $totalDays); // Calculate the average
 
     $SalesAve = (new Query())
-        ->select('transacton_date, SUM(amount) as transaction_count')
-        ->from('operational_report')
-        ->groupBy('transacton_date');
+        ->select('transaction_date, SUM(amount) as transaction_count')
+        ->from('transaction')
+        ->where([
+            'division' => '2',
+           'transaction_status' => '1'
+       ])
+        ->groupBy('transaction_date');
 
     $SalesAve = $SalesAve->all(); // Get the results with daily transaction counts
     $totalDays = count($SalesAve); // Total number of days
@@ -782,15 +862,15 @@ $this->title = '';
     //dito yung pag lalagay nung naka set na color
     foreach ($SalesperDiv['datasets'] as &$dataset) {
         $divisionName = $dataset['label'];
-        $dataset['backgroundColor'] = isset($divisionColors[$divisionName]['backgroundColor']) ? $divisionColors[$divisionName]['backgroundColor'] : '#EFF5FF'; // Default background color if division_name not found
-        $dataset['borderColor'] = isset($divisionColors[$divisionName]['borderColor']) ? $divisionColors[$divisionName]['borderColor'] : '#0362BA'; // Default border color if division_name not found
+        $dataset['backgroundColor'] = isset($divisionColors[$divisionName]['backgroundColor']) ? $divisionColors[$divisionName]['backgroundColor'] : '#EFF5FF'; // Default background color if division not found
+        $dataset['borderColor'] = isset($divisionColors[$divisionName]['borderColor']) ? $divisionColors[$divisionName]['borderColor'] : '#0362BA'; // Default border color if division not found
         // $dataset['borderWidth'] = isset($divisionColors[$divisionName]['borderWidth']) ? $divisionColors[$divisionName]['borderWidth'] : '#0362BA';
     }
 
     foreach ($TransactionperDiv['datasets'] as &$dataset) {
         $divisionName = $dataset['label'];
-        $dataset['backgroundColor'] = isset($divisionColors[$divisionName]['backgroundColor']) ? $divisionColors[$divisionName]['backgroundColor'] : '#EFF5FF'; // Default background color if division_name not found
-        $dataset['borderColor'] = isset($divisionColors[$divisionName]['borderColor']) ? $divisionColors[$divisionName]['borderColor'] : '#0362BA'; // Default border color if division_name not found
+        $dataset['backgroundColor'] = isset($divisionColors[$divisionName]['backgroundColor']) ? $divisionColors[$divisionName]['backgroundColor'] : '#EFF5FF'; // Default background color if division not found
+        $dataset['borderColor'] = isset($divisionColors[$divisionName]['borderColor']) ? $divisionColors[$divisionName]['borderColor'] : '#0362BA'; // Default border color if division not found
         // $dataset['borderWidth'] = isset($divisionColors[$divisionName]['borderWidth']) ? $divisionColors[$divisionName]['borderWidth'] : '#0362BA';
     }
 
@@ -801,19 +881,19 @@ $this->title = '';
     //Total Transaction everyday changes depending on date
     $todaymettrans = (new Query())
         ->select('COUNT(*)')
-        ->from('operational_report')
+        ->from('transaction')
         ->where([
-            'division_name' => 'Standard and Testing Division',
-            'transacton_date' => date('Y-m-d') // Assuming you want the number of transactions for today
+             'division' => '2',
+            'transaction_date' => date('Y-m-d') // Assuming you want the number of transactions for today
         ])
         ->scalar();
 
     $lastmettrans = (new Query())
         ->select('COUNT(*)')
-        ->from('operational_report')
+        ->from('transaction')
         ->where([
-            'division_name' => 'Standard and Testing Division',
-            'transacton_date' => date('Y-m-d', strtotime('-1 day'))
+             'division' => '2',
+            'transaction_date' => date('Y-m-d', strtotime('-1 day'))
         ])
         ->scalar();
 
@@ -835,19 +915,19 @@ $this->title = '';
     //Here should be the sum of total sales everyday
     $SalesToday = (new Query())
         ->select(['SUM(amount)'])
-        ->from('operational_report')
+        ->from('transaction')
         ->where([
-            'division_name' => 'Standard and Testing Division',
-            'transacton_date' => date('Y-m-d') // Using the current date in 'Y-m-d' format
+             'division' => '2',
+            'transaction_date' => date('Y-m-d') // Using the current date in 'Y-m-d' format
         ])
         ->scalar();
 
     $SalesYesterday = (new Query())
         ->select(['SUM(amount)'])
-        ->from('operational_report')
+        ->from('transaction')
         ->where([
-            'division_name' => 'Standard and Testing Division',
-            'transacton_date' => date('Y-m-d', strtotime('-1 day'))
+             'division' => '2',
+            'transaction_date' => date('Y-m-d', strtotime('-1 day'))
         ])
         ->scalar();
 
@@ -876,12 +956,12 @@ $this->title = '';
 
     //Here is the average transaction daily
     $transactionPerday = (new Query())
-        ->select('transacton_date, COUNT(*) as transaction_count')
-        ->from('operational_report')
+        ->select('transaction_date, COUNT(*) as transaction_count')
+        ->from('transaction')
         ->where([
-            'division_name' => 'Standard and Testing Division',
+            'division' => '2',
         ])
-        ->groupBy('transacton_date');
+        ->groupBy('transaction_date');
 
     $transactionPerday = $transactionPerday->all(); // Get the results with daily transaction counts
     $totalDays = count($transactionPerday); // Total number of days
@@ -891,7 +971,19 @@ $this->title = '';
         $totalTransactions += $result['transaction_count'];
     }
 
-    $average = round($totalTransactions / $totalDays); // Calculate the average
+    try {
+        $average = round($totalTransactions / $totalDays); // Calculate the average
+    } catch (DivisionByZeroError $e) {
+        $average = 0;
+    }
+
+    Yii::$app->set('db', [ //revert default connection 
+        'class' => \yii\db\Connection::class,
+        'dsn' => 'mysql:host=localhost;dbname=visualight2user',
+        'username' => 'root',
+        'password' => '',
+        'charset' => 'utf8',
+    ]);
 
     ?>
 
@@ -991,46 +1083,32 @@ $this->title = '';
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 
-
         <div class="chart-container">
-            <p id="reportTitle"> Total Transaction and Sales</p>
-            <div class="containerBody">
-                <canvas id="combinedChart"></canvas>
-            </div>
-        </div>
-
-        <div class="chart-container">
-            <p id="reportTitle"> Transaction Per Division</p>
+            <p id="reportTitle"> Transaction Report</p>
             <!-- <div class="containerBody"> -->
             <canvas id="transactionChart"></canvas>
             <!-- </div> -->
         </div>
 
-
+ 
         <div class="chart-container">
-            <p id="reportTitle"> Sales per Division</p>
-            <div class="containerBody">
+            <p id="reportTitle"> Sales Report</p>
                 <canvas id="salesChart"></canvas>
 
-            </div>
         </div>
 
 
         <div class="chart-container" id="avgSales">
-            <p id="reportTitle">Average sales per day</p>
-            <div class="asOne">
-                <canvas id="myChart"></canvas>
                 <div class="custom-text">
-                    <div class="uwu-text">
+                    <div class="transactionAverage">
                         <p class="texty"> Average Transactions </p>
                         <p class="number"> <?= $average ?> </p>
                     </div>
-                    <div class="ehe-text">
+                    <div class="salesAverage">
                         <p class="texty"> Average Sales </p>
                         <p class="number"> <?= $saleaverage ?> </p>
                     </div>
                 </div>
-            </div>
         </div>
 
         <!-- <div class="chart-container" id="avgSales">
@@ -1041,11 +1119,11 @@ $this->title = '';
         </div>
         <div class="label" style="width: 5%; padding-left:3rem; ">
         <div class="custom-text">
-            <div class="uwu-text">
+            <div class="transactionAverage">
                 <p class="texty"> Average Transactions </p>
                 <p class="number"> <?= $average ?> </p>
             </div>
-            <div class="ehe-text">
+            <div class="salesAverage">
                 <p class="texty"> Average Sales </p>
                 <p class="number"> <?= $saleaverage ?> </p>
             </div>
@@ -1076,142 +1154,7 @@ $this->title = '';
             const TransactionperDiv = <?php echo json_encode($TransactionperDiv); ?>;
             const SalesperDiv = <?php echo json_encode($SalesperDiv); ?>;
 
-            // getting the sum of the transactions per day (from the data of $TransactionperDiv)
-            const sumTransaction = TransactionperDiv.labels.map((label, index) => {
-                let sum = 0;
-                TransactionperDiv.datasets.forEach(dataset => {
-                    sum += dataset.data[index];
-                });
-                return sum;
-            });
-
-            // Create a new data set named sumTransactionDataset from what we got from sumTransaction
-            const sumTransactionDataset = {
-                label: 'Total Transaction',
-                data: sumTransaction,
-
-            };
-
-            // getting the sum of the sales per day (from the data of $SalesperDiv)
-            const sumSalesData = SalesperDiv.labels.map((label, index) => {
-                let sum = 0;
-                SalesperDiv.datasets.forEach(dataset => {
-                    sum += dataset.data[index];
-                });
-                return sum;
-            });
-
-            // Create a new data set named sumSalesDataset from what we got from sumSalesData
-            const sumSalesDataset = {
-                label: 'Total Sales',
-                data: sumSalesData,
-            };
-
-            //Creating a combined data using the sumTransactionDataset and sumSalesDataset (to be used/call in creating combined chart)
-            const combinedData = {
-                labels: TransactionperDiv.labels,
-                datasets: [{
-                        ...sumSalesDataset,
-                        type: 'line', // Use line type
-                        backgroundColor: '#ba2ee8',
-                        borderColor: '#00d498',
-                        yAxisID: 'lineY', // Assign the line chart to a specific y-axis
-                        cubicInterpolationMode: 'monotone'
-
-
-                    },
-                    {
-                        ...sumTransactionDataset,
-                        borderColor: 'rgba(127, 207, 250)',
-                        backgroundColor: 'rgba(127, 207, 250)',
-                        type: 'bar',
-                        borderWidth: 2,
-                        yAxisID: 'y-axis-bar', // Assign the line chart to a specific y-axis
-
-                    },
-                ]
-            };
-
-            // Creating combined chart
-            const combinedCtx = document.getElementById('combinedChart').getContext('2d');
-
-            const combinedChart = new Chart(combinedCtx, {
-                type: 'line', // Start as bar chart
-                data: combinedData,
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                display: false
-                            },
-                            grid: {
-                                display: false,
-                                drawOnChartArea: false,
-                                drawTicks: false,
-                            }
-                        },
-                        x: {
-                            grid: {
-                                display: false,
-                                drawOnChartArea: false,
-                                type: 'category',
-                                display: 'auto', // Enable auto-scaling of x-axis labels
-                            }
-                        },
-                        'y-axis-bar': {
-                            position: 'right', // Show the primary y-axis on the left side (sumTransactionDataset)
-                            grid: {
-                                drawOnChartArea: false
-                            }
-                        },
-                        'lineY': {
-                            beginAtZero: true,
-                            ticks: {
-                                stepSize: 1 // Customize the step size as needed
-                            },
-                            grid: {
-                                display: false,
-                                drawOnChartArea: false,
-                                drawTicks: false,
-                            }
-                        },
-                    },
-                    plugins: {
-                        legend: {
-                            position: 'top',
-                            // display: false //para sa kinacancel sa taas
-                        },
-                        zoom: {
-                            pan: {
-                                enabled: true,
-                                mode: 'x'
-                            },
-                            zoom: {
-                                enabled: true,
-                                mode: 'x'
-                            }
-                        }
-                    },
-                    responsive: true,
-                    layout: {
-                        padding: {
-                            left: 10,
-                            right: 10,
-                            top: 10,
-                            bottom: 10
-                        }
-                    },
-
-                },
-            });
-
-
-
-
-            // Creating horizontal bar graphs
+            // Graphs for transaction
             const transactionCtx = document.getElementById('transactionChart').getContext('2d');
             const transactionChart = new Chart(transactionCtx, {
                 type: 'bar',
@@ -1224,11 +1167,11 @@ $this->title = '';
                 //     labels: TransactionperDiv.labels.slice(0, 7)  // Assuming labels are defined in TransactionperDiv
                 // },
                 options: {
-                    indexAxis: 'y',
+                    indexAxis: 'x',
                     responsive: true,
                     maintainAspectRatio: false,
                     scales: {
-                        y: {
+                        x: {
                             beginAtZero: true,
                             grid: {
                                 drawOnChartArea: false
@@ -1236,7 +1179,7 @@ $this->title = '';
                             min: 0,
                             max: 6,
                         },
-                        x: {
+                        y: {
                             grid: {
                                 display: false,
                                 drawOnChartArea: false
@@ -1246,21 +1189,7 @@ $this->title = '';
                 }
             });
 
-            function scroller(scroll, chart) {
-                console.log(scroll)
-
-                if (scroll.deltaY > 0) {
-                    transactionChart.option.scales.y.min += 1;
-                    transactionChart.option.scales.y.max += 1;
-                }
-                transactionChart.update();
-            }
-            //wheel is for the gilid scroll
-            transactionChart.canvas.addEventListener('wheel', (e) => {
-                scroller(e, transactionChart)
-            });
-
-            //vertical bar graph
+            //Graph for sales
             const salesCtx = document.getElementById('salesChart').getContext('2d');
             const salesChart = new Chart(salesCtx, {
                 type: 'bar',
@@ -1290,11 +1219,7 @@ $this->title = '';
                 }
             });
 
-            // for scrolling
-            const containerBody = document.querySelector('.containerBody');
-            if (salesChart.data.labels.length > 7) {
-                containerBody.style.width = '200%';
-            }
+
 
 
             // Function to calculate the average of an array of numbers
@@ -1381,7 +1306,7 @@ $this->title = '';
                         ctx.fillStyle = 'rgb(3, 98, 186, 1)';
                         ctx.textAlign = 'center';
                         ctx.fillText('Average sales per day', width / 2.1, height / 2 + top);
-                        console.log(chart.getDatasetMeta(0))
+                        //console.log(chart.getDatasetMeta(0))
 
                     }
 
@@ -1401,8 +1326,8 @@ $this->title = '';
         </script>
 
 
-        <!-- All about customer graphs -->
-        <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-geo"></script>
+       <!-- All about customer graphs -->
+       <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-geo"></script>
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <div class="customers_data">
             <div class="date_filter" style="text-align: left; padding-left: 8rem; padding-top: 0rem; padding-bottom: 2rem;">
@@ -1412,9 +1337,7 @@ $this->title = '';
                             <strong>Chart Filter</strong></label>
                         <select name="chart_type" id="chart_type" class="dropdown-content">
                             <option value="bar">Bar</option>
-                            <option value="doughnut">Doughnut</option>
                             <option value="line">Line</option>
-                            <option value="pie">Pie</option>
                             <option value="scatter">Map</option>
                             <!-- <option value="horizontal_bar">Horizontal chart</option> -->
                         </select>
@@ -1422,27 +1345,22 @@ $this->title = '';
                 </div>
             </div>
 
-            <div class="chart-container" style="max-width: 100%; height: 500px; overflow-x: scroll; text-align: center;">
+            <div class="chart-container">
                 <p id="reportTitle">Total Customers per Province</p>
-                <div class="containerBody">
                     <canvas id="Provinces"></canvas>
-                </div>
             </div>
 
-            <div class="chart-container">
+            <div class="chart-container" style="width: 47%; text-align: center;">
                 <p id="reportTitle">Type of Customers per Province</p>
-                <div class="containerBody">
                     <canvas id="TCProvinces"></canvas>
-                </div>
             </div>
-            <div class="chart-container">
+            <div class="chart-container" style="width: 47%; text-align: center;">
                 <p id="reportTitle">Type of Transaction per Province</p>
                 <div class="containerBody">
                     <canvas id="TTProvinces"></canvas>
                 </div>
             </div>
         </div>
-
     </div>
 
 
@@ -2354,7 +2272,7 @@ $this->title = '';
                                                                                     pdf.setFont('helvetica', 'bold');
                                                                                     pdf.setTextColor(0, 41, 102);
                                                                                     pdf.setFontSize(14);
-                                                                                    pdf.text('Visualight-STD', 83, 10);
+                                                                                    pdf.text('Visualight-NMD', 83, 10);
 
                                                                                     pdf.addImage(combinedChartImg, 'JPEG', 40, 30, 130, 70, undefined, 'FAST');
                                                                                     pdf.addImage(transactionChartImg, 'JPEG', 40, 123, 130, 70, undefined, 'FAST');
@@ -2396,7 +2314,7 @@ $this->title = '';
                                                                                     pdf.addImage(transactionTypeChartImg, 'JPEG', 60, 215, 100, 80, undefined, 'FAST');
 
 
-                                                                                    pdf.save('Visualight-STD.pdf');
+                                                                                    pdf.save('Visualight-NMD.pdf');
                                                                                 });
                                                                         });
 

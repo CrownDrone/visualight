@@ -86,63 +86,6 @@ class SiteController extends BaseController
      */
     public function actionIndex() //this is for the dashboard keme keme chemerut
     {
-        $queryAllDate = (new Query()) //daily record seperated by division, Y axis for the chart
-            ->select(['transaction_date AS labels', 'COUNT(*) AS datasets', 'division AS label'])
-            ->from('visualight2data.transaction') //from visualight2data database within transaction table
-            ->groupBy('transaction_date, division')
-            ->orderBy('transaction_date')
-            ->all();
-
-        $dailyMapping = [ //to be used on renaming divisions
-            "1" => "National Metrology Division",
-            "2" => "Standards and Testing Division",
-        ];
-
-        foreach ($queryAllDate as &$item) { //to change division 1 & 2 into actual division name
-            if (isset($item['label']) && isset($dailyMapping[$item['label']])) {
-                $item['label'] = $dailyMapping[$item['label']];
-            }
-        }
-
-        $queryAllDate2 = (new Query()) //daily record, separated kasi eto yung total transaction of 2 divisions
-            ->select([
-                'transaction_date AS labels',
-                'COUNT(*) AS datasets',
-                new \yii\db\Expression("CASE WHEN division IS NOT NULL THEN 'Total' ELSE NULL END AS label")
-            ])
-            ->from('visualight2data.transaction')
-            ->groupBy('transaction_date')
-            ->orderBy('transaction_date')
-            ->all();
-
-        array_splice($queryAllDate, 2, 0, $queryAllDate2); //separates array to insert new value
-
-        $queryAllDate = array_values($queryAllDate); //re-index the array
-
-        $currentYear = date('Y');//gets year in YYYY format
-        $startDate = "$currentYear-01-01";//first date of the current year
-        $endDate = "$currentYear-12-31";//last date of the current year
-
-        $dateRange = [];
-        $currentDate = new DateTime($startDate);
-        while ($currentDate->format('Y-m-d') <= $endDate) {//formats the date into like 2023-12-31
-            $dateRange[] = $currentDate->format('Y-m-d');
-            $currentDate->modify('+1 day');
-        }
-
-        $existingDates = Site::find()//looks for existing date(YYY-MM-DD) record
-            ->select('date')
-            ->where(['between', 'date', $startDate, $endDate])
-            ->asArray()
-            ->column();
-
-
-        $chartLabel = (new Query()) //YYYY-MM-DD will serve as label for the chart, the X axis if you may
-            ->select('transDate AS labels')
-            ->from('mock_data')
-            ->groupBy('transDate')
-            ->orderBy('transDate')
-            ->all();
 
         return $this->render('index');
     }

@@ -1,4 +1,4 @@
-@@ -1,2272 +1,2273 @@
+
 <?php
 
 $this->title = '';
@@ -20,7 +20,7 @@ $this->title = '';
         align-items: center;
     }
 
-    .custom-text {
+    .average {
         position: absolute;
         top: 80px;
         right: 50px;
@@ -29,12 +29,12 @@ $this->title = '';
         display: inline-block;
     }
 
-    .uwu-text,
-    .ehe-text {
+    .aveTransactionDiv,
+    .aveSalesDiv {
         background-color: #B526C2;
         color: white;
-        width: 220px;
-        height: 130px;
+        width: 20rem;
+        height: 15rem;
         border-radius: 20px;
         display: flex;
         flex-direction: column;
@@ -44,22 +44,22 @@ $this->title = '';
         margin-bottom: 30px;
     }
 
-    .uwu-text {
+    .aveTransactionDiv {
         background-color: #11A34C;
-        /* Updated background color for .uwu-text */
+        /* Updated background color for .aveTransactionDiv */
     }
 
     .texty {
         margin: 0;
         font-weight: bold;
-        font-size: 16px;
+        font-size: 2rem;
         font-family: Poppins;
     }
 
     .number {
         margin: 0;
         font-family: Poppins;
-        font-size: 45px;
+        font-size: 4rem;
         font-weight: bold;
         margin-bottom: 10px;
     }
@@ -77,7 +77,7 @@ $this->title = '';
     }
 
     @media (max-width: 600px) {
-        .custom-text {
+        .average {
             position: absolute;
             top: 25%;
             right: 10%;
@@ -85,8 +85,8 @@ $this->title = '';
             display: inline-block;
         }
 
-        .uwu-text,
-        .ehe-text {
+        .aveTransactionDiv,
+        .aveSalesDiv {
             width: 120px;
             height: 120px;
             border-radius: 20px;
@@ -277,22 +277,16 @@ $this->title = '';
 
     .chart-container {
         margin: .62rem;
-        padding: 3em;
-        border-radius: .93rem;
-        background-color: white;
-        display: inline-block;
-        height: 28rem;
-        width: 100%;
-        max-width: 47%;
-        overflow-x: scroll;
-        overflow-y: hidden;
-        white-space: nowrap;
-    }
+            padding: 3em;
+            border-radius: .93rem;
+            background-color: white;
+            display: inline-block;
+            height: 35rem;
+            width: 100%;
+            
+        }
 
-    .containerBody {
-        height: 100%;
-        width: 200%;
-    }
+    
 
     .graph2 {
         width: 100%;
@@ -698,12 +692,14 @@ $customerType_name = [
 ];
 
 
-foreach ($customerTypeData as $customersType) {
-    if (isset($customersType['customer_type']) && isset($customerType_name[$customersType['customer_type']]))
+foreach ($customerTypeData as $type) {
+    if (isset($type['customer_type']) && isset($customerType_name[$type['customer_type']]))
     {
-        $customersType['customer_type']=$customerType_name[$customersType['customer_type']];
+        $type['customer_type']=$customerType_name[$type['customer_type']];
     }
-    $customerType[] = $customersType['customer_type'];
+
+    $customerType[] = $type['customer_type'];
+    $customerscounts[] = $type['customer_count'];
 }
 
 $transactionTypeData = $query->select(['transaction_type', 'COUNT(*) as customer_count'])
@@ -826,6 +822,7 @@ foreach ($salesData as $data) {
 $transactionPerday = (new Query())
     ->select('transaction_date, COUNT(*) as transaction_count')
     ->from('transaction')
+    ->where(['transaction_status' => '1'])
     ->groupBy('transaction_date');
 
 $transactionPerday = $transactionPerday->all(); // Get the results with daily transaction counts
@@ -840,6 +837,7 @@ $average = round($totalTransactions / $totalDays); // Calculate the average
 $SalesAve = (new Query())
     ->select('transaction_date, SUM(amount) as transaction_count')
     ->from('transaction')
+    ->where(['transaction_status' => '1'])
     ->groupBy('transaction_date');
 
 $SalesAve = $SalesAve->all(); // Get the results with daily transaction counts
@@ -1055,13 +1053,19 @@ Yii::$app->set('db', [ //revert default connection
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 
+    <div class="chart-container">
+        <p id="reportTitle"> Total Transaction</p>
+        <canvas id="totaltransactionChart"></canvas>
+    </div>
+
 
     <div class="chart-container">
-        <p id="reportTitle"> Total Transaction and Sales</p>
-        <div class="containerBody">
-            <canvas id="combinedChart"></canvas>
-        </div>
+        <p id="reportTitle"> Total Sales </p>
+        <canvas id="totalsalesChart"></canvas>
     </div>
+
+
+    
 
     <div class="chart-container">
         <p id="reportTitle"> Transaction Per Division</p>
@@ -1073,9 +1077,7 @@ Yii::$app->set('db', [ //revert default connection
 
     <div class="chart-container">
         <p id="reportTitle"> Sales per Division</p>
-        <div class="containerBody">
             <canvas id="salesChart"></canvas>
-        </div>
     </div>
 
 
@@ -1083,12 +1085,12 @@ Yii::$app->set('db', [ //revert default connection
         <p id="reportTitle">Average sales per day</p>
         <div class="asOne">
             <canvas id="myChart"></canvas>
-            <div class="custom-text">
-                <div class="uwu-text">
+            <div class="average">
+                <div class="aveTransactionDiv" >
                     <p class="texty"> Average Transactions </p>
                     <p class="number"> <?= $average ?> </p>
                 </div>
-                <div class="ehe-text">
+                <div class="aveSalesDiv">
                     <p class="texty"> Average Sales </p>
                     <p class="number"> <?= $saleaverage ?> </p>
                 </div>
@@ -1103,12 +1105,12 @@ Yii::$app->set('db', [ //revert default connection
         <canvas id="myChart"></canvas>
         </div>
         <div class="label" style="width: 5%; padding-left:3rem; ">
-        <div class="custom-text">
-            <div class="uwu-text">
+        <div class="average">
+            <div class="aveTransactionDiv">
                 <p class="texty"> Average Transactions </p>
                 <p class="number"> <?= $average ?> </p>
             </div>
-            <div class="ehe-text">
+            <div class="aveSalesDiv">
                 <p class="texty"> Average Sales </p>
                 <p class="number"> <?= $saleaverage ?> </p>
             </div>
@@ -1170,6 +1172,46 @@ Yii::$app->set('db', [ //revert default connection
             data: sumSalesData,
         };
 
+         const totaltransactionCtx = document.getElementById('totaltransactionChart').getContext('2d');
+
+        // Create the chart
+        new Chart(totaltransactionCtx, {
+            type: 'bar', // This specifies a bar chart
+            data: {
+                labels: TransactionperDiv.labels, // Use the labels from your original data
+                datasets: [sumTransactionDataset],
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                    },
+                },
+            },
+        });
+
+        const totalsalesCtx = document.getElementById('totalsalesChart').getContext('2d');
+
+        // Create the chart
+        new Chart(totalsalesCtx, {
+            type: 'line', // This specifies a bar chart
+            data: {
+                labels: SalesperDiv.labels, // Use the labels from your original data
+                datasets: [sumSalesDataset],
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                    },
+                },
+            },
+        });
+
         //Creating a combined data using the sumTransactionDataset and sumSalesDataset (to be used/call in creating combined chart)
         const combinedData = {
             labels: TransactionperDiv.labels,
@@ -1217,91 +1259,6 @@ Yii::$app->set('db', [ //revert default connection
 
         };
 
-        // Creating combined chart
-        const combinedCtx = document.getElementById('combinedChart').getContext('2d');
-
-        const combinedChart = new Chart(combinedCtx, {
-            type: 'line', // Start as bar chart
-            data: combinedData,
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            display: false
-                        },
-                        grid: {
-                            display: false,
-                            drawOnChartArea: false,
-                            drawTicks: false,
-                        }
-                    },
-                    x: {
-                        grid: {
-                            display: false,
-                            drawOnChartArea: false,
-                            type: 'category',
-                            display: 'auto', // Enable auto-scaling of x-axis labels
-                        }
-                    },
-                    'y-axis-bar': {
-                        position: 'right', // Show the primary y-axis on the left side (sumTransactionDataset)
-                        grid: {
-                            drawOnChartArea: false
-                        }
-                    },
-                    'lineY': {
-                        beginAtZero: true,
-                        ticks: {
-                            stepSize: 1 // Customize the step size as needed
-                        },
-                        grid: {
-                            display: false,
-                            drawOnChartArea: false,
-                            drawTicks: false,
-                        }
-                    },
-                },
-                plugins: {
-                    legend: {
-                        position: 'top',
-                        // display: false //para sa kinacancel sa taas
-                    },
-                    zoom: {
-                        pan: {
-                            enabled: true,
-                            mode: 'x'
-                        },
-                        zoom: {
-                            enabled: true,
-                            mode: 'x'
-                        }
-                    },
-
-                    bgColor:{
-                        backgroundColor: 'white'
-                    }
-                },
-                responsive: true,
-                layout: {
-                    padding: {
-                        left: 10,
-                        right: 10,
-                        top: 10,
-                        bottom: 10
-                    }
-                },
-
-            },
-            plugins:[bgColor],
-
-
-        });
-
-
-
 
         // Creating horizontal bar graphs
         const transactionCtx = document.getElementById('transactionChart').getContext('2d');
@@ -1316,11 +1273,11 @@ Yii::$app->set('db', [ //revert default connection
             //     labels: TransactionperDiv.labels.slice(0, 7)  // Assuming labels are defined in TransactionperDiv
             // },
             options: {
-                indexAxis: 'y',
+                indexAxis: 'x',
                 responsive: true,
                 maintainAspectRatio: false,
                 scales: {
-                    y: {
+                    x: {
                         beginAtZero: true,
                         grid: {
                             drawOnChartArea: false
@@ -1328,7 +1285,7 @@ Yii::$app->set('db', [ //revert default connection
                         min: 0,
                         max: 6,
                     },
-                    x: {
+                    y: {
                         grid: {
                             display: false,
                             drawOnChartArea: false
@@ -1342,20 +1299,6 @@ Yii::$app->set('db', [ //revert default connection
                 },
             },
              plugins:[bgColor],
-        });
-
-        function scroller(scroll, chart) {
-            //console.log(scroll)
-
-            if (scroll.deltaY > 0) {
-                transactionChart.option.scales.y.min += 1;
-                transactionChart.option.scales.y.max += 1;
-            }
-            transactionChart.update();
-        }
-        //wheel is for the gilid scroll
-        transactionChart.canvas.addEventListener('wheel', (e) => {
-            scroller(e, transactionChart)
         });
 
         //vertical bar graph
@@ -1395,11 +1338,6 @@ Yii::$app->set('db', [ //revert default connection
               plugins:[bgColor],
         });
 
-        // for scrolling
-        const containerBody = document.querySelector('.containerBody');
-        if (salesChart.data.labels.length > 7) {
-            containerBody.style.width = '200%';
-        }
 
 
         // Function to calculate the average of an array of numbers
@@ -1506,31 +1444,41 @@ Yii::$app->set('db', [ //revert default connection
     </script>
 
 
-    <!-- All about customer graphs -->
-    <div class="customers_data">
-        <div class="date_filter" style="text-align: left; padding-left: 8rem; padding-top: 0rem; padding-bottom: 2rem;">
-            <div class="containers">
-                <div class="date_dropdown">
-                    <label for="chart_type" class="chart_type_label">
-                        <strong>Chart Filter</strong></label>
-                    <select name="chart_type" id="chart_type" class="dropdown-content">
-                        <option value="bar">Bar</option>
-                        <option value="doughnut">Doughnut</option>
-                        <option value="line">Line</option>
-                        <option value="pie">Pie</option>
-                        <!-- <option value="horizontal_bar">Horizontal chart</option> -->
-                    </select>
+          <!-- All about customer graphs -->
+          <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-geo"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <div class="customers_data">
+            <div class="date_filter" style="text-align: left; padding-left: 8rem; padding-top: 0rem; padding-bottom: 2rem;">
+                <div class="containers">
+                    <div class="date_dropdown">
+                        <label for="chart_type" class="chart_type_label">
+                            <strong>Chart Filter</strong></label>
+                        <select name="chart_type" id="chart_type" class="dropdown-content">
+                            <option value="bar">Bar</option>
+                            <option value="line">Line</option>
+                            <option value="scatter">Map</option>
+                            <!-- <option value="horizontal_bar">Horizontal chart</option> -->
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <p id="reportTitle">Total Customers per Province</p>
+                    <canvas id="Provinces"></canvas>
+            </div>
+
+            <div class="chart-container" style="width: 47%; text-align: center;">
+                <p id="reportTitle">Type of Customers per Province</p>
+                    <canvas id="TCProvinces"></canvas>
+            </div>
+            <div class="chart-container" style="width: 47%; text-align: center;">
+                <p id="reportTitle">Type of Transaction per Province</p>
+                <div class="containerBody">
+                    <canvas id="TTProvinces"></canvas>
                 </div>
             </div>
         </div>
-
-        <div class="chart-container" style="max-width: 100%; height: 500px; overflow-x: scroll; text-align: center;">
-            <p id="reportTitle">Total Customers per Province</p>
-            <div class="containerBody">
-                <canvas id="Provinces"></canvas>
-            </div>
-        </div>
-    </div>
 
 </div>
 

@@ -45,8 +45,8 @@ $this->title = '';
             display: inline-block;
         }
 
-        .uwu-text,
-        .ehe-text {
+        .aveTransactionDiv,
+        .aveSalesDiv {
             background-color: #B526C2;
             color: white;
             width: 220px;
@@ -60,9 +60,9 @@ $this->title = '';
             margin-bottom: 30px;
         }
 
-        .uwu-text {
+        .aveTransactionDiv {
             background-color: #11A34C;
-            /* Updated background color for .uwu-text */
+            /* Updated background color for .aveTransactionDiv */
         }
 
         .texty {
@@ -101,8 +101,8 @@ $this->title = '';
                 display: inline-block;
             }
 
-            .uwu-text,
-            .ehe-text {
+            .aveTransactionDiv,
+            .aveSalesDiv {
                 width: 120px;
                 height: 120px;
                 border-radius: 20px;
@@ -310,17 +310,9 @@ $this->title = '';
             border-radius: .93rem;
             background-color: white;
             display: inline-block;
-            height: 28rem;
+            height: 30rem;
             width: 100%;
-            max-width: 47%;
-            overflow-x: scroll;
-            overflow-y: hidden;
-            white-space: nowrap;
-        }
-
-        .containerBody {
-            height: 100%;
-            width: 200%;
+            
         }
 
         .graph2 {
@@ -826,6 +818,10 @@ $this->title = '';
     $transactionPerday = (new Query())
         ->select('transaction_date, COUNT(*) as transaction_count')
         ->from('transaction')
+        ->where([
+            'division' => '1',
+           'transaction_status' => '1'
+       ])
         ->groupBy('transaction_date');
 
     $transactionPerday = $transactionPerday->all(); // Get the results with daily transaction counts
@@ -840,6 +836,10 @@ $this->title = '';
     $SalesAve = (new Query())
         ->select('transaction_date, SUM(amount) as transaction_count')
         ->from('transaction')
+        ->where([
+            'division' => '1',
+           'transaction_status' => '1'
+       ])
         ->groupBy('transaction_date');
 
     $SalesAve = $SalesAve->all(); // Get the results with daily transaction counts
@@ -966,7 +966,7 @@ $this->title = '';
         ->select('transaction_date, COUNT(*) as transaction_count')
         ->from('transaction')
         ->where([
-            'division' => 'National Metrology Division',
+            'division' => '1',
         ])
         ->groupBy('transaction_date');
 
@@ -1090,84 +1090,33 @@ $this->title = '';
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 
-
         <div class="chart-container">
-            <p id="reportTitle"> Total Transaction and Sales</p>
-            <div class="containerBody">
-                <canvas id="combinedChart"></canvas>
-            </div>
-        </div>
-
-        <div class="chart-container">
-            <p id="reportTitle"> Transaction Per Division</p>
-            <!-- <div class="containerBody"> -->
-            <canvas id="transactionChart"></canvas>
-            <!-- </div> -->
-        </div>
+        <p id="reportTitle">Total Transaction Report</p>
+        <!-- <div class="containerBody"> -->
+        <canvas id="transactionChart"></canvas>
+        <!-- </div> -->
+         </div>
 
 
         <div class="chart-container">
-            <p id="reportTitle"> Sales per Division</p>
-            <div class="containerBody">
+            <p id="reportTitle"> Total Sales Report</p>
                 <canvas id="salesChart"></canvas>
-
-            </div>
         </div>
 
 
         <div class="chart-container" id="avgSales">
-            <p id="reportTitle">Average sales per day</p>
-            <div class="asOne">
-                <canvas id="myChart"></canvas>
                 <div class="custom-text">
-                    <div class="uwu-text">
+                    <div class="aveTransactionDiv">
                         <p class="texty"> Average Transactions </p>
                         <p class="number"> <?= $average ?> </p>
                     </div>
-                    <div class="ehe-text">
+                    <div class="aveSalesDiv">
                         <p class="texty"> Average Sales </p>
                         <p class="number"> <?= $saleaverage ?> </p>
                     </div>
                 </div>
-            </div>
         </div>
-
-        <!-- <div class="chart-container" id="avgSales">
-        <div class="aveChart" style="display: grid; grid-template-columns: repeat(2,1fr); grid-gap:.1rem; grid-template-rows: auto auto;">
-        <div class="chart"style="width: 90%; ">
-        <p id="reportTitle">Average sales per day</p>
-        <canvas id="myChart"></canvas>
-        </div>
-        <div class="label" style="width: 5%; padding-left:3rem; ">
-        <div class="custom-text">
-            <div class="uwu-text">
-                <p class="texty"> Average Transactions </p>
-                <p class="number"> <?= $average ?> </p>
-            </div>
-            <div class="ehe-text">
-                <p class="texty"> Average Sales </p>
-                <p class="number"> <?= $saleaverage ?> </p>
-            </div>
-        </div>
-        </div>
-        </div>
-    </div> -->
-
-        <!-- <div class="chart-container" style="max-width: 100%; height: 500px; overflow-x: scroll; text-align: center;">
-                <p id="reportTitle">Total Customers per Province</p>
-                <div class="ProvinceChart" style="display: grid; grid-template-columns: repeat(2,1fr); grid-gap:.1rem; grid-template-rows: auto auto;">
-                <div class="scaleContainer" style="width: 10%; text-align: justtify;">
-                <?php echo json_encode($customersCounts); ?>,
-                </div>
-                <div class="containerBody" style="width: 80%; height: 100%;">
-                    <canvas id="Provinces"></canvas>
-                </div>
-            </div>
-            </div> -->
-
-
-
-
+        
 
 
         <script>
@@ -1175,142 +1124,7 @@ $this->title = '';
             const TransactionperDiv = <?php echo json_encode($TransactionperDiv); ?>;
             const SalesperDiv = <?php echo json_encode($SalesperDiv); ?>;
 
-            // getting the sum of the transactions per day (from the data of $TransactionperDiv)
-            const sumTransaction = TransactionperDiv.labels.map((label, index) => {
-                let sum = 0;
-                TransactionperDiv.datasets.forEach(dataset => {
-                    sum += dataset.data[index];
-                });
-                return sum;
-            });
-
-            // Create a new data set named sumTransactionDataset from what we got from sumTransaction
-            const sumTransactionDataset = {
-                label: 'Total Transaction',
-                data: sumTransaction,
-
-            };
-
-            // getting the sum of the sales per day (from the data of $SalesperDiv)
-            const sumSalesData = SalesperDiv.labels.map((label, index) => {
-                let sum = 0;
-                SalesperDiv.datasets.forEach(dataset => {
-                    sum += dataset.data[index];
-                });
-                return sum;
-            });
-
-            // Create a new data set named sumSalesDataset from what we got from sumSalesData
-            const sumSalesDataset = {
-                label: 'Total Sales',
-                data: sumSalesData,
-            };
-
-            //Creating a combined data using the sumTransactionDataset and sumSalesDataset (to be used/call in creating combined chart)
-            const combinedData = {
-                labels: TransactionperDiv.labels,
-                datasets: [{
-                        ...sumSalesDataset,
-                        type: 'line', // Use line type
-                        backgroundColor: '#ba2ee8',
-                        borderColor: '#00d498',
-                        yAxisID: 'lineY', // Assign the line chart to a specific y-axis
-                        cubicInterpolationMode: 'monotone'
-
-
-                    },
-                    {
-                        ...sumTransactionDataset,
-                        borderColor: 'rgba(127, 207, 250)',
-                        backgroundColor: 'rgba(127, 207, 250)',
-                        type: 'bar',
-                        borderWidth: 2,
-                        yAxisID: 'y-axis-bar', // Assign the line chart to a specific y-axis
-
-                    },
-                ]
-            };
-
-            // Creating combined chart
-            const combinedCtx = document.getElementById('combinedChart').getContext('2d');
-
-            const combinedChart = new Chart(combinedCtx, {
-                type: 'line', // Start as bar chart
-                data: combinedData,
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                display: false
-                            },
-                            grid: {
-                                display: false,
-                                drawOnChartArea: false,
-                                drawTicks: false,
-                            }
-                        },
-                        x: {
-                            grid: {
-                                display: false,
-                                drawOnChartArea: false,
-                                type: 'category',
-                                display: 'auto', // Enable auto-scaling of x-axis labels
-                            }
-                        },
-                        'y-axis-bar': {
-                            position: 'right', // Show the primary y-axis on the left side (sumTransactionDataset)
-                            grid: {
-                                drawOnChartArea: false
-                            }
-                        },
-                        'lineY': {
-                            beginAtZero: true,
-                            ticks: {
-                                stepSize: 1 // Customize the step size as needed
-                            },
-                            grid: {
-                                display: false,
-                                drawOnChartArea: false,
-                                drawTicks: false,
-                            }
-                        },
-                    },
-                    plugins: {
-                        legend: {
-                            position: 'top',
-                            // display: false //para sa kinacancel sa taas
-                        },
-                        zoom: {
-                            pan: {
-                                enabled: true,
-                                mode: 'x'
-                            },
-                            zoom: {
-                                enabled: true,
-                                mode: 'x'
-                            }
-                        }
-                    },
-                    responsive: true,
-                    layout: {
-                        padding: {
-                            left: 10,
-                            right: 10,
-                            top: 10,
-                            bottom: 10
-                        }
-                    },
-
-                },
-            });
-
-
-
-
-            // Creating horizontal bar graphs
+            // Transaction bar graphs
             const transactionCtx = document.getElementById('transactionChart').getContext('2d');
             const transactionChart = new Chart(transactionCtx, {
                 type: 'bar',
@@ -1323,11 +1137,11 @@ $this->title = '';
                 //     labels: TransactionperDiv.labels.slice(0, 7)  // Assuming labels are defined in TransactionperDiv
                 // },
                 options: {
-                    indexAxis: 'y',
+                    indexAxis: 'x',
                     responsive: true,
                     maintainAspectRatio: false,
                     scales: {
-                        y: {
+                        x: {
                             beginAtZero: true,
                             grid: {
                                 drawOnChartArea: false
@@ -1335,7 +1149,7 @@ $this->title = '';
                             min: 0,
                             max: 6,
                         },
-                        x: {
+                        y: {
                             grid: {
                                 display: false,
                                 drawOnChartArea: false
@@ -1345,21 +1159,8 @@ $this->title = '';
                 }
             });
 
-            function scroller(scroll, chart) {
-                //console.log(scroll)
 
-                if (scroll.deltaY > 0) {
-                    transactionChart.option.scales.y.min += 1;
-                    transactionChart.option.scales.y.max += 1;
-                }
-                transactionChart.update();
-            }
-            //wheel is for the gilid scroll
-            transactionChart.canvas.addEventListener('wheel', (e) => {
-                scroller(e, transactionChart)
-            });
-
-            //vertical bar graph
+            //sales bar graph
             const salesCtx = document.getElementById('salesChart').getContext('2d');
             const salesChart = new Chart(salesCtx, {
                 type: 'bar',
@@ -1388,12 +1189,6 @@ $this->title = '';
 
                 }
             });
-
-            // for scrolling
-            const containerBody = document.querySelector('.containerBody');
-            if (salesChart.data.labels.length > 7) {
-                containerBody.style.width = '200%';
-            }
 
 
             // Function to calculate the average of an array of numbers
@@ -1511,9 +1306,7 @@ $this->title = '';
                             <strong>Chart Filter</strong></label>
                         <select name="chart_type" id="chart_type" class="dropdown-content">
                             <option value="bar">Bar</option>
-                            <option value="doughnut">Doughnut</option>
                             <option value="line">Line</option>
-                            <option value="pie">Pie</option>
                             <option value="scatter">Map</option>
                             <!-- <option value="horizontal_bar">Horizontal chart</option> -->
                         </select>
@@ -1521,20 +1314,16 @@ $this->title = '';
                 </div>
             </div>
 
-            <div class="chart-container" style="max-width: 100%; height: 500px; overflow-x: scroll; text-align: center;">
+            <div class="chart-container">
                 <p id="reportTitle">Total Customers per Province</p>
-                <div class="containerBody">
                     <canvas id="Provinces"></canvas>
-                </div>
             </div>
 
-            <div class="chart-container">
+            <div class="chart-container" style="width: 47%; text-align: center;">
                 <p id="reportTitle">Type of Customers per Province</p>
-                <div class="containerBody">
                     <canvas id="TCProvinces"></canvas>
-                </div>
             </div>
-            <div class="chart-container">
+            <div class="chart-container" style="width: 47%; text-align: center;">
                 <p id="reportTitle">Type of Transaction per Province</p>
                 <div class="containerBody">
                     <canvas id="TTProvinces"></canvas>
@@ -1554,7 +1343,7 @@ $this->title = '';
             const chartTypeDropdown = document.getElementById('chart_type');
             const provinces = <?php echo json_encode($provinces); ?>;
             //     function generateRandomColor() {
-            //   const randomColor = `rgb(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)})`;
+            //   const randomColor = `rgb(${Math. floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)})`;
             //   return randomColor;
             // }
 
