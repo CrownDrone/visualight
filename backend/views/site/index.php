@@ -34,7 +34,7 @@ $this->title = '';
         background-color: #B526C2;
         color: white;
         width: 20rem;
-        height: 15rem;
+        height: 12rem;
         border-radius: 20px;
         display: flex;
         flex-direction: column;
@@ -72,8 +72,8 @@ $this->title = '';
 
     .asOne {
         justify-content: space-between;
-        width: 60%;
-        right: 50%;
+        width: 45%;
+        right: 55%;
     }
 
     @media (max-width: 600px) {
