@@ -72,7 +72,7 @@ $this->title = '';
 
     .asOne {
         justify-content: space-between;
-        width: 45%;
+        width: 40%;
         right: 55%;
     }
 
