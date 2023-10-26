@@ -1,4 +1,3 @@
-
 <?php
 
 $this->title = '';
@@ -277,16 +276,16 @@ $this->title = '';
 
     .chart-container {
         margin: .62rem;
-            padding: 3em;
-            border-radius: .93rem;
-            background-color: white;
-            display: inline-block;
-            height: 35rem;
-            width: 100%;
-            
-        }
+        padding: 3em;
+        border-radius: .93rem;
+        background-color: white;
+        display: inline-block;
+        height: 35rem;
+        width: 100%;
 
-    
+    }
+
+
 
     .graph2 {
         width: 100%;
@@ -554,16 +553,17 @@ $this->title = '';
 
 use yii\db\Query;
 use yii\bootstrap5\Html;
+use controllers\SiteController;
 // Fetch sales data from the database
 // $fromDate = $_POST['startDate'];
 // $toDate = $_POST['endDate'];
 
 Yii::$app->set('db', [ //reroute default connection 
     'class' => \yii\db\Connection::class,
-            'dsn' => 'mysql:host=localhost;dbname=visualight2data',
-            'username' => 'root',
-            'password' => '',
-            'charset' => 'utf8',
+    'dsn' => 'mysql:host=localhost;dbname=visualight2data',
+    'username' => 'root',
+    'password' => '',
+    'charset' => 'utf8',
 ]);
 
 
@@ -577,7 +577,7 @@ $salesData = $query->select(['division', 'transaction_date', 'SUM(amount) as tot
     ->orderBy(['transaction_date' => SORT_DESC])
     ->all();
 
-// Fetch transaction data from the database (depends on how many transaction in same date and same div_name)
+// Fetch transaction data from the database (depends on how many transaction in same date and same div)
 $transactionData = $query->select(['division', 'transaction_date', 'COUNT(*) as transaction_count'])
     ->from('transaction')
     // ->where(['between', 'transaction_date', $fromDate, $toDate])
@@ -640,7 +640,6 @@ $addressData = $query->select(['address', 'COUNT(*) as customer_count'])
     // ->where(['between', 'transaction_date', $fromDate, $toDate])
     ->groupBy(['address'])
     ->orderBy(['customer_count' => SORT_DESC])
-    ->limit(100000)
     ->all();
 
 // // Prepare data for the chart
@@ -693,9 +692,8 @@ $customerType_name = [
 
 
 foreach ($customerTypeData as $type) {
-    if (isset($type['customer_type']) && isset($customerType_name[$type['customer_type']]))
-    {
-        $type['customer_type']=$customerType_name[$type['customer_type']];
+    if (isset($type['customer_type']) && isset($customerType_name[$type['customer_type']])) {
+        $type['customer_type'] = $customerType_name[$type['customer_type']];
     }
 
     $customerType[] = $type['customer_type'];
@@ -719,9 +717,8 @@ $transactionType_name = [
 ];
 
 foreach ($transactionTypeData as $type) {
-    if (isset($type['transaction_type']) && isset($transactionType_name[$type['transaction_type']]))
-    {
-        $type['transaction_type']=$transactionType_name[$type['transaction_type']];
+    if (isset($type['transaction_type']) && isset($transactionType_name[$type['transaction_type']])) {
+        $type['transaction_type'] = $transactionType_name[$type['transaction_type']];
     }
 
     $transactionType[] = $type['transaction_type'];
@@ -747,13 +744,11 @@ $transactionStatus_name = [
 
 
 foreach ($transactionStatusData as $status) {
-    if (isset($status['transaction_status']) && isset($transactionStatus_name[$status['transaction_status']]))
-    {
-        $status['transaction_status']=$transactionStatus_name[$status['transaction_status']];
+    if (isset($status['transaction_status']) && isset($transactionStatus_name[$status['transaction_status']])) {
+        $status['transaction_status'] = $transactionStatus_name[$status['transaction_status']];
     }
     $transactionStatus[] = $status['transaction_status'];
     $transactionStatusDatacounts[] = $status['customer_count'];
-
 }
 
 $PaymentMethodData = $query->select(['payment_method', 'COUNT(*) as customer_count'])
@@ -776,9 +771,8 @@ $paymentmethod_name = [
 ];
 
 foreach ($PaymentMethodData as $method) {
-    if (isset($method['payment_method']) && isset($paymentmethod_name[$method['payment_method']]))
-    {
-        $method['payment_method']=$paymentmethod_name[$method['payment_method']];
+    if (isset($method['payment_method']) && isset($paymentmethod_name[$method['payment_method']])) {
+        $method['payment_method'] = $paymentmethod_name[$method['payment_method']];
     }
     $PaymentMethod[] = $method['payment_method'];
     $PaymentMethodcounts[] = $method['customer_count'];
@@ -956,10 +950,10 @@ if ($todaySandTtrans == 0) {
 
 Yii::$app->set('db', [ //revert default connection 
     'class' => \yii\db\Connection::class,
-            'dsn' => 'mysql:host=localhost;dbname=visualight2user',
-            'username' => 'root',
-            'password' => '',
-            'charset' => 'utf8',
+    'dsn' => 'mysql:host=localhost;dbname=visualight2user',
+    'username' => 'root',
+    'password' => '',
+    'charset' => 'utf8',
 ]);
 
 ?>
@@ -1022,8 +1016,8 @@ Yii::$app->set('db', [ //revert default connection
 </div>
 
 <script>
-    var transactionDatas =<?php echo json_encode($transactionData); ?>;
-    console.log(transactionDatas);//3bm60 log to console
+    var transactionDatas = <?php echo json_encode($transactionData); ?>;
+    //console.log(transactionDatas); //3bm60 log to console
     // Attach an event listener to the date picker fields
     document.getElementById("startDate").addEventListener("change", updateFilteredData);
     document.getElementById("endDate").addEventListener("change", updateFilteredData);
@@ -1065,7 +1059,7 @@ Yii::$app->set('db', [ //revert default connection
     </div>
 
 
-    
+
 
     <div class="chart-container">
         <p id="reportTitle"> Transaction Per Division</p>
@@ -1077,7 +1071,7 @@ Yii::$app->set('db', [ //revert default connection
 
     <div class="chart-container">
         <p id="reportTitle"> Sales per Division</p>
-            <canvas id="salesChart"></canvas>
+        <canvas id="salesChart"></canvas>
     </div>
 
 
@@ -1086,7 +1080,7 @@ Yii::$app->set('db', [ //revert default connection
         <div class="asOne">
             <canvas id="myChart"></canvas>
             <div class="average">
-                <div class="aveTransactionDiv" >
+                <div class="aveTransactionDiv">
                     <p class="texty"> Average Transactions </p>
                     <p class="number"> <?= $average ?> </p>
                 </div>
@@ -1172,7 +1166,7 @@ Yii::$app->set('db', [ //revert default connection
             data: sumSalesData,
         };
 
-         const totaltransactionCtx = document.getElementById('totaltransactionChart').getContext('2d');
+        const totaltransactionCtx = document.getElementById('totaltransactionChart').getContext('2d');
 
         // Create the chart
         new Chart(totaltransactionCtx, {
@@ -1191,6 +1185,8 @@ Yii::$app->set('db', [ //revert default connection
                 },
             },
         });
+
+
 
         const totalsalesCtx = document.getElementById('totalsalesChart').getContext('2d');
 
@@ -1238,22 +1234,30 @@ Yii::$app->set('db', [ //revert default connection
         };
 
         const bgColor = {
-            id:'bgColor',
+            id: 'bgColor',
             beforeDraw: (chart, steps, options) => {
-                const {ctx, width, height } = chart;
+                const {
+                    ctx,
+                    width,
+                    height
+                } = chart;
                 ctx.fillStyle = options.backgroundColor;
-                ctx.fillRect( 0, 0, width, height)
+                ctx.fillRect(0, 0, width, height)
                 ctx.restore();
             }
 
         };
 
         const bgColor1 = {
-            id:'bgColor',
+            id: 'bgColor',
             beforeDraw: (chart, steps, options) => {
-                const {ctx, width, height } = chart;
+                const {
+                    ctx,
+                    width,
+                    height
+                } = chart;
                 ctx.fillStyle = options.backgroundColor;
-                ctx.fillRect( 0, 0, width, height)
+                ctx.fillRect(0, 0, width, height)
                 ctx.restore();
             }
 
@@ -1293,12 +1297,12 @@ Yii::$app->set('db', [ //revert default connection
                     },
                 },
                 plugins: {
-                    bgColor:{
+                    bgColor: {
                         backgroundColor: 'white'
                     }
                 },
             },
-             plugins:[bgColor],
+            plugins: [bgColor],
         });
 
         //vertical bar graph
@@ -1328,17 +1332,18 @@ Yii::$app->set('db', [ //revert default connection
 
                 },
 
-                 plugins: {
-                    bgColor:{
+                plugins: {
+                    bgColor: {
                         backgroundColor: 'white'
                     }
                 },
 
             },
-              plugins:[bgColor],
+            plugins: [bgColor],
         });
 
-
+        var varvarvar = (<?= json_encode($queryCustomerTypePerProvince) ?>);
+        console.log(varvarvar);
 
         // Function to calculate the average of an array of numbers
         const calculateAverage = (array) => {
@@ -1391,45 +1396,45 @@ Yii::$app->set('db', [ //revert default connection
 
         // Config for the doughnut chart
         const config = {
-                type: 'doughnut',
-                data,
-                options: {
-                    // cutout:'85%',
-                    borderRadius: 10,
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    },
-
-                    // plugins:[divisionName] //to be continue
-                },
-                plugins: [{
-                    id: 'divisionName',
-                    afterDatasetsDraw(chart, args, options) {
-                        const {
-                            ctx,
-                            data,
-                            scales,
-                            chartArea: {
-                                left,
-                                top,
-                                width,
-                                height
-                            }
-                        } = chart;
-
-                        ctx.save();
-                        ctx.font = 'bolder 15px Poppins';
-                        ctx.fillStyle = 'rgb(3, 98, 186, 1)';
-                        ctx.textAlign = 'center';
-                        ctx.fillText('Average sales per day', width / 2.1, height / 2 + top);
-                        console.log(chart.getDatasetMeta(0))
-
+            type: 'doughnut',
+            data,
+            options: {
+                // cutout:'85%',
+                borderRadius: 10,
+                plugins: {
+                    legend: {
+                        display: false
                     }
+                },
 
-                }]
-            };
+                // plugins:[divisionName] //to be continue
+            },
+            plugins: [{
+                id: 'divisionName',
+                afterDatasetsDraw(chart, args, options) {
+                    const {
+                        ctx,
+                        data,
+                        scales,
+                        chartArea: {
+                            left,
+                            top,
+                            width,
+                            height
+                        }
+                    } = chart;
+
+                    ctx.save();
+                    ctx.font = 'bolder 15px Poppins';
+                    ctx.fillStyle = 'rgb(3, 98, 186, 1)';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('Average sales per day', width / 2.1, height / 2 + top);
+                    //console.log(chart.getDatasetMeta(0))
+
+                }
+
+            }]
+        };
 
         // Render the doughnut chart
         const myChart = new Chart(document.getElementById('myChart'), config);
@@ -1444,41 +1449,41 @@ Yii::$app->set('db', [ //revert default connection
     </script>
 
 
-          <!-- All about customer graphs -->
-          <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-geo"></script>
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        <div class="customers_data">
-            <div class="date_filter" style="text-align: left; padding-left: 8rem; padding-top: 0rem; padding-bottom: 2rem;">
-                <div class="containers">
-                    <div class="date_dropdown">
-                        <label for="chart_type" class="chart_type_label">
-                            <strong>Chart Filter</strong></label>
-                        <select name="chart_type" id="chart_type" class="dropdown-content">
-                            <option value="bar">Bar</option>
-                            <option value="line">Line</option>
-                            <option value="scatter">Map</option>
-                            <!-- <option value="horizontal_bar">Horizontal chart</option> -->
-                        </select>
-                    </div>
-                </div>
-            </div>
-
-            <div class="chart-container">
-                <p id="reportTitle">Total Customers per Province</p>
-                    <canvas id="Provinces"></canvas>
-            </div>
-
-            <div class="chart-container" style="width: 47%; text-align: center;">
-                <p id="reportTitle">Type of Customers per Province</p>
-                    <canvas id="TCProvinces"></canvas>
-            </div>
-            <div class="chart-container" style="width: 47%; text-align: center;">
-                <p id="reportTitle">Type of Transaction per Province</p>
-                <div class="containerBody">
-                    <canvas id="TTProvinces"></canvas>
+    <!-- All about customer graphs -->
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-geo"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <div class="customers_data">
+        <div class="date_filter" style="text-align: left; padding-left: 8rem; padding-top: 0rem; padding-bottom: 2rem;">
+            <div class="containers">
+                <div class="date_dropdown">
+                    <label for="chart_type" class="chart_type_label">
+                        <strong>Chart Filter</strong></label>
+                    <select name="chart_type" id="chart_type" class="dropdown-content">
+                        <option value="bar">Bar</option>
+                        <option value="line">Line</option>
+                        <option value="scatter">Map</option>
+                        <!-- <option value="horizontal_bar">Horizontal chart</option> -->
+                    </select>
                 </div>
             </div>
         </div>
+
+        <div class="chart-container">
+            <p id="reportTitle">Total Customers per Province</p>
+            <canvas id="Provinces"></canvas>
+        </div>
+
+        <div class="chart-container" style="width: 47%; text-align: center;">
+            <p id="reportTitle">Type of Customers per Province</p>
+            <canvas id="TCProvinces"></canvas>
+        </div>
+        <div class="chart-container" style="width: 47%; text-align: center;">
+            <p id="reportTitle">Type of Transaction per Province</p>
+            <div class="containerBody">
+                <canvas id="TTProvinces"></canvas>
+            </div>
+        </div>
+    </div>
 
 </div>
 
@@ -1535,12 +1540,12 @@ Yii::$app->set('db', [ //revert default connection
                         legend: {
                             display: false
                         },
-                          bgColor:{
-                        backgroundColor: 'white'
-                    }
+                        bgColor: {
+                            backgroundColor: 'white'
+                        }
                     }
                 },
-                plugins:[bgColor],
+                plugins: [bgColor],
                 data: {
                     labels: <?php echo json_encode($province); ?>,
                     datasets: [{
@@ -1673,7 +1678,7 @@ Yii::$app->set('db', [ //revert default connection
                         position: 'top'
 
                     },
-                      bgColor:{
+                    bgColor: {
                         backgroundColor: 'white'
                     },
                     datalabels: {
@@ -1709,7 +1714,7 @@ Yii::$app->set('db', [ //revert default connection
                             borderWidth: 2
                         }],
                     },
-                    plugins:[bgColor],
+                    plugins: [bgColor],
                 });
 
                 paymendtMethodChart = new Chart(paymendtMethodChartContainer, {
@@ -1730,7 +1735,7 @@ Yii::$app->set('db', [ //revert default connection
                             borderWidth: 2
                         }],
                     },
-                    plugins:[bgColor],
+                    plugins: [bgColor],
                 });
                 transactionTypeChart = new Chart(transactionTypeChartContainer, {
                     type: selectedChartType,
@@ -1750,7 +1755,7 @@ Yii::$app->set('db', [ //revert default connection
                             borderWidth: 2
                         }],
                     },
-                    plugins:[bgColor],
+                    plugins: [bgColor],
                 });
 
                 customerTypeChart = new Chart(customerTypeChartContainer, {
@@ -1780,7 +1785,7 @@ Yii::$app->set('db', [ //revert default connection
                             borderWidth: 2
                         }],
                     },
-                    plugins:[bgColor],
+                    plugins: [bgColor],
                 });
             } else if (selectedChartType === 'pie') {
                 transactionStatusChart = new Chart(transactionStatusChartContainer, {
@@ -1792,9 +1797,9 @@ Yii::$app->set('db', [ //revert default connection
                                 position: 'top'
 
                             },
-                            bgColor:{
-                        backgroundColor: 'white'
-                    },
+                            bgColor: {
+                                backgroundColor: 'white'
+                            },
 
                             datalabels: {
                                 formatter: (value, context) => {
@@ -1805,7 +1810,8 @@ Yii::$app->set('db', [ //revert default connection
                         },
                         responsive: true,
                         maintainAspectRatio: false,
-                    },plugins:[bgColor],
+                    },
+                    plugins: [bgColor],
                     data: {
                         labels: <?php echo json_encode($transactionStatus); ?>,
                         datasets: [{
@@ -1832,9 +1838,9 @@ Yii::$app->set('db', [ //revert default connection
                                 position: 'top'
 
                             },
-                              bgColor:{
-                        backgroundColor: 'white'
-                    },
+                            bgColor: {
+                                backgroundColor: 'white'
+                            },
 
                             datalabels: {
                                 formatter: (value, context) => {
@@ -1845,7 +1851,8 @@ Yii::$app->set('db', [ //revert default connection
                         },
                         responsive: true,
                         maintainAspectRatio: false,
-                    },plugins:[bgColor],
+                    },
+                    plugins: [bgColor],
                     data: {
                         labels: <?php echo json_encode($PaymentMethod); ?>,
                         datasets: [{
@@ -1878,14 +1885,14 @@ Yii::$app->set('db', [ //revert default connection
                                 }
                             },
 
-                            bgColor:{
+                            bgColor: {
                                 backgroundColor: 'white'
-                                },
-                        responsive: true,
-                        maintainAspectRatio: false,
-                    },  
+                            },
+                            responsive: true,
+                            maintainAspectRatio: false,
+                        },
                     },
-                    plugins:[bgColor],
+                    plugins: [bgColor],
 
                     data: {
                         labels: <?php echo json_encode($transactionType); ?>,
@@ -1919,14 +1926,15 @@ Yii::$app->set('db', [ //revert default connection
                                     return context.chart.data.labels[context.dataIndex];
                                 }
                             },
-                              bgColor:{
-                        backgroundColor: 'white'
-                    }
+                            bgColor: {
+                                backgroundColor: 'white'
+                            }
 
                         },
                         responsive: true,
                         maintainAspectRatio: false,
-                    },plugins:[bgColor],
+                    },
+                    plugins: [bgColor],
                     data: {
                         labels: <?php echo json_encode($customerType); ?>,
                         datasets: [{
@@ -1976,12 +1984,13 @@ Yii::$app->set('db', [ //revert default connection
                         },
                         plugins: {
 
-                        bgColor:{
-                            backgroundColor: 'white'
+                            bgColor: {
+                                backgroundColor: 'white'
 
-                                }
+                            }
+                        },
                     },
-                },plugins:[bgColor],
+                    plugins: [bgColor],
                     data: {
                         labels: <?php echo json_encode($transactionStatus); ?>,
                         datasets: [{
@@ -2018,15 +2027,16 @@ Yii::$app->set('db', [ //revert default connection
 
                             },
                         },
-                         plugins: {
+                        plugins: {
 
-                        bgColor:{
-                            backgroundColor: 'white'
+                            bgColor: {
+                                backgroundColor: 'white'
 
-                                }
+                            }
+                        },
+
                     },
-
-                    },plugins:[bgColor],
+                    plugins: [bgColor],
                     data: {
                         labels: <?php echo json_encode($PaymentMethod); ?>,
                         datasets: [{
@@ -2065,15 +2075,15 @@ Yii::$app->set('db', [ //revert default connection
 
                             },
                         },
-                           plugins: {
+                        plugins: {
 
-                        bgColor:{
-                            backgroundColor: 'white'
+                            bgColor: {
+                                backgroundColor: 'white'
 
-                                }
+                            }
+                        },
                     },
-                    },
-                    plugins:[bgColor],
+                    plugins: [bgColor],
                     data: {
                         labels: <?php echo json_encode($transactionType); ?>,
                         datasets: [{
@@ -2111,12 +2121,13 @@ Yii::$app->set('db', [ //revert default connection
                         },
                         plugins: {
 
-                            bgColor:{
+                            bgColor: {
                                 backgroundColor: 'white'
 
-                                    }
-                            },
-                    },plugins:[bgColor],
+                            }
+                        },
+                    },
+                    plugins: [bgColor],
                     data: {
                         labels: <?php echo json_encode($customerType); ?>,
                         datasets: [{
@@ -2156,100 +2167,100 @@ Yii::$app->set('db', [ //revert default connection
     // dashboard design end
 </script>
 
-    <script>
-        function downloadPDF() {
-            const combinedChart = document.getElementById('combinedChart');
-            const transactionChart = document.getElementById('transactionChart');
-            const salesChart = document.getElementById('salesChart');
-            const myChart = document.getElementById('myChart');
-            const provincesChart = document.getElementById('Provinces');
-            const transactionStatusChart = document.getElementById('transactionStatus'); // New chart element
-            const paymentChart = document.getElementById('paymendtMethod'); // New chart element
-            const transactionTypeChart = document.getElementById('transactionType'); // New chart element
-            const customerTypeChart = document.getElementById('customerType'); // New chart element
+<script>
+    function downloadPDF() {
+        const combinedChart = document.getElementById('combinedChart');
+        const transactionChart = document.getElementById('transactionChart');
+        const salesChart = document.getElementById('salesChart');
+        const myChart = document.getElementById('myChart');
+        const provincesChart = document.getElementById('Provinces');
+        const transactionStatusChart = document.getElementById('transactionStatus'); // New chart element
+        const paymentChart = document.getElementById('paymendtMethod'); // New chart element
+        const transactionTypeChart = document.getElementById('transactionType'); // New chart element
+        const customerTypeChart = document.getElementById('customerType'); // New chart element
 
 
-            const options = {
-                quality: 5,
-                width: 800,
-                height: 600
-            };
+        const options = {
+            quality: 5,
+            width: 800,
+            height: 600
+        };
 
-            domtoimage.toPng(combinedChart, options)
-                .then(function(combinedChartImg) {
-                    domtoimage.toPng(transactionChart, options)
-                        .then(function(transactionChartImg) {
-                            domtoimage.toPng(salesChart, options)
-                                .then(function(salesChartImg) {
-                                    domtoimage.toPng(myChart, options)
-                                        .then(function(myChartImg) {
-                                            domtoimage.toPng(provincesChart, options)
-                                                .then(function(provincesChartImg) {
-                                                    domtoimage.toPng(transactionStatusChart, options)
-                                                        .then(function(transactionStatusChartImg) {
-                                                            domtoimage.toPng(transactionTypeChart, options)
-                                                                .then(function(transactionTypeChartImg) {
-                                                                    domtoimage.toPng(paymentChart, options)
-                                                                        .then(function(paymentChartImg) {
-                                                                            domtoimage.toPng(customerTypeChart, options)
-                                                                                .then(function(customerTypeChartImg) {
-                                                                                    const pdf = new jsPDF();
+        domtoimage.toPng(combinedChart, options)
+            .then(function(combinedChartImg) {
+                domtoimage.toPng(transactionChart, options)
+                    .then(function(transactionChartImg) {
+                        domtoimage.toPng(salesChart, options)
+                            .then(function(salesChartImg) {
+                                domtoimage.toPng(myChart, options)
+                                    .then(function(myChartImg) {
+                                        domtoimage.toPng(provincesChart, options)
+                                            .then(function(provincesChartImg) {
+                                                domtoimage.toPng(transactionStatusChart, options)
+                                                    .then(function(transactionStatusChartImg) {
+                                                        domtoimage.toPng(transactionTypeChart, options)
+                                                            .then(function(transactionTypeChartImg) {
+                                                                domtoimage.toPng(paymentChart, options)
+                                                                    .then(function(paymentChartImg) {
+                                                                        domtoimage.toPng(customerTypeChart, options)
+                                                                            .then(function(customerTypeChartImg) {
+                                                                                const pdf = new jsPDF();
 
-                                                                                    pdf.setFontSize(12);
-                                                                                    pdf.setFont('helvetica', 'bold');
-                                                                                    pdf.setTextColor(0, 122, 204);
-                                                                                    pdf.text('Total Transaction and Sales', 40, 25);
-                                                                                    pdf.text('Transaction per Division', 40, 115);
-                                                                                    pdf.text('Sales per Division', 40, 215);
+                                                                                pdf.setFontSize(12);
+                                                                                pdf.setFont('helvetica', 'bold');
+                                                                                pdf.setTextColor(0, 122, 204);
+                                                                                pdf.text('Total Transaction and Sales', 40, 25);
+                                                                                pdf.text('Transaction per Division', 40, 115);
+                                                                                pdf.text('Sales per Division', 40, 215);
 
-                                                                                    pdf.setFont('helvetica', 'bold');
-                                                                                    pdf.setTextColor(0, 41, 102);
-                                                                                    pdf.setFontSize(14);
-                                                                                    pdf.text('Visualight-Dashboard', 83, 10);
+                                                                                pdf.setFont('helvetica', 'bold');
+                                                                                pdf.setTextColor(0, 41, 102);
+                                                                                pdf.setFontSize(14);
+                                                                                pdf.text('Visualight-Dashboard', 83, 10);
 
-                                                                                    pdf.addImage(combinedChartImg, 'PNG', 40, 30, 130, 70, undefined, 'FAST');
-                                                                                    pdf.addImage(transactionChartImg, 'PNG', 40, 123, 130, 70, undefined, 'FAST');
-                                                                                    pdf.addImage(salesChartImg, 'PNG', 40, 220, 130, 70, undefined, 'FAST');
+                                                                                pdf.addImage(combinedChartImg, 'PNG', 40, 30, 130, 70, undefined, 'FAST');
+                                                                                pdf.addImage(transactionChartImg, 'PNG', 40, 123, 130, 70, undefined, 'FAST');
+                                                                                pdf.addImage(salesChartImg, 'PNG', 40, 220, 130, 70, undefined, 'FAST');
 
-                                                                                    pdf.addPage();
+                                                                                pdf.addPage();
 
-                                                                                    pdf.setFontSize(12);
-                                                                                    pdf.setFont('helvetica', 'bold');
-                                                                                    pdf.setTextColor(0, 122, 204);
-                                                                                    pdf.text('Average Sales Daily', 40, 25);
+                                                                                pdf.setFontSize(12);
+                                                                                pdf.setFont('helvetica', 'bold');
+                                                                                pdf.setTextColor(0, 122, 204);
+                                                                                pdf.text('Average Sales Daily', 40, 25);
 
-                                                                                    pdf.addImage(myChartImg, 'PNG', 50, 20, 110, 70, undefined, 'FAST');
+                                                                                pdf.addImage(myChartImg, 'PNG', 50, 20, 110, 70, undefined, 'FAST');
 
-                                                                                    pdf.text('Type of Customers', 40, 115);
+                                                                                pdf.text('Type of Customers', 40, 115);
 
-                                                                                    pdf.addImage(customerTypeChartImg, 'PNG', 40, 120, 130, 70, undefined, 'FAST');
+                                                                                pdf.addImage(customerTypeChartImg, 'PNG', 40, 120, 130, 70, undefined, 'FAST');
 
-                                                                                    pdf.text('Total Customers per Province', 40, 215);
+                                                                                pdf.text('Total Customers per Province', 40, 215);
 
-                                                                                    pdf.addImage(provincesChartImg, 'PNG', 40, 225, 130, 70, undefined, 'FAST');
+                                                                                pdf.addImage(provincesChartImg, 'PNG', 40, 225, 130, 70, undefined, 'FAST');
 
-                                                                                    pdf.addPage();
+                                                                                pdf.addPage();
 
-                                                                                    pdf.setFontSize(12);
-                                                                                    pdf.setFont('helvetica', 'bold');
-                                                                                    pdf.setTextColor(0, 122, 204);
-                                                                                    pdf.text('Transaction Status', 40, 18);
+                                                                                pdf.setFontSize(12);
+                                                                                pdf.setFont('helvetica', 'bold');
+                                                                                pdf.setTextColor(0, 122, 204);
+                                                                                pdf.text('Transaction Status', 40, 18);
 
-                                                                                    pdf.addImage(transactionStatusChartImg, 'PNG', 60, 25, 100, 80, undefined, 'FAST');
+                                                                                pdf.addImage(transactionStatusChartImg, 'PNG', 60, 25, 100, 80, undefined, 'FAST');
 
-                                                                                    pdf.text('Payment Method', 40, 115);
+                                                                                pdf.text('Payment Method', 40, 115);
 
-                                                                                    pdf.addImage(paymentChartImg, 'JPEG', 60, 115, 100, 80, undefined, 'FAST');
-
-
-                                                                                    pdf.text('Transaction Type', 40, 215);
-
-                                                                                    pdf.addImage(transactionTypeChartImg, 'PNG', 60, 215, 100, 80, undefined, 'FAST');
+                                                                                pdf.addImage(paymentChartImg, 'JPEG', 60, 115, 100, 80, undefined, 'FAST');
 
 
-                                                                                    pdf.save('Visualight-Dashboard.pdf');
-                                                                                });
-                                                                        });
+                                                                                pdf.text('Transaction Type', 40, 215);
+
+                                                                                pdf.addImage(transactionTypeChartImg, 'PNG', 60, 215, 100, 80, undefined, 'FAST');
+
+
+                                                                                pdf.save('Visualight-Dashboard.pdf');
+                                                                            });
+                                                                    });
 
                                                             });
                                                     });

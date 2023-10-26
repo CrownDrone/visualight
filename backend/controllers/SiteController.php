@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use backend\controllers\BaseController;
 use common\models\ForgotPasswordForm;
 use common\models\LoginForm;
 use common\models\PdfUploadForm;
@@ -87,9 +88,186 @@ class SiteController extends BaseController
     public function actionIndex() //this is for the dashboard keme keme chemerut
     {
 
-        return $this->render('index');
-    }
+        Yii::$app->set('db', [ //reroute default connection 
+            'class' => \yii\db\Connection::class,
+            'dsn' => 'mysql:host=localhost;dbname=visualight2data',
+            'username' => 'root',
+            'password' => '',
+            'charset' => 'utf8',
+        ]);
 
+        $queryAllDate = (new Query()) //daily transaction record seperated by division, Y axis for the chart
+            ->select(['transaction_date AS labels', 'COUNT(*) AS datasets', 'division AS label'])
+            ->from('visualight2data.transaction') //from visualight2data database within transaction table
+            ->groupBy('transaction_date, division')
+            ->orderBy('transaction_date')
+            ->all();
+
+        $dailyMapping = [ //to be used on renaming divisions
+            "1" => "National Metrology Division",
+            "2" => "Standards and Testing Division",
+        ];
+
+        foreach ($queryAllDate as &$item) { //to change division 1 & 2 into actual division name
+            if (isset($item['label']) && isset($dailyMapping[$item['label']])) {
+                $item['label'] = $dailyMapping[$item['label']];
+            }
+        }
+
+        $queryAllDate2 = (new Query()) //daily transaction record, separated kasi eto yung total transaction of 2 divisions
+            ->select([
+                'transaction_date AS labels',
+                'COUNT(*) AS datasets',
+                new \yii\db\Expression("CASE WHEN division IS NOT NULL THEN 'Total' ELSE NULL END AS label")
+            ])
+            ->from('visualight2data.transaction')
+            ->groupBy('transaction_date')
+            ->orderBy('transaction_date')
+            ->all();
+
+        array_splice($queryAllDate, 2, 0, $queryAllDate2); //splice the transaction per div array
+        $queryAllDate = array_values($queryAllDate); //insert total transaction into transaction per div array
+
+        //--------------
+        $queryTotalSale = (new Query()) //daily sales record seperated by division
+            ->select(['transaction_date AS labels', 'SUM(amount) AS datasets', 'division AS label'])
+            ->from('visualight2data.transaction') //from visualight2data database within transaction table
+            ->groupBy('transaction_date, division')
+            ->orderBy('transaction_date')
+            ->all();
+
+        foreach ($queryTotalSale as &$item) { //to change division 1 & 2 into actual division name
+            if (isset($item['label']) && isset($dailyMapping[$item['label']])) {
+                $item['label'] = $dailyMapping[$item['label']];
+            }
+        }
+
+        $queryTotalSale2 = (new Query()) //daily total sales record, separated kasi eto yung total transaction of 2 divisions
+            ->select([
+                'transaction_date AS labels',
+                'SUM(amount) AS datasets',
+                new \yii\db\Expression("CASE WHEN division IS NOT NULL THEN 'Total' ELSE NULL END AS label")
+            ])
+            ->from('visualight2data.transaction')
+            ->groupBy('transaction_date')
+            ->orderBy('transaction_date')
+            ->all();
+
+        array_splice($queryTotalSale, 2, 0, $queryTotalSale2); //splice the sales per div array
+        $queryTotalSale = array_values($queryTotalSale); //insert total sales into transaction per div array
+
+        //--------------------
+        $queryDivAverageSale = (new Query()) //daily average sales record seperated by division
+            ->select(['transaction_date AS labels', 'AVG(amount) AS datasets', 'division AS label'])
+            ->from('visualight2data.transaction') //from visualight2data database within transaction table
+            ->groupBy('transaction_date, division')
+            ->orderBy('transaction_date')
+            ->all();
+
+        foreach ($queryDivAverageSale as &$item) { //to change division 1 & 2 into actual division name
+            if (isset($item['label']) && isset($dailyMapping[$item['label']])) {
+                $item['label'] = $dailyMapping[$item['label']];
+            }
+        }
+
+        $queryTotalAverageSale = (new Query()) //daily total average sales record, separated kasi eto yung total transaction of 2 divisions
+            ->select([
+                'transaction_date AS labels',
+                'AVG(amount) AS datasets',
+                new \yii\db\Expression("CASE WHEN division IS NOT NULL THEN 'Total' ELSE NULL END AS label")
+            ])
+            ->from('visualight2data.transaction')
+            ->groupBy('transaction_date')
+            ->orderBy('transaction_date')
+            ->all();
+
+        $queryAddress = (new Query()) //total customer per province
+            ->select(['address AS labels', 'COUNT(*) as datasets'])
+            ->from('customer')
+            ->groupBy(['labels'])
+            ->orderBy(['datasets' => SORT_DESC])
+            ->all();
+
+        $queryCustomerTypePerProvince = (new Query()) //total of customer per type each province
+            ->select(['address AS labels', 'COUNT(*) as datasets'])
+            ->from('customer')
+            ->groupBy(['address'])
+            ->orderBy(['address' => SORT_DESC])
+            ->all();
+
+        $queryTransactionTypePerProvince = (new Query())//total of type of tranasction per province
+            ->select([
+                'c.address AS labels',
+                'datasets' => new \yii\db\Expression('COUNT(*)')
+            ])
+            ->from(['bs' => 'transaction']) // Assign an alias 'bs' to the 'transaction' table
+            ->innerJoin(['c' => 'customer'], 'bs.customer_id = c.id') // Assign an alias 'c' to the 'customer' table
+            ->groupBy('c.address')
+            ->orderBy(['bs.transaction_date']);
+
+        //------FOR DATE FORMATTING-------START
+        $currentYear = date('Y'); //gets year in YYYY format
+        $startDate = "$currentYear-01-01"; //first date of the current year
+        $endDate = "$currentYear-12-31"; //last date of the current year
+
+        $dateRange = [];
+        $currentDate = new DateTime($startDate);
+        while ($currentDate->format('Y-m-d') <= $endDate) { //formats the date into like 2023-12-31
+            $dateRange[] = $currentDate->format('Y-m-d');
+            $currentDate->modify('+1 day');
+        }
+
+        $existingDates = Site::find() //looks for existing date(YYY-MM-DD) record
+            ->select('date')
+            ->where(['between', 'date', $startDate, $endDate])
+            ->asArray()
+            ->column();
+
+        $newDates = array_diff($dateRange, $existingDates); //creates an array from early query
+
+        if (!empty($newDates)) { //if the date does not exist, creates it
+            $insertData = [];
+            foreach ($newDates as $date) {
+                $insertData[] = [$date];
+            }
+
+            Yii::$app->db->createCommand() //inserts all created date to database
+                ->batchInsert('date_label', ['date'], $insertData)
+                ->execute();
+        }
+        //------FOR DATE FORMATTING-------END
+
+
+
+        $chartLabel = (new Query()) //YYYY-MM-DD will serve as label for the chart, the X axis if you may
+            ->select('date AS labels')
+            ->from('date_label')
+            ->groupBy('date')
+            ->orderBy('date')
+            ->all();
+
+        Yii::$app->set('db', [ //revert default connection 
+            'class' => \yii\db\Connection::class,
+            'dsn' => 'mysql:host=localhost;dbname=visualight2user',
+            'username' => 'root',
+            'password' => '',
+            'charset' => 'utf8',
+        ]);
+        
+        return $this->render('index',[
+            'queryAllDate' => $queryAllDate,
+            'queryAllDate2' => $queryAllDate2,
+            'queryTotalSale' => $queryTotalSale,
+            'queryTotalSale2' => $queryTotalSale2,
+            'queryDivAverageSale' => $queryDivAverageSale,
+            'queryTotalAverageSale' => $queryTotalAverageSale,
+            'queryAddress' => $queryAddress,
+            'queryCustomerTypePerProvince' => $queryCustomerTypePerProvince,
+            'queryTransactionTypePerProvince' => $queryTransactionTypePerProvince,
+            'chartLabel' => $chartLabel,
+        ]);
+    }
+    
     /**
      * Login action.
      *
