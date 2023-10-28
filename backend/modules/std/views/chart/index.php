@@ -999,7 +999,7 @@ $this->title = '';
             </div>
         </div>
         <div class="deptransaction">
-            <p>Total Sales Daily</p>
+            <p>Total Income Daily</p>
             <div class="grid">
                 <img src="/images/Sales Performance.png" alt="icon2">
                 <p id="dailyTrans"><?= $SalesToday ?></p>
@@ -1092,7 +1092,7 @@ $this->title = '';
 
  
         <div class="chart-container">
-            <p id="reportTitle"> Sales Report</p>
+            <p id="reportTitle"> Income Report</p>
                 <canvas id="salesChart"></canvas>
 
         </div>
@@ -1105,7 +1105,7 @@ $this->title = '';
                         <p class="number"> <?= $average ?> </p>
                     </div>
                     <div class="salesAverage">
-                        <p class="texty"> Average Sales </p>
+                        <p class="texty"> Average Income </p>
                         <p class="number"> <?= $saleaverage ?> </p>
                     </div>
                 </div>
@@ -2223,110 +2223,98 @@ $this->title = '';
         })();
     </script>
 
-    <script>
+<script>
         function downloadPDF() {
-            const combinedChart = document.getElementById('combinedChart');
-            const transactionChart = document.getElementById('transactionChart');
-            const salesChart = document.getElementById('salesChart');
-            const myChart = document.getElementById('myChart');
-            const provincesChart = document.getElementById('Provinces');
-            const transactionStatusChart = document.getElementById('transactionStatus'); // New chart element
-            const paymentChart = document.getElementById('paymendtMethod'); // New chart element
-            const transactionTypeChart = document.getElementById('transactionType'); // New chart element
-            const customerTypeChart = document.getElementById('customerType'); // New chart element
+        const transactionChart = document.getElementById('transactionChart');
+        const salesChart = document.getElementById('salesChart');
+        const myChart = document.getElementById('myChart');
+        const provincesChart = document.getElementById('Provinces');
+        const transactionStatusChart = document.getElementById('transactionStatus'); // New chart element
+        const paymentChart = document.getElementById('paymendtMethod'); // New chart element
+        const transactionTypeChart = document.getElementById('transactionType'); // New chart element
+        const customerTypeChart = document.getElementById('customerType'); // New chart element
 
 
-            const options = {
-                quality: 5,
-                width: 800,
-                height: 600
-            };
+        const options = {
+            quality: 5,
+            width: 800,
+            height: 600
+        };
 
-            domtoimage.toPng(combinedChart, options)
-                .then(function(combinedChartImg) {
-                    domtoimage.toPng(transactionChart, options)
-                        .then(function(transactionChartImg) {
-                            domtoimage.toPng(salesChart, options)
-                                .then(function(salesChartImg) {
-                                    domtoimage.toPng(myChart, options)
-                                        .then(function(myChartImg) {
-                                            domtoimage.toPng(provincesChart, options)
-                                                .then(function(provincesChartImg) {
-                                                    domtoimage.toPng(transactionStatusChart, options)
-                                                        .then(function(transactionStatusChartImg) {
-                                                            domtoimage.toPng(transactionTypeChart, options)
-                                                                .then(function(transactionTypeChartImg) {
-                                                                    domtoimage.toPng(paymentChart, options)
-                                                                        .then(function(paymentChartImg) {
-                                                                            domtoimage.toPng(customerTypeChart, options)
-                                                                                .then(function(customerTypeChartImg) {
-                                                                                    const pdf = new jsPDF();
+                domtoimage.toPng(transactionChart, options)
+                    .then(function(transactionChartImg) {
+                        domtoimage.toPng(salesChart, options)
+                            .then(function(salesChartImg) {
+                                        domtoimage.toPng(provincesChart, options)
+                                            .then(function(provincesChartImg) {
+                                                domtoimage.toPng(transactionStatusChart, options)
+                                                    .then(function(transactionStatusChartImg) {
+                                                        domtoimage.toPng(transactionTypeChart, options)
+                                                            .then(function(transactionTypeChartImg) {
+                                                                domtoimage.toPng(paymentChart, options)
+                                                                    .then(function(paymentChartImg) {
+                                                                        domtoimage.toPng(customerTypeChart, options)
+                                                                            .then(function(customerTypeChartImg) {
+                                                                                const pdf = new jsPDF();
 
-                                                                                    pdf.setFontSize(12);
-                                                                                    pdf.setFont('helvetica', 'bold');
-                                                                                    pdf.setTextColor(0, 122, 204);
-                                                                                    pdf.text('Total Transaction and Sales', 40, 25);
-                                                                                    pdf.text('Transaction per Division', 40, 115);
-                                                                                    pdf.text('Sales per Division', 40, 215);
+                                                                                pdf.setFontSize(12);
+                                                                                pdf.setFont('helvetica', 'bold');
+                                                                                pdf.setTextColor(0, 122, 204);
+                                                                                pdf.text('Total Transaction Report', 40, 25);
+                                                                                pdf.text('Total Income Report', 40, 115);
+                                                                                pdf.text('Total Customer Per Province', 40, 215);
 
-                                                                                    pdf.setFont('helvetica', 'bold');
-                                                                                    pdf.setTextColor(0, 41, 102);
-                                                                                    pdf.setFontSize(14);
-                                                                                    pdf.text('Visualight-NMD', 83, 10);
+                                                                                pdf.setFont('helvetica', 'bold');
+                                                                                pdf.setTextColor(0, 41, 102);
+                                                                                pdf.setFontSize(14);
+                                                                                pdf.text('Visualight-Standards and Testing', 70, 10);
 
-                                                                                    pdf.addImage(combinedChartImg, 'JPEG', 40, 30, 130, 70, undefined, 'FAST');
-                                                                                    pdf.addImage(transactionChartImg, 'JPEG', 40, 123, 130, 70, undefined, 'FAST');
-                                                                                    pdf.addImage(salesChartImg, 'JPEG', 40, 220, 130, 70, undefined, 'FAST');
+                                                                                pdf.addImage(transactionChartImg, 'PNG', 40, 30, 130, 70, undefined, 'FAST');
+                                                                                pdf.addImage(salesChartImg, 'PNG', 40, 123, 130, 70, undefined, 'FAST');
+                                                                                pdf.addImage(provincesChartImg, 'PNG', 40, 220, 130, 70, undefined, 'FAST');
 
-                                                                                    pdf.addPage();
+                                                                                pdf.addPage();
 
-                                                                                    pdf.setFontSize(12);
-                                                                                    pdf.setFont('helvetica', 'bold');
-                                                                                    pdf.setTextColor(0, 122, 204);
-                                                                                    pdf.text('Average Sales Daily', 40, 25);
+                                                                                pdf.setFontSize(12);
+                                                                                pdf.setFont('helvetica', 'bold');
+                                                                                pdf.setTextColor(0, 122, 204);
+                                                                                pdf.text('Transaction Status', 40, 18);
 
-                                                                                    pdf.addImage(myChartImg, 'JPEG', 50, 20, 110, 70, undefined, 'FAST');
+                                                                                pdf.addImage(transactionStatusChartImg, 'PNG', 60, 25, 110, 70, undefined, 'FAST');
 
-                                                                                    pdf.text('Type of Customers', 40, 115);
+                                                                                pdf.text('Payment Method', 40, 110);
 
-                                                                                    pdf.addImage(customerTypeChartImg, 'JPEG', 40, 120, 130, 70, undefined, 'FAST');
-
-                                                                                    pdf.text('Total Customers per Province', 40, 215);
-
-                                                                                    pdf.addImage(provincesChartImg, 'JPEG', 40, 225, 130, 70, undefined, 'FAST');
-
-                                                                                    pdf.addPage();
-
-                                                                                    pdf.setFontSize(12);
-                                                                                    pdf.setFont('helvetica', 'bold');
-                                                                                    pdf.setTextColor(0, 122, 204);
-                                                                                    pdf.text('Transaction Status', 40, 18);
-
-                                                                                    pdf.addImage(transactionStatusChartImg, 'JPEG', 60, 25, 100, 80, undefined, 'FAST');
-
-                                                                                    pdf.text('Payment Method', 40, 115);
-
-                                                                                    pdf.addImage(paymentChartImg, 'JPEG', 60, 115, 100, 80, undefined, 'FAST');
+                                                                                pdf.addImage(paymentChartImg, 'JPEG', 60, 115, 110, 70, undefined, 'FAST');
 
 
-                                                                                    pdf.text('Transaction Type', 40, 215);
+                                                                                pdf.text('Transaction Type', 40, 205);
 
-                                                                                    pdf.addImage(transactionTypeChartImg, 'JPEG', 60, 215, 100, 80, undefined, 'FAST');
+                                                                                pdf.addImage(transactionTypeChartImg, 'PNG', 60, 215, 110, 70, undefined, 'FAST');
+
+                                                                                pdf.addPage();
+                                                                                
+                                                                                pdf.setFontSize(12);
+                                                                                pdf.setFont('helvetica', 'bold');
+                                                                                pdf.setTextColor(0, 122, 204);
+                                                                                pdf.text('Customer Type', 40, 18);
+                                                                                
+                                                                                pdf.addImage(customerTypeChartImg, 'PNG', 60, 25, 110, 70, undefined, 'FAST');
 
 
-                                                                                    pdf.save('Visualight-NMD.pdf');
-                                                                                });
-                                                                        });
 
-                                                                });
-                                                        });
-                                                });
-                                        });
-                                });
-                        });
-                })
-                .catch(function(error) {
-                    console.error('Error generating PDF:', error);
-                });
-        }
-    </script>
+                                                                                pdf.save('Visualight-Standards-and-Testing.pdf');
+                                                                            });
+                                                                    });
+
+                                                            });
+                                                    });
+                                            });
+                                    });
+                            })
+                            .catch(function(error) {
+                                console.error('Error generating PDF:', error);
+                            });
+               
+                            
+                    }
+</script>

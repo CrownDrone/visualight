@@ -1054,7 +1054,7 @@ Yii::$app->set('db', [ //revert default connection
 
 
     <div class="chart-container">
-        <p id="reportTitle"> Total Sales </p>
+        <p id="reportTitle"> Total Income </p>
         <canvas id="totalsalesChart"></canvas>
     </div>
 
@@ -1070,13 +1070,13 @@ Yii::$app->set('db', [ //revert default connection
 
 
     <div class="chart-container">
-        <p id="reportTitle"> Sales per Division</p>
+        <p id="reportTitle"> Income per Division</p>
         <canvas id="salesChart"></canvas>
     </div>
 
 
     <div class="chart-container" id="avgSales">
-        <p id="reportTitle">Average sales per day</p>
+        <p id="reportTitle">Average Income Daily</p>
         <div class="asOne">
             <canvas id="myChart"></canvas>
             <div class="average">
@@ -1085,7 +1085,7 @@ Yii::$app->set('db', [ //revert default connection
                     <p class="number"> <?= $average ?> </p>
                 </div>
                 <div class="aveSalesDiv">
-                    <p class="texty"> Average Sales </p>
+                    <p class="texty"> Average Income </p>
                     <p class="number"> <?= $saleaverage ?> </p>
                 </div>
             </div>
@@ -1162,7 +1162,7 @@ Yii::$app->set('db', [ //revert default connection
 
         // Create a new data set named sumSalesDataset from what we got from sumSalesData
         const sumSalesDataset = {
-            label: 'Total Sales',
+            label: 'Total Income',
             data: sumSalesData,
         };
 
@@ -1375,10 +1375,10 @@ Yii::$app->set('db', [ //revert default connection
             return {
                 label: `Average ${average.label}`,
                 data: [average.average],
-                borderWidth: 1,
+                borderWidth: 4, // previous:1
                 circumference: (ctx) => ((ctx.dataset.data[0] / maxAverage) * 270),
                 backgroundColor: color,
-                borderColor: color,
+                borderColor: 'white', //borderColor: color (previous code)
             };
         });
 
@@ -1428,7 +1428,7 @@ Yii::$app->set('db', [ //revert default connection
                     ctx.font = 'bolder 15px Poppins';
                     ctx.fillStyle = 'rgb(3, 98, 186, 1)';
                     ctx.textAlign = 'center';
-                    ctx.fillText('Average sales per day', width / 2.1, height / 2 + top);
+                    ctx.fillText('Average income Daily', width / 2.1, height / 2 + top);
                     //console.log(chart.getDatasetMeta(0))
 
                 }
@@ -2165,12 +2165,13 @@ Yii::$app->set('db', [ //revert default connection
     });
 
     // dashboard design end
-</script>
+</script>Sales
 
 <script>
     function downloadPDF() {
-        const combinedChart = document.getElementById('combinedChart');
+        const totaltransactionChart = document.getElementById('totaltransactionChart');
         const transactionChart = document.getElementById('transactionChart');
+        const totalsalesChart = document.getElementById('totalsalesChart');
         const salesChart = document.getElementById('salesChart');
         const myChart = document.getElementById('myChart');
         const provincesChart = document.getElementById('Provinces');
@@ -2186,8 +2187,8 @@ Yii::$app->set('db', [ //revert default connection
             height: 600
         };
 
-        domtoimage.toPng(combinedChart, options)
-            .then(function(combinedChartImg) {
+        domtoimage.toPng(totaltransactionChart, options)
+            .then(function(totaltransactionChartImg) {
                 domtoimage.toPng(transactionChart, options)
                     .then(function(transactionChartImg) {
                         domtoimage.toPng(salesChart, options)
@@ -2204,40 +2205,42 @@ Yii::$app->set('db', [ //revert default connection
                                                                     .then(function(paymentChartImg) {
                                                                         domtoimage.toPng(customerTypeChart, options)
                                                                             .then(function(customerTypeChartImg) {
+                                                                                  domtoimage.toPng(totalsalesChart, options)
+                                                                                    .then(function(totalsalesChartImg) {
                                                                                 const pdf = new jsPDF();
 
                                                                                 pdf.setFontSize(12);
                                                                                 pdf.setFont('helvetica', 'bold');
                                                                                 pdf.setTextColor(0, 122, 204);
-                                                                                pdf.text('Total Transaction and Sales', 40, 25);
-                                                                                pdf.text('Transaction per Division', 40, 115);
-                                                                                pdf.text('Sales per Division', 40, 215);
+                                                                                pdf.text('Total Transactions', 40, 25);
+                                                                                pdf.text('Total Income', 40, 115);
+                                                                                pdf.text('Transaction per Division', 40, 215);
 
                                                                                 pdf.setFont('helvetica', 'bold');
                                                                                 pdf.setTextColor(0, 41, 102);
                                                                                 pdf.setFontSize(14);
                                                                                 pdf.text('Visualight-Dashboard', 83, 10);
 
-                                                                                pdf.addImage(combinedChartImg, 'PNG', 40, 30, 130, 70, undefined, 'FAST');
-                                                                                pdf.addImage(transactionChartImg, 'PNG', 40, 123, 130, 70, undefined, 'FAST');
-                                                                                pdf.addImage(salesChartImg, 'PNG', 40, 220, 130, 70, undefined, 'FAST');
+                                                                                pdf.addImage(totaltransactionChartImg, 'PNG', 40, 30, 130, 70, undefined, 'FAST');
+                                                                                pdf.addImage(totalsalesChartImg, 'PNG', 40, 123, 130, 70, undefined, 'FAST');
+                                                                                pdf.addImage(transactionChartImg, 'PNG', 40, 220, 130, 70, undefined, 'FAST');
 
                                                                                 pdf.addPage();
 
                                                                                 pdf.setFontSize(12);
                                                                                 pdf.setFont('helvetica', 'bold');
                                                                                 pdf.setTextColor(0, 122, 204);
-                                                                                pdf.text('Average Sales Daily', 40, 25);
+                                                                                pdf.text('Income per Division', 40, 25);
 
-                                                                                pdf.addImage(myChartImg, 'PNG', 50, 20, 110, 70, undefined, 'FAST');
+                                                                                pdf.addImage(salesChartImg, 'PNG', 40, 30, 140, 70, undefined, 'FAST');
 
-                                                                                pdf.text('Type of Customers', 40, 115);
+                                                                                pdf.text('Average Income Daily', 40, 115);
 
-                                                                                pdf.addImage(customerTypeChartImg, 'PNG', 40, 120, 130, 70, undefined, 'FAST');
+                                                                                pdf.addImage(myChartImg, 'PNG', 40, 120, 105, 80, undefined, 'FAST');
 
-                                                                                pdf.text('Total Customers per Province', 40, 215);
+                                                                                pdf.text('Total Customers per Province', 40, 210);
 
-                                                                                pdf.addImage(provincesChartImg, 'PNG', 40, 225, 130, 70, undefined, 'FAST');
+                                                                                pdf.addImage(provincesChartImg, 'PNG', 40, 220, 130, 70, undefined, 'FAST');
 
                                                                                 pdf.addPage();
 
@@ -2246,16 +2249,26 @@ Yii::$app->set('db', [ //revert default connection
                                                                                 pdf.setTextColor(0, 122, 204);
                                                                                 pdf.text('Transaction Status', 40, 18);
 
-                                                                                pdf.addImage(transactionStatusChartImg, 'PNG', 60, 25, 100, 80, undefined, 'FAST');
+                                                                                pdf.addImage(transactionStatusChartImg, 'PNG', 60, 25, 110, 70, undefined, 'FAST');
 
-                                                                                pdf.text('Payment Method', 40, 115);
+                                                                                pdf.text('Payment Method', 40, 110);
 
-                                                                                pdf.addImage(paymentChartImg, 'JPEG', 60, 115, 100, 80, undefined, 'FAST');
+                                                                                pdf.addImage(paymentChartImg, 'JPEG', 60, 115, 110, 70, undefined, 'FAST');
 
 
-                                                                                pdf.text('Transaction Type', 40, 215);
+                                                                                pdf.text('Transaction Type', 40, 205);
 
-                                                                                pdf.addImage(transactionTypeChartImg, 'PNG', 60, 215, 100, 80, undefined, 'FAST');
+                                                                                pdf.addImage(transactionTypeChartImg, 'PNG', 60, 215, 110, 70, undefined, 'FAST');
+
+                                                                                pdf.addPage();
+                                                                                
+                                                                                pdf.setFontSize(12);
+                                                                                pdf.setFont('helvetica', 'bold');
+                                                                                pdf.setTextColor(0, 122, 204);
+                                                                                pdf.text('Customer Type', 40, 18);
+                                                                                
+                                                                                pdf.addImage(customerTypeChartImg, 'PNG', 60, 25, 110, 70, undefined, 'FAST');
+
 
 
                                                                                 pdf.save('Visualight-Dashboard.pdf');
@@ -2268,6 +2281,7 @@ Yii::$app->set('db', [ //revert default connection
                                     });
                             });
                     });
+                });
             })
             .catch(function(error) {
                 console.error('Error generating PDF:', error);
