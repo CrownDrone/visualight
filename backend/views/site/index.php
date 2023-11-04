@@ -2172,7 +2172,7 @@ Yii::$app->set('db', [ //revert default connection
     });
 
     // dashboard design end
-</script>Sales
+</script>
 
 <script>
     function downloadPDF() {
