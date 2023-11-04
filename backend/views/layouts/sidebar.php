@@ -91,7 +91,7 @@ $defaultImagePath = Yii::getAlias('@web') . '/images/user2.jpg';
                         'items' => [
                             [
                                 'label' => 'Query',
-                                'icon' => '	fas fa-share',
+                                'icon' => 'fas fa-search',
                                 'url' => ['/dbeditor/query'],
                                 'visible' => Helper::checkRoute('/dbeditor/query'),
                                 'active' => Yii::$app->controller->getUniqueID() === 'dbeditor/query',
