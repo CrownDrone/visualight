@@ -229,9 +229,6 @@ FROM AllMonths
 LEFT JOIN transaction t ON DATE_FORMAT(t.transaction_date, '%Y-%m-01') = AllMonths.first_month AND t.division = (SELECT id FROM division WHERE division_code = 'NMD')
 GROUP BY AllMonths.first_month
 ORDER BY AllMonths.first_month;
-
-
-
 ";
 
 $transactions4 = $chartDb->createCommand($sql4)->queryAll();
@@ -558,6 +555,8 @@ function updateChart3(data) {
             // Apply exponential smoothing to predicted amounts (adjust alpha value as needed)
             if (predictedIncomeValues.length > 0) {
                 predictedAmount = alpha * predictedAmount + (1 - alpha) * predictedIncomeValues[predictedIncomeValues.length - 1];
+            }else {
+                predictedAmount = 0; // Set to zero if there's no previous data
             }
             
             predictedIncomeLabels.push(new Date(futureTimestamp).toDateString());
@@ -864,6 +863,8 @@ function updateChart7(data) {
             // Apply exponential smoothing to predicted amounts (adjust alpha value as needed)
             if (predictedIncomeValues.length > 0) {
                 predictedAmount = alpha * predictedAmount + (1 - alpha) * predictedIncomeValues[predictedIncomeValues.length - 1];
+            }else {
+                predictedAmount = 0; // Set to zero if there's no previous data
             }
             
             predictedIncomeLabels.push(new Date(futureTimestamp).toDateString());
@@ -1171,6 +1172,8 @@ function updateChart11(data) {
             // Apply exponential smoothing to predicted amounts (adjust alpha value as needed)
             if (predictedIncomeValues.length > 0) {
                 predictedAmount = alpha * predictedAmount + (1 - alpha) * predictedIncomeValues[predictedIncomeValues.length - 1];
+            }else {
+                predictedAmount = 0; // Set to zero if there's no previous data
             }
             
             predictedIncomeLabels.push(new Date(futureTimestamp).toDateString());
