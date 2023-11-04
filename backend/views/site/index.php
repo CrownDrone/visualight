@@ -327,6 +327,71 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
 
     }
 
+    .popup {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+}
+
+.popup-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #fff;
+    padding: 20px;
+    border: 1px solid #333;
+    box-shadow: 2px 2px 10px #888;
+    text-align: center;
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+    cursor: pointer;
+}
+.half-speedometer {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.speedometer-dial {
+    width: 150px;
+    height: 75px; /* Half the height of the full dial */
+    background-color: #f3f3f3;
+    border-radius: 75px 75px 0 0; /* Round the top corners */
+    position: relative;
+    margin: 0 auto;
+}
+
+.speedometer-reading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.speedometer-arrow {
+    position: absolute;
+    width: 2px;
+    height: 30px; /* Half the height of the full arrow */
+    background-color: red;
+    top: 45%;
+    left: 50%;
+    transform-origin: 50% 0;
+    transform: translateX(-50%) rotate(0deg);
+    transition: transform 1s ease;
+}
+
+
 
 
     /* responsiveness */
@@ -1066,8 +1131,6 @@ Yii::$app->set('db', [ //revert default connection
     </div>
 
 
-
-
     <div class="chart-container">
         <p id="reportTitle"> Transaction Per Division</p>
         <!-- <div class="containerBody"> -->
@@ -1099,45 +1162,73 @@ Yii::$app->set('db', [ //revert default connection
         </div>
     </div>
 
-    <!-- <div class="chart-container" id="avgSales">
-        <div class="aveChart" style="display: grid; grid-template-columns: repeat(2,1fr); grid-gap:.1rem; grid-template-rows: auto auto;">
-        <div class="chart"style="width: 90%; ">
-        <p id="reportTitle">Average sales per day</p>
-        <canvas id="myChart"></canvas>
-        </div>
-        <div class="label" style="width: 5%; padding-left:3rem; ">
-        <div class="average">
-            <div class="aveTransactionDiv">
-                <p class="texty"> Average Transactions </p>
-                <p class="number"> <?= $average ?> </p>
-            </div>
-            <div class="aveSalesDiv">
-                <p class="texty"> Average Sales </p>
-                <p class="number"> <?= $saleaverage ?> </p>
+        <div class="popup" id="popup">
+    <div class="popup-content">
+        <span class="close" id="close-popup">&times;</span>
+        <h2>Total Transaction</h2>
+        <p id="popup-text"></p>
+        <div class="speedometer">
+            <div class="speedometer-dial">
+                <div class="speedometer-reading" id="speedometer-reading">0 km/h</div>
+                <div class="speedometer-arrow" id="speedometer-arrow"></div>
             </div>
         </div>
-        </div>
-        </div>
-    </div> -->
+    </div>
+</div>
 
-    <!-- <div class="chart-container" style="max-width: 100%; height: 500px; overflow-x: scroll; text-align: center;">
-                <p id="reportTitle">Total Customers per Province</p>
-                <div class="ProvinceChart" style="display: grid; grid-template-columns: repeat(2,1fr); grid-gap:.1rem; grid-template-rows: auto auto;">
-                <div class="scaleContainer" style="width: 10%; text-align: justtify;">
-                <?php echo json_encode($customersCounts); ?>,
-                </div>
-                <div class="containerBody" style="width: 80%; height: 100%;">
-                    <canvas id="Provinces"></canvas>
-                </div>
-            </div>
-            </div> -->
+<script>
+    // Reference datas
+    const transaction = <?php echo json_encode($TransactionperDiv); ?>;
+    const income = <?php echo json_encode($SalesperDiv); ?>;
+
+    
+
+    const chart = document.getElementById("totaltransactionChart");
+    const popup = document.getElementById("popup");
+    const closePopup = document.getElementById("close-popup");
+    const popupText = document.getElementById("popup-text");
+    const speedometerReading = document.getElementById("speedometer-reading");
+    const speedometerArrow = document.getElementById("speedometer-arrow");
+
+    chart.addEventListener("click", () => {
+        // Set the pop-up content here (you can customize this)
+        popupText.textContent = "You clicked the chart!";
+
+        // Simulate a speedometer reading (you can replace this with actual data)
+        const transactionTotal = transaction.labels.map((label, index) => {
+            let sum = 0;
+            transaction.datasets.forEach(dataset => {
+                sum += dataset.data[index];
+            });
+            return sum;
+        });
+        const  Total= (array) => {
+            if (array.length === 0) return 0;
+            const sum = array.reduce((total, num) => total + num, 0);
+            return Math.round(sum);
+        };
 
 
+        speedometerReading.textContent = Total + " Transaction";
 
+        // Simulate the speedometer arrow movement (you can replace this with actual data)
+        const rotation = (Total / 120) * 180 - 90;
+        speedometerArrow.style.transform = `translateX(-50%) rotate(${rotation}deg)`;
 
+        // Display the pop-up
+        popup.style.display = "block";
+    });
+
+    closePopup.addEventListener("click", () => {
+        // Close the pop-up when the close button is clicked
+        popup.style.display = "none";
+    });
+
+</script>
 
 
     <script>
+        
         // Reference datas
         const TransactionperDiv = <?php echo json_encode($TransactionperDiv); ?>;
         const SalesperDiv = <?php echo json_encode($SalesperDiv); ?>;
@@ -1375,7 +1466,7 @@ Yii::$app->set('db', [ //revert default connection
         const maxAverage = Math.max(...TransactionAverage.map((average) => average.average));
 
         // Create a new dataset for each sales average
-        const newDatasets = TransactionAverage.map((average, index) => {
+        const salesAverage = TransactionAverage.map((average, index) => {
             const datasetColors = ['rgba(0, 115, 199,1)', 'rgba(2, 165, 96,1)', 'rgba(242, 26, 156,1)']; // Array of specific colors
             const color = datasetColors[index % datasetColors.length]; // Assign color based on index
 
@@ -1390,7 +1481,7 @@ Yii::$app->set('db', [ //revert default connection
         });
 
         // Combine the existing datasets with the new datasets
-        const allDatasets = [...TransactionAverage, ...newDatasets];
+        const allDatasets = [...TransactionAverage, ...salesAverage];
 
         // Define the data for the doughnut chart
         const data = {
@@ -1480,7 +1571,7 @@ Yii::$app->set('db', [ //revert default connection
             <canvas id="Provinces"></canvas>
         </div>
 
-        <div class="chart-container" style="width: 47%; text-align: center;">
+        <!-- <div class="chart-container" style="width: 47%; text-align: center;">
             <p id="reportTitle">Type of Customers per Province</p>
             <canvas id="TCProvinces"></canvas>
         </div>
@@ -1489,7 +1580,7 @@ Yii::$app->set('db', [ //revert default connection
             <div class="containerBody">
                 <canvas id="TTProvinces"></canvas>
             </div>
-        </div>
+        </div> -->
     </div>
 
 </div>

@@ -1323,7 +1323,7 @@ $this->title = '';
                     <canvas id="Provinces"></canvas>
             </div>
 
-            <div class="chart-container" style="width: 47%; text-align: center;">
+            <!-- <div class="chart-container" style="width: 47%; text-align: center;">
                 <p id="reportTitle">Type of Customers per Province</p>
                     <canvas id="TCProvinces"></canvas>
             </div>
@@ -1333,7 +1333,7 @@ $this->title = '';
                     <canvas id="TTProvinces"></canvas>
                 </div>
             </div>
-        </div>
+        </div> -->
 
     </div>
 
