@@ -91,6 +91,7 @@ $defaultImagePath = Yii::getAlias('@web') . '/images/user2.jpg';
                         'items' => [
                             [
                                 'label' => 'Query',
+                                'icon' => '	fas fa-share',
                                 'url' => ['/dbeditor/query'],
                                 'visible' => Helper::checkRoute('/dbeditor/query'),
                                 'active' => Yii::$app->controller->getUniqueID() === 'dbeditor/query',
@@ -98,6 +99,7 @@ $defaultImagePath = Yii::getAlias('@web') . '/images/user2.jpg';
                             ],
                             [
                                 'label' => 'Customer',
+                                'icon' => 'fas fa-users',
                                 'url' => ['/dbeditor/customer'],
                                 'visible' => Helper::checkRoute('/dbeditor/customer'),
                                 'active' => Yii::$app->controller->getUniqueID() === 'dbeditor/customer',
@@ -105,36 +107,42 @@ $defaultImagePath = Yii::getAlias('@web') . '/images/user2.jpg';
                             ],
                             [
                                 'label' => 'Customer Type',
+                                'icon' => '	fas fa-user-check',
                                 'url'   => ['/dbeditor/customer-type'],
                                 'visible' => Helper::checkRoute('/dbeditor/customer-type'),
                                 'active' => Yii::$app->controller->getUniqueID() === 'dbeditor/customer-type',
                             ],
                             [
                                 'label' => 'Division',
+                                'icon' => '	fas fa-building	',
                                 'url'   => ['/dbeditor/division'],
                                 'visible' => Helper::checkRoute('/dbeditor/division'),
                                 'active' => Yii::$app->controller->getUniqueID() === 'dbeditor/division',
                             ],
                             [
                                 'label' => 'Payment Method',
+                                'icon' => '	fas fa-money-bill-wave	',
                                 'url'   => ['/dbeditor/payment-method'],
                                 'visible' => Helper::checkRoute('/dbeditor/payment-method'),
                                 'active' => Yii::$app->controller->getUniqueID() === 'dbeditor/payment-method',
                             ],
                             [
                                 'label' => 'Transactions',
+                                'icon' => 'fas fa-book	',
                                 'url'   => ['/dbeditor/transaction'],
                                 'visible' => Helper::checkRoute('/dbeditor/transaction'),
                                 'active' => Yii::$app->controller->getUniqueID() === 'dbeditor/transaction',
                             ],
                             [
                                 'label' => 'Transaction Status',
+                                'icon' => 'fas fa-check-circle',
                                 'url'   => ['/dbeditor/transaction-status'],
                                 'visible' => Helper::checkRoute('/dbeditor/transaction-status'),
                                 'active' => Yii::$app->controller->getUniqueID() === 'dbeditor/transaction-status',
                             ],
                             [
                                 'label' => 'Transaction Type',
+                                'icon' => 'fas fa-tasks',
                                 'url'   => ['/dbeditor/transaction-type'],
                                 'visible' => Helper::checkRoute('/dbeditor/transaction-type'),
                                 'active' => Yii::$app->controller->getUniqueID() === 'dbeditor/transaction-type',
@@ -149,33 +157,37 @@ $defaultImagePath = Yii::getAlias('@web') . '/images/user2.jpg';
                         'items' => [
                              [
                                 'label' => 'Resend Email Verification',
-                                'icon' => 'star',
+                                'icon' => '	fas fa-share',
                                 'url' => ['/user/send-verification-code'],
                                 'active' => Yii::$app->controller->route === 'user/send-verification-code',
                             ],
                             [
                                 'label' => 'User',
-                                'icon' => 'star',
+                                'icon' => 'fas fa-user-circle',
                                 'url' => ['/user/index'],
                                 'active' => Yii::$app->controller->route === 'user/index',
                             ],
                             [
                                 'label' => 'Assignment',
+                                'icon' => 'fas fa-address-book',
                                 'url'   => ['/admin/assignment/index'],
                                 'active' => Yii::$app->controller->id === 'assignment',
                             ],
                             [
                                 'label' => 'Role',
+                                'icon' => 'fas fa-eye',
                                 'url'   => ['/admin/role/index'],
                                 'active' => Yii::$app->controller->id === 'role',
                             ],
                             [
                                 'label' => 'Permission',
+                                'icon' => 'fas fa-check-square	',
                                 'url'   => ['/admin/permission/index'],
                                 'active' => Yii::$app->controller->id === 'permission',
                             ],
                             [
                                 'label' => 'Route',
+                                'icon' => 'fas fa-route	',
                                 'url'   => ['/admin/route/index'],
                                 'active' => Yii::$app->controller->id === 'route',
                             ],
@@ -183,24 +195,24 @@ $defaultImagePath = Yii::getAlias('@web') . '/images/user2.jpg';
                     ],
 
                     // ['label' => 'ChartJS', 'header' => true, 'visible' => Helper::checkRoute('/chart/chart/index'),],
-                    ['label' => 'Chart',  'icon' => 'fas fa-chart-bar', 'url' => ['/chart/chart/index'], 'visible' => Helper::checkRoute('/chart/chart/index'),],
-                    ['label' => 'Send PDF',  'icon' => 'fas fa-chart-bar', 'url' => ["/site/upload-pdf"], 'visible' => Helper::checkRoute('/admin/index'),],
+                    ['label' => 'Chart',  'icon' => 'star', 'url' => ['/chart/chart/index'], 'visible' => Helper::checkRoute('/chart/chart/index'),],
+                    ['label' => 'Send PDF',  'icon' => 'star', 'url' => ["/site/upload-pdf"], 'visible' => Helper::checkRoute('/admin/index'),],
                     ['label' => 'Dashboard',  'icon' => 'fas fa-chalkboard', 'url' => ["/site/index"], 'visible' => Helper::checkRoute('/site/index'),],                    
                     [
                         'label' => 'Division Charts',
-                        'icon' => 'user',
+                        'icon' => '	fas fa-chart-area',
                         'visible' => Helper::checkRoute('/site/index'),
                         'items' => [
                             [
                                 'label' => 'Predict Chart',
-                                'icon' => 'star',
+                                'icon' => 'fas fa-chart-bar',
                                 'url' => ['/predict/chart/index'],
                                 'visible' => Helper::checkRoute('/predict/chart/index'),
                                 'active' => Yii::$app->controller->route === 'predict/chart/index',
                             ],
                                 [
                                 'label' => 'National Metrology',
-                                'icon' => 'star',
+                                'icon' => 'fas fa-chart-pie	',
                                 'url' => ['/nmd/chart/index'],
                                 'visible' => Helper::checkRoute('/nmd/chart/index'),
                                 'active' => Yii::$app->controller->route === 'nmd/chart/index',
@@ -208,7 +220,7 @@ $defaultImagePath = Yii::getAlias('@web') . '/images/user2.jpg';
                             ],
                             [
                                 'label' => 'Standard and Testing',
-                                'icon' => 'star',
+                                'icon' => 'fas fa-chart-line',
                                 'url' => ['/std/chart/index'],
                                 'visible' => Helper::checkRoute('/std/chart/index'),
                                 'active' => Yii::$app->controller->route === 'std/chart/index',
