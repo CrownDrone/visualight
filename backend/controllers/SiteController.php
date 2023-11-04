@@ -468,6 +468,7 @@ class SiteController extends BaseController
         $model = new PdfUploadForm();
 
         if (Yii::$app->request->isPost) {
+            
             $model->pdfFile = UploadedFile::getInstances($model, 'pdfFile');
 
             $uploadSuccessful = true;
@@ -517,7 +518,7 @@ class SiteController extends BaseController
                 }
 
                 if (!Yii::$app->session->hasFlash('error')) {
-                    Yii::$app->session->setFlash('success', 'PDF files uploaded and emails sent successfully.');
+                    Yii::$app->session->setFlash('success', 'PDF attachments are sent successfully.');
 
                     // Redirect to prevent repeated form submissions
                     return $this->redirect(['site/upload-pdf']);

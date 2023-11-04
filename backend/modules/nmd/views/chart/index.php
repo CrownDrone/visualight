@@ -1023,6 +1023,10 @@ $this->title = '';
 
     </div>
 
+    <div id="sending-email-message" class="alert alert-info hidden" style = "display:none;">
+        PDF attachments are downloading, please wait...
+    </div>
+
     <!-- Date Filter Div -->
     <div class="date_filter">
 
@@ -2195,6 +2199,9 @@ $this->title = '';
 
     <script>
         function downloadPDF() {
+
+        document.getElementById('sending-email-message').style.display = 'block';
+
         const transactionChart = document.getElementById('transactionChart');
         const salesChart = document.getElementById('salesChart');
         const myChart = document.getElementById('myChart');
@@ -2284,7 +2291,9 @@ $this->title = '';
                             .catch(function(error) {
                                 console.error('Error generating PDF:', error);
                             });
-               
-                            
+                            setTimeout(function() {
+                                document.getElementById('sending-email-message').style.display = 'none';
+                            }, 10000);
+                                                
                     }
 </script>

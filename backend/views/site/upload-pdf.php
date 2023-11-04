@@ -9,10 +9,7 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
 
 ?>
 
-
-
 <h1><?= Html::encode($this->title) ?></h1>
-
 
 <?php if (Yii::$app->session->hasFlash('success')): ?>
     <div class="alert alert-success">
@@ -28,6 +25,10 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
     </div>
 <?php endif; ?>
 
+<div id="sending-email-message" class="alert alert-info hidden" style = "display:none;">
+        PDF attachments are sending, please wait...
+</div>
+
 <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
 
 <?= $form->field($model, 'pdfFile[]')->fileInput(['multiple' => true]) ?>
@@ -37,11 +38,19 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
 ) ?>
 
 <div class="form-group">
-    <?= Html::submitButton('Send Email', ['class' => 'btn btn-primary']) ?>
+    <?= Html::submitButton('Send Email', ['class' => 'btn btn-primary', 'id' => 'send-email-button']) ?>
 </div>
-
 
 <?php ActiveForm::end(); ?>
 
-
-
+<?php
+$js = <<< JS
+$(document).ready(function() {
+    $('#send-email-button').click(function() {
+        $('#sending-email-message').hide();
+        $('#sending-email-message').show();
+    });
+});
+JS;
+$this->registerJs($js, \yii\web\View::POS_READY);
+?>

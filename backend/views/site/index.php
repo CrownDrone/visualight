@@ -1,6 +1,9 @@
 <?php
 
 $this->title = '';
+
+$this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position' => \yii\web\View::POS_HEAD]);
+
 ?>
 
 <style>
@@ -976,6 +979,10 @@ Yii::$app->set('db', [ //revert default connection
             <p id="valueIncrease"><?= $SandTdailytransincrease ?></p>
         </div>
     </div>
+</div>
+
+<div id="sending-email-message" class="alert alert-info hidden" style = "display:none;">
+        PDF attachments are downloading, please wait...
 </div>
 
 <!-- Date Filter Div -->
@@ -2169,6 +2176,9 @@ Yii::$app->set('db', [ //revert default connection
 
 <script>
     function downloadPDF() {
+
+        document.getElementById('sending-email-message').style.display = 'block';
+
         const totaltransactionChart = document.getElementById('totaltransactionChart');
         const transactionChart = document.getElementById('transactionChart');
         const totalsalesChart = document.getElementById('totalsalesChart');
@@ -2286,5 +2296,9 @@ Yii::$app->set('db', [ //revert default connection
             .catch(function(error) {
                 console.error('Error generating PDF:', error);
             });
+
+        setTimeout(function() {
+             document.getElementById('sending-email-message').style.display = 'none';
+        }, 10000);
     }
 </script>
