@@ -1024,7 +1024,7 @@ $this->title = '';
     </div>
 
     <div id="sending-email-message" class="alert alert-info hidden" style = "display:none;">
-        PDF attachments are downloading, please wait...
+        PDF file is downloading, please wait...
     </div>
 
     <!-- Date Filter Div -->
@@ -2293,7 +2293,7 @@ $this->title = '';
                             });
                             setTimeout(function() {
                                 document.getElementById('sending-email-message').style.display = 'none';
-                            }, 10000);
+                            }, 5000);
                                                 
                     }
 </script>

@@ -86,7 +86,6 @@ class UserProfileController extends BaseController
                 }
 
                 if ($model->save()) {
-                    Yii::$app->session->setFlash('success', 'User profile updated successfully.');
                     return $this->redirect(['view']);
                 } else {
                     Yii::$app->session->setFlash('error', 'Error updating user profile.');
