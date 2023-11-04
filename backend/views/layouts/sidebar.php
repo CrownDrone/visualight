@@ -86,7 +86,7 @@ $defaultImagePath = Yii::getAlias('@web') . '/images/user2.jpg';
 
                     [
                         'label' => 'Database Editor',
-                        'icon' => 'address-card',
+                        'icon' => 'fas fa-database',
                         'visible' => Helper::checkRoute('/admin/index'),
                         'items' => [
                             [
