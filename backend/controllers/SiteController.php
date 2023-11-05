@@ -502,7 +502,7 @@ class SiteController extends BaseController
                                 ->setFrom([Yii::$app->params['adminEmail'] => 'Visualight Team'])
                                 ->setTo($user->email)
                                 ->setSubject('PDF Files')
-                                ->setTextBody('Please find attached the PDF files.');
+                                ->setTextBody('These are the attached PDF files.');
 
                             // Attach all the uploaded files to the email
                             foreach ($filePaths as $filePath) {
