@@ -364,7 +364,7 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
 .speedometer-dial {
     width: 150px;
     height: 75px; /* Half the height of the full dial */
-    background-color: #f3f3f3;
+    background-color: red;
     border-radius: 75px 75px 0 0; /* Round the top corners */
     position: relative;
     margin: 0 auto;
@@ -382,14 +382,14 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
 .speedometer-arrow {
     position: absolute;
     width: 2px;
-    height: 30px; /* Half the height of the full arrow */
-    background-color: red;
+    height: 30px; 
+    background-color: black;
     top: 45%;
     left: 50%;
     transform-origin: 50% 0;
     transform: translateX(-50%) rotate(0deg);
     transition: transform 1s ease;
-}
+ }
 
 
 
@@ -653,7 +653,6 @@ $transactionData = $query->select(['division', 'transaction_date', 'COUNT(*) as 
     ->orderBy(['transaction_date' => SORT_DESC])
     ->all();
 
-// Prepare $TransactionperDiv array (null pa// otw yung data HAHA)
 $TransactionperDiv = [
     'labels' => [],
     'datasets' => [],
@@ -1165,14 +1164,23 @@ Yii::$app->set('db', [ //revert default connection
         <div class="popup" id="popup">
     <div class="popup-content">
         <span class="close" id="close-popup">&times;</span>
-        <h2>Total Transaction</h2>
-        <p id="popup-text"></p>
+        <h2 id="PopupHeader"></h2>
+        
         <div class="speedometer">
+            <p>Color of speedometer will identify if the target is meet</p>
+            <p><span style="color: red">Low </span>
+               <span style="color: orange">Moderate </span>
+               <span style="color: yellow">High </span>
+               <span style="color: green">Satisfaction </span>
+            </p>
             <div class="speedometer-dial">
-                <div class="speedometer-reading" id="speedometer-reading">0 km/h</div>
+                <div class="speedometer-reading" id="speedometer-reading"></div>
                 <div class="speedometer-arrow" id="speedometer-arrow"></div>
             </div>
         </div>
+        <p id="targetTransaction"></p>
+        <p id="percentTransaction"></p>
+        <p></p>
     </div>
 </div>
 
@@ -1181,48 +1189,257 @@ Yii::$app->set('db', [ //revert default connection
     const transaction = <?php echo json_encode($TransactionperDiv); ?>;
     const income = <?php echo json_encode($SalesperDiv); ?>;
 
-    
+    const currentDate = new Date();
+    const currentMonth = currentDate.getMonth();
+    const currentYear = currentDate.getFullYear();
 
-    const chart = document.getElementById("totaltransactionChart");
+    const totaltransactionChart = document.getElementById("totaltransactionChart");
+    const totalsalesChart = document.getElementById("totalsalesChart");
     const popup = document.getElementById("popup");
     const closePopup = document.getElementById("close-popup");
-    const popupText = document.getElementById("popup-text");
+    const targetTransaction = document.getElementById("targetTransaction");
+    const percentTransaction = document.getElementById("percentTransaction");
+    const PopupHeader = document.getElementById("PopupHeader");
     const speedometerReading = document.getElementById("speedometer-reading");
     const speedometerArrow = document.getElementById("speedometer-arrow");
 
-    chart.addEventListener("click", () => {
-        // Set the pop-up content here (you can customize this)
-        popupText.textContent = "You clicked the chart!";
+    //totaltransaction popup
+    totaltransactionChart.addEventListener("click", () => {
 
-        // Simulate a speedometer reading (you can replace this with actual data)
-        const transactionTotal = transaction.labels.map((label, index) => {
-            let sum = 0;
-            transaction.datasets.forEach(dataset => {
-                sum += dataset.data[index];
-            });
-            return sum;
+        // Initialize empty arrays for each quarter
+        const quarter1 = [];
+        const quarter2 = [];
+        const quarter3 = [];
+        const quarter4 = [];
+
+        // Iterate through the transaction data
+        transaction.labels.forEach((label, index) => {
+            const date = new Date(label);
+            const year = date.getFullYear();
+            const quarter = Math.floor((date.getMonth() + 3) / 3);
+
+            // Check if the transaction is from the current year
+            if (year === currentYear) {
+                const sumValue = transaction.datasets[0].data[index] + transaction.datasets[1].data[index];
+                switch (quarter) {
+                    case 1:
+                        quarter1.push(sumValue);
+                        break;
+                    case 2:
+                        quarter2.push(sumValue);
+                        break;
+                    case 3:
+                        quarter3.push(sumValue);
+                        break;
+                    case 4:
+                        quarter4.push(sumValue);
+                        break;
+                }
+            }
         });
-        const  Total= (array) => {
-            if (array.length === 0) return 0;
-            const sum = array.reduce((total, num) => total + num, 0);
-            return Math.round(sum);
-        };
 
+        // Calculate the sum of transactions for each quarter
+        const sumQuarter1 = quarter1.reduce((acc, value) => acc + value, 0);
+        const sumQuarter2 = quarter2.reduce((acc, value) => acc + value, 0);
+        const sumQuarter3 = quarter3.reduce((acc, value) => acc + value, 0);
+        const sumQuarter4 = quarter4.reduce((acc, value) => acc + value, 0);
+
+
+        let Total;
+
+        if (currentMonth >= 0 && currentMonth < 3) {
+            Total = sumQuarter1; // January to March
+        } else if (currentMonth >= 3 && currentMonth < 6) {
+            Total = sumQuarter2; // April to June
+        } else if (currentMonth >= 6 && currentMonth < 9) {
+            Total = sumQuarter3; // July to September
+        } else if (currentMonth >= 8 && currentMonth < 12) {
+            Total = sumQuarter4; // October to December
+        }
+
+        const targetValues = [100, 150, 200, 500];  
+
+        // Get the appropriate target value based on the current month
+        const targetValue = getTargetValue(currentMonth);
+
+        // Function to determine the target value based on the current month
+        function getTargetValue(month) {
+        if (month >= 0 && month < 3) {
+            return targetValues[0]; // January to March
+        } else if (month >= 3 && month < 6) {
+            return targetValues[1]; // April to June
+        } else if (month >= 6 && month < 9) {
+            return targetValues[2]; // July to September
+        } else {
+            return targetValues[3]; // October to December
+        }
+        }
+        
+        const Target = targetValue; 
+
+        const needle= (Total/Target);
+        const percentage= (needle * 100).toFixed(2);
 
         speedometerReading.textContent = Total + " Transaction";
 
         // Simulate the speedometer arrow movement (you can replace this with actual data)
-        const rotation = (Total / 120) * 180 - 90;
+        const rotation = (needle) * 180 - 90;
+        speedometerArrow.style.transformOrigin = "50% 100%"; 
         speedometerArrow.style.transform = `translateX(-50%) rotate(${rotation}deg)`;
 
+        const speedometerDial = document.querySelector('.speedometer-dial');
+
+        // Get the total/target value (you can replace this with your actual value)
+        const totalValue = needle; // Change this value as needed
+
+        // Function to update the background color based on the value
+        function updateBackgroundColor(value) {
+        if (value >= 0 && value <= 0.25) {
+            speedometerDial.style.backgroundColor = 'red';
+        } else if (value > 0.25 && value <= 0.5) {
+            speedometerDial.style.backgroundColor = 'orange';
+        } else if (value > 0.5 && value <= 0.75) {
+            speedometerDial.style.backgroundColor = 'yellow';
+        } else {
+            speedometerDial.style.backgroundColor = 'green';
+        }
+        }
+
+        // Call the updateBackgroundColor function with the initial total/target value
+        updateBackgroundColor(totalValue);
         // Display the pop-up
         popup.style.display = "block";
+
+        targetTransaction.textContent = "Target transaction for this quarter is "+Target;
+        percentTransaction.textContent = "Achieved " + percentage +"% of target transaction";
+        PopupHeader.textContent = "Total Transaction";
+
     });
 
     closePopup.addEventListener("click", () => {
         // Close the pop-up when the close button is clicked
         popup.style.display = "none";
     });
+
+    // sales popup
+    totalsalesChart.addEventListener("click", () => {
+        
+    
+        // Initialize empty arrays for each quarter
+        const quarter1 = [];
+        const quarter2 = [];
+        const quarter3 = [];
+        const quarter4 = [];
+
+        // Iterate through the income data
+        income.labels.forEach((label, index) => {
+            const date = new Date(label);
+            const year = date.getFullYear();
+            const quarter = Math.floor((date.getMonth() + 3) / 3);
+
+            // Check if the income is from the current year
+            if (year === currentYear) {
+                const sumValue = income.datasets[0].data[index] + income.datasets[1].data[index];
+                switch (quarter) {
+                    case 1:
+                        quarter1.push(sumValue);
+                        break;
+                    case 2:
+                        quarter2.push(sumValue);
+                        break;
+                    case 3:
+                        quarter3.push(sumValue);
+                        break;
+                    case 4:
+                        quarter4.push(sumValue);
+                        break;
+                }
+            }
+        });
+
+        // Calculate the sum of income for each quarter
+        const sumQuarter1 = quarter1.reduce((acc, value) => acc + value, 0);
+        const sumQuarter2 = quarter2.reduce((acc, value) => acc + value, 0);
+        const sumQuarter3 = quarter3.reduce((acc, value) => acc + value, 0);
+        const sumQuarter4 = quarter4.reduce((acc, value) => acc + value, 0);
+
+
+        let Total;
+
+        if (currentMonth >= 0 && currentMonth < 3) {
+            Total = sumQuarter1; // January to March
+        } else if (currentMonth >= 3 && currentMonth < 6) {
+            Total = sumQuarter2; // April to June
+        } else if (currentMonth >= 6 && currentMonth < 9) {
+            Total = sumQuarter3; // July to September
+        } else if (currentMonth >= 8 && currentMonth < 12) {
+            Total = sumQuarter4; // October to December
+        }
+
+        const targetValues = [10000, 150000, 200000, 500000];  
+
+        // Get the appropriate target value based on the current month
+        const targetValue = getTargetValue(currentMonth);
+
+        // Function to determine the target value based on the current month
+        function getTargetValue(month) {
+        if (month >= 0 && month < 3) {
+            return targetValues[0]; // January to March
+        } else if (month >= 3 && month < 6) {
+            return targetValues[1]; // April to June
+        } else if (month >= 6 && month < 9) {
+            return targetValues[2]; // July to September
+        } else {
+            return targetValues[3]; // October to December
+        }
+        }
+        
+        const Target = targetValue; 
+
+        const needle= (Total/Target);
+        const percentage= (needle * 100).toFixed(2);
+
+        speedometerReading.textContent = Total + " Transaction";
+
+        // Simulate the speedometer arrow movement (you can replace this with actual data)
+        const rotation = (needle) * 180 - 90;
+        speedometerArrow.style.transformOrigin = "50% 100%"; 
+        speedometerArrow.style.transform = `translateX(-50%) rotate(${rotation}deg)`;
+
+        const speedometerDial = document.querySelector('.speedometer-dial');
+
+        // Get the total/target value (you can replace this with your actual value)
+        const totalValue = needle; // Change this value as needed
+
+        // Function to update the background color based on the value
+        function updateBackgroundColor(value) {
+        if (value >= 0 && value <= 0.25) {
+            speedometerDial.style.backgroundColor = 'red';
+        } else if (value > 0.25 && value <= 0.5) {
+            speedometerDial.style.backgroundColor = 'orange';
+        } else if (value > 0.5 && value <= 0.75) {
+            speedometerDial.style.backgroundColor = 'yellow';
+        } else {
+            speedometerDial.style.backgroundColor = 'green';
+        }
+        }
+
+        // Call the updateBackgroundColor function with the initial total/target value
+        updateBackgroundColor(totalValue);
+        // Display the pop-up
+        popup.style.display = "block";
+
+        targetTransaction.textContent = "Target income for this quarter is "+Target;
+        percentTransaction.textContent = "Achieved " + percentage +"% of target income";
+        PopupHeader.textContent = "Total Income";
+
+    });
+
+    closePopup.addEventListener("click", () => {
+        // Close the pop-up when the close button is clicked
+        popup.style.display = "none";
+    });
+
 
 </script>
 
@@ -1450,18 +1667,13 @@ Yii::$app->set('db', [ //revert default connection
             return Math.round(sum / array.length);
         };
 
-        // // Calculate the average of each dataset
-        // const salesAverage = SalesperDiv.datasets.map(dataset => ({
-        //     label: dataset.label,
-        //     average: calculateAverage(dataset.data),
-        // }));
-
 
         // Calculate the average of each dataset
         const TransactionAverage = SalesperDiv.datasets.map(dataset => ({
             label: dataset.label,
             average: calculateAverage(dataset.data),
         }));
+        
         // Find the maximum average value
         const maxAverage = Math.max(...TransactionAverage.map((average) => average.average));
 

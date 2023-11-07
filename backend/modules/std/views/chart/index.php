@@ -344,6 +344,70 @@ $this->title = '';
             letter-spacing: .15rem;
 
         }
+        .popup {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+}
+
+.popup-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #fff;
+    padding: 20px;
+    border: 1px solid #333;
+    box-shadow: 2px 2px 10px #888;
+    text-align: center;
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+    cursor: pointer;
+}
+.half-speedometer {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.speedometer-dial {
+    width: 150px;
+    height: 75px; /* Half the height of the full dial */
+    background-color: red;
+    border-radius: 75px 75px 0 0; /* Round the top corners */
+    position: relative;
+    margin: 0 auto;
+}
+
+.speedometer-reading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.speedometer-arrow {
+    position: absolute;
+    width: 2px;
+    height: 30px; 
+    background-color: black;
+    top: 45%;
+    left: 50%;
+    transform-origin: 50% 0;
+    transform: translateX(-50%) rotate(0deg);
+    transition: transform 1s ease;
+ }
+
 
 
 
@@ -1115,38 +1179,286 @@ $this->title = '';
                 </div>
         </div>
 
-        <!-- <div class="chart-container" id="avgSales">
-        <div class="aveChart" style="display: grid; grid-template-columns: repeat(2,1fr); grid-gap:.1rem; grid-template-rows: auto auto;">
-        <div class="chart"style="width: 90%; ">
-        <p id="reportTitle">Average sales per day</p>
-        <canvas id="myChart"></canvas>
-        </div>
-        <div class="label" style="width: 5%; padding-left:3rem; ">
-        <div class="custom-text">
-            <div class="transactionAverage">
-                <p class="texty"> Average Transactions </p>
-                <p class="number"> <?= $average ?> </p>
+        <div class="popup" id="popup">
+    <div class="popup-content">
+        <span class="close" id="close-popup">&times;</span>
+        
+        <h2 id="PopupHeader"></h2>
+        
+        <div class="speedometer">
+            <p>Color of speedometer will identify if the target is meet</p>
+            <p><span style="color: red">Low </span>
+               <span style="color: orange">Moderate </span>
+               <span style="color: yellow">High </span>
+               <span style="color: green">Satisfaction </span>
+            </p>
+            <div class="speedometer-dial">
+                <div class="speedometer-reading" id="speedometer-reading"></div>
+                <div class="speedometer-arrow" id="speedometer-arrow"></div>
             </div>
-            <div class="salesAverage">
-                <p class="texty"> Average Sales </p>
-                <p class="number"> <?= $saleaverage ?> </p>
-            </div>
         </div>
-        </div>
-        </div>
-    </div> -->
+        <p id="targetTransaction"></p>
+        <p id="percentTransaction"></p>
+        <p></p>
+    </div>
+</div>
 
-        <!-- <div class="chart-container" style="max-width: 100%; height: 500px; overflow-x: scroll; text-align: center;">
-                <p id="reportTitle">Total Customers per Province</p>
-                <div class="ProvinceChart" style="display: grid; grid-template-columns: repeat(2,1fr); grid-gap:.1rem; grid-template-rows: auto auto;">
-                <div class="scaleContainer" style="width: 10%; text-align: justtify;">
-                <?php echo json_encode($customersCounts); ?>,
-                </div>
-                <div class="containerBody" style="width: 80%; height: 100%;">
-                    <canvas id="Provinces"></canvas>
-                </div>
-            </div>
-            </div> -->
+<script>
+     // Reference datas
+     const transaction = <?php echo json_encode($TransactionperDiv); ?>;
+    const income = <?php echo json_encode($SalesperDiv); ?>;
+
+    const currentDate = new Date();
+    const currentMonth = currentDate.getMonth();
+    const currentYear = currentDate.getFullYear();
+
+    const totaltransactionChart = document.getElementById("transactionChart");
+    const totalsalesChart = document.getElementById("salesChart");
+    const popup = document.getElementById("popup");
+    const closePopup = document.getElementById("close-popup");
+    const targetTransaction = document.getElementById("targetTransaction");
+    const percentTransaction = document.getElementById("percentTransaction");
+    const PopupHeader = document.getElementById("PopupHeader");
+    const speedometerReading = document.getElementById("speedometer-reading");
+    const speedometerArrow = document.getElementById("speedometer-arrow");
+
+    //totaltransaction popup
+    totaltransactionChart.addEventListener("click", () => {
+
+        // Initialize empty arrays for each quarter
+        const quarter1 = [];
+        const quarter2 = [];
+        const quarter3 = [];
+        const quarter4 = [];
+
+        // Iterate through the transaction data
+        transaction.labels.forEach((label, index) => {
+            const date = new Date(label);
+            const year = date.getFullYear();
+            const quarter = Math.floor((date.getMonth() + 3) / 3);
+
+            // Check if the transaction is from the current year
+                if (year === currentYear) {
+        // Categorize transactions into quarters
+                switch (quarter) {
+                    case 1:
+                        quarter1.push(transaction.datasets[0].data[index]);
+                        break;
+                    case 2:
+                        quarter2.push(transaction.datasets[0].data[index]);
+                        break;
+                    case 3:
+                        quarter3.push(transaction.datasets[0].data[index]);
+                        break;
+                    case 4:
+                        quarter4.push(transaction.datasets[0].data[index]);
+                        break;
+                }
+            }
+        });
+        // Calculate the sum of transactions for each quarter
+        const sumQuarter1 = quarter1.reduce((acc, value) => acc + value, 0);
+        const sumQuarter2 = quarter2.reduce((acc, value) => acc + value, 0);
+        const sumQuarter3 = quarter3.reduce((acc, value) => acc + value, 0);
+        const sumQuarter4 = quarter4.reduce((acc, value) => acc + value, 0);
+
+
+        let Total;
+
+        if (currentMonth >= 0 && currentMonth < 3) {
+            Total = sumQuarter1; // January to March
+        } else if (currentMonth >= 3 && currentMonth < 6) {
+            Total = sumQuarter2; // April to June
+        } else if (currentMonth >= 6 && currentMonth < 9) {
+            Total = sumQuarter3; // July to September
+        } else if (currentMonth >= 8 && currentMonth < 12) {
+            Total = sumQuarter4; // October to December
+        }
+
+        const targetValues = [100, 150, 200, 500];  
+
+        // Get the appropriate target value based on the current month
+        const targetValue = getTargetValue(currentMonth);
+
+        // Function to determine the target value based on the current month
+        function getTargetValue(month) {
+        if (month >= 0 && month < 3) {
+            return targetValues[0]; // January to March
+        } else if (month >= 3 && month < 6) {
+            return targetValues[1]; // April to June
+        } else if (month >= 6 && month < 9) {
+            return targetValues[2]; // July to September
+        } else {
+            return targetValues[3]; // October to December
+        }
+        }
+        
+        const Target = targetValue; 
+
+        const needle= (Total/Target);
+        const percentage= (needle * 100).toFixed(2);
+
+        speedometerReading.textContent = Total + " Transaction";
+
+        // Simulate the speedometer arrow movement (you can replace this with actual data)
+        const rotation = (needle) * 180 - 90;
+        speedometerArrow.style.transformOrigin = "50% 100%"; 
+        speedometerArrow.style.transform = `translateX(-50%) rotate(${rotation}deg)`;
+
+        const speedometerDial = document.querySelector('.speedometer-dial');
+
+        // Get the total/target value (you can replace this with your actual value)
+        const totalValue = needle; // Change this value as needed
+
+        // Function to update the background color based on the value
+        function updateBackgroundColor(value) {
+        if (value >= 0 && value <= 0.25) {
+            speedometerDial.style.backgroundColor = 'red';
+        } else if (value > 0.25 && value <= 0.5) {
+            speedometerDial.style.backgroundColor = 'orange';
+        } else if (value > 0.5 && value <= 0.75) {
+            speedometerDial.style.backgroundColor = 'yellow';
+        } else {
+            speedometerDial.style.backgroundColor = 'green';
+        }
+        }
+
+        // Call the updateBackgroundColor function with the initial total/target value
+        updateBackgroundColor(totalValue);
+        // Display the pop-up
+        popup.style.display = "block";
+
+        targetTransaction.textContent = "Target transaction for this quarter is "+Target;
+        percentTransaction.textContent = "Achieved " + percentage +"% of target transaction";
+        PopupHeader.textContent = "Total Transaction";
+
+    });
+
+    closePopup.addEventListener("click", () => {
+        // Close the pop-up when the close button is clicked
+        popup.style.display = "none";
+    });
+
+    // sales popup
+    totalsalesChart.addEventListener("click", () => {
+        
+    
+        // Initialize empty arrays for each quarter
+        const quarter1 = [];
+        const quarter2 = [];
+        const quarter3 = [];
+        const quarter4 = [];
+
+        // Iterate through the income data
+        income.labels.forEach((label, index) => {
+            const date = new Date(label);
+            const year = date.getFullYear();
+            const quarter = Math.floor((date.getMonth() + 3) / 3);
+
+            // Check if the income is from the current year
+            if (year === currentYear) {
+                // Categorize income into quarters
+                switch (quarter) {
+                    case 1:
+                        quarter1.push(income.datasets[0].data[index]);
+                        break;
+                    case 2:
+                        quarter2.push(income.datasets[0].data[index]);
+                        break;
+                    case 3:
+                        quarter3.push(income.datasets[0].data[index]);
+                        break;
+                    case 4:
+                        quarter4.push(income.datasets[0].data[index]);
+                        break;
+                }
+            }
+        });
+        // Calculate the sum of income for each quarter
+        const sumQuarter1 = quarter1.reduce((acc, value) => acc + value, 0);
+        const sumQuarter2 = quarter2.reduce((acc, value) => acc + value, 0);
+        const sumQuarter3 = quarter3.reduce((acc, value) => acc + value, 0);
+        const sumQuarter4 = quarter4.reduce((acc, value) => acc + value, 0);
+
+
+        let Total;
+
+        if (currentMonth >= 0 && currentMonth < 3) {
+            Total = sumQuarter1; // January to March
+        } else if (currentMonth >= 3 && currentMonth < 6) {
+            Total = sumQuarter2; // April to June
+        } else if (currentMonth >= 6 && currentMonth < 9) {
+            Total = sumQuarter3; // July to September
+        } else if (currentMonth >= 8 && currentMonth < 12) {
+            Total = sumQuarter4; // October to December
+        }
+
+        const targetValues = [10000, 150000, 200000, 500000];  
+
+        // Get the appropriate target value based on the current month
+        const targetValue = getTargetValue(currentMonth);
+
+        // Function to determine the target value based on the current month
+        function getTargetValue(month) {
+        if (month >= 0 && month < 3) {
+            return targetValues[0]; // January to March
+        } else if (month >= 3 && month < 6) {
+            return targetValues[1]; // April to June
+        } else if (month >= 6 && month < 9) {
+            return targetValues[2]; // July to September
+        } else {
+            return targetValues[3]; // October to December
+        }
+        }
+        
+        const Target = targetValue; 
+
+        const needle= (Total/Target);
+        const percentage= (needle * 100).toFixed(2);
+
+        speedometerReading.textContent = Total + " Transaction";
+
+        // Simulate the speedometer arrow movement (you can replace this with actual data)
+        const rotation = (needle) * 180 - 90;
+        speedometerArrow.style.transformOrigin = "50% 100%"; 
+        speedometerArrow.style.transform = `translateX(-50%) rotate(${rotation}deg)`;
+
+        const speedometerDial = document.querySelector('.speedometer-dial');
+
+        // Get the total/target value (you can replace this with your actual value)
+        const totalValue = needle; // Change this value as needed
+
+        // Function to update the background color based on the value
+        function updateBackgroundColor(value) {
+        if (value >= 0 && value <= 0.25) {
+            speedometerDial.style.backgroundColor = 'red';
+        } else if (value > 0.25 && value <= 0.5) {
+            speedometerDial.style.backgroundColor = 'orange';
+        } else if (value > 0.5 && value <= 0.75) {
+            speedometerDial.style.backgroundColor = 'yellow';
+        } else {
+            speedometerDial.style.backgroundColor = 'green';
+        }
+        }
+
+        // Call the updateBackgroundColor function with the initial total/target value
+        updateBackgroundColor(totalValue);
+        // Display the pop-up
+        popup.style.display = "block";
+
+        targetTransaction.textContent = "Target income for this quarter is "+Target;
+        percentTransaction.textContent = "Achieved " + percentage +"% of target income";
+        PopupHeader.textContent = "Total Income";
+
+    });
+
+    closePopup.addEventListener("click", () => {
+        // Close the pop-up when the close button is clicked
+        popup.style.display = "none";
+    });
+
+
+</script>
 
 
 
