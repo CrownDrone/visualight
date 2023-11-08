@@ -25,7 +25,7 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
     .average {
         position: absolute;
         top: 80px;
-        right: 50px;
+        right: 95px;
         text-align: center;
         width: 30%;
         display: inline-block;
@@ -75,7 +75,8 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
     .asOne {
         justify-content: space-between;
         width: 40%;
-        right: 55%;
+        right: 40%;
+        left: 60%;
     }
 
     @media (max-width: 600px) {
@@ -106,7 +107,7 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
         .asOne {
             justify-content: space-between;
             width: 60%;
-            right: 50%;
+            right: 45%;
         }
     }
 

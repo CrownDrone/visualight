@@ -29,12 +29,13 @@ $this->title = '';
         }
 
         .custom-text {
-            position: absolute;
             top: 80px;
             right: 50px;
             text-align: center;
             width: 30%;
-            display: inline-block;
+            box-sizing: border-box;
+            display: inline-block;   
+
         }
 
         .transactionAverage,
@@ -1166,7 +1167,7 @@ $this->title = '';
         </div>
 
 
-        <div class="chart-container" id="avgSales">
+        <div class="chart-container3" id="avgSales">
                 <div class="custom-text">
                     <div class="transactionAverage">
                         <p class="texty"> Average Transactions </p>
