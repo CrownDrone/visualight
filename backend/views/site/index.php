@@ -1165,6 +1165,7 @@ Yii::$app->set('db', [ //revert default connection
         <div class="popup" id="popup">
     <div class="popup-content">
         <span class="close" id="close-popup">&times;</span>
+        
         <h2 id="PopupHeader"></h2>
         
         <div class="speedometer">
@@ -1182,6 +1183,10 @@ Yii::$app->set('db', [ //revert default connection
         <p id="targetTransaction"></p>
         <p id="percentTransaction"></p>
         <p></p>
+
+        <!-- Input box and OK button for changing the target -->
+        <input type="number" id="newTargetInput" placeholder="Enter new target value">
+        <button id="changeTargetButton">OK</button>
     </div>
 </div>
 
@@ -1203,6 +1208,8 @@ Yii::$app->set('db', [ //revert default connection
     const PopupHeader = document.getElementById("PopupHeader");
     const speedometerReading = document.getElementById("speedometer-reading");
     const speedometerArrow = document.getElementById("speedometer-arrow");
+    const changeTargetButton = document.getElementById("changeTargetButton");
+    const newTargetInput = document.getElementById("newTargetInput");
 
     //totaltransaction popup
     totaltransactionChart.addEventListener("click", () => {
@@ -1258,25 +1265,72 @@ Yii::$app->set('db', [ //revert default connection
             Total = sumQuarter4; // October to December
         }
 
-        const targetValues = [100, 150, 200, 500];  
+        // const targetValues = [100, 150, 200, 500];  
 
-        // Get the appropriate target value based on the current month
-        const targetValue = getTargetValue(currentMonth);
+        // // Get the appropriate target value based on the current month
+        // const targetValue = getTargetValue(currentMonth);
 
-        // Function to determine the target value based on the current month
-        function getTargetValue(month) {
-        if (month >= 0 && month < 3) {
-            return targetValues[0]; // January to March
-        } else if (month >= 3 && month < 6) {
-            return targetValues[1]; // April to June
-        } else if (month >= 6 && month < 9) {
-            return targetValues[2]; // July to September
-        } else {
-            return targetValues[3]; // October to December
-        }
-        }
+        // // Function to determine the target value based on the current month
+        // function getTargetValue(month) {
+        // if (month >= 0 && month < 3) {
+        //     return targetValues[0]; // January to March
+        // } else if (month >= 3 && month < 6) {
+        //     return targetValues[1]; // April to June
+        // } else if (month >= 6 && month < 9) {
+        //     return targetValues[2]; // July to September
+        // } else {
+        //     return targetValues[3]; // October to December
+        // }
+        // }
         
-        const Target = targetValue; 
+        const Target = 0;
+        
+        changeTargetButton.addEventListener("click", () => {
+            // Get the new target value from the input box
+            const newTargetValue = parseFloat(newTargetInput.value);
+
+            if (!isNaN(newTargetValue)) {
+                // Update the target value
+                const Target = newTargetValue;
+
+                        const needle= (Total/Target);
+                        const percentage= (needle * 100).toFixed(2);
+
+                        speedometerReading.textContent = Total + " Transaction";
+
+                        // Simulate the speedometer arrow movement (you can replace this with actual data)
+                        const rotation = (needle) * 180 - 90;
+                        speedometerArrow.style.transformOrigin = "50% 100%"; 
+                        speedometerArrow.style.transform = `translateX(-50%) rotate(${rotation}deg)`;
+
+                        const speedometerDial = document.querySelector('.speedometer-dial');
+
+                        // Get the total/target value (you can replace this with your actual value)
+                        const totalValue = needle; // Change this value as needed
+
+                        // Function to update the background color based on the value
+                        function updateBackgroundColor(value) {
+                        if (value >= 0 && value <= 0.25) {
+                            speedometerDial.style.backgroundColor = 'red';
+                        } else if (value > 0.25 && value <= 0.5) {
+                            speedometerDial.style.backgroundColor = 'orange';
+                        } else if (value > 0.5 && value <= 0.75) {
+                            speedometerDial.style.backgroundColor = 'yellow';
+                        } else {
+                            speedometerDial.style.backgroundColor = 'green';
+                        }
+                        }
+
+                        // Call the updateBackgroundColor function with the initial total/target value
+                        updateBackgroundColor(totalValue);
+                        // Display the pop-up
+                        popup.style.display = "block";
+
+                        targetTransaction.textContent = "Target transaction for this quarter is "+Target;
+                        percentTransaction.textContent = "Achieved " + percentage +"% of target transaction";
+                        PopupHeader.textContent = "Total Transaction";
+            }
+        });
 
         const needle= (Total/Target);
         const percentage= (needle * 100).toFixed(2);
@@ -1377,30 +1431,59 @@ Yii::$app->set('db', [ //revert default connection
             Total = sumQuarter4; // October to December
         }
 
-        const targetValues = [10000, 150000, 200000, 500000];  
-
-        // Get the appropriate target value based on the current month
-        const targetValue = getTargetValue(currentMonth);
-
-        // Function to determine the target value based on the current month
-        function getTargetValue(month) {
-        if (month >= 0 && month < 3) {
-            return targetValues[0]; // January to March
-        } else if (month >= 3 && month < 6) {
-            return targetValues[1]; // April to June
-        } else if (month >= 6 && month < 9) {
-            return targetValues[2]; // July to September
-        } else {
-            return targetValues[3]; // October to December
-        }
-        }
+        const Target = 0;
         
-        const Target = targetValue; 
+        changeTargetButton.addEventListener("click", () => {
+            // Get the new target value from the input box
+            const newTargetValue = parseFloat(newTargetInput.value);
+
+            if (!isNaN(newTargetValue)) {
+                // Update the target value
+                const Target = newTargetValue;
+
+                const needle= (Total/Target);
+        const percentage= (needle * 100).toFixed(2);
+
+        speedometerReading.textContent = Total + " Income";
+
+        // Simulate the speedometer arrow movement (you can replace this with actual data)
+        const rotation = (needle) * 180 - 90;
+        speedometerArrow.style.transformOrigin = "50% 100%"; 
+        speedometerArrow.style.transform = `translateX(-50%) rotate(${rotation}deg)`;
+
+        const speedometerDial = document.querySelector('.speedometer-dial');
+
+        // Get the total/target value (you can replace this with your actual value)
+        const totalValue = needle; // Change this value as needed
+
+        // Function to update the background color based on the value
+        function updateBackgroundColor(value) {
+        if (value >= 0 && value <= 0.25) {
+            speedometerDial.style.backgroundColor = 'red';
+        } else if (value > 0.25 && value <= 0.5) {
+            speedometerDial.style.backgroundColor = 'orange';
+        } else if (value > 0.5 && value <= 0.75) {
+            speedometerDial.style.backgroundColor = 'yellow';
+        } else {
+            speedometerDial.style.backgroundColor = 'green';
+        }
+        }
+
+        // Call the updateBackgroundColor function with the initial total/target value
+        updateBackgroundColor(totalValue);
+        // Display the pop-up
+        popup.style.display = "block";
+
+        targetTransaction.textContent = "Target income for this quarter is "+Target;
+        percentTransaction.textContent = "Achieved " + percentage +"% of target income";
+        PopupHeader.textContent = "Total Income";
+            }
+        });
 
         const needle= (Total/Target);
         const percentage= (needle * 100).toFixed(2);
 
-        speedometerReading.textContent = Total + " Transaction";
+        speedometerReading.textContent = Total + " Income";
 
         // Simulate the speedometer arrow movement (you can replace this with actual data)
         const rotation = (needle) * 180 - 90;
@@ -1440,6 +1523,247 @@ Yii::$app->set('db', [ //revert default connection
         // Close the pop-up when the close button is clicked
         popup.style.display = "none";
     });
+
+
+
+
+
+
+//     totaltransactionChart.addEventListener("click", () => {
+
+// // Initialize empty arrays for each quarter
+// const quarter1 = [];
+// const quarter2 = [];
+// const quarter3 = [];
+// const quarter4 = [];
+
+// // Iterate through the transaction data
+// transaction.labels.forEach((label, index) => {
+//     const date = new Date(label);
+//     const year = date.getFullYear();
+//     const quarter = Math.floor((date.getMonth() + 3) / 3);
+
+//     // Check if the transaction is from the current year
+//         if (year === currentYear) {
+// // Categorize transactions into quarters
+//         switch (quarter) {
+//             case 1:
+//                 quarter1.push(transaction.datasets[0].data[index]);
+//                 break;
+//             case 2:
+//                 quarter2.push(transaction.datasets[0].data[index]);
+//                 break;
+//             case 3:
+//                 quarter3.push(transaction.datasets[0].data[index]);
+//                 break;
+//             case 4:
+//                 quarter4.push(transaction.datasets[0].data[index]);
+//                 break;
+//         }
+//     }
+// });
+// // Calculate the sum of transactions for each quarter
+// const sumQuarter1 = quarter1.reduce((acc, value) => acc + value, 0);
+// const sumQuarter2 = quarter2.reduce((acc, value) => acc + value, 0);
+// const sumQuarter3 = quarter3.reduce((acc, value) => acc + value, 0);
+// const sumQuarter4 = quarter4.reduce((acc, value) => acc + value, 0);
+
+
+// let Total;
+
+// if (currentMonth >= 0 && currentMonth < 3) {
+//     Total = sumQuarter1; // January to March
+// } else if (currentMonth >= 3 && currentMonth < 6) {
+//     Total = sumQuarter2; // April to June
+// } else if (currentMonth >= 6 && currentMonth < 9) {
+//     Total = sumQuarter3; // July to September
+// } else if (currentMonth >= 8 && currentMonth < 12) {
+//     Total = sumQuarter4; // October to December
+// }
+
+// const targetValues = [100, 150, 200, 500];  
+
+// // Get the appropriate target value based on the current month
+// const targetValue = getTargetValue(currentMonth);
+
+// // Function to determine the target value based on the current month
+// function getTargetValue(month) {
+// if (month >= 0 && month < 3) {
+//     return targetValues[0]; // January to March
+// } else if (month >= 3 && month < 6) {
+//     return targetValues[1]; // April to June
+// } else if (month >= 6 && month < 9) {
+//     return targetValues[2]; // July to September
+// } else {
+//     return targetValues[3]; // October to December
+// }
+// }
+
+// const Target = targetValue; 
+
+// const needle= (Total/Target);
+// const percentage= (needle * 100).toFixed(2);
+
+// speedometerReading.textContent = Total + " Transaction";
+
+// // Simulate the speedometer arrow movement (you can replace this with actual data)
+// const rotation = (needle) * 180 - 90;
+// speedometerArrow.style.transformOrigin = "50% 100%"; 
+// speedometerArrow.style.transform = `translateX(-50%) rotate(${rotation}deg)`;
+
+// const speedometerDial = document.querySelector('.speedometer-dial');
+
+// // Get the total/target value (you can replace this with your actual value)
+// const totalValue = needle; // Change this value as needed
+
+// // Function to update the background color based on the value
+// function updateBackgroundColor(value) {
+// if (value >= 0 && value <= 0.25) {
+//     speedometerDial.style.backgroundColor = 'red';
+// } else if (value > 0.25 && value <= 0.5) {
+//     speedometerDial.style.backgroundColor = 'orange';
+// } else if (value > 0.5 && value <= 0.75) {
+//     speedometerDial.style.backgroundColor = 'yellow';
+// } else {
+//     speedometerDial.style.backgroundColor = 'green';
+// }
+// }
+
+// // Call the updateBackgroundColor function with the initial total/target value
+// updateBackgroundColor(totalValue);
+// // Display the pop-up
+// popup.style.display = "block";
+
+// targetTransaction.textContent = "Target transaction for this quarter is "+Target;
+// percentTransaction.textContent = "Achieved " + percentage +"% of target transaction";
+// PopupHeader.textContent = "Total Transaction";
+
+// });
+
+// closePopup.addEventListener("click", () => {
+// // Close the pop-up when the close button is clicked
+// popup.style.display = "none";
+// });
+
+// // sales popup
+// totalsalesChart.addEventListener("click", () => {
+
+
+// // Initialize empty arrays for each quarter
+// const quarter1 = [];
+// const quarter2 = [];
+// const quarter3 = [];
+// const quarter4 = [];
+
+// // Iterate through the income data
+// income.labels.forEach((label, index) => {
+//     const date = new Date(label);
+//     const year = date.getFullYear();
+//     const quarter = Math.floor((date.getMonth() + 3) / 3);
+
+//     // Check if the income is from the current year
+//     if (year === currentYear) {
+//         // Categorize income into quarters
+//         switch (quarter) {
+//             case 1:
+//                 quarter1.push(income.datasets[0].data[index]);
+//                 break;
+//             case 2:
+//                 quarter2.push(income.datasets[0].data[index]);
+//                 break;
+//             case 3:
+//                 quarter3.push(income.datasets[0].data[index]);
+//                 break;
+//             case 4:
+//                 quarter4.push(income.datasets[0].data[index]);
+//                 break;
+//         }
+//     }
+// });
+// // Calculate the sum of income for each quarter
+// const sumQuarter1 = quarter1.reduce((acc, value) => acc + value, 0);
+// const sumQuarter2 = quarter2.reduce((acc, value) => acc + value, 0);
+// const sumQuarter3 = quarter3.reduce((acc, value) => acc + value, 0);
+// const sumQuarter4 = quarter4.reduce((acc, value) => acc + value, 0);
+
+
+// let Total;
+
+// if (currentMonth >= 0 && currentMonth < 3) {
+//     Total = sumQuarter1; // January to March
+// } else if (currentMonth >= 3 && currentMonth < 6) {
+//     Total = sumQuarter2; // April to June
+// } else if (currentMonth >= 6 && currentMonth < 9) {
+//     Total = sumQuarter3; // July to September
+// } else if (currentMonth >= 8 && currentMonth < 12) {
+//     Total = sumQuarter4; // October to December
+// }
+
+// const targetValues = [10000, 150000, 200000, 500000];  
+
+// // Get the appropriate target value based on the current month
+// const targetValue = getTargetValue(currentMonth);
+
+// // Function to determine the target value based on the current month
+// function getTargetValue(month) {
+// if (month >= 0 && month < 3) {
+//     return targetValues[0]; // January to March
+// } else if (month >= 3 && month < 6) {
+//     return targetValues[1]; // April to June
+// } else if (month >= 6 && month < 9) {
+//     return targetValues[2]; // July to September
+// } else {
+//     return targetValues[3]; // October to December
+// }
+// }
+
+// const Target = targetValue; 
+
+// const needle= (Total/Target);
+// const percentage= (needle * 100).toFixed(2);
+
+// speedometerReading.textContent = Total + " Transaction";
+
+// // Simulate the speedometer arrow movement (you can replace this with actual data)
+// const rotation = (needle) * 180 - 90;
+// speedometerArrow.style.transformOrigin = "50% 100%"; 
+// speedometerArrow.style.transform = `translateX(-50%) rotate(${rotation}deg)`;
+
+// const speedometerDial = document.querySelector('.speedometer-dial');
+
+// // Get the total/target value (you can replace this with your actual value)
+// const totalValue = needle; // Change this value as needed
+
+// // Function to update the background color based on the value
+// function updateBackgroundColor(value) {
+// if (value >= 0 && value <= 0.25) {
+//     speedometerDial.style.backgroundColor = 'red';
+// } else if (value > 0.25 && value <= 0.5) {
+//     speedometerDial.style.backgroundColor = 'orange';
+// } else if (value > 0.5 && value <= 0.75) {
+//     speedometerDial.style.backgroundColor = 'yellow';
+// } else {
+//     speedometerDial.style.backgroundColor = 'green';
+// }
+// }
+
+// // Call the updateBackgroundColor function with the initial total/target value
+// updateBackgroundColor(totalValue);
+// // Display the pop-up
+// popup.style.display = "block";
+
+// targetTransaction.textContent = "Target income for this quarter is "+Target;
+// percentTransaction.textContent = "Achieved " + percentage +"% of target income";
+// PopupHeader.textContent = "Total Income";
+
+// });
+
+// closePopup.addEventListener("click", () => {
+// // Close the pop-up when the close button is clicked
+// popup.style.display = "none";
+// });
+
+
 
 
 </script>
