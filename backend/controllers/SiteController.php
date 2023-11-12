@@ -188,14 +188,130 @@ class SiteController extends BaseController
             ->orderBy(['datasets' => SORT_DESC])
             ->all();
 
-        $queryCustomerTypePerProvince = (new Query()) //total of customer per type each province
-            ->select(['address AS labels', 'COUNT(*) as datasets'])
+        //----------------------START OF REGIONAL PROVINCE-----------------------------------
+        
+        $custmerPerProvinceNCR = (new Query())
+            ->select(['address AS label', 'COUNT(*) as data'])
             ->from('customer')
-            ->groupBy(['address'])
-            ->orderBy(['address' => SORT_DESC])
+            ->where(['address' => ['Metro Manila']])
+            ->groupBy(['label'])
             ->all();
 
-        $queryTransactionTypePerProvince = (new Query())//total of type of tranasction per province
+        $custmerPerProvinceRI = (new Query())
+            ->select(['address AS label', 'COUNT(*) as data'])
+            ->from('customer')
+            ->where(['address' => ['Ilocos Norte', 'Ilocos Sur', 'La Union', 'Pangasinan']])
+            ->groupBy(['label'])
+            ->all();
+
+        $custmerPerProvinceRII = (new Query())
+            ->select(['address AS label', 'COUNT(*) as data'])
+            ->from('customer')
+            ->where(['address' => ['Batanes', 'Cagayan', 'La Union', 'Isabela', 'Quirino', 'Nueva Vizcaya']])
+            ->groupBy(['label'])
+            ->all();
+
+        $custmerPerProvinceRIII = (new Query())
+            ->select(['address AS label', 'COUNT(*) as data'])
+            ->from('customer')
+            ->where(['address' => ['Aurora', 'Bataan', 'Bulacan', 'Nueba Ecija', 'Pampanga', 'Tarlac', 'Zambales']])
+            ->groupBy(['label'])
+            ->all();
+
+        $custmerPerProvinceRIVA = (new Query())
+            ->select(['address AS label', 'COUNT(*) as data'])
+            ->from('customer')
+            ->where(['address' => ['Batangas', 'Cavite', 'Laguna', 'Quezon', 'Rizal',]])
+            ->groupBy(['label'])
+            ->all();
+
+        $custmerPerProvinceMIMAROPA = (new Query()) //use MIMAROPA as desc please
+            ->select(['address AS label', 'COUNT(*) as data'])
+            ->from('customer')
+            ->where(['address' => ['Marinduque', 'Occidental Mindoro', 'Oriental Mindoro', 'Palawan', 'Romblon']])
+            ->groupBy(['label'])
+            ->all();
+
+        $custmerPerProvinceV = (new Query())
+            ->select(['address AS label', 'COUNT(*) as data'])
+            ->from('customer')
+            ->where(['address' => ['Albay', 'Camarines Sur', 'Camarines Norte', 'Catanduanes', 'Masbate', 'Sorsogon']])
+            ->groupBy(['label'])
+            ->all();
+
+        $custmerPerProvinceCAR = (new Query())
+            ->select(['address AS label', 'COUNT(*) as data'])
+            ->from('customer')
+            ->where(['address' => ['Abra', 'Apayao', 'Benguet', 'Ifugao', 'Kalinga', 'Mountain Province']])
+            ->groupBy(['label'])
+            ->all();
+
+        $custmerPerProvinceVI = (new Query())
+            ->select(['address AS label', 'COUNT(*) as data'])
+            ->from('customer')
+            ->where(['address' => ['Aklan', 'Antique', 'Capiz', 'Guimaras', 'Iloilo', 'Negros Occidental']])
+            ->groupBy(['label'])
+            ->all();
+
+        $custmerPerProvinceVII = (new Query())
+            ->select(['address AS label', 'COUNT(*) as data'])
+            ->from('customer')
+            ->where(['address' => ['Bohol', 'Cebu', 'Negros Oriental', 'Siquijor']])
+            ->groupBy(['label'])
+            ->all();
+
+        $custmerPerProvinceVIII = (new Query())
+            ->select(['address AS label', 'COUNT(*) as data'])
+            ->from('customer')
+            ->where(['address' => ['Biliran', 'Eastern Samar', 'Leyte', 'Western Samar', 'Samar', 'Southern Leyte']])
+            ->groupBy(['label'])
+            ->all();
+
+        $custmerPerProvinceIX = (new Query())
+            ->select(['address AS label', 'COUNT(*) as data'])
+            ->from('customer')
+            ->where(['address' => ['Zamboanga del Sur', 'Zamboanga del Norte', 'Zamboanga Sibugay']])
+            ->groupBy(['label'])
+            ->all();
+
+        $custmerPerProvinceX = (new Query())
+            ->select(['address AS label', 'COUNT(*) as data'])
+            ->from('customer')
+            ->where(['address' => ['Bukidnon', 'Camiguin', 'Lanao del Norte', 'Misamis Oriental', 'Misamis Occidental']])
+            ->groupBy(['label'])
+            ->all();
+
+        $custmerPerProvinceXI = (new Query())
+            ->select(['address AS label', 'COUNT(*) as data'])
+            ->from('customer')
+            ->where(['address' => ['Davao de Oro', 'Davao del Norte', 'Davao del Sur', 'Davao Oriental', 'Davao Occidental']])
+            ->groupBy(['label'])
+            ->all();
+
+        $custmerPerProvinceXII = (new Query())
+            ->select(['address AS label', 'COUNT(*) as data'])
+            ->from('customer')
+            ->where(['address' => ['Cotabato', 'Sarangani', 'South Cotabato', 'Sultan Kudarat']])
+            ->groupBy(['label'])
+            ->all();
+
+        $custmerPerProvinceXIII = (new Query())
+            ->select(['address AS label', 'COUNT(*) as data'])
+            ->from('customer')
+            ->where(['address' => ['Agusan del Norte', 'Agusan del Sur', 'Dinagat Islands', 'Surigao del Norte', 'Surigao del Sur']])
+            ->groupBy(['label'])
+            ->all();
+
+        $custmerPerProvinceBARMM = (new Query())
+            ->select(['address AS label', 'COUNT(*) as data'])
+            ->from('customer')
+            ->where(['address' => ['Basilan', 'Lanao del Sur', 'Maguindanao del Norte', 'Sulu', 'Maguindanao del Sur','Tawi-Tawi']])
+            ->groupBy(['label'])
+            ->all();
+
+
+        //-----------------------------------END OF REGIONAL PROVINCE----------------------------------------------
+        $queryTransactionTypePerProvince = (new Query()) //total of type of tranasction per province
             ->select([
                 'c.address AS labels',
                 'datasets' => new \yii\db\Expression('COUNT(*)')
@@ -235,6 +351,7 @@ class SiteController extends BaseController
                 ->batchInsert('date_label', ['date'], $insertData)
                 ->execute();
         }
+
         //------FOR DATE FORMATTING-------END
 
 
@@ -253,21 +370,35 @@ class SiteController extends BaseController
             'password' => '',
             'charset' => 'utf8',
         ]);
-        
-        return $this->render('index',[
+
+        return $this->render('index', [
             'queryAllDate' => $queryAllDate,
-            'queryAllDate2' => $queryAllDate2,
             'queryTotalSale' => $queryTotalSale,
-            'queryTotalSale2' => $queryTotalSale2,
             'queryDivAverageSale' => $queryDivAverageSale,
             'queryTotalAverageSale' => $queryTotalAverageSale,
             'queryAddress' => $queryAddress,
-            'queryCustomerTypePerProvince' => $queryCustomerTypePerProvince,
+            'custmerPerProvinceNCR' => $custmerPerProvinceNCR,
+            'custmerPerProvinceRI' => $custmerPerProvinceRI,
+            'custmerPerProvinceRII' => $custmerPerProvinceRII,
+            'custmerPerProvinceRIII' => $custmerPerProvinceRIII,
+            'custmerPerProvinceRIVA' => $custmerPerProvinceRIVA,
+            'custmerPerProvinceMIMAROPA' => $custmerPerProvinceMIMAROPA,
+            'custmerPerProvinceV' => $custmerPerProvinceV,
+            'custmerPerProvinceCAR' => $custmerPerProvinceCAR,
+            'custmerPerProvinceVI' => $custmerPerProvinceVI,
+            'custmerPerProvinceVII' => $custmerPerProvinceVII,
+            'custmerPerProvinceVIII' => $custmerPerProvinceVIII,
+            'custmerPerProvinceIX' => $custmerPerProvinceIX,
+            'custmerPerProvinceX' => $custmerPerProvinceX,
+            'custmerPerProvinceXI' => $custmerPerProvinceXI,
+            'custmerPerProvinceXII' => $custmerPerProvinceXII,
+            'custmerPerProvinceXIII' => $custmerPerProvinceXIII,
+            'custmerPerProvinceBARMM' => $custmerPerProvinceBARMM,
             'queryTransactionTypePerProvince' => $queryTransactionTypePerProvince,
-            'chartLabel' => $chartLabel,
+            'chartLabel' => $chartLabel, // to be used as label to all chart label that uses yyyy-mm-dd format
         ]);
     }
-    
+
     /**
      * Login action.
      *
@@ -468,7 +599,7 @@ class SiteController extends BaseController
         $model = new PdfUploadForm();
 
         if (Yii::$app->request->isPost) {
-            
+
             $model->pdfFile = UploadedFile::getInstances($model, 'pdfFile');
 
             $uploadSuccessful = true;

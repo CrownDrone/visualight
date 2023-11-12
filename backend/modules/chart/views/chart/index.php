@@ -224,8 +224,6 @@ $monthLabel = (new Query())
         monthChartLoad();
         monthLabelLoad();
         dateFilterRefresh();
-        console.log(queryAllDates);
-        console.log(dataCon);
         const pieChartData = (<?= json_encode($pieChartData) ?>); //di ma edit pag sa html declared yung canvas/chart
         //Prepare the bar chart 
         const barCtx = document.getElementById('barChart').getContext('2d');
@@ -250,8 +248,6 @@ $monthLabel = (new Query())
                     x: {
                         ticks: {
                             autoSkip: true,
-                            // minTicksLimit: 1,
-                            // maxTicksLimit: 8,
                         },
                         grid: {
                             display: false,
@@ -389,7 +385,7 @@ $monthLabel = (new Query())
         //get current year and month
         const d = new Date();
         let year = d.getFullYear();
-        // let janMonth = ("0" + (d.getMonth() - d.getMonth()) + 1).slice(-2); //get current year's januray
+        // let janMonth = ("0" + (d.getMonth() - d.getMonth()) + 1).slice(-2); //get current year's january
         let mbs = []
 
         function toMonthAssign() {
@@ -436,16 +432,20 @@ $monthLabel = (new Query())
             var selectedValue = dateTypeSelect.value;
             if (selectedValue === 'Days') {
                 const dateList = [...labels];
+                
                 //get the contents of the html datepicker
                 const fromDateValue = document.getElementById('fromDate');
                 const toDatevalue = document.getElementById('toDate');
+                
                 //get the index of the labels array based on the value of datepicker
-                //both array value and date picker value must be matching cAsEnSiTiVe to give a result
+                //both array value and date picker value must be matching cAsE sEnSiTiVe to give a result
                 const sunIndex = dateList.indexOf(fromDateValue.value);
                 const satIndex = dateList.indexOf(toDatevalue.value);
+
                 //slice the labels array based on the sunIndex and satIndex
                 const newLabels = dateList.slice(sunIndex, satIndex + 1);
                 barChart.config.data.labels = newLabels; //assign new label to the chart
+
                 //new json for new dataset iterates through all object "data"
                 newDataCon.datasets.forEach(function(datasets) {
                     var originalDataLog = datasets.data;
@@ -457,9 +457,10 @@ $monthLabel = (new Query())
                         newDataLog[key] = originalDataLog[key];
                     }
                     datasets.data = newDataLog;
+                    
                 });
+                console.log(newDataCon);
                 barChart.config.data.datasets = newDataCon.datasets; //replace the current chart dataset
-                console.log(queryAllLabel)
                 barChart.update(); //udpate the chart
                 newDataCon = JSON.parse(JSON.stringify(cacheDataCon)); //reverts the value of the newdataCon prior to modification
 
