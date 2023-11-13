@@ -28,21 +28,35 @@ $this->title = '';
             align-items: center;
         }
 
-        .custom-text {
-
-            top: 80px;
-            right: 50px;
-            width: 50%;
-            /* Set to 50% width to make them appear beside each other */
-            box-sizing: border-box;
-            /* Include padding and border in the width */
-            padding: 15px;
-            /* Add padding to create spacing between elements */
-            display: inline-flex;
-            /* Display elements inline */
-            width: 30%;
-            display: inline-block;
+        .aveTransactionDiv,
+        .aveSalesDiv {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            /* You may adjust the margin as needed */
+            margin: 0 2%;
+            /* Reduced margin for better centering */
         }
+
+        .custom-text {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            top: 80px;
+            /* If you want to position it from the top, adjust as needed */
+            right: 50px;
+            /* If you want to position it from the right, adjust as needed */
+            margin: 5% 10%;
+            box-sizing: border-box;
+            padding: 15px;
+            width: 80%;
+            /* Increase the width for better centering */
+        }
+
 
         .aveTransactionDiv,
         .aveSalesDiv {
@@ -1174,7 +1188,7 @@ $this->title = '';
 
         <div class="chart-container4" id="avgSales">
             <div class="custom-text">
-                <div class="aveTransactionDiv">
+                <div class="aveTransactionDiv ">
                     <p class="texty"> Average Transactions </p>
                     <p class="number"> <?= $average ?> </p>
                 </div>
@@ -1207,9 +1221,9 @@ $this->title = '';
                 <p id="percentTransaction"></p>
                 <p></p>
 
-        <!-- Input box and OK button for changing the target -->
-        <input type="number" id="newTargetInput" placeholder="Enter new target value">
-        <button id="changeTargetButton">OK</button>
+                <!-- Input box and OK button for changing the target -->
+                <input type="number" id="newTargetInput" placeholder="Enter new target value">
+                <button id="changeTargetButton">OK</button>
             </div>
         </div>
 
@@ -1231,8 +1245,8 @@ $this->title = '';
             const PopupHeader = document.getElementById("PopupHeader");
             const speedometerReading = document.getElementById("speedometer-reading");
             const speedometerArrow = document.getElementById("speedometer-arrow");
-    const changeTargetButton = document.getElementById("changeTargetButton");
-    const newTargetInput = document.getElementById("newTargetInput");
+            const changeTargetButton = document.getElementById("changeTargetButton");
+            const newTargetInput = document.getElementById("newTargetInput");
 
             //totaltransaction popup
             totaltransactionChart.addEventListener("click", () => {
@@ -1287,24 +1301,24 @@ $this->title = '';
                     Total = sumQuarter4; // October to December
                 }
 
-        const Target = 0;
-        
-        changeTargetButton.addEventListener("click", () => {
-            // Get the new target value from the input box
-            const newTargetValue = parseFloat(newTargetInput.value);
+                const Target = 0;
 
-            if (!isNaN(newTargetValue)) {
-                // Update the target value
-                const Target = newTargetValue;
+                changeTargetButton.addEventListener("click", () => {
+                    // Get the new target value from the input box
+                    const newTargetValue = parseFloat(newTargetInput.value);
 
-                        const needle= (Total/Target);
-                        const percentage= (needle * 100).toFixed(2);
+                    if (!isNaN(newTargetValue)) {
+                        // Update the target value
+                        const Target = newTargetValue;
+
+                        const needle = (Total / Target);
+                        const percentage = (needle * 100).toFixed(2);
 
                         speedometerReading.textContent = Total + " Transaction";
 
                         // Simulate the speedometer arrow movement (you can replace this with actual data)
                         const rotation = (needle) * 180 - 90;
-                        speedometerArrow.style.transformOrigin = "50% 100%"; 
+                        speedometerArrow.style.transformOrigin = "50% 100%";
                         speedometerArrow.style.transform = `translateX(-50%) rotate(${rotation}deg)`;
 
                         const speedometerDial = document.querySelector('.speedometer-dial');
@@ -1314,15 +1328,15 @@ $this->title = '';
 
                         // Function to update the background color based on the value
                         function updateBackgroundColor(value) {
-                        if (value >= 0 && value <= 0.25) {
-                            speedometerDial.style.backgroundColor = 'red';
-                        } else if (value > 0.25 && value <= 0.5) {
-                            speedometerDial.style.backgroundColor = 'orange';
-                        } else if (value > 0.5 && value <= 0.75) {
-                            speedometerDial.style.backgroundColor = 'yellow';
-                        } else {
-                            speedometerDial.style.backgroundColor = 'green';
-                        }
+                            if (value >= 0 && value <= 0.25) {
+                                speedometerDial.style.backgroundColor = 'red';
+                            } else if (value > 0.25 && value <= 0.5) {
+                                speedometerDial.style.backgroundColor = 'orange';
+                            } else if (value > 0.5 && value <= 0.75) {
+                                speedometerDial.style.backgroundColor = 'yellow';
+                            } else {
+                                speedometerDial.style.backgroundColor = 'green';
+                            }
                         }
 
                         // Call the updateBackgroundColor function with the initial total/target value
@@ -1330,11 +1344,11 @@ $this->title = '';
                         // Display the pop-up
                         popup.style.display = "block";
 
-                        targetTransaction.textContent = "Target transaction for this quarter is "+Target;
-                        percentTransaction.textContent = "Achieved " + percentage +"% of target transaction";
+                        targetTransaction.textContent = "Target transaction for this quarter is " + Target;
+                        percentTransaction.textContent = "Achieved " + percentage + "% of target transaction";
                         PopupHeader.textContent = "Total Transaction";
-            }
-        });
+                    }
+                });
 
                 const needle = (Total / Target);
                 const percentage = (needle * 100).toFixed(2);
@@ -1434,54 +1448,54 @@ $this->title = '';
                     Total = sumQuarter4; // October to December
                 }
 
-        const Target = 0;
-        
-        changeTargetButton.addEventListener("click", () => {
-            // Get the new target value from the input box
-            const newTargetValue = parseFloat(newTargetInput.value);
+                const Target = 0;
 
-            if (!isNaN(newTargetValue)) {
-                // Update the target value
-                const Target = newTargetValue;
+                changeTargetButton.addEventListener("click", () => {
+                    // Get the new target value from the input box
+                    const newTargetValue = parseFloat(newTargetInput.value);
 
-                const needle= (Total/Target);
-        const percentage= (needle * 100).toFixed(2);
+                    if (!isNaN(newTargetValue)) {
+                        // Update the target value
+                        const Target = newTargetValue;
 
-        speedometerReading.textContent = Total + " Income";
+                        const needle = (Total / Target);
+                        const percentage = (needle * 100).toFixed(2);
 
-        // Simulate the speedometer arrow movement (you can replace this with actual data)
-        const rotation = (needle) * 180 - 90;
-        speedometerArrow.style.transformOrigin = "50% 100%"; 
-        speedometerArrow.style.transform = `translateX(-50%) rotate(${rotation}deg)`;
+                        speedometerReading.textContent = Total + " Income";
 
-        const speedometerDial = document.querySelector('.speedometer-dial');
+                        // Simulate the speedometer arrow movement (you can replace this with actual data)
+                        const rotation = (needle) * 180 - 90;
+                        speedometerArrow.style.transformOrigin = "50% 100%";
+                        speedometerArrow.style.transform = `translateX(-50%) rotate(${rotation}deg)`;
 
-        // Get the total/target value (you can replace this with your actual value)
-        const totalValue = needle; // Change this value as needed
+                        const speedometerDial = document.querySelector('.speedometer-dial');
 
-        // Function to update the background color based on the value
-        function updateBackgroundColor(value) {
-        if (value >= 0 && value <= 0.25) {
-            speedometerDial.style.backgroundColor = 'red';
-        } else if (value > 0.25 && value <= 0.5) {
-            speedometerDial.style.backgroundColor = 'orange';
-        } else if (value > 0.5 && value <= 0.75) {
-            speedometerDial.style.backgroundColor = 'yellow';
-        } else {
-            speedometerDial.style.backgroundColor = 'green';
-        }
-        }
+                        // Get the total/target value (you can replace this with your actual value)
+                        const totalValue = needle; // Change this value as needed
 
-        // Call the updateBackgroundColor function with the initial total/target value
-        updateBackgroundColor(totalValue);
-        // Display the pop-up
-        popup.style.display = "block";
+                        // Function to update the background color based on the value
+                        function updateBackgroundColor(value) {
+                            if (value >= 0 && value <= 0.25) {
+                                speedometerDial.style.backgroundColor = 'red';
+                            } else if (value > 0.25 && value <= 0.5) {
+                                speedometerDial.style.backgroundColor = 'orange';
+                            } else if (value > 0.5 && value <= 0.75) {
+                                speedometerDial.style.backgroundColor = 'yellow';
+                            } else {
+                                speedometerDial.style.backgroundColor = 'green';
+                            }
+                        }
 
-        targetTransaction.textContent = "Target income for this quarter is "+Target;
-        percentTransaction.textContent = "Achieved " + percentage +"% of target income";
-        PopupHeader.textContent = "Total Income";
-            }
-        });
+                        // Call the updateBackgroundColor function with the initial total/target value
+                        updateBackgroundColor(totalValue);
+                        // Display the pop-up
+                        popup.style.display = "block";
+
+                        targetTransaction.textContent = "Target income for this quarter is " + Target;
+                        percentTransaction.textContent = "Achieved " + percentage + "% of target income";
+                        PopupHeader.textContent = "Total Income";
+                    }
+                });
 
                 const needle = (Total / Target);
                 const percentage = (needle * 100).toFixed(2);

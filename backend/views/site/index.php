@@ -1124,7 +1124,7 @@ Yii::$app->set('db', [ //revert default connection
 
 
     <div class="chart-container" id="avgSales">
-        <p id="reportTitle">Average Income Daily</p>
+        <p id="reportTitle">Average Income Daily </p>
         <div class="asOne">
             <canvas id="myChart"></canvas>
             <div class="average">
@@ -2185,6 +2185,7 @@ Yii::$app->set('db', [ //revert default connection
                     ctx.fillStyle = 'rgb(3, 98, 186, 1)';
                     ctx.textAlign = 'center';
                     ctx.fillText('Average income Daily', width / 2.1, height / 2 + top);
+                    //console.log(chart.getDatasetMeta(0))
 
                 }
 

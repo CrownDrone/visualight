@@ -28,15 +28,35 @@ $this->title = '';
             align-items: center;
         }
 
-        .custom-text {
-            top: 80px;
-            right: 50px;
+        .aveTransactionDiv,
+        .aveSalesDiv {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
             text-align: center;
-            width: 30%;
-            box-sizing: border-box;
-            display: inline-block;   
-
+            /* You may adjust the margin as needed */
+            margin: 0 2%;
+            /* Reduced margin for better centering */
         }
+
+        .custom-text {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            top: 80px;
+            /* If you want to position it from the top, adjust as needed */
+            right: 50px;
+            /* If you want to position it from the right, adjust as needed */
+            margin: 5% 10%;
+            box-sizing: border-box;
+            padding: 15px;
+            width: 80%;
+            /* Increase the width for better centering */
+        }
+
 
         .transactionAverage,
         .salesAverage {
@@ -305,7 +325,7 @@ $this->title = '';
             display: inline-block;
             height: 30rem;
             width: 100%;
-            
+
         }
 
 
@@ -345,69 +365,73 @@ $this->title = '';
             letter-spacing: .15rem;
 
         }
+
         .popup {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.7);
-}
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+        }
 
-.popup-content {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: #fff;
-    padding: 20px;
-    border: 1px solid #333;
-    box-shadow: 2px 2px 10px #888;
-    text-align: center;
-}
+        .popup-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #fff;
+            padding: 20px;
+            border: 1px solid #333;
+            box-shadow: 2px 2px 10px #888;
+            text-align: center;
+        }
 
-.close {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    font-size: 24px;
-    cursor: pointer;
-}
-.half-speedometer {
-    margin-top: 20px;
-    text-align: center;
-}
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 24px;
+            cursor: pointer;
+        }
 
-.speedometer-dial {
-    width: 150px;
-    height: 75px; /* Half the height of the full dial */
-    background-color: red;
-    border-radius: 75px 75px 0 0; /* Round the top corners */
-    position: relative;
-    margin: 0 auto;
-}
+        .half-speedometer {
+            margin-top: 20px;
+            text-align: center;
+        }
 
-.speedometer-reading {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 18px;
-    font-weight: bold;
-}
+        .speedometer-dial {
+            width: 150px;
+            height: 75px;
+            /* Half the height of the full dial */
+            background-color: red;
+            border-radius: 75px 75px 0 0;
+            /* Round the top corners */
+            position: relative;
+            margin: 0 auto;
+        }
 
-.speedometer-arrow {
-    position: absolute;
-    width: 2px;
-    height: 30px; 
-    background-color: black;
-    top: 45%;
-    left: 50%;
-    transform-origin: 50% 0;
-    transform: translateX(-50%) rotate(0deg);
-    transition: transform 1s ease;
- }
+        .speedometer-reading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .speedometer-arrow {
+            position: absolute;
+            width: 2px;
+            height: 30px;
+            background-color: black;
+            top: 45%;
+            left: 50%;
+            transform-origin: 50% 0;
+            transform: translateX(-50%) rotate(0deg);
+            transition: transform 1s ease;
+        }
 
 
 
@@ -611,11 +635,11 @@ $this->title = '';
         'labels' => [],
         'datasets' => [],
     ];
-    
+
     $divMapping = [
         "2" => "Standard and Testing Division",
     ];
-    
+
     foreach ($salesData as &$item) { //this renames division into actual division name
         if (isset($item['division']) && isset($divMapping[$item['division']])) {
             $item['division'] = $divMapping[$item['division']];
@@ -654,7 +678,7 @@ $this->title = '';
         ->from('transaction')
         // ->where(['between', 'transaction_date', $fromDate, $toDate])
         ->where([
-             'division' => '2'
+            'division' => '2'
         ])
         ->groupBy(['division', 'transaction_date'])
         ->orderBy(['transaction_date' => SORT_DESC])
@@ -715,7 +739,7 @@ $this->title = '';
         'labels' => [],
         'datasets' => [],
     ];
-    
+
     foreach ($addressData as $customeraddress) {
         $province[] = $customeraddress['address'];
         $customersCounts[] = $customeraddress['customer_count'];
@@ -735,11 +759,12 @@ $this->title = '';
             $provinces['datasets'][$provinceIndex]['data'][] = $customersCounts;
         }
     }
-    function debug_to_console($data) {
+    function debug_to_console($data)
+    {
         $output = $data;
         if (is_array($output))
             $output = implode(', ', $output[0]);
-    
+
         echo "<script>console.log('Debug Objects: " . $output . "' );</script>";
     }
     debug_to_console($addressData);
@@ -771,7 +796,7 @@ $this->title = '';
 
     $customerType = [];
     $customerscounts = [];
-    
+
     foreach ($customerTypeData as $customersType) {
         if (isset($customersType['customer_type']) && isset($customerType_name[$customersType['customer_type']])) {
             $customersType['customer_type'] = $customerType_name[$customersType['customer_type']];
@@ -785,7 +810,7 @@ $this->title = '';
         ->from('transaction')
         // ->where(['between', 'transaction_date', $fromDate, $toDate])
         ->where([
-             'division' => '2',
+            'division' => '2',
             //'transaction_status' => ['1']
         ])
         ->groupBy(['transaction_type'])
@@ -802,21 +827,20 @@ $this->title = '';
     ];
 
     foreach ($transactionTypeData as $type) {
-        if (isset($type['transaction_type']) && isset($transactionType_name[$type['transaction_type']]))
-        {
-            $type['transaction_type']=$transactionType_name[$type['transaction_type']];
+        if (isset($type['transaction_type']) && isset($transactionType_name[$type['transaction_type']])) {
+            $type['transaction_type'] = $transactionType_name[$type['transaction_type']];
         }
-    
+
         $transactionType[] = $type['transaction_type'];
         $transactionTypecounts[] = $type['customer_count'];
     }
-    
+
     $query = new Query();
     $transactionStatusData = $query->select(['transaction_status', 'COUNT(*) as customer_count'])
         ->from('transaction')
         // ->where(['between', 'transaction_date', $fromDate, $toDate])
         ->where([
-             'division' => '2',
+            'division' => '2',
         ])
         ->groupBy(['transaction_status'])
         ->orderBy(['customer_count' => SORT_DESC])
@@ -833,13 +857,11 @@ $this->title = '';
 
 
     foreach ($transactionStatusData as $status) {
-        if (isset($status['transaction_status']) && isset($transactionStatus_name[$status['transaction_status']]))
-        {
-            $status['transaction_status']=$transactionStatus_name[$status['transaction_status']];
+        if (isset($status['transaction_status']) && isset($transactionStatus_name[$status['transaction_status']])) {
+            $status['transaction_status'] = $transactionStatus_name[$status['transaction_status']];
         }
         $transactionStatus[] = $status['transaction_status'];
         $transactionStatusDatacounts[] = $status['customer_count'];
-    
     }
 
     $query = new Query();
@@ -848,7 +870,7 @@ $this->title = '';
         ->where(['payment_method' => ['1', '2', '3']])
         // ->where(['between', 'transaction_date', $fromDate, $toDate])
         ->where([
-             'division' => '2',
+            'division' => '2',
             'transaction_status' => '1'
         ])
         ->groupBy(['payment_method'])
@@ -865,9 +887,8 @@ $this->title = '';
     ];
 
     foreach ($PaymentMethodData as $method) {
-        if (isset($method['payment_method']) && isset($paymentmethod_name[$method['payment_method']]))
-        {
-            $method['payment_method']=$paymentmethod_name[$method['payment_method']];
+        if (isset($method['payment_method']) && isset($paymentmethod_name[$method['payment_method']])) {
+            $method['payment_method'] = $paymentmethod_name[$method['payment_method']];
         }
         $PaymentMethod[] = $method['payment_method'];
         $PaymentMethodcounts[] = $method['customer_count'];
@@ -878,8 +899,8 @@ $this->title = '';
         ->from('transaction')
         ->where([
             'division' => '2',
-           'transaction_status' => '1'
-       ])
+            'transaction_status' => '1'
+        ])
         ->groupBy('transaction_date');
 
     $transactionPerday = $transactionPerday->all(); // Get the results with daily transaction counts
@@ -896,8 +917,8 @@ $this->title = '';
         ->from('transaction')
         ->where([
             'division' => '2',
-           'transaction_status' => '1'
-       ])
+            'transaction_status' => '1'
+        ])
         ->groupBy('transaction_date');
 
     $SalesAve = $SalesAve->all(); // Get the results with daily transaction counts
@@ -948,7 +969,7 @@ $this->title = '';
         ->select('COUNT(*)')
         ->from('transaction')
         ->where([
-             'division' => '2',
+            'division' => '2',
             'transaction_date' => date('Y-m-d') // Assuming you want the number of transactions for today
         ])
         ->scalar();
@@ -957,7 +978,7 @@ $this->title = '';
         ->select('COUNT(*)')
         ->from('transaction')
         ->where([
-             'division' => '2',
+            'division' => '2',
             'transaction_date' => date('Y-m-d', strtotime('-1 day'))
         ])
         ->scalar();
@@ -982,7 +1003,7 @@ $this->title = '';
         ->select(['SUM(amount)'])
         ->from('transaction')
         ->where([
-             'division' => '2',
+            'division' => '2',
             'transaction_date' => date('Y-m-d') // Using the current date in 'Y-m-d' format
         ])
         ->scalar();
@@ -991,7 +1012,7 @@ $this->title = '';
         ->select(['SUM(amount)'])
         ->from('transaction')
         ->where([
-             'division' => '2',
+            'division' => '2',
             'transaction_date' => date('Y-m-d', strtotime('-1 day'))
         ])
         ->scalar();
@@ -1081,7 +1102,7 @@ $this->title = '';
 
     </div>
 
-    <div id="sending-email-message" class="alert alert-info hidden" style = "display:none;">
+    <div id="sending-email-message" class="alert alert-info hidden" style="display:none;">
         PDF file is downloading, please wait...
     </div>
 
@@ -1159,146 +1180,146 @@ $this->title = '';
             <!-- </div> -->
         </div>
 
- 
+
         <div class="chart-container">
             <p id="reportTitle"> Income Report</p>
-                <canvas id="salesChart"></canvas>
+            <canvas id="salesChart"></canvas>
 
         </div>
 
 
         <div class="chart-container3" id="avgSales">
-                <div class="custom-text">
-                    <div class="transactionAverage">
-                        <p class="texty"> Average Transactions </p>
-                        <p class="number"> <?= $average ?> </p>
-                    </div>
-                    <div class="salesAverage">
-                        <p class="texty"> Average Income </p>
-                        <p class="number"> <?= $saleaverage ?> </p>
-                    </div>
+            <div class="custom-text">
+                <div class="transactionAverage">
+                    <p class="texty"> Average Transactions </p>
+                    <p class="number"> <?= $average ?> </p>
                 </div>
+                <div class="salesAverage">
+                    <p class="texty"> Average Income </p>
+                    <p class="number"> <?= $saleaverage ?> </p>
+                </div>
+            </div>
         </div>
 
         <div class="popup" id="popup">
-    <div class="popup-content">
-        <span class="close" id="close-popup">&times;</span>
-        
-        <h2 id="PopupHeader"></h2>
-        
-        <div class="speedometer">
-            <p>Color of speedometer will identify if the target is meet</p>
-            <p><span style="color: red">Low </span>
-               <span style="color: orange">Moderate </span>
-               <span style="color: yellow">High </span>
-               <span style="color: green">Satisfaction </span>
-            </p>
-            <div class="speedometer-dial">
-                <div class="speedometer-reading" id="speedometer-reading"></div>
-                <div class="speedometer-arrow" id="speedometer-arrow"></div>
+            <div class="popup-content">
+                <span class="close" id="close-popup">&times;</span>
+
+                <h2 id="PopupHeader"></h2>
+
+                <div class="speedometer">
+                    <p>Color of speedometer will identify if the target is meet</p>
+                    <p><span style="color: red">Low </span>
+                        <span style="color: orange">Moderate </span>
+                        <span style="color: yellow">High </span>
+                        <span style="color: green">Satisfaction </span>
+                    </p>
+                    <div class="speedometer-dial">
+                        <div class="speedometer-reading" id="speedometer-reading"></div>
+                        <div class="speedometer-arrow" id="speedometer-arrow"></div>
+                    </div>
+                </div>
+                <p id="targetTransaction"></p>
+                <p id="percentTransaction"></p>
+                <p></p>
+
+                <input type="number" id="newTargetInput" placeholder="Enter new target value">
+                <button id="changeTargetButton">OK</button>
             </div>
         </div>
-        <p id="targetTransaction"></p>
-        <p id="percentTransaction"></p>
-        <p></p>
 
-        <input type="number" id="newTargetInput" placeholder="Enter new target value">
-        <button id="changeTargetButton">OK</button>
-    </div>
-</div>
+        <script>
+            // Reference datas
+            const transaction = <?php echo json_encode($TransactionperDiv); ?>;
+            const income = <?php echo json_encode($SalesperDiv); ?>;
 
-<script>
-     // Reference datas
-     const transaction = <?php echo json_encode($TransactionperDiv); ?>;
-    const income = <?php echo json_encode($SalesperDiv); ?>;
+            const currentDate = new Date();
+            const currentMonth = currentDate.getMonth();
+            const currentYear = currentDate.getFullYear();
 
-    const currentDate = new Date();
-    const currentMonth = currentDate.getMonth();
-    const currentYear = currentDate.getFullYear();
+            const totaltransactionChart = document.getElementById("transactionChart");
+            const totalsalesChart = document.getElementById("salesChart");
+            const popup = document.getElementById("popup");
+            const closePopup = document.getElementById("close-popup");
+            const targetTransaction = document.getElementById("targetTransaction");
+            const percentTransaction = document.getElementById("percentTransaction");
+            const PopupHeader = document.getElementById("PopupHeader");
+            const speedometerReading = document.getElementById("speedometer-reading");
+            const speedometerArrow = document.getElementById("speedometer-arrow");
+            const changeTargetButton = document.getElementById("changeTargetButton");
+            const newTargetInput = document.getElementById("newTargetInput");
 
-    const totaltransactionChart = document.getElementById("transactionChart");
-    const totalsalesChart = document.getElementById("salesChart");
-    const popup = document.getElementById("popup");
-    const closePopup = document.getElementById("close-popup");
-    const targetTransaction = document.getElementById("targetTransaction");
-    const percentTransaction = document.getElementById("percentTransaction");
-    const PopupHeader = document.getElementById("PopupHeader");
-    const speedometerReading = document.getElementById("speedometer-reading");
-    const speedometerArrow = document.getElementById("speedometer-arrow");
-    const changeTargetButton = document.getElementById("changeTargetButton");
-    const newTargetInput = document.getElementById("newTargetInput");
+            //totaltransaction popup
+            totaltransactionChart.addEventListener("click", () => {
 
-    //totaltransaction popup
-    totaltransactionChart.addEventListener("click", () => {
+                // Initialize empty arrays for each quarter
+                const quarter1 = [];
+                const quarter2 = [];
+                const quarter3 = [];
+                const quarter4 = [];
 
-        // Initialize empty arrays for each quarter
-        const quarter1 = [];
-        const quarter2 = [];
-        const quarter3 = [];
-        const quarter4 = [];
+                // Iterate through the transaction data
+                transaction.labels.forEach((label, index) => {
+                    const date = new Date(label);
+                    const year = date.getFullYear();
+                    const quarter = Math.floor((date.getMonth() + 3) / 3);
 
-        // Iterate through the transaction data
-        transaction.labels.forEach((label, index) => {
-            const date = new Date(label);
-            const year = date.getFullYear();
-            const quarter = Math.floor((date.getMonth() + 3) / 3);
+                    // Check if the transaction is from the current year
+                    if (year === currentYear) {
+                        // Categorize transactions into quarters
+                        switch (quarter) {
+                            case 1:
+                                quarter1.push(transaction.datasets[0].data[index]);
+                                break;
+                            case 2:
+                                quarter2.push(transaction.datasets[0].data[index]);
+                                break;
+                            case 3:
+                                quarter3.push(transaction.datasets[0].data[index]);
+                                break;
+                            case 4:
+                                quarter4.push(transaction.datasets[0].data[index]);
+                                break;
+                        }
+                    }
+                });
+                // Calculate the sum of transactions for each quarter
+                const sumQuarter1 = quarter1.reduce((acc, value) => acc + value, 0);
+                const sumQuarter2 = quarter2.reduce((acc, value) => acc + value, 0);
+                const sumQuarter3 = quarter3.reduce((acc, value) => acc + value, 0);
+                const sumQuarter4 = quarter4.reduce((acc, value) => acc + value, 0);
 
-            // Check if the transaction is from the current year
-                if (year === currentYear) {
-        // Categorize transactions into quarters
-                switch (quarter) {
-                    case 1:
-                        quarter1.push(transaction.datasets[0].data[index]);
-                        break;
-                    case 2:
-                        quarter2.push(transaction.datasets[0].data[index]);
-                        break;
-                    case 3:
-                        quarter3.push(transaction.datasets[0].data[index]);
-                        break;
-                    case 4:
-                        quarter4.push(transaction.datasets[0].data[index]);
-                        break;
+
+                let Total;
+
+                if (currentMonth >= 0 && currentMonth < 3) {
+                    Total = sumQuarter1; // January to March
+                } else if (currentMonth >= 3 && currentMonth < 6) {
+                    Total = sumQuarter2; // April to June
+                } else if (currentMonth >= 6 && currentMonth < 9) {
+                    Total = sumQuarter3; // July to September
+                } else if (currentMonth >= 8 && currentMonth < 12) {
+                    Total = sumQuarter4; // October to December
                 }
-            }
-        });
-        // Calculate the sum of transactions for each quarter
-        const sumQuarter1 = quarter1.reduce((acc, value) => acc + value, 0);
-        const sumQuarter2 = quarter2.reduce((acc, value) => acc + value, 0);
-        const sumQuarter3 = quarter3.reduce((acc, value) => acc + value, 0);
-        const sumQuarter4 = quarter4.reduce((acc, value) => acc + value, 0);
 
+                const Target = 0;
 
-        let Total;
+                changeTargetButton.addEventListener("click", () => {
+                    // Get the new target value from the input box
+                    const newTargetValue = parseFloat(newTargetInput.value);
 
-        if (currentMonth >= 0 && currentMonth < 3) {
-            Total = sumQuarter1; // January to March
-        } else if (currentMonth >= 3 && currentMonth < 6) {
-            Total = sumQuarter2; // April to June
-        } else if (currentMonth >= 6 && currentMonth < 9) {
-            Total = sumQuarter3; // July to September
-        } else if (currentMonth >= 8 && currentMonth < 12) {
-            Total = sumQuarter4; // October to December
-        }
+                    if (!isNaN(newTargetValue)) {
+                        // Update the target value
+                        const Target = newTargetValue;
 
-        const Target = 0;
-        
-        changeTargetButton.addEventListener("click", () => {
-            // Get the new target value from the input box
-            const newTargetValue = parseFloat(newTargetInput.value);
-
-            if (!isNaN(newTargetValue)) {
-                // Update the target value
-                const Target = newTargetValue;
-
-                        const needle= (Total/Target);
-                        const percentage= (needle * 100).toFixed(2);
+                        const needle = (Total / Target);
+                        const percentage = (needle * 100).toFixed(2);
 
                         speedometerReading.textContent = Total + " Transaction";
 
                         // Simulate the speedometer arrow movement (you can replace this with actual data)
                         const rotation = (needle) * 180 - 90;
-                        speedometerArrow.style.transformOrigin = "50% 100%"; 
+                        speedometerArrow.style.transformOrigin = "50% 100%";
                         speedometerArrow.style.transform = `translateX(-50%) rotate(${rotation}deg)`;
 
                         const speedometerDial = document.querySelector('.speedometer-dial');
@@ -1308,15 +1329,15 @@ $this->title = '';
 
                         // Function to update the background color based on the value
                         function updateBackgroundColor(value) {
-                        if (value >= 0 && value <= 0.25) {
-                            speedometerDial.style.backgroundColor = 'red';
-                        } else if (value > 0.25 && value <= 0.5) {
-                            speedometerDial.style.backgroundColor = 'orange';
-                        } else if (value > 0.5 && value <= 0.75) {
-                            speedometerDial.style.backgroundColor = 'yellow';
-                        } else {
-                            speedometerDial.style.backgroundColor = 'green';
-                        }
+                            if (value >= 0 && value <= 0.25) {
+                                speedometerDial.style.backgroundColor = 'red';
+                            } else if (value > 0.25 && value <= 0.5) {
+                                speedometerDial.style.backgroundColor = 'orange';
+                            } else if (value > 0.5 && value <= 0.75) {
+                                speedometerDial.style.backgroundColor = 'yellow';
+                            } else {
+                                speedometerDial.style.backgroundColor = 'green';
+                            }
                         }
 
                         // Call the updateBackgroundColor function with the initial total/target value
@@ -1324,206 +1345,204 @@ $this->title = '';
                         // Display the pop-up
                         popup.style.display = "block";
 
-                        targetTransaction.textContent = "Target transaction for this quarter is "+Target;
-                        percentTransaction.textContent = "Achieved " + percentage +"% of target transaction";
+                        targetTransaction.textContent = "Target transaction for this quarter is " + Target;
+                        percentTransaction.textContent = "Achieved " + percentage + "% of target transaction";
                         PopupHeader.textContent = "Total Transaction";
-            }
-        });
+                    }
+                });
 
 
-        const needle= (Total/Target);
-        const percentage= (needle * 100).toFixed(2);
+                const needle = (Total / Target);
+                const percentage = (needle * 100).toFixed(2);
 
-        speedometerReading.textContent = Total + " Transaction";
+                speedometerReading.textContent = Total + " Transaction";
 
-        // Simulate the speedometer arrow movement (you can replace this with actual data)
-        const rotation = (needle) * 180 - 90;
-        speedometerArrow.style.transformOrigin = "50% 100%"; 
-        speedometerArrow.style.transform = `translateX(-50%) rotate(${rotation}deg)`;
+                // Simulate the speedometer arrow movement (you can replace this with actual data)
+                const rotation = (needle) * 180 - 90;
+                speedometerArrow.style.transformOrigin = "50% 100%";
+                speedometerArrow.style.transform = `translateX(-50%) rotate(${rotation}deg)`;
 
-        const speedometerDial = document.querySelector('.speedometer-dial');
+                const speedometerDial = document.querySelector('.speedometer-dial');
 
-        // Get the total/target value (you can replace this with your actual value)
-        const totalValue = needle; // Change this value as needed
+                // Get the total/target value (you can replace this with your actual value)
+                const totalValue = needle; // Change this value as needed
 
-        // Function to update the background color based on the value
-        function updateBackgroundColor(value) {
-        if (value >= 0 && value <= 0.25) {
-            speedometerDial.style.backgroundColor = 'red';
-        } else if (value > 0.25 && value <= 0.5) {
-            speedometerDial.style.backgroundColor = 'orange';
-        } else if (value > 0.5 && value <= 0.75) {
-            speedometerDial.style.backgroundColor = 'yellow';
-        } else {
-            speedometerDial.style.backgroundColor = 'green';
-        }
-        }
-
-        // Call the updateBackgroundColor function with the initial total/target value
-        updateBackgroundColor(totalValue);
-        // Display the pop-up
-        popup.style.display = "block";
-
-        targetTransaction.textContent = "Target transaction for this quarter is "+Target;
-        percentTransaction.textContent = "Achieved " + percentage +"% of target transaction";
-        PopupHeader.textContent = "Total Transaction";
-
-    });
-
-    closePopup.addEventListener("click", () => {
-        // Close the pop-up when the close button is clicked
-        popup.style.display = "none";
-    });
-
-    // sales popup
-    totalsalesChart.addEventListener("click", () => {
-        
-    
-        // Initialize empty arrays for each quarter
-        const quarter1 = [];
-        const quarter2 = [];
-        const quarter3 = [];
-        const quarter4 = [];
-
-        // Iterate through the income data
-        income.labels.forEach((label, index) => {
-            const date = new Date(label);
-            const year = date.getFullYear();
-            const quarter = Math.floor((date.getMonth() + 3) / 3);
-
-            // Check if the income is from the current year
-            if (year === currentYear) {
-                // Categorize income into quarters
-                switch (quarter) {
-                    case 1:
-                        quarter1.push(income.datasets[0].data[index]);
-                        break;
-                    case 2:
-                        quarter2.push(income.datasets[0].data[index]);
-                        break;
-                    case 3:
-                        quarter3.push(income.datasets[0].data[index]);
-                        break;
-                    case 4:
-                        quarter4.push(income.datasets[0].data[index]);
-                        break;
+                // Function to update the background color based on the value
+                function updateBackgroundColor(value) {
+                    if (value >= 0 && value <= 0.25) {
+                        speedometerDial.style.backgroundColor = 'red';
+                    } else if (value > 0.25 && value <= 0.5) {
+                        speedometerDial.style.backgroundColor = 'orange';
+                    } else if (value > 0.5 && value <= 0.75) {
+                        speedometerDial.style.backgroundColor = 'yellow';
+                    } else {
+                        speedometerDial.style.backgroundColor = 'green';
+                    }
                 }
-            }
-        });
-        // Calculate the sum of income for each quarter
-        const sumQuarter1 = quarter1.reduce((acc, value) => acc + value, 0);
-        const sumQuarter2 = quarter2.reduce((acc, value) => acc + value, 0);
-        const sumQuarter3 = quarter3.reduce((acc, value) => acc + value, 0);
-        const sumQuarter4 = quarter4.reduce((acc, value) => acc + value, 0);
+
+                // Call the updateBackgroundColor function with the initial total/target value
+                updateBackgroundColor(totalValue);
+                // Display the pop-up
+                popup.style.display = "block";
+
+                targetTransaction.textContent = "Target transaction for this quarter is " + Target;
+                percentTransaction.textContent = "Achieved " + percentage + "% of target transaction";
+                PopupHeader.textContent = "Total Transaction";
+
+            });
+
+            closePopup.addEventListener("click", () => {
+                // Close the pop-up when the close button is clicked
+                popup.style.display = "none";
+            });
+
+            // sales popup
+            totalsalesChart.addEventListener("click", () => {
 
 
-        let Total;
+                // Initialize empty arrays for each quarter
+                const quarter1 = [];
+                const quarter2 = [];
+                const quarter3 = [];
+                const quarter4 = [];
 
-        if (currentMonth >= 0 && currentMonth < 3) {
-            Total = sumQuarter1; // January to March
-        } else if (currentMonth >= 3 && currentMonth < 6) {
-            Total = sumQuarter2; // April to June
-        } else if (currentMonth >= 6 && currentMonth < 9) {
-            Total = sumQuarter3; // July to September
-        } else if (currentMonth >= 8 && currentMonth < 12) {
-            Total = sumQuarter4; // October to December
-        }
+                // Iterate through the income data
+                income.labels.forEach((label, index) => {
+                    const date = new Date(label);
+                    const year = date.getFullYear();
+                    const quarter = Math.floor((date.getMonth() + 3) / 3);
 
-        const Target = 0;
-
-        changeTargetButton.addEventListener("click", () => {
-            // Get the new target value from the input box
-            const newTargetValue = parseFloat(newTargetInput.value);
-
-            if (!isNaN(newTargetValue)) {
-                // Update the target value
-                const Target = newTargetValue;
-
-                const needle= (Total/Target);
-        const percentage= (needle * 100).toFixed(2);
-
-        speedometerReading.textContent = Total + " Income";
-
-        // Simulate the speedometer arrow movement (you can replace this with actual data)
-        const rotation = (needle) * 180 - 90;
-        speedometerArrow.style.transformOrigin = "50% 100%"; 
-        speedometerArrow.style.transform = `translateX(-50%) rotate(${rotation}deg)`;
-
-        const speedometerDial = document.querySelector('.speedometer-dial');
-
-        // Get the total/target value (you can replace this with your actual value)
-        const totalValue = needle; // Change this value as needed
-
-        // Function to update the background color based on the value
-        function updateBackgroundColor(value) {
-        if (value >= 0 && value <= 0.25) {
-            speedometerDial.style.backgroundColor = 'red';
-        } else if (value > 0.25 && value <= 0.5) {
-            speedometerDial.style.backgroundColor = 'orange';
-        } else if (value > 0.5 && value <= 0.75) {
-            speedometerDial.style.backgroundColor = 'yellow';
-        } else {
-            speedometerDial.style.backgroundColor = 'green';
-        }
-        }
-
-        // Call the updateBackgroundColor function with the initial total/target value
-        updateBackgroundColor(totalValue);
-        // Display the pop-up
-        popup.style.display = "block";
-
-        targetTransaction.textContent = "Target income for this quarter is "+Target;
-        percentTransaction.textContent = "Achieved " + percentage +"% of target income";
-        PopupHeader.textContent = "Total Income";
-            }
-        });
-
-        const needle= (Total/Target);
-        const percentage= (needle * 100).toFixed(2);
-
-        speedometerReading.textContent = Total + " Transaction";
-
-        // Simulate the speedometer arrow movement (you can replace this with actual data)
-        const rotation = (needle) * 180 - 90;
-        speedometerArrow.style.transformOrigin = "50% 100%"; 
-        speedometerArrow.style.transform = `translateX(-50%) rotate(${rotation}deg)`;
-
-        const speedometerDial = document.querySelector('.speedometer-dial');
-
-        // Get the total/target value (you can replace this with your actual value)
-        const totalValue = needle; // Change this value as needed
-
-        // Function to update the background color based on the value
-        function updateBackgroundColor(value) {
-        if (value >= 0 && value <= 0.25) {
-            speedometerDial.style.backgroundColor = 'red';
-        } else if (value > 0.25 && value <= 0.5) {
-            speedometerDial.style.backgroundColor = 'orange';
-        } else if (value > 0.5 && value <= 0.75) {
-            speedometerDial.style.backgroundColor = 'yellow';
-        } else {
-            speedometerDial.style.backgroundColor = 'green';
-        }
-        }
-
-        // Call the updateBackgroundColor function with the initial total/target value
-        updateBackgroundColor(totalValue);
-        // Display the pop-up
-        popup.style.display = "block";
-
-        targetTransaction.textContent = "Target income for this quarter is "+Target;
-        percentTransaction.textContent = "Achieved " + percentage +"% of target income";
-        PopupHeader.textContent = "Total Income";
-
-    });
-
-    closePopup.addEventListener("click", () => {
-        // Close the pop-up when the close button is clicked
-        popup.style.display = "none";
-    });
+                    // Check if the income is from the current year
+                    if (year === currentYear) {
+                        // Categorize income into quarters
+                        switch (quarter) {
+                            case 1:
+                                quarter1.push(income.datasets[0].data[index]);
+                                break;
+                            case 2:
+                                quarter2.push(income.datasets[0].data[index]);
+                                break;
+                            case 3:
+                                quarter3.push(income.datasets[0].data[index]);
+                                break;
+                            case 4:
+                                quarter4.push(income.datasets[0].data[index]);
+                                break;
+                        }
+                    }
+                });
+                // Calculate the sum of income for each quarter
+                const sumQuarter1 = quarter1.reduce((acc, value) => acc + value, 0);
+                const sumQuarter2 = quarter2.reduce((acc, value) => acc + value, 0);
+                const sumQuarter3 = quarter3.reduce((acc, value) => acc + value, 0);
+                const sumQuarter4 = quarter4.reduce((acc, value) => acc + value, 0);
 
 
-</script>
+                let Total;
+
+                if (currentMonth >= 0 && currentMonth < 3) {
+                    Total = sumQuarter1; // January to March
+                } else if (currentMonth >= 3 && currentMonth < 6) {
+                    Total = sumQuarter2; // April to June
+                } else if (currentMonth >= 6 && currentMonth < 9) {
+                    Total = sumQuarter3; // July to September
+                } else if (currentMonth >= 8 && currentMonth < 12) {
+                    Total = sumQuarter4; // October to December
+                }
+
+                const Target = 0;
+
+                changeTargetButton.addEventListener("click", () => {
+                    // Get the new target value from the input box
+                    const newTargetValue = parseFloat(newTargetInput.value);
+
+                    if (!isNaN(newTargetValue)) {
+                        // Update the target value
+                        const Target = newTargetValue;
+
+                        const needle = (Total / Target);
+                        const percentage = (needle * 100).toFixed(2);
+
+                        speedometerReading.textContent = Total + " Income";
+
+                        // Simulate the speedometer arrow movement (you can replace this with actual data)
+                        const rotation = (needle) * 180 - 90;
+                        speedometerArrow.style.transformOrigin = "50% 100%";
+                        speedometerArrow.style.transform = `translateX(-50%) rotate(${rotation}deg)`;
+
+                        const speedometerDial = document.querySelector('.speedometer-dial');
+
+                        // Get the total/target value (you can replace this with your actual value)
+                        const totalValue = needle; // Change this value as needed
+
+                        // Function to update the background color based on the value
+                        function updateBackgroundColor(value) {
+                            if (value >= 0 && value <= 0.25) {
+                                speedometerDial.style.backgroundColor = 'red';
+                            } else if (value > 0.25 && value <= 0.5) {
+                                speedometerDial.style.backgroundColor = 'orange';
+                            } else if (value > 0.5 && value <= 0.75) {
+                                speedometerDial.style.backgroundColor = 'yellow';
+                            } else {
+                                speedometerDial.style.backgroundColor = 'green';
+                            }
+                        }
+
+                        // Call the updateBackgroundColor function with the initial total/target value
+                        updateBackgroundColor(totalValue);
+                        // Display the pop-up
+                        popup.style.display = "block";
+
+                        targetTransaction.textContent = "Target income for this quarter is " + Target;
+                        percentTransaction.textContent = "Achieved " + percentage + "% of target income";
+                        PopupHeader.textContent = "Total Income";
+                    }
+                });
+
+                const needle = (Total / Target);
+                const percentage = (needle * 100).toFixed(2);
+
+                speedometerReading.textContent = Total + " Transaction";
+
+                // Simulate the speedometer arrow movement (you can replace this with actual data)
+                const rotation = (needle) * 180 - 90;
+                speedometerArrow.style.transformOrigin = "50% 100%";
+                speedometerArrow.style.transform = `translateX(-50%) rotate(${rotation}deg)`;
+
+                const speedometerDial = document.querySelector('.speedometer-dial');
+
+                // Get the total/target value (you can replace this with your actual value)
+                const totalValue = needle; // Change this value as needed
+
+                // Function to update the background color based on the value
+                function updateBackgroundColor(value) {
+                    if (value >= 0 && value <= 0.25) {
+                        speedometerDial.style.backgroundColor = 'red';
+                    } else if (value > 0.25 && value <= 0.5) {
+                        speedometerDial.style.backgroundColor = 'orange';
+                    } else if (value > 0.5 && value <= 0.75) {
+                        speedometerDial.style.backgroundColor = 'yellow';
+                    } else {
+                        speedometerDial.style.backgroundColor = 'green';
+                    }
+                }
+
+                // Call the updateBackgroundColor function with the initial total/target value
+                updateBackgroundColor(totalValue);
+                // Display the pop-up
+                popup.style.display = "block";
+
+                targetTransaction.textContent = "Target income for this quarter is " + Target;
+                percentTransaction.textContent = "Achieved " + percentage + "% of target income";
+                PopupHeader.textContent = "Total Income";
+
+            });
+
+            closePopup.addEventListener("click", () => {
+                // Close the pop-up when the close button is clicked
+                popup.style.display = "none";
+            });
+        </script>
 
 
 
@@ -1707,8 +1726,8 @@ $this->title = '';
         </script>
 
 
-       <!-- All about customer graphs -->
-       <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-geo"></script>
+        <!-- All about customer graphs -->
+        <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-geo"></script>
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <div class="customers_data">
             <div class="date_filter" style="text-align: left; padding-left: 8rem; padding-top: 0rem; padding-bottom: 2rem;">
@@ -1728,7 +1747,7 @@ $this->title = '';
 
             <div class="chart-container">
                 <p id="reportTitle">Total Customers per Province</p>
-                    <canvas id="Provinces"></canvas>
+                <canvas id="Provinces"></canvas>
             </div>
 
             <!-- <div class="chart-container" style="width: 47%; text-align: center;">
@@ -2604,105 +2623,105 @@ $this->title = '';
         })();
     </script>
 
-<script>
+    <script>
         function downloadPDF() {
 
-        document.getElementById('sending-email-message').style.display = 'block';
+            document.getElementById('sending-email-message').style.display = 'block';
 
-        const transactionChart = document.getElementById('transactionChart');
-        const salesChart = document.getElementById('salesChart');
-        const myChart = document.getElementById('myChart');
-        const provincesChart = document.getElementById('Provinces');
-        const transactionStatusChart = document.getElementById('transactionStatus'); // New chart element
-        const paymentChart = document.getElementById('paymendtMethod'); // New chart element
-        const transactionTypeChart = document.getElementById('transactionType'); // New chart element
-        const customerTypeChart = document.getElementById('customerType'); // New chart element
-
-
-        const options = {
-            quality: 5,
-            width: 800,
-            height: 600
-        };
-
-                domtoimage.toPng(transactionChart, options)
-                    .then(function(transactionChartImg) {
-                        domtoimage.toPng(salesChart, options)
-                            .then(function(salesChartImg) {
-                                        domtoimage.toPng(provincesChart, options)
-                                            .then(function(provincesChartImg) {
-                                                domtoimage.toPng(transactionStatusChart, options)
-                                                    .then(function(transactionStatusChartImg) {
-                                                        domtoimage.toPng(transactionTypeChart, options)
-                                                            .then(function(transactionTypeChartImg) {
-                                                                domtoimage.toPng(paymentChart, options)
-                                                                    .then(function(paymentChartImg) {
-                                                                        domtoimage.toPng(customerTypeChart, options)
-                                                                            .then(function(customerTypeChartImg) {
-                                                                                const pdf = new jsPDF();
-
-                                                                                pdf.setFontSize(12);
-                                                                                pdf.setFont('helvetica', 'bold');
-                                                                                pdf.setTextColor(0, 122, 204);
-                                                                                pdf.text('Total Transaction Report', 40, 25);
-                                                                                pdf.text('Total Income Report', 40, 115);
-                                                                                pdf.text('Total Customer Per Province', 40, 215);
-
-                                                                                pdf.setFont('helvetica', 'bold');
-                                                                                pdf.setTextColor(0, 41, 102);
-                                                                                pdf.setFontSize(14);
-                                                                                pdf.text('Visualight-Standards and Testing', 70, 10);
-
-                                                                                pdf.addImage(transactionChartImg, 'PNG', 40, 30, 130, 70, undefined, 'FAST');
-                                                                                pdf.addImage(salesChartImg, 'PNG', 40, 123, 130, 70, undefined, 'FAST');
-                                                                                pdf.addImage(provincesChartImg, 'PNG', 40, 220, 130, 70, undefined, 'FAST');
-
-                                                                                pdf.addPage();
-
-                                                                                pdf.setFontSize(12);
-                                                                                pdf.setFont('helvetica', 'bold');
-                                                                                pdf.setTextColor(0, 122, 204);
-                                                                                pdf.text('Transaction Status', 40, 18);
-
-                                                                                pdf.addImage(transactionStatusChartImg, 'PNG', 60, 25, 110, 70, undefined, 'FAST');
-
-                                                                                pdf.text('Payment Method', 40, 110);
-
-                                                                                pdf.addImage(paymentChartImg, 'JPEG', 60, 115, 110, 70, undefined, 'FAST');
+            const transactionChart = document.getElementById('transactionChart');
+            const salesChart = document.getElementById('salesChart');
+            const myChart = document.getElementById('myChart');
+            const provincesChart = document.getElementById('Provinces');
+            const transactionStatusChart = document.getElementById('transactionStatus'); // New chart element
+            const paymentChart = document.getElementById('paymendtMethod'); // New chart element
+            const transactionTypeChart = document.getElementById('transactionType'); // New chart element
+            const customerTypeChart = document.getElementById('customerType'); // New chart element
 
 
-                                                                                pdf.text('Transaction Type', 40, 205);
+            const options = {
+                quality: 5,
+                width: 800,
+                height: 600
+            };
 
-                                                                                pdf.addImage(transactionTypeChartImg, 'PNG', 60, 215, 110, 70, undefined, 'FAST');
+            domtoimage.toPng(transactionChart, options)
+                .then(function(transactionChartImg) {
+                    domtoimage.toPng(salesChart, options)
+                        .then(function(salesChartImg) {
+                            domtoimage.toPng(provincesChart, options)
+                                .then(function(provincesChartImg) {
+                                    domtoimage.toPng(transactionStatusChart, options)
+                                        .then(function(transactionStatusChartImg) {
+                                            domtoimage.toPng(transactionTypeChart, options)
+                                                .then(function(transactionTypeChartImg) {
+                                                    domtoimage.toPng(paymentChart, options)
+                                                        .then(function(paymentChartImg) {
+                                                            domtoimage.toPng(customerTypeChart, options)
+                                                                .then(function(customerTypeChartImg) {
+                                                                    const pdf = new jsPDF();
 
-                                                                                pdf.addPage();
-                                                                                
-                                                                                pdf.setFontSize(12);
-                                                                                pdf.setFont('helvetica', 'bold');
-                                                                                pdf.setTextColor(0, 122, 204);
-                                                                                pdf.text('Customer Type', 40, 18);
-                                                                                
-                                                                                pdf.addImage(customerTypeChartImg, 'PNG', 60, 25, 110, 70, undefined, 'FAST');
+                                                                    pdf.setFontSize(12);
+                                                                    pdf.setFont('helvetica', 'bold');
+                                                                    pdf.setTextColor(0, 122, 204);
+                                                                    pdf.text('Total Transaction Report', 40, 25);
+                                                                    pdf.text('Total Income Report', 40, 115);
+                                                                    pdf.text('Total Customer Per Province', 40, 215);
+
+                                                                    pdf.setFont('helvetica', 'bold');
+                                                                    pdf.setTextColor(0, 41, 102);
+                                                                    pdf.setFontSize(14);
+                                                                    pdf.text('Visualight-Standards and Testing', 70, 10);
+
+                                                                    pdf.addImage(transactionChartImg, 'PNG', 40, 30, 130, 70, undefined, 'FAST');
+                                                                    pdf.addImage(salesChartImg, 'PNG', 40, 123, 130, 70, undefined, 'FAST');
+                                                                    pdf.addImage(provincesChartImg, 'PNG', 40, 220, 130, 70, undefined, 'FAST');
+
+                                                                    pdf.addPage();
+
+                                                                    pdf.setFontSize(12);
+                                                                    pdf.setFont('helvetica', 'bold');
+                                                                    pdf.setTextColor(0, 122, 204);
+                                                                    pdf.text('Transaction Status', 40, 18);
+
+                                                                    pdf.addImage(transactionStatusChartImg, 'PNG', 60, 25, 110, 70, undefined, 'FAST');
+
+                                                                    pdf.text('Payment Method', 40, 110);
+
+                                                                    pdf.addImage(paymentChartImg, 'JPEG', 60, 115, 110, 70, undefined, 'FAST');
+
+
+                                                                    pdf.text('Transaction Type', 40, 205);
+
+                                                                    pdf.addImage(transactionTypeChartImg, 'PNG', 60, 215, 110, 70, undefined, 'FAST');
+
+                                                                    pdf.addPage();
+
+                                                                    pdf.setFontSize(12);
+                                                                    pdf.setFont('helvetica', 'bold');
+                                                                    pdf.setTextColor(0, 122, 204);
+                                                                    pdf.text('Customer Type', 40, 18);
+
+                                                                    pdf.addImage(customerTypeChartImg, 'PNG', 60, 25, 110, 70, undefined, 'FAST');
 
 
 
-                                                                                pdf.save('Visualight-Standards-and-Testing.pdf');
-                                                                            });
-                                                                    });
+                                                                    pdf.save('Visualight-Standards-and-Testing.pdf');
+                                                                });
+                                                        });
 
-                                                            });
-                                                    });
-                                            });
-                                    });
-                            })
-                            .catch(function(error) {
-                                console.error('Error generating PDF:', error);
-                            });
-                            
-                            setTimeout(function() {
-                                document.getElementById('sending-email-message').style.display = 'none';
-                            }, 5000);
-                              
-                            
-                    }
-</script>
+                                                });
+                                        });
+                                });
+                        });
+                })
+                .catch(function(error) {
+                    console.error('Error generating PDF:', error);
+                });
+
+            setTimeout(function() {
+                document.getElementById('sending-email-message').style.display = 'none';
+            }, 5000);
+
+
+        }
+    </script>
