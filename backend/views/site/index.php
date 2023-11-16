@@ -21,6 +21,7 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
         display: flex;
         flex-direction: column;
         align-items: center;
+        box-shadow: -4px 4px 8px rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.15); /* Updated box-shadow */
     }
 
     .average {
@@ -67,10 +68,10 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
         margin-bottom: 10px;
     }
 
-    #myChart {
+    #myChart { /* css sa radial */
         position: absolute;
         left: 50px;
-        top: 45px;
+        top: 5px;
     }
 
     .asOne {
@@ -276,6 +277,7 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
         width: 100%;
         text-align: center;
         display: wrap;
+
     }
 
 
@@ -297,6 +299,8 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
         text-align: center;
         display: wrap;
         background-color: white;
+        box-shadow: -4px 4px 8px rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.15);
+
     }
 
     .chart-container2 {
@@ -1124,7 +1128,7 @@ Yii::$app->set('db', [ //revert default connection
 
 
     <div class="chart-container" id="avgSales">
-        <p id="reportTitle">Average Income Daily </p>
+        <p id="reportTitle">Average Income</p>
         <div class="asOne">
             <canvas id="myChart"></canvas>
             <div class="average">
@@ -2184,7 +2188,7 @@ Yii::$app->set('db', [ //revert default connection
                     ctx.font = 'bolder 15px Poppins';
                     ctx.fillStyle = 'rgb(3, 98, 186, 1)';
                     ctx.textAlign = 'center';
-                    ctx.fillText('Average income Daily', width / 2.1, height / 2 + top);
+                    ctx.fillText('Average income', width / 2.1, height / 2 + top);
                     //console.log(chart.getDatasetMeta(0))
 
                 }
@@ -2272,22 +2276,22 @@ Yii::$app->set('db', [ //revert default connection
         type: 'bar',
         options: {
             data: deselected_data,
-            responsive: true,
-            maintainAspectRatio: false,
+            barThickness: 50,
+            barPercentage: 0.15,
+            options: {
+                maintainAspectRatio: false,
+            },
             scales: {
                 y: {
                     beginAtZero: true,
                     ticks: {
-                        stepSize: 1,
+                        stepSize: 12,
                     },
                     grid: {
                         display: true,
                     }
                 },
                 x: {
-                    ticks: {
-                        autoSkip: true,
-                    },
                     grid: {
                         display: false,
                     }
