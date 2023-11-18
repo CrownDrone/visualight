@@ -1050,7 +1050,39 @@ $this->title = '';
         'charset' => 'utf8',
     ]);
 
+    $currentDate = new \DateTime(); 
+
+$targetTransactiondata = Yii::$app->db->createCommand('
+    SELECT quarter_1, quarter_2, quarter_3, quarter_4
+    FROM stdtarget_transaction
+    WHERE date = :year
+', [':year' => $currentDate->format('Y')])->queryOne();
+
+    $targetTransaction = [
+    (float)($targetTransactiondata['quarter_1'] ?? 0),
+    (float)($targetTransactiondata['quarter_2'] ?? 0),
+    (float)($targetTransactiondata['quarter_3'] ?? 0),
+    (float)($targetTransactiondata['quarter_4'] ?? 0),
+    ];
+
+$targetIncomedata = Yii::$app->db->createCommand('
+    SELECT quarter_1, quarter_2, quarter_3, quarter_4
+    FROM stdtarget_income
+    WHERE date = :year
+', [':year' => $currentDate->format('Y')])->queryOne();
+
+$targetIncome = 
+[
+    (float)($targetIncomedata['quarter_1'] ?? 0),
+    (float)($targetIncomedata['quarter_2'] ?? 0),
+    (float)($targetIncomedata['quarter_3'] ?? 0),
+    (float)($targetIncomedata['quarter_4'] ?? 0),
+];
+
+
     ?>
+
+    
 
     <div class="DailyTransaction">
         <br>
@@ -1202,9 +1234,6 @@ $this->title = '';
         <p id="percentTransaction"></p>
         <p></p>
 
-        <input type="number" id="newTargetInput" placeholder="Enter new target value">
-        <button id="changeTargetButton">OK</button>
-
         <p id="highest"></p>
         <p id="mostTransactionType"></p>
         <p id="mostCustomerType"></p>
@@ -1216,6 +1245,8 @@ $this->title = '';
      // Reference datas
     const transaction = <?php echo json_encode($TransactionperDiv); ?>;
     const income = <?php echo json_encode($SalesperDiv); ?>;
+    const targetValues = <?php echo json_encode($targetTransaction); ?>; 
+    const targetincomeValues = <?php echo json_encode($targetIncome); ?>;
 
     const currentDate = new Date();
     const currentMonth = currentDate.getMonth();
@@ -1230,8 +1261,6 @@ $this->title = '';
     const PopupHeader = document.getElementById("PopupHeader");
     const speedometerReading = document.getElementById("speedometer-reading");
     const speedometerArrow = document.getElementById("speedometer-arrow");
-    const changeTargetButton = document.getElementById("changeTargetButton");
-    const newTargetInput = document.getElementById("newTargetInput");
     const highest = document.getElementById("highest");
     const mostTransactionType = document.getElementById("mostTransactionType");
     const mostCustomerType = document.getElementById("mostCustomerType");
@@ -1277,7 +1306,23 @@ $this->title = '';
         const sumQuarter3 = quarter3.reduce((acc, value) => acc + value, 0);
         const sumQuarter4 = quarter4.reduce((acc, value) => acc + value, 0);
 
+            // Get the appropriate target value based on the current month
+            const targetValue = getTargetValue(currentMonth);
 
+            // Function to determine the target value based on the current month
+            function getTargetValue(month) {
+            if (month >= 0 && month < 3) {
+                return targetValues[0]; // January to March
+            } else if (month >= 3 && month < 6) {
+                return targetValues[1]; // April to June
+            } else if (month >= 6 && month < 9) {
+                return targetValues[2]; // July to September
+            } else {
+                return targetValues[3]; // October to December
+            }
+            }
+
+        Target=targetValue;
         let Total;
 
         if (currentMonth >= 0 && currentMonth < 3) {
@@ -1290,10 +1335,17 @@ $this->title = '';
             Total = sumQuarter4; // October to December
         }
 
-        const Target = 0;
-
         const needle= (Total/Target);
-        const percentage= 100;
+        let  percentage= needle*100;
+        if(percentage>100)
+        {
+            percentage=100;
+        }
+        else
+        {
+            percentage=percentage;
+        }
+
         speedometerReading.textContent = Total + " Transaction";
 
         //rotation of the needle 
@@ -1332,59 +1384,6 @@ $this->title = '';
         targetTransaction.textContent = "Target transaction for this quarter is "+Target;
         percentTransaction.textContent = "Achieved " + percentage +"% of target transaction";
         PopupHeader.textContent = "Total Transaction";
-        
-        changeTargetButton.addEventListener("click", () => {
-            // Get the new target value from the input box
-            const newTargetValue = parseFloat(newTargetInput.value);
-
-            if (!isNaN(newTargetValue)) {
-                // Update the target value
-                const Target = newTargetValue;
-
-                        const needle= (Total/Target);
-                        const percentage= (needle * 100).toFixed(2);
-
-                        speedometerReading.textContent = Total + " Transaction";
-
-                        let rotation = (needle) * 180 - 90;
-                        if (rotation>180)
-                            {
-                                rotation=180-90;
-                            }
-                        speedometerArrow.style.transformOrigin = "50% 100%"; 
-                        speedometerArrow.style.transform = `translateX(-50%) rotate(${rotation}deg)`;
-
-                        const speedometerDial = document.querySelector('.speedometer-dial');
-
-                        // Get the total/target value (you can replace this with your actual value)
-                        const totalValue = needle; // Change this value as needed
-
-                        // Function to update the background color based on the value
-                        function updateBackgroundColor(value) {
-                        if (value >= 0 && value <= 0.25) {
-                            speedometerDial.style.backgroundColor = 'red';
-                        } else if (value > 0.25 && value <= 0.5) {
-                            speedometerDial.style.backgroundColor = 'orange';
-                        } else if (value > 0.5 && value <= 0.75) {
-                            speedometerDial.style.backgroundColor = 'yellow';
-                        } else {
-                            speedometerDial.style.backgroundColor = 'green';
-                        }
-                        }
-
-                        // Call the updateBackgroundColor function with the initial total/target value
-                        updateBackgroundColor(totalValue);
-                        // Display the pop-up
-                        popup.style.display = "block";
-
-                        targetTransaction.textContent = "Target transaction for this quarter is "+Target;
-                        percentTransaction.textContent = "Achieved " + percentage +"% of target transaction";
-                        PopupHeader.textContent = "Total Transaction";
-
-                        
-            }
-        });
-
         
 
     });
@@ -1435,6 +1434,23 @@ $this->title = '';
                 const sumQuarter3 = quarter3.reduce((acc, value) => acc + value, 0);
                 const sumQuarter4 = quarter4.reduce((acc, value) => acc + value, 0);
 
+                            // Get the appropriate target value based on the current month
+            const targetincomeValue = getTargetValue(currentMonth);
+
+            // Function to determine the target value based on the current month
+            function getTargetValue(month) {
+            if (month >= 0 && month < 3) {
+                return targetincomeValues[0]; // January to March
+            } else if (month >= 3 && month < 6) {
+                return targetincomeValues[1]; // April to June
+            } else if (month >= 6 && month < 9) {
+                return targetincomeValues[2]; // July to September
+            } else {
+                return targetincomeValues[3]; // October to December
+            }
+            }
+
+            Target=targetincomeValue;
 
             
         let Total;
@@ -1450,9 +1466,16 @@ $this->title = '';
                 }
                 Total=Total.toFixed(2);
 
-                const Target = 0;
                 const needle= (Total/Target);
-                const percentage= 100;
+                let  percentage= needle*100;
+                if(percentage>100)
+                {
+                    percentage=100;
+                }
+                else
+                {
+                    percentage=percentage;
+                }
 
                 speedometerReading.textContent = Total + " Income";
 
@@ -1491,60 +1514,6 @@ $this->title = '';
                 targetTransaction.textContent = "Target income for this quarter is "+Target;
                 percentTransaction.textContent = "Achieved " + percentage +"% of target income";
                 PopupHeader.textContent = "Total Income";
-
-                changeTargetButton.addEventListener("click", () => {
-            // Get the new target value from the input box
-            const newTargetValue = parseFloat(newTargetInput.value);
-
-            if (!isNaN(newTargetValue)) {
-                // Update the target value
-                const Target = newTargetValue;
-
-                        const needle= (Total/Target);
-                        const percentage= (needle * 100).toFixed(2);
-
-                        speedometerReading.textContent = Total + " Income";
-
-                        let rotation = (needle) * 180 - 90;
-                        if (rotation>180)
-                            {
-                                rotation=180-90;
-                            }
-                        speedometerArrow.style.transformOrigin = "50% 100%"; 
-                        speedometerArrow.style.transform = `translateX(-50%) rotate(${rotation}deg)`;
-
-                        const speedometerDial = document.querySelector('.speedometer-dial');
-
-                        // Get the total/target value (you can replace this with your actual value)
-                        const totalValue = needle; // Change this value as needed
-
-                        // Function to update the background color based on the value
-                        function updateBackgroundColor(value) {
-                        if (value >= 0 && value <= 0.25) {
-                            speedometerDial.style.backgroundColor = 'red';
-                        } else if (value > 0.25 && value <= 0.5) {
-                            speedometerDial.style.backgroundColor = 'orange';
-                        } else if (value > 0.5 && value <= 0.75) {
-                            speedometerDial.style.backgroundColor = 'yellow';
-                        } else {
-                            speedometerDial.style.backgroundColor = 'green';
-                        }
-                        }
-
-                        // Call the updateBackgroundColor function with the initial total/target value
-                        updateBackgroundColor(totalValue);
-                        // Display the pop-up
-                        popup.style.display = "block";
-
-                        targetTransaction.textContent = "Target income for this quarter is "+Target;
-                        percentTransaction.textContent = "Achieved " + percentage +"% of target income";
-                        PopupHeader.textContent = "Total Income";
-
-                        
-            }
-        });
-
-        
 
     });
 
