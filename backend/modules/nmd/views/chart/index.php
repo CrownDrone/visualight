@@ -738,7 +738,7 @@ $this->title = '';
         'labels' => [],
         'datasets' => [],
     ];
-
+    
     foreach ($addressData as $customeraddress) {
         $province[] = $customeraddress['address'];
         $customersCounts[] = $customeraddress['customer_count'];
@@ -758,16 +758,86 @@ $this->title = '';
             $provinces['datasets'][$provinceIndex]['data'][] = $customersCounts;
         }
     }
-    function debug_to_console($data)
-    {
+
+    function debug_to_console($data) {
         $output = $data;
         if (is_array($output))
             $output = implode(', ', $output[0]);
-
+    
         echo "<script>console.log('Debug Objects: " . $output . "' );</script>";
     }
     debug_to_console($addressData);
 
+    $query = new Query();
+    $addressDatatransaction = $query->select(['customer.address', 'COUNT(*) as transaction_count'])
+    ->from('transaction')
+    ->join('INNER JOIN', 'customer', 'transaction.customer_id = customer.id')
+    ->where(['transaction.division' => ['2']])
+    // Add your additional conditions if needed
+    // ->where(['between', 'transaction_date', $fromDate, $toDate])
+    ->groupBy(['customer.address'])
+    ->orderBy(['transaction_count' => SORT_DESC])
+    ->all();
+
+$provincestransaction = [
+    'labels' => [],
+    'datasets' => [],
+];
+
+foreach ($addressDatatransaction as $customeraddress) {
+    $province = $customeraddress['address'];
+    $transactioncount = $customeraddress['transaction_count'];
+
+    // Check if the province is not already in labels
+    if (!in_array($province, $provincestransaction['labels'])) {
+        $provincestransaction['labels'][] = $province;
+    }
+
+    // Add the customer count directly to the datasets array
+    $provincestransaction['datasets'][] = $transactioncount;
+}
+
+    foreach ($addressDatatransaction as $customeraddress) {
+        $province = $customeraddress['address'];
+        $transactioncount = $customeraddress['transaction_count'];
+
+        // Check if the province is not already in labels
+        if (!in_array($province, $provincestransaction['labels'])) {
+            $provincestransaction['labels'][] = $province;
+        }
+
+        // Add the customer count directly to the datasets array
+        $provincestransaction['datasets'][] = $transactioncount;
+    }
+
+    $addressDataincome = (new \yii\db\Query())
+    ->select(['customer.address', 'SUM(amount) as total_amount'])
+    ->from('transaction')
+    ->join('INNER JOIN', 'customer', 'transaction.customer_id = customer.id')
+    ->where(['transaction.division' => ['2']])
+    // Add your additional conditions if needed
+    // ->where(['between', 'transaction_date', $fromDate, $toDate])
+    ->groupBy(['customer.address'])
+    ->orderBy(['total_amount' => SORT_DESC])
+    ->all();
+
+    $provincesincome = [
+    'labels' => [],
+    'datasets' => [],
+    ];
+
+    foreach ($addressDataincome as $customeraddress) {
+        $province = $customeraddress['address'];
+        $transactioncount = $customeraddress['total_amount'];
+
+        // Check if the province is not already in labels
+        if (!in_array($province, $provincesincome['labels'])) {
+            $provincesincome['labels'][] = $province;
+        }
+
+        // Add the customer count directly to the datasets array
+        $provincesincome['datasets'][] = $transactioncount;
+    }
 
     $query = new Query();
     $customerTypeData = $query->select([
@@ -793,8 +863,8 @@ $this->title = '';
         "7" => "Not Applicable",
     ];
 
-    $customerType = [];
-    $customerscounts = [];
+    $customerType = ['no customer'];
+    $customerscounts = [0];
 
     foreach ($customerTypeData as $customersType) {
         if (isset($customersType['customer_type']) && isset($customerType_name[$customersType['customer_type']])) {
@@ -802,6 +872,55 @@ $this->title = '';
         }
         $customerType[] = $customersType['customer_type'];
         $customerscounts[] = $customersType['customer_count'];
+    }
+
+    // customer type from table transaction
+    $customerTypeDatatransaction = (new \yii\db\Query())
+    ->select(['customer.customer_type', 'COUNT(*) as transaction_count'])
+    ->from('transaction')
+    ->join('INNER JOIN', 'customer', 'transaction.customer_id = customer.id')
+    ->where([
+        'transaction.division' => 1
+    ])
+    // Add your additional conditions if needed
+    // ->where(['between', 'transaction_date', $fromDate, $toDate])
+    ->groupBy(['customer.customer_type'])
+    ->orderBy(['transaction_count' => SORT_DESC])
+    ->all();
+    $customerTypetransaction = [];
+    $customerTypecounttransaction = [];
+
+    foreach ($customerTypeDatatransaction as $type) {
+    if (isset($type['customer_type']) && isset($customerType_name[$type['customer_type']])) {
+        $type['customer_type'] = $customerType_name[$type['customer_type']];
+    }
+
+    $customerTypetransaction[] = $type['customer_type'];
+    $customerTypecounttransaction[] = $type['transaction_count'];
+    }
+
+
+    $customerTypeDataincome = (new \yii\db\Query())
+    ->select(['customer.customer_type', 'SUM(amount) as total_amount'])
+    ->from('transaction')
+    ->join('INNER JOIN', 'customer', 'transaction.customer_id = customer.id')
+    ->where([
+        'transaction.division' => 1
+    ])
+    // ->where(['between', 'transaction_date', $fromDate, $toDate])
+    ->groupBy(['customer.customer_type'])
+    ->orderBy(['total_amount' => SORT_DESC])
+    ->all();
+    $customerTypeincome = [];
+    $customerTypecountincome = [];
+
+    foreach ($customerTypeDataincome as $type) {
+    if (isset($type['customer_type']) && isset($customerType_name[$type['customer_type']])) {
+        $type['customer_type'] = $customerType_name[$type['customer_type']];
+    }
+
+    $customerTypeincome[] = $type['customer_type'];
+    $customerTypecountincome[] = $type['total_amount'];
     }
 
     $query = new Query();
@@ -832,6 +951,29 @@ $this->title = '';
 
         $transactionType[] = $type['transaction_type'];
         $transactionTypecounts[] = $type['customer_count'];
+    }
+
+    $transactionTypeincomeData = $query->select(['transaction_type', 'SUM(amount) as total_amount'])
+    ->from('transaction')
+    ->where([
+        'division' => '1',
+       //'transaction_status' => ['1']
+   ])
+    // ->where(['between', 'transaction_date', $fromDate, $toDate])
+    ->groupBy(['transaction_type'])
+    ->orderBy(['total_amount' => SORT_DESC])
+    ->limit(100000)
+    ->all();
+    $transactionTypeincome = [];
+    $transactionTypesumincome = [];
+
+    foreach ($transactionTypeincomeData as $type) {
+        if (isset($type['transaction_type']) && isset($transactionType_name[$type['transaction_type']])) {
+            $type['transaction_type'] = $transactionType_name[$type['transaction_type']];
+        }
+
+        $transactionTypeincome[] = $type['transaction_type'];
+        $transactionTypesumincome[] = $type['total_amount'];
     }
 
     $query = new Query();
@@ -1250,19 +1392,30 @@ $targetIncome =
         <p id="percentTransaction"></p>
         <p></p>
 
-        <p id="highest"></p>
-        <p id="mostTransactionType"></p>
-        <p id="mostCustomerType"></p>
-        <p id="mostCustomerProvince"></p>
+        <div style="text-align: left; margin: 0 auto; width: 80%;">
+            <p id="highest"> </p>
+            <p id="least"> </p>
+
+            <p id="mostTransactionType"> </p>
+            <p id="leastTransactionType"> </p>
+
+            <p id="mostCustomerType"> </p>
+            <p id="leastCustomerType"> </p>
+
+            <p id="mostCustomerProvince"> </p>
+            <p id="leastCustomerProvince"> </p>
+            </div>
     </div>
 </div>
 
 <script>
      // Reference datas
-    const transaction = <?php echo json_encode($TransactionperDiv); ?>;
+     const transaction = <?php echo json_encode($TransactionperDiv); ?>;
     const income = <?php echo json_encode($SalesperDiv); ?>;
     const targetValues = <?php echo json_encode($targetTransaction); ?>; 
     const targetincomeValues = <?php echo json_encode($targetIncome); ?>;
+    const province = <?php echo json_encode($provincestransaction); ?>; 
+    const provinceincome = <?php echo json_encode($provincesincome); ?>;
 
     const currentDate = new Date();
     const currentMonth = currentDate.getMonth();
@@ -1277,11 +1430,16 @@ $targetIncome =
     const PopupHeader = document.getElementById("PopupHeader");
     const speedometerReading = document.getElementById("speedometer-reading");
     const speedometerArrow = document.getElementById("speedometer-arrow");
-    const highest = document.getElementById("highest");
+    const highest = document.getElementById("highest"); 
+    const least = document.getElementById("least");
     const mostTransactionType = document.getElementById("mostTransactionType");
+    const leastTransactionType = document.getElementById("leastTransactionType");
     const mostCustomerType = document.getElementById("mostCustomerType");
+    const leastCustomerType = document.getElementById("leastCustomerType");
     const mostCustomerProvince = document.getElementById("mostCustomerProvince");
+    const leastCustomerProvince = document.getElementById("leastCustomerProvince");
 
+   
     //totaltransaction popup
     totaltransactionChart.addEventListener("click", () => {
 
@@ -1394,14 +1552,139 @@ $targetIncome =
 
         // Call the updateBackgroundColor function with the initial total/target value
         updateBackgroundColor(totalValue);
+        //percentage text color
+        let percentagecolor = '';
+        if (percentage >= 76 && percentage <= 100) {
+            percentagecolor = 'green';
+        } else if (percentage >= 51 && percentage <= 75) {
+            percentagecolor = 'yellow';
+        } else if (percentage >= 26 && percentage <= 50) {
+            percentagecolor = 'orange';
+        } else {
+            percentagecolor = 'red';
+        }
+        
+
         // Display the pop-up
         popup.style.display = "block";
 
-        targetTransaction.textContent = "Target transaction for this quarter is "+Target;
-        percentTransaction.textContent = "Achieved " + percentage +"% of target transaction";
-        PopupHeader.textContent = "Total Transaction";
-        
+        targetTransaction.innerHTML = "Target transaction for this quarter is <span style='color: blue;'>"+Target;
+        percentTransaction.innerHTML = "Achieved <span style='color: " + percentagecolor + ";'>" + percentage + "%</span> of target transaction.";
+        PopupHeader.innerHTML = "Total Transaction";
 
+        // Extract transactionlabel and transactiondata from the PHP
+            const transactionlabel = transaction.labels;
+            const transactiondata = transaction.datasets;
+
+            // Initialize variables for overall highest and least values
+            let overallHighestTransactionCount = 0;
+            let overallLeastTransactionCount = Infinity;
+            let overallHighestTransactionDate = null;
+            let overallLeastTransactionDate = null;
+
+            // Iterate through the datasets
+            transactiondata.forEach(dataset => {
+                // Find the highest transaction count in the dataset
+                const highestTransactionCountInDataset = Math.max(...dataset.data);
+
+                // Find the least transaction count in the dataset
+                const leastTransactionCountInDataset = Math.min(...dataset.data);
+
+                // Check for the overall highest transaction count
+                if (highestTransactionCountInDataset > overallHighestTransactionCount) {
+                    overallHighestTransactionCount = highestTransactionCountInDataset;
+                    overallHighestTransactionDate = transactionlabel[dataset.data.indexOf(overallHighestTransactionCount)];
+                }
+
+                // Check for the overall least transaction count
+                if (leastTransactionCountInDataset < overallLeastTransactionCount) {
+                    overallLeastTransactionCount = leastTransactionCountInDataset;
+                    overallLeastTransactionDate = transactionlabel[dataset.data.indexOf(overallLeastTransactionCount)];
+                }
+            });
+
+
+        //Transaction type dataset
+    const transactionTypeData = <?php
+        $data = array();
+        for ($i = 0; $i < count($transactionType); $i++) {
+            $data[] = array('label' => $transactionType[$i], 'data' => $transactionTypecounts[$i]);
+        }
+        echo json_encode($data);
+        ?>;
+        if (transactionTypeData.length === 0) {
+            transactionTypeData.push({ label: 'No customer saved', data: 0 });
+        }
+
+    const maxtransactionTypeData= transactionTypeData.reduce((max, obj) => (obj.data > max.data ? obj : max), { data: -Infinity });
+    const maxData = maxtransactionTypeData.data;
+    const maxtransactionType = transactionTypeData.filter(obj => obj.data === maxData).map(obj => obj.label);
+    const minTransactionTypeData = transactionTypeData.reduce((min, obj) => (obj.data < min.data ? obj : min), { data: Infinity });
+    const minData = minTransactionTypeData.data;
+    const minTransactionType = transactionTypeData.filter(obj => obj.data === minData).map(obj => obj.label);
+
+    const customerTypeData = <?php
+        $data = array();
+        for ($i = 0; $i < count($customerTypetransaction); $i++) {
+            $data[] = array('label' => $customerTypetransaction[$i], 'data' => $customerTypecounttransaction[$i]);
+        }
+        echo json_encode($data);
+        ?>;
+        if (customerTypeData.length === 0) {
+            customerTypeData.push({ label: 'No customer saved', data: 0 });
+        }
+
+        const maxCustomerTypeData = customerTypeData.reduce((max, obj) => (obj.data >= max.data ? obj : max), { data: -Infinity });
+        const maxCustomerData = maxCustomerTypeData.data;
+        const maxCustomerTypes = customerTypeData.filter(obj => obj.data === maxCustomerData).map(obj => obj.label);
+        const minCustomerTypeData = customerTypeData.reduce((min, obj) => (obj.data <= min.data ? obj : min), { data: Infinity });
+        const minCustomerData = minCustomerTypeData.data;
+        const minCustomerType = customerTypeData.filter(obj => obj.data === minCustomerData).map(obj => obj.label);
+
+        const Province = {
+            data: province.datasets,
+            labels: province.labels,
+        };
+
+        // Check if the data array is empty
+        if (Province.data.length === 0) {
+            const defaultLabel = 'none';
+            const defaultData = 0;
+
+            mostCustomerProvince.innerHTML = "Provinces with the highest transactions: <span style='color:green;'>" + defaultLabel + "</span> having <span style='color: blue;'> " + defaultData + "</span> transaction/s.";
+            leastCustomerProvince.innerHTML = "Provinces with the least transactions: <span style='color:green;'>" + defaultLabel + "</span> having <span style='color: blue;'> " + defaultData + "</span> transaction/s.";
+        } else {
+            const tolerance = 0.0001;
+
+            const highestprovincedata = Math.max(...Province.data);
+            const leastprovincedata = Math.min(...Province.data);
+
+            const highestprovinces = [];
+            const leastprovinces = [];
+
+            Province.labels.forEach((label, index) => {
+                if (Math.abs(Province.data[index] - highestprovincedata) < tolerance) {
+                    highestprovinces.push(label);
+                }
+
+                if (Math.abs(Province.data[index] - leastprovincedata) < tolerance) {
+                    leastprovinces.push(label);
+                }
+            });
+
+            mostCustomerProvince.innerHTML = "Provinces with the highest transactions: <span style='color:green;'>" + highestprovinces.join(', ') + "</span> having <span style='color: blue;'> " + highestprovincedata + "</span> transaction/s.";
+            leastCustomerProvince.innerHTML = "Provinces with the least transactions: <span style='color:green;'>" + leastprovinces.join(', ') + "</span> having <span style='color: blue;'> " + leastprovincedata + "</span> transaction/s.";
+        }
+
+
+
+        // Display the results in your HTML elements
+        highest.innerHTML = "Highest transaction: <span style='color: red;'>" + overallHighestTransactionDate + "</span> with <span style='color: blue;'> " + overallHighestTransactionCount + "</span> transaction/s.";
+        least.innerHTML = "Least transaction: <span style='color: red;'>" + overallLeastTransactionDate + "</span> with <span style='color: blue;'> " + overallLeastTransactionCount + "</span> transaction/s.";
+        mostTransactionType.innerHTML = "Highest transaction type:  <span style='color:green;'>"+ maxtransactionType.join(', ') + "</span> having  <span style='color: blue;'> " + maxData + "</span> transaction/s.";
+        leastTransactionType.innerHTML = "Least transaction type:   <span style='color:green;'>"+ minTransactionType.join(', ') + "</span> having  <span style='color: blue;'> " + minData + "</span> transaction/s.";
+        mostCustomerType.innerHTML = "Highest customer type(s): <span style='color:green;'>" + maxCustomerTypes.join(', ') + "</span> having <span style='color: blue;'> " + maxCustomerData + "</span> transaction/s.";
+        leastCustomerType.innerHTML = "Least customer type: <span style='color:green;'>" + minCustomerType.join(', ') + "</span> having <span style='color: blue;'> " + minCustomerData + "</span> transaction/s.";
     });
 
     closePopup.addEventListener("click", () => {
@@ -1450,7 +1733,7 @@ $targetIncome =
                 const sumQuarter3 = quarter3.reduce((acc, value) => acc + value, 0);
                 const sumQuarter4 = quarter4.reduce((acc, value) => acc + value, 0);
 
-            
+            // Get the appropriate target value based on the current month
             const targetincomeValue = getTargetValue(currentMonth);
 
             // Function to determine the target value based on the current month
@@ -1524,12 +1807,138 @@ $targetIncome =
 
                 // Call the updateBackgroundColor function with the initial total/target value
                 updateBackgroundColor(totalValue);
+                //percentage text color
+                let percentagecolor = '';
+                if (percentage >= 76 && percentage <= 100) {
+                    percentagecolor = 'green';
+                } else if (percentage >= 51 && percentage <= 75) {
+                    percentagecolor = 'yellow';
+                } else if (percentage >= 26 && percentage <= 50) {
+                    percentagecolor = 'orange';
+                } else {
+                    percentagecolor = 'red';
+                }
+
+
                 // Display the pop-up
                 popup.style.display = "block";
 
-                targetTransaction.textContent = "Target income for this quarter is "+Target;
-                percentTransaction.textContent = "Achieved " + percentage +"% of target income";
-                PopupHeader.textContent = "Total Income";
+                targetTransaction.innerHTML = "Target income for this quarter is <span style='color: blue;'>"+Target;
+                percentTransaction.innerHTML = "Achieved <span style='color: " + percentagecolor + ";'>" + percentage + "%</span> of target income";
+                PopupHeader.innerHTML = "Total Income";
+
+                
+                // Extract incomelabel and incomedata from the PHP data
+                const incomelabel = income.labels;
+                const incomedata = income.datasets;
+
+                // Initialize variables for overall highest and least values
+                let overallHighestIncome = 0;
+                let overallLeastIncome = Infinity;
+                let overallHighestIncomeDate = null;
+                let overallLeastIncomeDate = null;
+
+                // Iterate through the datasets
+                incomedata.forEach(dataset => {
+                    // Find the highest income in the dataset
+                    const highestIncomeInDataset = Math.max(...dataset.data);
+
+                    // Find the least income in the dataset
+                    const leastIncomeInDataset = Math.min(...dataset.data);
+
+                    // Check for the overall highest income
+                    if (highestIncomeInDataset > overallHighestIncome) {
+                        overallHighestIncome = highestIncomeInDataset;
+                        overallHighestIncomeDate = incomelabel[dataset.data.indexOf(overallHighestIncome)];
+                    }
+
+                    // Check for the overall least income
+                    if (leastIncomeInDataset < overallLeastIncome) {
+                        overallLeastIncome = leastIncomeInDataset;
+                        overallLeastIncomeDate = incomelabel[dataset.data.indexOf(overallLeastIncome)];
+                    }
+                });
+
+        const transactionTypeData = <?php
+        $data = array();
+        for ($i = 0; $i < count($transactionTypeincome); $i++) {
+            $data[] = array('label' => $transactionTypeincome[$i], 'data' => $transactionTypesumincome[$i]);
+        }
+        echo json_encode($data);
+        ?>;
+        if (transactionTypeData.length === 0) {
+            transactionTypeData.push({ label: 'No customer saved', data: 0 });
+        }
+
+
+    const maxtransactionTypeData= transactionTypeData.reduce((max, obj) => (obj.data > max.data ? obj : max), { data: -Infinity });
+    const maxData = maxtransactionTypeData.data;
+    const maxtransactionType = transactionTypeData.filter(obj => obj.data === maxData).map(obj => obj.label);
+    const minTransactionTypeData = transactionTypeData.reduce((min, obj) => (obj.data < min.data ? obj : min), { data: Infinity });
+    const minData = minTransactionTypeData.data;
+    const minTransactionType = transactionTypeData.filter(obj => obj.data === minData).map(obj => obj.label);
+    
+        const customerTypeData = <?php
+        $data = array();
+        for ($i = 0; $i < count($customerTypeincome); $i++) {
+            $data[] = array('label' => $customerTypeincome[$i], 'data' => $customerTypecountincome[$i]);
+        }
+        echo json_encode($data);
+        ?>;
+        if (customerTypeData.length === 0) {
+            customerTypeData.push({ label: 'No customer saved', data: 0 });
+        }
+
+
+        const maxCustomerTypeData = customerTypeData.reduce((max, obj) => (obj.data >= max.data ? obj : max), { data: -Infinity });
+        const maxCustomerData = maxCustomerTypeData.data;
+        const maxCustomerTypes = customerTypeData.filter(obj => obj.data === maxCustomerData).map(obj => obj.label);
+        const minCustomerTypeData = customerTypeData.reduce((min, obj) => (obj.data <= min.data ? obj : min), { data: Infinity });
+        const minCustomerData = minCustomerTypeData.data;
+        const minCustomerType = customerTypeData.filter(obj => obj.data === minCustomerData).map(obj => obj.label);
+
+        const Province = {
+            data: provinceincome.datasets,
+            labels: provinceincome.labels,
+        };
+
+        // Check if the data array is empty
+        if (Province.data.length === 0) {
+            const defaultLabel = 'none';
+            const defaultData = 0;
+
+            mostCustomerProvince.innerHTML = "Provinces with the highest income: <span style='color:green;'>" + defaultLabel + "</span> having <span style='color: blue;'> " + Number(defaultData).toFixed(2)  + "</span> total income.";
+            leastCustomerProvince.innerHTML = "Provinces with the least income: <span style='color:green;'>" + defaultLabel + "</span> having <span style='color: blue;'> " + Number(defaultData).toFixed(2)  + "</span> total income.";
+        } else {
+            const tolerance = 0.0001;
+
+            const highestprovincedata = Math.max(...Province.data);
+            const leastprovincedata = Math.min(...Province.data);
+
+            const highestprovinces = [];
+            const leastprovinces = [];
+
+            Province.labels.forEach((label, index) => {
+                if (Math.abs(Province.data[index] - highestprovincedata) < tolerance) {
+                    highestprovinces.push(label);
+                }
+
+                if (Math.abs(Province.data[index] - leastprovincedata) < tolerance) {
+                    leastprovinces.push(label);
+                }
+            });
+
+            mostCustomerProvince.innerHTML = "Provinces with the highest income: <span style='color:green;'>" + highestprovinces.join(', ') + "</span> having <span style='color: blue;'> " + Number(highestprovincedata).toFixed(2)  + "</span> total income.";
+            leastCustomerProvince.innerHTML = "Provinces with the least income: <span style='color:green;'>" + leastprovinces.join(', ') + "</span> having <span style='color: blue;'> " + Number(leastprovincedata).toFixed(2)  + "</span> total income.";
+        }
+
+        highest.innerHTML = "Highest income: <span style='color: red;'>" + overallHighestIncomeDate + "</span> with <span style='color: blue;'> " + Number(overallHighestIncome).toFixed(2) + "</span>.";
+        least.innerHTML = "Least income: <span style='color: red;'>" + overallLeastIncomeDate + "</span> with <span style='color: blue;'> " + Number(overallLeastIncome).toFixed(2) + "</span>.";
+        mostTransactionType.innerHTML = "Highest transaction type:  <span style='color:green;'>"+ maxtransactionType.join(', ') + "</span> having  <span style='color: blue;'> " + Number(maxData).toFixed(2) +"</span> total income.";
+        leastTransactionType.innerHTML = "Least transaction type:   <span style='color:green;'>"+ minTransactionType.join(', ') + "</span> having  <span style='color: blue;'> " + Number(minData ).toFixed(2)+  "</span> total income.";
+        mostCustomerType.innerHTML = "Highest customer type(s): <span style='color:green;'>" + maxCustomerTypes.join(', ') + "</span> having <span style='color: blue;'> " + Number(maxCustomerData).toFixed(2) + "</span> total income.";
+        leastCustomerType.innerHTML = "Least customer type: <span style='color:green;'>" + minCustomerType.join(', ') + "</span> having <span style='color: blue;'> " + Number(minCustomerData).toFixed(2) + "</span> total income.";
+        
 
     });
 
@@ -2438,185 +2847,7 @@ $targetIncome =
             // dashboard design end
         </script>
 
-        <script src="https://code.highcharts.com/maps/highmaps.js"></script>
-        <script src="https://code.highcharts.com/maps/modules/exporting.js"></script>
-        <div id="container"></div>
-        <script>
-            (async () => {
-
-                const topology = await fetch(
-                    'https://code.highcharts.com/mapdata/countries/ph/ph-all.topo.json'
-                ).then(response => response.json());
-
-                // Prepare demo data. The data is joined to map using value of 'hc-key'
-                // property by default. See API docs for 'joinBy' for more info on linking
-                // data and map.
-                const data = [
-                    ['ph-mn', 10],
-                    ['ph-4218', 11],
-                    ['ph-tt', 12],
-                    ['ph-bo', 13],
-                    ['ph-cb', 14],
-                    ['ph-bs', 15],
-                    ['ph-2603', 16],
-                    ['ph-su', 17],
-                    ['ph-aq', 18],
-                    ['ph-pl', 19],
-                    ['ph-ro', 20],
-                    ['ph-al', 21],
-                    ['ph-cs', 22],
-                    ['ph-6999', 23],
-                    ['ph-bn', 24],
-                    ['ph-cg', 25],
-                    ['ph-pn', 26],
-                    ['ph-bt', 27],
-                    ['ph-mc', 28],
-                    ['ph-qz', 29],
-                    ['ph-es', 30],
-                    ['ph-le', 31],
-                    ['ph-sm', 32],
-                    ['ph-ns', 33],
-                    ['ph-cm', 34],
-                    ['ph-di', 35],
-                    ['ph-ds', 36],
-                    ['ph-6457', 37],
-                    ['ph-6985', 38],
-                    ['ph-ii', 39],
-                    ['ph-7017', 40],
-                    ['ph-7021', 41],
-                    ['ph-lg', 42],
-                    ['ph-ri', 43],
-                    ['ph-ln', 44],
-                    ['ph-6991', 45],
-                    ['ph-ls', 46],
-                    ['ph-nc', 47],
-                    ['ph-mg', 48],
-                    ['ph-sk', 49],
-                    ['ph-sc', 50],
-                    ['ph-sg', 51],
-                    ['ph-an', 52],
-                    ['ph-ss', 53],
-                    ['ph-as', 54],
-                    ['ph-do', 55],
-                    ['ph-dv', 56],
-                    ['ph-bk', 57],
-                    ['ph-cl', 58],
-                    ['ph-6983', 59],
-                    ['ph-6984', 60],
-                    ['ph-6987', 61],
-                    ['ph-6986', 62],
-                    ['ph-6988', 63],
-                    ['ph-6989', 64],
-                    ['ph-6990', 65],
-                    ['ph-6992', 66],
-                    ['ph-6995', 67],
-                    ['ph-6996', 68],
-                    ['ph-6997', 69],
-                    ['ph-6998', 70],
-                    ['ph-nv', 71],
-                    ['ph-7020', 72],
-                    ['ph-7018', 73],
-                    ['ph-7022', 74],
-                    ['ph-1852', 75],
-                    ['ph-7000', 76],
-                    ['ph-7001', 77],
-                    ['ph-7002', 78],
-                    ['ph-7003', 79],
-                    ['ph-7004', 80],
-                    ['ph-que', 81],
-                    ['ph-7007', 82],
-                    ['ph-7008', 83],
-                    ['ph-7009', 84],
-                    ['ph-7010', 85],
-                    ['ph-7011', 86],
-                    ['ph-7012', 87],
-                    ['ph-7013', 88],
-                    ['ph-7014', 89],
-                    ['ph-7015', 90],
-                    ['ph-7016', 91],
-                    ['ph-7019', 92],
-                    ['ph-6456', 93],
-                    ['ph-zs', 94],
-                    ['ph-nd', 95],
-                    ['ph-zn', 96],
-                    ['ph-md', 97],
-                    ['ph-ab', 98],
-                    ['ph-2658', 99],
-                    ['ph-ap', 100],
-                    ['ph-au', 101],
-                    ['ph-ib', 102],
-                    ['ph-if', 103],
-                    ['ph-mt', 104],
-                    ['ph-qr', 105],
-                    ['ph-ne', 106],
-                    ['ph-pm', 107],
-                    ['ph-ba', 108],
-                    ['ph-bg', 109],
-                    ['ph-zm', 110],
-                    ['ph-cv', 111],
-                    ['ph-bu', 112],
-                    ['ph-mr', 113],
-                    ['ph-sq', 114],
-                    ['ph-gu', 115],
-                    ['ph-ct', 116],
-                    ['ph-mb', 117],
-                    ['ph-mq', 118],
-                    ['ph-bi', 119],
-                    ['PH-SL', 150],
-                    ['ph-nr', 121],
-                    ['ph-ak', 122],
-                    ['ph-cp', 123],
-                    ['ph-cn', 124],
-                    ['ph-sr', 125],
-                    ['ph-in', 126],
-                    ['ph-is', 127],
-                    ['ph-tr', 128],
-                    ['ph-lu', 129]
-                ];
-
-                // Create the chart
-                Highcharts.mapChart('container', {
-                    chart: {
-                        map: topology
-                    },
-
-                    title: {
-                        text: 'Highcharts Maps basic demo'
-                    },
-
-                    subtitle: {
-                        text: 'Source map: <a href="http://code.highcharts.com/mapdata/countries/ph/ph-all.topo.json">Philippines</a>'
-                    },
-
-                    mapNavigation: {
-                        enabled: true,
-                        buttonOptions: {
-                            verticalAlign: 'bottom'
-                        }
-                    },
-
-                    colorAxis: {
-                        min: 0
-                    },
-
-                    series: [{
-                        data: data,
-                        name: 'Random data',
-                        states: {
-                            hover: {
-                                color: '#BADA55'
-                            }
-                        },
-                        dataLabels: {
-                            enabled: true,
-                            format: '{point.name}'
-                        }
-                    }]
-                });
-
-            })();
-        </script>
-
+        
         <script>
             function downloadPDF() {
 
