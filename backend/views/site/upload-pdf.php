@@ -30,7 +30,7 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
     }
 
     .card-header {
-        background-color: #007bff;
+        background-color: #234d90;
         color: white;
         text-align: center;
         padding: 1.5rem;
@@ -92,7 +92,7 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
 
             <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data', 'class' => 'mt-1']]); ?>
 
-            <?= $form->field($model, 'pdfFile[]')->fileInput(['multiple' => true, 'class' => 'form-control-file'])->label('Select PDF Files') ?>
+            <?= $form->field($model, 'pdfFile[]')->fileInput(['id' => 'your-file-input-id','multiple' => true, 'class' => 'form-control-file'])->label('Select PDF Files') ?>
             <br>
             <?= $form->field($model, 'selectedRoles')->checkboxList(
                 ArrayHelper::map(Yii::$app->authManager->getRoles(), 'name', 'name'),
@@ -115,8 +115,13 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
 $js = <<< JS
 $(document).ready(function() {
     $('#send-email-button').click(function() {
-        $('#sending-email-message').hide();
-        $('#sending-email-message').show();
+        var fileInput = $('#your-file-input-id'); // Replace 'your-file-input-id' with the actual ID of your file input
+        if (fileInput[0].files.length > 0) {
+            $('#sending-email-message').hide();
+            $('#sending-email-message').show();
+        } else {
+            $('#sending-email-message').hide();
+        }
     });
 });
 JS;
