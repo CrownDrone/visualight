@@ -8,7 +8,50 @@ use yii\web\View;
 
 ?>
 
+<meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <style>
+
+
+        #prediction-form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: static;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        input {
+            width: 80%;
+            padding: 10px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
         .chart-container {
             margin: 0.5rem;
             padding-bottom: 1rem;
@@ -31,6 +74,26 @@ use yii\web\View;
         body.dark-mode .chart-container canvas {
             background-color: black;
         }
+        #toggleButton{
+            background-color: #0073D8;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-left: 1000px;
+            margin-bottom:10px;
+            font-weight: bold;
+            position:static;
+            font-size: 20px;
+            display:none;
+
+        }
+
+        #toggleButton:hover {
+            background-color: #6BBAFF;
+        }
 
 
         @media (max-width: 900px) {
@@ -46,20 +109,69 @@ use yii\web\View;
     </style>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js" integrity="sha512-JPcRR8yFa8mmCsfrw4TNte1ZvF1e3+1SdGMslZvmrzDYxS69J7J49vkFL8u6u8PlPJK+H3voElBtUCzaXj+6ig==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
    <div class="prediction-index">
         <h1><?= Html::encode($this->title) ?></h1>
+    </div>    
 
-        <form id="prediction-form">
-            <label for="years">Enter the number of years for predictions:</label>
-            <input type="number" id="years" name="years" step="0.01" value="">
-            <button type="submit">Compute Predictions</button>
-        </form>
+    <button id="toggleButton">—</button>
+    
+    <form id="prediction-form">
+    <label for="years">Enter the number of years for predictions:</label>
+    <input type="number" id="years" name="years" step="0.01" value="">
+    <button type="submit">Compute Predictions</button>
+</form>
+<script>
+    window.onscroll = function() { scrollFunction(); };
+    
+    function scrollFunction() {
+        var form = document.getElementById("prediction-form");
+        var toggleButton = document.getElementById("toggleButton");
+
+        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+            form.style.position = "fixed";
+            form.style.top = "20px"; // Add "px" for the top value
+            form.style.width = "77%";
+            toggleButton.style.display = "block";
+            toggleButton.style.position = "fixed";
+            toggleButton.style.top = "10px"; // Add "px" for the top value
+            toggleButton.style.right = "20px"; // Adjust this value based on your design
+            toggleButton.style.zIndex = "1000";
+            
+
+            if (toggleButton.innerHTML == "+") {
+                toggleButton.innerHTML = "+";
+            }
+
+        } else {
+            form.style.position = "static";
+            form.style.top = "20px"; // Adjust this value based on your design
+            form.style.width = "100%";
+            toggleButton.style.display = "none";
+
+            if (toggleButton.innerHTML == "+") {
+                toggleButton.innerHTML = "+";
+            }
+            
+        }
+    }
+
+    var form = document.getElementById("prediction-form");
+    var toggleButton = document.getElementById("toggleButton");
+
+    toggleButton.addEventListener("click", function() {
+        form.style.display = (form.style.display === "none") ? "block" : "none";
+        toggleButton.innerHTML = (form.style.display === "none") ? "+" : "—";
+
+    });
+</script>
+
 
         
+<br>        
 <!-- Total -->
-<h3> Total Transaction Counts per Month </h3>
+<h3> Transaction Counts per Month </h3>
 
 <div class="chart-container">
 <p style="display: flex; justify-content: center; align-items: center;"> National Metrology Division </p>
@@ -72,13 +184,14 @@ use yii\web\View;
 </div>
 
 <div class="chart-container">
-    <canvas id="transaction-chart" style="width: 65rem; height: 20rem;" ></canvas>
+    <p style="display: flex; justify-content: center; align-items: center;"> Total Transaction </p>
+    <canvas id="transaction-chart" style="width: 65rem; height: 20rem;" > </canvas>
 </div>
 <br>
 
 
-
-<h3> Total Transaction Counts  </h3>
+<br>
+<h3> General Total Transaction Counts  </h3>
 <div class="chart-container">
 <p style="display: flex; justify-content: center; align-items: center;"> National Metrology Division </p>
     <canvas id="transaction-chart5" style="width: 30rem; height: 20rem;" ></canvas>
@@ -93,7 +206,7 @@ use yii\web\View;
 </div>
 <br>
 
-
+<br>
 <h3> Total Income per Month </h3>
 <div class="chart-container">
     <p style="display: flex; justify-content: center; align-items: center;"> National Metrology Division </p>
@@ -110,7 +223,7 @@ use yii\web\View;
 <br> 
 
 
-
+<br>
 <h3> Total Income</h3>
 <div class="chart-container">
     <p style="display: flex; justify-content: center; align-items: center;"> National Metrology Division </p>
@@ -298,8 +411,8 @@ $transactions6 = $chartDb->createCommand($sql6)->queryAll();
             datasets: [{
                 label: 'Predicted Transaction Total per Month',
                 data: [],
-                borderColor: 'rgb(0, 115, 230)',
-                backgroundColor: 'rgb(0, 115, 230)',
+                borderColor: 'rgb(6, 214, 160)', //rgb(0, 115, 230)
+                backgroundColor: 'rgb(6, 214, 160)',
                 fill: true
             }]
         },
@@ -342,7 +455,7 @@ $transactions6 = $chartDb->createCommand($sql6)->queryAll();
             labels: ['Predicted Total Transaction ', 'Current Total Transaction'],
             datasets: [{
                 data: [],
-                backgroundColor: ['rgb(0, 115, 230)', 'rgb(255, 119, 51)'],
+                backgroundColor: ['rgb(6, 214, 160)', 'rgb(6, 214, 160, 0.6)'],
                 borderWidth: 1
             }]
         },
@@ -350,9 +463,19 @@ $transactions6 = $chartDb->createCommand($sql6)->queryAll();
             plugins: {
                 legend: {
                     display: true,
+                },
+                datalabels: {
+                color: 'black', // Set the text color to black
+                fontSize: 16, // Set the font size for labels
+                formatter: function(value, context) {
+                    // Format the value with commas
+                    return value.toLocaleString();
                 }
             }
-        }
+            }
+        },
+            plugins: [ChartDataLabels]
+
     });
 
 function updateChart1(data) {
@@ -443,7 +566,7 @@ function updateChart1(data) {
             datasets: [{
                 label: 'Predicted Total Income per Month',
                 data: [],
-                borderColor: 'rgb(0, 115, 230)',
+                borderColor: 'rgb(6, 214, 160)',
                 backgroundColor: 'rgba(0, 0, 0, 0)',
                 fill: true,
                 cubicInterpolationMode: 'monotone'
@@ -468,7 +591,7 @@ function updateChart1(data) {
             plugins: {
                 legend: {
                     display: true, // Display the legend
-                }
+                },
             }
         }
     });
@@ -488,7 +611,7 @@ function updateChart1(data) {
             labels: ['Predicted Total Income ', 'Current Total Income '],
             datasets: [{
                 data: [],
-                backgroundColor: ['rgb(0, 115, 230)', 'rgb(255, 119, 51)'],
+                backgroundColor: ['rgb(6, 214, 160)', 'rgb(6, 214, 160,0.5)'],
                 borderWidth: 1
             }]
         },
@@ -496,9 +619,19 @@ function updateChart1(data) {
             plugins: {
                 legend: {
                     display: true,
+                },
+                 datalabels: {
+                color: 'black', // Set the text color to black
+                fontSize: 16, // Set the font size for labels
+                formatter: function(value, context) {
+                    // Format the value with commas
+                    return value.toLocaleString();
                 }
             }
-        }
+            }
+        },
+        plugins: [ChartDataLabels]
+
     });
 
 function updateChart3(data) {
@@ -605,8 +738,8 @@ function updateChart3(data) {
             datasets: [{
                 label: 'Predicted Transaction Total of NMD per Month',
                 data: [],
-                borderColor: 'rgb(6, 214, 160)',
-                backgroundColor: 'rgb(6, 214, 160)',
+                borderColor: 'rgb(0, 115, 230)',
+                backgroundColor: 'rgb(0, 115, 230)',
                 fill: true
             }]
         },
@@ -649,7 +782,7 @@ function updateChart3(data) {
             labels: ['Predicted Total Transaction NMD', 'Current Total Transaction NMD'],
             datasets: [{
                 data: [],
-                backgroundColor: ['rgb(6, 214, 160)', 'rgb(255, 214, 51)'],
+                backgroundColor: ['rgb(0, 115, 230)', 'rgb(0, 115, 230,0.7)'],
                 borderWidth: 1
             }]
         },
@@ -657,9 +790,17 @@ function updateChart3(data) {
             plugins: {
                 legend: {
                     display: true,
+                },
+                datalabels: {
+                color: 'black', // Set the text color to white
+                formatter: function(value, context) {
+                    // Format the value with commas
+                    return value.toLocaleString();
                 }
             }
-        }
+            }
+        },
+        plugins:[ChartDataLabels]
     });
 
 function updateChart5(data) {
@@ -678,6 +819,7 @@ function updateChart5(data) {
         <?php foreach ($transactions3 as $transaction) { ?>
             dataPoints.push([<?php echo strtotime($transaction['month_date']) * 1000; ?>, <?php echo $transaction['paid_and_pending_count']; ?>]);
         <?php } ?>
+
 
         // Perform linear regression using a simple linear model (y = mx + b)
         function linearRegression(data) {
@@ -751,7 +893,7 @@ function updateChart5(data) {
             datasets: [{
                 label: 'Predicted NMD Total Income per Month',
                 data: [],
-                borderColor: 'rgb(6, 214, 160)',
+                borderColor: 'rgb(0, 115, 230)',
                 backgroundColor: 'rgb(255, 255, 255)',
                 fill: true,
                 cubicInterpolationMode: 'monotone'
@@ -796,7 +938,7 @@ function updateChart5(data) {
             labels: ['Predicted Total Income NMD', 'Current Total Income  NMD'],
             datasets: [{
                 data: [],
-                backgroundColor: ['rgb(6, 214, 160)', 'rgb(255, 214, 51)'],
+                backgroundColor: ['rgb(0, 115, 230)', 'rgb(0, 115, 230,0.7)'],
                 borderWidth: 1
             }]
         },
@@ -804,9 +946,18 @@ function updateChart5(data) {
             plugins: {
                 legend: {
                     display: true,
+                },
+                 datalabels: {
+                color: 'black', // Set the text color to white
+                formatter: function(value, context) {
+                    // Format the value with commas
+                    return value.toLocaleString();
                 }
             }
-        }
+            }
+        },
+        plugins: [ChartDataLabels]
+
     });
 
 function updateChart7(data) {
@@ -914,8 +1065,8 @@ function updateChart7(data) {
             datasets: [{
                 label: 'Predicted Transaction Total of STD per Month',
                 data: [],
-                borderColor: 'rgb(114, 9, 183)',
-                backgroundColor: 'rgb(114, 9, 183)',
+                borderColor: 'rgb(255, 214, 51)',
+                backgroundColor: 'rgb(255, 214, 51)',
                 fill: true
             }]
         },
@@ -958,7 +1109,7 @@ function updateChart7(data) {
             labels: ['Predicted Total Transaction STD', 'Current Total Transaction STD'],
             datasets: [{
                 data: [],
-                backgroundColor: ['rgb(114, 9, 183)', 'rgb(255, 77, 166)'],
+                backgroundColor: ['rgb(255, 214, 51)', 'rgb(255, 214, 51,0.7)'],
                 borderWidth: 1
             }]
         },
@@ -966,9 +1117,18 @@ function updateChart7(data) {
             plugins: {
                 legend: {
                     display: true,
+                },
+                datalabels: {
+                color: 'black', // Set the text color to white
+                fontSize: 86, // Set the font size for labels
+                formatter: function(value, context) {
+                    // Format the value with commas
+                    return value.toLocaleString();
                 }
             }
-        }
+            }
+        },
+         plugins:[ChartDataLabels]
     });
 
 function updateChart9(data) {
@@ -1060,7 +1220,7 @@ function updateChart9(data) {
             datasets: [{
                 label: 'Predicted STD Total Income per Month',
                 data: [],
-                borderColor: 'rgb(114, 9, 183)',
+                borderColor: 'rgb(255, 214, 51)',
                 backgroundColor: 'rgba(0, 0, 0, 0)',
                 fill: true,
                 cubicInterpolationMode: 'monotone'
@@ -1105,7 +1265,7 @@ function updateChart9(data) {
             labels: ['Predicted Total Income STD', 'Current Total Income STD'],
             datasets: [{
                 data: [],
-                backgroundColor: ['rgb(114, 9, 183)', 'rgb(255, 77, 166)'],
+                backgroundColor: ['rgb(255, 214, 51)', 'rgb(255, 214, 51, 0.7)'],
                 borderWidth: 1
             }]
         },
@@ -1113,9 +1273,19 @@ function updateChart9(data) {
             plugins: {
                 legend: {
                     display: true,
+                },
+                datalabels: {
+                color: 'black', // Set the text color to white
+                fontSize: 86, // Set the font size for labels
+                formatter: function(value, context) {
+                    // Format the value with commas
+                    return value.toLocaleString();
                 }
             }
-        }
+            }
+        },
+        plugins: [ChartDataLabels]
+
     });
 
 function updateChart11(data) {
