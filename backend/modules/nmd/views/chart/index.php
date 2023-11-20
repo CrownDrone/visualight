@@ -1089,8 +1089,8 @@ foreach ($addressDatatransaction as $customeraddress) {
     //dito yung pag lalagay nung naka set na color
     foreach ($SalesperDiv['datasets'] as &$dataset) {
         $divisionName = $dataset['label'];
-        $dataset['backgroundColor'] = isset($divisionColors[$divisionName]['backgroundColor']) ? $divisionColors[$divisionName]['backgroundColor'] : '#EFF5FF'; // Default background color if division not found
-        $dataset['borderColor'] = isset($divisionColors[$divisionName]['borderColor']) ? $divisionColors[$divisionName]['borderColor'] : '#0362BA'; // Default border color if division not found
+        $dataset['backgroundColor'] = isset($divisionColors[$divisionName]['#70507c']) ? $divisionColors[$divisionName]['backgroundColor'] : '#bf60e2'; // Default background color if division not found
+        $dataset['borderColor'] = isset($divisionColors[$divisionName]['borderColor']) ? $divisionColors[$divisionName]['borderColor'] : '#2b6f73'; // Default border color if division not found
         // $dataset['borderWidth'] = isset($divisionColors[$divisionName]['borderWidth']) ? $divisionColors[$divisionName]['borderWidth'] : '#0362BA';
     }
 

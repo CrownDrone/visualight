@@ -60,7 +60,7 @@ $this->title = '';
 
         .aveTransactionDiv,
         .aveSalesDiv {
-            background-color: #B526C2;
+            background-color: #ff8101;
             color: white;
             width: 220px;
             height: 130px;
@@ -74,7 +74,7 @@ $this->title = '';
         }
 
         .aveTransactionDiv {
-            background-color: #11A34C;
+            background-color: #3499ff;
             /* Updated background color for .aveTransactionDiv */
         }
 
@@ -166,7 +166,7 @@ $this->title = '';
             width: 30%;
             height: 7.875rem;
             border-radius: .635rem;
-            background: #7209b7;
+            background: #0073e6;
             color: #FFF;
             font-family: Poppins;
             font-size: 1rem;
@@ -1070,7 +1070,7 @@ $this->title = '';
     //setting default colors for each department
     $divisionColors = [
         'Standard and Testing Division' => [
-            'backgroundColor' => '#7209b7',
+            'backgroundColor' => '#19c4e6',
             'borderWidth' => 2,
         ],
     ];
@@ -1078,14 +1078,14 @@ $this->title = '';
     //dito yung pag lalagay nung naka set na color
     foreach ($SalesperDiv['datasets'] as &$dataset) {
         $divisionName = $dataset['label'];
-        $dataset['backgroundColor'] = isset($divisionColors[$divisionName]['backgroundColor']) ? $divisionColors[$divisionName]['backgroundColor'] : '#EFF5FF'; // Default background color if division not found
+        $dataset['backgroundColor'] = isset($divisionColors[$divisionName]['#ff9a34']) ? $divisionColors[$divisionName]['backgroundColor'] : '#ff9a34'; // Default background color if division not found
         $dataset['borderColor'] = isset($divisionColors[$divisionName]['borderColor']) ? $divisionColors[$divisionName]['borderColor'] : '#0362BA'; // Default border color if division not found
         // $dataset['borderWidth'] = isset($divisionColors[$divisionName]['borderWidth']) ? $divisionColors[$divisionName]['borderWidth'] : '#0362BA';
     }
 
     foreach ($TransactionperDiv['datasets'] as &$dataset) {
         $divisionName = $dataset['label'];
-        $dataset['backgroundColor'] = isset($divisionColors[$divisionName]['backgroundColor']) ? $divisionColors[$divisionName]['backgroundColor'] : '#EFF5FF'; // Default background color if division not found
+        $dataset['backgroundColor'] = isset($divisionColors[$divisionName]['#3499ff']) ? $divisionColors[$divisionName]['backgroundColor'] : '#3499ff'; // Default background color if division not found
         $dataset['borderColor'] = isset($divisionColors[$divisionName]['borderColor']) ? $divisionColors[$divisionName]['borderColor'] : '#0362BA'; // Default border color if division not found
         // $dataset['borderWidth'] = isset($divisionColors[$divisionName]['borderWidth']) ? $divisionColors[$divisionName]['borderWidth'] : '#0362BA';
     }
