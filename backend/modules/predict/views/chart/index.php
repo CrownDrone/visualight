@@ -411,8 +411,8 @@ $transactions6 = $chartDb->createCommand($sql6)->queryAll();
             datasets: [{
                 label: 'Predicted Transaction Total per Month',
                 data: [],
-                borderColor: 'rgb(153, 102, 255)', //rgb(0, 115, 230)
-                backgroundColor: 'rgb(153, 102, 255)',
+                borderColor: 'rgb(6, 214, 160)', //rgb(0, 115, 230)
+                backgroundColor: 'rgb(6, 214, 160)',
                 fill: true
             }]
         },
@@ -455,7 +455,7 @@ $transactions6 = $chartDb->createCommand($sql6)->queryAll();
             labels: ['Predicted Total Transaction ', 'Current Total Transaction'],
             datasets: [{
                 data: [],
-                backgroundColor: ['rgb(153, 102, 255)', 'rgb(153, 102, 255,0.7)'],
+                backgroundColor: ['rgb(6, 214, 160)', 'rgb(6, 214, 160, 0.6)'],
                 borderWidth: 1
             }]
         },
@@ -566,7 +566,7 @@ function updateChart1(data) {
             datasets: [{
                 label: 'Predicted Total Income per Month',
                 data: [],
-                borderColor: 'rgb(153, 102, 255)',
+                borderColor: 'rgb(6, 214, 160)',
                 backgroundColor: 'rgba(0, 0, 0, 0)',
                 fill: true,
                 cubicInterpolationMode: 'monotone'
@@ -611,7 +611,7 @@ function updateChart1(data) {
             labels: ['Predicted Total Income ', 'Current Total Income '],
             datasets: [{
                 data: [],
-                backgroundColor: ['rgb(153, 102, 255)', 'rgb(153, 102, 255,0.7)'],
+                backgroundColor: ['rgb(6, 214, 160)', 'rgb(6, 214, 160,0.5)'],
                 borderWidth: 1
             }]
         },
@@ -738,8 +738,8 @@ function updateChart3(data) {
             datasets: [{
                 label: 'Predicted Transaction Total of NMD per Month',
                 data: [],
-                borderColor: 'rgb(6, 214, 160)',
-                backgroundColor: 'rgb(6, 214, 160)',
+                borderColor: 'rgb(0, 115, 230)',
+                backgroundColor: 'rgb(0, 115, 230)',
                 fill: true
             }]
         },
@@ -782,7 +782,7 @@ function updateChart3(data) {
             labels: ['Predicted Total Transaction NMD', 'Current Total Transaction NMD'],
             datasets: [{
                 data: [],
-                backgroundColor: ['rgb(6, 214, 160)', 'rgb(6, 214, 160,0.7)'],
+                backgroundColor: ['rgb(0, 115, 230)', 'rgb(0, 115, 230,0.7)'],
                 borderWidth: 1
             }]
         },
@@ -893,7 +893,7 @@ function updateChart5(data) {
             datasets: [{
                 label: 'Predicted NMD Total Income per Month',
                 data: [],
-                borderColor: 'rgb(6, 214, 160)',
+                borderColor: 'rgb(0, 115, 230)',
                 backgroundColor: 'rgb(255, 255, 255)',
                 fill: true,
                 cubicInterpolationMode: 'monotone'
@@ -938,7 +938,7 @@ function updateChart5(data) {
             labels: ['Predicted Total Income NMD', 'Current Total Income  NMD'],
             datasets: [{
                 data: [],
-                backgroundColor: ['rgb(6, 214, 160)', 'rgb(6, 214, 160,0.7)'],
+                backgroundColor: ['rgb(0, 115, 230)', 'rgb(0, 115, 230,0.7)'],
                 borderWidth: 1
             }]
         },
@@ -1065,8 +1065,8 @@ function updateChart7(data) {
             datasets: [{
                 label: 'Predicted Transaction Total of STD per Month',
                 data: [],
-                borderColor: 'rgb(0,115,230,0.8)',
-                backgroundColor: 'rgb(0,115,230,0.8)',
+                borderColor: 'rgb(255, 214, 51)',
+                backgroundColor: 'rgb(255, 214, 51)',
                 fill: true
             }]
         },
@@ -1109,7 +1109,7 @@ function updateChart7(data) {
             labels: ['Predicted Total Transaction STD', 'Current Total Transaction STD'],
             datasets: [{
                 data: [],
-                backgroundColor: ['rgb(0,115,230,0.8)', 'rgb(0,115,230,0.5)'],
+                backgroundColor: ['rgb(255, 214, 51)', 'rgb(255, 214, 51,0.7)'],
                 borderWidth: 1
             }]
         },
@@ -1220,7 +1220,7 @@ function updateChart9(data) {
             datasets: [{
                 label: 'Predicted STD Total Income per Month',
                 data: [],
-                borderColor: 'rgb(0,115,230,0.8)',
+                borderColor: 'rgb(255, 214, 51)',
                 backgroundColor: 'rgba(0, 0, 0, 0)',
                 fill: true,
                 cubicInterpolationMode: 'monotone'
@@ -1265,7 +1265,7 @@ function updateChart9(data) {
             labels: ['Predicted Total Income STD', 'Current Total Income STD'],
             datasets: [{
                 data: [],
-                backgroundColor: ['rgb(0,115,230,0.8)', 'rgb(0,115,230,0.5)'],
+                backgroundColor: ['rgb(255, 214, 51)', 'rgb(255, 214, 51, 0.7)'],
                 borderWidth: 1
             }]
         },

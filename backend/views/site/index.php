@@ -1085,7 +1085,7 @@ $divisionColors = [
         'borderWidth' => 2,
     ],
     'Standards and Testing Division' => [
-        'backgroundColor' => '#0073E6',
+        'backgroundColor' => '#7209b7',
         'borderWidth' => 2,
     ],
 ];
@@ -1235,7 +1235,7 @@ $targetIncome = [
             <p id="valueIncrease"><?= $metdailytransincrease ?></p>
         </div>
     </div>
-    <div class="deptransaction" style="background-color:#0073E6;">
+    <div class="deptransaction" style="background-color:#7209b7;">
         <p>Standards and Testing</p>
         <div class="grid">
             <img src="/images/Pass Fail.png" alt="icon2">
