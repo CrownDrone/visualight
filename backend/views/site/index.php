@@ -21,7 +21,8 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
         display: flex;
         flex-direction: column;
         align-items: center;
-        box-shadow: -4px 4px 8px rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.15); /* Updated box-shadow */
+        box-shadow: -4px 4px 8px rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.15);
+        /* Updated box-shadow */
     }
 
     .average {
@@ -68,7 +69,8 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
         margin-bottom: 10px;
     }
 
-    #myChart { /* css sa radial */
+    #myChart {
+        /* css sa radial */
         position: absolute;
         left: 50px;
         top: 5px;
@@ -272,12 +274,13 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
     }
 
     .navigation-and-download {
-    justify-content: space-between;
-    align-items: center;
+        justify-content: space-between;
+        align-items: center;
     }
 
     .navigation {
-        margin-right: 10px; /* Adjust the margin as needed */
+        margin-right: 10px;
+        /* Adjust the margin as needed */
     }
 
 
@@ -655,70 +658,70 @@ Yii::$app->set('db', [ //reroute default connection
 
 $query = new Query();
 
-    $salesData = $query->select(['division', 'transaction_date', 'SUM(amount) as total_amount'])
-        ->from('transaction')
-        // ->where(['between', 'transaction_date', $fromDate, $toDate])
-        // ->where(['between', 'transaction_date', '2023-06-10', '2023-06-14'])
-        ->groupBy(['division', 'transaction_date'])
-        ->orderBy(['transaction_date' => SORT_DESC])
-        ->all();
+$salesData = $query->select(['division', 'transaction_date', 'SUM(amount) as total_amount'])
+    ->from('transaction')
+    // ->where(['between', 'transaction_date', $fromDate, $toDate])
+    // ->where(['between', 'transaction_date', '2023-06-10', '2023-06-14'])
+    ->groupBy(['division', 'transaction_date'])
+    ->orderBy(['transaction_date' => SORT_DESC])
+    ->all();
 
-    // Fetch transaction data from the database (depends on how many transaction in same date and same div)
-    $transactionData = $query->select(['division', 'transaction_date', 'COUNT(*) as transaction_count'])
-        ->from('transaction')
-        // ->where(['between', 'transaction_date', $fromDate, $toDate])
-        ->groupBy(['division', 'transaction_date'])
-        ->orderBy(['transaction_date' => SORT_DESC])
-        ->all();
+// Fetch transaction data from the database (depends on how many transaction in same date and same div)
+$transactionData = $query->select(['division', 'transaction_date', 'COUNT(*) as transaction_count'])
+    ->from('transaction')
+    // ->where(['between', 'transaction_date', $fromDate, $toDate])
+    ->groupBy(['division', 'transaction_date'])
+    ->orderBy(['transaction_date' => SORT_DESC])
+    ->all();
 
-    $TransactionperDiv = [
-        'labels' => [],
-        'datasets' => [],
-    ];
+$TransactionperDiv = [
+    'labels' => [],
+    'datasets' => [],
+];
 
 
-    $lotMapping = [
-        "1" => "National Metrology Division",
-        "2" => "Standards and Testing Division",
-    ];
+$lotMapping = [
+    "1" => "National Metrology Division",
+    "2" => "Standards and Testing Division",
+];
 
-    foreach ($transactionData as &$item) {
-        if (isset($item['division']) && isset($lotMapping[$item['division']])) {
-            $item['division'] = $lotMapping[$item['division']];
-        }
+foreach ($transactionData as &$item) {
+    if (isset($item['division']) && isset($lotMapping[$item['division']])) {
+        $item['division'] = $lotMapping[$item['division']];
+    }
+}
+
+foreach ($salesData as &$item) {
+    if (isset($item['division']) && isset($lotMapping[$item['division']])) {
+        $item['division'] = $lotMapping[$item['division']];
+    }
+}
+
+//getting data for the $TransactionperDiv
+foreach ($transactionData as $data) {
+    $divisionName = $data['division'];
+    $transactionDate = $data['transaction_date'];
+    $transactionCount = (int) $data['transaction_count'];
+
+    // Add unique dates to the labels array
+    if (!in_array($transactionDate, $TransactionperDiv['labels'])) {
+        $TransactionperDiv['labels'][] = $transactionDate;
     }
 
-    foreach ($salesData as &$item) {
-        if (isset($item['division']) && isset($lotMapping[$item['division']])) {
-            $item['division'] = $lotMapping[$item['division']];
-        }
+    // Find the index of the division in the datasets array
+    $divisionIndex = array_search($divisionName, array_column($TransactionperDiv['datasets'], 'label'));
+
+    if ($divisionIndex === false) {
+        // Add a new dataset for the division if not already present
+        $TransactionperDiv['datasets'][] = [
+            'label' => $divisionName,
+            'data' => [$transactionCount],
+        ];
+    } else {
+        // If the dataset already exists, add the transaction count to the existing data
+        $TransactionperDiv['datasets'][$divisionIndex]['data'][] = $transactionCount;
     }
-
-    //getting data for the $TransactionperDiv
-    foreach ($transactionData as $data) {
-        $divisionName = $data['division'];
-        $transactionDate = $data['transaction_date'];
-        $transactionCount = (int) $data['transaction_count'];
-
-        // Add unique dates to the labels array
-        if (!in_array($transactionDate, $TransactionperDiv['labels'])) {
-            $TransactionperDiv['labels'][] = $transactionDate;
-        }
-
-        // Find the index of the division in the datasets array
-        $divisionIndex = array_search($divisionName, array_column($TransactionperDiv['datasets'], 'label'));
-
-        if ($divisionIndex === false) {
-            // Add a new dataset for the division if not already present
-            $TransactionperDiv['datasets'][] = [
-                'label' => $divisionName,
-                'data' => [$transactionCount],
-            ];
-        } else {
-            // If the dataset already exists, add the transaction count to the existing data
-            $TransactionperDiv['datasets'][$divisionIndex]['data'][] = $transactionCount;
-        }
-    }
+}
 
 $addressData = $query->select(['address', 'COUNT(*) as customer_count'])
     ->from('customer')
@@ -756,25 +759,25 @@ $addressDatatransaction = (new \yii\db\Query())
     ->orderBy(['transaction_count' => SORT_DESC])
     ->all();
 
-    $provincestransaction = [
+$provincestransaction = [
     'labels' => [],
     'datasets' => [],
-    ];
+];
 
-    foreach ($addressDatatransaction as $customeraddress) {
-        $province = $customeraddress['address'];
-        $transactioncount = $customeraddress['transaction_count'];
+foreach ($addressDatatransaction as $customeraddress) {
+    $province = $customeraddress['address'];
+    $transactioncount = $customeraddress['transaction_count'];
 
-        // Check if the province is not already in labels
-        if (!in_array($province, $provincestransaction['labels'])) {
-            $provincestransaction['labels'][] = $province;
-        }
-
-        // Add the customer count directly to the datasets array
-        $provincestransaction['datasets'][] = $transactioncount;
+    // Check if the province is not already in labels
+    if (!in_array($province, $provincestransaction['labels'])) {
+        $provincestransaction['labels'][] = $province;
     }
 
-    $addressDataincome = (new \yii\db\Query())
+    // Add the customer count directly to the datasets array
+    $provincestransaction['datasets'][] = $transactioncount;
+}
+
+$addressDataincome = (new \yii\db\Query())
     ->select(['customer.address', 'SUM(amount) as total_amount'])
     ->from('transaction')
     ->join('INNER JOIN', 'customer', 'transaction.customer_id = customer.id')
@@ -784,23 +787,23 @@ $addressDatatransaction = (new \yii\db\Query())
     ->orderBy(['total_amount' => SORT_DESC])
     ->all();
 
-    $provincesincome = [
+$provincesincome = [
     'labels' => [],
     'datasets' => [],
-    ];
+];
 
-    foreach ($addressDataincome as $customeraddress) {
-        $province = $customeraddress['address'];
-        $transactioncount = $customeraddress['total_amount'];
+foreach ($addressDataincome as $customeraddress) {
+    $province = $customeraddress['address'];
+    $transactioncount = $customeraddress['total_amount'];
 
-        // Check if the province is not already in labels
-        if (!in_array($province, $provincesincome['labels'])) {
-            $provincesincome['labels'][] = $province;
-        }
-
-        // Add the customer count directly to the datasets array
-        $provincesincome['datasets'][] = $transactioncount;
+    // Check if the province is not already in labels
+    if (!in_array($province, $provincesincome['labels'])) {
+        $provincesincome['labels'][] = $province;
     }
+
+    // Add the customer count directly to the datasets array
+    $provincesincome['datasets'][] = $transactioncount;
+}
 
 
 
@@ -1181,7 +1184,7 @@ Yii::$app->set('db', [ //revert default connection
     'charset' => 'utf8',
 ]);
 
-$currentDate = new \DateTime(); 
+$currentDate = new \DateTime();
 $targetStd = Yii::$app->db->createCommand('
 SELECT quarter_1, quarter_2, quarter_3, quarter_4
 FROM stdtarget_transaction
@@ -1263,33 +1266,35 @@ $targetIncome = [
                 </form>
             </div>
 
-<div class="navigation-and-download">
-    <div class="print_pdf">
-        <Button class="print_pdf_label" onclick="downloadPDF()">Chart Download</Button>
-    </div>
+            <div class="navigation-and-download">
+                <div class="print_pdf">
+                    <Button class="print_pdf_label" onclick="downloadPDF()">Chart Download</Button>
+                </div>
 
-    <div class="navigation">
-        <label for="navigationDropdown">Navigate to:</label>
-        <select id="navigationDropdown" onchange="navigateToSection()">
-            <option value="totaltransaction">Total Transaction</option>
-            <option value="totalsales">Total Income</option>
-            <option value="transactionChart">Transaction Per Division</option>
-            <option value="salesChart">Income per Division</option>
-            <option value="avgSales">Average Income</option>
-            <!-- Add more options based on the IDs of your other sections -->
-        </select>
-    </div>
-</div>
-<script>
-    function navigateToSection() {
-        var dropdown = document.getElementById("navigationDropdown");
-        var selectedOption = dropdown.options[dropdown.selectedIndex].value;
+                <div class="navigation">
+                    <label for="navigationDropdown">Navigate to:</label>
+                    <select id="navigationDropdown" onchange="navigateToSection()">
+                        <option value="totaltransaction">Total Transaction</option>
+                        <option value="totalsales">Total Income</option>
+                        <option value="transactionChart">Transaction Per Division</option>
+                        <option value="salesChart">Income per Division</option>
+                        <option value="avgSales">Average Income</option>
+                        <!-- Add more options based on the IDs of your other sections -->
+                    </select>
+                </div>
+            </div>
+            <script>
+                function navigateToSection() {
+                    var dropdown = document.getElementById("navigationDropdown");
+                    var selectedOption = dropdown.options[dropdown.selectedIndex].value;
 
-        // Scroll to the selected section
-        var selectedSection = document.getElementById(selectedOption);
-        selectedSection.scrollIntoView({ behavior: "smooth" });
-    }
-</script>
+                    // Scroll to the selected section
+                    var selectedSection = document.getElementById(selectedOption);
+                    selectedSection.scrollIntoView({
+                        behavior: "smooth"
+                    });
+                }
+            </script>
         </div>
     </div>
     <div class="containers">
@@ -1312,9 +1317,25 @@ $targetIncome = [
     <script src="https://cdn.jsdelivr.net/npm/brain.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+    <div class="chart-container" id="avgSales">
+        <p class="reportTitle" id=" "></p>
+        <div class="asOne">
+            <canvas id="myChart"></canvas>
+            <div class="average">
+                <div class="aveTransactionDiv">
+                    <p class="texty"> Average Transactions </p>
+                    <p class="number"> <?= $average ?> </p>
+                </div>
+                <div class="aveSalesDiv">
+                    <p class="texty"> Average Income </p>
+                    <p class="number"> <?= $saleaverage ?> </p>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="chart-container">
-        
+
         <p class="reportTitle" id="totaltransaction"> Total Transaction</p>
         <canvas id="totaltransactionChart"></canvas>
     </div>
@@ -1339,24 +1360,6 @@ $targetIncome = [
         <canvas id="salesChart"></canvas>
     </div>
 
-
-    <div class="chart-container" id="avgSales">
-        <p class="reportTitle" id=" ">Average Income</p>
-        <div class="asOne">
-            <canvas id="myChart"></canvas>
-            <div class="average">
-                <div class="aveTransactionDiv">
-                    <p class="texty"> Average Transactions </p>
-                    <p class="number"> <?= $average ?> </p>
-                </div>
-                <div class="aveSalesDiv">
-                    <p class="texty"> Average Income </p>
-                    <p class="number"> <?= $saleaverage ?> </p>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <div class="popup" id="popup">
         <div class="popup-content">
             <span class="close" id="close-popup">&times;</span>
@@ -1379,21 +1382,21 @@ $targetIncome = [
             <p id="percentTransaction"></p>
             <p></p>
 
-            
+
             <div style="text-align: left; margin: 0 auto; width: 80%;">
-            <p id="highest"> </p>
-            <p id="least"> </p>
+                <p id="highest"> </p>
+                <p id="least"> </p>
 
-            <p id="mostTransactionType"> </p>
-            <p id="leastTransactionType"> </p>
+                <p id="mostTransactionType"> </p>
+                <p id="leastTransactionType"> </p>
 
-            <p id="mostCustomerType"> </p>
-            <p id="leastCustomerType"> </p>
+                <p id="mostCustomerType"> </p>
+                <p id="leastCustomerType"> </p>
 
-            <p id="mostCustomerProvince"> </p>
-            <p id="leastCustomerProvince"> </p>
+                <p id="mostCustomerProvince"> </p>
+                <p id="leastCustomerProvince"> </p>
             </div>
-            
+
         </div>
     </div>
 
@@ -1401,9 +1404,9 @@ $targetIncome = [
         // Reference datas
         const transaction = <?php echo json_encode($TransactionperDiv); ?>;
         const income = <?php echo json_encode($SalesperDiv); ?>;
-        const targetValues = <?php echo json_encode($targetTransaction); ?>; 
+        const targetValues = <?php echo json_encode($targetTransaction); ?>;
         const targetincomeValues = <?php echo json_encode($targetIncome); ?>;
-        const province = <?php echo json_encode($provincestransaction); ?>; 
+        const province = <?php echo json_encode($provincestransaction); ?>;
         const provinceincome = <?php echo json_encode($provincesincome); ?>;
 
         const currentDate = new Date();
@@ -1419,7 +1422,7 @@ $targetIncome = [
         const PopupHeader = document.getElementById("PopupHeader");
         const speedometerReading = document.getElementById("speedometer-reading");
         const speedometerArrow = document.getElementById("speedometer-arrow");
-        const highest = document.getElementById("highest"); 
+        const highest = document.getElementById("highest");
         const least = document.getElementById("least");
         const mostTransactionType = document.getElementById("mostTransactionType");
         const leastTransactionType = document.getElementById("leastTransactionType");
@@ -1428,7 +1431,7 @@ $targetIncome = [
         const mostCustomerProvince = document.getElementById("mostCustomerProvince");
         const leastCustomerProvince = document.getElementById("leastCustomerProvince");
 
-       
+
         //totaltransaction popup
         totaltransactionChart.addEventListener("click", () => {
 
@@ -1476,182 +1479,185 @@ $targetIncome = [
 
             // Function to determine the target value based on the current month
             function getTargetValue(month) {
-            if (month >= 0 && month < 3) {
-                return targetValues[0]; // January to March
-            } else if (month >= 3 && month < 6) {
-                return targetValues[1]; // April to June
-            } else if (month >= 6 && month < 9) {
-                return targetValues[2]; // July to September
+                if (month >= 0 && month < 3) {
+                    return targetValues[0]; // January to March
+                } else if (month >= 3 && month < 6) {
+                    return targetValues[1]; // April to June
+                } else if (month >= 6 && month < 9) {
+                    return targetValues[2]; // July to September
+                } else {
+                    return targetValues[3]; // October to December
+                }
+            }
+
+            Target = targetValue;
+            let Total;
+
+            if (currentMonth >= 0 && currentMonth < 3) {
+                Total = sumQuarter1; // January to March
+            } else if (currentMonth >= 3 && currentMonth < 6) {
+                Total = sumQuarter2; // April to June
+            } else if (currentMonth >= 6 && currentMonth < 9) {
+                Total = sumQuarter3; // July to September
+            } else if (currentMonth >= 8 && currentMonth < 12) {
+                Total = sumQuarter4; // October to December
+            }
+
+            const needle = (Total / Target);
+            let percentage = needle * 100;
+            if (percentage > 100) {
+                percentage = 100;
             } else {
-                return targetValues[3]; // October to December
+                percentage = percentage;
             }
+
+            speedometerReading.textContent = Total + " Transaction";
+
+            //rotation of the needle 
+            let rotation = (needle) * 180 - 90;
+            if (rotation > 180) {
+                rotation = 180 - 90;
             }
 
-        Target=targetValue;
-        let Total;
+            speedometerArrow.style.transformOrigin = "50% 100%";
+            speedometerArrow.style.transform = `translateX(-50%) rotate(${rotation}deg)`;
 
-        if (currentMonth >= 0 && currentMonth < 3) {
-            Total = sumQuarter1; // January to March
-        } else if (currentMonth >= 3 && currentMonth < 6) {
-            Total = sumQuarter2; // April to June
-        } else if (currentMonth >= 6 && currentMonth < 9) {
-            Total = sumQuarter3; // July to September
-        } else if (currentMonth >= 8 && currentMonth < 12) {
-            Total = sumQuarter4; // October to December
-        }
+            const speedometerDial = document.querySelector('.speedometer-dial');
 
-        const needle= (Total/Target);
-        let  percentage= needle*100;
-        if(percentage>100)
-        {
-            percentage=100;
-        }
-        else
-        {
-            percentage=percentage;
-        }
+            // Get the total/target value (you can replace this with your actual value)
+            const totalValue = needle; // Change this value as needed
 
-        speedometerReading.textContent = Total + " Transaction";
+            // Function to update the background color based on the value
+            function updateBackgroundColor(value) {
+                if (value >= 0 && value <= 0.25) {
+                    speedometerDial.style.backgroundColor = 'red';
+                } else if (value > 0.25 && value <= 0.5) {
+                    speedometerDial.style.backgroundColor = 'orange';
+                } else if (value > 0.5 && value <= 0.75) {
+                    speedometerDial.style.backgroundColor = 'yellow';
+                } else {
+                    speedometerDial.style.backgroundColor = 'green';
+                }
+            }
+            // Call the updateBackgroundColor function with the initial total/target value
+            updateBackgroundColor(totalValue);
 
-        //rotation of the needle 
-        let rotation = (needle) * 180 - 90;
-        if (rotation>180)
-        {
-            rotation=180-90;
-        }
+            //percentage text color
+            let percentagecolor = '';
+            if (percentage >= 76 && percentage <= 100) {
+                percentagecolor = 'green';
+            } else if (percentage >= 51 && percentage <= 75) {
+                percentagecolor = 'yellow';
+            } else if (percentage >= 26 && percentage <= 50) {
+                percentagecolor = 'orange';
+            } else {
+                percentagecolor = 'red';
+            }
 
-        speedometerArrow.style.transformOrigin = "50% 100%"; 
-        speedometerArrow.style.transform = `translateX(-50%) rotate(${rotation}deg)`;
 
-        const speedometerDial = document.querySelector('.speedometer-dial');
+            // Display the pop-up
+            popup.style.display = "block";
 
-        // Get the total/target value (you can replace this with your actual value)
-        const totalValue = needle; // Change this value as needed
+            targetTransaction.innerHTML = "Target transaction for this quarter is <span style='color: blue;'>" + Target;
+            percentTransaction.innerHTML = "Achieved <span style='color: " + percentagecolor + ";'>" + percentage + "%</span> of target transaction.";
+            PopupHeader.innerHTML = "Total Transaction";
 
-        // Function to update the background color based on the value
-        function updateBackgroundColor(value) {
-        if (value >= 0 && value <= 0.25) {
-            speedometerDial.style.backgroundColor = 'red';
-        } else if (value > 0.25 && value <= 0.5) {
-            speedometerDial.style.backgroundColor = 'orange';
-        } else if (value > 0.5 && value <= 0.75) {
-            speedometerDial.style.backgroundColor = 'yellow';
-        } else {
-            speedometerDial.style.backgroundColor = 'green';
-        }
-        }
-        // Call the updateBackgroundColor function with the initial total/target value
-        updateBackgroundColor(totalValue);
+            //sum of transaction per div (dataset)
+            const sumTransactionDataset = {
+                data: TransactionperDiv.labels.map((date, index) => {
+                    let sum = 0;
+                    TransactionperDiv.datasets.forEach(dataset => {
+                        if (dataset.data[index] !== undefined) {
+                            sum += dataset.data[index];
+                        }
+                    });
+                    return sum;
+                }),
+                // Set labels to transaction_date values
+                labels: TransactionperDiv.labels,
+            };
+            const maxIndex = sumTransactionDataset.data.indexOf(Math.max(...sumTransactionDataset.data));
+            const highestTransactionCount = sumTransactionDataset.data[maxIndex];
+            const dateofhighest = sumTransactionDataset.labels[maxIndex];
+            const minIndex = sumTransactionDataset.data.indexOf(Math.min(...sumTransactionDataset.data));
+            const leastTransactionCount = sumTransactionDataset.data[minIndex];
+            const dateofleast = sumTransactionDataset.labels[minIndex];
 
-        //percentage text color
-        let percentagecolor = '';
-        if (percentage >= 76 && percentage <= 100) {
-            percentagecolor = 'green';
-        } else if (percentage >= 51 && percentage <= 75) {
-            percentagecolor = 'yellow';
-        } else if (percentage >= 26 && percentage <= 50) {
-            percentagecolor = 'orange';
-        } else {
-            percentagecolor = 'red';
-        }
-        
+            // console.log('sumTransactionDataset:', sumTransactionDataset);
 
-        // Display the pop-up
-        popup.style.display = "block";
+            //Transaction type dataset
+            const transactionTypeData = <?php
+                                        $data = array();
+                                        for ($i = 0; $i < count($transactionType); $i++) {
+                                            $data[] = array('label' => $transactionType[$i], 'data' => $transactionTypecounts[$i]);
+                                        }
+                                        echo json_encode($data);
+                                        ?>;
 
-        targetTransaction.innerHTML = "Target transaction for this quarter is <span style='color: blue;'>"+Target;
-        percentTransaction.innerHTML = "Achieved <span style='color: " + percentagecolor + ";'>" + percentage + "%</span> of target transaction.";
-        PopupHeader.innerHTML = "Total Transaction";
+            const maxtransactionTypeData = transactionTypeData.reduce((max, obj) => (obj.data > max.data ? obj : max), {
+                data: -Infinity
+            });
+            const maxData = maxtransactionTypeData.data;
+            const maxtransactionType = transactionTypeData.filter(obj => obj.data === maxData).map(obj => obj.label);
+            const minTransactionTypeData = transactionTypeData.reduce((min, obj) => (obj.data < min.data ? obj : min), {
+                data: Infinity
+            });
+            const minData = minTransactionTypeData.data;
+            const minTransactionType = transactionTypeData.filter(obj => obj.data === minData).map(obj => obj.label);
 
-    //sum of transaction per div (dataset)
-    const sumTransactionDataset = {
-        data: TransactionperDiv.labels.map((date, index) => {
-            let sum = 0;
-            TransactionperDiv.datasets.forEach(dataset => {
-                if (dataset.data[index] !== undefined) {
-                    sum += dataset.data[index];
+            const customerTypeData = <?php
+                                        $data = array();
+                                        for ($i = 0; $i < count($customerTypetransaction); $i++) {
+                                            $data[] = array('label' => $customerTypetransaction[$i], 'data' => $customerTypecounttransaction[$i]);
+                                        }
+                                        echo json_encode($data);
+                                        ?>;
+            console.log(customerTypeData)
+
+            const maxCustomerTypeData = customerTypeData.reduce((max, obj) => (obj.data >= max.data ? obj : max), {
+                data: -Infinity
+            });
+            const maxCustomerData = maxCustomerTypeData.data;
+            const maxCustomerTypes = customerTypeData.filter(obj => obj.data === maxCustomerData).map(obj => obj.label);
+            const minCustomerTypeData = customerTypeData.reduce((min, obj) => (obj.data <= min.data ? obj : min), {
+                data: Infinity
+            });
+            const minCustomerData = minCustomerTypeData.data;
+            const minCustomerType = customerTypeData.filter(obj => obj.data === minCustomerData).map(obj => obj.label);
+
+            const Province = {
+                data: province.datasets,
+                labels: province.labels,
+            };
+
+            const highestprovincedata = Math.max(...Province.data);
+            const tolerance = 0.0001;
+            const highestprovinces = [];
+            Province.labels.forEach((label, index) => {
+                if (Math.abs(Province.data[index] - highestprovincedata) < tolerance) {
+                    highestprovinces.push(label);
                 }
             });
-            return sum;
-        }),
-        // Set labels to transaction_date values
-        labels: TransactionperDiv.labels,
-    };
-    const maxIndex = sumTransactionDataset.data.indexOf(Math.max(...sumTransactionDataset.data));
-    const highestTransactionCount = sumTransactionDataset.data[maxIndex];
-    const dateofhighest = sumTransactionDataset.labels[maxIndex];
-    const minIndex = sumTransactionDataset.data.indexOf(Math.min(...sumTransactionDataset.data));
-    const leastTransactionCount = sumTransactionDataset.data[minIndex];
-    const dateofleast = sumTransactionDataset.labels[minIndex];
 
-    // console.log('sumTransactionDataset:', sumTransactionDataset);
+            const leastprovincedata = Math.min(...Province.data);
+            const leastprovinces = [];
+            Province.labels.forEach((label, index) => {
+                if (Math.abs(Province.data[index] - leastprovincedata) < tolerance) {
+                    leastprovinces.push(label);
+                }
+            });
 
-    //Transaction type dataset
-    const transactionTypeData = <?php
-        $data = array();
-        for ($i = 0; $i < count($transactionType); $i++) {
-            $data[] = array('label' => $transactionType[$i], 'data' => $transactionTypecounts[$i]);
-        }
-        echo json_encode($data);
-        ?>;
+            //analyzation that should depends in the date filter or chart
+            highest.innerHTML = "Highest transaction: <span style='color: red;'>" + dateofleast + "</span> with <span style='color: blue;'> " + highestTransactionCount + "</span> transaction/s.";
+            least.innerHTML = "Least transaction: <span style='color: red;'>" + dateofhighest + "</span> with <span style='color: blue;'> " + leastTransactionCount + "</span> transaction/s.";
+            mostTransactionType.innerHTML = "Highest transaction type:  <span style='color:green;'>" + maxtransactionType.join(', ') + "</span> having  <span style='color: blue;'> " + maxData + "</span> transaction/s.";
+            leastTransactionType.innerHTML = "Least transaction type:   <span style='color:green;'>" + minTransactionType.join(', ') + "</span> having  <span style='color: blue;'> " + minData + "</span> transaction/s.";
+            mostCustomerType.innerHTML = "Highest customer type(s): <span style='color:green;'>" + maxCustomerTypes.join(', ') + "</span> having <span style='color: blue;'> " + maxCustomerData + "</span> transaction/s.";
+            leastCustomerType.innerHTML = "Least customer type: <span style='color:green;'>" + minCustomerType.join(', ') + "</span> having <span style='color: blue;'> " + minCustomerData + "</span> transaction/s.";
+            mostCustomerProvince.innerHTML = "Provinces with the highest transactions: <span style='color:green;'>" + highestprovinces.join(', ') + "</span> having <span style='color: blue;'> " + highestprovincedata + "</span> transaction/s.";
+            leastCustomerProvince.innerHTML = "Provinces with the least transactions: <span style='color:green;'>" + leastprovinces.join(', ') + "</span> having <span style='color: blue;'> " + leastprovincedata + "</span> transaction/s.";
 
-    const maxtransactionTypeData= transactionTypeData.reduce((max, obj) => (obj.data > max.data ? obj : max), { data: -Infinity });
-    const maxData = maxtransactionTypeData.data;
-    const maxtransactionType = transactionTypeData.filter(obj => obj.data === maxData).map(obj => obj.label);
-    const minTransactionTypeData = transactionTypeData.reduce((min, obj) => (obj.data < min.data ? obj : min), { data: Infinity });
-    const minData = minTransactionTypeData.data;
-    const minTransactionType = transactionTypeData.filter(obj => obj.data === minData).map(obj => obj.label);
-
-    const customerTypeData = <?php
-        $data = array();
-        for ($i = 0; $i < count($customerTypetransaction); $i++) {
-            $data[] = array('label' => $customerTypetransaction[$i], 'data' => $customerTypecounttransaction[$i]);
-        }
-        echo json_encode($data);
-        ?>;
-        console.log(customerTypeData)
-
-        const maxCustomerTypeData = customerTypeData.reduce((max, obj) => (obj.data >= max.data ? obj : max), { data: -Infinity });
-        const maxCustomerData = maxCustomerTypeData.data;
-        const maxCustomerTypes = customerTypeData.filter(obj => obj.data === maxCustomerData).map(obj => obj.label);
-        const minCustomerTypeData = customerTypeData.reduce((min, obj) => (obj.data <= min.data ? obj : min), { data: Infinity });
-        const minCustomerData = minCustomerTypeData.data;
-        const minCustomerType = customerTypeData.filter(obj => obj.data === minCustomerData).map(obj => obj.label);
-
-        const Province = 
-        {
-            data: province.datasets,
-            labels: province.labels,
-        };
-
-        const highestprovincedata = Math.max(...Province.data);
-        const tolerance = 0.0001;
-        const highestprovinces = [];
-        Province.labels.forEach((label, index) => {
-            if (Math.abs(Province.data[index] - highestprovincedata) < tolerance) {
-                highestprovinces.push(label);
-            }
         });
-
-        const leastprovincedata = Math.min(...Province.data);
-        const leastprovinces = [];
-        Province.labels.forEach((label, index) => {
-            if (Math.abs(Province.data[index] - leastprovincedata) < tolerance) {
-                leastprovinces.push(label);
-            }
-        });
-
-    //analyzation that should depends in the date filter or chart
-    highest.innerHTML = "Highest transaction: <span style='color: red;'>" + dateofleast + "</span> with <span style='color: blue;'> " + highestTransactionCount + "</span> transaction/s.";
-    least.innerHTML = "Least transaction: <span style='color: red;'>" + dateofhighest + "</span> with <span style='color: blue;'> " + leastTransactionCount + "</span> transaction/s.";
-    mostTransactionType.innerHTML = "Highest transaction type:  <span style='color:green;'>"+ maxtransactionType.join(', ') + "</span> having  <span style='color: blue;'> " + maxData + "</span> transaction/s.";
-    leastTransactionType.innerHTML = "Least transaction type:   <span style='color:green;'>"+ minTransactionType.join(', ') + "</span> having  <span style='color: blue;'> " + minData + "</span> transaction/s.";
-    mostCustomerType.innerHTML = "Highest customer type(s): <span style='color:green;'>" + maxCustomerTypes.join(', ') + "</span> having <span style='color: blue;'> " + maxCustomerData + "</span> transaction/s.";
-    leastCustomerType.innerHTML = "Least customer type: <span style='color:green;'>" + minCustomerType.join(', ') + "</span> having <span style='color: blue;'> " + minCustomerData + "</span> transaction/s.";
-    mostCustomerProvince.innerHTML = "Provinces with the highest transactions: <span style='color:green;'>" + highestprovinces.join(', ') + "</span> having <span style='color: blue;'> " + highestprovincedata + "</span> transaction/s.";
-    leastCustomerProvince.innerHTML = "Provinces with the least transactions: <span style='color:green;'>" + leastprovinces.join(', ') + "</span> having <span style='color: blue;'> " + leastprovincedata + "</span> transaction/s.";
-
-    });
         closePopup.addEventListener("click", () => {
             // Close the pop-up when the close button is clicked
             popup.style.display = "none";
@@ -1705,62 +1711,58 @@ $targetIncome = [
 
             // Function to determine the target value based on the current month
             function getTargetValue(month) {
-            if (month >= 0 && month < 3) {
-                return targetincomeValues[0]; // January to March
-            } else if (month >= 3 && month < 6) {
-                return targetincomeValues[1]; // April to June
-            } else if (month >= 6 && month < 9) {
-                return targetincomeValues[2]; // July to September
-            } else {
-                return targetincomeValues[3]; // October to December
-            }
+                if (month >= 0 && month < 3) {
+                    return targetincomeValues[0]; // January to March
+                } else if (month >= 3 && month < 6) {
+                    return targetincomeValues[1]; // April to June
+                } else if (month >= 6 && month < 9) {
+                    return targetincomeValues[2]; // July to September
+                } else {
+                    return targetincomeValues[3]; // October to December
+                }
             }
 
-            Target=targetincomeValue;
+            Target = targetincomeValue;
 
 
             let Total;
 
-                if (currentMonth >= 0 && currentMonth < 3) {
-                    Total = sumQuarter1; // January to March
-                } else if (currentMonth >= 3 && currentMonth < 6) {
-                    Total = sumQuarter2; // April to June
-                } else if (currentMonth >= 6 && currentMonth < 9) {
-                    Total = sumQuarter3; // July to September
-                } else if (currentMonth >= 8 && currentMonth < 12) {
-                    Total = sumQuarter4; // October to December
-                }
-                Total=Total.toFixed(2);
+            if (currentMonth >= 0 && currentMonth < 3) {
+                Total = sumQuarter1; // January to March
+            } else if (currentMonth >= 3 && currentMonth < 6) {
+                Total = sumQuarter2; // April to June
+            } else if (currentMonth >= 6 && currentMonth < 9) {
+                Total = sumQuarter3; // July to September
+            } else if (currentMonth >= 8 && currentMonth < 12) {
+                Total = sumQuarter4; // October to December
+            }
+            Total = Total.toFixed(2);
 
-                const needle= (Total/Target);
-                let  percentage= needle*100;
-                if(percentage>100)
-                {
-                    percentage=100;
-                }
-                else
-                {
-                    percentage=percentage;
-                }
+            const needle = (Total / Target);
+            let percentage = needle * 100;
+            if (percentage > 100) {
+                percentage = 100;
+            } else {
+                percentage = percentage;
+            }
 
-                speedometerReading.textContent = Total + " Income";
+            speedometerReading.textContent = Total + " Income";
 
-                // Simulate the speedometer arrow movement (you can replace this with actual data)
-                let rotation = (needle) * 180 - 90;
-                    if (rotation>180)
-                        {
-                        rotation=180-90;
-                        }            
-                speedometerArrow.style.transformOrigin = "50% 100%"; 
-                speedometerArrow.style.transform = `translateX(-50%) rotate(${rotation}deg)`;
+            // Simulate the speedometer arrow movement (you can replace this with actual data)
+            let rotation = (needle) * 180 - 90;
+            if (rotation > 180) {
+                rotation = 180 - 90;
+            }
+            speedometerArrow.style.transformOrigin = "50% 100%";
+            speedometerArrow.style.transform = `translateX(-50%) rotate(${rotation}deg)`;
 
-                const speedometerDial = document.querySelector('.speedometer-dial');
+            const speedometerDial = document.querySelector('.speedometer-dial');
 
-                // Get the total/target value (you can replace this with your actual value)
-                const totalValue = needle; // Change this value as needed
+            // Get the total/target value (you can replace this with your actual value)
+            const totalValue = needle; // Change this value as needed
 
-                // Function to update the background color based on the value
-                function updateBackgroundColor(value) {
+            // Function to update the background color based on the value
+            function updateBackgroundColor(value) {
                 if (value >= 0 && value <= 0.25) {
                     speedometerDial.style.backgroundColor = 'red';
                 } else if (value > 0.25 && value <= 0.5) {
@@ -1770,126 +1772,134 @@ $targetIncome = [
                 } else {
                     speedometerDial.style.backgroundColor = 'green';
                 }
+            }
+
+            // Call the updateBackgroundColor function with the initial total/target value
+            updateBackgroundColor(totalValue);
+
+            //percentage text color
+            let percentagecolor = '';
+            if (percentage >= 76 && percentage <= 100) {
+                percentagecolor = 'green';
+            } else if (percentage >= 51 && percentage <= 75) {
+                percentagecolor = 'yellow';
+            } else if (percentage >= 26 && percentage <= 50) {
+                percentagecolor = 'orange';
+            } else {
+                percentagecolor = 'red';
+            }
+
+
+            // Display the pop-up
+            popup.style.display = "block";
+
+            targetTransaction.innerHTML = "Target income for this quarter is <span style='color: blue;'>" + Target;
+            percentTransaction.innerHTML = "Achieved <span style='color: " + percentagecolor + ";'>" + percentage + "%</span> of target income";
+            PopupHeader.innerHTML = "Total Income";
+
+
+            //sum of transaction per div (dataset)
+            const sumIncomeDataset = {
+                data: SalesperDiv.labels.map((date, index) => {
+                    let sum = 0;
+                    SalesperDiv.datasets.forEach(dataset => {
+                        if (dataset.data[index] !== undefined) {
+                            sum += dataset.data[index];
+                        }
+                    });
+                    return sum;
+                }),
+                // Set labels to transaction_date values
+                labels: SalesperDiv.labels,
+            };
+
+            const maxIndex = sumIncomeDataset.data.indexOf(Math.max(...sumIncomeDataset.data));
+            const highestIncomeCount = parseFloat(sumIncomeDataset.data[maxIndex]).toFixed(2);
+            const dateofhighest = sumIncomeDataset.labels[maxIndex];
+            const minIndex = sumIncomeDataset.data.indexOf(Math.min(...sumIncomeDataset.data));
+            const leastIncomeCount = parseFloat(sumIncomeDataset.data[minIndex]).toFixed(2);
+            const dateofleast = sumIncomeDataset.labels[minIndex];
+
+            const transactionTypeData = <?php
+                                        $data = array();
+                                        for ($i = 0; $i < count($transactionTypeincome); $i++) {
+                                            $data[] = array('label' => $transactionTypeincome[$i], 'data' => $transactionTypesumincome[$i]);
+                                        }
+                                        echo json_encode($data);
+                                        ?>;
+
+            const maxtransactionTypeData = transactionTypeData.reduce((max, obj) => (obj.data > max.data ? obj : max), {
+                data: -Infinity
+            });
+            const maxData = maxtransactionTypeData.data;
+            const maxtransactionType = transactionTypeData.filter(obj => obj.data === maxData).map(obj => obj.label);
+            const minTransactionTypeData = transactionTypeData.reduce((min, obj) => (obj.data < min.data ? obj : min), {
+                data: Infinity
+            });
+            const minData = minTransactionTypeData.data;
+            const minTransactionType = transactionTypeData.filter(obj => obj.data === minData).map(obj => obj.label);
+
+            const customerTypeData = <?php
+                                        $data = array();
+                                        for ($i = 0; $i < count($customerTypeincome); $i++) {
+                                            $data[] = array('label' => $customerTypeincome[$i], 'data' => $customerTypecountincome[$i]);
+                                        }
+                                        echo json_encode($data);
+                                        ?>;
+            console.log(customerTypeData)
+
+            const maxCustomerTypeData = customerTypeData.reduce((max, obj) => (obj.data >= max.data ? obj : max), {
+                data: -Infinity
+            });
+            const maxCustomerData = maxCustomerTypeData.data;
+            const maxCustomerTypes = customerTypeData.filter(obj => obj.data === maxCustomerData).map(obj => obj.label);
+            const minCustomerTypeData = customerTypeData.reduce((min, obj) => (obj.data <= min.data ? obj : min), {
+                data: Infinity
+            });
+            const minCustomerData = minCustomerTypeData.data;
+            const minCustomerType = customerTypeData.filter(obj => obj.data === minCustomerData).map(obj => obj.label);
+
+            const ProvinceIncome = {
+                data: provinceincome.datasets,
+                labels: provinceincome.labels,
+            };
+
+            const highestIncomeData = Math.max(...ProvinceIncome.data);
+            const tolerance = 0.0001;
+            const highestIncomeProvinces = [];
+            ProvinceIncome.labels.forEach((label, index) => {
+                if (Math.abs(ProvinceIncome.data[index] - highestIncomeData) < tolerance) {
+                    highestIncomeProvinces.push(label);
                 }
+            });
 
-                // Call the updateBackgroundColor function with the initial total/target value
-        updateBackgroundColor(totalValue);
-
-        //percentage text color
-        let percentagecolor = '';
-        if (percentage >= 76 && percentage <= 100) {
-            percentagecolor = 'green';
-        } else if (percentage >= 51 && percentage <= 75) {
-            percentagecolor = 'yellow';
-        } else if (percentage >= 26 && percentage <= 50) {
-            percentagecolor = 'orange';
-        } else {
-            percentagecolor = 'red';
-        }
-
-
-        // Display the pop-up
-        popup.style.display = "block";
-
-        targetTransaction.innerHTML = "Target income for this quarter is <span style='color: blue;'>"+Target;
-        percentTransaction.innerHTML = "Achieved <span style='color: " + percentagecolor + ";'>" + percentage + "%</span> of target income";
-        PopupHeader.innerHTML = "Total Income";
-        
-
-                //sum of transaction per div (dataset)
-                const sumIncomeDataset = {
-                    data: SalesperDiv.labels.map((date, index) => {
-                        let sum = 0;
-                        SalesperDiv.datasets.forEach(dataset => {
-                            if (dataset.data[index] !== undefined) {
-                                sum += dataset.data[index];
-                            }
-                        });
-                        return sum;
-                    }),
-                    // Set labels to transaction_date values
-                    labels: SalesperDiv.labels,
-                };  
-               
-    const maxIndex = sumIncomeDataset.data.indexOf(Math.max(...sumIncomeDataset.data));
-    const highestIncomeCount = parseFloat(sumIncomeDataset.data[maxIndex]).toFixed(2);
-    const dateofhighest = sumIncomeDataset.labels[maxIndex];
-    const minIndex = sumIncomeDataset.data.indexOf(Math.min(...sumIncomeDataset.data));
-    const leastIncomeCount = parseFloat(sumIncomeDataset.data[minIndex]).toFixed(2);
-    const dateofleast = sumIncomeDataset.labels[minIndex];
-
-    const transactionTypeData = <?php
-        $data = array();
-        for ($i = 0; $i < count($transactionTypeincome); $i++) {
-            $data[] = array('label' => $transactionTypeincome[$i], 'data' => $transactionTypesumincome[$i]);
-        }
-        echo json_encode($data);
-        ?>;
-
-    const maxtransactionTypeData= transactionTypeData.reduce((max, obj) => (obj.data > max.data ? obj : max), { data: -Infinity });
-    const maxData = maxtransactionTypeData.data;
-    const maxtransactionType = transactionTypeData.filter(obj => obj.data === maxData).map(obj => obj.label);
-    const minTransactionTypeData = transactionTypeData.reduce((min, obj) => (obj.data < min.data ? obj : min), { data: Infinity });
-    const minData = minTransactionTypeData.data;
-    const minTransactionType = transactionTypeData.filter(obj => obj.data === minData).map(obj => obj.label);
-    
-    const customerTypeData = <?php
-        $data = array();
-        for ($i = 0; $i < count($customerTypeincome); $i++) {
-            $data[] = array('label' => $customerTypeincome[$i], 'data' => $customerTypecountincome[$i]);
-        }
-        echo json_encode($data);
-        ?>;
-        console.log(customerTypeData)
-
-        const maxCustomerTypeData = customerTypeData.reduce((max, obj) => (obj.data >= max.data ? obj : max), { data: -Infinity });
-        const maxCustomerData = maxCustomerTypeData.data;
-        const maxCustomerTypes = customerTypeData.filter(obj => obj.data === maxCustomerData).map(obj => obj.label);
-        const minCustomerTypeData = customerTypeData.reduce((min, obj) => (obj.data <= min.data ? obj : min), { data: Infinity });
-        const minCustomerData = minCustomerTypeData.data;
-        const minCustomerType = customerTypeData.filter(obj => obj.data === minCustomerData).map(obj => obj.label);
-
-        const ProvinceIncome = {
-        data: provinceincome.datasets,
-        labels: provinceincome.labels,
-        };
-
-        const highestIncomeData = Math.max(...ProvinceIncome.data);
-        const tolerance = 0.0001;
-        const highestIncomeProvinces = [];
-        ProvinceIncome.labels.forEach((label, index) => {
-            if (Math.abs(ProvinceIncome.data[index] - highestIncomeData) < tolerance) {
-                highestIncomeProvinces.push(label);
-            }
-        });
-
-        const leastIncomeData = Math.min(...ProvinceIncome.data);
-        const leastIncomeProvinces = [];
-        ProvinceIncome.labels.forEach((label, index) => {
-            if (Math.abs(ProvinceIncome.data[index] - leastIncomeData) < tolerance) {
-                leastIncomeProvinces.push(label);
-            }
-        });
-
-        
-
-
-    highest.innerHTML = "Highest income: <span style='color: red;'>" + dateofleast + "</span> with <span style='color: blue;'> " + highestIncomeCount + "</span> total income.";
-    least.innerHTML = "Least income: <span style='color: red;'>" + dateofhighest + "</span> with <span style='color: blue;'> " + leastIncomeCount + "</span> total income.";
-    mostTransactionType.innerHTML = "Highest transaction type:  <span style='color:green;'>"+ maxtransactionType.join(', ') + "</span> having  <span style='color: blue;'> " + Number(maxData).toFixed(2) +"</span> total income.";
-    leastTransactionType.innerHTML = "Least transaction type:   <span style='color:green;'>"+ minTransactionType.join(', ') + "</span> having  <span style='color: blue;'> " + Number(minData ).toFixed(2)+  "</span> total income.";
-    mostCustomerType.innerHTML = "Highest customer type(s): <span style='color:green;'>" + maxCustomerTypes.join(', ') + "</span> having <span style='color: blue;'> " + Number(maxCustomerData).toFixed(2) + "</span> total income.";
-    leastCustomerType.innerHTML = "Least customer type: <span style='color:green;'>" + minCustomerType.join(', ') + "</span> having <span style='color: blue;'> " + Number(minCustomerData).toFixed(2) + "</span> total income.";
-    mostCustomerProvince.innerHTML = "Provinces with the highest income: <span style='color:green;'>" + highestIncomeProvinces.join(', ') + "</span> having <span style='color: blue;'> " + highestIncomeData.toFixed(2) + "</span>.";
-    leastCustomerProvince.innerHTML = "Provinces with the least income: <span style='color:green;'>" + leastIncomeProvinces.join(', ') + "</span> having <span style='color: blue;'> " + leastIncomeData.toFixed(2) + "</span>.";
-
+            const leastIncomeData = Math.min(...ProvinceIncome.data);
+            const leastIncomeProvinces = [];
+            ProvinceIncome.labels.forEach((label, index) => {
+                if (Math.abs(ProvinceIncome.data[index] - leastIncomeData) < tolerance) {
+                    leastIncomeProvinces.push(label);
+                }
             });
 
 
-            closePopup.addEventListener("click", () => {
-                // Close the pop-up when the close button is clicked
-                popup.style.display = "none";
-            });
+
+
+            highest.innerHTML = "Highest income: <span style='color: red;'>" + dateofleast + "</span> with <span style='color: blue;'> " + highestIncomeCount + "</span> total income.";
+            least.innerHTML = "Least income: <span style='color: red;'>" + dateofhighest + "</span> with <span style='color: blue;'> " + leastIncomeCount + "</span> total income.";
+            mostTransactionType.innerHTML = "Highest transaction type:  <span style='color:green;'>" + maxtransactionType.join(', ') + "</span> having  <span style='color: blue;'> " + Number(maxData).toFixed(2) + "</span> total income.";
+            leastTransactionType.innerHTML = "Least transaction type:   <span style='color:green;'>" + minTransactionType.join(', ') + "</span> having  <span style='color: blue;'> " + Number(minData).toFixed(2) + "</span> total income.";
+            mostCustomerType.innerHTML = "Highest customer type(s): <span style='color:green;'>" + maxCustomerTypes.join(', ') + "</span> having <span style='color: blue;'> " + Number(maxCustomerData).toFixed(2) + "</span> total income.";
+            leastCustomerType.innerHTML = "Least customer type: <span style='color:green;'>" + minCustomerType.join(', ') + "</span> having <span style='color: blue;'> " + Number(minCustomerData).toFixed(2) + "</span> total income.";
+            mostCustomerProvince.innerHTML = "Provinces with the highest income: <span style='color:green;'>" + highestIncomeProvinces.join(', ') + "</span> having <span style='color: blue;'> " + highestIncomeData.toFixed(2) + "</span>.";
+            leastCustomerProvince.innerHTML = "Provinces with the least income: <span style='color:green;'>" + leastIncomeProvinces.join(', ') + "</span> having <span style='color: blue;'> " + leastIncomeData.toFixed(2) + "</span>.";
+
+        });
+
+
+        closePopup.addEventListener("click", () => {
+            // Close the pop-up when the close button is clicked
+            popup.style.display = "none";
+        });
     </script>
 
 
@@ -2312,7 +2322,6 @@ $targetIncome = [
                         display: false
                     }
                 },
-
                 // plugins:[divisionName] //to be continue
             },
             plugins: [{
@@ -2334,13 +2343,27 @@ $targetIncome = [
                     ctx.font = 'bolder 15px Poppins';
                     ctx.fillStyle = 'rgb(3, 98, 186, 1)';
                     ctx.textAlign = 'center';
-                    ctx.fillText('Average income', width / 2.1, height / 2 + top);
-                    //console.log(chart.getDatasetMeta(0))
+                    ctx.fillText('Average income', width / 2.1, height / 10 + top);
 
+                    // Count and display the numbers
+                    let total1 = 0;
+                    let total2 = 0;
+                    data.datasets[2].data.forEach(value => {
+                        total1 += value;
+                    });
+                    data.datasets[3].data.forEach(value => {
+                        total2 += value;
+                    });
+
+                    ctx.fillText(`Total: ${total1}`, width / 2.1, height / 2 + top);
+                    ctx.fillText(`Total: ${total2}`, width / 2.1, height / 2 + top + 20);
+
+
+                    ctx.restore();
                 }
-
             }]
         };
+
 
         // Render the doughnut chart
         const myChart = new Chart(document.getElementById('myChart'), config);
