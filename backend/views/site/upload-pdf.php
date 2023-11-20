@@ -68,7 +68,7 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
 <div class="container">
     <div class="card">
         <div class="card-header">
-            <h1><?= Html::encode($this->title) ?></h1>
+            <h1>Send PDF to Email</h1>
         </div>
 
         <div class="card-body">
@@ -103,7 +103,7 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
             )->label('Select User Roles') ?>
 
             <div class="form-group mt-4">
-                <?= Html::submitButton('Send Email', ['class' => 'btn btn-primary btn-block', 'id' => 'send-email-button']) ?>
+                <?= Html::submitButton('Send PDF', ['class' => 'btn btn-primary btn-block', 'id' => 'send-email-button']) ?>
             </div>
 
             <?php ActiveForm::end(); ?>

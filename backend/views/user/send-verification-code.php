@@ -77,6 +77,7 @@ $this->registerCssFile(Url::to(['/css/custom.css']));
 
     .form-group {
         margin-top: 20px;
+        text-align:right;
     }
 
     .btn-primary {
@@ -123,7 +124,7 @@ $this->registerCssFile(Url::to(['/css/custom.css']));
         <?= $form->field($model, 'email')->textInput(['maxlength' => true, 'class' => 'form-control']) ?>
 
         <div class="form-group">
-            <?= Html::submitButton('Resend Verification Email', ['class' => 'btn btn-primary']) ?>
+            <?= Html::submitButton('Send', ['class' => 'btn btn-primary']) ?>
         </div>
 
         <?php ActiveForm::end(); ?>
