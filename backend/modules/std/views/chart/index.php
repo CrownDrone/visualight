@@ -2427,13 +2427,13 @@ $targetIncome =
                                 labels: <?php echo json_encode($transactionStatus); ?>,
                                 datasets: [{
                                     data: <?php echo json_encode($transactionStatusDatacounts); ?>,
-                                    backgroundColor: ['rgba(0, 215, 132, 0.2)',
-                                        'rgba(229, 247, 48, 0.2)',
-                                        'rgba(241, 37, 150, 0.2)',
+                                    backgroundColor: ['rgba(229, 247, 48, 0.2)',//red
+                                        'rgba(241, 37, 150, 0.2)',//yellow
+                                        'rgba(0, 215, 132, 0.2)',//green
                                     ],
-                                    borderColor: ['rgba(0, 215, 132, 0.93)',
-                                        'rgba(229, 247, 48, 0.8)',
-                                        'rgba(241, 37, 150, 0.8)',
+                                    borderColor: ['rgba(229, 247, 48, 0.8)', //red
+                                        'rgba(241, 37, 150, 0.8)', //yellow
+                                        'rgba(0, 215, 132, 0.93)',//green
                                     ],
                                     borderWidth: 2
                                 }],
