@@ -69,7 +69,14 @@ class UserController extends BaseController
                         ->setTo($model->email)
                         ->setFrom([Yii::$app->params['adminEmail'] => 'Visualight Team'])
                         ->setSubject('Email Verification')
-                        ->setTextBody("Please click the following link to verify your email: $verificationLink")
+                        ->setTextBody( "Hello, to complete your registration, please verify your email address by clicking the following link:\n" .
+                        $verificationLink . "\n\n" .
+                        "Your account details are as follows:\n" .
+                        "Username: " . $model->username . "\n" .
+                        "Password: " . $model->newPassword . "\n\n" .
+                        "For your security, we strongly recommend that you change your password immediately after logging in.\n\n" .
+                        "Best regards,\n" .
+                        "The Visualight Team")
                         ->send();
                         if ($mailer) {
                             Yii::$app->session->setFlash('success', 'User created successfully. Please check your email for verification instructions.');
@@ -94,6 +101,7 @@ class UserController extends BaseController
 {
     $model = new User(['scenario' => User::SCENARIO_CREATE]);
 
+
     if ($model->load(Yii::$app->request->post())) {
         // Check if the provided email exists in the database
         $existingUser = User::findByEmail($model->email);
@@ -111,7 +119,13 @@ class UserController extends BaseController
                         ->setTo($existingUser->email)
                         ->setFrom([Yii::$app->params['adminEmail'] => 'Visualight Team'])
                         ->setSubject('Email Verification')
-                        ->setTextBody("Please click the following link to verify your email: $verificationLink")
+                        ->setTextBody("Hello, to complete your registration, please verify your email address by clicking the following link:\n" .
+                        $verificationLink . "\n\n" .
+                        "Once your email is verified, please proceed to the 'Forgot Password?' section to update your password, enabling you to access your account.\n\n" .
+                        "Your account details are as follows:\n" .
+                        "Email: " . $model->email . "\n" .
+                        "Best regards,\n" .
+                        "The Visualight Team")
                         ->send();
 
                     if ($mailer) {
