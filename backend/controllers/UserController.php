@@ -20,9 +20,13 @@ class UserController extends BaseController
                 'class' => AccessControl::class,
                 'rules' => [
                     [
-                        'actions' => ['index', 'view', 'create', 'update', 'delete','send-verification-code'],
+                        'actions' => ['index', 'view', 'create', 'update', 'delete'],
                         'allow' => true,
-                        'roles' => ['ADMIN'],
+                        'permissions' => ['canCreateUser'],
+                    ],
+                    [
+                        'actions' => ['send-verification-code'],
+                        'allow' => true,
                         'permissions' => ['canResendEmailVerification'],
                     ],
                 ],

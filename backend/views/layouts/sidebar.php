@@ -87,13 +87,13 @@ $defaultImagePath = Yii::getAlias('@web') . '/images/user2.jpg';
                     [
                         'label' => 'Database Editor',
                         'icon' => 'fas fa-database',
-                        'visible' => Helper::checkRoute('/admin/index'),
+                        'visible' => Yii::$app->user->can('ADMIN'),
                         'items' => [
                             [
                                 'label' => 'Query',
                                 'icon' => 'fas fa-search',
                                 'url' => ['/dbeditor/query'],
-                                'visible' => Helper::checkRoute('/dbeditor/query'),
+                                'visible' => Yii::$app->user->can('dbQuery'),
                                 'active' => Yii::$app->controller->getUniqueID() === 'dbeditor/query',
 
                             ],
@@ -101,7 +101,7 @@ $defaultImagePath = Yii::getAlias('@web') . '/images/user2.jpg';
                                 'label' => 'Customer',
                                 'icon' => 'fas fa-users',
                                 'url' => ['/dbeditor/customer'],
-                                'visible' => Helper::checkRoute('/dbeditor/customer'),
+                                'visible' => Yii::$app->user->can('Customer_Permission'),
                                 'active' => Yii::$app->controller->getUniqueID() === 'dbeditor/customer',
 
                             ],
@@ -109,42 +109,42 @@ $defaultImagePath = Yii::getAlias('@web') . '/images/user2.jpg';
                                 'label' => 'Customer Type',
                                 'icon' => '	fas fa-user-check',
                                 'url'   => ['/dbeditor/customer-type'],
-                                'visible' => Helper::checkRoute('/dbeditor/customer-type'),
+                                'visible' => Yii::$app->user->can('CustomerType_Permission'),
                                 'active' => Yii::$app->controller->getUniqueID() === 'dbeditor/customer-type',
                             ],
                             [
                                 'label' => 'Division',
                                 'icon' => '	fas fa-building	',
                                 'url'   => ['/dbeditor/division'],
-                                'visible' => Helper::checkRoute('/dbeditor/division'),
+                                'visible' => Yii::$app->user->can('Division_Permission'),
                                 'active' => Yii::$app->controller->getUniqueID() === 'dbeditor/division',
                             ],
                             [
                                 'label' => 'Payment Method',
                                 'icon' => '	fas fa-money-bill-wave	',
                                 'url'   => ['/dbeditor/payment-method'],
-                                'visible' => Helper::checkRoute('/dbeditor/payment-method'),
+                                'visible' => Yii::$app->user->can('PaymentMethod_Permission'),
                                 'active' => Yii::$app->controller->getUniqueID() === 'dbeditor/payment-method',
                             ],
                             [
                                 'label' => 'Transactions',
                                 'icon' => 'fas fa-book	',
                                 'url'   => ['/dbeditor/transaction'],
-                                'visible' => Helper::checkRoute('/dbeditor/transaction'),
+                                'visible' => Yii::$app->user->can('Transaction_Permission'),
                                 'active' => Yii::$app->controller->getUniqueID() === 'dbeditor/transaction',
                             ],
                             [
                                 'label' => 'Transaction Status',
                                 'icon' => 'fas fa-check-circle',
                                 'url'   => ['/dbeditor/transaction-status'],
-                                'visible' => Helper::checkRoute('/dbeditor/transaction-status'),
+                                'visible' => Yii::$app->user->can('TransactionStatus_Permission'),
                                 'active' => Yii::$app->controller->getUniqueID() === 'dbeditor/transaction-status',
                             ],
                             [
                                 'label' => 'Transaction Type',
                                 'icon' => 'fas fa-tasks',
                                 'url'   => ['/dbeditor/transaction-type'],
-                                'visible' => Helper::checkRoute('/dbeditor/transaction-type'),
+                                'visible' => Yii::$app->user->can('TransactionType_Permission'),
                                 'active' => Yii::$app->controller->getUniqueID() === 'dbeditor/transaction-type',
                             ],
                         ],
@@ -153,37 +153,42 @@ $defaultImagePath = Yii::getAlias('@web') . '/images/user2.jpg';
                     [
                         'label' => 'Accounts',
                         'icon' => 'user',
-                        'visible' => Helper::checkRoute('/admin/index'),
+                        'visible' => Yii::$app->user->can('ADMIN'),
                         'items' => [
                             [
                                 'label' => 'User',
                                 'icon' => 'fas fa-user-circle',
                                 'url' => ['/user/index'],
                                 'active' => Yii::$app->controller->route === 'user/index',
+                                'visible' => Yii::$app->user->can('canCreateUser')
                             ],
                             [
                                 'label' => 'Assignment',
                                 'icon' => 'fas fa-address-book',
                                 'url'   => ['/admin/assignment/index'],
                                 'active' => Yii::$app->controller->id === 'assignment',
+                                'visible' => Yii::$app->user->can('canAssignRole')
                             ],
                             [
                                 'label' => 'Role',
                                 'icon' => 'fas fa-eye',
                                 'url'   => ['/admin/role/index'],
                                 'active' => Yii::$app->controller->id === 'role',
+                                'visible' => Yii::$app->user->can('canCreateRole')
                             ],
                             [
                                 'label' => 'Permission',
                                 'icon' => 'fas fa-check-square	',
                                 'url'   => ['/admin/permission/index'],
                                 'active' => Yii::$app->controller->id === 'permission',
+                                 'visible' => Yii::$app->user->can('canPermit')
                             ],
                             [
                                 'label' => 'Route',
                                 'icon' => 'fas fa-route	',
                                 'url'   => ['/admin/route/index'],
                                 'active' => Yii::$app->controller->id === 'route',
+                                'visible' => Yii::$app->user->can('canRoute')
                             ],
                         ],
                     ],
