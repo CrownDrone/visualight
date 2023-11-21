@@ -929,8 +929,8 @@ $this->title = '';
 
     $transactionType_name = [
         "1" => "Technical Services",
-        "2" => "National Laboratory Information Management System",
-        "3" => "Unified Laboratory Information Management System",
+        "2" => "NLIMS",
+        "3" => "ULIMS",
     ];
 
     foreach ($transactionTypeData as $type) {
@@ -2358,6 +2358,7 @@ $targetIncome =
 
 
         <!-- scriptfor customers graph -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js" integrity="sha512-JPcRR8yFa8mmCsfrw4TNte1ZvF1e3+1SdGMslZvmrzDYxS69J7J49vkFL8u6u8PlPJK+H3voElBtUCzaXj+6ig==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
         <script>
             document.addEventListener('DOMContentLoaded', function() {
@@ -2406,11 +2407,16 @@ $targetIncome =
 
                             },
                             datalabels: {
-                                formatter: (value, context) => {
-                                    // Display the label based on the selected data (e.g., transaction type or payment method)
-                                    return context.chart.data.labels[context.dataIndex];
-                                }
-                            }
+                            color: 'black', // Set the text color to black
+                            fontSize: 16, // Set the font size for labels
+                            formatter: function (value, context) {
+                                // Format the value with commas
+                                if (value === 0) {
+                                        return '';
+                                    }
+                                return value.toLocaleString();
+                            },
+                        }
                         },
                         responsive: true,
                         maintainAspectRatio: false,
@@ -2423,26 +2429,29 @@ $targetIncome =
                         transactionStatusChart = new Chart(transactionStatusChartContainer, {
                             type: selectedChartType,
                             options: doughnutOptions,
+                            plugins: [ChartDataLabels],
                             data: {
                                 labels: <?php echo json_encode($transactionStatus); ?>,
                                 datasets: [{
                                     data: <?php echo json_encode($transactionStatusDatacounts); ?>,
                                     backgroundColor: ['rgba(229, 247, 48, 0.2)',//red
-                                        'rgba(241, 37, 150, 0.2)',//yellow
-                                        'rgba(0, 215, 132, 0.2)',//green
-                                    ],
-                                    borderColor: ['rgba(229, 247, 48, 0.8)', //red
-                                        'rgba(241, 37, 150, 0.8)', //yellow
-                                        'rgba(0, 215, 132, 0.93)',//green
-                                    ],
+                                    'rgba(241, 37, 150, 0.2)',//yellow
+                                    'rgba(0, 215, 132, 0.2)',//green
+                                ],
+                                borderColor: ['rgba(229, 247, 48, 0.8)', //red
+                                    'rgba(241, 37, 150, 0.8)', //yellow
+                                    'rgba(0, 215, 132, 0.93)',//green
+                                ],
                                     borderWidth: 2
                                 }],
-                            }
+                            },
+                            
                         });
 
                         paymendtMethodChart = new Chart(paymendtMethodChartContainer, {
                             type: selectedChartType,
                             options: doughnutOptions,
+                            plugins: [ChartDataLabels],
                             data: {
                                 labels: <?php echo json_encode($PaymentMethod); ?>,
                                 datasets: [{
@@ -2462,6 +2471,7 @@ $targetIncome =
                         transactionTypeChart = new Chart(transactionTypeChartContainer, {
                             type: selectedChartType,
                             options: doughnutOptions,
+                            plugins: [ChartDataLabels],
                             data: {
                                 labels: <?php echo json_encode($transactionType); ?>,
                                 datasets: [{
@@ -2482,6 +2492,7 @@ $targetIncome =
                         customerTypeChart = new Chart(customerTypeChartContainer, {
                             type: selectedChartType,
                             options: doughnutOptions,
+                            plugins: [ChartDataLabels],
                             data: {
                                 labels: <?php echo json_encode($customerType); ?>,
                                 datasets: [{
@@ -2518,15 +2529,20 @@ $targetIncome =
 
                                     },
                                     datalabels: {
+                                        color: 'black', // Set the text color to black
                                         formatter: (value, context) => {
                                             // Display the label based on the selected data (e.g., transaction type or payment method)
-                                            return context.chart.data.labels[context.dataIndex];
+                                             if (value === 0) {
+                                                return '';
+                                            }
+                                            return value.toLocaleString();
                                         }
                                     }
                                 },
                                 responsive: true,
                                 maintainAspectRatio: false,
                             },
+                            plugins:[ChartDataLabels],
                             data: {
                                 labels: <?php echo json_encode($transactionStatus); ?>,
                                 datasets: [{
@@ -2554,15 +2570,20 @@ $targetIncome =
 
                                     },
                                     datalabels: {
+                                        color: 'black', // Set the text color to black
                                         formatter: (value, context) => {
                                             // Display the label based on the selected data (e.g., transaction type or payment method)
-                                            return context.chart.data.labels[context.dataIndex];
+                                             if (value === 0) {
+                                                return '';
+                                            }
+                                            return value.toLocaleString();
                                         }
                                     }
                                 },
                                 responsive: true,
                                 maintainAspectRatio: false,
                             },
+                            plugins:[ChartDataLabels],
                             data: {
                                 labels: <?php echo json_encode($PaymentMethod); ?>,
                                 datasets: [{
@@ -2589,15 +2610,20 @@ $targetIncome =
 
                                     },
                                     datalabels: {
+                                        color: 'black', // Set the text color to black
                                         formatter: (value, context) => {
                                             // Display the label based on the selected data (e.g., transaction type or payment method)
-                                            return context.chart.data.labels[context.dataIndex];
+                                             if (value === 0) {
+                                                return '';
+                                            }
+                                            return value.toLocaleString();
                                         }
                                     }
                                 },
                                 responsive: true,
                                 maintainAspectRatio: false,
                             },
+                            plugins:[ChartDataLabels],
                             data: {
                                 labels: <?php echo json_encode($transactionType); ?>,
                                 datasets: [{
@@ -2625,15 +2651,20 @@ $targetIncome =
 
                                     },
                                     datalabels: {
+                                        color: 'black', // Set the text color to black
                                         formatter: (value, context) => {
                                             // Display the label based on the selected data (e.g., transaction type or payment method)
-                                            return context.chart.data.labels[context.dataIndex];
+                                             if (value === 0) {
+                                                return '';
+                                            }
+                                            return value.toLocaleString();
                                         }
                                     }
                                 },
                                 responsive: true,
                                 maintainAspectRatio: false,
                             },
+                            plugins:[ChartDataLabels],
                             data: {
                                 labels: <?php echo json_encode($customerType); ?>,
                                 datasets: [{
@@ -2659,7 +2690,7 @@ $targetIncome =
                                 }],
                             }
                         });
-                    } else {
+                    } else if (selectedChartType === 'bar') {
 
                         // Create new charts based on selected chart type
                         transactionStatusChart = new Chart(transactionStatusChartContainer, {
@@ -2680,8 +2711,26 @@ $targetIncome =
 
                                     },
 
-                                }
+                                },
+                                plugins: {
+                                    legend: {
+                                        display: false,
+                                        position: 'top'
+
+                                    },
+                                    datalabels: {
+                                        color: 'black', // Set the text color to black
+                                        formatter: (value, context) => {
+                                            // Display the label based on the selected data (e.g., transaction type or payment method)
+                                            if (value === 0) {
+                                                return '';
+                                            }
+                                            return value.toLocaleString();
+                                        }
+                                    }
+                                },
                             },
+                            plugins:[ChartDataLabels],
 
                             data: {
                                 labels: <?php echo json_encode($transactionStatus); ?>,
@@ -2718,9 +2767,26 @@ $targetIncome =
                                         }
 
                                     },
-                                }
+                                },
+                                plugins: {
+                                    legend: {
+                                        display: false,
+                                        position: 'top'
 
+                                    },
+                                    datalabels: {
+                                        color: 'black', // Set the text color to black
+                                        formatter: (value, context) => {
+                                            // Display the label based on the selected data (e.g., transaction type or payment method)
+                                            if (value === 0) {
+                                                return '';
+                                            }
+                                            return value.toLocaleString();
+                                        }
+                                    }
+                                },
                             },
+                            plugins:[ChartDataLabels],
                             data: {
                                 labels: <?php echo json_encode($PaymentMethod); ?>,
                                 datasets: [{
@@ -2757,9 +2823,26 @@ $targetIncome =
                                         }
 
                                     },
-                                }
-                            },
+                                },
+                                plugins: {
+                                    legend: {
+                                        display: false,
+                                        position: 'top'
 
+                                    },
+                                    datalabels: {
+                                        color: 'black', // Set the text color to black
+                                        formatter: (value, context) => {
+                                            // Display the label based on the selected data (e.g., transaction type or payment method)
+                                            if (value === 0) {
+                                                return '';
+                                            }
+                                            return value.toLocaleString();
+                                        }
+                                    }
+                                },
+                            },
+                            plugins:[ChartDataLabels],
                             data: {
                                 labels: <?php echo json_encode($transactionType); ?>,
                                 datasets: [{
@@ -2795,9 +2878,25 @@ $targetIncome =
 
                                     },
                                 },
+                                plugins: {
+                                    legend: {
+                                        display: false,
+                                        position: 'top'
 
-
+                                    },
+                                    datalabels: {
+                                        color: 'black', // Set the text color to black
+                                        formatter: (value, context) => {
+                                            // Display the label based on the selected data (e.g., transaction type or payment method)
+                                            if (value === 0) {
+                                                return '';
+                                            }
+                                            return value.toLocaleString();
+                                        }
+                                    }
+                                },
                             },
+                            plugins:[ChartDataLabels],
                             data: {
                                 labels: <?php echo json_encode($customerType); ?>,
                                 datasets: [{
@@ -2824,14 +2923,260 @@ $targetIncome =
                             },
 
                         });
-                    }
-                }
+                        }
+                        else {
+
+                        // Create new charts based on selected chart type
+                        transactionStatusChart = new Chart(transactionStatusChartContainer, {
+                            type: selectedChartType,
+                            options: {
+                                scales: {
+                                    y: {
+                                        beginAtZero: true,
+                                        grid: {
+                                            drawOnChartArea: false
+                                        }
+                                    },
+                                    x: {
+                                        grid: {
+                                            display: false,
+                                            drawOnChartArea: false
+                                        }
+
+                                    },
+
+                                },
+                                plugins: {
+                                    legend: {
+                                        display: false,
+                                        position: 'top'
+
+                                    },
+                                    datalabels: {
+                                        color: 'black', // Set the text color to black
+                                        formatter: (value, context) => {
+                                            // Display the label based on the selected data (e.g., transaction type or payment method)
+                                            if (value === 0) {
+                                                return '';
+                                            }
+                                            return value.toLocaleString();
+                                        },
+                                        align: 'bottom', // Align the labels at the top of the data point
+                                        anchor: 'start', // Anchor the labels to the start of the data point
+                                        offset: 0, // Adjust the offset to move the labels down
+                                    }
+                                },
+                            },
+                            plugins:[ChartDataLabels],
+
+                            data: {
+                                labels: <?php echo json_encode($transactionStatus); ?>,
+                                datasets: [{
+                                    data: <?php echo json_encode($transactionStatusDatacounts); ?>,
+                                    backgroundColor: ['rgba(0, 215, 132, 0.2)',
+                                        'rgba(229, 247, 48, 0.2)',
+                                        'rgba(241, 37, 150, 0.2)',
+                                    ],
+                                    borderColor: ['rgba(0, 215, 132, 0.93)',
+                                        'rgba(229, 247, 48, 0.8)',
+                                        'rgba(241, 37, 150, 0.8)',
+                                    ],
+                                    borderWidth: 2
+                                }],
+                            }
+                        });
 
 
-                // Listen for changes in the dropdown and update charts
-                chartTypeDropdown.addEventListener('change', updateCharts);
+                        paymendtMethodChart = new Chart(paymendtMethodChartContainer, {
+                            type: selectedChartType,
+                            options: {
+                                scales: {
+                                    y: {
+                                        beginAtZero: true,
+                                        grid: {
+                                            drawOnChartArea: false
+                                        }
+                                    },
+                                    x: {
+                                        grid: {
+                                            display: false,
+                                            drawOnChartArea: false
+                                        }
 
-                updateCharts();
+                                    },
+                                },
+                                plugins: {
+                                    legend: {
+                                        display: false,
+                                        position: 'top'
+
+                                    },
+                                    datalabels: {
+                                        color: 'black', // Set the text color to black
+                                        formatter: (value, context) => {
+                                            // Display the label based on the selected data (e.g., transaction type or payment method)
+                                            if (value === 0) {
+                                                return '';
+                                            }
+                                            return value.toLocaleString();
+                                        },
+                                        align: 'bottom', // Align the labels at the top of the data point
+                                        anchor: 'start', // Anchor the labels to the start of the data point
+                                        offset: 0, // Adjust the offset to move the labels down
+                                    }
+                                },
+                            },
+                            plugins:[ChartDataLabels],
+                            data: {
+                                labels: <?php echo json_encode($PaymentMethod); ?>,
+                                datasets: [{
+                                    data: <?php echo json_encode($PaymentMethodcounts); ?>,
+                                    backgroundColor: ['rgba(0, 21, 215, 0.2)',
+                                        'rgba(0, 215, 132, 0.2)',
+                                        'rgba(118, 0, 186, 0.2)',
+                                    ],
+                                    borderColor: ['rgba(0, 21, 215, 0.93)',
+                                        'rgba(0, 215, 132, 1)',
+                                        'rgba(118, 0, 186, 0.93)',
+                                    ],
+                                    borderWidth: 2
+                                }]
+                            },
+                        });
+
+
+                        // Create new charts based on selected chart type
+                        transactionTypeChart = new Chart(transactionTypeChartContainer, {
+                            type: selectedChartType,
+                            options: {
+                                scales: {
+                                    y: {
+                                        beginAtZero: true,
+                                        grid: {
+                                            drawOnChartArea: false
+                                        }
+                                    },
+                                    x: {
+                                        grid: {
+                                            display: false,
+                                            drawOnChartArea: false
+                                        }
+
+                                    },
+                                },
+                                plugins: {
+                                    legend: {
+                                        display: false,
+                                        position: 'top'
+
+                                    },
+                                    datalabels: {
+                                        color: 'black', // Set the text color to black
+                                        formatter: (value, context) => {
+                                            // Display the label based on the selected data (e.g., transaction type or payment method)
+                                            if (value === 0) {
+                                                return '';
+                                            }
+                                            return value.toLocaleString();
+                                        },
+                                        align: 'bottom', // Align the labels at the top of the data point
+                                        anchor: 'start', // Anchor the labels to the start of the data point
+                                        offset: 0, // Adjust the offset to move the labels down
+                                    }
+                                },
+                            },
+                            plugins:[ChartDataLabels],
+                            data: {
+                                labels: <?php echo json_encode($transactionType); ?>,
+                                datasets: [{
+                                    data: <?php echo json_encode($transactionTypecounts); ?>,
+                                    backgroundColor: ['rgba(186, 0, 0, 0.2)',
+                                        'rgba(250, 154, 37, 0.2)',
+                                        'rgba(37, 202, 247, 0.2)',
+                                    ],
+                                    borderColor: ['rgba(186, 0, 0, 0.93)',
+                                        'rgba(250, 154, 37, 0.81)',
+                                        'rgba(37, 202, 247, 0.81)',
+                                    ],
+                                    borderWidth: 2
+                                }],
+                            }
+                        });
+
+                        customerTypeChart = new Chart(customerTypeChartContainer, {
+                            type: selectedChartType,
+                            options: {
+                                scales: {
+                                    y: {
+                                        beginAtZero: true,
+                                        grid: {
+                                            drawOnChartArea: false
+                                        }
+                                    },
+                                    x: {
+                                        grid: {
+                                            display: false,
+                                            drawOnChartArea: false
+                                        }
+
+                                    },
+                                },
+                                plugins: {
+                                    legend: {
+                                        display: false,
+                                        position: 'top'
+
+                                    },
+                                    datalabels: {
+                                        color: 'black', // Set the text color to black
+                                        formatter: (value, context) => {
+                                            // Display the label based on the selected data (e.g., transaction type or payment method)
+                                            if (value === 0) {
+                                                return '';
+                                            }
+                                            return value.toLocaleString();
+                                        },
+                                        align: 'bottom', // Align the labels at the top of the data point
+                                        anchor: 'start', // Anchor the labels to the start of the data point
+                                        offset: 0, // Adjust the offset to move the labels down
+                                    }
+                                },
+                            },
+                            plugins:[ChartDataLabels],
+                            data: {
+                                labels: <?php echo json_encode($customerType); ?>,
+                                datasets: [{
+                                    data: <?php echo json_encode($customerscounts); ?>,
+                                    backgroundColor: ['rgba(247, 37, 149, 0.2)',
+                                        'rgba(166, 37, 247, 0.2)',
+                                        'rgba(255, 155, 22, 0.2)',
+                                        'rgba(255, 213, 22, 0.2)',
+                                        'rgba(49, 255, 22, 0.2)',
+                                        'rgba(73, 0, 242, 0.2)',
+                                        'rgba(0, 220, 242, 0.2)'
+
+                                    ],
+                                    borderColor: ['rgba(247, 37, 149, 0.81)',
+                                        'rgba(166, 37, 247, 0.83)',
+                                        'rgba(255, 155, 22, 0.83)',
+                                        'rgba(255, 213, 22, 0.83)',
+                                        'rgba(49, 255, 22, 0.83)',
+                                        'rgba(73, 0, 242, 0.83)',
+                                        'rgba(0, 220, 242, 0.83)'
+                                    ],
+                                    borderWidth: 2
+                                }]
+                            },
+
+                        });
+                        }
+                        }
+
+
+                        // Listen for changes in the dropdown and update charts
+                        chartTypeDropdown.addEventListener('change', updateCharts);
+
+                        updateCharts();
             });
 
             // dashboard design end
