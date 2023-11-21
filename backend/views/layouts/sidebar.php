@@ -155,12 +155,6 @@ $defaultImagePath = Yii::getAlias('@web') . '/images/user2.jpg';
                         'icon' => 'user',
                         'visible' => Helper::checkRoute('/admin/index'),
                         'items' => [
-                             [
-                                'label' => 'Resend Email Verification',
-                                'icon' => '	fas fa-share',
-                                'url' => ['/user/send-verification-code'],
-                                'active' => Yii::$app->controller->route === 'user/send-verification-code',
-                            ],
                             [
                                 'label' => 'User',
                                 'icon' => 'fas fa-user-circle',
@@ -196,7 +190,8 @@ $defaultImagePath = Yii::getAlias('@web') . '/images/user2.jpg';
 
                     // ['label' => 'ChartJS', 'header' => true, 'visible' => Helper::checkRoute('/chart/chart/index'),],
                     ['label' => 'Chart',  'icon' => 'star', 'url' => ['/chart/chart/index'], 'visible' => Helper::checkRoute('/chart/chart/index'),],
-                    ['label' => 'Send PDF',  'icon' => 'star', 'url' => ["/site/upload-pdf"], 'visible' => Helper::checkRoute('/admin/index'),],
+                    ['label' => 'Resend Email Verification',  'icon' => 'fas fa-share', 'url' => ["/user/send-verification-code"], 'visible' => Helper::checkRoute('user/send-verification-code'),],
+                    ['label' => 'Send PDF',  'icon' => 'star', 'url' => ["/site/upload-pdf"], 'visible' => Yii::$app->user->can('ADMINISTRATOR') || Yii::$app->user->can('SECRETARY')],
                     ['label' => 'Dashboard',  'icon' => 'fas fa-chalkboard', 'url' => ["/site/index"], 'visible' => Helper::checkRoute('/site/index'),],                    
                     [
                         'label' => 'Division Charts',

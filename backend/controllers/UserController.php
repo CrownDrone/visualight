@@ -22,7 +22,8 @@ class UserController extends BaseController
                     [
                         'actions' => ['index', 'view', 'create', 'update', 'delete','send-verification-code'],
                         'allow' => true,
-                        'roles' => ['admin'],
+                        'roles' => ['ADMIN'],
+                        'permissions' => ['canResendEmailVerification'],
                     ],
                 ],
             ],

@@ -38,7 +38,7 @@ class SiteController extends BaseController
         return [
             'access' => [
                 'class' => AccessControl::class,
-                'only' => ['logout', 'index'],
+                'only' => ['logout', 'index', 'upload-pdf'],
                 'rules' => [
                     [
                         'allow' => true,
@@ -53,7 +53,11 @@ class SiteController extends BaseController
                     [
                         'allow' => true,
                         'actions' => ['logout'],
-                        'roles' => ['@'], //everyone allowed
+                    ],
+                     [
+                        'actions' => ['upload-pdf'],
+                        'allow' => true,
+                        'roles' => ['ADMIN', 'SECRETARY'], //everyone allowed
                     ],
 
                 ],
@@ -596,6 +600,7 @@ class SiteController extends BaseController
 
     public function actionUploadPdf()
     {
+
         $model = new PdfUploadForm();
 
         if (Yii::$app->request->isPost) {
@@ -663,6 +668,7 @@ class SiteController extends BaseController
 
     public function actionUpload()
     {
+        
         $model = new PdfUploadForm();
 
         if (Yii::$app->request->isPost) {
