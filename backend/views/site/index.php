@@ -2718,6 +2718,9 @@ $targetIncome = [
             };
 
             if (selectedChartType === 'doughnut') {
+
+                const transactionTypeElement = document.getElementById("transactionType");
+                transactionTypeElement.style.marginLeft = "0px"; 
                 // For doughnut and pie charts, use the custom options
                 transactionStatusChart = new Chart(transactionStatusChartContainer, {
                     type: selectedChartType,
@@ -2811,6 +2814,10 @@ $targetIncome = [
                     },
                 });
             } else if (selectedChartType === 'pie') {
+
+                const transactionTypeElement = document.getElementById("transactionType");
+                transactionTypeElement.style.marginLeft = "110px"; 
+
                 transactionStatusChart = new Chart(transactionStatusChartContainer, {
                     type: selectedChartType,
                     options: {
@@ -2988,6 +2995,9 @@ $targetIncome = [
                     }
                 });
             } else if (selectedChartType === 'bar') {
+
+                const transactionTypeElement = document.getElementById("transactionType");
+                transactionTypeElement.style.marginLeft = "0px"; 
 
                 // Create new charts based on selected chart type
                 transactionStatusChart = new Chart(transactionStatusChartContainer, {
@@ -3246,6 +3256,9 @@ $targetIncome = [
 
                 });
             } else {
+
+                const transactionTypeElement = document.getElementById("transactionType");
+                transactionTypeElement.style.marginLeft = "0px"; 
 
                 // Create new charts based on selected chart type
                 transactionStatusChart = new Chart(transactionStatusChartContainer, {
