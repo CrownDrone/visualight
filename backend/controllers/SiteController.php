@@ -57,7 +57,7 @@ class SiteController extends BaseController
                      [
                         'actions' => ['upload-pdf'],
                         'allow' => true,
-                        'roles' => ['ADMIN', 'SECRETARY'], //everyone allowed
+                        'permissions' => ['canSendPDF'],
                     ],
 
                 ],
