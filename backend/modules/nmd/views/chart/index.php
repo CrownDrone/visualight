@@ -1776,7 +1776,7 @@ $targetIncome =
                     percentage=percentage;
                 }
 
-                speedometerReading.textContent = Total + " Income";
+                speedometerReading.textContent = Number(Total).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " Income";
 
                 // Simulate the speedometer arrow movement (you can replace this with actual data)
                 let rotation = (needle) * 180 - 90;
@@ -1907,8 +1907,8 @@ $targetIncome =
             const defaultLabel = 'none';
             const defaultData = 0;
 
-            mostCustomerProvince.innerHTML = "Provinces with the highest income: <span style='color:green;'>" + defaultLabel + "</span> having <span style='color: blue;'> " + Number(defaultData).toFixed(2)  + "</span> total income.";
-            leastCustomerProvince.innerHTML = "Provinces with the least income: <span style='color:green;'>" + defaultLabel + "</span> having <span style='color: blue;'> " + Number(defaultData).toFixed(2)  + "</span> total income.";
+            mostCustomerProvince.innerHTML = "Provinces with the highest income: <span style='color:green;'>" + defaultLabel + "</span> having <span style='color: blue;'> " + Number(defaultData).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })  + "</span> total income.";
+            leastCustomerProvince.innerHTML = "Provinces with the least income: <span style='color:green;'>" + defaultLabel + "</span> having <span style='color: blue;'> " + Number(defaultData).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })  + "</span> total income.";
         } else {
             const tolerance = 0.0001;
 
@@ -1928,16 +1928,16 @@ $targetIncome =
                 }
             });
 
-            mostCustomerProvince.innerHTML = "Provinces with the highest income: <span style='color:green;'>" + highestprovinces.join(', ') + "</span> having <span style='color: blue;'> " + Number(highestprovincedata).toFixed(2)  + "</span> total income.";
-            leastCustomerProvince.innerHTML = "Provinces with the least income: <span style='color:green;'>" + leastprovinces.join(', ') + "</span> having <span style='color: blue;'> " + Number(leastprovincedata).toFixed(2)  + "</span> total income.";
+            mostCustomerProvince.innerHTML = "Provinces with the highest income: <span style='color:green;'>" + highestprovinces.join(', ') + "</span> having <span style='color: blue;'> " + Number(highestprovincedata).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })  + "</span> total income.";
+            leastCustomerProvince.innerHTML = "Provinces with the least income: <span style='color:green;'>" + leastprovinces.join(', ') + "</span> having <span style='color: blue;'> " + Number(leastprovincedata).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })  + "</span> total income.";
         }
 
-        highest.innerHTML = "Highest income: <span style='color: red;'>" + overallHighestIncomeDate + "</span> with <span style='color: blue;'> " + Number(overallHighestIncome).toFixed(2) + "</span>.";
-        least.innerHTML = "Least income: <span style='color: red;'>" + overallLeastIncomeDate + "</span> with <span style='color: blue;'> " + Number(overallLeastIncome).toFixed(2) + "</span>.";
-        mostTransactionType.innerHTML = "Highest transaction type:  <span style='color:green;'>"+ maxtransactionType.join(', ') + "</span> having  <span style='color: blue;'> " + Number(maxData).toFixed(2) +"</span> total income.";
-        leastTransactionType.innerHTML = "Least transaction type:   <span style='color:green;'>"+ minTransactionType.join(', ') + "</span> having  <span style='color: blue;'> " + Number(minData ).toFixed(2)+  "</span> total income.";
-        mostCustomerType.innerHTML = "Highest customer type(s): <span style='color:green;'>" + maxCustomerTypes.join(', ') + "</span> having <span style='color: blue;'> " + Number(maxCustomerData).toFixed(2) + "</span> total income.";
-        leastCustomerType.innerHTML = "Least customer type: <span style='color:green;'>" + minCustomerType.join(', ') + "</span> having <span style='color: blue;'> " + Number(minCustomerData).toFixed(2) + "</span> total income.";
+        highest.innerHTML = "Highest income: <span style='color: red;'>" + overallHighestIncomeDate + "</span> with <span style='color: blue;'> " + Number(overallHighestIncome).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + "</span>.";
+        least.innerHTML = "Least income: <span style='color: red;'>" + overallLeastIncomeDate + "</span> with <span style='color: blue;'> " + Number(overallLeastIncome).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + "</span>.";
+        mostTransactionType.innerHTML = "Highest transaction type:  <span style='color:green;'>"+ maxtransactionType.join(', ') + "</span> having  <span style='color: blue;'> " + Number(maxData).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) +"</span> total income.";
+        leastTransactionType.innerHTML = "Least transaction type:   <span style='color:green;'>"+ minTransactionType.join(', ') + "</span> having  <span style='color: blue;'> " + Number(minData ).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })+  "</span> total income.";
+        mostCustomerType.innerHTML = "Highest customer type(s): <span style='color:green;'>" + maxCustomerTypes.join(', ') + "</span> having <span style='color: blue;'> " + Number(maxCustomerData).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + "</span> total income.";
+        leastCustomerType.innerHTML = "Least customer type: <span style='color:green;'>" + minCustomerType.join(', ') + "</span> having <span style='color: blue;'> " + Number(minCustomerData).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + "</span> total income.";
         
 
     });
