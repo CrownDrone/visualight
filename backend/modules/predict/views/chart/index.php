@@ -551,8 +551,30 @@ function updateChart1(data) {
 
         updateChart1([totalPredictedSum, currentTransactionSum]);
 
+        var lossData = detectTransactionLoss(dataPoints);
+        console.log('Loss Data Points:', lossData);
+
 
     });
+
+
+        function detectTransactionLoss(dataPoints) {
+        let lossPoints = [];
+
+        for (let i = 1; i < dataPoints.length; i++) {
+            // Check if the current transaction count is less than the previous one
+            if (dataPoints[i][1] < dataPoints[i - 1][1]) {
+                lossPoints.push({
+                    timestamp: dataPoints[i][0],
+                    transactionCount: dataPoints[i][1],
+                    previousTransactionCount: dataPoints[i - 1][1]
+                });
+            }
+        }
+
+        return lossPoints;
+    }
+
 
     
 </script>

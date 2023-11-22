@@ -2021,6 +2021,7 @@ $targetIncome = [
         var totalSum = {
             datasets: [{
                 backgroundColor: "green",
+                borderColor: "green",
                 label: 'Total Income',
                 data: {}
             }]
@@ -2048,12 +2049,13 @@ $targetIncome = [
 
         // dashboard total income
         const totalsalesChartB = new Chart(totalsalesCtx, {
-            type: 'bar', // This specifies a bar chart
+            type: 'line', // This specifies a bar chart
             data: {
                 labels: global_label_day,
                 datasets: totalSum.datasets,
             },
             options: {
+                tension: 0.4,
                 responsive: true,
                 maintainAspectRatio: false,
                 scales: {
@@ -2192,11 +2194,13 @@ $targetIncome = [
         var soldPerDivs = { //prepare array for translated data
             datasets: [{
                     backgroundColor: "#06d6a0",
+                    borderColor: "#06d6a0",
                     label: 'National Metrology Division',
                     data: {}
                 },
                 {
                     backgroundColor: "#7209b7",
+                    borderColor: "#7209b7",
                     label: 'Standards and Testing Division',
                     data: {}
                 }
@@ -2222,12 +2226,13 @@ $targetIncome = [
         //dashboard income per division
         const salesCtx = document.getElementById('salesChart').getContext('2d');
         const salesChart = new Chart(salesCtx, {
-            type: 'bar',
+            type: 'line',
             data: {
                 labels: global_label_day,
                 datasets: soldPerDivs.datasets,
             },
             options: {
+                tension: 0.4,
                 responsive: true,
                 maintainAspectRatio: false,
                 scales: {

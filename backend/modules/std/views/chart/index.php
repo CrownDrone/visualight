@@ -1079,7 +1079,7 @@ $this->title = '';
     foreach ($SalesperDiv['datasets'] as &$dataset) {
         $divisionName = $dataset['label'];
         $dataset['backgroundColor'] = isset($divisionColors[$divisionName]['#ff9a34']) ? $divisionColors[$divisionName]['backgroundColor'] : '#ff9a34'; // Default background color if division not found
-        $dataset['borderColor'] = isset($divisionColors[$divisionName]['borderColor']) ? $divisionColors[$divisionName]['borderColor'] : '#0362BA'; // Default border color if division not found
+        $dataset['borderColor'] = isset($divisionColors[$divisionName]['borderColor']) ? $divisionColors[$divisionName]['borderColor'] : '#ff9a34'; // Default border color if division not found
         // $dataset['borderWidth'] = isset($divisionColors[$divisionName]['borderWidth']) ? $divisionColors[$divisionName]['borderWidth'] : '#0362BA';
     }
 
@@ -1986,9 +1986,10 @@ $targetIncome =
             //sales bar graph
             const salesCtx = document.getElementById('salesChart').getContext('2d');
             const salesChart = new Chart(salesCtx, {
-                type: 'bar',
+                type: 'line',
                 data: SalesperDiv,
                 options: {
+                    tension: 0.4,
                     responsive: true,
                     maintainAspectRatio: false,
                     scales: {

@@ -1090,7 +1090,7 @@ foreach ($addressDatatransaction as $customeraddress) {
     foreach ($SalesperDiv['datasets'] as &$dataset) {
         $divisionName = $dataset['label'];
         $dataset['backgroundColor'] = isset($divisionColors[$divisionName]['#70507c']) ? $divisionColors[$divisionName]['backgroundColor'] : '#bf60e2'; // Default background color if division not found
-        $dataset['borderColor'] = isset($divisionColors[$divisionName]['borderColor']) ? $divisionColors[$divisionName]['borderColor'] : '#2b6f73'; // Default border color if division not found
+        $dataset['borderColor'] = isset($divisionColors[$divisionName]['borderColor']) ? $divisionColors[$divisionName]['borderColor'] : '#bf60e2'; // Default border color if division not found
         // $dataset['borderWidth'] = isset($divisionColors[$divisionName]['borderWidth']) ? $divisionColors[$divisionName]['borderWidth'] : '#0362BA';
     }
 
@@ -1996,9 +1996,10 @@ $targetIncome =
             //sales bar graph
             const salesCtx = document.getElementById('salesChart').getContext('2d');
             const salesChart = new Chart(salesCtx, {
-                type: 'bar',
+                type: 'line',
                 data: SalesperDiv,
                 options: {
+                    tension: 0.4,
                     responsive: true,
                     maintainAspectRatio: false,
                     scales: {
