@@ -910,7 +910,7 @@ foreach ($transactionTypeData as $type) {
     $transactionTypecounts[] = $type['customer_count'];
 }
 
-//invome from transaction type
+//income from transaction type
 $transactionTypeincomeData = $query->select(['transaction_type', 'SUM(amount) as total_amount'])
     ->from('transaction')
     // ->where(['between', 'transaction_date', $fromDate, $toDate])
@@ -930,26 +930,29 @@ foreach ($transactionTypeincomeData as $type) {
     $transactionTypesumincome[] = $type['total_amount'];
 }
 
-//Transaction customer table
 
 //transaction used per customer type
 $customerTypeDatapertransaction = (new \yii\db\Query())
-    ->select(['ct.type as customer_type', 'tt.type as transaction_type', 'COUNT(*) as transaction_count'])
+    ->select(['ct.type as customer_type', 'tt.type as transaction_type', 'COUNT(*) as transaction_count', 'SUM(t.amount) as total_amount', 'ts.status as transaction_status'])
     ->from('transaction t')
     ->join('INNER JOIN', 'customer c', 't.customer_id = c.id')
     ->join('INNER JOIN', 'customer_type ct', 'c.customer_type = ct.id')
     ->join('INNER JOIN', 'transaction_type tt', 't.transaction_type = tt.id')
-    ->groupBy(['ct.type', 'tt.type'])
+    ->join('INNER JOIN', 'transaction_status ts', 't.transaction_status = ts.id')
+    ->groupBy(['ct.type', 'tt.type', 'ts.status'])
     ->orderBy(['transaction_count' => SORT_DESC])
     ->all();
 
 $ctpt = [''];
 $ctct = [0];
+$ctamt = [0];
+$ctstatus = [''];
 
 foreach ($customerTypeDatapertransaction as $type) {
-
     $ctpt[] = $type['customer_type'];
     $ctct[] = $type['transaction_count'];
+    $ctamt[] = $type['total_amount'];
+    $ctstatus[] = $type['transaction_status'];
 }
 
 
@@ -2654,19 +2657,20 @@ $targetIncome = [
 
             <h2 id="header"></h2>
 
+            <div style="text-align: left; margin: 0 auto; width: 80%;">
+                <label for="transactionTypeDropdown">Select Transaction Type:</label>
+                <select id="transactionTypeDropdown">
+                    <option value="ts">Technical Services</option>
+                    <option value="nlims">National Laboratory Information Management System</option>
+                    <option value="ulims">Unified Laboratory Information Management System</option>
+                    
+                    
+                </select> <br><br>
 
             <div style="text-align: left; margin: 0 auto; width: 80%;">
                <h4 id="type1"></h4>
                <p id="hightype1"></p>
-               <p id="leasttype1"></p>
-
-               <h4 id="type2"></h4>
-               <p id="hightype2"></p>
-               <p id="leasttype2"></p>
-
-               <h4 id="type3"></h4>
-               <p id="hightype3"></p>
-               <p id="leasttype3"></p>
+              
             </div>
 
         </div>
@@ -2689,6 +2693,7 @@ $targetIncome = [
         const transactionTypopup = document.getElementById("transactionTypopup");
         const customerpopup = document.getElementById("customerpopup");
         const close = document.getElementById("close");
+        const transactionTypeDropdown = document.getElementById("transactionTypeDropdown");
  
          
 
@@ -2696,82 +2701,149 @@ $targetIncome = [
         transactionTypopup.addEventListener("click", () => {
 
         const customerTypeData = <?php echo json_encode($customerTypeDatapertransaction); ?>;
-
-        //Highest Transaction Type for this quarter
-        
-
-        //for Technical services transaction type
-        const technicalServicesData = customerTypeData.filter(item => item.transaction_type === 'Technical Services');
-        const customertypeTS = technicalServicesData.map(item => item.customer_type);
-        const customertypeTSdata = technicalServicesData.map(item => item.transaction_count);
-        const customertransactiontype = [];
-
-        for (let i = 0; i < customertypeTS.length; i++) {
-            customertransactiontype.push({
-                label: customertypeTS[i],
-                data: customertypeTSdata[i]
-            });
-        }
-        
-        const maxCustomerTypeData = customertransactiontype.reduce((max, obj) => (obj.data >= max.data ? obj : max), {data: -Infinity });
-        const maxCustomerData = maxCustomerTypeData.data;
-        const maxCustomerTypes = customertransactiontype.filter(obj => obj.data === maxCustomerData).map(obj => obj.label);
-        const minCustomerTypeData = customertransactiontype.reduce((min, obj) => (obj.data <= min.data ? obj : min), {data: Infinity});
-        const minCustomerData = minCustomerTypeData.data;
-        const minCustomerType = customertransactiontype.filter(obj => obj.data === minCustomerData).map(obj => obj.label);
-
-        //for Unified Laboratory Information Management System transaction type
-        const ulimsData = customerTypeData.filter(item => item.transaction_type === 'Unified Laboratory Information Management System');
-        const customertypeulims = ulimsData.map(item => item.customer_type);
-        const customertypeulimsdata = ulimsData.map(item => item.transaction_count);
-        const customertransactiontypeUlims = [];
-
-        for (let i = 0; i < customertypeulims.length; i++) {
-            customertransactiontypeUlims.push({
-                label: customertypeulims[i],
-                data: customertypeulimsdata[i]
-            });
-        }
-        
-        const maxCustomerTypeDataulims = customertransactiontypeUlims.reduce((max, obj) => (obj.data >= max.data ? obj : max), {data: -Infinity });
-        const maxCustomerDataulims = maxCustomerTypeDataulims.data;
-        const maxCustomerTypesulims = customertransactiontypeUlims.filter(obj => obj.data === maxCustomerDataulims).map(obj => obj.label);
-        const minCustomerTypeDataulims = customertransactiontypeUlims.reduce((min, obj) => (obj.data <= min.data ? obj : min), {data: Infinity});
-        const minCustomerDataulims = minCustomerTypeDataulims.data;
-        const minCustomerTypeulims = customertransactiontypeUlims.filter(obj => obj.data === minCustomerDataulims).map(obj => obj.label);
-
-        //for National Laboratory Information Management System transaction type
-        const nlimsData = customerTypeData.filter(item => item.transaction_type === 'National Laboratory Information Management System');
-        const customertypenlims = nlimsData.map(item => item.customer_type);
-        const customertypenlimsdata = nlimsData.map(item => item.transaction_count);
-        const customertransactiontypeNlims = [];
-
-        for (let i = 0; i < customertypenlims.length; i++) {
-            customertransactiontypeNlims.push({
-                label: customertypenlims[i],
-                data: customertypenlimsdata[i]
-            });
-        }
-        
-        const maxCustomerTypeDatanlims = customertransactiontypeNlims.reduce((max, obj) => (obj.data >= max.data ? obj : max), {data: -Infinity });
-        const maxCustomerDatanlims = maxCustomerTypeDatanlims.data;
-        const maxCustomerTypesnlims = customertransactiontypeNlims.filter(obj => obj.data === maxCustomerDatanlims).map(obj => obj.label);
-        const minCustomerTypeDatanlims = customertransactiontypeNlims.reduce((min, obj) => (obj.data <= min.data ? obj : min), {data: Infinity});
-        const minCustomerDatanlims = minCustomerTypeDatanlims.data;
-        const minCustomerTypenlims= customertransactiontypeNlims.filter(obj => obj.data === minCustomerDatanlims).map(obj => obj.label);
-
-
-        // Use the found data
         header.innerHTML = "Transaction Type <br>";
-        type1.innerHTML = "<span style='color: orange;'>Technical Services";
-        hightype1.innerHTML = "Highest customer type(s) : <span style='color: green;'>" + maxCustomerTypes + "</span> having <span style='color: red;'>" + maxCustomerData + " transaction";
-        leasttype1.innerHTML = "Least customer type(s) : <span style='color: green;'>" + minCustomerType + "</span> having <span style='color: red;'>" + minCustomerData + " transaction";
-        type2.innerHTML = "<span style='color: violet;'>Unified Laboratory Information Management System (ULIMS)";
-        hightype2.innerHTML = "Highest customer type(s) : <span style='color: green;'>" + maxCustomerTypesulims + "</span> having <span style='color: red;'>" + maxCustomerDataulims + " transaction";
-        leasttype2.innerHTML = "Least customer type(s) : <span style='color: green;'>" + minCustomerTypeulims + "</span> having <span style='color: red;'>" + minCustomerDataulims + " transaction";
-        type3.innerHTML = "<span style='color: red;'>National Laboratory Information Management System";
-        hightype3.innerHTML = "Highest customer type(s) : <span style='color: green;'>" + maxCustomerTypesnlims + "</span> having <span style='color: red;'>" + maxCustomerDatanlims + " transaction";
-        leasttype3.innerHTML = "Least customer type(s) : <span style='color: green;'>" + minCustomerTypenlims + "</span> having <span style='color: red;'>" + minCustomerDatanlims + " transaction";
+
+        transactionTypeDropdown.addEventListener("change", () => {
+            const selectedTransactionType = transactionTypeDropdown.value;
+         
+            switch (selectedTransactionType) {
+                case "ts":
+                    //for Technical services transaction type
+                    const technicalServicesData = customerTypeData.filter(item => item.transaction_type === 'Technical Services');
+                    const customertypeTS = technicalServicesData.map(item => item.customer_type);
+                    const customertypeTSdata = technicalServicesData.map(item => item.transaction_count);
+                    const totalAmountTSdata = technicalServicesData.map(item => item.total_amount);
+                    const transactionStatusTS = technicalServicesData.map(item => item.transaction_status);
+
+                    const customertransactiontype = [];
+
+                    for (let i = 0; i < customertypeTS.length; i++) {
+                        customertransactiontype.push({
+                            label: customertypeTS[i],
+                            data: customertypeTSdata[i],
+                            totalAmount: totalAmountTSdata[i],
+                            transactionStatus: transactionStatusTS[i]
+                        });
+                    }
+                    
+                    //paid ts
+                    const paidTransactionsTS = customertransactiontype.filter(item => item.transactionStatus === 'Paid');
+                    const highestPaidTransactionTS = paidTransactionsTS.reduce((max, current) => (current.data > max.data) ? current : max, paidTransactionsTS[0]);
+                    const leastPaidTransactionTS =paidTransactionsTS.reduce((min, current) => (current.data < min.data) ? current : min, paidTransactionsTS[0]);
+                    //cancelled ts
+                    const cancelledTransactionsTS = customertransactiontype.filter(item => item.transactionStatus === 'Cancelled');
+                    const highestcancelledTransactionTS = cancelledTransactionsTS.reduce((max, current) => (current.data > max.data) ? current : max, cancelledTransactionsTS[0]);
+                    const leastcancelledTransactionTS =cancelledTransactionsTS.reduce((min, current) => (current.data < min.data) ? current : min, cancelledTransactionsTS[0]); 
+                    //Pending TS
+                    const pendingTransactionsTS = customertransactiontype.filter(item => item.transactionStatus === 'Pending');
+                    const highestPendingTransactionTS = pendingTransactionsTS.reduce((max, current) => (current.data > max.data) ? current : max, pendingTransactionsTS[0]);
+                    const leastPendingTransactionTS =pendingTransactionsTS.reduce((min, current) => (current.data < min.data) ? current : min, pendingTransactionsTS[0]);
+
+
+
+                    // // Use the found data
+                    
+                    type1.innerHTML = "<span style='color: orange;'>Technical Services <br>";
+                    hightype1.innerHTML = "&nbsp; &nbsp; + Highest Paid Transaction:<span style='color: green;'> " +highestPaidTransactionTS.label + "</span> with <span style='color: red;'>" + highestPaidTransactionTS.data + "</span> transaction having the total income of <span style='color: red;'>" + Number(highestPaidTransactionTS.totalAmount).toFixed(2) +"."
+                    + "</span><br>&nbsp; &nbsp; + Least paid Transaction:<span style='color: green;'> " +leastPaidTransactionTS.label + "</span> with <span style='color: red;'>" + leastPaidTransactionTS.data + "</span> transaction having the total income of <span style='color: red;'>" + Number(leastPaidTransactionTS.totalAmount).toFixed(2) +"."
+                    + "</span><br>&nbsp; &nbsp; + Highest pending Transaction:<span style='color: green;'> " +highestPendingTransactionTS.label + "</span> with <span style='color: red;'>" + highestPendingTransactionTS.data + "</span> transaction having the total income of <span style='color: red;'>" + Number(highestPendingTransactionTS.totalAmount).toFixed(2) +"."
+                    + "</span><br>&nbsp; &nbsp; + Least pending Transaction:<span style='color: green;'> " +leastPendingTransactionTS.label + "</span> with <span style='color: red;'>" + leastPendingTransactionTS.data + "</span> transaction having the total income of <span style='color: red;'>" + Number(leastPendingTransactionTS.totalAmount).toFixed(2) +"."
+                    + "</span><br>&nbsp; &nbsp; + Highest cancelled Transaction:<span style='color: green;'> " +highestcancelledTransactionTS.label + "</span> with <span style='color: red;'>" + highestcancelledTransactionTS.data + "</span> transaction having the total income of <span style='color: red;'>" + Number(highestcancelledTransactionTS.totalAmount).toFixed(2) +"."
+                    + "</span><br>&nbsp; &nbsp; + Least cancelled Transaction:<span style='color: green;'> " +leastcancelledTransactionTS.label + "</span> with <span style='color: red;'>" + leastcancelledTransactionTS.data + "</span> transaction having the total income of <span style='color: red;'>" + Number(leastcancelledTransactionTS.totalAmount).toFixed(2) +".";
+                    
+                break;
+
+                case "nlims":
+                    //for Technical services transaction type
+                    const nlimsData = customerTypeData.filter(item => item.transaction_type === 'National Laboratory Information Management System');
+                    const customertypenlims = nlimsData.map(item => item.customer_type);
+                    const customertypenlimsdata = nlimsData.map(item => item.transaction_count);
+                    const totalAmountnlimsdata = nlimsData.map(item => item.total_amount);
+                    const transactionStatusnlims = nlimsData.map(item => item.transaction_status);
+
+                    const customertransactiontypenlims = [];
+
+                    for (let i = 0; i < customertypenlims.length; i++) {
+                        customertransactiontypenlims.push({
+                            label: customertypenlims[i],
+                            data: customertypenlimsdata[i],
+                            totalAmount: totalAmountnlimsdata[i],
+                            transactionStatus: transactionStatusnlims[i]
+                        });
+                    }
+                    
+                    //paid nlims
+                    const paidTransactionsnlims = customertransactiontypenlims.filter(item => item.transactionStatus === 'Paid');
+                    const highestPaidTransactionnlims = paidTransactionsnlims.reduce((max, current) => (current.data > max.data) ? current : max, paidTransactionsnlims[0]);
+                    const leastPaidTransactionnlims =paidTransactionsnlims.reduce((min, current) => (current.data < min.data) ? current : min, paidTransactionsnlims[0]);
+                    //cancelled nlims
+                    const cancelledTransactionsnlims = customertransactiontypenlims.filter(item => item.transactionStatus === 'Cancelled');
+                    const highestcancelledTransactionnlims = cancelledTransactionsnlims.reduce((max, current) => (current.data > max.data) ? current : max, cancelledTransactionsnlims[0]);
+                    const leastcancelledTransactionnlims =cancelledTransactionsnlims.reduce((min, current) => (current.data < min.data) ? current : min, cancelledTransactionsnlims[0]); 
+                    //Pending nlims
+                    const pendingTransactionsnlims = customertransactiontypenlims.filter(item => item.transactionStatus === 'Pending');
+                    const highestPendingTransactionnlims = pendingTransactionsnlims.reduce((max, current) => (current.data > max.data) ? current : max, pendingTransactionsnlims[0]);
+                    const leastPendingTransactionnlims =pendingTransactionsnlims.reduce((min, current) => (current.data < min.data) ? current : min, pendingTransactionsnlims[0]);
+
+
+
+                    // // Use the found data
+                    
+                    type1.innerHTML = "<span style='color: Red;'>National Laboratory Information Management System <br>";
+                    hightype1.innerHTML = "&nbsp; &nbsp; + Highest Paid Transaction:<span style='color: green;'> " +highestPaidTransactionnlims.label + "</span> with <span style='color: red;'>" + highestPaidTransactionnlims.data + "</span> transaction having the total income of <span style='color: red;'>" + Number(highestPaidTransactionnlims.totalAmount).toFixed(2) +"."
+                    + "</span><br>&nbsp; &nbsp; + Least paid Transaction:<span style='color: green;'> " +leastPaidTransactionnlims.label + "</span> with <span style='color: red;'>" + leastPaidTransactionnlims.data + "</span> transaction having the total income of <span style='color: red;'>" + Number(leastPaidTransactionnlims.totalAmount).toFixed(2) +"."
+                    + "</span><br>&nbsp; &nbsp; + Highest pending Transaction:<span style='color: green;'> " +highestPendingTransactionnlims.label + "</span> with <span style='color: red;'>" + highestPendingTransactionnlims.data + "</span> transaction having the total income of <span style='color: red;'>" + Number(highestPendingTransactionnlims.totalAmount).toFixed(2) +"."
+                    + "</span><br>&nbsp; &nbsp; + Least pending Transaction:<span style='color: green;'> " +leastPendingTransactionnlims.label + "</span> with <span style='color: red;'>" + leastPendingTransactionnlims.data + "</span> transaction having the total income of <span style='color: red;'>" + Number(leastPendingTransactionnlims.totalAmount).toFixed(2) +"."
+                    + "</span><br>&nbsp; &nbsp; + Highest cancelled Transaction:<span style='color: green;'> " +highestcancelledTransactionnlims.label + "</span> with <span style='color: red;'>" + highestcancelledTransactionnlims.data + "</span> transaction having the total income of <span style='color: red;'>" + Number(highestcancelledTransactionnlims.totalAmount).toFixed(2) +"."
+                    + "</span><br>&nbsp; &nbsp; + Least cancelled Transaction:<span style='color: green;'> " +leastcancelledTransactionTS.label + "</span> with <span style='color: red;'>" + leastcancelledTransactionnlims.data + "</span> transaction having the total income of <span style='color: red;'>" + Number(leastcancelledTransactionnlims.totalAmount).toFixed(2) +".";
+                    
+                break;
+
+                case "ulims":
+
+                    //for ulims transaction type
+                    const ulimsData = customerTypeData.filter(item => item.transaction_type === 'Unified Laboratory Information Management System');
+                    const customertypeulims = ulimsData.map(item => item.customer_type);
+                    const customertypeulimsdata = ulimsData.map(item => item.transaction_count);
+                    const totalAmountulimsdata = ulimsData.map(item => item.total_amount);
+                    const transactionStatusulims = ulimsData.map(item => item.transaction_status);
+
+                    const customertransactiontypeulims = [];
+
+                    for (let i = 0; i < customertypeulimsdata.length; i++) {
+                        customertransactiontypeulims.push({
+                            label: customertypeulims[i],
+                            data: customertypeulimsdata[i],
+                            totalAmount: totalAmountulimsdata[i],
+                            transactionStatus: transactionStatusulims[i]
+                        });
+                    }
+                    
+                    //paid ulims
+                    const paidTransactionsulims = customertransactiontypeulims.filter(item => item.transactionStatus === 'Paid');
+                    const highestPaidTransactionulims = paidTransactionsulims.reduce((max, current) => (current.data > max.data) ? current : max, paidTransactionsulims[0]);
+                    const leastPaidTransactionulims =paidTransactionsulims.reduce((min, current) => (current.data < min.data) ? current : min, paidTransactionsulims[0]);
+                    //cancelled ulims
+                    const cancelledTransactionsulims = customertransactiontypeulims.filter(item => item.transactionStatus === 'Cancelled');
+                    const highestcancelledTransactionulims = cancelledTransactionsulims.reduce((max, current) => (current.data > max.data) ? current : max, cancelledTransactionsulims[0]);
+                    const leastcancelledTransactionulims =cancelledTransactionsulims.reduce((min, current) => (current.data < min.data) ? current : min, cancelledTransactionsulims[0]); 
+                    //Pending ulims
+                    const pendingTransactionsulims = customertransactiontypeulims.filter(item => item.transactionStatus === 'Pending');
+                    const highestPendingTransactionulims = pendingTransactionsulims.reduce((max, current) => (current.data > max.data) ? current : max, pendingTransactionsulims[0]);
+                    const leastPendingTransactionulims =pendingTransactionsulims.reduce((min, current) => (current.data < min.data) ? current : min, pendingTransactionsulims[0]);
+
+                    type1.innerHTML = "<span style='color: violet;'>Unified Laboratory Information Management System <br>";
+                    hightype1.innerHTML = "&nbsp; &nbsp; + Highest Paid Transaction:<span style='color: green;'> " +highestPaidTransactionulims.label + "</span> with <span style='color: red;'>" + highestPaidTransactionulims.data + "</span> transaction having the total income of <span style='color: red;'>" + Number(highestPaidTransactionulims.totalAmount).toFixed(2) +"."
+                    + "</span><br>&nbsp; &nbsp; + Least paid Transaction:<span style='color: green;'> " +leastPaidTransactionulims.label + "</span> with <span style='color: red;'>" + leastPaidTransactionulims.data + "</span> transaction having the total income of <span style='color: red;'>" + Number(leastPaidTransactionulims.totalAmount).toFixed(2) +"."
+                    + "</span><br>&nbsp; &nbsp; + Highest pending Transaction:<span style='color: green;'> " +highestPendingTransactionulims.label + "</span> with <span style='color: red;'>" + highestPendingTransactionulims.data + "</span> transaction having the total income of <span style='color: red;'>" + Number(highestPendingTransactionulims.totalAmount).toFixed(2) +"."
+                    + "</span><br>&nbsp; &nbsp; + Least pending Transaction:<span style='color: green;'> " +leastPendingTransactionulims.label + "</span> with <span style='color: red;'>" + leastPendingTransactionulims.data + "</span> transaction having the total income of <span style='color: red;'>" + Number(leastPendingTransactionulims.totalAmount).toFixed(2) +"."
+                    + "</span><br>&nbsp; &nbsp; + Highest cancelled Transaction:<span style='color: green;'> " +highestcancelledTransactionulims.label + "</span> with <span style='color: red;'>" + highestcancelledTransactionulims.data + "</span> transaction having the total income of <span style='color: red;'>" + Number(highestcancelledTransactionulims.totalAmount).toFixed(2) +"."
+                    + "</span><br>&nbsp; &nbsp; + Least cancelled Transaction:<span style='color: green;'> " +leastcancelledTransactionulims.label + "</span> with <span style='color: red;'>" + leastcancelledTransactionulims.data + "</span> transaction having the total income of <span style='color: red;'>" + Number(leastcancelledTransactionulims.totalAmount).toFixed(2) +".";
+                break;
+            }
+    });
+    transactionTypeDropdown.value = 'ts';
+    transactionTypeDropdown.dispatchEvent(new Event('change'));
 
         customerpopup.style.display = "block";
 
