@@ -910,6 +910,7 @@ foreach ($transactionTypeData as $type) {
     $transactionTypecounts[] = $type['customer_count'];
 }
 
+//invome from transaction type
 $transactionTypeincomeData = $query->select(['transaction_type', 'SUM(amount) as total_amount'])
     ->from('transaction')
     // ->where(['between', 'transaction_date', $fromDate, $toDate])
@@ -929,6 +930,29 @@ foreach ($transactionTypeincomeData as $type) {
     $transactionTypesumincome[] = $type['total_amount'];
 }
 
+//Transaction customer table
+
+//transaction used per customer type
+$customerTypeDatapertransaction = (new \yii\db\Query())
+    ->select(['ct.type as customer_type', 'tt.type as transaction_type', 'COUNT(*) as transaction_count'])
+    ->from('transaction t')
+    ->join('INNER JOIN', 'customer c', 't.customer_id = c.id')
+    ->join('INNER JOIN', 'customer_type ct', 'c.customer_type = ct.id')
+    ->join('INNER JOIN', 'transaction_type tt', 't.transaction_type = tt.id')
+    ->groupBy(['ct.type', 'tt.type'])
+    ->orderBy(['transaction_count' => SORT_DESC])
+    ->all();
+
+$ctpt = [''];
+$ctct = [0];
+
+foreach ($customerTypeDatapertransaction as $type) {
+
+    $ctpt[] = $type['customer_type'];
+    $ctct[] = $type['transaction_count'];
+}
+
+
 $transactionStatusData = $query->select(['transaction_status', 'COUNT(*) as customer_count'])
     ->from('transaction')
     // ->where(['between', 'transaction_date', $fromDate, $toDate])
@@ -945,30 +969,6 @@ $transactionStatus_name = [
     "2" => "Cancelled",
     "3" => "Pending",
 ];
-
-// $statusColors = [
-//     'Paid' => [
-//         'backgroundColor' => 'rgba(0, 215, 132, 0.2)',
-//         'borderWidth' => 'rgba(0, 215, 132, 0.2)',
-//     ],
-//     'Cancelled' => [
-//         'backgroundColor' => 'rgba(255, 0, 0, 0.2)',
-//         'borderWidth' =>'rgba(255, 0, 0, 0.2)',
-//     ],
-//     'Pending' => [
-//         'backgroundColor' => 'rgba(255, 255, 0, 0.2)',
-//         'borderWidth' =>'rgba(255, 255, 0, 0.2)',
-//     ],
-// ];
-
-// //dito yung pag lalagay nung naka set na color
-// foreach ($SalesperDiv['datasets'] as &$dataset) {
-//     $divisionName = $dataset['label'];
-//     $dataset['backgroundColor'] = isset($divisionColors[$divisionName]['backgroundColor']) ? $divisionColors[$divisionName]['backgroundColor'] : '#EFF5FF'; // Default background color if division not found
-//     $dataset['borderColor'] = isset($divisionColors[$divisionName]['borderColor']) ? $divisionColors[$divisionName]['borderColor'] : '#0362BA'; // Default border color if division not found
-//     // $dataset['borderWidth'] = isset($divisionColors[$divisionName]['borderWidth']) ? $divisionColors[$divisionName]['borderWidth'] : '#0362BA';
-// }
-
 
 
 foreach ($transactionStatusData as $status) {
@@ -1616,7 +1616,6 @@ $targetIncome = [
                                         }
                                         echo json_encode($data);
                                         ?>;
-            console.log(customerTypeData)
 
             const maxCustomerTypeData = customerTypeData.reduce((max, obj) => (obj.data >= max.data ? obj : max), {
                 data: -Infinity
@@ -1850,7 +1849,6 @@ $targetIncome = [
                                         }
                                         echo json_encode($data);
                                         ?>;
-            console.log(customerTypeData)
 
             const maxCustomerTypeData = customerTypeData.reduce((max, obj) => (obj.data >= max.data ? obj : max), {
                 data: -Infinity
@@ -2422,7 +2420,7 @@ $targetIncome = [
 
         <div class="chart-container">
             <p class="reportTitle" id=" ">Total Customers per Province</p>
-            <canvas id="Provinces"></canvas>
+            <canvas id="Provinces" width="100%"></canvas>
         </div>
 
         <!-- <div class="chart-container" style="width: 47%; text-align: center;">
@@ -2634,13 +2632,13 @@ $targetIncome = [
             <canvas id="transactionStatus"></canvas>
         </div>
         <div class="chart-container2">
-            <p class="reportTitle" id=" ">Payment Method</p>
+            <p class="reportTitle" id="paymendtMethodpopup">Payment Method</p>
             <canvas id="paymendtMethod"></canvas>
         </div>
     </div>
     <div class="graph2">
         <div class="chart-container2">
-            <p class="reportTitle" id=" ">Type of Transaction</p>
+            <p class="reportTitle" id="transactionTypopup">Type of Transaction</p>
             <canvas id="transactionType"></canvas>
         </div>
 
@@ -2650,7 +2648,141 @@ $targetIncome = [
         </div>
     </div>
 
+    <div class="popup" id="customerpopup">
+        <div class="popup-content">
+            <span class="close" id="close">&times;</span>
+
+            <h2 id="header"></h2>
+
+
+            <div style="text-align: left; margin: 0 auto; width: 80%;">
+               <h4 id="type1"></h4>
+               <p id="hightype1"></p>
+               <p id="leasttype1"></p>
+
+               <h4 id="type2"></h4>
+               <p id="hightype2"></p>
+               <p id="leasttype2"></p>
+
+               <h4 id="type3"></h4>
+               <p id="hightype3"></p>
+               <p id="leasttype3"></p>
+            </div>
+
+        </div>
+    </div>
+
 </div>
+
+<!-- popup script for customers -->
+
+<script>
+        //reference data
+        // const transaction = <?php echo json_encode($TransactionperDiv); ?>;
+        
+
+        // Reference datas current
+        const date = new Date();
+        const month = currentDate.getMonth();
+        const year = currentDate.getFullYear();
+
+        const transactionTypopup = document.getElementById("transactionTypopup");
+        const customerpopup = document.getElementById("customerpopup");
+        const close = document.getElementById("close");
+ 
+         
+
+        //Transaction Type pop-up analyzation
+        transactionTypopup.addEventListener("click", () => {
+
+        const customerTypeData = <?php echo json_encode($customerTypeDatapertransaction); ?>;
+
+        //Highest Transaction Type for this quarter
+        
+
+        //for Technical services transaction type
+        const technicalServicesData = customerTypeData.filter(item => item.transaction_type === 'Technical Services');
+        const customertypeTS = technicalServicesData.map(item => item.customer_type);
+        const customertypeTSdata = technicalServicesData.map(item => item.transaction_count);
+        const customertransactiontype = [];
+
+        for (let i = 0; i < customertypeTS.length; i++) {
+            customertransactiontype.push({
+                label: customertypeTS[i],
+                data: customertypeTSdata[i]
+            });
+        }
+        
+        const maxCustomerTypeData = customertransactiontype.reduce((max, obj) => (obj.data >= max.data ? obj : max), {data: -Infinity });
+        const maxCustomerData = maxCustomerTypeData.data;
+        const maxCustomerTypes = customertransactiontype.filter(obj => obj.data === maxCustomerData).map(obj => obj.label);
+        const minCustomerTypeData = customertransactiontype.reduce((min, obj) => (obj.data <= min.data ? obj : min), {data: Infinity});
+        const minCustomerData = minCustomerTypeData.data;
+        const minCustomerType = customertransactiontype.filter(obj => obj.data === minCustomerData).map(obj => obj.label);
+
+        //for Unified Laboratory Information Management System transaction type
+        const ulimsData = customerTypeData.filter(item => item.transaction_type === 'Unified Laboratory Information Management System');
+        const customertypeulims = ulimsData.map(item => item.customer_type);
+        const customertypeulimsdata = ulimsData.map(item => item.transaction_count);
+        const customertransactiontypeUlims = [];
+
+        for (let i = 0; i < customertypeulims.length; i++) {
+            customertransactiontypeUlims.push({
+                label: customertypeulims[i],
+                data: customertypeulimsdata[i]
+            });
+        }
+        
+        const maxCustomerTypeDataulims = customertransactiontypeUlims.reduce((max, obj) => (obj.data >= max.data ? obj : max), {data: -Infinity });
+        const maxCustomerDataulims = maxCustomerTypeDataulims.data;
+        const maxCustomerTypesulims = customertransactiontypeUlims.filter(obj => obj.data === maxCustomerDataulims).map(obj => obj.label);
+        const minCustomerTypeDataulims = customertransactiontypeUlims.reduce((min, obj) => (obj.data <= min.data ? obj : min), {data: Infinity});
+        const minCustomerDataulims = minCustomerTypeDataulims.data;
+        const minCustomerTypeulims = customertransactiontypeUlims.filter(obj => obj.data === minCustomerDataulims).map(obj => obj.label);
+
+        //for National Laboratory Information Management System transaction type
+        const nlimsData = customerTypeData.filter(item => item.transaction_type === 'National Laboratory Information Management System');
+        const customertypenlims = nlimsData.map(item => item.customer_type);
+        const customertypenlimsdata = nlimsData.map(item => item.transaction_count);
+        const customertransactiontypeNlims = [];
+
+        for (let i = 0; i < customertypenlims.length; i++) {
+            customertransactiontypeNlims.push({
+                label: customertypenlims[i],
+                data: customertypenlimsdata[i]
+            });
+        }
+        
+        const maxCustomerTypeDatanlims = customertransactiontypeNlims.reduce((max, obj) => (obj.data >= max.data ? obj : max), {data: -Infinity });
+        const maxCustomerDatanlims = maxCustomerTypeDatanlims.data;
+        const maxCustomerTypesnlims = customertransactiontypeNlims.filter(obj => obj.data === maxCustomerDatanlims).map(obj => obj.label);
+        const minCustomerTypeDatanlims = customertransactiontypeNlims.reduce((min, obj) => (obj.data <= min.data ? obj : min), {data: Infinity});
+        const minCustomerDatanlims = minCustomerTypeDatanlims.data;
+        const minCustomerTypenlims= customertransactiontypeNlims.filter(obj => obj.data === minCustomerDatanlims).map(obj => obj.label);
+
+
+        // Use the found data
+        header.innerHTML = "Transaction Type <br>";
+        type1.innerHTML = "<span style='color: orange;'>Technical Services";
+        hightype1.innerHTML = "Highest customer type(s) : <span style='color: green;'>" + maxCustomerTypes + "</span> having <span style='color: red;'>" + maxCustomerData + " transaction";
+        leasttype1.innerHTML = "Least customer type(s) : <span style='color: green;'>" + minCustomerType + "</span> having <span style='color: red;'>" + minCustomerData + " transaction";
+        type2.innerHTML = "<span style='color: violet;'>Unified Laboratory Information Management System (ULIMS)";
+        hightype2.innerHTML = "Highest customer type(s) : <span style='color: green;'>" + maxCustomerTypesulims + "</span> having <span style='color: red;'>" + maxCustomerDataulims + " transaction";
+        leasttype2.innerHTML = "Least customer type(s) : <span style='color: green;'>" + minCustomerTypeulims + "</span> having <span style='color: red;'>" + minCustomerDataulims + " transaction";
+        type3.innerHTML = "<span style='color: red;'>National Laboratory Information Management System";
+        hightype3.innerHTML = "Highest customer type(s) : <span style='color: green;'>" + maxCustomerTypesnlims + "</span> having <span style='color: red;'>" + maxCustomerDatanlims + " transaction";
+        leasttype3.innerHTML = "Least customer type(s) : <span style='color: green;'>" + minCustomerTypenlims + "</span> having <span style='color: red;'>" + minCustomerDatanlims + " transaction";
+
+        customerpopup.style.display = "block";
+
+
+});
+
+close.addEventListener("click", () => {
+// Close the pop-up when the close button is clicked
+customerpopup.style.display = "none";
+});
+</script>
 
 <!-- scriptfor customers graph -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js" integrity="sha512-JPcRR8yFa8mmCsfrw4TNte1ZvF1e3+1SdGMslZvmrzDYxS69J7J49vkFL8u6u8PlPJK+H3voElBtUCzaXj+6ig==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
