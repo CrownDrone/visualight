@@ -258,6 +258,38 @@ class SiteController extends BaseController
                 ->all();
             //---------END OF PROVINCE
 
+            $forTransactionStatusChart = (new Query())
+                ->select(['transaction_status as label', 'COUNT(*) as data'])
+                ->from(['transaction'])
+                ->where(['between', 'transaction_date', $fromDate, $toDate])
+                ->groupBy('label')
+                ->all();
+
+            $forPaymendtMethodChart = (new Query())
+                ->select(['payment_method as label', 'COUNT(*) as data'])
+                ->from(['transaction'])
+                ->where(['between', 'transaction_date', $fromDate, $toDate])
+                ->groupBy('label')
+                ->all();
+
+            $forTransactionTypeChart = (new Query())
+                ->select(['transaction_type as label', 'COUNT(*) as data'])
+                ->from(['transaction'])
+                ->where(['between', 'transaction_date', $fromDate, $toDate])
+                ->groupBy('label')
+                ->all();
+
+            $forCustomerTypeChart = (new Query())
+                ->select(['t2.customer_type as label', 'COUNT(*) AS data'])
+                ->from(['t1' => 'transaction'])
+                ->join('JOIN', 'customer t2', 't1.customer_id = t2.id')
+                ->where(['between', 't1.transaction_date', $fromDate, $toDate])
+                ->groupBy('label')
+                ->all();
+
+
+
+
             return json_encode([
                 'custmerPerProvinceNCR' => $custmerPerProvinceNCR,
                 'custmerPerProvinceRI' => $custmerPerProvinceRI,
@@ -278,6 +310,11 @@ class SiteController extends BaseController
                 'custmerPerProvinceBARMM' => $custmerPerProvinceBARMM,
                 'fromDate' => $fromDate,
                 'toDate' => $toDate,
+                //
+                'forTransactionStatusChart' => $forTransactionStatusChart,
+                'forPaymendtMethodChart' => $forPaymendtMethodChart,
+                'forTransactionTypeChart' => $forTransactionTypeChart,
+                'forCustomerTypeChart' => $forCustomerTypeChart,
             ]);
         }
 
