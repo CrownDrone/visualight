@@ -17,13 +17,19 @@ return [
         'view' => [
             'theme' => [
                 'pathMap' => [
-                   '@app/views' => '@vendor/hail812/yii2-adminlte3/src/views',
+                    '@app/views' => '@vendor/hail812/yii2-adminlte3/src/views',
                 ],
             ],
         ],
         'authManager' => [
             'class' => 'mdm\admin\components\DbManager', // Removed the extra comma (,) after the class definition
             'db' => 'db_rbac',
+
+        ],
+        'session' => [
+            // this is the name of the session cookie used for login on the backend
+            'name' => 'advanced-backend',
+            'class' => 'yii\web\Session',
 
         ],
         'user' => [
@@ -39,7 +45,6 @@ return [
                 'settings' => 'userprofile/settings/view',
                 'settings/update' => 'userprofile/settings/update',
                 'assignment/view/<id:\d+>' => 'assignment/view',
-
             ],
         ],
         'mailer' => [

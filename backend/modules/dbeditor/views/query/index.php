@@ -64,7 +64,7 @@ use yii\grid\GridView;
 
 <?php ActiveForm::end(); ?>
 
-<?php if (isset($result)) : ?>
+<?php if (isset($result) && is_array($result) && !empty($result)) : ?>
     <h5>Result:</h5>
     <div class="bot-side">
         <?= GridView::widget([
@@ -78,6 +78,6 @@ use yii\grid\GridView;
 <?php else : ?>
     <h5>Result:</h5>
     <div class="bot-side">
-        <?php echo ("owo"); ?>
+        <?php echo ("Enter a Valid Query"); ?>
     </div>
 <?php endif; ?>

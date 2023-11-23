@@ -69,15 +69,13 @@ class QueryController extends BaseController
                         'model' => $model,
                         'result' => $result, // Pass the query result to the view
                     ]);
-                } else {
-                    $result = "Invalid Input";
-                    return $this->render('index', [
-                        'model' => $model,
-                        'result' => $result, // Pass the query result to the view
-                    ]);
                 }
             } catch (Exception $e) {
-                $result = 'Invalid Input';
+                $result = [
+                    'Error: ',
+                    'Invalid ',
+                    'Query'  
+                ];
                 return $this->render('index', [
                     'model' => $model,
                     'result' => $result, // Pass the query result to the view

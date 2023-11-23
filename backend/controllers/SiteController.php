@@ -9,16 +9,10 @@ use common\models\PdfUploadForm;
 use common\models\ResetPasswordForm;
 use common\models\Site;
 use Yii;
-use yii\base\InvalidParamException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use yii\helpers\Url;
-use yii\web\BadRequestHttpException;
-use yii\web\Controller;
-use yii\web\ForbiddenHttpException;
-use yii\web\NotFoundHttpException;
 use yii\web\Response;
-use yii\db\ActiveRecord;
 use common\models\User;
 use yii\web\UploadedFile;
 use yii\db\Query;
@@ -30,6 +24,7 @@ use DateTime;
  */
 class SiteController extends BaseController
 {
+
     /**
      * {@inheritdoc}
      */
@@ -54,7 +49,7 @@ class SiteController extends BaseController
                         'allow' => true,
                         'actions' => ['logout'],
                     ],
-                     [
+                    [
                         'actions' => ['upload-pdf'],
                         'allow' => true,
                         'permissions' => ['canSendPDF'],
@@ -89,6 +84,212 @@ class SiteController extends BaseController
      *
      * @return string
      */
+
+    public function actionProvince()
+    {
+
+        Yii::$app->set('db', [ //reroute default connection 
+            'class' => \yii\db\Connection::class,
+            'dsn' => 'mysql:host=localhost;dbname=visualight2data',
+            'username' => 'root',
+            'password' => '',
+            'charset' => 'utf8',
+        ]);
+
+        $fromDate = "";
+        $toDate = "";
+        if (Yii::$app->request->isAjax) {
+            $fromDate = Yii::$app->request->post('fromDate');
+            $toDate = Yii::$app->request->post('toDate');
+
+            //----------------------START OF REGIONAL PROVINCE-----------------------------------
+
+            $custmerPerProvinceNCR = (new Query())
+                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->from(['t2' => 'customer'])
+                ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
+                ->where(['t2.address' => ['Metro Manila']])
+                ->andwhere(['between', 't1.transaction_date', $fromDate, $toDate])
+                ->groupBy('label')
+                ->all();
+
+            $custmerPerProvinceRI = (new Query())
+                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->from(['t2' => 'customer'])
+                ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
+                ->where(['t2.address' => ['Ilocos Norte', 'Ilocos Sur', 'La Union', 'Pangasinan']])
+                ->andwhere(['between', 't1.transaction_date', $fromDate, $toDate])
+                ->groupBy('label')
+                ->all();
+
+            $custmerPerProvinceRII = (new Query())
+                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->from(['t2' => 'customer'])
+                ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
+                ->where(['t2.address' => ['Batanes', 'Cagayan', 'La Union', 'Isabela', 'Quirino', 'Nueva Vizcaya']])
+                ->andwhere(['between', 't1.transaction_date', $fromDate, $toDate])
+                ->groupBy('label')
+                ->all();
+
+            $custmerPerProvinceRIII = (new Query())
+                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->from(['t2' => 'customer'])
+                ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
+                ->where(['t2.address' => ['Aurora', 'Bataan', 'Bulacan', 'Nueba Ecija', 'Pampanga', 'Tarlac', 'Zambales']])
+                ->andwhere(['between', 't1.transaction_date', $fromDate, $toDate])
+                ->groupBy('label')
+                ->all();
+
+            $custmerPerProvinceRIVA = (new Query())
+                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->from(['t2' => 'customer'])
+                ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
+                ->where(['t2.address' => ['Batangas', 'Cavite', 'Laguna', 'Quezon', 'Rizal',]])
+                ->andwhere(['between', 't1.transaction_date', $fromDate, $toDate])
+                ->groupBy('label')
+                ->all();
+
+            $custmerPerProvinceMIMAROPA = (new Query()) //use MIMAROPA as desc please
+                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->from(['t2' => 'customer'])
+                ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
+                ->where(['t2.address' => ['Marinduque', 'Occidental Mindoro', 'Oriental Mindoro', 'Palawan', 'Romblon']])
+                ->andwhere(['between', 't1.transaction_date', $fromDate, $toDate])
+                ->groupBy('label')
+                ->all();
+
+            $custmerPerProvinceV = (new Query())
+                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->from(['t2' => 'customer'])
+                ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
+                ->where(['t2.address' => ['Albay', 'Camarines Sur', 'Camarines Norte', 'Catanduanes', 'Masbate', 'Sorsogon']])
+                ->andwhere(['between', 't1.transaction_date', $fromDate, $toDate])
+                ->groupBy('label')
+                ->all();
+
+            $custmerPerProvinceCAR = (new Query())
+                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->from(['t2' => 'customer'])
+                ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
+                ->where(['t2.address' => ['Abra', 'Apayao', 'Benguet', 'Ifugao', 'Kalinga', 'Mountain Province']])
+                ->andwhere(['between', 't1.transaction_date', $fromDate, $toDate])
+                ->groupBy('label')
+                ->all();
+
+            $custmerPerProvinceVI = (new Query())
+                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->from(['t2' => 'customer'])
+                ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
+                ->where(['t2.address' => ['Aklan', 'Antique', 'Capiz', 'Guimaras', 'Iloilo', 'Negros Occidental']])
+                ->andwhere(['between', 't1.transaction_date', $fromDate, $toDate])
+                ->groupBy('label')
+                ->all();
+
+            $custmerPerProvinceVII = (new Query())
+                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->from(['t2' => 'customer'])
+                ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
+                ->where(['t2.address' => ['Bohol', 'Cebu', 'Negros Oriental', 'Siquijor']])
+                ->andwhere(['between', 't1.transaction_date', $fromDate, $toDate])
+                ->groupBy('label')
+                ->all();
+
+            $custmerPerProvinceVIII = (new Query())
+                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->from(['t2' => 'customer'])
+                ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
+                ->where(['t2.address' => ['Biliran', 'Eastern Samar', 'Leyte', 'Western Samar', 'Samar', 'Southern Leyte']])
+                ->andwhere(['between', 't1.transaction_date', $fromDate, $toDate])
+                ->groupBy('label')
+                ->all();
+
+            $custmerPerProvinceIX = (new Query())
+                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->from(['t2' => 'customer'])
+                ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
+                ->where(['t2.address' => ['Zamboanga del Sur', 'Zamboanga del Norte', 'Zamboanga Sibugay']])
+                ->andwhere(['between', 't1.transaction_date', $fromDate, $toDate])
+                ->groupBy('label')
+                ->all();
+
+            $custmerPerProvinceX = (new Query())
+                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->from(['t2' => 'customer'])
+                ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
+                ->where(['t2.address' => ['Bukidnon', 'Camiguin', 'Lanao del Norte', 'Misamis Oriental', 'Misamis Occidental']])
+                ->andwhere(['between', 't1.transaction_date', $fromDate, $toDate])
+                ->groupBy('label')
+                ->all();
+
+            $custmerPerProvinceXI = (new Query())
+                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->from(['t2' => 'customer'])
+                ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
+                ->where(['t2.address' => ['Davao de Oro', 'Davao del Norte', 'Davao del Sur', 'Davao Oriental', 'Davao Occidental']])
+                ->andwhere(['between', 't1.transaction_date', $fromDate, $toDate])
+                ->groupBy('label')
+                ->all();
+
+            $custmerPerProvinceXII = (new Query())
+                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->from(['t2' => 'customer'])
+                ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
+                ->where(['t2.address' => ['Cotabato', 'Sarangani', 'South Cotabato', 'Sultan Kudarat']])
+                ->andwhere(['between', 't1.transaction_date', $fromDate, $toDate])
+                ->groupBy('label')
+                ->all();
+
+            $custmerPerProvinceXIII = (new Query())
+                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->from(['t2' => 'customer'])
+                ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
+                ->where(['t2.address' => ['Agusan del Norte', 'Agusan del Sur', 'Dinagat Islands', 'Surigao del Norte', 'Surigao del Sur']])
+                ->andwhere(['between', 't1.transaction_date', $fromDate, $toDate])
+                ->groupBy('label')
+                ->all();
+
+            $custmerPerProvinceBARMM = (new Query())
+                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->from(['t2' => 'customer'])
+                ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
+                ->where(['t2.address' => ['Basilan', 'Lanao del Sur', 'Maguindanao del Norte', 'Sulu', 'Maguindanao del Sur', 'Tawi-Tawi']])
+                ->andwhere(['between', 't1.transaction_date', $fromDate, $toDate])
+                ->groupBy('label')
+                ->all();
+            //---------END OF PROVINCE
+
+            return json_encode([
+                'custmerPerProvinceNCR' => $custmerPerProvinceNCR,
+                'custmerPerProvinceRI' => $custmerPerProvinceRI,
+                'custmerPerProvinceRII' => $custmerPerProvinceRII,
+                'custmerPerProvinceRIII' => $custmerPerProvinceRIII,
+                'custmerPerProvinceRIVA' => $custmerPerProvinceRIVA,
+                'custmerPerProvinceMIMAROPA' => $custmerPerProvinceMIMAROPA,
+                'custmerPerProvinceV' => $custmerPerProvinceV,
+                'custmerPerProvinceCAR' => $custmerPerProvinceCAR,
+                'custmerPerProvinceVI' => $custmerPerProvinceVI,
+                'custmerPerProvinceVII' => $custmerPerProvinceVII,
+                'custmerPerProvinceVIII' => $custmerPerProvinceVIII,
+                'custmerPerProvinceIX' => $custmerPerProvinceIX,
+                'custmerPerProvinceX' => $custmerPerProvinceX,
+                'custmerPerProvinceXI' => $custmerPerProvinceXI,
+                'custmerPerProvinceXII' => $custmerPerProvinceXII,
+                'custmerPerProvinceXIII' => $custmerPerProvinceXIII,
+                'custmerPerProvinceBARMM' => $custmerPerProvinceBARMM,
+                'fromDate' => $fromDate,
+                'toDate' => $toDate,
+            ]);
+        }
+
+        Yii::$app->set('db', [ //revert default connection 
+            'class' => \yii\db\Connection::class,
+            'dsn' => 'mysql:host=localhost;dbname=visualight2user',
+            'username' => 'root',
+            'password' => '',
+            'charset' => 'utf8',
+        ]);
+    }
+
     public function actionIndex() //this is for the dashboard keme keme chemerut
     {
 
@@ -192,129 +393,7 @@ class SiteController extends BaseController
             ->orderBy(['datasets' => SORT_DESC])
             ->all();
 
-        //----------------------START OF REGIONAL PROVINCE-----------------------------------
-        
-        $custmerPerProvinceNCR = (new Query())
-            ->select(['address AS label', 'COUNT(*) as data'])
-            ->from('customer')
-            ->where(['address' => ['Metro Manila']])
-            ->groupBy(['label'])
-            ->all();
 
-        $custmerPerProvinceRI = (new Query())
-            ->select(['address AS label', 'COUNT(*) as data'])
-            ->from('customer')
-            ->where(['address' => ['Ilocos Norte', 'Ilocos Sur', 'La Union', 'Pangasinan']])
-            ->groupBy(['label'])
-            ->all();
-
-        $custmerPerProvinceRII = (new Query())
-            ->select(['address AS label', 'COUNT(*) as data'])
-            ->from('customer')
-            ->where(['address' => ['Batanes', 'Cagayan', 'La Union', 'Isabela', 'Quirino', 'Nueva Vizcaya']])
-            ->groupBy(['label'])
-            ->all();
-
-        $custmerPerProvinceRIII = (new Query())
-            ->select(['address AS label', 'COUNT(*) as data'])
-            ->from('customer')
-            ->where(['address' => ['Aurora', 'Bataan', 'Bulacan', 'Nueba Ecija', 'Pampanga', 'Tarlac', 'Zambales']])
-            ->groupBy(['label'])
-            ->all();
-
-        $custmerPerProvinceRIVA = (new Query())
-            ->select(['address AS label', 'COUNT(*) as data'])
-            ->from('customer')
-            ->where(['address' => ['Batangas', 'Cavite', 'Laguna', 'Quezon', 'Rizal',]])
-            ->groupBy(['label'])
-            ->all();
-
-        $custmerPerProvinceMIMAROPA = (new Query()) //use MIMAROPA as desc please
-            ->select(['address AS label', 'COUNT(*) as data'])
-            ->from('customer')
-            ->where(['address' => ['Marinduque', 'Occidental Mindoro', 'Oriental Mindoro', 'Palawan', 'Romblon']])
-            ->groupBy(['label'])
-            ->all();
-
-        $custmerPerProvinceV = (new Query())
-            ->select(['address AS label', 'COUNT(*) as data'])
-            ->from('customer')
-            ->where(['address' => ['Albay', 'Camarines Sur', 'Camarines Norte', 'Catanduanes', 'Masbate', 'Sorsogon']])
-            ->groupBy(['label'])
-            ->all();
-
-        $custmerPerProvinceCAR = (new Query())
-            ->select(['address AS label', 'COUNT(*) as data'])
-            ->from('customer')
-            ->where(['address' => ['Abra', 'Apayao', 'Benguet', 'Ifugao', 'Kalinga', 'Mountain Province']])
-            ->groupBy(['label'])
-            ->all();
-
-        $custmerPerProvinceVI = (new Query())
-            ->select(['address AS label', 'COUNT(*) as data'])
-            ->from('customer')
-            ->where(['address' => ['Aklan', 'Antique', 'Capiz', 'Guimaras', 'Iloilo', 'Negros Occidental']])
-            ->groupBy(['label'])
-            ->all();
-
-        $custmerPerProvinceVII = (new Query())
-            ->select(['address AS label', 'COUNT(*) as data'])
-            ->from('customer')
-            ->where(['address' => ['Bohol', 'Cebu', 'Negros Oriental', 'Siquijor']])
-            ->groupBy(['label'])
-            ->all();
-
-        $custmerPerProvinceVIII = (new Query())
-            ->select(['address AS label', 'COUNT(*) as data'])
-            ->from('customer')
-            ->where(['address' => ['Biliran', 'Eastern Samar', 'Leyte', 'Western Samar', 'Samar', 'Southern Leyte']])
-            ->groupBy(['label'])
-            ->all();
-
-        $custmerPerProvinceIX = (new Query())
-            ->select(['address AS label', 'COUNT(*) as data'])
-            ->from('customer')
-            ->where(['address' => ['Zamboanga del Sur', 'Zamboanga del Norte', 'Zamboanga Sibugay']])
-            ->groupBy(['label'])
-            ->all();
-
-        $custmerPerProvinceX = (new Query())
-            ->select(['address AS label', 'COUNT(*) as data'])
-            ->from('customer')
-            ->where(['address' => ['Bukidnon', 'Camiguin', 'Lanao del Norte', 'Misamis Oriental', 'Misamis Occidental']])
-            ->groupBy(['label'])
-            ->all();
-
-        $custmerPerProvinceXI = (new Query())
-            ->select(['address AS label', 'COUNT(*) as data'])
-            ->from('customer')
-            ->where(['address' => ['Davao de Oro', 'Davao del Norte', 'Davao del Sur', 'Davao Oriental', 'Davao Occidental']])
-            ->groupBy(['label'])
-            ->all();
-
-        $custmerPerProvinceXII = (new Query())
-            ->select(['address AS label', 'COUNT(*) as data'])
-            ->from('customer')
-            ->where(['address' => ['Cotabato', 'Sarangani', 'South Cotabato', 'Sultan Kudarat']])
-            ->groupBy(['label'])
-            ->all();
-
-        $custmerPerProvinceXIII = (new Query())
-            ->select(['address AS label', 'COUNT(*) as data'])
-            ->from('customer')
-            ->where(['address' => ['Agusan del Norte', 'Agusan del Sur', 'Dinagat Islands', 'Surigao del Norte', 'Surigao del Sur']])
-            ->groupBy(['label'])
-            ->all();
-
-        $custmerPerProvinceBARMM = (new Query())
-            ->select(['address AS label', 'COUNT(*) as data'])
-            ->from('customer')
-            ->where(['address' => ['Basilan', 'Lanao del Sur', 'Maguindanao del Norte', 'Sulu', 'Maguindanao del Sur','Tawi-Tawi']])
-            ->groupBy(['label'])
-            ->all();
-
-
-        //-----------------------------------END OF REGIONAL PROVINCE----------------------------------------------
         $queryTransactionTypePerProvince = (new Query()) //total of type of tranasction per province
             ->select([
                 'c.address AS labels',
@@ -367,13 +446,7 @@ class SiteController extends BaseController
             ->orderBy('date')
             ->all();
 
-        Yii::$app->set('db', [ //revert default connection 
-            'class' => \yii\db\Connection::class,
-            'dsn' => 'mysql:host=localhost;dbname=visualight2user',
-            'username' => 'root',
-            'password' => '',
-            'charset' => 'utf8',
-        ]);
+
 
         return $this->render('index', [
             'queryAllDate' => $queryAllDate,
@@ -381,27 +454,20 @@ class SiteController extends BaseController
             'queryDivAverageSale' => $queryDivAverageSale,
             'queryTotalAverageSale' => $queryTotalAverageSale,
             'queryAddress' => $queryAddress,
-            'custmerPerProvinceNCR' => $custmerPerProvinceNCR,
-            'custmerPerProvinceRI' => $custmerPerProvinceRI,
-            'custmerPerProvinceRII' => $custmerPerProvinceRII,
-            'custmerPerProvinceRIII' => $custmerPerProvinceRIII,
-            'custmerPerProvinceRIVA' => $custmerPerProvinceRIVA,
-            'custmerPerProvinceMIMAROPA' => $custmerPerProvinceMIMAROPA,
-            'custmerPerProvinceV' => $custmerPerProvinceV,
-            'custmerPerProvinceCAR' => $custmerPerProvinceCAR,
-            'custmerPerProvinceVI' => $custmerPerProvinceVI,
-            'custmerPerProvinceVII' => $custmerPerProvinceVII,
-            'custmerPerProvinceVIII' => $custmerPerProvinceVIII,
-            'custmerPerProvinceIX' => $custmerPerProvinceIX,
-            'custmerPerProvinceX' => $custmerPerProvinceX,
-            'custmerPerProvinceXI' => $custmerPerProvinceXI,
-            'custmerPerProvinceXII' => $custmerPerProvinceXII,
-            'custmerPerProvinceXIII' => $custmerPerProvinceXIII,
-            'custmerPerProvinceBARMM' => $custmerPerProvinceBARMM,
             'queryTransactionTypePerProvince' => $queryTransactionTypePerProvince,
             'chartLabel' => $chartLabel, // to be used as label to all chart label that uses yyyy-mm-dd format
         ]);
+
+
+        Yii::$app->set('db', [ //revert default connection 
+            'class' => \yii\db\Connection::class,
+            'dsn' => 'mysql:host=localhost;dbname=visualight2user',
+            'username' => 'root',
+            'password' => '',
+            'charset' => 'utf8',
+        ]);
     }
+
 
     /**
      * Login action.
@@ -668,7 +734,7 @@ class SiteController extends BaseController
 
     public function actionUpload()
     {
-        
+
         $model = new PdfUploadForm();
 
         if (Yii::$app->request->isPost) {

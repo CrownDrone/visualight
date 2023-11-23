@@ -1,9 +1,13 @@
 <?php
-date_default_timezone_set("Asia/Hong_Kong");
+
+use yii\helpers\Url;
 
 $this->title = '';
 
 $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position' => \yii\web\View::POS_HEAD]);
+
+$currentUrl = Yii::$app->controller->id;
+$currentIndex = Url::to(['']);
 
 ?>
 
@@ -1227,6 +1231,7 @@ $targetIncome = [
 ];
 
 ?>
+<?php \yii\widgets\Pjax::begin(); ?>
 <div class="DailyTransaction">
     <p>Total Transactions Daily</p>
 
@@ -1303,9 +1308,9 @@ $targetIncome = [
     <div class="containers">
         <div class="datePicker">
             <label>From: </label>
-            <input type="date" id="startDate" name="startDate" class="datePicker_label" onchange="dateFilter()">
+            <input type="date" id="startDate" name="startDate" class="datePicker_label" onchange="dateFilter(); updateProvince()">
             <label>&nbsp;&nbsp;&nbsp;&nbsp;To:</label>
-            <input type="date" id="endDate" name="endDate" class="datePicker_label" onchange="dateFilter()">
+            <input type="date" id="endDate" name="endDate" class="datePicker_label" onchange="dateFilter(); updateProvince()">
         </div>
     </div>
 </div>
@@ -1752,7 +1757,10 @@ $targetIncome = [
                 percentage = percentage;
             }
 
-            speedometerReading.textContent = Number(Total).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " Income";
+            speedometerReading.textContent = Number(Total).toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }) + " Income";
 
             // Simulate the speedometer arrow movement (you can replace this with actual data)
             let rotation = (needle) * 180 - 90;
@@ -1891,12 +1899,30 @@ $targetIncome = [
 
             highest.innerHTML = "Highest income: <span style='color: red;'>" + dateofleast + "</span> with <span style='color: blue;'> " + highestIncomeCount + "</span> total income.";
             least.innerHTML = "Least income: <span style='color: red;'>" + dateofhighest + "</span> with <span style='color: blue;'> " + leastIncomeCount + "</span> total income.";
-            mostTransactionType.innerHTML = "Highest transaction type:  <span style='color:green;'>" + maxtransactionType.join(', ') + "</span> having  <span style='color: blue;'> " + Number(maxData).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })+ "</span> total income.";
-            leastTransactionType.innerHTML = "Least transaction type:   <span style='color:green;'>" + minTransactionType.join(', ') + "</span> having  <span style='color: blue;'> " + Number(minData).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + "</span> total income.";
-            mostCustomerType.innerHTML = "Highest customer type(s): <span style='color:green;'>" + maxCustomerTypes.join(', ') + "</span> having <span style='color: blue;'> " + Number(maxCustomerData).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + "</span> total income.";
-            leastCustomerType.innerHTML = "Least customer type: <span style='color:green;'>" + minCustomerType.join(', ') + "</span> having <span style='color: blue;'> " + Number(minCustomerData).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + "</span> total income.";
-            mostCustomerProvince.innerHTML = "Provinces with the highest income: <span style='color:green;'>" + highestIncomeProvinces.join(', ') + "</span> having <span style='color: blue;'> " + Number(highestIncomeData).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + "</span>.";
-            leastCustomerProvince.innerHTML = "Provinces with the least income: <span style='color:green;'>" + leastIncomeProvinces.join(', ') + "</span> having <span style='color: blue;'> " + Number(leastIncomeData).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + "</span>.";
+            mostTransactionType.innerHTML = "Highest transaction type:  <span style='color:green;'>" + maxtransactionType.join(', ') + "</span> having  <span style='color: blue;'> " + Number(maxData).toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }) + "</span> total income.";
+            leastTransactionType.innerHTML = "Least transaction type:   <span style='color:green;'>" + minTransactionType.join(', ') + "</span> having  <span style='color: blue;'> " + Number(minData).toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }) + "</span> total income.";
+            mostCustomerType.innerHTML = "Highest customer type(s): <span style='color:green;'>" + maxCustomerTypes.join(', ') + "</span> having <span style='color: blue;'> " + Number(maxCustomerData).toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }) + "</span> total income.";
+            leastCustomerType.innerHTML = "Least customer type: <span style='color:green;'>" + minCustomerType.join(', ') + "</span> having <span style='color: blue;'> " + Number(minCustomerData).toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }) + "</span> total income.";
+            mostCustomerProvince.innerHTML = "Provinces with the highest income: <span style='color:green;'>" + highestIncomeProvinces.join(', ') + "</span> having <span style='color: blue;'> " + Number(highestIncomeData).toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }) + "</span>.";
+            leastCustomerProvince.innerHTML = "Provinces with the least income: <span style='color:green;'>" + leastIncomeProvinces.join(', ') + "</span> having <span style='color: blue;'> " + Number(leastIncomeData).toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }) + "</span>.";
 
         });
 
@@ -2244,7 +2270,6 @@ $targetIncome = [
                         }
                     },
                 },
-
                 plugins: {
                     bgColor: {
                         backgroundColor: 'white'
@@ -2391,13 +2416,14 @@ $targetIncome = [
 
     <!-- All about customer graphs -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <div class="customers_data">
         <div class="date_filter" style="text-align: left; padding-left: 8rem; padding-top: 0rem; padding-bottom: 2rem;">
             <div class="containers">
                 <div class="date_dropdown">
                     <label for="chart_type" class="chart_type_label">
                         <strong>Select Region</strong></label>
-                    <select name="chart_type" id="chart_type" class="dropdown-content" onChange="updateProvince()">
+                    <select name="chart_type" id="chart_type" class="dropdown-content" onchange="dateFilter()">
                         <!-- <option value="all-region">All Province</option> -->
                         <option value="ncr">National Capital Region</option>
                         <option value="region-1">Region-I</option>
@@ -2427,24 +2453,13 @@ $targetIncome = [
             <p class="reportTitle" id=" ">Total Customers per Province</p>
             <canvas id="Provinces" width="100%"></canvas>
         </div>
-
-        <!-- <div class="chart-container" style="width: 47%; text-align: center;">
-            <p class="reportTitle" id=" ">Type of Customers per Province</p>
-            <canvas id="TCProvinces"></canvas>
-        </div>
-        <div class="chart-container" style="width: 47%; text-align: center;">
-            <p class="reportTitle" id=" ">Type of Transaction per Province</p>
-            <div class="containerBody">
-                <canvas id="TTProvinces"></canvas>
-            </div>
-        </div> -->
     </div>
 
 </div>
 
 
 <!-- scriptfor customers graph -->
-
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
 <script>
     //3bm60
 
@@ -2456,42 +2471,37 @@ $targetIncome = [
     const constprovincesChart = new Chart(provincesChartContainer, {
         type: 'bar',
         options: {
-            data: deselected_data,
-            barThickness: 50,
-            barPercentage: 0.15,
-            options: {
-                maintainAspectRatio: false,
-            },
+            barThickness: 25,
+            maintainAspectRatio: false,
             scales: {
                 y: {
                     beginAtZero: true,
-                    ticks: {
-                        stepSize: 12,
-                    },
                     grid: {
                         display: true,
-                    }
+                    },
                 },
                 x: {
+                    ticks: {
+                        display: false,
+                    },
                     grid: {
                         display: false,
-                    }
+                    },
                 },
             },
             plugins: {
-                legend: {
-                    display: false
+                datalabels: {
+                    anchor: 'end',
+                    align: 'end',
+                    offset: 4,
+                    display: 'auto',
+                    color: 'black',
                 },
                 bgColor: {
                     backgroundColor: 'white'
                 }
-            }
+            },
         },
-        legend: {
-            display: false
-        },
-        plugins: [bgColor],
-
     });
 
     function getRandomColor() {
@@ -2506,110 +2516,7 @@ $targetIncome = [
     var provinceLabels = [];
     var provinceData = [];
 
-    function updateProvince() {
-        const selectedType = chartTypeDropdown.value;
-        var selected_data;
-        switch (selectedType) {
-            case "ncr":
-                selected_data = (<?= json_encode($custmerPerProvinceNCR) ?>);
-                break;
-            case "region-1":
-                selected_data = (<?= json_encode($custmerPerProvinceRI) ?>);
-                break;
-            case "region-2":
-                selected_data = (<?= json_encode($custmerPerProvinceRII) ?>);
-                break;
-            case "region-3":
-                selected_data = (<?= json_encode($custmerPerProvinceRIII) ?>);
-                break;
-            case "region-4a":
-                selected_data = (<?= json_encode($custmerPerProvinceRIVA) ?>);
-                break;
-            case "mimaropa":
-                selected_data = (<?= json_encode($custmerPerProvinceMIMAROPA) ?>);
-                break;
-            case "region-5":
-                selected_data = (<?= json_encode($custmerPerProvinceV) ?>);
-                break;
-            case "car":
-                selected_data = (<?= json_encode($custmerPerProvinceCAR) ?>);
-                break;
-            case "region-6":
-                selected_data = (<?= json_encode($custmerPerProvinceVI) ?>);
-                break;
-            case "region-7":
-                selected_data = (<?= json_encode($custmerPerProvinceVII) ?>);
-                break;
-            case "region-8":
-                selected_data = (<?= json_encode($custmerPerProvinceVIII) ?>);
-                break;
-            case "region-9":
-                selected_data = (<?= json_encode($custmerPerProvinceIX) ?>);
-                break;
-            case "region-10":
-                selected_data = (<?= json_encode($custmerPerProvinceX) ?>);
-                break;
-            case "region-11":
-                selected_data = (<?= json_encode($custmerPerProvinceXI) ?>);
-                break;
-            case "region-12":
-                selected_data = (<?= json_encode($custmerPerProvinceXII) ?>);
-                break;
-            case "region-13":
-                selected_data = (<?= json_encode($custmerPerProvinceXIII) ?>);
-                break;
-            case "barm":
-                selected_data = (<?= json_encode($custmerPerProvinceBARMM) ?>);
-                break;
-        }
-
-        // Remove old data
-        constprovincesChart.data.labels = [];
-        constprovincesChart.data.datasets.forEach((dataset) => {
-            dataset.data = [];
-        });
-
-
-        //convert data into usable chartjs labels
-        var x = 0
-        while (selected_data[x] != null) {
-            var dataA = selected_data[x].label;
-            var dataB = selected_data[x].data;
-            var arrayZ = [{
-                backgroundColor: getRandomColor(),
-                data: {
-                    [dataA]: parseInt(dataB)
-                },
-                label: dataA
-            }]
-            for (var i = 0; i < arrayZ.length; i++) {
-                provinceData.push(arrayZ[i]);
-            }
-            x++
-        }
-
-        x = 0
-        while (selected_data[x] != null) {
-            var lab = selected_data[x].label;
-            provinceLabels[x] = lab;
-            x++
-        }
-
-        console.log("OC");
-        console.log(selected_data);
-        console.log("label");
-        console.log(provinceLabels);
-        console.log("data");
-        console.log(provinceData);
-        constprovincesChart.data.datasets = provinceData;
-        console.log("chart");
-        console.log(constprovincesChart.data.datasets);
-        constprovincesChart.config.data.labels = provinceLabels;
-        constprovincesChart.update();
-        provinceLabels = [];
-        provinceData = [];
-    }
-    updateProvince();
+    //look for updateProvince()
 </script>
 
 <!-- All about customer graphs -->
@@ -2665,1331 +2572,1496 @@ $targetIncome = [
                     <option value="ts">Technical Services</option>
                     <option value="nlims">National Laboratory Information Management System</option>
                     <option value="ulims">Unified Laboratory Information Management System</option>
-                    
-                    
+
+
                 </select> <br><br>
 
-            <div style="text-align: left; margin: 0 auto; width: 80%;">
-               <h4 id="type1"></h4>
-               <p id="hightype1"></p>
-               <p id="leasttype1"></p>
+                <div style="text-align: left; margin: 0 auto; width: 80%;">
+                    <h4 id="type1"></h4>
+                    <p id="hightype1"></p>
+                    <p id="leasttype1"></p>
 
-               <h4 id="type2"></h4>
-               <p id="hightype2"></p>
-               <p id="leasttype2"></p>
+                    <h4 id="type2"></h4>
+                    <p id="hightype2"></p>
+                    <p id="leasttype2"></p>
 
-               <h4 id="type3"></h4>
-               <p id="hightype3"></p>
-               <p id="leasttype3"></p>
+                    <h4 id="type3"></h4>
+                    <p id="hightype3"></p>
+                    <p id="leasttype3"></p>
+                </div>
+
             </div>
-
         </div>
+
     </div>
+    <?php \yii\widgets\Pjax::end(); ?>
 
-</div>
+    <!-- popup script for customers -->
 
-<!-- popup script for customers -->
-
-<script>
-    //reference data
-    // const transaction = <?php echo json_encode($TransactionperDiv); ?>;
+    <script>
+        //reference data
+        // const transaction = <?php echo json_encode($TransactionperDiv); ?>;
 
 
-    // Reference datas current
-    const date = new Date();
-    const month = currentDate.getMonth();
-    const year = currentDate.getFullYear();
+        // Reference datas current
+        const date = new Date();
+        const month = currentDate.getMonth();
+        const year = currentDate.getFullYear();
 
         const transactionTypopup = document.getElementById("transactionTypopup");
         const customerpopup = document.getElementById("customerpopup");
         const close = document.getElementById("close");
- 
-         
 
-    //Transaction Type pop-up analyzation
-    transactionTypopup.addEventListener("click", () => {
 
-        const customerTypeData = <?php echo json_encode($customerTypeDatapertransaction); ?>;
-        header.innerHTML = "Transaction Type <br>";
 
-        //Highest Transaction Type for this quarter
-        
+        //Transaction Type pop-up analyzation
+        transactionTypopup.addEventListener("click", () => {
 
-        //for Technical services transaction type
-        const technicalServicesData = customerTypeData.filter(item => item.transaction_type === 'Technical Services');
-        const customertypeTS = technicalServicesData.map(item => item.customer_type);
-        const customertypeTSdata = technicalServicesData.map(item => item.transaction_count);
-        const customertransactiontype = [];
+            const customerTypeData = <?php echo json_encode($customerTypeDatapertransaction); ?>;
+            header.innerHTML = "Transaction Type <br>";
 
-        for (let i = 0; i < customertypeTS.length; i++) {
-            customertransactiontype.push({
-                label: customertypeTS[i],
-                data: customertypeTSdata[i]
+            //Highest Transaction Type for this quarter
+
+
+            //for Technical services transaction type
+            const technicalServicesData = customerTypeData.filter(item => item.transaction_type === 'Technical Services');
+            const customertypeTS = technicalServicesData.map(item => item.customer_type);
+            const customertypeTSdata = technicalServicesData.map(item => item.transaction_count);
+            const customertransactiontype = [];
+
+            for (let i = 0; i < customertypeTS.length; i++) {
+                customertransactiontype.push({
+                    label: customertypeTS[i],
+                    data: customertypeTSdata[i]
+                });
+            }
+
+            const maxCustomerTypeData = customertransactiontype.reduce((max, obj) => (obj.data >= max.data ? obj : max), {
+                data: -Infinity
             });
-        }
-        
-        const maxCustomerTypeData = customertransactiontype.reduce((max, obj) => (obj.data >= max.data ? obj : max), {data: -Infinity });
-        const maxCustomerData = maxCustomerTypeData.data;
-        const maxCustomerTypes = customertransactiontype.filter(obj => obj.data === maxCustomerData).map(obj => obj.label);
-        const minCustomerTypeData = customertransactiontype.reduce((min, obj) => (obj.data <= min.data ? obj : min), {data: Infinity});
-        const minCustomerData = minCustomerTypeData.data;
-        const minCustomerType = customertransactiontype.filter(obj => obj.data === minCustomerData).map(obj => obj.label);
-
-        //for Unified Laboratory Information Management System transaction type
-        const ulimsData = customerTypeData.filter(item => item.transaction_type === 'Unified Laboratory Information Management System');
-        const customertypeulims = ulimsData.map(item => item.customer_type);
-        const customertypeulimsdata = ulimsData.map(item => item.transaction_count);
-        const customertransactiontypeUlims = [];
-
-        for (let i = 0; i < customertypeulims.length; i++) {
-            customertransactiontypeUlims.push({
-                label: customertypeulims[i],
-                data: customertypeulimsdata[i]
+            const maxCustomerData = maxCustomerTypeData.data;
+            const maxCustomerTypes = customertransactiontype.filter(obj => obj.data === maxCustomerData).map(obj => obj.label);
+            const minCustomerTypeData = customertransactiontype.reduce((min, obj) => (obj.data <= min.data ? obj : min), {
+                data: Infinity
             });
-        }
-        
-        const maxCustomerTypeDataulims = customertransactiontypeUlims.reduce((max, obj) => (obj.data >= max.data ? obj : max), {data: -Infinity });
-        const maxCustomerDataulims = maxCustomerTypeDataulims.data;
-        const maxCustomerTypesulims = customertransactiontypeUlims.filter(obj => obj.data === maxCustomerDataulims).map(obj => obj.label);
-        const minCustomerTypeDataulims = customertransactiontypeUlims.reduce((min, obj) => (obj.data <= min.data ? obj : min), {data: Infinity});
-        const minCustomerDataulims = minCustomerTypeDataulims.data;
-        const minCustomerTypeulims = customertransactiontypeUlims.filter(obj => obj.data === minCustomerDataulims).map(obj => obj.label);
+            const minCustomerData = minCustomerTypeData.data;
+            const minCustomerType = customertransactiontype.filter(obj => obj.data === minCustomerData).map(obj => obj.label);
 
-        //for National Laboratory Information Management System transaction type
-        const nlimsData = customerTypeData.filter(item => item.transaction_type === 'National Laboratory Information Management System');
-        const customertypenlims = nlimsData.map(item => item.customer_type);
-        const customertypenlimsdata = nlimsData.map(item => item.transaction_count);
-        const customertransactiontypeNlims = [];
+            //for Unified Laboratory Information Management System transaction type
+            const ulimsData = customerTypeData.filter(item => item.transaction_type === 'Unified Laboratory Information Management System');
+            const customertypeulims = ulimsData.map(item => item.customer_type);
+            const customertypeulimsdata = ulimsData.map(item => item.transaction_count);
+            const customertransactiontypeUlims = [];
 
-        for (let i = 0; i < customertypenlims.length; i++) {
-            customertransactiontypeNlims.push({
-                label: customertypenlims[i],
-                data: customertypenlimsdata[i]
+            for (let i = 0; i < customertypeulims.length; i++) {
+                customertransactiontypeUlims.push({
+                    label: customertypeulims[i],
+                    data: customertypeulimsdata[i]
+                });
+            }
+
+            const maxCustomerTypeDataulims = customertransactiontypeUlims.reduce((max, obj) => (obj.data >= max.data ? obj : max), {
+                data: -Infinity
             });
-        }
-        
-        const maxCustomerTypeDatanlims = customertransactiontypeNlims.reduce((max, obj) => (obj.data >= max.data ? obj : max), {data: -Infinity });
-        const maxCustomerDatanlims = maxCustomerTypeDatanlims.data;
-        const maxCustomerTypesnlims = customertransactiontypeNlims.filter(obj => obj.data === maxCustomerDatanlims).map(obj => obj.label);
-        const minCustomerTypeDatanlims = customertransactiontypeNlims.reduce((min, obj) => (obj.data <= min.data ? obj : min), {data: Infinity});
-        const minCustomerDatanlims = minCustomerTypeDatanlims.data;
-        const minCustomerTypenlims= customertransactiontypeNlims.filter(obj => obj.data === minCustomerDatanlims).map(obj => obj.label);
+            const maxCustomerDataulims = maxCustomerTypeDataulims.data;
+            const maxCustomerTypesulims = customertransactiontypeUlims.filter(obj => obj.data === maxCustomerDataulims).map(obj => obj.label);
+            const minCustomerTypeDataulims = customertransactiontypeUlims.reduce((min, obj) => (obj.data <= min.data ? obj : min), {
+                data: Infinity
+            });
+            const minCustomerDataulims = minCustomerTypeDataulims.data;
+            const minCustomerTypeulims = customertransactiontypeUlims.filter(obj => obj.data === minCustomerDataulims).map(obj => obj.label);
 
+            //for National Laboratory Information Management System transaction type
+            const nlimsData = customerTypeData.filter(item => item.transaction_type === 'National Laboratory Information Management System');
+            const customertypenlims = nlimsData.map(item => item.customer_type);
+            const customertypenlimsdata = nlimsData.map(item => item.transaction_count);
+            const customertransactiontypeNlims = [];
 
-        // Use the found data
-        header.innerHTML = "Transaction Type <br>";
-        type1.innerHTML = "<span style='color: orange;'>Technical Services";
-        hightype1.innerHTML = "Highest customer type(s) : <span style='color: green;'>" + maxCustomerTypes + "</span> having <span style='color: red;'>" + maxCustomerData + " transaction";
-        leasttype1.innerHTML = "Least customer type(s) : <span style='color: green;'>" + minCustomerType + "</span> having <span style='color: red;'>" + minCustomerData + " transaction";
-        type2.innerHTML = "<span style='color: violet;'>Unified Laboratory Information Management System (ULIMS)";
-        hightype2.innerHTML = "Highest customer type(s) : <span style='color: green;'>" + maxCustomerTypesulims + "</span> having <span style='color: red;'>" + maxCustomerDataulims + " transaction";
-        leasttype2.innerHTML = "Least customer type(s) : <span style='color: green;'>" + minCustomerTypeulims + "</span> having <span style='color: red;'>" + minCustomerDataulims + " transaction";
-        type3.innerHTML = "<span style='color: red;'>National Laboratory Information Management System";
-        hightype3.innerHTML = "Highest customer type(s) : <span style='color: green;'>" + maxCustomerTypesnlims + "</span> having <span style='color: red;'>" + maxCustomerDatanlims + " transaction";
-        leasttype3.innerHTML = "Least customer type(s) : <span style='color: green;'>" + minCustomerTypenlims + "</span> having <span style='color: red;'>" + minCustomerDatanlims + " transaction";
-
-        customerpopup.style.display = "block";
-
-
-    });
-
-    close.addEventListener("click", () => {
-        // Close the pop-up when the close button is clicked
-        customerpopup.style.display = "none";
-    });
-</script>
-
-<!-- scriptfor customers graph -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js" integrity="sha512-JPcRR8yFa8mmCsfrw4TNte1ZvF1e3+1SdGMslZvmrzDYxS69J7J49vkFL8u6u8PlPJK+H3voElBtUCzaXj+6ig==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Get references to chart containers and the dropdown
-        const transactionStatusChartContainer = document.getElementById('transactionStatus');
-        const paymendtMethodChartContainer = document.getElementById('paymendtMethod');
-        const transactionTypeChartContainer = document.getElementById('transactionType');
-        const customerTypeChartContainer = document.getElementById('customerType');
-        const chartTypeDropdown = document.getElementById('chart_type2');
-
-        //     function generateRandomColor() {
-        //   const randomColor = `rgb(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)})`;
-        //   return randomColor;
-        // }
-
-        // const randomColor = generateRandomColor();
-        // Initialize charts (empty)
-        let transactionStatusChart = null;
-        let paymendtMethodChart = null;
-        let transactionTypeChart = null;
-        let customerTypeChart = null;
-
-
-        // Update charts based on selected chart type
-        function updateCharts() {
-            const selectedChartType = chartTypeDropdown.value;
-
-            // Destroy existing charts if they exist
-            if (transactionStatusChart) {
-                transactionStatusChart.destroy();
-            }
-            if (paymendtMethodChart) {
-                paymendtMethodChart.destroy();
-            }
-            if (transactionTypeChart) {
-                transactionTypeChart.destroy();
-            }
-            if (customerTypeChart) {
-                customerTypeChart.destroy();
+            for (let i = 0; i < customertypenlims.length; i++) {
+                customertransactiontypeNlims.push({
+                    label: customertypenlims[i],
+                    data: customertypenlimsdata[i]
+                });
             }
 
-            const doughnutOptions = {
-                plugins: {
-                    legend: {
-                        display: true,
-                        position: 'top'
+            const maxCustomerTypeDatanlims = customertransactiontypeNlims.reduce((max, obj) => (obj.data >= max.data ? obj : max), {
+                data: -Infinity
+            });
+            const maxCustomerDatanlims = maxCustomerTypeDatanlims.data;
+            const maxCustomerTypesnlims = customertransactiontypeNlims.filter(obj => obj.data === maxCustomerDatanlims).map(obj => obj.label);
+            const minCustomerTypeDatanlims = customertransactiontypeNlims.reduce((min, obj) => (obj.data <= min.data ? obj : min), {
+                data: Infinity
+            });
+            const minCustomerDatanlims = minCustomerTypeDatanlims.data;
+            const minCustomerTypenlims = customertransactiontypeNlims.filter(obj => obj.data === minCustomerDatanlims).map(obj => obj.label);
 
-                    },
-                    bgColor: {
-                        backgroundColor: 'white'
-                    },
-                    datalabels: {
-                        color: 'black', // Set the text color to black
-                        fontSize: 16, // Set the font size for labels
-                        formatter: function(value, context) {
-                            // Format the value with commas
-                            return value.toLocaleString();
+
+            // Use the found data
+            header.innerHTML = "Transaction Type <br>";
+            type1.innerHTML = "<span style='color: orange;'>Technical Services";
+            hightype1.innerHTML = "Highest customer type(s) : <span style='color: green;'>" + maxCustomerTypes + "</span> having <span style='color: red;'>" + maxCustomerData + " transaction";
+            leasttype1.innerHTML = "Least customer type(s) : <span style='color: green;'>" + minCustomerType + "</span> having <span style='color: red;'>" + minCustomerData + " transaction";
+            type2.innerHTML = "<span style='color: violet;'>Unified Laboratory Information Management System (ULIMS)";
+            hightype2.innerHTML = "Highest customer type(s) : <span style='color: green;'>" + maxCustomerTypesulims + "</span> having <span style='color: red;'>" + maxCustomerDataulims + " transaction";
+            leasttype2.innerHTML = "Least customer type(s) : <span style='color: green;'>" + minCustomerTypeulims + "</span> having <span style='color: red;'>" + minCustomerDataulims + " transaction";
+            type3.innerHTML = "<span style='color: red;'>National Laboratory Information Management System";
+            hightype3.innerHTML = "Highest customer type(s) : <span style='color: green;'>" + maxCustomerTypesnlims + "</span> having <span style='color: red;'>" + maxCustomerDatanlims + " transaction";
+            leasttype3.innerHTML = "Least customer type(s) : <span style='color: green;'>" + minCustomerTypenlims + "</span> having <span style='color: red;'>" + minCustomerDatanlims + " transaction";
+
+            customerpopup.style.display = "block";
+
+
+        });
+
+        close.addEventListener("click", () => {
+            // Close the pop-up when the close button is clicked
+            customerpopup.style.display = "none";
+        });
+    </script>
+
+    <!-- scriptfor customers graph -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js" integrity="sha512-JPcRR8yFa8mmCsfrw4TNte1ZvF1e3+1SdGMslZvmrzDYxS69J7J49vkFL8u6u8PlPJK+H3voElBtUCzaXj+6ig==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get references to chart containers and the dropdown
+            const transactionStatusChartContainer = document.getElementById('transactionStatus');
+            const paymendtMethodChartContainer = document.getElementById('paymendtMethod');
+            const transactionTypeChartContainer = document.getElementById('transactionType');
+            const customerTypeChartContainer = document.getElementById('customerType');
+            const chartTypeDropdown = document.getElementById('chart_type2');
+
+            //     function generateRandomColor() {
+            //   const randomColor = `rgb(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)})`;
+            //   return randomColor;
+            // }
+
+            // const randomColor = generateRandomColor();
+            // Initialize charts (empty)
+            let transactionStatusChart = null;
+            let paymendtMethodChart = null;
+            let transactionTypeChart = null;
+            let customerTypeChart = null;
+
+
+            // Update charts based on selected chart type
+            function updateCharts() {
+                const selectedChartType = chartTypeDropdown.value;
+
+                // Destroy existing charts if they exist
+                if (transactionStatusChart) {
+                    transactionStatusChart.destroy();
+                }
+                if (paymendtMethodChart) {
+                    paymendtMethodChart.destroy();
+                }
+                if (transactionTypeChart) {
+                    transactionTypeChart.destroy();
+                }
+                if (customerTypeChart) {
+                    customerTypeChart.destroy();
+                }
+
+                const doughnutOptions = {
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top'
+
                         },
-                    }
-                },
-                responsive: true,
-                maintainAspectRatio: false,
-                cutout: '70%', // Adjust the size of the doughnut hole
-
-            };
-
-            if (selectedChartType === 'doughnut') {
-
-                const transactionTypeElement = document.getElementById("transactionType");
-                transactionTypeElement.style.marginLeft = "0px";
-                // For doughnut and pie charts, use the custom options
-                transactionStatusChart = new Chart(transactionStatusChartContainer, {
-                    type: selectedChartType,
-                    options: doughnutOptions,
-                    plugins: [bgColor, ChartDataLabels],
-                    data: {
-                        labels: <?php echo json_encode($transactionStatus); ?>,
-                        datasets: [{
-                            data: <?php echo json_encode($transactionStatusDatacounts); ?>,
-                            backgroundColor: ['rgba(229, 247, 48, 0.2)', //red
-                                'rgba(241, 37, 150, 0.2)', //yellow
-                                'rgba(0, 215, 132, 0.2)', //green
-                            ],
-                            borderColor: ['rgba(229, 247, 48, 0.8)', //red
-                                'rgba(241, 37, 150, 0.8)', //yellow
-                                'rgba(0, 215, 132, 0.93)', //green
-                            ],
-                            borderWidth: 2
-                        }],
-                    },
-                });
-
-                paymendtMethodChart = new Chart(paymendtMethodChartContainer, {
-                    type: selectedChartType,
-                    options: doughnutOptions,
-                    plugins: [bgColor, ChartDataLabels],
-                    data: {
-                        labels: <?php echo json_encode($PaymentMethod); ?>,
-                        datasets: [{
-                            data: <?php echo json_encode($PaymentMethodcounts); ?>,
-                            backgroundColor: ['rgba(0, 21, 215, 0.2)',
-                                'rgba(0, 215, 132, 0.2)',
-                                'rgba(118, 0, 186, 0.2)',
-                            ],
-                            borderColor: ['rgba(0, 21, 215, 0.93)',
-                                'rgba(0, 215, 132, 1)',
-                                'rgba(118, 0, 186, 0.93)',
-                            ],
-                            borderWidth: 2
-                        }],
-                    },
-                });
-                transactionTypeChart = new Chart(transactionTypeChartContainer, {
-                    type: selectedChartType,
-                    options: doughnutOptions,
-                    plugins: [bgColor, ChartDataLabels],
-                    data: {
-                        labels: <?php echo json_encode($transactionType); ?>,
-                        datasets: [{
-                            data: <?php echo json_encode($transactionTypecounts); ?>,
-                            backgroundColor: ['rgba(186, 0, 0, 0.2)',
-                                'rgba(250, 154, 37, 0.2)',
-                                'rgba(37, 202, 247, 0.2)',
-                            ],
-                            borderColor: ['rgba(186, 0, 0, 0.93)',
-                                'rgba(250, 154, 37, 0.81)',
-                                'rgba(37, 202, 247, 0.81)',
-                            ],
-                            borderWidth: 2
-                        }],
-                    },
-                });
-
-                customerTypeChart = new Chart(customerTypeChartContainer, {
-                    type: selectedChartType,
-                    options: doughnutOptions,
-                    plugins: [bgColor, ChartDataLabels],
-                    data: {
-                        labels: <?php echo json_encode($customerType); ?>,
-                        datasets: [{
-                            data: <?php echo json_encode($customerscounts); ?>,
-                            backgroundColor: ['rgba(247, 37, 149, 0.2)',
-                                'rgba(166, 37, 247, 0.2)',
-                                'rgba(255, 155, 22, 0.2)',
-                                'rgba(255, 213, 22, 0.2)',
-                                'rgba(49, 255, 22, 0.2)',
-                                'rgba(73, 0, 242, 0.2)',
-                                'rgba(0, 220, 242, 0.2)'
-
-                            ],
-                            borderColor: ['rgba(247, 37, 149, 0.81)',
-                                'rgba(166, 37, 247, 0.83)',
-                                'rgba(255, 155, 22, 0.83)',
-                                'rgba(255, 213, 22, 0.83)',
-                                'rgba(49, 255, 22, 0.83)',
-                                'rgba(73, 0, 242, 0.83)',
-                                'rgba(0, 220, 242, 0.83)'
-                            ],
-                            borderWidth: 2
-                        }],
-                    },
-                });
-            } else if (selectedChartType === 'pie') {
-
-                const transactionTypeElement = document.getElementById("transactionType");
-                transactionTypeElement.style.marginLeft = "110px";
-
-                transactionStatusChart = new Chart(transactionStatusChartContainer, {
-                    type: selectedChartType,
-                    options: {
-                        plugins: {
-                            legend: {
-                                display: true,
-                                position: 'top'
-
-                            },
-                            bgColor: {
-                                backgroundColor: 'white'
-                            },
-
-                            datalabels: {
-                                color: 'black',
-                                formatter: (value, context) => {
-                                    // Display the label based on the selected data (e.g., transaction type or payment method)
-                                    return value.toLocaleString();
-                                }
-                            }
+                        bgColor: {
+                            backgroundColor: 'white'
                         },
-                        responsive: true,
-                        maintainAspectRatio: false,
+                        datalabels: {
+                            color: 'black', // Set the text color to black
+                            fontSize: 16, // Set the font size for labels
+                            formatter: function(value, context) {
+                                // Format the value with commas
+                                return value.toLocaleString();
+                            },
+                        }
                     },
-                    plugins: [bgColor, ChartDataLabels],
-                    data: {
-                        labels: <?php echo json_encode($transactionStatus); ?>,
-                        datasets: [{
-                            data: <?php echo json_encode($transactionStatusDatacounts); ?>,
-                            backgroundColor: ['rgba(0, 215, 132, 0.2)',
-                                'rgba(229, 247, 48, 0.2)',
-                                'rgba(241, 37, 150, 0.2)',
-                            ],
-                            borderColor: ['rgba(0, 215, 132, 0.93)',
-                                'rgba(229, 247, 48, 0.8)',
-                                'rgba(241, 37, 150, 0.8)',
-                            ],
-                            borderWidth: 2
-                        }],
-                    }
-                });
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '70%', // Adjust the size of the doughnut hole
 
-                paymendtMethodChart = new Chart(paymendtMethodChartContainer, {
-                    type: selectedChartType,
-                    options: {
-                        plugins: {
-                            legend: {
-                                display: true,
-                                position: 'top'
+                };
 
-                            },
-                            bgColor: {
-                                backgroundColor: 'white'
-                            },
+                if (selectedChartType === 'doughnut') {
 
-                            datalabels: {
-                                color: 'black',
-                                formatter: (value, context) => {
-                                    // Display the label based on the selected data (e.g., transaction type or payment method)
-                                    return value.toLocaleString();
-                                }
-                            }
+                    const transactionTypeElement = document.getElementById("transactionType");
+                    transactionTypeElement.style.marginLeft = "0px";
+                    // For doughnut and pie charts, use the custom options
+                    transactionStatusChart = new Chart(transactionStatusChartContainer, {
+                        type: selectedChartType,
+                        options: doughnutOptions,
+                        plugins: [bgColor, ChartDataLabels],
+                        data: {
+                            labels: <?php echo json_encode($transactionStatus); ?>,
+                            datasets: [{
+                                data: <?php echo json_encode($transactionStatusDatacounts); ?>,
+                                backgroundColor: ['rgba(229, 247, 48, 0.2)', //red
+                                    'rgba(241, 37, 150, 0.2)', //yellow
+                                    'rgba(0, 215, 132, 0.2)', //green
+                                ],
+                                borderColor: ['rgba(229, 247, 48, 0.8)', //red
+                                    'rgba(241, 37, 150, 0.8)', //yellow
+                                    'rgba(0, 215, 132, 0.93)', //green
+                                ],
+                                borderWidth: 2
+                            }],
                         },
-                        responsive: true,
-                        maintainAspectRatio: false,
-                    },
-                    plugins: [bgColor, ChartDataLabels],
-                    data: {
-                        labels: <?php echo json_encode($PaymentMethod); ?>,
-                        datasets: [{
-                            data: <?php echo json_encode($PaymentMethodcounts); ?>,
-                            backgroundColor: ['rgba(0, 21, 215, 0.2)',
-                                'rgba(0, 215, 132, 0.2)',
-                                'rgba(118, 0, 186, 0.2)',
-                            ],
-                            borderColor: ['rgba(0, 21, 215, 0.93)',
-                                'rgba(0, 215, 132, 1)',
-                                'rgba(118, 0, 186, 0.93)',
-                            ],
-                            borderWidth: 2
-                        }],
-                    }
-                });
-                transactionTypeChart = new Chart(transactionTypeChartContainer, {
-                    type: selectedChartType,
-                    options: {
-                        plugins: {
-                            legend: {
-                                display: true,
-                                position: 'top'
+                    });
 
-                            },
-                            datalabels: {
-                                color: 'black',
-                                formatter: (value, context) => {
-                                    // Display the label based on the selected data (e.g., transaction type or payment method)
-                                    return value.toLocaleString();
+                    paymendtMethodChart = new Chart(paymendtMethodChartContainer, {
+                        type: selectedChartType,
+                        options: doughnutOptions,
+                        plugins: [bgColor, ChartDataLabels],
+                        data: {
+                            labels: <?php echo json_encode($PaymentMethod); ?>,
+                            datasets: [{
+                                data: <?php echo json_encode($PaymentMethodcounts); ?>,
+                                backgroundColor: ['rgba(0, 21, 215, 0.2)',
+                                    'rgba(0, 215, 132, 0.2)',
+                                    'rgba(118, 0, 186, 0.2)',
+                                ],
+                                borderColor: ['rgba(0, 21, 215, 0.93)',
+                                    'rgba(0, 215, 132, 1)',
+                                    'rgba(118, 0, 186, 0.93)',
+                                ],
+                                borderWidth: 2
+                            }],
+                        },
+                    });
+                    transactionTypeChart = new Chart(transactionTypeChartContainer, {
+                        type: selectedChartType,
+                        options: doughnutOptions,
+                        plugins: [bgColor, ChartDataLabels],
+                        data: {
+                            labels: <?php echo json_encode($transactionType); ?>,
+                            datasets: [{
+                                data: <?php echo json_encode($transactionTypecounts); ?>,
+                                backgroundColor: ['rgba(186, 0, 0, 0.2)',
+                                    'rgba(250, 154, 37, 0.2)',
+                                    'rgba(37, 202, 247, 0.2)',
+                                ],
+                                borderColor: ['rgba(186, 0, 0, 0.93)',
+                                    'rgba(250, 154, 37, 0.81)',
+                                    'rgba(37, 202, 247, 0.81)',
+                                ],
+                                borderWidth: 2
+                            }],
+                        },
+                    });
+
+                    customerTypeChart = new Chart(customerTypeChartContainer, {
+                        type: selectedChartType,
+                        options: doughnutOptions,
+                        plugins: [bgColor, ChartDataLabels],
+                        data: {
+                            labels: <?php echo json_encode($customerType); ?>,
+                            datasets: [{
+                                data: <?php echo json_encode($customerscounts); ?>,
+                                backgroundColor: ['rgba(247, 37, 149, 0.2)',
+                                    'rgba(166, 37, 247, 0.2)',
+                                    'rgba(255, 155, 22, 0.2)',
+                                    'rgba(255, 213, 22, 0.2)',
+                                    'rgba(49, 255, 22, 0.2)',
+                                    'rgba(73, 0, 242, 0.2)',
+                                    'rgba(0, 220, 242, 0.2)'
+
+                                ],
+                                borderColor: ['rgba(247, 37, 149, 0.81)',
+                                    'rgba(166, 37, 247, 0.83)',
+                                    'rgba(255, 155, 22, 0.83)',
+                                    'rgba(255, 213, 22, 0.83)',
+                                    'rgba(49, 255, 22, 0.83)',
+                                    'rgba(73, 0, 242, 0.83)',
+                                    'rgba(0, 220, 242, 0.83)'
+                                ],
+                                borderWidth: 2
+                            }],
+                        },
+                    });
+                } else if (selectedChartType === 'pie') {
+
+                    const transactionTypeElement = document.getElementById("transactionType");
+                    transactionTypeElement.style.marginLeft = "110px";
+
+                    transactionStatusChart = new Chart(transactionStatusChartContainer, {
+                        type: selectedChartType,
+                        options: {
+                            plugins: {
+                                legend: {
+                                    display: true,
+                                    position: 'top'
+
+                                },
+                                bgColor: {
+                                    backgroundColor: 'white'
+                                },
+
+                                datalabels: {
+                                    color: 'black',
+                                    formatter: (value, context) => {
+                                        // Display the label based on the selected data (e.g., transaction type or payment method)
+                                        return value.toLocaleString();
+                                    }
                                 }
-                            },
-
-                            bgColor: {
-                                backgroundColor: 'white'
                             },
                             responsive: true,
                             maintainAspectRatio: false,
                         },
-                    },
-                    plugins: [bgColor, ChartDataLabels],
+                        plugins: [bgColor, ChartDataLabels],
+                        data: {
+                            labels: <?php echo json_encode($transactionStatus); ?>,
+                            datasets: [{
+                                data: <?php echo json_encode($transactionStatusDatacounts); ?>,
+                                backgroundColor: ['rgba(0, 215, 132, 0.2)',
+                                    'rgba(229, 247, 48, 0.2)',
+                                    'rgba(241, 37, 150, 0.2)',
+                                ],
+                                borderColor: ['rgba(0, 215, 132, 0.93)',
+                                    'rgba(229, 247, 48, 0.8)',
+                                    'rgba(241, 37, 150, 0.8)',
+                                ],
+                                borderWidth: 2
+                            }],
+                        }
+                    });
 
-                    data: {
-                        labels: <?php echo json_encode($transactionType); ?>,
-                        datasets: [{
-                            data: <?php echo json_encode($transactionTypecounts); ?>,
-                            backgroundColor: ['rgba(186, 0, 0, 0.2)',
-                                'rgba(250, 154, 37, 0.2)',
-                                'rgba(37, 202, 247, 0.2)',
-                            ],
-                            borderColor: ['rgba(186, 0, 0, 0.93)',
-                                'rgba(250, 154, 37, 0.81)',
-                                'rgba(37, 202, 247, 0.81)',
-                            ],
-                            borderWidth: 2
-                        }],
-                    }
-                });
+                    paymendtMethodChart = new Chart(paymendtMethodChartContainer, {
+                        type: selectedChartType,
+                        options: {
+                            plugins: {
+                                legend: {
+                                    display: true,
+                                    position: 'top'
 
-                customerTypeChart = new Chart(customerTypeChartContainer, {
-                    type: selectedChartType,
-                    options: {
-                        plugins: {
-                            legend: {
-                                display: true,
-                                position: 'top'
-
-                            },
-                            datalabels: {
-                                color: 'black',
-                                formatter: (value, context) => {
-                                    // Display the label based on the selected data (e.g., transaction type or payment method)
-                                    return value.toLocaleString();
-                                }
-                            },
-                            bgColor: {
-                                backgroundColor: 'white'
-                            }
-
-                        },
-                        responsive: true,
-                        maintainAspectRatio: false,
-                    },
-                    plugins: [bgColor, ChartDataLabels],
-                    data: {
-                        labels: <?php echo json_encode($customerType); ?>,
-                        datasets: [{
-                            data: <?php echo json_encode($customerscounts); ?>,
-                            backgroundColor: ['rgba(247, 37, 149, 0.2)',
-                                'rgba(166, 37, 247, 0.2)',
-                                'rgba(255, 155, 22, 0.2)',
-                                'rgba(255, 213, 22, 0.2)',
-                                'rgba(49, 255, 22, 0.2)',
-                                'rgba(73, 0, 242, 0.2)',
-                                'rgba(0, 220, 242, 0.2)'
-
-                            ],
-                            borderColor: ['rgba(247, 37, 149, 0.81)',
-                                'rgba(166, 37, 247, 0.83)',
-                                'rgba(255, 155, 22, 0.83)',
-                                'rgba(255, 213, 22, 0.83)',
-                                'rgba(49, 255, 22, 0.83)',
-                                'rgba(73, 0, 242, 0.83)',
-                                'rgba(0, 220, 242, 0.83)'
-                            ],
-                            borderWidth: 2
-                        }],
-                    }
-                });
-            } else if (selectedChartType === 'bar') {
-
-                const transactionTypeElement = document.getElementById("transactionType");
-                transactionTypeElement.style.marginLeft = "0px";
-
-                // Create new charts based on selected chart type
-                transactionStatusChart = new Chart(transactionStatusChartContainer, {
-                    type: selectedChartType,
-                    options: {
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                grid: {
-                                    drawOnChartArea: false
-                                }
-                            },
-                            x: {
-                                grid: {
-                                    display: false,
-                                    drawOnChartArea: false
-                                }
-
-                            },
-                        },
-                        plugins: {
-
-                            bgColor: {
-                                backgroundColor: 'white'
-
-                            },
-                            legend: {
-                                display: false,
-                                position: 'top'
-
-                            },
-                            datalabels: {
-                                color: 'black',
-                                formatter: (value, context) => {
-                                    // Display the label based on the selected data (e.g., transaction type or payment method)
-                                    return value.toLocaleString();
-                                }
-                            },
-                            bgColor: {
-                                backgroundColor: 'white'
-                            }
-
-                        },
-                    },
-                    plugins: [bgColor, ChartDataLabels],
-                    data: {
-                        labels: <?php echo json_encode($transactionStatus); ?>,
-                        datasets: [{
-                            data: <?php echo json_encode($transactionStatusDatacounts); ?>,
-                            backgroundColor: ['rgba(0, 215, 132, 0.2)',
-                                'rgba(229, 247, 48, 0.2)',
-                                'rgba(241, 37, 150, 0.2)',
-                            ],
-                            borderColor: ['rgba(0, 215, 132, 0.93)',
-                                'rgba(229, 247, 48, 0.8)',
-                                'rgba(241, 37, 150, 0.8)',
-                            ],
-                            borderWidth: 2
-                        }],
-                    }
-                });
-
-
-                paymendtMethodChart = new Chart(paymendtMethodChartContainer, {
-                    type: selectedChartType,
-                    options: {
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                grid: {
-                                    drawOnChartArea: false
-                                }
-                            },
-                            x: {
-                                grid: {
-                                    display: false,
-                                    drawOnChartArea: false
-                                }
-
-                            },
-                        },
-                        plugins: {
-
-                            bgColor: {
-                                backgroundColor: 'white'
-
-                            },
-                            legend: {
-                                display: false,
-                                position: 'top'
-
-                            },
-                            datalabels: {
-                                color: 'black',
-                                formatter: (value, context) => {
-                                    // Display the label based on the selected data (e.g., transaction type or payment method)
-                                    return value.toLocaleString();
-                                }
-                            },
-                            bgColor: {
-                                backgroundColor: 'white'
-                            }
-
-                        },
-
-                    },
-                    plugins: [bgColor, ChartDataLabels],
-                    data: {
-                        labels: <?php echo json_encode($PaymentMethod); ?>,
-                        datasets: [{
-                            data: <?php echo json_encode($PaymentMethodcounts); ?>,
-                            backgroundColor: ['rgba(0, 21, 215, 0.2)',
-                                'rgba(0, 215, 132, 0.2)',
-                                'rgba(118, 0, 186, 0.2)',
-                            ],
-                            borderColor: ['rgba(0, 21, 215, 0.93)',
-                                'rgba(0, 215, 132, 1)',
-                                'rgba(118, 0, 186, 0.93)',
-                            ],
-                            borderWidth: 2
-                        }]
-                    },
-                });
-
-                //uwu
-
-                // Create new charts based on selected chart type
-                transactionTypeChart = new Chart(transactionTypeChartContainer, {
-                    type: selectedChartType,
-                    options: {
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                grid: {
-                                    drawOnChartArea: false
-                                }
-                            },
-                            x: {
-                                grid: {
-                                    display: false,
-                                    drawOnChartArea: false
-                                }
-
-                            },
-                        },
-                        plugins: {
-
-                            bgColor: {
-                                backgroundColor: 'white'
-
-                            },
-                            legend: {
-                                display: false,
-                                position: 'top'
-
-                            },
-                            datalabels: {
-                                color: 'black',
-                                formatter: (value, context) => {
-                                    // Display the label based on the selected data (e.g., transaction type or payment method)
-                                    return value.toLocaleString();
-                                }
-                            },
-                            bgColor: {
-                                backgroundColor: 'white'
-                            }
-
-                        },
-                    },
-                    plugins: [bgColor, ChartDataLabels],
-                    data: {
-                        labels: <?php echo json_encode($transactionType); ?>,
-                        datasets: [{
-                            data: <?php echo json_encode($transactionTypecounts); ?>,
-                            backgroundColor: ['rgba(186, 0, 0, 0.2)',
-                                'rgba(250, 154, 37, 0.2)',
-                                'rgba(37, 202, 247, 0.2)',
-                            ],
-                            borderColor: ['rgba(186, 0, 0, 0.93)',
-                                'rgba(250, 154, 37, 0.81)',
-                                'rgba(37, 202, 247, 0.81)',
-                            ],
-                            borderWidth: 2
-                        }],
-                    }
-                });
-
-                customerTypeChart = new Chart(customerTypeChartContainer, {
-                    type: selectedChartType,
-                    options: {
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                grid: {
-                                    drawOnChartArea: false
-                                }
-                            },
-                            x: {
-                                grid: {
-                                    display: false,
-                                    drawOnChartArea: false
-                                }
-
-                            },
-                        },
-                        plugins: {
-
-                            bgColor: {
-                                backgroundColor: 'white'
-
-                            },
-                            legend: {
-                                display: false,
-                                position: 'top'
-
-                            },
-                            datalabels: {
-                                color: 'black',
-                                formatter: (value, context) => {
-                                    // Display the label based on the selected data (e.g., transaction type or payment method)
-                                    return value.toLocaleString();
                                 },
-                                offset: '150',
-                            },
-                            bgColor: {
-                                backgroundColor: 'white'
-                            }
-
-                        },
-                    },
-                    plugins: [bgColor, ChartDataLabels],
-                    data: {
-                        labels: <?php echo json_encode($customerType); ?>,
-                        datasets: [{
-                            data: <?php echo json_encode($customerscounts); ?>,
-                            backgroundColor: ['rgba(247, 37, 149, 0.2)',
-                                'rgba(166, 37, 247, 0.2)',
-                                'rgba(255, 155, 22, 0.2)',
-                                'rgba(255, 213, 22, 0.2)',
-                                'rgba(49, 255, 22, 0.2)',
-                                'rgba(73, 0, 242, 0.2)',
-                                'rgba(0, 220, 242, 0.2)'
-
-                            ],
-                            borderColor: ['rgba(247, 37, 149, 0.81)',
-                                'rgba(166, 37, 247, 0.83)',
-                                'rgba(255, 155, 22, 0.83)',
-                                'rgba(255, 213, 22, 0.83)',
-                                'rgba(49, 255, 22, 0.83)',
-                                'rgba(73, 0, 242, 0.83)',
-                                'rgba(0, 220, 242, 0.83)'
-                            ],
-                            borderWidth: 2
-                        }]
-                    },
-
-                });
-            } else {
-
-                const transactionTypeElement = document.getElementById("transactionType");
-                transactionTypeElement.style.marginLeft = "0px";
-
-                // Create new charts based on selected chart type
-                transactionStatusChart = new Chart(transactionStatusChartContainer, {
-                    type: selectedChartType,
-                    options: {
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                grid: {
-                                    drawOnChartArea: false
-                                }
-                            },
-                            x: {
-                                grid: {
-                                    display: false,
-                                    drawOnChartArea: false
-                                }
-
-                            },
-                        },
-                        plugins: {
-
-                            bgColor: {
-                                backgroundColor: 'white'
-
-                            },
-                            legend: {
-                                display: false,
-                                position: 'top'
-
-                            },
-                            datalabels: {
-                                color: 'black',
-                                formatter: (value, context) => {
-                                    // Display the label based on the selected data (e.g., transaction type or payment method)
-                                    return value.toLocaleString();
+                                bgColor: {
+                                    backgroundColor: 'white'
                                 },
-                                align: 'bottom', // Align the labels at the top of the data point
-                                anchor: 'start', // Anchor the labels to the start of the data point
-                                offset: 0, // Adjust the offset to move the labels down
+
+                                datalabels: {
+                                    color: 'black',
+                                    formatter: (value, context) => {
+                                        // Display the label based on the selected data (e.g., transaction type or payment method)
+                                        return value.toLocaleString();
+                                    }
+                                }
                             },
-                            bgColor: {
-                                backgroundColor: 'white'
-                            }
+                            responsive: true,
+                            maintainAspectRatio: false,
+                        },
+                        plugins: [bgColor, ChartDataLabels],
+                        data: {
+                            labels: <?php echo json_encode($PaymentMethod); ?>,
+                            datasets: [{
+                                data: <?php echo json_encode($PaymentMethodcounts); ?>,
+                                backgroundColor: ['rgba(0, 21, 215, 0.2)',
+                                    'rgba(0, 215, 132, 0.2)',
+                                    'rgba(118, 0, 186, 0.2)',
+                                ],
+                                borderColor: ['rgba(0, 21, 215, 0.93)',
+                                    'rgba(0, 215, 132, 1)',
+                                    'rgba(118, 0, 186, 0.93)',
+                                ],
+                                borderWidth: 2
+                            }],
+                        }
+                    });
+                    transactionTypeChart = new Chart(transactionTypeChartContainer, {
+                        type: selectedChartType,
+                        options: {
+                            plugins: {
+                                legend: {
+                                    display: true,
+                                    position: 'top'
+
+                                },
+                                datalabels: {
+                                    color: 'black',
+                                    formatter: (value, context) => {
+                                        // Display the label based on the selected data (e.g., transaction type or payment method)
+                                        return value.toLocaleString();
+                                    }
+                                },
+
+                                bgColor: {
+                                    backgroundColor: 'white'
+                                },
+                                responsive: true,
+                                maintainAspectRatio: false,
+                            },
+                        },
+                        plugins: [bgColor, ChartDataLabels],
+
+                        data: {
+                            labels: <?php echo json_encode($transactionType); ?>,
+                            datasets: [{
+                                data: <?php echo json_encode($transactionTypecounts); ?>,
+                                backgroundColor: ['rgba(186, 0, 0, 0.2)',
+                                    'rgba(250, 154, 37, 0.2)',
+                                    'rgba(37, 202, 247, 0.2)',
+                                ],
+                                borderColor: ['rgba(186, 0, 0, 0.93)',
+                                    'rgba(250, 154, 37, 0.81)',
+                                    'rgba(37, 202, 247, 0.81)',
+                                ],
+                                borderWidth: 2
+                            }],
+                        }
+                    });
+
+                    customerTypeChart = new Chart(customerTypeChartContainer, {
+                        type: selectedChartType,
+                        options: {
+                            plugins: {
+                                legend: {
+                                    display: true,
+                                    position: 'top'
+
+                                },
+                                datalabels: {
+                                    color: 'black',
+                                    formatter: (value, context) => {
+                                        // Display the label based on the selected data (e.g., transaction type or payment method)
+                                        return value.toLocaleString();
+                                    }
+                                },
+                                bgColor: {
+                                    backgroundColor: 'white'
+                                }
+
+                            },
+                            responsive: true,
+                            maintainAspectRatio: false,
+                        },
+                        plugins: [bgColor, ChartDataLabels],
+                        data: {
+                            labels: <?php echo json_encode($customerType); ?>,
+                            datasets: [{
+                                data: <?php echo json_encode($customerscounts); ?>,
+                                backgroundColor: ['rgba(247, 37, 149, 0.2)',
+                                    'rgba(166, 37, 247, 0.2)',
+                                    'rgba(255, 155, 22, 0.2)',
+                                    'rgba(255, 213, 22, 0.2)',
+                                    'rgba(49, 255, 22, 0.2)',
+                                    'rgba(73, 0, 242, 0.2)',
+                                    'rgba(0, 220, 242, 0.2)'
+
+                                ],
+                                borderColor: ['rgba(247, 37, 149, 0.81)',
+                                    'rgba(166, 37, 247, 0.83)',
+                                    'rgba(255, 155, 22, 0.83)',
+                                    'rgba(255, 213, 22, 0.83)',
+                                    'rgba(49, 255, 22, 0.83)',
+                                    'rgba(73, 0, 242, 0.83)',
+                                    'rgba(0, 220, 242, 0.83)'
+                                ],
+                                borderWidth: 2
+                            }],
+                        }
+                    });
+                } else if (selectedChartType === 'bar') {
+
+                    const transactionTypeElement = document.getElementById("transactionType");
+                    transactionTypeElement.style.marginLeft = "0px";
+
+                    // Create new charts based on selected chart type
+                    transactionStatusChart = new Chart(transactionStatusChartContainer, {
+                        type: selectedChartType,
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    grid: {
+                                        drawOnChartArea: false
+                                    }
+                                },
+                                x: {
+                                    grid: {
+                                        display: false,
+                                        drawOnChartArea: false
+                                    }
+
+                                },
+                            },
+                            plugins: {
+
+                                bgColor: {
+                                    backgroundColor: 'white'
+
+                                },
+                                legend: {
+                                    display: false,
+                                    position: 'top'
+
+                                },
+                                datalabels: {
+                                    color: 'black',
+                                    formatter: (value, context) => {
+                                        // Display the label based on the selected data (e.g., transaction type or payment method)
+                                        return value.toLocaleString();
+                                    }
+                                },
+                                bgColor: {
+                                    backgroundColor: 'white'
+                                }
+
+                            },
+                        },
+                        plugins: [bgColor, ChartDataLabels],
+                        data: {
+                            labels: <?php echo json_encode($transactionStatus); ?>,
+                            datasets: [{
+                                data: <?php echo json_encode($transactionStatusDatacounts); ?>,
+                                backgroundColor: ['rgba(0, 215, 132, 0.2)',
+                                    'rgba(229, 247, 48, 0.2)',
+                                    'rgba(241, 37, 150, 0.2)',
+                                ],
+                                borderColor: ['rgba(0, 215, 132, 0.93)',
+                                    'rgba(229, 247, 48, 0.8)',
+                                    'rgba(241, 37, 150, 0.8)',
+                                ],
+                                borderWidth: 2
+                            }],
+                        }
+                    });
+
+
+                    paymendtMethodChart = new Chart(paymendtMethodChartContainer, {
+                        type: selectedChartType,
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    grid: {
+                                        drawOnChartArea: false
+                                    }
+                                },
+                                x: {
+                                    grid: {
+                                        display: false,
+                                        drawOnChartArea: false
+                                    }
+
+                                },
+                            },
+                            plugins: {
+
+                                bgColor: {
+                                    backgroundColor: 'white'
+
+                                },
+                                legend: {
+                                    display: false,
+                                    position: 'top'
+
+                                },
+                                datalabels: {
+                                    color: 'black',
+                                    formatter: (value, context) => {
+                                        // Display the label based on the selected data (e.g., transaction type or payment method)
+                                        return value.toLocaleString();
+                                    }
+                                },
+                                bgColor: {
+                                    backgroundColor: 'white'
+                                }
+
+                            },
 
                         },
+                        plugins: [bgColor, ChartDataLabels],
+                        data: {
+                            labels: <?php echo json_encode($PaymentMethod); ?>,
+                            datasets: [{
+                                data: <?php echo json_encode($PaymentMethodcounts); ?>,
+                                backgroundColor: ['rgba(0, 21, 215, 0.2)',
+                                    'rgba(0, 215, 132, 0.2)',
+                                    'rgba(118, 0, 186, 0.2)',
+                                ],
+                                borderColor: ['rgba(0, 21, 215, 0.93)',
+                                    'rgba(0, 215, 132, 1)',
+                                    'rgba(118, 0, 186, 0.93)',
+                                ],
+                                borderWidth: 2
+                            }]
+                        },
+                    });
+
+                    //uwu
+
+                    // Create new charts based on selected chart type
+                    transactionTypeChart = new Chart(transactionTypeChartContainer, {
+                        type: selectedChartType,
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    grid: {
+                                        drawOnChartArea: false
+                                    }
+                                },
+                                x: {
+                                    grid: {
+                                        display: false,
+                                        drawOnChartArea: false
+                                    }
+
+                                },
+                            },
+                            plugins: {
+
+                                bgColor: {
+                                    backgroundColor: 'white'
+
+                                },
+                                legend: {
+                                    display: false,
+                                    position: 'top'
+
+                                },
+                                datalabels: {
+                                    color: 'black',
+                                    formatter: (value, context) => {
+                                        // Display the label based on the selected data (e.g., transaction type or payment method)
+                                        return value.toLocaleString();
+                                    }
+                                },
+                                bgColor: {
+                                    backgroundColor: 'white'
+                                }
+
+                            },
+                        },
+                        plugins: [bgColor, ChartDataLabels],
+                        data: {
+                            labels: <?php echo json_encode($transactionType); ?>,
+                            datasets: [{
+                                data: <?php echo json_encode($transactionTypecounts); ?>,
+                                backgroundColor: ['rgba(186, 0, 0, 0.2)',
+                                    'rgba(250, 154, 37, 0.2)',
+                                    'rgba(37, 202, 247, 0.2)',
+                                ],
+                                borderColor: ['rgba(186, 0, 0, 0.93)',
+                                    'rgba(250, 154, 37, 0.81)',
+                                    'rgba(37, 202, 247, 0.81)',
+                                ],
+                                borderWidth: 2
+                            }],
+                        }
+                    });
+
+                    customerTypeChart = new Chart(customerTypeChartContainer, {
+                        type: selectedChartType,
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    grid: {
+                                        drawOnChartArea: false
+                                    }
+                                },
+                                x: {
+                                    grid: {
+                                        display: false,
+                                        drawOnChartArea: false
+                                    }
+
+                                },
+                            },
+                            plugins: {
+
+                                bgColor: {
+                                    backgroundColor: 'white'
+
+                                },
+                                legend: {
+                                    display: false,
+                                    position: 'top'
+
+                                },
+                                datalabels: {
+                                    color: 'black',
+                                    formatter: (value, context) => {
+                                        // Display the label based on the selected data (e.g., transaction type or payment method)
+                                        return value.toLocaleString();
+                                    },
+                                    offset: '150',
+                                },
+                                bgColor: {
+                                    backgroundColor: 'white'
+                                }
+
+                            },
+                        },
+                        plugins: [bgColor, ChartDataLabels],
+                        data: {
+                            labels: <?php echo json_encode($customerType); ?>,
+                            datasets: [{
+                                data: <?php echo json_encode($customerscounts); ?>,
+                                backgroundColor: ['rgba(247, 37, 149, 0.2)',
+                                    'rgba(166, 37, 247, 0.2)',
+                                    'rgba(255, 155, 22, 0.2)',
+                                    'rgba(255, 213, 22, 0.2)',
+                                    'rgba(49, 255, 22, 0.2)',
+                                    'rgba(73, 0, 242, 0.2)',
+                                    'rgba(0, 220, 242, 0.2)'
+
+                                ],
+                                borderColor: ['rgba(247, 37, 149, 0.81)',
+                                    'rgba(166, 37, 247, 0.83)',
+                                    'rgba(255, 155, 22, 0.83)',
+                                    'rgba(255, 213, 22, 0.83)',
+                                    'rgba(49, 255, 22, 0.83)',
+                                    'rgba(73, 0, 242, 0.83)',
+                                    'rgba(0, 220, 242, 0.83)'
+                                ],
+                                borderWidth: 2
+                            }]
+                        },
+
+                    });
+                } else {
+
+                    const transactionTypeElement = document.getElementById("transactionType");
+                    transactionTypeElement.style.marginLeft = "0px";
+
+                    // Create new charts based on selected chart type
+                    transactionStatusChart = new Chart(transactionStatusChartContainer, {
+                        type: selectedChartType,
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    grid: {
+                                        drawOnChartArea: false
+                                    }
+                                },
+                                x: {
+                                    grid: {
+                                        display: false,
+                                        drawOnChartArea: false
+                                    }
+
+                                },
+                            },
+                            plugins: {
+
+                                bgColor: {
+                                    backgroundColor: 'white'
+
+                                },
+                                legend: {
+                                    display: false,
+                                    position: 'top'
+
+                                },
+                                datalabels: {
+                                    color: 'black',
+                                    formatter: (value, context) => {
+                                        // Display the label based on the selected data (e.g., transaction type or payment method)
+                                        return value.toLocaleString();
+                                    },
+                                    align: 'bottom', // Align the labels at the top of the data point
+                                    anchor: 'start', // Anchor the labels to the start of the data point
+                                    offset: 0, // Adjust the offset to move the labels down
+                                },
+                                bgColor: {
+                                    backgroundColor: 'white'
+                                }
+
+                            },
+                        },
+                        plugins: [bgColor, ChartDataLabels],
+                        data: {
+                            labels: <?php echo json_encode($transactionStatus); ?>,
+                            datasets: [{
+                                data: <?php echo json_encode($transactionStatusDatacounts); ?>,
+                                backgroundColor: ['rgba(0, 215, 132, 0.2)',
+                                    'rgba(229, 247, 48, 0.2)',
+                                    'rgba(241, 37, 150, 0.2)',
+                                ],
+                                borderColor: ['rgba(0, 215, 132, 0.93)',
+                                    'rgba(229, 247, 48, 0.8)',
+                                    'rgba(241, 37, 150, 0.8)',
+                                ],
+                                borderWidth: 2
+                            }],
+                        }
+                    });
+
+
+                    paymendtMethodChart = new Chart(paymendtMethodChartContainer, {
+                        type: selectedChartType,
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    grid: {
+                                        drawOnChartArea: false
+                                    }
+                                },
+                                x: {
+                                    grid: {
+                                        display: false,
+                                        drawOnChartArea: false
+                                    }
+
+                                },
+                            },
+                            plugins: {
+
+                                bgColor: {
+                                    backgroundColor: 'white'
+
+                                },
+                                legend: {
+                                    display: false,
+                                    position: 'top'
+
+                                },
+                                datalabels: {
+                                    color: 'black',
+                                    formatter: (value, context) => {
+                                        // Display the label based on the selected data (e.g., transaction type or payment method)
+                                        return value.toLocaleString();
+                                    },
+                                    align: 'bottom', // Align the labels at the top of the data point
+                                    anchor: 'start', // Anchor the labels to the start of the data point
+                                    offset: 0, // Adjust the offset to move the labels down
+                                },
+                                bgColor: {
+                                    backgroundColor: 'white'
+                                }
+
+                            },
+
+                        },
+                        plugins: [bgColor, ChartDataLabels],
+                        data: {
+                            labels: <?php echo json_encode($PaymentMethod); ?>,
+                            datasets: [{
+                                data: <?php echo json_encode($PaymentMethodcounts); ?>,
+                                backgroundColor: ['rgba(0, 21, 215, 0.2)',
+                                    'rgba(0, 215, 132, 0.2)',
+                                    'rgba(118, 0, 186, 0.2)',
+                                ],
+                                borderColor: ['rgba(0, 21, 215, 0.93)',
+                                    'rgba(0, 215, 132, 1)',
+                                    'rgba(118, 0, 186, 0.93)',
+                                ],
+                                borderWidth: 2
+                            }]
+                        },
+                    });
+
+                    //uwu
+
+                    // Create new charts based on selected chart type
+                    transactionTypeChart = new Chart(transactionTypeChartContainer, {
+                        type: selectedChartType,
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    grid: {
+                                        drawOnChartArea: false
+                                    }
+                                },
+                                x: {
+                                    grid: {
+                                        display: false,
+                                        drawOnChartArea: false
+                                    }
+
+                                },
+                            },
+                            plugins: {
+
+                                bgColor: {
+                                    backgroundColor: 'white'
+
+                                },
+                                legend: {
+                                    display: false,
+                                    position: 'top'
+
+                                },
+                                datalabels: {
+                                    color: 'black',
+                                    formatter: (value, context) => {
+                                        // Display the label based on the selected data (e.g., transaction type or payment method)
+                                        return value.toLocaleString();
+                                    },
+                                    align: 'bottom', // Align the labels at the top of the data point
+                                    anchor: 'start', // Anchor the labels to the start of the data point
+                                    offset: 0, // Adjust the offset to move the labels down
+                                },
+                                bgColor: {
+                                    backgroundColor: 'white'
+                                }
+
+                            },
+                        },
+                        plugins: [bgColor, ChartDataLabels],
+                        data: {
+                            labels: <?php echo json_encode($transactionType); ?>,
+                            datasets: [{
+                                data: <?php echo json_encode($transactionTypecounts); ?>,
+                                backgroundColor: ['rgba(186, 0, 0, 0.2)',
+                                    'rgba(250, 154, 37, 0.2)',
+                                    'rgba(37, 202, 247, 0.2)',
+                                ],
+                                borderColor: ['rgba(186, 0, 0, 0.93)',
+                                    'rgba(250, 154, 37, 0.81)',
+                                    'rgba(37, 202, 247, 0.81)',
+                                ],
+                                borderWidth: 2
+                            }],
+                        }
+                    });
+
+                    customerTypeChart = new Chart(customerTypeChartContainer, {
+                        type: selectedChartType,
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    grid: {
+                                        drawOnChartArea: false
+                                    }
+                                },
+                                x: {
+                                    grid: {
+                                        display: false,
+                                        drawOnChartArea: false
+                                    }
+
+                                },
+                            },
+                            plugins: {
+
+                                bgColor: {
+                                    backgroundColor: 'white'
+
+                                },
+                                legend: {
+                                    display: false,
+                                    position: 'top'
+
+                                },
+                                datalabels: {
+                                    color: 'black',
+                                    formatter: (value, context) => {
+                                        // Display the label based on the selected data (e.g., transaction type or payment method)
+                                        return value.toLocaleString();
+                                    },
+                                    align: 'bottom', // Align the labels at the top of the data point
+                                    anchor: 'start', // Anchor the labels to the start of the data point
+                                    offset: 0, // Adjust the offset to move the labels down
+                                },
+                                bgColor: {
+                                    backgroundColor: 'white'
+                                }
+
+                            },
+                        },
+                        plugins: [bgColor, ChartDataLabels],
+                        data: {
+                            labels: <?php echo json_encode($customerType); ?>,
+                            datasets: [{
+                                data: <?php echo json_encode($customerscounts); ?>,
+                                backgroundColor: ['rgba(247, 37, 149, 0.2)',
+                                    'rgba(166, 37, 247, 0.2)',
+                                    'rgba(255, 155, 22, 0.2)',
+                                    'rgba(255, 213, 22, 0.2)',
+                                    'rgba(49, 255, 22, 0.2)',
+                                    'rgba(73, 0, 242, 0.2)',
+                                    'rgba(0, 220, 242, 0.2)'
+
+                                ],
+                                borderColor: ['rgba(247, 37, 149, 0.81)',
+                                    'rgba(166, 37, 247, 0.83)',
+                                    'rgba(255, 155, 22, 0.83)',
+                                    'rgba(255, 213, 22, 0.83)',
+                                    'rgba(49, 255, 22, 0.83)',
+                                    'rgba(73, 0, 242, 0.83)',
+                                    'rgba(0, 220, 242, 0.83)'
+                                ],
+                                borderWidth: 2
+                            }]
+                        },
+
+                    });
+                }
+            }
+
+
+            // Listen for changes in the dropdown and update charts
+            chartTypeDropdown.addEventListener('change', updateCharts);
+
+            updateCharts();
+        });
+
+        // dashboard design end
+    </script>
+    <script>
+        //script for date filter, at the bottom so all functions can be called
+        var newTotalTransaction = {
+            datasets: []
+        };
+        newTotalTransaction.datasets = totalTransactionDataset.datasets.map(a => {
+            return {
+                ...a
+            }
+        }); //total transaction modified json
+
+        var newTotalSum = {
+            datasets: []
+        };
+        newTotalSum.datasets = totalSum.datasets.map(a => {
+            return {
+                ...a
+            }
+        }) //total income modified json
+
+
+        var new_divData = {
+            datasets: []
+        };
+        new_divData.datasets = perDivData.datasets.map(a => {
+            return {
+                ...a
+            }
+        })
+
+        var newSoldPerDivs = {
+            datasets: []
+        };
+        newSoldPerDivs.datasets = soldPerDivs.datasets.map(a => {
+            return {
+                ...a
+            }
+        }); //total income per division modified json
+
+        //reserve as backup dataset, cuz OG gets modified---------------------------------------------------------------
+        const cacheTotalTransaction = {
+            datasets: []
+        };
+        cacheTotalTransaction.datasets = totalTransactionDataset.datasets.map(a => {
+            return {
+                ...a
+            }
+        });
+
+        const cacheTotalSum = {
+            datasets: []
+        };
+        cacheTotalSum.datasets = totalSum.datasets.map(a => {
+            return {
+                ...a
+            }
+        });
+
+        const cachePerDivData = {
+            datasets: []
+        };
+        cachePerDivData.datasets = perDivData.datasets.map(a => {
+            return {
+                ...a
+            }
+        });
+
+        const cacheSoldPerDivs = {
+            datasets: []
+        };
+        cacheSoldPerDivs.datasets = soldPerDivs.datasets.map(a => {
+            return {
+                ...a
+            }
+        });
+        //--------------------------------------------------------------------------------------------------------------
+
+        var dateTypeSelect = document.getElementById('date_type');
+
+        function dateChange() {
+            var selectedValue = dateTypeSelect.value;
+            if (selectedValue === '_day') {
+                document.getElementById('startDate').setAttribute('type', 'date');
+                document.getElementById('endDate').setAttribute('type', 'date');
+
+                dateFilterRefresh();
+                dateFilter();
+            }
+        };
+    </script>
+
+
+
+    <script>
+        function dateFilter() {
+            var selectedValue = dateTypeSelect.value;
+            if (selectedValue === '_day') {
+
+                var csrfToken = $('meta[name="csrf-token"]').attr('content');
+                //using Date() functionality, PC local time
+                const today = new Date();
+                //get date of this week's sunday
+                const sunDay = new Date(
+                    today.setDate(today.getDate() - today.getDay() + 1),
+                );
+                //get date of this week's saturday
+                const satDay = new Date(
+                    today.setDate(today.getDate() - today.getDay() + 7),
+                );
+                //"yyyy-mm-dd" format
+                var toSunDay = sunDay.toISOString().slice(0, 10);
+                var toSatDay = satDay.toISOString().slice(0, 10);
+
+                //get the contents of the html datepicker
+                const fromDateValue = document.getElementById('startDate');
+                const toDatevalue = document.getElementById('endDate');
+                const fDate = fromDateValue.value;
+                const tDate = toDatevalue.value;
+                console.log(fDate + " to " + tDate);
+
+                //send datepicker data to controller, 
+                $.ajax({
+                    url: '<?php echo Yii::$app->request->baseUrl . '/site/province' ?>', // from index to controller then action
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-Token': csrfToken
                     },
-                    plugins: [bgColor, ChartDataLabels],
+                    dataType: 'json',
                     data: {
-                        labels: <?php echo json_encode($transactionStatus); ?>,
-                        datasets: [{
-                            data: <?php echo json_encode($transactionStatusDatacounts); ?>,
-                            backgroundColor: ['rgba(0, 215, 132, 0.2)',
-                                'rgba(229, 247, 48, 0.2)',
-                                'rgba(241, 37, 150, 0.2)',
-                            ],
-                            borderColor: ['rgba(0, 215, 132, 0.93)',
-                                'rgba(229, 247, 48, 0.8)',
-                                'rgba(241, 37, 150, 0.8)',
-                            ],
-                            borderWidth: 2
-                        }],
+                        fromDate: fDate,
+                        toDate: tDate
+                    },
+                    success: function(response) {
+                        //assign new value from controller to variables
+                        updateProvince(response)
+                    },
+                    error: function(error) {
+                        console.error(error);
                     }
                 });
 
 
-                paymendtMethodChart = new Chart(paymendtMethodChartContainer, {
-                    type: selectedChartType,
-                    options: {
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                grid: {
-                                    drawOnChartArea: false
-                                }
-                            },
-                            x: {
-                                grid: {
-                                    display: false,
-                                    drawOnChartArea: false
-                                }
+                const dateList = [...global_label_day];
 
-                            },
-                        },
-                        plugins: {
+                //get the index of the labels array based on the value of datepicker
+                //both array value and date picker value must be matching cAsE sEnSiTiVe to give a result
+                const sunIndex = dateList.indexOf(fromDateValue.value);
+                const satIndex = dateList.indexOf(toDatevalue.value);
 
-                            bgColor: {
-                                backgroundColor: 'white'
+                //slice the labels array based on the sunIndex and satIndex
+                const new_dayList = dateList.slice(sunIndex, satIndex + 1);
 
-                            },
-                            legend: {
-                                display: false,
-                                position: 'top'
+                totaltransactionChartB.config.data.labels = new_dayList; //assign new label to the chart
+                transactionChartB.config.data.labels = new_dayList;
+                totalsalesChartB.config.data.labels = new_dayList;
+                salesChart.config.data.labels = new_dayList;
 
-                            },
-                            datalabels: {
-                                color: 'black',
-                                formatter: (value, context) => {
-                                    // Display the label based on the selected data (e.g., transaction type or payment method)
-                                    return value.toLocaleString();
-                                },
-                                align: 'bottom', // Align the labels at the top of the data point
-                                anchor: 'start', // Anchor the labels to the start of the data point
-                                offset: 0, // Adjust the offset to move the labels down
-                            },
-                            bgColor: {
-                                backgroundColor: 'white'
-                            }
-
-                        },
-
-                    },
-                    plugins: [bgColor, ChartDataLabels],
-                    data: {
-                        labels: <?php echo json_encode($PaymentMethod); ?>,
-                        datasets: [{
-                            data: <?php echo json_encode($PaymentMethodcounts); ?>,
-                            backgroundColor: ['rgba(0, 21, 215, 0.2)',
-                                'rgba(0, 215, 132, 0.2)',
-                                'rgba(118, 0, 186, 0.2)',
-                            ],
-                            borderColor: ['rgba(0, 21, 215, 0.93)',
-                                'rgba(0, 215, 132, 1)',
-                                'rgba(118, 0, 186, 0.93)',
-                            ],
-                            borderWidth: 2
-                        }]
-                    },
-                });
-
-                //uwu
-
-                // Create new charts based on selected chart type
-                transactionTypeChart = new Chart(transactionTypeChartContainer, {
-                    type: selectedChartType,
-                    options: {
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                grid: {
-                                    drawOnChartArea: false
-                                }
-                            },
-                            x: {
-                                grid: {
-                                    display: false,
-                                    drawOnChartArea: false
-                                }
-
-                            },
-                        },
-                        plugins: {
-
-                            bgColor: {
-                                backgroundColor: 'white'
-
-                            },
-                            legend: {
-                                display: false,
-                                position: 'top'
-
-                            },
-                            datalabels: {
-                                color: 'black',
-                                formatter: (value, context) => {
-                                    // Display the label based on the selected data (e.g., transaction type or payment method)
-                                    return value.toLocaleString();
-                                },
-                                align: 'bottom', // Align the labels at the top of the data point
-                                anchor: 'start', // Anchor the labels to the start of the data point
-                                offset: 0, // Adjust the offset to move the labels down
-                            },
-                            bgColor: {
-                                backgroundColor: 'white'
-                            }
-
-                        },
-                    },
-                    plugins: [bgColor, ChartDataLabels],
-                    data: {
-                        labels: <?php echo json_encode($transactionType); ?>,
-                        datasets: [{
-                            data: <?php echo json_encode($transactionTypecounts); ?>,
-                            backgroundColor: ['rgba(186, 0, 0, 0.2)',
-                                'rgba(250, 154, 37, 0.2)',
-                                'rgba(37, 202, 247, 0.2)',
-                            ],
-                            borderColor: ['rgba(186, 0, 0, 0.93)',
-                                'rgba(250, 154, 37, 0.81)',
-                                'rgba(37, 202, 247, 0.81)',
-                            ],
-                            borderWidth: 2
-                        }],
+                //new json for new dataset iterates through all object "data"
+                //if date is not accurate remove the -7 on both sunIndex and satIndex, some machines are retarded
+                //------------------------------------------------1st
+                newTotalTransaction.datasets.forEach(function(datasets) {
+                    var originalDataLog = datasets.data;
+                    var newDataLog = {};
+                    var keys = Object.keys(originalDataLog);
+                    for (var i = sunIndex - 7; i <= satIndex - 7 && i < keys.length; i++) { //fetch all values based from sunIndex to satIndex
+                        var key = keys[i];
+                        newDataLog[key] = originalDataLog[key];
                     }
+                    datasets.data = newDataLog;
                 });
-
-                customerTypeChart = new Chart(customerTypeChartContainer, {
-                    type: selectedChartType,
-                    options: {
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                grid: {
-                                    drawOnChartArea: false
-                                }
-                            },
-                            x: {
-                                grid: {
-                                    display: false,
-                                    drawOnChartArea: false
-                                }
-
-                            },
-                        },
-                        plugins: {
-
-                            bgColor: {
-                                backgroundColor: 'white'
-
-                            },
-                            legend: {
-                                display: false,
-                                position: 'top'
-
-                            },
-                            datalabels: {
-                                color: 'black',
-                                formatter: (value, context) => {
-                                    // Display the label based on the selected data (e.g., transaction type or payment method)
-                                    return value.toLocaleString();
-                                },
-                                align: 'bottom', // Align the labels at the top of the data point
-                                anchor: 'start', // Anchor the labels to the start of the data point
-                                offset: 0, // Adjust the offset to move the labels down
-                            },
-                            bgColor: {
-                                backgroundColor: 'white'
-                            }
-
-                        },
-                    },
-                    plugins: [bgColor, ChartDataLabels],
-                    data: {
-                        labels: <?php echo json_encode($customerType); ?>,
-                        datasets: [{
-                            data: <?php echo json_encode($customerscounts); ?>,
-                            backgroundColor: ['rgba(247, 37, 149, 0.2)',
-                                'rgba(166, 37, 247, 0.2)',
-                                'rgba(255, 155, 22, 0.2)',
-                                'rgba(255, 213, 22, 0.2)',
-                                'rgba(49, 255, 22, 0.2)',
-                                'rgba(73, 0, 242, 0.2)',
-                                'rgba(0, 220, 242, 0.2)'
-
-                            ],
-                            borderColor: ['rgba(247, 37, 149, 0.81)',
-                                'rgba(166, 37, 247, 0.83)',
-                                'rgba(255, 155, 22, 0.83)',
-                                'rgba(255, 213, 22, 0.83)',
-                                'rgba(49, 255, 22, 0.83)',
-                                'rgba(73, 0, 242, 0.83)',
-                                'rgba(0, 220, 242, 0.83)'
-                            ],
-                            borderWidth: 2
-                        }]
-                    },
-
+                totaltransactionChartB.config.data.datasets = newTotalTransaction.datasets; //replace the current chart dataset
+                //now repeating the process for the other chart---2nd
+                newTotalSum.datasets.forEach(function(datasets) {
+                    var originalDataLog = datasets.data;
+                    var newDataLog = {};
+                    var keys = Object.keys(originalDataLog);
+                    for (var i = sunIndex - 7; i <= satIndex - 7 && i < keys.length; i++) { //fetch all values based from sunIndex to satIndex
+                        var key = keys[i];
+                        newDataLog[key] = originalDataLog[key];
+                    }
+                    datasets.data = newDataLog;
                 });
+                totalsalesChartB.config.data.datasets = newTotalSum.datasets
+                //------------------------------------------------3rd
+
+                new_divData.datasets.forEach(function(dataset) {
+                    dataset.data = Object.keys(dataset.data)
+                        .filter((date) => date >= fromDateValue.value && date <= toDatevalue.value)
+                        .reduce((obj, date) => {
+                            obj[date] = dataset.data[date];
+                            return obj;
+                        }, {});
+                });
+                transactionChartB.config.data.datasets = new_divData.datasets;
+                //------------------------------------------------4th
+
+                newSoldPerDivs.datasets.forEach(function(dataset) {
+                    dataset.data = Object.keys(dataset.data)
+                        .filter((date) => date >= fromDateValue.value && date <= toDatevalue.value)
+                        .reduce((obj, date) => {
+                            obj[date] = dataset.data[date];
+                            return obj;
+                        }, {});
+                });
+                salesChart.config.data.datasets = newSoldPerDivs.datasets;
+
+                totaltransactionChartB.update(); //udpate the chart
+                totalsalesChartB.update();
+                transactionChartB.update();
+                salesChart.update();
+
+                newTotalTransaction = JSON.parse(JSON.stringify(cacheTotalTransaction)); //reverts the value of the newTotalTransaction prior to modification
+                newTotalSum = JSON.parse(JSON.stringify(cacheTotalSum));
+                new_divData = JSON.parse(JSON.stringify(cachePerDivData));
+                newSoldPerDivs = JSON.parse(JSON.stringify(cacheSoldPerDivs));
             }
         }
 
+        //declare variables to hold the data from ajax response
+        // var custmerPerProvinceNCR, custmerPerProvinceRI, custmerPerProvinceRII, custmerPerProvinceRIII, custmerPerProvinceRIVA, custmerPerProvinceMIMAROPA,
+        //     custmerPerProvinceV, custmerPerProvinceCAR, custmerPerProvinceVI, custmerPerProvinceVII, custmerPerProvinceVIII, custmerPerProvinceIX,
+        //     custmerPerProvinceX, custmerPerProvinceXI, custmerPerProvinceXIII, custmerPerProvinceBARMM
 
-        // Listen for changes in the dropdown and update charts
-        chartTypeDropdown.addEventListener('change', updateCharts);
+        function updateProvince(response) {
+            //START OF Total Customers per Province
+            const selectedType = chartTypeDropdown.value;
+            var selected_data;
+            switch (selectedType) {
+                case "ncr":
+                    selected_data  = response.custmerPerProvinceNCR
+                    break;
+                case "region-1":
+                    selected_data  = response.custmerPerProvinceRI
+                    break;
+                case "region-2":
+                    selected_data  = response.custmerPerProvinceRII
+                    break;
+                case "region-3":
+                    selected_data  = response.custmerPerProvinceRIII
+                    break;
+                case "region-4a":
+                    selected_data  = response.custmerPerProvinceRIVA
+                    break;
+                case "mimaropa":
+                    selected_data  = response.custmerPerProvinceMIMAROPA
+                    break;
+                case "region-5":
+                    selected_data  = response.custmerPerProvinceV
+                    break;
+                case "car":
+                    selected_data  = response.custmerPerProvinceCAR
+                    break;
+                case "region-6":
+                    selected_data  = response.custmerPerProvinceVI
+                    break;
+                case "region-7":
+                    selected_data  = response.custmerPerProvinceVII
+                    break;
+                case "region-8":
+                    selected_data  = response.custmerPerProvinceVIII
+                    break;
+                case "region-9":
+                    selected_data  = response.custmerPerProvinceIX
+                    break;
+                case "region-10":
+                    selected_data  = response.custmerPerProvinceX
+                    break;
+                case "region-11":
+                    selected_data  = response.custmerPerProvinceXI
+                    break;
+                case "region-12":
+                    selected_data  = response.custmerPerProvinceXII
+                    break;
+                case "region-13":
+                    selected_data  = response.custmerPerProvinceXIII
+                    break;
+                case "barm":
+                    selected_data  = response.custmerPerProvinceBARMM
+                    break;
+            }
 
-        updateCharts();
-    });
+            console.log("current array: ")
+            console.log(selected_data)
 
-    // dashboard design end
-</script>
-<script>
-    //script for date filter, at the bottom so all functions can be called
-    var newTotalTransaction = {
-        datasets: []
-    };
-    newTotalTransaction.datasets = totalTransactionDataset.datasets.map(a => {
-        return {
-            ...a
-        }
-    }); //total transaction modified json
-
-    var newTotalSum = {
-        datasets: []
-    };
-    newTotalSum.datasets = totalSum.datasets.map(a => {
-        return {
-            ...a
-        }
-    }) //total income modified json
+            // Remove old data
+            constprovincesChart.data.labels = [];
+            constprovincesChart.data.datasets.forEach((dataset) => {
+                dataset.data = [];
+            });
 
 
-    var new_divData = {
-        datasets: []
-    };
-    new_divData.datasets = perDivData.datasets.map(a => {
-        return {
-            ...a
-        }
-    })
-
-    var newSoldPerDivs = {
-        datasets: []
-    };
-    newSoldPerDivs.datasets = soldPerDivs.datasets.map(a => {
-        return {
-            ...a
-        }
-    }); //total income per division modified json
-
-    //reserve as backup dataset, cuz OG gets modified---------------------------------------------------------------
-    const cacheTotalTransaction = {
-        datasets: []
-    };
-    cacheTotalTransaction.datasets = totalTransactionDataset.datasets.map(a => {
-        return {
-            ...a
-        }
-    });
-
-    const cacheTotalSum = {
-        datasets: []
-    };
-    cacheTotalSum.datasets = totalSum.datasets.map(a => {
-        return {
-            ...a
-        }
-    });
-
-    const cachePerDivData = {
-        datasets: []
-    };
-    cachePerDivData.datasets = perDivData.datasets.map(a => {
-        return {
-            ...a
-        }
-    });
-
-    const cacheSoldPerDivs = {
-        datasets: []
-    };
-    cacheSoldPerDivs.datasets = soldPerDivs.datasets.map(a => {
-        return {
-            ...a
-        }
-    });
-    //--------------------------------------------------------------------------------------------------------------
-
-    var dateTypeSelect = document.getElementById('date_type');
-
-    function dateChange() {
-        var selectedValue = dateTypeSelect.value;
-        if (selectedValue === '_day') {
-            document.getElementById('startDate').setAttribute('type', 'date');
-            document.getElementById('endDate').setAttribute('type', 'date');
-
-            dateFilterRefresh();
-            dateFilter();
-        }
-    };
-</script>
-<script>
-    function dateFilter() {
-        var selectedValue = dateTypeSelect.value;
-        if (selectedValue === '_day') {
-            const dateList = [...global_label_day];
-
-            //get the contents of the html datepicker
-            const fromDateValue = document.getElementById('startDate');
-            const toDatevalue = document.getElementById('endDate');
-
-            //get the index of the labels array based on the value of datepicker
-            //both array value and date picker value must be matching cAsE sEnSiTiVe to give a result
-            const sunIndex = dateList.indexOf(fromDateValue.value);
-            const satIndex = dateList.indexOf(toDatevalue.value);
-
-            //slice the labels array based on the sunIndex and satIndex
-            const new_dayList = dateList.slice(sunIndex, satIndex + 1);
-
-            totaltransactionChartB.config.data.labels = new_dayList; //assign new label to the chart
-            transactionChartB.config.data.labels = new_dayList;
-            totalsalesChartB.config.data.labels = new_dayList;
-            salesChart.config.data.labels = new_dayList;
-
-            //new json for new dataset iterates through all object "data"
-            //if date is not accurate remove the -7 on both sunIndex and satIndex, some machines are retarded
-            //------------------------------------------------1st
-            newTotalTransaction.datasets.forEach(function(datasets) {
-                var originalDataLog = datasets.data;
-                var newDataLog = {};
-                var keys = Object.keys(originalDataLog);
-                for (var i = sunIndex - 7; i <= satIndex - 7 && i < keys.length; i++) { //fetch all values based from sunIndex to satIndex
-                    var key = keys[i];
-                    newDataLog[key] = originalDataLog[key];
+            //convert data into usable chartjs labels
+            var x = 0
+            while (selected_data[x] != null) {
+                var dataA = selected_data[x].label;
+                var dataB = selected_data[x].data;
+                var arrayZ = [{
+                    backgroundColor: getRandomColor(),
+                    data: {
+                        [dataA]: parseInt(dataB)
+                    },
+                    label: dataA
+                }]
+                for (var i = 0; i < arrayZ.length; i++) {
+                    provinceData.push(arrayZ[i]);
                 }
-                datasets.data = newDataLog;
-            });
-            totaltransactionChartB.config.data.datasets = newTotalTransaction.datasets; //replace the current chart dataset
-            //now repeating the process for the other chart---2nd
-            newTotalSum.datasets.forEach(function(datasets) {
-                var originalDataLog = datasets.data;
-                var newDataLog = {};
-                var keys = Object.keys(originalDataLog);
-                for (var i = sunIndex - 7; i <= satIndex - 7 && i < keys.length; i++) { //fetch all values based from sunIndex to satIndex
-                    var key = keys[i];
-                    newDataLog[key] = originalDataLog[key];
-                }
-                datasets.data = newDataLog;
-            });
-            totalsalesChartB.config.data.datasets = newTotalSum.datasets
-            //------------------------------------------------3rd
+                x++
+            }
 
-            new_divData.datasets.forEach(function(dataset) {
-                dataset.data = Object.keys(dataset.data)
-                    .filter((date) => date >= fromDateValue.value && date <= toDatevalue.value)
-                    .reduce((obj, date) => {
-                        obj[date] = dataset.data[date];
-                        return obj;
-                    }, {});
-            });
-            transactionChartB.config.data.datasets = new_divData.datasets;
-            //------------------------------------------------4th
-
-            newSoldPerDivs.datasets.forEach(function(dataset) {
-                dataset.data = Object.keys(dataset.data)
-                    .filter((date) => date >= fromDateValue.value && date <= toDatevalue.value)
-                    .reduce((obj, date) => {
-                        obj[date] = dataset.data[date];
-                        return obj;
-                    }, {});
-            });
-            salesChart.config.data.datasets = newSoldPerDivs.datasets;
-
-            totaltransactionChartB.update(); //udpate the chart
-            totalsalesChartB.update();
-            transactionChartB.update();
-            salesChart.update();
-
-            newTotalTransaction = JSON.parse(JSON.stringify(cacheTotalTransaction)); //reverts the value of the newTotalTransaction prior to modification
-            newTotalSum = JSON.parse(JSON.stringify(cacheTotalSum));
-            new_divData = JSON.parse(JSON.stringify(cachePerDivData));
-            newSoldPerDivs = JSON.parse(JSON.stringify(cacheSoldPerDivs));
+            console.log("OC");
+            console.log(selected_data);
+            console.log("label");
+            console.log(provinceLabels);
+            console.log("data");
+            console.log(provinceData);
+            constprovincesChart.data.datasets = provinceData;
+            console.log("chart");
+            console.log(constprovincesChart.data.datasets);
+            constprovincesChart.config.data.labels = [];
+            constprovincesChart.update();
+            provinceLabels = [];
+            provinceData = [];
         }
+        //END OF Total Customers per Province
 
-    }
-    dateFilter();
-</script>
-<script>
-    function downloadPDF() {
+        dateFilter();
+        updateProvince();
 
-        document.getElementById('sending-email-message').style.display = 'block';
+    </script>
+    <script>
+        function downloadPDF() {
 
-        const totaltransactionChart = document.getElementById('totaltransactionChart');
-        const transactionChart = document.getElementById('transactionChart');
-        const totalsalesChart = document.getElementById('totalsalesChart');
-        const salesChart = document.getElementById('salesChart');
-        const myChart = document.getElementById('myChart');
-        const provincesChart = document.getElementById('Provinces');
-        const transactionStatusChart = document.getElementById('transactionStatus'); // New chart element
-        const paymentChart = document.getElementById('paymendtMethod'); // New chart element
-        const transactionTypeChart = document.getElementById('transactionType'); // New chart element
-        const customerTypeChart = document.getElementById('customerType'); // New chart element
+            document.getElementById('sending-email-message').style.display = 'block';
 
+            const totaltransactionChart = document.getElementById('totaltransactionChart');
+            const transactionChart = document.getElementById('transactionChart');
+            const totalsalesChart = document.getElementById('totalsalesChart');
+            const salesChart = document.getElementById('salesChart');
+            const myChart = document.getElementById('myChart');
+            const provincesChart = document.getElementById('Provinces');
+            const transactionStatusChart = document.getElementById('transactionStatus'); // New chart element
+            const paymentChart = document.getElementById('paymendtMethod'); // New chart element
+            const transactionTypeChart = document.getElementById('transactionType'); // New chart element
+            const customerTypeChart = document.getElementById('customerType'); // New chart element
 
-        const options = {
-            quality: 5,
-            width: 800,
-            height: 600
-        };
+            const options = {
+                quality: 5,
+                width: 800,
+                height: 600
+            };
 
-        domtoimage.toPng(totaltransactionChart, options)
-            .then(function(totaltransactionChartImg) {
-                domtoimage.toPng(transactionChart, options)
-                    .then(function(transactionChartImg) {
-                        domtoimage.toPng(salesChart, options)
-                            .then(function(salesChartImg) {
-                                domtoimage.toPng(myChart, options)
-                                    .then(function(myChartImg) {
-                                        domtoimage.toPng(provincesChart, options)
-                                            .then(function(provincesChartImg) {
-                                                domtoimage.toPng(transactionStatusChart, options)
-                                                    .then(function(transactionStatusChartImg) {
-                                                        domtoimage.toPng(transactionTypeChart, options)
-                                                            .then(function(transactionTypeChartImg) {
-                                                                domtoimage.toPng(paymentChart, options)
-                                                                    .then(function(paymentChartImg) {
-                                                                        domtoimage.toPng(customerTypeChart, options)
-                                                                            .then(function(customerTypeChartImg) {
-                                                                                domtoimage.toPng(totalsalesChart, options)
-                                                                                    .then(function(totalsalesChartImg) {
-                                                                                        const pdf = new jsPDF();
+            domtoimage.toPng(totaltransactionChart, options)
+                .then(function(totaltransactionChartImg) {
+                    domtoimage.toPng(transactionChart, options)
+                        .then(function(transactionChartImg) {
+                            domtoimage.toPng(salesChart, options)
+                                .then(function(salesChartImg) {
+                                    domtoimage.toPng(myChart, options)
+                                        .then(function(myChartImg) {
+                                            domtoimage.toPng(provincesChart, options)
+                                                .then(function(provincesChartImg) {
+                                                    domtoimage.toPng(transactionStatusChart, options)
+                                                        .then(function(transactionStatusChartImg) {
+                                                            domtoimage.toPng(transactionTypeChart, options)
+                                                                .then(function(transactionTypeChartImg) {
+                                                                    domtoimage.toPng(paymentChart, options)
+                                                                        .then(function(paymentChartImg) {
+                                                                            domtoimage.toPng(customerTypeChart, options)
+                                                                                .then(function(customerTypeChartImg) {
+                                                                                    domtoimage.toPng(totalsalesChart, options)
+                                                                                        .then(function(totalsalesChartImg) {
+                                                                                            const pdf = new jsPDF();
 
-                                                                                        pdf.setFontSize(12);
-                                                                                        pdf.setFont('helvetica', 'bold');
-                                                                                        pdf.setTextColor(0, 122, 204);
-                                                                                        pdf.text('Total Transactions', 40, 25);
-                                                                                        pdf.text('Total Income', 40, 115);
-                                                                                        pdf.text('Transaction per Division', 40, 215);
+                                                                                            pdf.setFontSize(12);
+                                                                                            pdf.setFont('helvetica', 'bold');
+                                                                                            pdf.setTextColor(0, 122, 204);
+                                                                                            pdf.text('Total Transactions', 40, 25);
+                                                                                            pdf.text('Total Income', 40, 115);
+                                                                                            pdf.text('Transaction per Division', 40, 215);
 
-                                                                                        pdf.setFont('helvetica', 'bold');
-                                                                                        pdf.setTextColor(0, 41, 102);
-                                                                                        pdf.setFontSize(14);
-                                                                                        pdf.text('Visualight-Dashboard', 83, 10);
+                                                                                            pdf.setFont('helvetica', 'bold');
+                                                                                            pdf.setTextColor(0, 41, 102);
+                                                                                            pdf.setFontSize(14);
+                                                                                            pdf.text('Visualight-Dashboard', 83, 10);
 
-                                                                                        pdf.addImage(totaltransactionChartImg, 'PNG', 40, 30, 130, 70, undefined, 'FAST');
-                                                                                        pdf.addImage(totalsalesChartImg, 'PNG', 40, 123, 130, 70, undefined, 'FAST');
-                                                                                        pdf.addImage(transactionChartImg, 'PNG', 40, 220, 130, 70, undefined, 'FAST');
+                                                                                            pdf.addImage(totaltransactionChartImg, 'PNG', 40, 30, 130, 70, undefined, 'FAST');
+                                                                                            pdf.addImage(totalsalesChartImg, 'PNG', 40, 123, 130, 70, undefined, 'FAST');
+                                                                                            pdf.addImage(transactionChartImg, 'PNG', 40, 220, 130, 70, undefined, 'FAST');
 
-                                                                                        pdf.addPage();
+                                                                                            pdf.addPage();
 
-                                                                                        pdf.setFontSize(12);
-                                                                                        pdf.setFont('helvetica', 'bold');
-                                                                                        pdf.setTextColor(0, 122, 204);
-                                                                                        pdf.text('Income per Division', 40, 25);
+                                                                                            pdf.setFontSize(12);
+                                                                                            pdf.setFont('helvetica', 'bold');
+                                                                                            pdf.setTextColor(0, 122, 204);
+                                                                                            pdf.text('Income per Division', 40, 25);
 
-                                                                                        pdf.addImage(salesChartImg, 'PNG', 40, 30, 140, 70, undefined, 'FAST');
+                                                                                            pdf.addImage(salesChartImg, 'PNG', 40, 30, 140, 70, undefined, 'FAST');
 
-                                                                                        pdf.text('Average Income Daily', 40, 115);
+                                                                                            pdf.text('Average Income Daily', 40, 115);
 
-                                                                                        pdf.addImage(myChartImg, 'PNG', 40, 120, 105, 80, undefined, 'FAST');
+                                                                                            pdf.addImage(myChartImg, 'PNG', 40, 120, 105, 80, undefined, 'FAST');
 
-                                                                                        pdf.text('Total Customers per Province', 40, 210);
+                                                                                            pdf.text('Total Customers per Province', 40, 210);
 
-                                                                                        pdf.addImage(provincesChartImg, 'PNG', 40, 220, 130, 70, undefined, 'FAST');
+                                                                                            pdf.addImage(provincesChartImg, 'PNG', 40, 220, 130, 70, undefined, 'FAST');
 
-                                                                                        pdf.addPage();
+                                                                                            pdf.addPage();
 
-                                                                                        pdf.setFontSize(12);
-                                                                                        pdf.setFont('helvetica', 'bold');
-                                                                                        pdf.setTextColor(0, 122, 204);
-                                                                                        pdf.text('Transaction Status', 40, 18);
+                                                                                            pdf.setFontSize(12);
+                                                                                            pdf.setFont('helvetica', 'bold');
+                                                                                            pdf.setTextColor(0, 122, 204);
+                                                                                            pdf.text('Transaction Status', 40, 18);
 
-                                                                                        pdf.addImage(transactionStatusChartImg, 'PNG', 60, 25, 110, 70, undefined, 'FAST');
+                                                                                            pdf.addImage(transactionStatusChartImg, 'PNG', 60, 25, 110, 70, undefined, 'FAST');
 
-                                                                                        pdf.text('Payment Method', 40, 110);
+                                                                                            pdf.text('Payment Method', 40, 110);
 
-                                                                                        pdf.addImage(paymentChartImg, 'JPEG', 60, 115, 110, 70, undefined, 'FAST');
-
-
-                                                                                        pdf.text('Transaction Type', 40, 205);
-
-                                                                                        pdf.addImage(transactionTypeChartImg, 'PNG', 60, 215, 110, 70, undefined, 'FAST');
-
-                                                                                        pdf.addPage();
-
-                                                                                        pdf.setFontSize(12);
-                                                                                        pdf.setFont('helvetica', 'bold');
-                                                                                        pdf.setTextColor(0, 122, 204);
-                                                                                        pdf.text('Customer Type', 40, 18);
-
-                                                                                        pdf.addImage(customerTypeChartImg, 'PNG', 60, 25, 110, 70, undefined, 'FAST');
+                                                                                            pdf.addImage(paymentChartImg, 'JPEG', 60, 115, 110, 70, undefined, 'FAST');
 
 
+                                                                                            pdf.text('Transaction Type', 40, 205);
 
-                                                                                        pdf.save('Visualight-Dashboard.pdf');
-                                                                                    });
-                                                                            });
+                                                                                            pdf.addImage(transactionTypeChartImg, 'PNG', 60, 215, 110, 70, undefined, 'FAST');
 
-                                                                    });
-                                                            });
-                                                    });
-                                            });
-                                    });
-                            });
-                    });
-            })
-            .catch(function(error) {
-                console.error('Error generating PDF:', error);
-            });
+                                                                                            pdf.addPage();
 
-        setTimeout(function() {
-            document.getElementById('sending-email-message').style.display = 'none';
-        }, 5000);
-    }
-</script>
+                                                                                            pdf.setFontSize(12);
+                                                                                            pdf.setFont('helvetica', 'bold');
+                                                                                            pdf.setTextColor(0, 122, 204);
+                                                                                            pdf.text('Customer Type', 40, 18);
+
+                                                                                            pdf.addImage(customerTypeChartImg, 'PNG', 60, 25, 110, 70, undefined, 'FAST');
+
+
+
+                                                                                            pdf.save('Visualight-Dashboard.pdf');
+                                                                                        });
+                                                                                });
+
+                                                                        });
+                                                                });
+                                                        });
+                                                });
+                                        });
+                                });
+                        });
+                })
+                .catch(function(error) {
+                    console.error('Error generating PDF:', error);
+                });
+
+            setTimeout(function() {
+                document.getElementById('sending-email-message').style.display = 'none';
+            }, 5000);
+        }
+    </script>

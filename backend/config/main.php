@@ -16,10 +16,10 @@ return [ //routes, if you cannot see your created route gamitin nyo this sa term
         'dbeditor' => [
             'class' => 'app\modules\dbeditor\Module',
         ],
-        'test' => [//aka transaction, si duke kasi test nilagay
+        'test' => [ //aka transaction, si duke kasi test nilagay
             'class' => 'app\modules\dbeditor\Module',
         ],
-        'gii' => [//prevents users from accessing gii dev
+        'gii' => [ //prevents users from accessing gii dev
             'class' => 'yii\gii\Module',
         ],
         'admin' => [
@@ -102,7 +102,10 @@ return [ //routes, if you cannot see your created route gamitin nyo this sa term
                 'site/success' => 'site/success',
                 'dbeditor' => 'dbeditor/default/index',
                 'assignment/view/<id:\d+>' => 'assignment/view',
-
+                '<controller:[\w-]+>/<id:\d+>' => '<controller>/view',
+                '<controller:[\w-]+>/<action:[\w-]+>/<id:\d+>' => '<controller>/<action>',
+                '<controller:[\w\-]+>/<action:[\w\-]+>/<id:[\w]+>' => '<controller>/<action>',
+                '<controller:[\w-]+>/<action:[\w-]+>' => '<controller>/<action>',
                 // 'survey/survey-form' => 'survey/default/survey-form',
 
             ],
@@ -114,8 +117,11 @@ return [ //routes, if you cannot see your created route gamitin nyo this sa term
             'assignmentTable' => 'auth_assignment',
             'ruleTable' => 'auth_rule',
         ],
-        
+
 
     ],
-    'params' => $params,
+    'params' => array_merge($params, [
+        'fromDate' => '2023-01-01',
+        'toDate' => '2023-12-31',
+    ]),
 ];
