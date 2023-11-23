@@ -166,7 +166,7 @@ $this->title = '';
             width: 30%;
             height: 7.875rem;
             border-radius: .635rem;
-             background: #0073e6; /*blue */
+            background: #0073e6;
             color: #FFF;
             font-family: Poppins;
             font-size: 1rem;
@@ -1070,7 +1070,7 @@ $this->title = '';
     //setting default colors for each department
     $divisionColors = [
         'Standard and Testing Division' => [
-            'backgroundColor' => '#19c4e6',
+            'backgroundColor' => '#7209b7',
             'borderWidth' => 2,
         ],
     ];

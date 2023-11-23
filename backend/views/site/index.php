@@ -1238,7 +1238,7 @@ $targetIncome = [
             <p id="valueIncrease"><?= $metdailytransincrease ?></p>
         </div>
     </div>
-    <div class="deptransaction" style="background-color:#7209b7;">
+    <div class="deptransaction" style="background-color:#0073e6;">
         <p>Standards and Testing</p>
         <div class="grid">
             <img src="/images/Pass Fail.png" alt="icon2">
@@ -1952,7 +1952,7 @@ $targetIncome = [
         //preparing array to store the retrieved data
         var totalTransactionDataset = {
             datasets: [{
-                backgroundColor: "blue",
+                backgroundColor: "#274690",
                 label: 'Total Transaction',
                 data: {}
             }, ],
@@ -2021,8 +2021,8 @@ $targetIncome = [
 
         var totalSum = {
             datasets: [{
-                backgroundColor: "green",
-                borderColor: "green",
+                backgroundColor: "#fccb06",
+                borderColor: "#fccb06",
                 label: 'Total Income',
                 data: {}
             }]
@@ -2131,7 +2131,7 @@ $targetIncome = [
                     data: {}
                 },
                 {
-                    backgroundColor: "#7209b7",
+                    backgroundColor: "#0073e6",
                     label: 'Standards and Testing Division',
                     data: {}
                 }
@@ -2200,8 +2200,8 @@ $targetIncome = [
                     data: {}
                 },
                 {
-                    backgroundColor: "#7209b7",
-                    borderColor: "#7209b7",
+                    backgroundColor: "#0073e6",
+                    borderColor: "#0073e6",
                     label: 'Standards and Testing Division',
                     data: {}
                 }
@@ -2365,8 +2365,10 @@ $targetIncome = [
                         total2 += value;
                     });
 
-                    ctx.fillText(`Total: ${total1}`, width / 2.1, height / 2 + top);
-                    ctx.fillText(`Total: ${total2}`, width / 2.1, height / 2 + top + 20);
+                    ctx.fillStyle = 'rgb(255,204,51)';
+                    ctx.fillText(`STD Total: ${total1}`, width / 2.1, height / 2 + top);
+                    ctx.fillStyle = 'rgb(0, 0, 255)';
+                    ctx.fillText(`NMD Total: ${total2}`, width / 2.1, height / 2 + top + 20);
 
 
                     ctx.restore();
@@ -2670,7 +2672,15 @@ $targetIncome = [
             <div style="text-align: left; margin: 0 auto; width: 80%;">
                <h4 id="type1"></h4>
                <p id="hightype1"></p>
-              
+               <p id="leasttype1"></p>
+
+               <h4 id="type2"></h4>
+               <p id="hightype2"></p>
+               <p id="leasttype2"></p>
+
+               <h4 id="type3"></h4>
+               <p id="hightype3"></p>
+               <p id="leasttype3"></p>
             </div>
 
         </div>
@@ -2681,187 +2691,118 @@ $targetIncome = [
 <!-- popup script for customers -->
 
 <script>
-        //reference data
-        // const transaction = <?php echo json_encode($TransactionperDiv); ?>;
-        
+    //reference data
+    // const transaction = <?php echo json_encode($TransactionperDiv); ?>;
 
-        // Reference datas current
-        const date = new Date();
-        const month = currentDate.getMonth();
-        const year = currentDate.getFullYear();
+
+    // Reference datas current
+    const date = new Date();
+    const month = currentDate.getMonth();
+    const year = currentDate.getFullYear();
 
         const transactionTypopup = document.getElementById("transactionTypopup");
         const customerpopup = document.getElementById("customerpopup");
         const close = document.getElementById("close");
-        const transactionTypeDropdown = document.getElementById("transactionTypeDropdown");
  
          
 
-        //Transaction Type pop-up analyzation
-        transactionTypopup.addEventListener("click", () => {
+    //Transaction Type pop-up analyzation
+    transactionTypopup.addEventListener("click", () => {
 
         const customerTypeData = <?php echo json_encode($customerTypeDatapertransaction); ?>;
         header.innerHTML = "Transaction Type <br>";
 
-        transactionTypeDropdown.addEventListener("change", () => {
-            const selectedTransactionType = transactionTypeDropdown.value;
-         
-            switch (selectedTransactionType) {
-                case "ts":
-                    //for Technical services transaction type
-                    const technicalServicesData = customerTypeData.filter(item => item.transaction_type === 'Technical Services');
-                    const customertypeTS = technicalServicesData.map(item => item.customer_type);
-                    const customertypeTSdata = technicalServicesData.map(item => item.transaction_count);
-                    const totalAmountTSdata = technicalServicesData.map(item => item.total_amount);
-                    const transactionStatusTS = technicalServicesData.map(item => item.transaction_status);
+        //Highest Transaction Type for this quarter
+        
 
-                    const customertransactiontype = [];
+        //for Technical services transaction type
+        const technicalServicesData = customerTypeData.filter(item => item.transaction_type === 'Technical Services');
+        const customertypeTS = technicalServicesData.map(item => item.customer_type);
+        const customertypeTSdata = technicalServicesData.map(item => item.transaction_count);
+        const customertransactiontype = [];
 
-                    for (let i = 0; i < customertypeTS.length; i++) {
-                        customertransactiontype.push({
-                            label: customertypeTS[i],
-                            data: customertypeTSdata[i],
-                            totalAmount: totalAmountTSdata[i],
-                            transactionStatus: transactionStatusTS[i]
-                        });
-                    }
-                    
-                    //paid ts
-                    const paidTransactionsTS = customertransactiontype.filter(item => item.transactionStatus === 'Paid');
-                    const highestPaidTransactionTS = paidTransactionsTS.reduce((max, current) => (current.data > max.data) ? current : max, paidTransactionsTS[0]);
-                    const leastPaidTransactionTS =paidTransactionsTS.reduce((min, current) => (current.data < min.data) ? current : min, paidTransactionsTS[0]);
-                    //cancelled ts
-                    const cancelledTransactionsTS = customertransactiontype.filter(item => item.transactionStatus === 'Cancelled');
-                    const highestcancelledTransactionTS = cancelledTransactionsTS.reduce((max, current) => (current.data > max.data) ? current : max, cancelledTransactionsTS[0]);
-                    const leastcancelledTransactionTS =cancelledTransactionsTS.reduce((min, current) => (current.data < min.data) ? current : min, cancelledTransactionsTS[0]); 
-                    //Pending TS
-                    const pendingTransactionsTS = customertransactiontype.filter(item => item.transactionStatus === 'Pending');
-                    const highestPendingTransactionTS = pendingTransactionsTS.reduce((max, current) => (current.data > max.data) ? current : max, pendingTransactionsTS[0]);
-                    const leastPendingTransactionTS =pendingTransactionsTS.reduce((min, current) => (current.data < min.data) ? current : min, pendingTransactionsTS[0]);
+        for (let i = 0; i < customertypeTS.length; i++) {
+            customertransactiontype.push({
+                label: customertypeTS[i],
+                data: customertypeTSdata[i]
+            });
+        }
+        
+        const maxCustomerTypeData = customertransactiontype.reduce((max, obj) => (obj.data >= max.data ? obj : max), {data: -Infinity });
+        const maxCustomerData = maxCustomerTypeData.data;
+        const maxCustomerTypes = customertransactiontype.filter(obj => obj.data === maxCustomerData).map(obj => obj.label);
+        const minCustomerTypeData = customertransactiontype.reduce((min, obj) => (obj.data <= min.data ? obj : min), {data: Infinity});
+        const minCustomerData = minCustomerTypeData.data;
+        const minCustomerType = customertransactiontype.filter(obj => obj.data === minCustomerData).map(obj => obj.label);
 
+        //for Unified Laboratory Information Management System transaction type
+        const ulimsData = customerTypeData.filter(item => item.transaction_type === 'Unified Laboratory Information Management System');
+        const customertypeulims = ulimsData.map(item => item.customer_type);
+        const customertypeulimsdata = ulimsData.map(item => item.transaction_count);
+        const customertransactiontypeUlims = [];
 
+        for (let i = 0; i < customertypeulims.length; i++) {
+            customertransactiontypeUlims.push({
+                label: customertypeulims[i],
+                data: customertypeulimsdata[i]
+            });
+        }
+        
+        const maxCustomerTypeDataulims = customertransactiontypeUlims.reduce((max, obj) => (obj.data >= max.data ? obj : max), {data: -Infinity });
+        const maxCustomerDataulims = maxCustomerTypeDataulims.data;
+        const maxCustomerTypesulims = customertransactiontypeUlims.filter(obj => obj.data === maxCustomerDataulims).map(obj => obj.label);
+        const minCustomerTypeDataulims = customertransactiontypeUlims.reduce((min, obj) => (obj.data <= min.data ? obj : min), {data: Infinity});
+        const minCustomerDataulims = minCustomerTypeDataulims.data;
+        const minCustomerTypeulims = customertransactiontypeUlims.filter(obj => obj.data === minCustomerDataulims).map(obj => obj.label);
 
-                    // // Use the found data
-                    
-                    type1.innerHTML = "<span style='color: orange;'>Technical Services <br>";
-                    hightype1.innerHTML = "&nbsp; &nbsp; + Highest Paid Transaction:<span style='color: green;'> " +highestPaidTransactionTS.label + "</span> with <span style='color: red;'>" + highestPaidTransactionTS.data + "</span> transaction having the total income of <span style='color: red;'>" + Number(highestPaidTransactionTS.totalAmount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })+"."
-                    + "</span><br>&nbsp; &nbsp; + Least paid Transaction:<span style='color: green;'> " +leastPaidTransactionTS.label + "</span> with <span style='color: red;'>" + leastPaidTransactionTS.data + "</span> transaction having the total income of <span style='color: red;'>" + Number(leastPaidTransactionTS.totalAmount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) +"."
-                    + "</span><br>&nbsp; &nbsp; + Highest pending Transaction:<span style='color: green;'> " +highestPendingTransactionTS.label + "</span> with <span style='color: red;'>" + highestPendingTransactionTS.data + "</span> transaction having the total income of <span style='color: red;'>" + Number(highestPendingTransactionTS.totalAmount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) +"."
-                    + "</span><br>&nbsp; &nbsp; + Least pending Transaction:<span style='color: green;'> " +leastPendingTransactionTS.label + "</span> with <span style='color: red;'>" + leastPendingTransactionTS.data + "</span> transaction having the total income of <span style='color: red;'>" + Number(leastPendingTransactionTS.totalAmount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) +"."
-                    + "</span><br>&nbsp; &nbsp; + Highest cancelled Transaction:<span style='color: green;'> " +highestcancelledTransactionTS.label + "</span> with <span style='color: red;'>" + highestcancelledTransactionTS.data + "</span> transaction having the total income of <span style='color: red;'>" + Number(highestcancelledTransactionTS.totalAmount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })+"."
-                    + "</span><br>&nbsp; &nbsp; + Least cancelled Transaction:<span style='color: green;'> " +leastcancelledTransactionTS.label + "</span> with <span style='color: red;'>" + leastcancelledTransactionTS.data + "</span> transaction having the total income of <span style='color: red;'>" + Number(leastcancelledTransactionTS.totalAmount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) +".";
-                    
-                break;
+        //for National Laboratory Information Management System transaction type
+        const nlimsData = customerTypeData.filter(item => item.transaction_type === 'National Laboratory Information Management System');
+        const customertypenlims = nlimsData.map(item => item.customer_type);
+        const customertypenlimsdata = nlimsData.map(item => item.transaction_count);
+        const customertransactiontypeNlims = [];
 
-                case "nlims":
-                    //for Technical services transaction type
-                    const nlimsData = customerTypeData.filter(item => item.transaction_type === 'National Laboratory Information Management System');
-                    const customertypenlims = nlimsData.map(item => item.customer_type);
-                    const customertypenlimsdata = nlimsData.map(item => item.transaction_count);
-                    const totalAmountnlimsdata = nlimsData.map(item => item.total_amount);
-                    const transactionStatusnlims = nlimsData.map(item => item.transaction_status);
-
-                    const customertransactiontypenlims = [];
-
-                    for (let i = 0; i < customertypenlims.length; i++) {
-                        customertransactiontypenlims.push({
-                            label: customertypenlims[i],
-                            data: customertypenlimsdata[i],
-                            totalAmount: totalAmountnlimsdata[i],
-                            transactionStatus: transactionStatusnlims[i]
-                        });
-                    }
-                    
-                    //paid nlims
-                    const paidTransactionsnlims = customertransactiontypenlims.filter(item => item.transactionStatus === 'Paid');
-                    const highestPaidTransactionnlims = paidTransactionsnlims.reduce((max, current) => (current.data > max.data) ? current : max, paidTransactionsnlims[0]);
-                    const leastPaidTransactionnlims =paidTransactionsnlims.reduce((min, current) => (current.data < min.data) ? current : min, paidTransactionsnlims[0]);
-                    //cancelled nlims
-                    const cancelledTransactionsnlims = customertransactiontypenlims.filter(item => item.transactionStatus === 'Cancelled');
-                    const highestcancelledTransactionnlims = cancelledTransactionsnlims.reduce((max, current) => (current.data > max.data) ? current : max, cancelledTransactionsnlims[0]);
-                    const leastcancelledTransactionnlims =cancelledTransactionsnlims.reduce((min, current) => (current.data < min.data) ? current : min, cancelledTransactionsnlims[0]); 
-                    //Pending nlims
-                    const pendingTransactionsnlims = customertransactiontypenlims.filter(item => item.transactionStatus === 'Pending');
-                    const highestPendingTransactionnlims = pendingTransactionsnlims.reduce((max, current) => (current.data > max.data) ? current : max, pendingTransactionsnlims[0]);
-                    const leastPendingTransactionnlims =pendingTransactionsnlims.reduce((min, current) => (current.data < min.data) ? current : min, pendingTransactionsnlims[0]);
+        for (let i = 0; i < customertypenlims.length; i++) {
+            customertransactiontypeNlims.push({
+                label: customertypenlims[i],
+                data: customertypenlimsdata[i]
+            });
+        }
+        
+        const maxCustomerTypeDatanlims = customertransactiontypeNlims.reduce((max, obj) => (obj.data >= max.data ? obj : max), {data: -Infinity });
+        const maxCustomerDatanlims = maxCustomerTypeDatanlims.data;
+        const maxCustomerTypesnlims = customertransactiontypeNlims.filter(obj => obj.data === maxCustomerDatanlims).map(obj => obj.label);
+        const minCustomerTypeDatanlims = customertransactiontypeNlims.reduce((min, obj) => (obj.data <= min.data ? obj : min), {data: Infinity});
+        const minCustomerDatanlims = minCustomerTypeDatanlims.data;
+        const minCustomerTypenlims= customertransactiontypeNlims.filter(obj => obj.data === minCustomerDatanlims).map(obj => obj.label);
 
 
-
-                    // // Use the found data
-                    
-                    type1.innerHTML = "<span style='color: Red;'>National Laboratory Information Management System <br>";
-                    hightype1.innerHTML = "&nbsp; &nbsp; + Highest Paid Transaction:<span style='color: green;'> " +highestPaidTransactionnlims.label + "</span> with <span style='color: red;'>" + highestPaidTransactionnlims.data + "</span> transaction having the total income of <span style='color: red;'>" + Number(highestPaidTransactionnlims.totalAmount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) +"."
-                    + "</span><br>&nbsp; &nbsp; + Least paid Transaction:<span style='color: green;'> " +leastPaidTransactionnlims.label + "</span> with <span style='color: red;'>" + leastPaidTransactionnlims.data + "</span> transaction having the total income of <span style='color: red;'>" + Number(leastPaidTransactionnlims.totalAmount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) +"."
-                    + "</span><br>&nbsp; &nbsp; + Highest pending Transaction:<span style='color: green;'> " +highestPendingTransactionnlims.label + "</span> with <span style='color: red;'>" + highestPendingTransactionnlims.data + "</span> transaction having the total income of <span style='color: red;'>" + Number(highestPendingTransactionnlims.totalAmount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })+"."
-                    + "</span><br>&nbsp; &nbsp; + Least pending Transaction:<span style='color: green;'> " +leastPendingTransactionnlims.label + "</span> with <span style='color: red;'>" + leastPendingTransactionnlims.data + "</span> transaction having the total income of <span style='color: red;'>" + Number(leastPendingTransactionnlims.totalAmount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })+"."
-                    + "</span><br>&nbsp; &nbsp; + Highest cancelled Transaction:<span style='color: green;'> " +highestcancelledTransactionnlims.label + "</span> with <span style='color: red;'>" + highestcancelledTransactionnlims.data + "</span> transaction having the total income of <span style='color: red;'>" + Number(highestcancelledTransactionnlims.totalAmount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })+"."
-                    + "</span><br>&nbsp; &nbsp; + Least cancelled Transaction:<span style='color: green;'> " +leastcancelledTransactionTS.label + "</span> with <span style='color: red;'>" + leastcancelledTransactionnlims.data + "</span> transaction having the total income of <span style='color: red;'>" + Number(leastcancelledTransactionnlims.totalAmount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) +".";
-                    
-                break;
-
-                case "ulims":
-
-                    //for ulims transaction type
-                    const ulimsData = customerTypeData.filter(item => item.transaction_type === 'Unified Laboratory Information Management System');
-                    const customertypeulims = ulimsData.map(item => item.customer_type);
-                    const customertypeulimsdata = ulimsData.map(item => item.transaction_count);
-                    const totalAmountulimsdata = ulimsData.map(item => item.total_amount);
-                    const transactionStatusulims = ulimsData.map(item => item.transaction_status);
-
-                    const customertransactiontypeulims = [];
-
-                    for (let i = 0; i < customertypeulimsdata.length; i++) {
-                        customertransactiontypeulims.push({
-                            label: customertypeulims[i],
-                            data: customertypeulimsdata[i],
-                            totalAmount: totalAmountulimsdata[i],
-                            transactionStatus: transactionStatusulims[i]
-                        });
-                    }
-                    
-                    //paid ulims
-                    const paidTransactionsulims = customertransactiontypeulims.filter(item => item.transactionStatus === 'Paid');
-                    const highestPaidTransactionulims = paidTransactionsulims.reduce((max, current) => (current.data > max.data) ? current : max, paidTransactionsulims[0]);
-                    const leastPaidTransactionulims =paidTransactionsulims.reduce((min, current) => (current.data < min.data) ? current : min, paidTransactionsulims[0]);
-                    //cancelled ulims
-                    const cancelledTransactionsulims = customertransactiontypeulims.filter(item => item.transactionStatus === 'Cancelled');
-                    const highestcancelledTransactionulims = cancelledTransactionsulims.reduce((max, current) => (current.data > max.data) ? current : max, cancelledTransactionsulims[0]);
-                    const leastcancelledTransactionulims =cancelledTransactionsulims.reduce((min, current) => (current.data < min.data) ? current : min, cancelledTransactionsulims[0]); 
-                    //Pending ulims
-                    const pendingTransactionsulims = customertransactiontypeulims.filter(item => item.transactionStatus === 'Pending');
-                    const highestPendingTransactionulims = pendingTransactionsulims.reduce((max, current) => (current.data > max.data) ? current : max, pendingTransactionsulims[0]);
-                    const leastPendingTransactionulims =pendingTransactionsulims.reduce((min, current) => (current.data < min.data) ? current : min, pendingTransactionsulims[0]);
-
-                    type1.innerHTML = "<span style='color: violet;'>Unified Laboratory Information Management System <br>";
-                    hightype1.innerHTML = "&nbsp; &nbsp; + Highest Paid Transaction:<span style='color: green;'> " +highestPaidTransactionulims.label + "</span> with <span style='color: red;'>" + highestPaidTransactionulims.data + "</span> transaction having the total income of <span style='color: red;'>" + Number(highestPaidTransactionulims.totalAmount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) +"."
-                    + "</span><br>&nbsp; &nbsp; + Least paid Transaction:<span style='color: green;'> " +leastPaidTransactionulims.label + "</span> with <span style='color: red;'>" + leastPaidTransactionulims.data + "</span> transaction having the total income of <span style='color: red;'>" + Number(leastPaidTransactionulims.totalAmount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) +"."
-                    + "</span><br>&nbsp; &nbsp; + Highest pending Transaction:<span style='color: green;'> " +highestPendingTransactionulims.label + "</span> with <span style='color: red;'>" + highestPendingTransactionulims.data + "</span> transaction having the total income of <span style='color: red;'>" + Number(highestPendingTransactionulims.totalAmount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) +"."
-                    + "</span><br>&nbsp; &nbsp; + Least pending Transaction:<span style='color: green;'> " +leastPendingTransactionulims.label + "</span> with <span style='color: red;'>" + leastPendingTransactionulims.data + "</span> transaction having the total income of <span style='color: red;'>" + Number(leastPendingTransactionulims.totalAmount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) +"."
-                    + "</span><br>&nbsp; &nbsp; + Highest cancelled Transaction:<span style='color: green;'> " +highestcancelledTransactionulims.label + "</span> with <span style='color: red;'>" + highestcancelledTransactionulims.data + "</span> transaction having the total income of <span style='color: red;'>" + Number(highestcancelledTransactionulims.totalAmount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) +"."
-                    + "</span><br>&nbsp; &nbsp; + Least cancelled Transaction:<span style='color: green;'> " +leastcancelledTransactionulims.label + "</span> with <span style='color: red;'>" + leastcancelledTransactionulims.data + "</span> transaction having the total income of <span style='color: red;'>" + Number(leastcancelledTransactionulims.totalAmount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) +".";
-                break;
-            }
-    });
-    transactionTypeDropdown.value = 'ts';
-    transactionTypeDropdown.dispatchEvent(new Event('change'));
+        // Use the found data
+        header.innerHTML = "Transaction Type <br>";
+        type1.innerHTML = "<span style='color: orange;'>Technical Services";
+        hightype1.innerHTML = "Highest customer type(s) : <span style='color: green;'>" + maxCustomerTypes + "</span> having <span style='color: red;'>" + maxCustomerData + " transaction";
+        leasttype1.innerHTML = "Least customer type(s) : <span style='color: green;'>" + minCustomerType + "</span> having <span style='color: red;'>" + minCustomerData + " transaction";
+        type2.innerHTML = "<span style='color: violet;'>Unified Laboratory Information Management System (ULIMS)";
+        hightype2.innerHTML = "Highest customer type(s) : <span style='color: green;'>" + maxCustomerTypesulims + "</span> having <span style='color: red;'>" + maxCustomerDataulims + " transaction";
+        leasttype2.innerHTML = "Least customer type(s) : <span style='color: green;'>" + minCustomerTypeulims + "</span> having <span style='color: red;'>" + minCustomerDataulims + " transaction";
+        type3.innerHTML = "<span style='color: red;'>National Laboratory Information Management System";
+        hightype3.innerHTML = "Highest customer type(s) : <span style='color: green;'>" + maxCustomerTypesnlims + "</span> having <span style='color: red;'>" + maxCustomerDatanlims + " transaction";
+        leasttype3.innerHTML = "Least customer type(s) : <span style='color: green;'>" + minCustomerTypenlims + "</span> having <span style='color: red;'>" + minCustomerDatanlims + " transaction";
 
         customerpopup.style.display = "block";
 
 
-});
+    });
 
-close.addEventListener("click", () => {
-// Close the pop-up when the close button is clicked
-customerpopup.style.display = "none";
-});
+    close.addEventListener("click", () => {
+        // Close the pop-up when the close button is clicked
+        customerpopup.style.display = "none";
+    });
 </script>
 
 <!-- scriptfor customers graph -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js" integrity="sha512-JPcRR8yFa8mmCsfrw4TNte1ZvF1e3+1SdGMslZvmrzDYxS69J7J49vkFL8u6u8PlPJK+H3voElBtUCzaXj+6ig==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 <script>
-
-    
     document.addEventListener('DOMContentLoaded', function() {
         // Get references to chart containers and the dropdown
         const transactionStatusChartContainer = document.getElementById('transactionStatus');
@@ -2914,7 +2855,7 @@ customerpopup.style.display = "none";
                     datalabels: {
                         color: 'black', // Set the text color to black
                         fontSize: 16, // Set the font size for labels
-                        formatter: function (value, context) {
+                        formatter: function(value, context) {
                             // Format the value with commas
                             return value.toLocaleString();
                         },
@@ -2929,7 +2870,7 @@ customerpopup.style.display = "none";
             if (selectedChartType === 'doughnut') {
 
                 const transactionTypeElement = document.getElementById("transactionType");
-                transactionTypeElement.style.marginLeft = "0px"; 
+                transactionTypeElement.style.marginLeft = "0px";
                 // For doughnut and pie charts, use the custom options
                 transactionStatusChart = new Chart(transactionStatusChartContainer, {
                     type: selectedChartType,
@@ -2939,13 +2880,13 @@ customerpopup.style.display = "none";
                         labels: <?php echo json_encode($transactionStatus); ?>,
                         datasets: [{
                             data: <?php echo json_encode($transactionStatusDatacounts); ?>,
-                            backgroundColor: ['rgba(229, 247, 48, 0.2)',//red
-                                'rgba(241, 37, 150, 0.2)',//yellow
-                                'rgba(0, 215, 132, 0.2)',//green
+                            backgroundColor: ['rgba(229, 247, 48, 0.2)', //red
+                                'rgba(241, 37, 150, 0.2)', //yellow
+                                'rgba(0, 215, 132, 0.2)', //green
                             ],
                             borderColor: ['rgba(229, 247, 48, 0.8)', //red
                                 'rgba(241, 37, 150, 0.8)', //yellow
-                                'rgba(0, 215, 132, 0.93)',//green
+                                'rgba(0, 215, 132, 0.93)', //green
                             ],
                             borderWidth: 2
                         }],
@@ -3025,7 +2966,7 @@ customerpopup.style.display = "none";
             } else if (selectedChartType === 'pie') {
 
                 const transactionTypeElement = document.getElementById("transactionType");
-                transactionTypeElement.style.marginLeft = "110px"; 
+                transactionTypeElement.style.marginLeft = "110px";
 
                 transactionStatusChart = new Chart(transactionStatusChartContainer, {
                     type: selectedChartType,
@@ -3206,7 +3147,7 @@ customerpopup.style.display = "none";
             } else if (selectedChartType === 'bar') {
 
                 const transactionTypeElement = document.getElementById("transactionType");
-                transactionTypeElement.style.marginLeft = "0px"; 
+                transactionTypeElement.style.marginLeft = "0px";
 
                 // Create new charts based on selected chart type
                 transactionStatusChart = new Chart(transactionStatusChartContainer, {
@@ -3251,7 +3192,7 @@ customerpopup.style.display = "none";
 
                         },
                     },
-                    plugins: [bgColor,ChartDataLabels],
+                    plugins: [bgColor, ChartDataLabels],
                     data: {
                         labels: <?php echo json_encode($transactionStatus); ?>,
                         datasets: [{
@@ -3310,10 +3251,10 @@ customerpopup.style.display = "none";
                                 backgroundColor: 'white'
                             }
 
-                            },
+                        },
 
                     },
-                    plugins: [bgColor,ChartDataLabels],
+                    plugins: [bgColor, ChartDataLabels],
                     data: {
                         labels: <?php echo json_encode($PaymentMethod); ?>,
                         datasets: [{
@@ -3374,7 +3315,7 @@ customerpopup.style.display = "none";
                                 backgroundColor: 'white'
                             }
 
-                    },
+                        },
                     },
                     plugins: [bgColor, ChartDataLabels],
                     data: {
@@ -3435,9 +3376,9 @@ customerpopup.style.display = "none";
                                 backgroundColor: 'white'
                             }
 
-                            },
+                        },
                     },
-                    plugins: [bgColor,ChartDataLabels],
+                    plugins: [bgColor, ChartDataLabels],
                     data: {
                         labels: <?php echo json_encode($customerType); ?>,
                         datasets: [{
@@ -3467,7 +3408,7 @@ customerpopup.style.display = "none";
             } else {
 
                 const transactionTypeElement = document.getElementById("transactionType");
-                transactionTypeElement.style.marginLeft = "0px"; 
+                transactionTypeElement.style.marginLeft = "0px";
 
                 // Create new charts based on selected chart type
                 transactionStatusChart = new Chart(transactionStatusChartContainer, {
@@ -3505,7 +3446,7 @@ customerpopup.style.display = "none";
                                     // Display the label based on the selected data (e.g., transaction type or payment method)
                                     return value.toLocaleString();
                                 },
-                                 align: 'bottom', // Align the labels at the top of the data point
+                                align: 'bottom', // Align the labels at the top of the data point
                                 anchor: 'start', // Anchor the labels to the start of the data point
                                 offset: 0, // Adjust the offset to move the labels down
                             },
@@ -3515,7 +3456,7 @@ customerpopup.style.display = "none";
 
                         },
                     },
-                    plugins: [bgColor,ChartDataLabels],
+                    plugins: [bgColor, ChartDataLabels],
                     data: {
                         labels: <?php echo json_encode($transactionStatus); ?>,
                         datasets: [{
@@ -3577,10 +3518,10 @@ customerpopup.style.display = "none";
                                 backgroundColor: 'white'
                             }
 
-                            },
+                        },
 
                     },
-                    plugins: [bgColor,ChartDataLabels],
+                    plugins: [bgColor, ChartDataLabels],
                     data: {
                         labels: <?php echo json_encode($PaymentMethod); ?>,
                         datasets: [{
@@ -3644,7 +3585,7 @@ customerpopup.style.display = "none";
                                 backgroundColor: 'white'
                             }
 
-                    },
+                        },
                     },
                     plugins: [bgColor, ChartDataLabels],
                     data: {
@@ -3707,9 +3648,9 @@ customerpopup.style.display = "none";
                                 backgroundColor: 'white'
                             }
 
-                            },
+                        },
                     },
-                    plugins: [bgColor,ChartDataLabels],
+                    plugins: [bgColor, ChartDataLabels],
                     data: {
                         labels: <?php echo json_encode($customerType); ?>,
                         datasets: [{
@@ -3736,7 +3677,7 @@ customerpopup.style.display = "none";
                     },
 
                 });
-                }
+            }
         }
 
 
