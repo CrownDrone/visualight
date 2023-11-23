@@ -579,78 +579,11 @@ $currentIndex = Url::to(['']);
         }
     }
 
-    /* 
-    .date_filter 
-        {
-        height: 2.8125rem;
-        }
-
-        .containers
-        {
-            height: 2.875rem;
-        }
-
-        .date_dropdown 
-        {
-            padding-right: 1rem;
-            padding-top: .5rem;
-            padding-bottom: .5rem;
-        }
-
-        .date_type_label {
-            font-size: .8rem;
-            letter-spacing: 0.01rem;
-        }
-
-        .dropdown-content 
-        {
-            z-index: 1;
-            text-align: center;
-            border-radius: 0.5rem;
-            width: 0.02rem;
-            height: 1.5rem;
-            font-size: .8rem;
-        }
-        
-        .date_type 
-        {
-            border-radius:1px;
-        }
-
-        .print_pdf 
-        {
-            padding-right: 0rem;
-            padding-top:.5rem;
-            padding-bottom:.2rem;
-        }
-
-        .print_pdf_label 
-        {
-            border-radius: 1rem;
-            padding-left: 0rem;
-            padding-right: 0rem;
-            width: 6rem;
-        }
-        
-        .datePicker_label 
-        {
-            border-radius: 0.3rem;
-            width: 6rem;
-            font-size: .6rem;
-        }
-    
-    } */
 </style>
 
 <?php
 
 use yii\db\Query;
-use yii\bootstrap5\Html;
-use controllers\SiteController;
-// Fetch sales data from the database
-// $fromDate = $_POST['startDate'];
-// $toDate = $_POST['endDate'];
-
 Yii::$app->set('db', [ //reroute default connection 
     'class' => \yii\db\Connection::class,
     'dsn' => 'mysql:host=localhost;dbname=visualight2data',
@@ -1594,8 +1527,6 @@ $targetIncome = [
             const minIndex = sumTransactionDataset.data.indexOf(Math.min(...sumTransactionDataset.data));
             const leastTransactionCount = sumTransactionDataset.data[minIndex];
             const dateofleast = sumTransactionDataset.labels[minIndex];
-
-            // console.log('sumTransactionDataset:', sumTransactionDataset);
 
             //Transaction type dataset
             const transactionTypeData = <?php
@@ -3727,7 +3658,6 @@ $targetIncome = [
                 const toDatevalue = document.getElementById('endDate');
                 const fDate = fromDateValue.value;
                 const tDate = toDatevalue.value;
-                console.log(fDate + " to " + tDate);
 
                 //send datepicker data to controller, 
                 $.ajax({
@@ -3890,9 +3820,6 @@ $targetIncome = [
                     break;
             }
 
-            console.log("current array: ")
-            console.log(selected_data)
-
             // Remove old data
             constprovincesChart.data.labels = [];
             constprovincesChart.data.datasets.forEach((dataset) => {
@@ -3918,15 +3845,7 @@ $targetIncome = [
                 x++
             }
 
-            console.log("OC");
-            console.log(selected_data);
-            console.log("label");
-            console.log(provinceLabels);
-            console.log("data");
-            console.log(provinceData);
             constprovincesChart.data.datasets = provinceData;
-            console.log("chart");
-            console.log(constprovincesChart.data.datasets);
             constprovincesChart.config.data.labels = [];
             constprovincesChart.update();
             provinceLabels = [];
