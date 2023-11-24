@@ -357,6 +357,7 @@ $currentIndex = Url::to(['']);
         width: 100%;
         height: 100%;
         background: rgba(0, 0, 0, 0.7);
+        z-index:1000;
     }
 
     .popup-content {
