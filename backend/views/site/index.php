@@ -21,6 +21,8 @@ $currentIndex = Url::to(['']);
 
     /* Default styles */
     .chart-container {
+        top: 20px;
+        bottom:20px;
         position: relative;
         display: flex;
         flex-direction: column;
@@ -61,7 +63,7 @@ $currentIndex = Url::to(['']);
     .texty {
         margin: 0;
         font-weight: bold;
-        font-size: 2rem;
+        font-size: 1.5rem;
         font-family: Poppins;
     }
 
@@ -76,8 +78,8 @@ $currentIndex = Url::to(['']);
     #myChart {
         /* css sa radial */
         position: absolute;
-        left: 50px;
-        top: 5px;
+        left: 100px;
+        top: 35px;
     }
 
     .asOne {
@@ -1288,23 +1290,6 @@ $targetIncome = [
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 
-    <div class="chart-container" id="avgSales">
-        <p class="reportTitle" id=" "></p>
-        <div class="asOne">
-            <canvas id="myChart"></canvas>
-            <div class="average">
-                <div class="aveTransactionDiv">
-                    <p class="texty"> Average Transactions </p>
-                    <p class="number"> <?= $average ?> </p>
-                </div>
-                <div class="aveSalesDiv">
-                    <p class="texty"> Average Income </p>
-                    <p class="number"> <?= $saleaverage ?> </p>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <div class="chart-container">
 
         <p class="reportTitle" id="totaltransaction"> Total Transaction</p>
@@ -1329,6 +1314,23 @@ $targetIncome = [
     <div class="chart-container">
         <p class="reportTitle" id=" "> Income per Division</p>
         <canvas id="salesChart"></canvas>
+    </div>
+
+    <div class="chart-container" id="avgSales">
+        <p class="reportTitle" id=" "></p>
+        <div class="asOne">
+            <canvas id="myChart"></canvas>
+            <div class="average">
+                <div class="aveTransactionDiv">
+                    <p class="texty"> Average Transactions </p>
+                    <p class="number"> <?= $average ?> </p>
+                </div>
+                <div class="aveSalesDiv">
+                    <p class="texty"> Combined Average Income </p>
+                    <p class="number"> <?= $saleaverage ?> </p>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="popup" id="popup">
@@ -2361,7 +2363,7 @@ $targetIncome = [
                     ctx.font = 'bolder 15px Poppins';
                     ctx.fillStyle = 'rgb(3, 98, 186, 1)';
                     ctx.textAlign = 'center';
-                    ctx.fillText('Average income', width / 2.1, height / 10 + top);
+                    ctx.fillText('Average Income', width / 2.1, height / 10 + top);
 
                     // Count and display the numbers
                     let total1 = 0;
@@ -2373,10 +2375,10 @@ $targetIncome = [
                         total2 += value;
                     });
 
-                    ctx.fillStyle = 'rgb(255,204,51)';
-                    ctx.fillText(`STD Total: ${total1}`, width / 2.1, height / 2 + top);
-                    ctx.fillStyle = 'rgb(0, 0, 255)';
-                    ctx.fillText(`NMD Total: ${total2}`, width / 2.1, height / 2 + top + 20);
+                    ctx.fillStyle = 'rgb(0, 115, 230)';
+                    ctx.fillText(`STD: ${total1.toLocaleString()}`, width / 2.1, height / 2 + top);
+                    ctx.fillStyle = 'rgb(17, 163, 76)';
+                    ctx.fillText(`NMD: ${total2.toLocaleString()}`, width / 2.1, height / 2 + top + 20);
 
 
                     ctx.restore();
@@ -2403,7 +2405,7 @@ $targetIncome = [
     <div class="customers_data">
         <div class="date_filter" style="text-align: left; padding-left: 8rem; padding-top: 0rem; padding-bottom: 2rem;">
             <div class="containers">
-                <div class="date_dropdown">
+                <div class="date_dropdown" style ="top: 20px;">
                     <label for="chart_type" class="chart_type_label">
                         <strong>Select Region: </strong></label>
                     <select name="chart_type" id="chart_type" class="dropdown-content" onchange="dateFilter()">
@@ -2567,7 +2569,7 @@ $targetIncome = [
 <div class="customers_data">
     <div class="date_filter" style="text-align: left; padding-left: 8rem; padding-top: 0rem; padding-bottom: 2rem;">
         <div class="containers">
-            <div class="date_dropdown">
+            <div class="date_dropdown" style ="top: 20px;">
                 <label for="chart_type2" class="chart_type_label2">
                     <strong>Chart Filter: </strong></label>
                 <select name="chart_type2" id="chart_type2" class="dropdown-content" onchange="changeChart()">
@@ -3747,23 +3749,18 @@ if (close2) {
         const selectedChartType = chartTypeDropdown2.value;
 
         const doughnutOptions = {
-
             plugins: {
-                legend: {
-                    display: true,
-                    position: 'top'
-                },
                 bgColor: {
-                    backgroundColor: 'white'
+                    backgroundColor: 'white',
                 },
                 datalabels: {
-                    color: 'black', // Set the text color to black
-                    fontSize: 16, // Set the font size for labels
-                }
+                    color: 'black',
+                    fontSize: 10,
+                },
             },
             responsive: true,
             maintainAspectRatio: false,
-            cutout: '70%', // Adjust the size of the doughnut hole
+            cutout: '70%',
         };
 
         const transactionTypeElement = document.getElementById("transactionType");
@@ -3863,29 +3860,31 @@ if (close2) {
         // dashboard design end
 
         function changeChart() {
-            var type = document.getElementById('chart_type2');
-            var typeSelect = type.value;
+        var type = document.getElementById('chart_type2');
+        var typeSelect = type.value;
 
-            transactionStatusChart.config.type = ''
-            paymendtMethodChart.config.type = ''
-            transactionTypeChart.config.type = ''
-            customerTypeChart.config.type = ''
+        // Remove cutout if the selected type is 'bar'
+        doughnutOptions.cutout = typeSelect === 'pie' ? 0 : '70%';        
+       
+        transactionStatusChart.config.type = typeSelect;
+        paymendtMethodChart.config.type = typeSelect;
+        transactionTypeChart.config.type = typeSelect;
+        customerTypeChart.config.type = typeSelect;
 
-            transactionStatusChart.config.type = typeSelect
-            transactionStatusChart.update();
+        transactionStatusChart.options = doughnutOptions;
+        paymendtMethodChart.options = doughnutOptions;
+        transactionTypeChart.options = doughnutOptions;
+        customerTypeChart.options = doughnutOptions;
 
-            paymendtMethodChart.config.type = typeSelect
-            paymendtMethodChart.update();
+        transactionStatusChart.update();
+        paymendtMethodChart.update();
+        transactionTypeChart.update();
+        customerTypeChart.update();
 
-            transactionTypeChart.config.type = typeSelect
-            transactionTypeChart.update();
+        typeSelect = "";
+    }
 
-            customerTypeChart.config.type = typeSelect
-            customerTypeChart.update();
 
-            typeSelect = "";
-
-        }
     </script>
     <script>
         //script for date filter, at the bottom so all functions can be called
@@ -4393,7 +4392,7 @@ if (close2) {
 
                                                                                             pdf.addImage(salesChartImg, 'PNG', 40, 30, 140, 70, undefined, 'FAST');
 
-                                                                                            pdf.text('Average Income Daily', 40, 115);
+                                                                                            pdf.text('Average Income', 40, 115);
 
                                                                                             pdf.addImage(myChartImg, 'PNG', 40, 120, 105, 80, undefined, 'FAST');
 
