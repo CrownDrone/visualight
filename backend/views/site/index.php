@@ -3338,7 +3338,7 @@ $targetIncome = [
 
                                                                                             pdf.addImage(salesChartImg, 'PNG', 40, 30, 140, 70, undefined, 'FAST');
 
-                                                                                            pdf.text('Average Income Daily', 40, 115);
+                                                                                            pdf.text('Average Income', 40, 115);
 
                                                                                             pdf.addImage(myChartImg, 'PNG', 40, 120, 105, 80, undefined, 'FAST');
 

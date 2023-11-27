@@ -3233,7 +3233,7 @@ $targetIncome =
                                                                         pdf.setFont('helvetica', 'bold');
                                                                         pdf.setTextColor(0, 41, 102);
                                                                         pdf.setFontSize(14);
-                                                                        pdf.text('Visualight-National Metrology', 75, 10);
+                                                                        pdf.text('Visualight-Standards and Testing', 75, 10);
 
                                                                         pdf.addImage(transactionChartImg, 'PNG', 40, 30, 130, 70, undefined, 'FAST');
                                                                         pdf.addImage(salesChartImg, 'PNG', 40, 123, 130, 70, undefined, 'FAST');
