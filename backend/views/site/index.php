@@ -1194,7 +1194,8 @@ $targetIncome = [
 ?>
 <?php \yii\widgets\Pjax::begin(); ?>
 <div class="DailyTransaction">
-    <p>Total Transactions Daily</p>
+<p >Total Transactions Daily</p>
+<!-- <p id="totalTransactionsTitle">Total Transactions Daily</p> -->
 
     <div class="deptransaction">
         <p>National Metrology</p>
@@ -1213,6 +1214,20 @@ $targetIncome = [
         </div>
     </div>
 </div>
+
+<script>
+        // Get the current date
+        const currentDate1 = new Date();
+        
+        // Format the date as "Month Day, Year"
+        const formattedDate = currentDate1.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+        
+        // Get the element with the ID "totalTransactionsTitle"
+        const titleElement = document.getElementById('totalTransactionsTitle');
+        
+        // Update the HTML content to include the formatted date
+        titleElement.innerHTML += `: ${formattedDate}`;
+    </script>
 
 <div id="sending-email-message" class="alert alert-info hidden" style="display:none;">
     PDF file is downloading, please wait...

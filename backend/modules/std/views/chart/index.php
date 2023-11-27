@@ -1282,12 +1282,13 @@ $targetIncome =
 
     ?>
 
+
     <div class="DailyTransaction">
         <br>
 
         <div class="deptransaction">
-            <p>Total Transactions Daily</p>
-            <div class="grid">
+        <p id="totalTransactionsTitle">Total Transactions Daily</p>            
+        <div class="grid">
                 <img src="/images/Total Sales.png" alt="icon1">
                 <p id="dailyTrans"><?= $todaymettrans ?></p>
                 <p id="valueIncrease"><?= $metdailytransincrease ?></p>
@@ -1310,6 +1311,7 @@ $targetIncome =
         </div>
 
     </div>
+
 
     <div id="sending-email-message" class="alert alert-info hidden" style="display:none;">
         PDF file is downloading, please wait...
