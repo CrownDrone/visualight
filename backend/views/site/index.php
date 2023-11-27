@@ -29,6 +29,15 @@ $currentIndex = Url::to(['']);
         /* Updated box-shadow */
     }
 
+    .chart-container3 {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        box-shadow: -4px 4px 8px rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.15);
+        /* Updated box-shadow */
+    }
+
     .average {
         position: absolute;
         top: 80px;
@@ -82,7 +91,7 @@ $currentIndex = Url::to(['']);
 
     .asOne {
         justify-content: space-between;
-        width: 40%;
+        width: 45%;
         right: 40%;
         left: 60%;
     }
@@ -308,6 +317,17 @@ $currentIndex = Url::to(['']);
 
     }
 
+    .chart-container3 {
+        margin: .62rem;
+        padding: 3em;
+        border-radius: .93rem;
+        background-color: white;
+        display: inline-block;
+        height: 35rem;
+        width: 97%;
+
+    }
+
 
 
     .graph2 {
@@ -357,7 +377,7 @@ $currentIndex = Url::to(['']);
         width: 100%;
         height: 100%;
         background: rgba(0, 0, 0, 0.7);
-        z-index:1000;
+        z-index: 1000;
     }
 
     .popup-content {
@@ -452,6 +472,14 @@ $currentIndex = Url::to(['']);
         }
 
         .chart-container2 {
+            flex-basis: 100%;
+            max-width: 100%;
+            width: 95%;
+            height: 25rem;
+            display: block;
+        }
+
+        .chart-container3 {
             flex-basis: 100%;
             max-width: 100%;
             width: 95%;
@@ -1262,8 +1290,19 @@ $targetIncome = [
     <script src="https://cdn.jsdelivr.net/npm/brain.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+    <div class="chart-container">
 
-    <div class="chart-container" id="avgSales">
+        <p class="reportTitle" id="totaltransaction"> Total Transaction</p>
+        <canvas id="totaltransactionChart"></canvas>
+    </div>
+
+
+    <div class="chart-container">
+        <p class="reportTitle" id="totalsales"> Total Income </p>
+        <canvas id="totalsalesChart"></canvas>
+    </div>
+
+    <div class="chart-container3" id="avgSales">
         <p class="reportTitle" id=" "></p>
         <div class="asOne">
             <canvas id="myChart"></canvas>
@@ -1281,19 +1320,6 @@ $targetIncome = [
     </div>
 
     <div class="chart-container">
-
-        <p class="reportTitle" id="totaltransaction"> Total Transaction</p>
-        <canvas id="totaltransactionChart"></canvas>
-    </div>
-
-
-    <div class="chart-container">
-        <p class="reportTitle" id="totalsales"> Total Income </p>
-        <canvas id="totalsalesChart"></canvas>
-    </div>
-
-
-    <div class="chart-container">
         <p class="reportTitle" id=" "> Transaction Per Division</p>
         <!-- <div class="containerBody"> -->
         <canvas id="transactionChart"></canvas>
@@ -1305,6 +1331,9 @@ $targetIncome = [
         <p class="reportTitle" id=" "> Income per Division</p>
         <canvas id="salesChart"></canvas>
     </div>
+
+
+
 
     <div class="popup" id="popup">
         <div class="popup-content">
@@ -2687,7 +2716,7 @@ $targetIncome = [
         transactionTypeElement.style.marginLeft = "0px";
         // For doughnut and pie charts, use the custom options
         transactionStatusChart = new Chart(transactionStatusChartContainer, {
-            type: 'doughnut',
+            type: 'pie',
             options: doughnutOptions,
             plugins: [bgColor, ChartDataLabels],
             data: {
@@ -2708,7 +2737,7 @@ $targetIncome = [
         });
 
         paymendtMethodChart = new Chart(paymendtMethodChartContainer, {
-            type: 'doughnut',
+            type: 'pie',
             options: doughnutOptions,
             plugins: [bgColor, ChartDataLabels],
             data: {
@@ -2728,7 +2757,7 @@ $targetIncome = [
             },
         });
         transactionTypeChart = new Chart(transactionTypeChartContainer, {
-            type: 'doughnut',
+            type: 'pie',
             options: doughnutOptions,
             plugins: [bgColor, ChartDataLabels],
             data: {
@@ -2748,7 +2777,7 @@ $targetIncome = [
             },
         });
         customerTypeChart = new Chart(customerTypeChartContainer, {
-            type: 'doughnut',
+            type: 'pie',
             options: doughnutOptions,
             plugins: [bgColor, ChartDataLabels],
             data: {
@@ -2782,11 +2811,8 @@ $targetIncome = [
         function changeChart() {
             var type = document.getElementById('chart_type2');
             var typeSelect = type.value;
-
-            transactionStatusChart.config.type = ''
-            paymendtMethodChart.config.type = ''
-            transactionTypeChart.config.type = ''
-            customerTypeChart.config.type = ''
+            console.log("typeSelect")
+            console.log(typeSelect)
 
             transactionStatusChart.config.type = typeSelect
             transactionStatusChart.update();
@@ -2899,8 +2925,8 @@ $targetIncome = [
 
     <script>
         function dateFilter() {
-            console.log(<?php echo json_encode($PaymentMethod) ?>);
-            console.log(<?php echo json_encode($PaymentMethodcounts); ?>);
+            // console.log(<?php echo json_encode($PaymentMethod) ?>);
+            // console.log(<?php echo json_encode($PaymentMethodcounts); ?>);
             if (selectedValue === '_day') {
 
                 var csrfToken = $('meta[name="csrf-token"]').attr('content');
@@ -3122,8 +3148,8 @@ $targetIncome = [
                 // for transactionStatusChart / Transaction Status
                 x = 0
                 var TSChart1 = response.forTransactionStatusChart;
-                console.log("TestChart1")
-                console.log(TSChart1)
+                // console.log("TestChart1")
+                // console.log(TSChart1)
 
                 var data1 = TSChart1.map(item => item.data);
 
@@ -3142,15 +3168,15 @@ $targetIncome = [
                         borderWidth: 2
                     }],
                 }
-                console.log(transactionStatusChart.config.data.labels)
-                console.log(data)
+                // console.log(transactionStatusChart.config.data.labels)
+                // console.log(data)
                 transactionStatusChart.update();
 
                 //paymendtMethodChart
                 x = 0
                 var TSChart2 = response.forPaymendtMethodChart;
-                console.log("TestChart2")
-                console.log(TSChart2)
+                // console.log("TestChart2")
+                // console.log(TSChart2)
 
                 var data2 = TSChart2.map(item => item.data);
 
@@ -3169,15 +3195,15 @@ $targetIncome = [
                         borderWidth: 2
                     }],
                 }
-                console.log(paymendtMethodChart.config.data.labels)
-                console.log(data2)
+                // console.log(paymendtMethodChart.config.data.labels)
+                // console.log(data2)
                 paymendtMethodChart.update();
 
                 //transactionTypeChart
                 x = 0
                 var TSChart3 = response.forTransactionTypeChart;
-                console.log("TestChart3")
-                console.log(TSChart3)
+                // console.log("TestChart3")
+                // console.log(TSChart3)
 
                 var data3 = TSChart3.map(item => item.data);
 
@@ -3196,15 +3222,15 @@ $targetIncome = [
                         borderWidth: 2
                     }],
                 }
-                console.log(transactionTypeChart.config.data.labels)
-                console.log(data3)
+                // console.log(transactionTypeChart.config.data.labels)
+                // console.log(data3)
                 transactionTypeChart.update();
 
                 //customerTypeChart
                 x = 0
                 var TSChart4 = response.forCustomerTypeChart;
-                console.log("TestChart4")
-                console.log(response.forCustomerTypeChart)
+                // console.log("TestChart4")
+                // console.log(response.forCustomerTypeChart)
 
                 var data4 = TSChart4.map(item => item.data);
 
@@ -3232,8 +3258,8 @@ $targetIncome = [
                         borderWidth: 2
                     }],
                 }
-                console.log(customerTypeChart.config.data.labels)
-                console.log(data4)
+                // console.log(customerTypeChart.config.data.labels)
+                // console.log(data4)
                 customerTypeChart.update();
             } // end of _day filter
         }
