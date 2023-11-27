@@ -95,6 +95,11 @@ $currentIndex = Url::to(['']);
         right: 40%;
         left: 60%;
     }
+    #chart_type {
+    width: 200px;
+}
+
+
 
     @media (max-width: 600px) {
         .average {
@@ -1996,11 +2001,17 @@ $targetIncome = [
                         ticks: {
                             stepSize: 1,
                         },
+                        grid:{
+                            display:false,
+                        }
                     },
                     x: {
                         ticks: {
                             autoSkip: false,
                         },
+                        grid:{
+                            display:false,
+                        }
                     },
                 },
             },
@@ -2051,6 +2062,14 @@ $targetIncome = [
                 scales: {
                     y: {
                         beginAtZero: true,
+                        grid:{
+                            display:false,
+                        }
+                    },
+                    x: {
+                        grid:{
+                            display:false,
+                        }
                     },
                 },
             },
@@ -2160,7 +2179,7 @@ $targetIncome = [
                             stepSize: 1,
                         },
                         grid: {
-                            display: true,
+                            display: false,
                         },
                     },
                     x: {
@@ -2168,7 +2187,7 @@ $targetIncome = [
                             autoSkip: true,
                         },
                         grid: {
-                            display: true,
+                            display: false,
                         },
                     },
                 },
@@ -2229,7 +2248,13 @@ $targetIncome = [
                     y: {
                         beginAtZero: true,
                         grid: {
-                            drawOnChartArea: false
+                            drawOnChartArea: false,
+                            display:false
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display:false
                         }
                     },
                 },
@@ -2386,7 +2411,7 @@ $targetIncome = [
             <div class="containers">
                 <div class="date_dropdown">
                     <label for="chart_type" class="chart_type_label">
-                        <strong>Select Region</strong></label>
+                        <strong>Select Region: </strong></label>
                     <select name="chart_type" id="chart_type" class="dropdown-content" onchange="dateFilter()">
                         <!-- <option value="all-region">All Province</option> -->
                         <option value="ncr">National Capital Region</option>
@@ -2439,7 +2464,7 @@ $targetIncome = [
                 y: {
                     beginAtZero: true,
                     grid: {
-                        display: true,
+                        display: false,
                     },
                 },
                 x: {
@@ -2485,7 +2510,7 @@ $targetIncome = [
         <div class="containers">
             <div class="date_dropdown">
                 <label for="chart_type2" class="chart_type_label2">
-                    <strong>Chart Filter</strong></label>
+                    <strong>Chart Filter: </strong></label>
                 <select name="chart_type2" id="chart_type2" class="dropdown-content" onchange="changeChart()">
                     <option value="doughnut">Doughnut</option>
                     <option value="pie">Pie</option>

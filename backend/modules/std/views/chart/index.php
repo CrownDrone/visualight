@@ -1969,7 +1969,8 @@ $targetIncome =
                         x: {
                             beginAtZero: true,
                             grid: {
-                                drawOnChartArea: false
+                                drawOnChartArea: false,
+                                display: false,
                             },
                             min: 0,
                             max: 6,
@@ -1998,7 +1999,8 @@ $targetIncome =
                         y: {
                             beginAtZero: true,
                             grid: {
-                                drawOnChartArea: false
+                                drawOnChartArea: false,
+                                display: false,
                             }
 
                         },
@@ -2007,7 +2009,8 @@ $targetIncome =
                             min: 0,
                             max: 7,
                             grid: {
-                                drawOnChartArea: false
+                                drawOnChartArea: false,
+                                display: false,
                             }
                         }
 
@@ -2258,7 +2261,7 @@ $targetIncome =
                                     y: {
                                         beginAtZero: true,
                                         grid: {
-
+                                            display: false,
                                         }
                                     },
                                     x: {
