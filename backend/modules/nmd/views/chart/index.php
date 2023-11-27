@@ -62,7 +62,7 @@ $this->title = '';
         .aveSalesDiv {
             background-color: #B526C2;
             color: white;
-            width: 220px;
+            width: 400px;
             height: 130px;
             border-radius: 20px;
             display: flex;
@@ -203,7 +203,7 @@ $this->title = '';
         }
 
         #valueIncrease {
-            font-size: 1.5rem;
+            font-size: 1.2rem;
             font-weight: 400;
             letter-spacing: .15rem;
             grid-column: 3;
@@ -1130,7 +1130,7 @@ foreach ($addressDatatransaction as $customeraddress) {
     } else {
         //dito magcocompute ng percentage ng increase or decrease ng number of past transaction at today's transaction (tinatype ko pa din yung sa last transaction kunwari kasi di pa ko marunong)
         $metdailytransincrease = (($todaymettrans - $lastmettrans) / $todaymettrans) * 100;
-        $metdailytransincrease = number_format($metdailytransincrease, 2);
+        $metdailytransincrease = number_format($metdailytransincrease);
         if ($metdailytransincrease > 1) {
             $metdailytransincrease = '+' . $metdailytransincrease . '%';
         } else {
@@ -1165,7 +1165,7 @@ foreach ($addressDatatransaction as $customeraddress) {
     } else {
 
         $SalesIncreasePercent = (($SalesToday - $SalesYesterday) / $SalesToday) * 100;
-        $SalesIncreasePercent = number_format($SalesIncreasePercent, 2);
+        $SalesIncreasePercent = number_format($SalesIncreasePercent);
         if ($SalesIncreasePercent > 1) {
             $SalesIncreasePercent = '+' . $SalesIncreasePercent . '%';
         } else {
