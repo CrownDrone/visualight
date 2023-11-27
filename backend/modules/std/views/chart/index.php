@@ -967,6 +967,53 @@ $this->title = '';
         $transactionTypesumincome[] = $type['total_amount'];
     }
 
+    //transaction used per customer type
+$customerTypeDatapertransaction = (new \yii\db\Query())
+->select([
+    'ct.type as customer_type',
+    'tt.type as transaction_type',
+    'COUNT(*) as transaction_count',
+    'SUM(t.amount) as total_amount',
+    'ts.status as transaction_status',
+    't.transaction_date',
+    'pm.method as payment_method', 
+])
+->from('transaction t')
+->where(['t.division' => '2',])
+->join('INNER JOIN', 'customer c', 't.customer_id = c.id')
+->join('INNER JOIN', 'customer_type ct', 'c.customer_type = ct.id')
+->join('INNER JOIN', 'transaction_type tt', 't.transaction_type = tt.id')
+->join('INNER JOIN', 'transaction_status ts', 't.transaction_status = ts.id')
+->join('INNER JOIN', 'payment_method pm', 't.payment_method = pm.id')
+->groupBy(['ct.type', 'tt.type', 'ts.status', 't.transaction_date', 'pm.method'])
+->orderBy(['transaction_count' => SORT_DESC])
+->all();
+
+$ctpt = [];
+$ctct = [0];
+$ctamt = [0];
+$ctstatus = [''];
+$cttd = [''];
+$ctpm = [''];
+
+foreach ($customerTypeDatapertransaction as $type) {
+$ctpt[] = $type['customer_type'];
+$ctct[] = $type['transaction_count'];
+$ctamt[] = $type['total_amount'];
+$ctstatus[] = $type['transaction_status'];
+$cttd[] = $type['transaction_date'];
+$ctpm[] = $type['payment_method']; // Store the payment_method value
+}
+
+$TransactionYear = (new \yii\db\Query())
+->select(['YEAR(t.transaction_date) as year'])
+->distinct()
+->from('transaction t')
+->orderBy(['year' => SORT_ASC])
+->all();
+
+$distinctYears = array_column($TransactionYear, 'year');
+
     $query = new Query();
     $transactionStatusData = $query->select(['transaction_status', 'COUNT(*) as customer_count'])
         ->from('transaction')

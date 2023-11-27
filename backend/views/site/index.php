@@ -29,15 +29,6 @@ $currentIndex = Url::to(['']);
         /* Updated box-shadow */
     }
 
-    .chart-container3 {
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        box-shadow: -4px 4px 8px rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.15);
-        /* Updated box-shadow */
-    }
-
     .average {
         position: absolute;
         top: 80px;
@@ -51,7 +42,7 @@ $currentIndex = Url::to(['']);
     .aveSalesDiv {
         background-color: #B526C2;
         color: white;
-        width: 25rem;
+        width: 20rem;
         height: 12rem;
         border-radius: 20px;
         display: flex;
@@ -70,7 +61,7 @@ $currentIndex = Url::to(['']);
     .texty {
         margin: 0;
         font-weight: bold;
-        font-size: 1.5rem;
+        font-size: 2rem;
         font-family: Poppins;
     }
 
@@ -85,13 +76,13 @@ $currentIndex = Url::to(['']);
     #myChart {
         /* css sa radial */
         position: absolute;
-        left: 100px;
-        top: 50px;
+        left: 50px;
+        top: 5px;
     }
 
     .asOne {
         justify-content: space-between;
-        width: 45%;
+        width: 40%;
         right: 40%;
         left: 60%;
     }
@@ -112,12 +103,11 @@ $currentIndex = Url::to(['']);
 
         .aveTransactionDiv,
         .aveSalesDiv {
-            width: 100px;
-            height: 100px;
+            width: 120px;
+            height: 120px;
             border-radius: 20px;
             padding: 15px;
             margin-bottom: 15px;
-            right: 30px;
         }
 
         #myChart {
@@ -130,7 +120,7 @@ $currentIndex = Url::to(['']);
         .asOne {
             justify-content: space-between;
             width: 60%;
-            right: 15%;
+            right: 45%;
         }
     }
 
@@ -308,7 +298,6 @@ $currentIndex = Url::to(['']);
         width: 100%;
         text-align: center;
         display: wrap;
-        margin-top: 50px;
 
     }
 
@@ -321,17 +310,6 @@ $currentIndex = Url::to(['']);
         display: inline-block;
         height: 35rem;
         width: 100%;
-
-    }
-
-    .chart-container3 {
-        margin: .62rem;
-        padding: 3em;
-        border-radius: .93rem;
-        background-color: white;
-        display: inline-block;
-        height: 35rem;
-        width: 97%;
 
     }
 
@@ -384,7 +362,6 @@ $currentIndex = Url::to(['']);
         width: 100%;
         height: 100%;
         background: rgba(0, 0, 0, 0.7);
-        z-index: 1000;
     }
 
     .popup-content {
@@ -479,14 +456,6 @@ $currentIndex = Url::to(['']);
         }
 
         .chart-container2 {
-            flex-basis: 100%;
-            max-width: 100%;
-            width: 95%;
-            height: 25rem;
-            display: block;
-        }
-
-        .chart-container3 {
             flex-basis: 100%;
             max-width: 100%;
             width: 95%;
@@ -787,7 +756,6 @@ $customerTypeData = $query->select(['customer_type', 'COUNT(*) as customer_count
     // ->where(['between', 'transaction_date', $fromDate, $toDate])
     ->groupBy(['customer_type'])
     ->orderBy(['customer_count' => SORT_DESC])
-    ->limit(100000)
     ->all();
 $customerType = [];
 $customerscounts = [];
@@ -863,7 +831,6 @@ $transactionTypeData = $query->select(['transaction_type', 'COUNT(*) as customer
     // ->where(['between', 'transaction_date', $fromDate, $toDate])
     ->groupBy(['transaction_type'])
     ->orderBy(['customer_count' => SORT_DESC])
-    ->limit(100000)
     ->all();
 $transactionType = [];
 $transactionTypecounts = [];
@@ -889,7 +856,6 @@ $transactionTypeincomeData = $query->select(['transaction_type', 'SUM(amount) as
     // ->where(['between', 'transaction_date', $fromDate, $toDate])
     ->groupBy(['transaction_type'])
     ->orderBy(['total_amount' => SORT_DESC])
-    ->limit(100000)
     ->all();
 $transactionTypeincome = [];
 $transactionTypesumincome = [];
@@ -906,27 +872,51 @@ foreach ($transactionTypeincomeData as $type) {
 
 //transaction used per customer type
 $customerTypeDatapertransaction = (new \yii\db\Query())
-    ->select(['ct.type as customer_type', 'tt.type as transaction_type', 'COUNT(*) as transaction_count', 'SUM(t.amount) as total_amount', 'ts.status as transaction_status'])
+    ->select([
+        'ct.type as customer_type',
+        'tt.type as transaction_type',
+        'COUNT(*) as transaction_count',
+        'SUM(t.amount) as total_amount',
+        'ts.status as transaction_status',
+        't.transaction_date',
+        'pm.method as payment_method', 
+    ])
     ->from('transaction t')
     ->join('INNER JOIN', 'customer c', 't.customer_id = c.id')
     ->join('INNER JOIN', 'customer_type ct', 'c.customer_type = ct.id')
     ->join('INNER JOIN', 'transaction_type tt', 't.transaction_type = tt.id')
     ->join('INNER JOIN', 'transaction_status ts', 't.transaction_status = ts.id')
-    ->groupBy(['ct.type', 'tt.type', 'ts.status'])
+    ->join('INNER JOIN', 'payment_method pm', 't.payment_method = pm.id')
+    ->groupBy(['ct.type', 'tt.type', 'ts.status', 't.transaction_date', 'pm.method'])
     ->orderBy(['transaction_count' => SORT_DESC])
     ->all();
 
-$ctpt = [''];
+$ctpt = [];
 $ctct = [0];
 $ctamt = [0];
 $ctstatus = [''];
+$cttd = [''];
+$ctpm = [''];
 
 foreach ($customerTypeDatapertransaction as $type) {
     $ctpt[] = $type['customer_type'];
     $ctct[] = $type['transaction_count'];
     $ctamt[] = $type['total_amount'];
     $ctstatus[] = $type['transaction_status'];
+    $cttd[] = $type['transaction_date'];
+    $ctpm[] = $type['payment_method']; // Store the payment_method value
 }
+
+$TransactionYear = (new \yii\db\Query())
+    ->select(['YEAR(t.transaction_date) as year'])
+    ->distinct()
+    ->from('transaction t')
+    ->orderBy(['year' => SORT_ASC])
+    ->all();
+
+$distinctYears = array_column($TransactionYear, 'year');
+
+
 
 
 $transactionStatusData = $query->select(['transaction_status', 'COUNT(*) as customer_count'])
@@ -934,7 +924,6 @@ $transactionStatusData = $query->select(['transaction_status', 'COUNT(*) as cust
     // ->where(['between', 'transaction_date', $fromDate, $toDate])
     ->groupBy(['transaction_status'])
     ->orderBy(['customer_count' => SORT_DESC])
-    ->limit(100000)
     ->all();
 
 $transactionStatus = [];
@@ -955,13 +944,14 @@ foreach ($transactionStatusData as $status) {
     $transactionStatusDatacounts[] = $status['customer_count'];
 }
 
+
+
 $PaymentMethodData = $query->select(['payment_method', 'COUNT(*) as customer_count'])
     ->from('transaction')
-    ->where(['payment_method' => ['1', '2', '3']])
+    ->where(['transaction_status' => ['1']])
     // ->where(['between', 'transaction_date', $fromDate, $toDate])
     ->groupBy(['payment_method'])
     ->orderBy(['customer_count' => SORT_DESC])
-    ->limit(100000)
     ->all();
 
 $PaymentMethod = [];
@@ -1109,7 +1099,7 @@ if ($todaymettrans == 0) {
 } else {
     //dito magcocompute ng percentage ng increase or decrease ng number of past transaction at today's transaction (tinatype ko pa din yung sa last transaction kunwari kasi di pa ko marunong)
     $metdailytransincrease = (($todaymettrans - $lastmettrans) / $todaymettrans) * 100;
-    $metdailytransincrease = number_format($metdailytransincrease);
+    $metdailytransincrease = number_format($metdailytransincrease, 2);
     if ($metdailytransincrease > 1) {
         $metdailytransincrease = '+' . $metdailytransincrease . '%';
     } else {
@@ -1144,7 +1134,7 @@ if ($todaySandTtrans == 0) {
 } else {
 
     $SandTdailytransincrease = (($todaySandTtrans - $lastSandTtrans) / $todaySandTtrans) * 100;
-    $SandTdailytransincrease = number_format($SandTdailytransincrease);
+    $SandTdailytransincrease = number_format($SandTdailytransincrease, 2);
     if ($SandTdailytransincrease > 1) {
         $SandTdailytransincrease = '+' . $SandTdailytransincrease . '%';
     } else {
@@ -1297,6 +1287,24 @@ $targetIncome = [
     <script src="https://cdn.jsdelivr.net/npm/brain.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+
+    <div class="chart-container" id="avgSales">
+        <p class="reportTitle" id=" "></p>
+        <div class="asOne">
+            <canvas id="myChart"></canvas>
+            <div class="average">
+                <div class="aveTransactionDiv">
+                    <p class="texty"> Average Transactions </p>
+                    <p class="number"> <?= $average ?> </p>
+                </div>
+                <div class="aveSalesDiv">
+                    <p class="texty"> Average Income </p>
+                    <p class="number"> <?= $saleaverage ?> </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="chart-container">
 
         <p class="reportTitle" id="totaltransaction"> Total Transaction</p>
@@ -1309,7 +1317,6 @@ $targetIncome = [
         <canvas id="totalsalesChart"></canvas>
     </div>
 
-   
 
     <div class="chart-container">
         <p class="reportTitle" id=" "> Transaction Per Division</p>
@@ -1323,24 +1330,6 @@ $targetIncome = [
         <p class="reportTitle" id=" "> Income per Division</p>
         <canvas id="salesChart"></canvas>
     </div>
-
-    <div class="chart-container3" id="avgSales">
-        <p class="reportTitle" id=" "></p>
-        <div class="asOne">
-            <canvas id="myChart"></canvas>
-            <div class="average">
-                <div class="aveTransactionDiv">
-                    <p class="texty"> Average Transactions </p>
-                    <p class="number"> <?= $average ?> </p>
-                </div>
-                <div class="aveSalesDiv">
-                    <p class="texty"> Combined Average Income </p>
-                    <p class="number"> <?= $saleaverage ?> </p>
-                </div>
-            </div>
-        </div>
-    </div>
-
 
     <div class="popup" id="popup">
         <div class="popup-content">
@@ -1412,6 +1401,9 @@ $targetIncome = [
         const leastCustomerType = document.getElementById("leastCustomerType");
         const mostCustomerProvince = document.getElementById("mostCustomerProvince");
         const leastCustomerProvince = document.getElementById("leastCustomerProvince");
+
+        const startDate = document.getElementById("startDate").value;
+        const endDate = document.getElementById("endDate").value;
 
 
         //totaltransaction popup
@@ -1543,6 +1535,9 @@ $targetIncome = [
             targetTransaction.innerHTML = "Target transaction for this quarter is <span style='color: blue;'>" + Target;
             percentTransaction.innerHTML = "Achieved <span style='color: " + percentagecolor + ";'>" + percentage + "%</span> of target transaction.";
             PopupHeader.innerHTML = "Total Transaction";
+
+            const startDateObj = new Date(startDate);
+            const endDateObj = new Date(endDate);
 
             //sum of transaction per div (dataset)
             const sumTransactionDataset = {
@@ -2366,7 +2361,7 @@ $targetIncome = [
                     ctx.font = 'bolder 15px Poppins';
                     ctx.fillStyle = 'rgb(3, 98, 186, 1)';
                     ctx.textAlign = 'center';
-                    ctx.fillText(' Average Income', width / 2.1, height / 10 + top);
+                    ctx.fillText('Average income', width / 2.1, height / 10 + top);
 
                     // Count and display the numbers
                     let total1 = 0;
@@ -2378,10 +2373,10 @@ $targetIncome = [
                         total2 += value;
                     });
 
-                    ctx.fillStyle = 'rgb(0, 115, 230)';
-                    ctx.fillText(`STD: ${total1.toLocaleString()}`, width / 2.1, height / 2 + top);
-                    ctx.fillStyle = 'rgb(17, 163, 76)';
-                    ctx.fillText(`NMD: ${total2.toLocaleString()}`, width / 2.1, height / 2 + top + 20);
+                    ctx.fillStyle = 'rgb(255,204,51)';
+                    ctx.fillText(`STD Total: ${total1}`, width / 2.1, height / 2 + top);
+                    ctx.fillStyle = 'rgb(0, 0, 255)';
+                    ctx.fillText(`NMD Total: ${total2}`, width / 2.1, height / 2 + top + 20);
 
 
                     ctx.restore();
@@ -2389,7 +2384,6 @@ $targetIncome = [
             }]
         };
 
-        //UwUEheDolor<3
 
         // Render the doughnut chart
         const myChart = new Chart(document.getElementById('myChart'), config);
@@ -2439,13 +2433,78 @@ $targetIncome = [
         </div>
 
         <div class="chart-container">
-            <p class="reportTitle" id=" ">Total Customers per Province</p>
+            <p class="reportTitle" id="Provincespopup">Total Customers per Province</p>
             <canvas id="Provinces" width="100%"></canvas>
         </div>
     </div>
 
 </div>
+<!-- 
+<div class="popup" id="Provincespopupcontent">
+        <div class="popup-content">
+            <span class="close" id="closeProvincespopup">&times;</span>
 
+            <h2 id="header2"></h2>
+
+            <div id="yearPickerContainer" style="margin-bottom: 20px;">
+                <label for="yearPicker">Select Year:</label>
+                <select id="yearPicker">
+                    <?php foreach ($distinctYears as $year): ?>
+                        <option value="<?php echo htmlspecialchars($year); ?>">
+                            <?php echo htmlspecialchars($year); ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <div style="text-align: left; margin: 0 auto; width: 80%;">
+               <h4 id="type"></h4>
+               <p id="hightype"></p> 
+                        
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Reference datas current
+        const currentDate = new Date();
+        const month = currentDate.getMonth();
+        const year = currentDate.getFullYear();
+
+        //for clickable reference
+        const Provincespopup = document.getElementById("Provincespopup");
+        const Provincespopupcontent = document.getElementById("Provincespopupcontent");
+        const closeProvincespopup = document.getElementById("closeProvincespopup");
+
+    
+        const startDate = document.getElementById("startDate").value;
+        const endDate = document.getElementById("endDate").value;
+       
+        const technicalServicesData = <?php echo json_encode($customerTypeDatapertransaction); ?>;
+        const customerTypeData = technicalServicesData.filter(item =>
+            item.transaction_date >= startDate &&
+            item.transaction_date <= endDate
+        );
+        
+        // province pop-up analyzation
+        if (Provincespopup) {
+            Provincespopup.addEventListener("click", () => {
+
+                
+
+        });
+
+        if (closeProvincespopup) {
+            Provincespopupcontent.addEventListener("click", () => {
+            customerpopup.style.display = "none";
+    });
+}
+    
+    }
+});
+</script> -->
 
 <!-- scriptfor customers graph -->
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
@@ -2524,185 +2583,1153 @@ $targetIncome = [
 
     <div class="graph2">
         <div class="chart-container2">
-            <p class="reportTitle" id=" transactionStatuslabel">Transaction Status</p>
+            <p class="reportTitle" id="transactionStatuspopup">Transaction Status</p>
             <canvas id="transactionStatus"></canvas>
         </div>
         <div class="chart-container2">
-            <p class="reportTitle" id="paymendtMethodpopup">Payment Method</p>
+            <p class="reportTitle" id="paymentMethodpopup">Payment Method</p>
             <canvas id="paymendtMethod"></canvas>
         </div>
     </div>
     <div class="graph2">
         <div class="chart-container2">
-            <p class="reportTitle" id="transactionTypopup">Type of Transaction</p>
+            <p class="reportTitle" id="transactionTypepoppup">Type of Transaction</p>
             <canvas id="transactionType"></canvas>
         </div>
 
         <div class="chart-container2">
-            <p class="reportTitle" id=" ">Type of Customers</p>
+            <p class="reportTitle" id="customerTypepoppup">Type of Customers</p>
             <canvas id="customerType"></canvas>
         </div>
     </div>
 
+
+    <!-- Pop-up for transaction type -->
     <div class="popup" id="customerpopup">
         <div class="popup-content">
             <span class="close" id="close">&times;</span>
 
             <h2 id="header"></h2>
-
+        
             <div style="text-align: left; margin: 0 auto; width: 80%;">
-                <label for="transactionTypeDropdown">Select Transaction Type:</label>
+            <div id="transactionTypeDropdownContainer">
+                <label for="transactionTypeDropdown"></label>
                 <select id="transactionTypeDropdown">
                     <option value="ts">Technical Services</option>
                     <option value="nlims">National Laboratory Information Management System</option>
                     <option value="ulims">Unified Laboratory Information Management System</option>
-
-
+                    
+                    
                 </select> <br><br>
+            </div>
 
-                <div style="text-align: left; margin: 0 auto; width: 80%;">
-                    <h4 id="type1"></h4>
-                    <p id="hightype1"></p>
-                    <p id="leasttype1"></p>
-
-                    <h4 id="type2"></h4>
-                    <p id="hightype2"></p>
-                    <p id="leasttype2"></p>
-
-                    <h4 id="type3"></h4>
-                    <p id="hightype3"></p>
-                    <p id="leasttype3"></p>
-                </div>
-
+            <div style="text-align: left; margin: 0 auto; width: 80%;">
+               <h4 id="type1"></h4>
+               <p id="hightype1"></p> 
+                        
             </div>
         </div>
+    </div>
 
     </div>
+    <div class="popup" id="customerpopup2">
+        <div class="popup-content">
+            <span class="close" id="close2">&times;</span>
+
+            <h2 id="header2"></h2>
+
+            <div id="yearPickerContainer" style="margin-bottom: 20px;">
+                <label for="yearPicker">Select Year:</label>
+                <select id="yearPicker">
+                    <?php foreach ($distinctYears as $year): ?>
+                        <option value="<?php echo htmlspecialchars($year); ?>">
+                            <?php echo htmlspecialchars($year); ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <div style="text-align: left; margin: 0 auto; width: 80%;">
+               <h4 id="type"></h4>
+               <p id="hightype"></p> 
+                        
+            </div>
+        </div>
+    </div>
+
+    </div>
+
     <?php \yii\widgets\Pjax::end(); ?>
 
     <!-- popup script for customers -->
 
-    <script>
-        //reference data
-        // const transaction = <?php echo json_encode($TransactionperDiv); ?>;
+<script>
 
-
+document.addEventListener('DOMContentLoaded', function () {
         // Reference datas current
-        const date = new Date();
+        const currentDate = new Date();
         const month = currentDate.getMonth();
         const year = currentDate.getFullYear();
 
-        const transactionTypopup = document.getElementById("transactionTypopup");
+        //for clickable reference
+        const transactionStatuspopup = document.getElementById("transactionStatuspopup");
+        const paymentMethodpopup = document.getElementById("paymentMethodpopup");
+        const transactionTypepoppup = document.getElementById("transactionTypepoppup");
+        const customerTypepoppup = document.getElementById("customerTypepoppup");
         const customerpopup = document.getElementById("customerpopup");
         const close = document.getElementById("close");
+        const customerpopup2 = document.getElementById("customerpopup2");
+        const close2 = document.getElementById("close2");
 
+    
+        const startDate = document.getElementById("startDate").value;
+        const endDate = document.getElementById("endDate").value;
+       
+        const technicalServicesData = <?php echo json_encode($customerTypeDatapertransaction); ?>;
+        const customerTypeData = technicalServicesData.filter(item =>
+            item.transaction_date >= startDate &&
+            item.transaction_date <= endDate
+        );
+        
+    // Transaction status pop-up analyzation
+if (transactionStatuspopup) {
+    transactionStatuspopup.addEventListener("click", () => {
+        const dropdown = document.getElementById("transactionTypeDropdown");
+        
+        // Clear existing options and add new options: Paid, Pending, Cancelled
+        dropdown.innerHTML = '';
+        const options = ["Paid", "Pending", "Cancelled"];
+        options.forEach(option => {
+            let opt = document.createElement('option');
+            opt.value = option.toLowerCase();
+            opt.innerHTML = option;
+            dropdown.appendChild(opt);
+        });
 
+        header.innerHTML = "Transaction Status <br>";
 
-        //Transaction Type pop-up analyzation
-        transactionTypopup.addEventListener("click", () => {
+        // Initialize the dropdown value to 'paid' and dispatch the change event
+        dropdown.value = 'paid';
+        dropdown.dispatchEvent(new Event('change'));
 
-            const customerTypeData = <?php echo json_encode($customerTypeDatapertransaction); ?>;
-            header.innerHTML = "Transaction Type <br>";
+        customerpopup.style.display = "block";
+    });
+}
 
-            //Highest Transaction Type for this quarter
+    // Handle the change event for the dropdown
+    document.getElementById("transactionTypeDropdown").addEventListener("change", (event) => {
+    const selectedTransactionType = event.target.value;
+    
+    switch (selectedTransactionType) {
+        case "paid":
+            const paiddata = customerTypeData.filter(item =>item.transaction_status=== 'Paid');
+            const paiddatafiltered = paiddata.reduce((result, item) => {
+                const existingTransactionTypeIndex = result.findIndex(entry => entry.transaction_type === item.transaction_type);
 
+                if (existingTransactionTypeIndex !== -1) {
+                    const existingCustomerTypeIndex = result[existingTransactionTypeIndex].customer_types.findIndex(
+                        customer => customer.customer_type === item.customer_type
+                    );
 
-            //for Technical services transaction type
-            const technicalServicesData = customerTypeData.filter(item => item.transaction_type === 'Technical Services');
-            const customertypeTS = technicalServicesData.map(item => item.customer_type);
-            const customertypeTSdata = technicalServicesData.map(item => item.transaction_count);
-            const customertransactiontype = [];
+                    if (existingCustomerTypeIndex !== -1) {
+                        result[existingTransactionTypeIndex].customer_types[existingCustomerTypeIndex].transaction_count += Number(
+                            item.transaction_count
+                        );
+                        result[existingTransactionTypeIndex].customer_types[existingCustomerTypeIndex].total_amount += Number(
+                            item.total_amount
+                        );
+                    } else {
+                        result[existingTransactionTypeIndex].customer_types.push({
+                            customer_type: item.customer_type,
+                            transaction_count: Number(item.transaction_count),
+                            total_amount: Number(item.total_amount),
+                        });
+                    }
+                } else {
+                    result.push({
+                        transaction_type: item.transaction_type,
+                        customer_types: [
+                            {
+                                customer_type: item.customer_type,
+                                transaction_count: Number(item.transaction_count),
+                                total_amount: Number(item.total_amount),
+                            },
+                        ],
+                    });
+                }
 
-            for (let i = 0; i < customertypeTS.length; i++) {
-                customertransactiontype.push({
-                    label: customertypeTS[i],
-                    data: customertypeTSdata[i]
-                });
+                return result;
+            }, []);
+
+            // Summing transaction_count for each transaction_type
+            const transactionTypeSum = paiddatafiltered.map(entry => ({
+                transaction_type: entry.transaction_type,
+                total_transaction_count: entry.customer_types.reduce((sum, customer) => sum + customer.transaction_count, 0),
+                total_transaction_income: entry.customer_types.reduce((sum, customer) => sum + customer.total_amount, 0),
+            }));
+                    const customertypepaid = paiddatafiltered.map(item => item.customer_types.map(customer => customer.customer_type));
+                    const totalAmountpaiddata = transactionTypeSum.map(item => item.total_transaction_income); 
+                    const transactionTypepaid = transactionTypeSum.map(item => item.transaction_type);
+                    const customertypepaiddata = transactionTypeSum.map(item => item.total_transaction_count);                    
+
+                    const customertransactiontypePaid = [];
+                    for (let i = 0; i < customertypepaid.length; i++) {
+                        customertransactiontypePaid.push({
+                            label: customertypepaid[i],
+                            data: customertypepaiddata[i],
+                            totalAmount: totalAmountpaiddata[i],
+                            transactionType: transactionTypepaid[i]
+                        });
+                    }
+                    
+                    function handleNullDataset(dataset) {
+                    if (!dataset || dataset.length === 0) {
+                        return [{
+                            label: 'no customer',
+                            data: 0,
+                            totalAmount: 0,
+                            transactionType: 'no transaction'
+                        }];
+                    }
+                    return dataset;
+                }
+                console.log(customertransactiontypePaid);
+
+                let paidTransactions = customertransactiontypePaid;
+                paidTransactions = handleNullDataset(paidTransactions);
+                const totalpaidTransaction = customertransactiontypePaid.reduce((sum, item) => sum + item.data, 0);
+                const totalpaidAmount = customertransactiontypePaid.reduce((sum, item) => sum + item.totalAmount, 0);
+                const highestPaidTransaction = paidTransactions.reduce((max, current) => (current.totalAmount > max.totalAmount) ? current : max, paidTransactions[0]);
+                const leastPaidTransaction =paidTransactions.reduce((min, current) => (current.totalAmount < min.totalAmount) ? current : min, paidTransactions[0]);
+                const highestlabelPaidransaction = paidTransactions.filter(obj => obj.totalAmount === highestPaidTransaction.totalAmount).map(obj => obj.label);
+                const leastlabelPaidTransaction = paidTransactions.filter(obj => obj.totalAmount === leastPaidTransaction.totalAmount).map(obj => obj.label);
+                const highestlabelPaidransactionTY = paidTransactions.filter(obj => obj.totalAmount === highestPaidTransaction.totalAmount).map(obj => obj.transactionType);
+                const leastlabelPaidTransactionTY = paidTransactions.filter(obj => obj.totalAmount === leastPaidTransaction.totalAmount).map(obj => obj.transactionType);
+                  
+            //get the highest & lowest customer type with paid transaction (customer, transaction, amount, transaction type)
+            type1.innerHTML = "<span style='color: green;'> Paid Transaction <br>";
+            hightype1.innerHTML = "Total of Paid transaction: <span style='color: red;'>" + totalpaidTransaction + "</span> with the amount of <span style='color: red;'>" + Number(totalpaidAmount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+            +"</span><br><br><br>The highest paying transaction type: <span style='color: blue;'>" + highestlabelPaidransactionTY.join(' , ') + "</span> with total income of <span style='color: red;'>" + Number(highestPaidTransaction.totalAmount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+            + "</span> for <span style='color: red;'>" + highestPaidTransaction.data + "</span> transactions from customers; <br> <br> Customers with highest paying transactions: <span style='color: blue;'> " +  highestlabelPaidransaction.join(', ')
+            + "</span><br><br><br>The Least paying transaction type: <span style='color: blue;'>" + leastlabelPaidTransactionTY.join(' , ') + "</span> with total income of <span style='color: red;'>" + Number(leastPaidTransaction.totalAmount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+            + "</span> for <span style='color: red;'>" + leastPaidTransaction.data + "</span> transactions from customers; <br> <br> Customers with least paying transactions: <span style='color: blue;'> " +leastlabelPaidTransaction.join(', ');
+        break;
+
+        case "pending":
+            const pendingdata = customerTypeData.filter(item => item.transaction_status === 'Pending');
+
+            const pendingdatafiltered = pendingdata.reduce((result, item) => {
+                const existingTransactionTypeIndex = result.findIndex(entry => entry.transaction_type === item.transaction_type);
+
+                if (existingTransactionTypeIndex !== -1) {
+                    const existingCustomerTypeIndex = result[existingTransactionTypeIndex].customer_types.findIndex(
+                        customer => customer.customer_type === item.customer_type
+                    );
+
+                    if (existingCustomerTypeIndex !== -1) {
+                        result[existingTransactionTypeIndex].customer_types[existingCustomerTypeIndex].transaction_count += Number(item.transaction_count);
+                        result[existingTransactionTypeIndex].customer_types[existingCustomerTypeIndex].total_amount += Number(item.total_amount);
+                    } else {
+                        result[existingTransactionTypeIndex].customer_types.push({
+                            customer_type: item.customer_type,
+                            transaction_count: Number(item.transaction_count),
+                            total_amount: Number(item.total_amount)
+                        });
+                    }
+                } else {
+                    result.push({
+                        transaction_type: item.transaction_type,
+                        customer_types: [{
+                            customer_type: item.customer_type,
+                            transaction_count: Number(item.transaction_count),
+                            total_amount: Number(item.total_amount)
+                        }]
+                    });
+                }
+
+                return result;
+            }, []);
+
+            // if null or empty dataset
+            function handleNullDataset(dataset) {
+                if (!dataset || dataset.length === 0) {
+                    return [{
+                        transaction_type: ' ',
+                        customer_types: [{
+                            customer_type: ' ',
+                            transaction_count: 0,
+                            total_amount: 0
+                        }]
+                    }];
+                }
+                return dataset;
             }
 
-            const maxCustomerTypeData = customertransactiontype.reduce((max, obj) => (obj.data >= max.data ? obj : max), {
-                data: -Infinity
-            });
-            const maxCustomerData = maxCustomerTypeData.data;
-            const maxCustomerTypes = customertransactiontype.filter(obj => obj.data === maxCustomerData).map(obj => obj.label);
-            const minCustomerTypeData = customertransactiontype.reduce((min, obj) => (obj.data <= min.data ? obj : min), {
-                data: Infinity
-            });
-            const minCustomerData = minCustomerTypeData.data;
-            const minCustomerType = customertransactiontype.filter(obj => obj.data === minCustomerData).map(obj => obj.label);
-
-            //for Unified Laboratory Information Management System transaction type
-            const ulimsData = customerTypeData.filter(item => item.transaction_type === 'Unified Laboratory Information Management System');
-            const customertypeulims = ulimsData.map(item => item.customer_type);
-            const customertypeulimsdata = ulimsData.map(item => item.transaction_count);
-            const customertransactiontypeUlims = [];
-
-            for (let i = 0; i < customertypeulims.length; i++) {
-                customertransactiontypeUlims.push({
-                    label: customertypeulims[i],
-                    data: customertypeulimsdata[i]
+            let pendingTransactions = handleNullDataset(pendingdatafiltered);
+            let sumOfAllPendingTransactionCounts = 0;
+            let sumOfAllPendingTransactionAmounts = 0;
+            pendingTransactions.forEach(transaction => {
+                transaction.customer_types.forEach(customer => {
+                    sumOfAllPendingTransactionCounts += customer.transaction_count;
+                    sumOfAllPendingTransactionAmounts += customer.total_amount;
                 });
+            });
+
+            // table
+            let tableHtml = '<table style="border-collapse: collapse; width: 100%;">';
+            tableHtml += `
+                <tr>
+                    <th style="border: 1px solid black; padding: 8px; text-align: left;">Transaction Type</th>
+                    <th style="border: 1px solid black; padding: 8px; text-align: left;">Customer Type</th>
+                    <th style="border: 1px solid black; padding: 8px; text-align: left;">Transaction Count</th>
+                    <th style="border: 1px solid black; padding: 8px; text-align: left;">Amount</th>
+                </tr>`;
+
+            // column/row each transaction type
+            pendingTransactions.forEach(transaction => {
+                let totalRowsForTransactionType = transaction.customer_types.length;
+                transaction.customer_types.forEach((customer, customerIndex) => {
+                    tableHtml += '<tr style="border: 1px solid black;">';
+                    if (customerIndex === 0) {
+                        tableHtml += `<td rowspan="${totalRowsForTransactionType}" style="border: 1px solid black; padding: 8px;">${transaction.transaction_type}</td>`;
+                    }tableHtml += `
+                        <td style="border: 1px solid black; padding: 8px;">${customer.customer_type}</td>
+                        <td style="border: 1px solid black; padding: 8px;">${customer.transaction_count}</td>
+                        <td style="border: 1px solid black; padding: 8px;">${customer.total_amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                    </tr>`;
+                });
+            });
+
+            tableHtml += '</table>';
+            type1.innerHTML = "<span style='color: Yellow;'>Pending Transaction <br>";
+            hightype1.innerHTML = "Total Pending Transaction:  <span style='color: red;'>"+sumOfAllPendingTransactionCounts + "</span> amounting of  <span style='color: red;'>"+ Number(sumOfAllPendingTransactionAmounts).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })+
+            "</span><br><br>"+ tableHtml;
+            
+        break;
+
+        case "cancelled":
+            const cancelleddata = customerTypeData.filter(item => item.transaction_status === 'Cancelled');
+
+            const cancelleddatafiltered = cancelleddata.reduce((result, item) => {
+                const existingTransactionTypeIndex = result.findIndex(entry => entry.transaction_type === item.transaction_type);
+
+                if (existingTransactionTypeIndex !== -1) {
+                    const existingCustomerTypeIndex = result[existingTransactionTypeIndex].customer_types.findIndex(
+                        customer => customer.customer_type === item.customer_type
+                    );
+
+                    if (existingCustomerTypeIndex !== -1) {
+                        result[existingTransactionTypeIndex].customer_types[existingCustomerTypeIndex].transaction_count += Number(item.transaction_count);
+                        result[existingTransactionTypeIndex].customer_types[existingCustomerTypeIndex].total_amount += Number(item.total_amount);
+                    } else {
+                        result[existingTransactionTypeIndex].customer_types.push({
+                            customer_type: item.customer_type,
+                            transaction_count: Number(item.transaction_count),
+                            total_amount: Number(item.total_amount)
+                        });
+                    }
+                } else {
+                    result.push({
+                        transaction_type: item.transaction_type,
+                        customer_types: [{
+                            customer_type: item.customer_type,
+                            transaction_count: Number(item.transaction_count),
+                            total_amount: Number(item.total_amount)
+                        }]
+                    });
+                }
+
+                return result;
+            }, []);
+
+            // if null or empty dataset
+            function handleNullDataset(dataset) {
+                if (!dataset || dataset.length === 0) {
+                    return [{
+                        transaction_type: ' ',
+                        customer_types: [{
+                            customer_type: ' ',
+                            transaction_count: 0,
+                            total_amount: 0
+                        }]
+                    }];
+                }
+                return dataset;
             }
 
-            const maxCustomerTypeDataulims = customertransactiontypeUlims.reduce((max, obj) => (obj.data >= max.data ? obj : max), {
-                data: -Infinity
-            });
-            const maxCustomerDataulims = maxCustomerTypeDataulims.data;
-            const maxCustomerTypesulims = customertransactiontypeUlims.filter(obj => obj.data === maxCustomerDataulims).map(obj => obj.label);
-            const minCustomerTypeDataulims = customertransactiontypeUlims.reduce((min, obj) => (obj.data <= min.data ? obj : min), {
-                data: Infinity
-            });
-            const minCustomerDataulims = minCustomerTypeDataulims.data;
-            const minCustomerTypeulims = customertransactiontypeUlims.filter(obj => obj.data === minCustomerDataulims).map(obj => obj.label);
-
-            //for National Laboratory Information Management System transaction type
-            const nlimsData = customerTypeData.filter(item => item.transaction_type === 'National Laboratory Information Management System');
-            const customertypenlims = nlimsData.map(item => item.customer_type);
-            const customertypenlimsdata = nlimsData.map(item => item.transaction_count);
-            const customertransactiontypeNlims = [];
-
-            for (let i = 0; i < customertypenlims.length; i++) {
-                customertransactiontypeNlims.push({
-                    label: customertypenlims[i],
-                    data: customertypenlimsdata[i]
+            let cancelledTransactions = handleNullDataset(cancelleddatafiltered);
+            let sumOfAllPendingTransactionCountsCancelled = 0;
+            let sumOfAllPendingTransactionAmountsCancelled = 0;
+            cancelledTransactions.forEach(transaction => {
+                transaction.customer_types.forEach(customer => {
+                    sumOfAllPendingTransactionCountsCancelled += customer.transaction_count;
+                    sumOfAllPendingTransactionAmountsCancelled += customer.total_amount;
                 });
+            });
+
+            // table
+            let tableHtmlcancelled = '<table style="border-collapse: collapse; width: 100%;">';
+            tableHtmlcancelled += `
+                <tr>
+                    <th style="border: 1px solid black; padding: 8px; text-align: left;">Transaction Type</th>
+                    <th style="border: 1px solid black; padding: 8px; text-align: left;">Customer Type</th>
+                    <th style="border: 1px solid black; padding: 8px; text-align: left;">Transaction Count</th>
+                    <th style="border: 1px solid black; padding: 8px; text-align: left;">Amount</th>
+                </tr>`;
+
+            // column/row each transaction type
+            cancelledTransactions.forEach(transaction => {
+                let totalRowsForTransactionType = transaction.customer_types.length;
+                transaction.customer_types.forEach((customer, customerIndex) => {
+                    tableHtmlcancelled += '<tr style="border: 1px solid black;">';
+                    if (customerIndex === 0) {
+                        tableHtmlcancelled += `<td rowspan="${totalRowsForTransactionType}" style="border: 1px solid black; padding: 8px;">${transaction.transaction_type}</td>`;
+                  }tableHtmlcancelled += `
+                        <td style="border: 1px solid black; padding: 8px;">${customer.customer_type}</td>
+                        <td style="border: 1px solid black; padding: 8px;">${customer.transaction_count}</td>
+                        <td style="border: 1px solid black; padding: 8px;">${customer.total_amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                    </tr>`;
+                });
+            });
+
+            tableHtmlcancelled += '</table>';
+            type1.innerHTML = "<span style='color: Yellow;'>Cancelled Transaction <br>";
+            hightype1.innerHTML = "Total Cancelled Transaction:  <span style='color: red;'>"+sumOfAllPendingTransactionCountsCancelled + "</span> amounting of  <span style='color: red;'>"+ Number(sumOfAllPendingTransactionAmountsCancelled).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })+
+            "</span><br><br>"+ tableHtmlcancelled;
+            
+            
+            break;
+    }
+
+    customerpopup.style.display = "block";
+    });
+
+
+    // Transaction status pop-up analyzation
+    if (paymentMethodpopup) {
+        paymentMethodpopup.addEventListener("click", () => {
+        const dropdown = document.getElementById("transactionTypeDropdown");
+        dropdown.innerHTML = '';
+        const paymenMethod = [
+            { value: "otc", text: "Ove the Counter" },
+            { value: "op", text: "Online Payment" },
+            { value: "cheque", text: "Cheque" }
+        ];
+        paymenMethod.forEach(option => {
+            let opt = document.createElement('option');
+            opt.value = option.value;
+            opt.innerHTML = option.text;
+            dropdown.appendChild(opt);
+        });
+        header.innerHTML = "Transaction Type <br>";
+
+
+        // Initialize the dropdown value to 'paid' and dispatch the change event
+        dropdown.value = 'otc';
+        dropdown.dispatchEvent(new Event('change'));
+
+        customerpopup.style.display = "block";
+            
+
+    // Handle the change event for the dropdown
+    document.getElementById("transactionTypeDropdown").addEventListener("change", (event) => {
+    const selectedTransactionType = event.target.value;
+    
+    switch (selectedTransactionType) 
+    {
+        case "otc":
+            const otcdata = customerTypeData.filter(item => item.transaction_status === 'Paid' && item.payment_method === 'Over the Counter');
+
+            const otcdatafiltered = otcdata.reduce((result, item) => {
+                const existingTransactionTypeIndex = result.findIndex(entry => entry.transaction_type === item.transaction_type);
+
+                if (existingTransactionTypeIndex !== -1) {
+                    const existingCustomerTypeIndex = result[existingTransactionTypeIndex].customer_types.findIndex(
+                        customer => customer.customer_type === item.customer_type
+                    );
+
+                    if (existingCustomerTypeIndex !== -1) {
+                        result[existingTransactionTypeIndex].customer_types[existingCustomerTypeIndex].transaction_count += Number(item.transaction_count);
+                        result[existingTransactionTypeIndex].customer_types[existingCustomerTypeIndex].total_amount += Number(item.total_amount);
+                    } else {
+                        result[existingTransactionTypeIndex].customer_types.push({
+                            customer_type: item.customer_type,
+                            transaction_count: Number(item.transaction_count),
+                            total_amount: Number(item.total_amount)
+                        });
+                    }
+                } else {
+                    result.push({
+                        transaction_type: item.transaction_type,
+                        customer_types: [{
+                            customer_type: item.customer_type,
+                            transaction_count: Number(item.transaction_count),
+                            total_amount: Number(item.total_amount)
+                        }]
+                    });
+                }
+
+                return result;
+            }, []);
+
+            // if null or empty dataset
+            function handleNullDataset(dataset) {
+                if (!dataset || dataset.length === 0) {
+                    return [{
+                        transaction_type: ' ',
+                        customer_types: [{
+                            customer_type: ' ',
+                            transaction_count: 0,
+                            total_amount: 0
+                        }]
+                    }];
+                }
+                return dataset;
             }
 
-            const maxCustomerTypeDatanlims = customertransactiontypeNlims.reduce((max, obj) => (obj.data >= max.data ? obj : max), {
-                data: -Infinity
+            let otcTransactions = handleNullDataset(otcdatafiltered);
+            let sumOfAllOTCTransactionCounts = 0;
+            let sumOfAllOTCTransactionAmounts = 0;
+            otcTransactions.forEach(transaction => {
+                transaction.customer_types.forEach(customer => {
+                    sumOfAllOTCTransactionCounts += customer.transaction_count;
+                    sumOfAllOTCTransactionAmounts += customer.total_amount;
+                });
             });
-            const maxCustomerDatanlims = maxCustomerTypeDatanlims.data;
-            const maxCustomerTypesnlims = customertransactiontypeNlims.filter(obj => obj.data === maxCustomerDatanlims).map(obj => obj.label);
-            const minCustomerTypeDatanlims = customertransactiontypeNlims.reduce((min, obj) => (obj.data <= min.data ? obj : min), {
-                data: Infinity
+
+            // table
+            let tableHtml = '<table style="border-collapse: collapse; width: 100%;">';
+            tableHtml += `
+                <tr>
+                    <th style="border: 1px solid black; padding: 8px; text-align: left;">Transaction Type</th>
+                    <th style="border: 1px solid black; padding: 8px; text-align: left;">Customer Type</th>
+                    <th style="border: 1px solid black; padding: 8px; text-align: left;">Transaction Count</th>
+                    <th style="border: 1px solid black; padding: 8px; text-align: left;">Amount</th>
+                </tr>`;
+
+            // column/row each transaction type
+            otcTransactions.forEach(transaction => {
+                let totalRowsForTransactionType = transaction.customer_types.length;
+                transaction.customer_types.forEach((customer, customerIndex) => {
+                    tableHtml += '<tr style="border: 1px solid black;">';
+                    if (customerIndex === 0) {
+                        tableHtml += `<td rowspan="${totalRowsForTransactionType}" style="border: 1px solid black; padding: 8px;">${transaction.transaction_type}</td>`;
+                    }tableHtml += `
+                        <td style="border: 1px solid black; padding: 8px;">${customer.customer_type}</td>
+                        <td style="border: 1px solid black; padding: 8px;">${customer.transaction_count}</td>
+                        <td style="border: 1px solid black; padding: 8px;">${customer.total_amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                    </tr>`;
+                });
             });
-            const minCustomerDatanlims = minCustomerTypeDatanlims.data;
-            const minCustomerTypenlims = customertransactiontypeNlims.filter(obj => obj.data === minCustomerDatanlims).map(obj => obj.label);
 
+            tableHtml += '</table>';
+            type1.innerHTML = "<span style='color: blue;'>Over the Counter Payment<br>";
+            hightype1.innerHTML = "Total Over the Counter Payment:  <span style='color: red;'>"+sumOfAllOTCTransactionCounts + "</span> amounting of  <span style='color: red;'>"+ Number(sumOfAllOTCTransactionAmounts).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })+
+            "</span><br><br>"+ tableHtml;
+            
+        break;
+        case "op":
+            const opdata = customerTypeData.filter(item => item.transaction_status === 'Paid' && item.payment_method === 'Online Payment');
 
-            // Use the found data
-            header.innerHTML = "Transaction Type <br>";
-            type1.innerHTML = "<span style='color: orange;'>Technical Services";
-            hightype1.innerHTML = "Highest customer type(s) : <span style='color: green;'>" + maxCustomerTypes + "</span> having <span style='color: red;'>" + maxCustomerData + " transaction";
-            leasttype1.innerHTML = "Least customer type(s) : <span style='color: green;'>" + minCustomerType + "</span> having <span style='color: red;'>" + minCustomerData + " transaction";
-            type2.innerHTML = "<span style='color: violet;'>Unified Laboratory Information Management System (ULIMS)";
-            hightype2.innerHTML = "Highest customer type(s) : <span style='color: green;'>" + maxCustomerTypesulims + "</span> having <span style='color: red;'>" + maxCustomerDataulims + " transaction";
-            leasttype2.innerHTML = "Least customer type(s) : <span style='color: green;'>" + minCustomerTypeulims + "</span> having <span style='color: red;'>" + minCustomerDataulims + " transaction";
-            type3.innerHTML = "<span style='color: red;'>National Laboratory Information Management System";
-            hightype3.innerHTML = "Highest customer type(s) : <span style='color: green;'>" + maxCustomerTypesnlims + "</span> having <span style='color: red;'>" + maxCustomerDatanlims + " transaction";
-            leasttype3.innerHTML = "Least customer type(s) : <span style='color: green;'>" + minCustomerTypenlims + "</span> having <span style='color: red;'>" + minCustomerDatanlims + " transaction";
+            const opdatafiltered = opdata.reduce((result, item) => {
+                const existingTransactionTypeIndex = result.findIndex(entry => entry.transaction_type === item.transaction_type);
+
+                if (existingTransactionTypeIndex !== -1) {
+                    const existingCustomerTypeIndex = result[existingTransactionTypeIndex].customer_types.findIndex(
+                        customer => customer.customer_type === item.customer_type
+                    );
+
+                    if (existingCustomerTypeIndex !== -1) {
+                        result[existingTransactionTypeIndex].customer_types[existingCustomerTypeIndex].transaction_count += Number(item.transaction_count);
+                        result[existingTransactionTypeIndex].customer_types[existingCustomerTypeIndex].total_amount += Number(item.total_amount);
+                    } else {
+                        result[existingTransactionTypeIndex].customer_types.push({
+                            customer_type: item.customer_type,
+                            transaction_count: Number(item.transaction_count),
+                            total_amount: Number(item.total_amount)
+                        });
+                    }
+                } else {
+                    result.push({
+                        transaction_type: item.transaction_type,
+                        customer_types: [{
+                            customer_type: item.customer_type,
+                            transaction_count: Number(item.transaction_count),
+                            total_amount: Number(item.total_amount)
+                        }]
+                    });
+                }
+
+                return result;
+            }, []);
+
+            // if null or empty dataset
+            function handleNullDataset(dataset) {
+                if (!dataset || dataset.length === 0) {
+                    return [{
+                        transaction_type: ' ',
+                        customer_types: [{
+                            customer_type: ' ',
+                            transaction_count: 0,
+                            total_amount: 0
+                        }]
+                    }];
+                }
+                return dataset;
+            }
+
+            let opTransactions = handleNullDataset(opdatafiltered);
+            let sumOfAllOPTransactionCounts = 0;
+            let sumOfAllOPTransactionAmounts = 0;
+            opTransactions.forEach(transaction => {
+                transaction.customer_types.forEach(customer => {
+                    sumOfAllOPTransactionCounts += customer.transaction_count;
+                    sumOfAllOPTransactionAmounts += customer.total_amount;
+                });
+            });
+
+            // table
+            let tableHtmlOP = '<table style="border-collapse: collapse; width: 100%;">';
+            tableHtmlOP += `
+                <tr>
+                    <th style="border: 1px solid black; padding: 8px; text-align: left;">Transaction Type</th>
+                    <th style="border: 1px solid black; padding: 8px; text-align: left;">Customer Type</th>
+                    <th style="border: 1px solid black; padding: 8px; text-align: left;">Transaction Count</th>
+                    <th style="border: 1px solid black; padding: 8px; text-align: left;">Amount</th>
+                </tr>`;
+
+            // column/row each transaction type
+            opTransactions.forEach(transaction => {
+                let totalRowsForTransactionType = transaction.customer_types.length;
+                transaction.customer_types.forEach((customer, customerIndex) => {
+                    tableHtmlOP += '<tr style="border: 1px solid black;">';
+                    if (customerIndex === 0) {
+                        tableHtmlOP += `<td rowspan="${totalRowsForTransactionType}" style="border: 1px solid black; padding: 8px;">${transaction.transaction_type}</td>`;
+                    }tableHtmlOP += `
+                        <td style="border: 1px solid black; padding: 8px;">${customer.customer_type}</td>
+                        <td style="border: 1px solid black; padding: 8px;">${customer.transaction_count}</td>
+                        <td style="border: 1px solid black; padding: 8px;">${customer.total_amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                    </tr>`;
+                });
+            });
+
+            tableHtmlOP += '</table>';
+            type1.innerHTML = "<span style='color: Blue;'>Online Payment<br>";
+            hightype1.innerHTML = "Total Online Payment:  <span style='color: red;'>"+sumOfAllOPTransactionCounts + "</span> amounting of  <span style='color: red;'>"+ Number(sumOfAllOPTransactionAmounts).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })+
+            "</span><br><br>"+ tableHtmlOP;
+            
+        break;
+        case "cheque":
+            const chequedata = customerTypeData.filter(item => item.transaction_status === 'Paid' && item.payment_method === 'Cheque');
+
+            const chequedatafiltered = chequedata.reduce((result, item) => {
+                const existingTransactionTypeIndex = result.findIndex(entry => entry.transaction_type === item.transaction_type);
+
+                if (existingTransactionTypeIndex !== -1) {
+                    const existingCustomerTypeIndex = result[existingTransactionTypeIndex].customer_types.findIndex(
+                        customer => customer.customer_type === item.customer_type
+                    );
+
+                    if (existingCustomerTypeIndex !== -1) {
+                        result[existingTransactionTypeIndex].customer_types[existingCustomerTypeIndex].transaction_count += Number(item.transaction_count);
+                        result[existingTransactionTypeIndex].customer_types[existingCustomerTypeIndex].total_amount += Number(item.total_amount);
+                    } else {
+                        result[existingTransactionTypeIndex].customer_types.push({
+                            customer_type: item.customer_type,
+                            transaction_count: Number(item.transaction_count),
+                            total_amount: Number(item.total_amount)
+                        });
+                    }
+                } else {
+                    result.push({
+                        transaction_type: item.transaction_type,
+                        customer_types: [{
+                            customer_type: item.customer_type,
+                            transaction_count: Number(item.transaction_count),
+                            total_amount: Number(item.total_amount)
+                        }]
+                    });
+                }
+
+                return result;
+            }, []);
+
+            // if null or empty dataset
+            function handleNullDataset(dataset) {
+                if (!dataset || dataset.length === 0) {
+                    return [{
+                        transaction_type: ' ',
+                        customer_types: [{
+                            customer_type: ' ',
+                            transaction_count: 0,
+                            total_amount: 0
+                        }]
+                    }];
+                }
+                return dataset;
+            }
+
+            let chequeTransactions = handleNullDataset(chequedatafiltered);
+            let sumOfAllChequeTransactionCounts = 0;
+            let sumOfAllChequeTransactionAmounts = 0;
+            chequeTransactions.forEach(transaction => {
+                transaction.customer_types.forEach(customer => {
+                    sumOfAllChequeTransactionCounts += customer.transaction_count;
+                    sumOfAllChequeTransactionAmounts += customer.total_amount;
+                });
+            });
+
+            // table
+            let tableHtmlCheque = '<table style="border-collapse: collapse; width: 100%;">';
+            tableHtmlCheque += `
+                <tr>
+                    <th style="border: 1px solid black; padding: 8px; text-align: left;">Transaction Type</th>
+                    <th style="border: 1px solid black; padding: 8px; text-align: left;">Customer Type</th>
+                    <th style="border: 1px solid black; padding: 8px; text-align: left;">Transaction Count</th>
+                    <th style="border: 1px solid black; padding: 8px; text-align: left;">Amount</th>
+                </tr>`;
+
+            // column/row each transaction type
+            chequeTransactions.forEach(transaction => {
+                let totalRowsForTransactionType = transaction.customer_types.length;
+                transaction.customer_types.forEach((customer, customerIndex) => {
+                    tableHtmlCheque += '<tr style="border: 1px solid black;">';
+                    if (customerIndex === 0) {
+                        tableHtmlCheque += `<td rowspan="${totalRowsForTransactionType}" style="border: 1px solid black; padding: 8px;">${transaction.transaction_type}</td>`;
+                    }tableHtmlCheque += `
+                        <td style="border: 1px solid black; padding: 8px;">${customer.customer_type}</td>
+                        <td style="border: 1px solid black; padding: 8px;">${customer.transaction_count}</td>
+                        <td style="border: 1px solid black; padding: 8px;">${customer.total_amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                    </tr>`;
+                });
+            });
+
+            tableHtmlCheque += '</table>';
+            type1.innerHTML = "<span style='color: Blue;'>Cheque Payment<br>";
+            hightype1.innerHTML = "Total Cheque Payment:  <span style='color: red;'>"+sumOfAllChequeTransactionCounts + "</span> amounting of  <span style='color: red;'>"+ Number(sumOfAllChequeTransactionAmounts).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })+
+            "</span><br><br>"+ tableHtmlCheque;
+            
+        break;
+        break;
+    }
+    });
+            transactionTypeDropdown.value = 'otc';
+            transactionTypeDropdown.dispatchEvent(new Event('change'));
 
             customerpopup.style.display = "block";
+    });
+        }
 
-
+    //Transaction Type pop-up analyzation
+    if (transactionTypepoppup) {
+        transactionTypepoppup.addEventListener("click", () => {
+        const dropdown = document.getElementById("transactionTypeDropdown");
+        dropdown.innerHTML = '';
+        const originalOptions = [
+            { value: "ts", text: "Technical Services" },
+            { value: "nlims", text: "National Laboratory Information Management System" },
+            { value: "ulims", text: "Unified Laboratory Information Management System" }
+        ];
+        originalOptions.forEach(option => {
+            let opt = document.createElement('option');
+            opt.value = option.value;
+            opt.innerHTML = option.text;
+            dropdown.appendChild(opt);
         });
+        header.innerHTML = "Transaction Type <br>";
 
-        close.addEventListener("click", () => {
-            // Close the pop-up when the close button is clicked
-            customerpopup.style.display = "none";
-        });
-    </script>
+        transactionTypeDropdown.addEventListener("change", () => {
+            const selectedTransactionType = transactionTypeDropdown.value;
+         
+            switch (selectedTransactionType) {
+                case "ts":
+                    //for Technical services transaction type
+                    const technicalServicesData = customerTypeData.filter(item =>item.transaction_type === 'Technical Services');
+                        const technicalServicesDatafiltered = technicalServicesData.reduce((result, item) => {
+                        const existingItem = result.find(entry => entry.customer_type === item.customer_type && entry.transaction_status === item.transaction_status);
 
+                        if (existingItem) {
+                            existingItem.transaction_count += Number(item.transaction_count);
+                            existingItem.total_amount += Number(item.total_amount);
+                        } else {
+                            result.push({
+                                customer_type: item.customer_type,
+                                transaction_status : item.transaction_status,
+                                transaction_count: Number(item.transaction_count),
+                                total_amount: Number(item.total_amount)
+                            });
+                        }
+
+                        return result;
+                    }, []);
+
+                const customertypeTS = technicalServicesDatafiltered.map(item => item.customer_type);
+                const customertypeTSdata = technicalServicesDatafiltered.map(item => item.transaction_count);
+                const totalAmountTSdata = technicalServicesDatafiltered.map(item => item.total_amount);
+                const transactionStatusTS = technicalServicesDatafiltered.map(item => item.transaction_status);
+                                    
+
+                    const customertransactiontype = [];
+
+                    for (let i = 0; i < customertypeTS.length; i++) {
+                        customertransactiontype.push({
+                            label: customertypeTS[i],
+                            data: customertypeTSdata[i],
+                            totalAmount: totalAmountTSdata[i],
+                            transactionStatus: transactionStatusTS[i]
+                        });
+                    }
+                    function handleNullDataset(dataset) {
+                    if (!dataset || dataset.length === 0) {
+                        return [{
+                            label: 'no customer',
+                            data: 0,
+                            totalAmount: 0,
+                            transactionStatus: 'no transaction'
+                        }];
+                    }
+                    return dataset;
+                }
+                    //paid ts
+                    let paidTransactionsTS = customertransactiontype.filter(item => item.transactionStatus === 'Paid');
+                    paidTransactionsTS = handleNullDataset(paidTransactionsTS);
+                    const highestPaidTransactionTS = paidTransactionsTS.reduce((max, current) => (current.data > max.data) ? current : max, paidTransactionsTS[0]);
+                    const leastPaidTransactionTS =paidTransactionsTS.reduce((min, current) => (current.data < min.data) ? current : min, paidTransactionsTS[0]);
+                    const highestlabelPaidransactionTS = paidTransactionsTS.filter(obj => obj.data === highestPaidTransactionTS.data).map(obj => obj.label);
+                    const leastlabelPaidTransactionTS = paidTransactionsTS.filter(obj => obj.data === leastPaidTransactionTS.data).map(obj => obj.label);
+                    //cancelled ts
+                    let cancelledTransactionsTS = customertransactiontype.filter(item => item.transactionStatus === 'Cancelled');
+                    cancelledTransactionsTS = handleNullDataset(cancelledTransactionsTS);
+                    const highestcancelledTransactionTS = cancelledTransactionsTS.reduce((max, current) => (current.data > max.data) ? current : max, cancelledTransactionsTS[0]);
+                    const leastcancelledTransactionTS =cancelledTransactionsTS.reduce((min, current) => (current.data < min.data) ? current : min, cancelledTransactionsTS[0]); 
+                    const highestlabelcancelledTransactionTS = cancelledTransactionsTS.filter(obj => obj.data === highestcancelledTransactionTS.data).map(obj => obj.label);
+                    const leastlabelcancelledTransactionTS = cancelledTransactionsTS.filter(obj => obj.data === leastcancelledTransactionTS.data).map(obj => obj.label);
+                    //Pending TS
+                    let pendingTransactionsTS = customertransactiontype.filter(item => item.transactionStatus === 'Pending');
+                    pendingTransactionsTS = handleNullDataset(pendingTransactionsTS);
+                    const highestPendingTransactionTS = pendingTransactionsTS.reduce((max, current) => (current.data > max.data) ? current : max, pendingTransactionsTS[0]);
+                    const leastPendingTransactionTS =pendingTransactionsTS.reduce((min, current) => (current.data < min.data) ? current : min, pendingTransactionsTS[0]);
+                    const highestlabelPendingTransactionTS = pendingTransactionsTS.filter(obj => obj.data === highestPendingTransactionTS.data).map(obj => obj.label);
+                    const leastlabelPendingTransactionTS = pendingTransactionsTS.filter(obj => obj.data === leastPendingTransactionTS.data).map(obj => obj.label);
+
+
+                    // // Use the found data
+                    
+                    type1.innerHTML = "<span style='color: red;'>Technical Services <br>";
+                    hightype1.innerHTML = "&nbsp; &nbsp; + Highest Paid Transaction:<span style='color: green;'> " +highestlabelPaidransactionTS.join(' ,')  + "</span> with <span style='color: red;'>" + highestPaidTransactionTS.data + "</span> transaction having the total income of <span style='color: red;'>" + Number(highestPaidTransactionTS.totalAmount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })+"."
+                    + "</span><br><br>&nbsp; &nbsp; + Least paid Transaction:<span style='color: green;'> " +leastlabelPaidTransactionTS.join(' ,') + "</span> with <span style='color: red;'>" + leastPaidTransactionTS.data + "</span> transaction having the total income of <span style='color: red;'>" + Number(leastPaidTransactionTS.totalAmount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) +"."
+                    + "</span><br><br>&nbsp; &nbsp; + Highest pending Transaction:<span style='color: green;'> " + highestlabelPendingTransactionTS.join(' ,')+ "</span> with <span style='color: red;'>" + highestPendingTransactionTS.data + "</span> transaction having the total income of <span style='color: red;'>" + Number(highestPendingTransactionTS.totalAmount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) +"."
+                    + "</span><br><br>&nbsp; &nbsp; + Least pending Transaction:<span style='color: green;'> " + leastlabelPendingTransactionTS.join(' ,') + "</span> with <span style='color: red;'>" + leastPendingTransactionTS.data + "</span> transaction having the total income of <span style='color: red;'>" + Number(leastPendingTransactionTS.totalAmount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) +"."
+                    + "</span><br><br>&nbsp; &nbsp; + Highest cancelled Transaction:<span style='color: green;'> " +highestlabelcancelledTransactionTS.join(' ,')  + "</span> with <span style='color: red;'>" + highestcancelledTransactionTS.data + "</span> transaction having the total income of <span style='color: red;'>" + Number(highestcancelledTransactionTS.totalAmount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })+"."
+                    + "</span><br><br>&nbsp; &nbsp; + Least cancelled Transaction:<span style='color: green;'> " +leastlabelcancelledTransactionTS.join(' ,') + "</span> with <span style='color: red;'>" + leastcancelledTransactionTS.data + "</span> transaction having the total income of <span style='color: red;'>" + Number(leastcancelledTransactionTS.totalAmount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) +".";
+                    
+                break;
+                //National Laboratory Information Management System
+
+                case "nlims":
+                   
+                const nlimsData = customerTypeData.filter(item =>
+                        item.transaction_type === 'National Laboratory Information Management System' );
+                        const nlimsDatafiltered = nlimsData.reduce((result, item) => {
+                        const existingItem = result.find(entry => entry.customer_type === item.customer_type && entry.transaction_status === item.transaction_status);
+
+                        if (existingItem) {
+                            existingItem.transaction_count += Number(item.transaction_count);
+                            existingItem.total_amount += Number(item.total_amount);
+                        } else {
+                            result.push({
+                                customer_type: item.customer_type,
+                                transaction_status : item.transaction_status,
+                                transaction_count: Number(item.transaction_count),
+                                total_amount: Number(item.total_amount)
+                            });
+                        }
+
+                        return result;
+                    }, []);
+
+                const customertypenlims = nlimsDatafiltered.map(item => item.customer_type);
+                const customertypenlimsdata = nlimsDatafiltered.map(item => item.transaction_count);
+                const totalAmountnlimsdata = nlimsDatafiltered.map(item => item.total_amount);
+                const transactionStatusnlims = nlimsDatafiltered.map(item => item.transaction_status);
+                                    
+
+                    const customertransactiontypenlims = [];
+
+                    for (let i = 0; i < customertypenlims.length; i++) {
+                        customertransactiontypenlims.push({
+                            label: customertypenlims[i],
+                            data: customertypenlimsdata[i],
+                            totalAmount: totalAmountnlimsdata[i],
+                            transactionStatus: transactionStatusnlims[i]
+                        });
+                    }
+                    function handleNullDataset(dataset) {
+                    if (!dataset || dataset.length === 0) {
+                        return [{
+                            label: 'no customer',
+                            data: 0,
+                            totalAmount: 0,
+                            transactionStatus: 'no transaction'
+                        }];
+                    }
+                    return dataset;
+}
+                    //paid nlims
+                    let paidTransactionsnlims = customertransactiontypenlims.filter(item => item.transactionStatus === 'Paid');
+                    paidTransactionsnlims = handleNullDataset(paidTransactionsnlims);
+
+                    // Continue with further processing
+                    const highestPaidTransactionnlims = paidTransactionsnlims.reduce((max, current) => (current.data > max.data) ? current : max, paidTransactionsnlims[0]);
+                    const leastPaidTransactionnlims = paidTransactionsnlims.reduce((min, current) => (current.data < min.data) ? current : min, paidTransactionsnlims[0]);
+                    const highestlabelPaidransactionnlims = paidTransactionsnlims.filter(obj => obj.data === highestPaidTransactionnlims.data).map(obj => obj.label);
+                    const leastlabelPaidTransactionnlims = paidTransactionsnlims.filter(obj => obj.data === leastPaidTransactionnlims.data).map(obj => obj.label);
+
+                    //cancelled nlims
+                    let cancelledTransactionsnlims = customertransactiontypenlims.filter(item => item.transactionStatus === 'Cancelled');
+                    cancelledTransactionsnlims = handleNullDataset(cancelledTransactionsnlims);
+                    const highestcancelledTransactionnlims = cancelledTransactionsnlims.reduce((max, current) => (current.data > max.data) ? current : max, cancelledTransactionsnlims[0]);
+                    const leastcancelledTransactionnlims =cancelledTransactionsnlims.reduce((min, current) => (current.data < min.data) ? current : min, cancelledTransactionsnlims[0]); 
+                    const highestlabelcancelledTransactionnlims = cancelledTransactionsnlims.filter(obj => obj.data === highestcancelledTransactionnlims.data).map(obj => obj.label);
+                    const leastlabelcancelledTransactionnlims = cancelledTransactionsnlims.filter(obj => obj.data === leastcancelledTransactionnlims.data).map(obj => obj.label);
+                    //Pending nlims
+                    let pendingTransactionsnlims = customertransactiontypenlims.filter(item => item.transactionStatus === 'Pending');
+                    pendingTransactionsnlims = handleNullDataset(pendingTransactionsnlims);
+                    const highestPendingTransactionnlims = pendingTransactionsnlims.reduce((max, current) => (current.data > max.data) ? current : max, pendingTransactionsnlims[0]);
+                    const leastPendingTransactionnlims =pendingTransactionsnlims.reduce((min, current) => (current.data < min.data) ? current : min, pendingTransactionsnlims[0]);
+                    const highestlabelPendingTransactionnlims = pendingTransactionsnlims.filter(obj => obj.data === highestPendingTransactionnlims.data).map(obj => obj.label);
+                    const leastlabelPendingTransactionnlims = pendingTransactionsnlims.filter(obj => obj.data === leastPendingTransactionnlims.data).map(obj => obj.label);
+
+
+                    // // Use the found data
+                    
+                    type1.innerHTML = "<span style='color: orange;'>National Laboratory Information Management System <br>";
+                    hightype1.innerHTML = "&nbsp; &nbsp; + Highest Paid Transaction:<span style='color: green;'> " +highestlabelPaidransactionnlims.join(' ,')  + "</span> with <span style='color: red;'>" + highestPaidTransactionnlims.data + "</span> transaction having the total income of <span style='color: red;'>" + Number(highestPaidTransactionnlims.totalAmount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })+"."
+                    + "</span><br><br>&nbsp; &nbsp; + Least paid Transaction:<span style='color: green;'> " +leastlabelPaidTransactionnlims.join(' ,') + "</span> with <span style='color: red;'>" + leastPaidTransactionnlims.data + "</span> transaction having the total income of <span style='color: red;'>" + Number(leastPaidTransactionnlims.totalAmount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) +"."
+                    + "</span><br><br>&nbsp; &nbsp; + Highest pending Transaction:<span style='color: green;'> " + highestlabelPendingTransactionnlims.join(' ,')+ "</span> with <span style='color: red;'>" + highestPendingTransactionnlims.data + "</span> transaction having the total income of <span style='color: red;'>" + Number(highestPendingTransactionnlims.totalAmount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) +"."
+                    + "</span><br><br>&nbsp; &nbsp; + Least pending Transaction:<span style='color: green;'> " + leastlabelPendingTransactionnlims.join(' ,') + "</span> with <span style='color: red;'>" + leastPendingTransactionnlims.data + "</span> transaction having the total income of <span style='color: red;'>" + Number(leastPendingTransactionnlims.totalAmount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) +"."
+                    + "</span><br><br>&nbsp; &nbsp; + Highest cancelled Transaction:<span style='color: green;'> " +highestlabelcancelledTransactionnlims.join(' ,')  + "</span> with <span style='color: red;'>" + highestcancelledTransactionnlims.data + "</span> transaction having the total income of <span style='color: red;'>" + Number(highestcancelledTransactionnlims.totalAmount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })+"."
+                    + "</span><br><br>&nbsp; &nbsp; + Least cancelled Transaction:<span style='color: green;'> " +leastlabelcancelledTransactionnlims.join(' ,') + "</span> with <span style='color: red;'>" + leastcancelledTransactionnlims.data + "</span> transaction having the total income of <span style='color: red;'>" + Number(leastcancelledTransactionnlims.totalAmount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) +".";
+
+                break;
+
+                case "ulims":
+
+                    //for ulims transaction type
+                    const ulimsData = customerTypeData.filter(item =>
+                            item.transaction_type === 'Unified Laboratory Information Management System'    );
+                        const ulimsDatafiltered = ulimsData.reduce((result, item) => {
+                        const existingItem = result.find(entry => entry.customer_type === item.customer_type && entry.transaction_status === item.transaction_status);
+
+                        if (existingItem) {
+                            existingItem.transaction_count += Number(item.transaction_count);
+                            existingItem.total_amount += Number(item.total_amount);
+                        } else {
+                            result.push({
+                                customer_type: item.customer_type,
+                                transaction_status : item.transaction_status,
+                                transaction_count: Number(item.transaction_count),
+                                total_amount: Number(item.total_amount)
+                            });
+                        }
+
+                        return result;
+                    }, []);
+
+                const customertypeulims = ulimsDatafiltered.map(item => item.customer_type);
+                const customertypeulimsdata = ulimsDatafiltered.map(item => item.transaction_count);
+                const totalAmountulimsdata = ulimsDatafiltered.map(item => item.total_amount);
+                const transactionStatusulims = ulimsDatafiltered.map(item => item.transaction_status);
+                                    
+
+                    const customertransactiontypeulims = [];
+
+                    for (let i = 0; i < customertypeulims.length; i++) {
+                        customertransactiontypeulims.push({
+                            label: customertypeulims[i],
+                            data: customertypeulimsdata[i],
+                            totalAmount: totalAmountulimsdata[i],
+                            transactionStatus: transactionStatusulims[i]
+                        });
+                    }
+                    function handleNullDataset(dataset) {
+                    if (!dataset || dataset.length === 0) {
+                        return [{
+                            label: 'no customer',
+                            data: 0,
+                            totalAmount: 0,
+                            transactionStatus: 'no transaction'
+                        }];
+                    }
+                    return dataset;
+                }
+                    //paid ulims
+                    let paidTransactionsulims = customertransactiontypeulims.filter(item => item.transactionStatus === 'Paid');
+                    paidTransactionsulims = handleNullDataset(paidTransactionsulims);
+                    const highestPaidTransactionulims = paidTransactionsulims.reduce((max, current) => (current.data > max.data) ? current : max, paidTransactionsulims[0]);
+                    const leastPaidTransactionulims =paidTransactionsulims.reduce((min, current) => (current.data < min.data) ? current : min, paidTransactionsulims[0]);
+                    const highestlabelPaidransactionulims = paidTransactionsulims.filter(obj => obj.data === highestPaidTransactionulims.data).map(obj => obj.label);
+                    const leastlabelPaidTransactionulims = paidTransactionsulims.filter(obj => obj.data === leastPaidTransactionulims.data).map(obj => obj.label);
+                    //cancelled ulims
+                    let cancelledTransactionsulims = customertransactiontypeulims.filter(item => item.transactionStatus === 'Cancelled');
+                    cancelledTransactionsulims = handleNullDataset(cancelledTransactionsulims);
+                    const highestcancelledTransactionulims = cancelledTransactionsulims.reduce((max, current) => (current.data > max.data) ? current : max, cancelledTransactionsulims[0]);
+                    const leastcancelledTransactionulims =cancelledTransactionsulims.reduce((min, current) => (current.data < min.data) ? current : min, cancelledTransactionsulims[0]); 
+                    const highestlabelcancelledTransactionulims = cancelledTransactionsulims.filter(obj => obj.data === highestcancelledTransactionulims.data).map(obj => obj.label);
+                    const leastlabelcancelledTransactionulims = cancelledTransactionsulims.filter(obj => obj.data === leastcancelledTransactionulims.data).map(obj => obj.label);
+                    //Pending ulims
+                    let pendingTransactionsulims = customertransactiontypeulims.filter(item => item.transactionStatus === 'Pending');
+                    pendingTransactionsulims = handleNullDataset(pendingTransactionsulims);
+                    const highestPendingTransactionulims = pendingTransactionsulims.reduce((max, current) => (current.data > max.data) ? current : max, pendingTransactionsulims[0]);
+                    const leastPendingTransactionulims =pendingTransactionsulims.reduce((min, current) => (current.data < min.data) ? current : min, pendingTransactionsulims[0]);
+                    const highestlabelPendingTransactionulims = pendingTransactionsulims.filter(obj => obj.data === highestPendingTransactionulims.data).map(obj => obj.label);
+                    const leastlabelPendingTransactionulims = pendingTransactionsulims.filter(obj => obj.data === leastPendingTransactionulims.data).map(obj => obj.label);
+
+
+                    // // Use the found data
+                    
+                    type1.innerHTML = "<span style='color: orange;'>Unified Laboratory Information Management System <br>";
+                    hightype1.innerHTML = "&nbsp; &nbsp; + Highest Paid Transaction:<span style='color: green;'> " +highestlabelPaidransactionulims.join(' ,')  + "</span> with <span style='color: red;'>" + highestPaidTransactionulims.data + "</span> transaction having the total income of <span style='color: red;'>" + Number(highestPaidTransactionulims.totalAmount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })+"."
+                    + "</span><br><br>&nbsp; &nbsp; + Least paid Transaction:<span style='color: green;'> " +leastlabelPaidTransactionulims.join(' ,') + "</span> with <span style='color: red;'>" + leastPaidTransactionulims.data + "</span> transaction having the total income of <span style='color: red;'>" + Number(leastPaidTransactionulims.totalAmount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) +"."
+                    + "</span><br><br>&nbsp; &nbsp; + Highest pending Transaction:<span style='color: green;'> " + highestlabelPendingTransactionulims.join(' ,')+ "</span> with <span style='color: red;'>" + highestPendingTransactionulims.data + "</span> transaction having the total income of <span style='color: red;'>" + Number(highestPendingTransactionulims.totalAmount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) +"."
+                    + "</span><br><br>&nbsp; &nbsp; + Least pending Transaction:<span style='color: green;'> " + leastlabelPendingTransactionulims.join(' ,') + "</span> with <span style='color: red;'>" + leastPendingTransactionulims.data + "</span> transaction having the total income of <span style='color: red;'>" + Number(leastPendingTransactionulims.totalAmount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) +"."
+                    + "</span><br><br>&nbsp; &nbsp; + Highest cancelled Transaction:<span style='color: green;'> " +highestlabelcancelledTransactionulims.join(' ,')  + "</span> with <span style='color: red;'>" + highestcancelledTransactionulims.data + "</span> transaction having the total income of <span style='color: red;'>" + Number(highestcancelledTransactionulims.totalAmount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })+"."
+                    + "</span><br><br>&nbsp; &nbsp; + Least cancelled Transaction:<span style='color: green;'> " +leastlabelcancelledTransactionulims.join(' ,') + "</span> with <span style='color: red;'>" + leastcancelledTransactionulims.data + "</span> transaction having the total income of <span style='color: red;'>" + Number(leastcancelledTransactionulims.totalAmount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) +".";
+                    
+                break;
+            }
+    });
+            transactionTypeDropdown.value = 'ts';
+            transactionTypeDropdown.dispatchEvent(new Event('change'));
+
+            customerpopup.style.display = "block";
+    });
+        }
+
+if (close) {
+    close.addEventListener("click", () => {
+        // Close the popup when the close button is clicked
+        customerpopup.style.display = "none";
+    });
+}
+    // Transaction status pop-up analyzation
+    if (customerTypepoppup) {
+    customerTypepoppup.addEventListener("click", () => {
+        // Show the popup
+        customerpopup2.style.display = "block";
+
+        // Set the header content
+        header2.innerHTML = "Customer Type";
+
+        // Clear previous data
+        type.innerHTML = "Top Customer Transaction per Month";
+        document.getElementById("yearPicker").addEventListener("change", function() {
+            const selectedYear = this.value;
+            const filteredData = technicalServicesData.filter(item => {
+                const transactionYear = new Date(item.transaction_date).getFullYear();
+                return item.transaction_status === 'Paid' && transactionYear.toString() === selectedYear;
+            });
+
+            let monthlyDataAggregated = {};
+            filteredData.forEach(item => {
+                const transactionMonth = new Date(item.transaction_date).getMonth() + 1;
+                const key = item.customer_type;
+
+                if (!monthlyDataAggregated[transactionMonth]) {
+                    monthlyDataAggregated[transactionMonth] = {};
+                }
+
+                if (!monthlyDataAggregated[transactionMonth][key]) {
+                    monthlyDataAggregated[transactionMonth][key] = { transaction_count: 0, total_amount: 0 };
+                }
+
+                monthlyDataAggregated[transactionMonth][key].transaction_count += Number(item.transaction_count);
+                monthlyDataAggregated[transactionMonth][key].total_amount += Number(item.total_amount);
+            });
+
+            // Find the customer type with the highest transaction count for each month
+            let highestTransactionsPerMonth = {};
+            for (const month in monthlyDataAggregated) {
+                let maxCount = 0;
+                let customerTypeWithMaxCount = '';
+                let maxIncome = 0;
+
+                for (const customerType in monthlyDataAggregated[month]) {
+                    const { transaction_count, total_amount } = monthlyDataAggregated[month][customerType];
+
+                    if (transaction_count > maxCount) {
+                        maxCount = transaction_count;
+                        customerTypeWithMaxCount = customerType;
+                        maxIncome = total_amount; // Set the max income for the current customer type
+                    }
+                }
+
+                highestTransactionsPerMonth[month] = {
+                    customer_type: customerTypeWithMaxCount,
+                    transaction_count: maxCount,
+                    income: maxIncome.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+                };
+            }
+
+            // Generate table HTML
+            let tableHtml = '<table style="width: 100%; text-align: center;">';
+            tableHtml += `
+                <tr>
+                    <th style="border: 1px solid black; padding: 8px;">Month</th>
+                    <th style="border: 1px solid black; padding: 8px; ">Customer Type</th>
+                    <th style="border: 1px solid black; padding: 8px; ">Transaction Count</th>
+                    <th style="border: 1px solid black; padding: 8px; ">Income</th>
+                </tr>`;
+
+                const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+            Object.entries(highestTransactionsPerMonth).forEach(([month, data]) => {
+                const monthName = monthNames[parseInt(month) - 1]; // Convert numeric month to month name
+                tableHtml += `
+                    <tr style="border: 1px solid black;">
+                        <td style="border: 1px solid black; padding: 8px;">${monthName}</td>
+                        <td style="border: 1px solid black; padding: 8px;">${data.customer_type}</td>
+                        <td style="border: 1px solid black; padding: 8px;">${data.transaction_count}</td>
+                        <td style="border: 1px solid black; padding: 8px;">${data.income}</td>
+                    </tr>`;
+            });
+
+            tableHtml += '</table>';
+            hightype.innerHTML = tableHtml;
+                    });
+
+                    // Trigger change event to load data for the currently selected year
+                    document.getElementById("yearPicker").value = year;
+
+                    document.getElementById("yearPicker").dispatchEvent(new Event('change'));
+                });
+}
+
+function handleNullDataset(dataset) {
+    for (const month in dataset) {
+        if (dataset[month].length === 0) {
+            dataset[month].push({
+                customer_type: 'None',
+                transaction_count: 0,
+                total_amount: 0
+            });
+        }
+    }
+    return dataset;
+}
+
+
+// Close button functionality
+
+if (close2) {
+    close2.addEventListener("click", () => {
+        // Close the popup when the close button is clicked
+        customerpopup2.style.display = "none";
+        
+    });
+}
+
+});
+</script>
     <!-- scriptfor customers graph -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js" integrity="sha512-JPcRR8yFa8mmCsfrw4TNte1ZvF1e3+1SdGMslZvmrzDYxS69J7J49vkFL8u6u8PlPJK+H3voElBtUCzaXj+6ig==" crossorigin="anonymous" referrerpolicy="no-referrer">
     </script>
@@ -2743,7 +3770,7 @@ $targetIncome = [
         transactionTypeElement.style.marginLeft = "0px";
         // For doughnut and pie charts, use the custom options
         transactionStatusChart = new Chart(transactionStatusChartContainer, {
-            type: 'pie',
+            type: 'doughnut',
             options: doughnutOptions,
             plugins: [bgColor, ChartDataLabels],
             data: {
@@ -2764,7 +3791,7 @@ $targetIncome = [
         });
 
         paymendtMethodChart = new Chart(paymendtMethodChartContainer, {
-            type: 'pie',
+            type: 'doughnut',
             options: doughnutOptions,
             plugins: [bgColor, ChartDataLabels],
             data: {
@@ -2784,7 +3811,7 @@ $targetIncome = [
             },
         });
         transactionTypeChart = new Chart(transactionTypeChartContainer, {
-            type: 'pie',
+            type: 'doughnut',
             options: doughnutOptions,
             plugins: [bgColor, ChartDataLabels],
             data: {
@@ -2804,7 +3831,7 @@ $targetIncome = [
             },
         });
         customerTypeChart = new Chart(customerTypeChartContainer, {
-            type: 'pie',
+            type: 'doughnut',
             options: doughnutOptions,
             plugins: [bgColor, ChartDataLabels],
             data: {
@@ -2838,8 +3865,11 @@ $targetIncome = [
         function changeChart() {
             var type = document.getElementById('chart_type2');
             var typeSelect = type.value;
-            console.log("typeSelect")
-            console.log(typeSelect)
+
+            transactionStatusChart.config.type = ''
+            paymendtMethodChart.config.type = ''
+            transactionTypeChart.config.type = ''
+            customerTypeChart.config.type = ''
 
             transactionStatusChart.config.type = typeSelect
             transactionStatusChart.update();
@@ -2952,8 +3982,8 @@ $targetIncome = [
 
     <script>
         function dateFilter() {
-            // console.log(<?php echo json_encode($PaymentMethod) ?>);
-            // console.log(<?php echo json_encode($PaymentMethodcounts); ?>);
+            console.log(<?php echo json_encode($PaymentMethod) ?>);
+            console.log(<?php echo json_encode($PaymentMethodcounts); ?>);
             if (selectedValue === '_day') {
 
                 var csrfToken = $('meta[name="csrf-token"]').attr('content');
@@ -3175,8 +4205,8 @@ $targetIncome = [
                 // for transactionStatusChart / Transaction Status
                 x = 0
                 var TSChart1 = response.forTransactionStatusChart;
-                // console.log("TestChart1")
-                // console.log(TSChart1)
+                console.log("TestChart1")
+                console.log(TSChart1)
 
                 var data1 = TSChart1.map(item => item.data);
 
@@ -3195,15 +4225,15 @@ $targetIncome = [
                         borderWidth: 2
                     }],
                 }
-                // console.log(transactionStatusChart.config.data.labels)
-                // console.log(data)
+                console.log(transactionStatusChart.config.data.labels)
+                console.log(data)
                 transactionStatusChart.update();
 
                 //paymendtMethodChart
                 x = 0
                 var TSChart2 = response.forPaymendtMethodChart;
-                // console.log("TestChart2")
-                // console.log(TSChart2)
+                console.log("TestChart2")
+                console.log(TSChart2)
 
                 var data2 = TSChart2.map(item => item.data);
 
@@ -3222,15 +4252,15 @@ $targetIncome = [
                         borderWidth: 2
                     }],
                 }
-                // console.log(paymendtMethodChart.config.data.labels)
-                // console.log(data2)
+                console.log(paymendtMethodChart.config.data.labels)
+                console.log(data2)
                 paymendtMethodChart.update();
 
                 //transactionTypeChart
                 x = 0
                 var TSChart3 = response.forTransactionTypeChart;
-                // console.log("TestChart3")
-                // console.log(TSChart3)
+                console.log("TestChart3")
+                console.log(TSChart3)
 
                 var data3 = TSChart3.map(item => item.data);
 
@@ -3249,15 +4279,15 @@ $targetIncome = [
                         borderWidth: 2
                     }],
                 }
-                // console.log(transactionTypeChart.config.data.labels)
-                // console.log(data3)
+                console.log(transactionTypeChart.config.data.labels)
+                console.log(data3)
                 transactionTypeChart.update();
 
                 //customerTypeChart
                 x = 0
                 var TSChart4 = response.forCustomerTypeChart;
-                // console.log("TestChart4")
-                // console.log(response.forCustomerTypeChart)
+                console.log("TestChart4")
+                console.log(response.forCustomerTypeChart)
 
                 var data4 = TSChart4.map(item => item.data);
 
@@ -3285,8 +4315,8 @@ $targetIncome = [
                         borderWidth: 2
                     }],
                 }
-                // console.log(customerTypeChart.config.data.labels)
-                // console.log(data4)
+                console.log(customerTypeChart.config.data.labels)
+                console.log(data4)
                 customerTypeChart.update();
             } // end of _day filter
         }
@@ -3363,7 +4393,7 @@ $targetIncome = [
 
                                                                                             pdf.addImage(salesChartImg, 'PNG', 40, 30, 140, 70, undefined, 'FAST');
 
-                                                                                            pdf.text('Average Income', 40, 115);
+                                                                                            pdf.text('Average Income Daily', 40, 115);
 
                                                                                             pdf.addImage(myChartImg, 'PNG', 40, 120, 105, 80, undefined, 'FAST');
 
