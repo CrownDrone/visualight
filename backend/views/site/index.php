@@ -51,7 +51,7 @@ $currentIndex = Url::to(['']);
     .aveSalesDiv {
         background-color: #B526C2;
         color: white;
-        width: 20rem;
+        width: 25rem;
         height: 12rem;
         border-radius: 20px;
         display: flex;
@@ -70,7 +70,7 @@ $currentIndex = Url::to(['']);
     .texty {
         margin: 0;
         font-weight: bold;
-        font-size: 2rem;
+        font-size: 1.5rem;
         font-family: Poppins;
     }
 
@@ -85,8 +85,8 @@ $currentIndex = Url::to(['']);
     #myChart {
         /* css sa radial */
         position: absolute;
-        left: 50px;
-        top: 5px;
+        left: 100px;
+        top: 50px;
     }
 
     .asOne {
@@ -107,11 +107,12 @@ $currentIndex = Url::to(['']);
 
         .aveTransactionDiv,
         .aveSalesDiv {
-            width: 120px;
-            height: 120px;
+            width: 100px;
+            height: 100px;
             border-radius: 20px;
             padding: 15px;
             margin-bottom: 15px;
+            right: 30px;
         }
 
         #myChart {
@@ -124,7 +125,7 @@ $currentIndex = Url::to(['']);
         .asOne {
             justify-content: space-between;
             width: 60%;
-            right: 45%;
+            right: 15%;
         }
     }
 
@@ -1103,7 +1104,7 @@ if ($todaymettrans == 0) {
 } else {
     //dito magcocompute ng percentage ng increase or decrease ng number of past transaction at today's transaction (tinatype ko pa din yung sa last transaction kunwari kasi di pa ko marunong)
     $metdailytransincrease = (($todaymettrans - $lastmettrans) / $todaymettrans) * 100;
-    $metdailytransincrease = number_format($metdailytransincrease, 2);
+    $metdailytransincrease = number_format($metdailytransincrease);
     if ($metdailytransincrease > 1) {
         $metdailytransincrease = '+' . $metdailytransincrease . '%';
     } else {
@@ -1138,7 +1139,7 @@ if ($todaySandTtrans == 0) {
 } else {
 
     $SandTdailytransincrease = (($todaySandTtrans - $lastSandTtrans) / $todaySandTtrans) * 100;
-    $SandTdailytransincrease = number_format($SandTdailytransincrease, 2);
+    $SandTdailytransincrease = number_format($SandTdailytransincrease);
     if ($SandTdailytransincrease > 1) {
         $SandTdailytransincrease = '+' . $SandTdailytransincrease . '%';
     } else {
@@ -1328,7 +1329,7 @@ $targetIncome = [
                     <p class="number"> <?= $average ?> </p>
                 </div>
                 <div class="aveSalesDiv">
-                    <p class="texty"> Average Income </p>
+                    <p class="texty"> Combined Average Income </p>
                     <p class="number"> <?= $saleaverage ?> </p>
                 </div>
             </div>
@@ -2353,9 +2354,9 @@ $targetIncome = [
                     });
 
                     ctx.fillStyle = 'rgb(0, 115, 230)';
-                    ctx.fillText(`STD Total: ${total1.toLocaleString()}`, width / 2.1, height / 2 + top);
+                    ctx.fillText(`STD: ${total1.toLocaleString()}`, width / 2.1, height / 2 + top);
                     ctx.fillStyle = 'rgb(17, 163, 76)';
-                    ctx.fillText(`NMD Total: ${total2.toLocaleString()}`, width / 2.1, height / 2 + top + 20);
+                    ctx.fillText(`NMD: ${total2.toLocaleString()}`, width / 2.1, height / 2 + top + 20);
 
 
                     ctx.restore();
