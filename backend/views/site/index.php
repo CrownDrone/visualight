@@ -2583,7 +2583,7 @@ $targetIncome = [
         </div>
     </div>
 
-    <div class="graph2">
+    <div class="graph2" style ="margin-top:20px">
         <div class="chart-container2">
             <p class="reportTitle" id="transactionStatuspopup">Transaction Status</p>
             <canvas id="transactionStatus"></canvas>
@@ -3761,6 +3761,7 @@ if (close2) {
             responsive: true,
             maintainAspectRatio: false,
             cutout: '70%',
+
         };
 
         const transactionTypeElement = document.getElementById("transactionType");
