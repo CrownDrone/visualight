@@ -176,7 +176,6 @@ class UserController extends BaseController
             }
 
             if ($model->save()) {
-                Yii::$app->session->setFlash('success', 'User updated successfully.');
                 return $this->redirect(['index']); // Change 'index' to your desired destination
             }
         }
@@ -191,9 +190,7 @@ class UserController extends BaseController
         $user = User::findOne($id);
         if ($user) {
             $user->delete();
-            Yii::$app->session->setFlash('success', 'User deleted successfully.');
         } else {
-            Yii::$app->session->setFlash('error', 'User not found.');
         }
 
         return $this->redirect(['index']);
