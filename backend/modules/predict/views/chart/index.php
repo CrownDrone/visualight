@@ -118,7 +118,7 @@ use yii\web\View;
     <button id="toggleButton">—</button>
     
     <form id="prediction-form">
-    <label for="years">Enter the number of years for predictions:</label>
+    <label for="years">Enter the number of year(s) for prediction:</label>
     <input type="number" id="years" name="years" step="0.01" value="">
     <button type="submit">Compute Predictions</button>
 </form>
@@ -171,7 +171,7 @@ use yii\web\View;
         
 <br>        
 <!-- Total -->
-<h3> Transaction Counts per Month </h3>
+<h3> Predicted Transactions per Month </h3>
 
 <div class="chart-container">
 <p style="display: flex; justify-content: center; align-items: center;"> National Metrology Division </p>
@@ -191,7 +191,7 @@ use yii\web\View;
 
 
 <br>
-<h3> General Total Transaction Counts  </h3>
+<h3> Predicted Transaction Comparison  </h3>
 <div class="chart-container">
 <p style="display: flex; justify-content: center; align-items: center;"> National Metrology Division </p>
     <canvas id="transaction-chart5" style="width: 30rem; height: 20rem;" ></canvas>
@@ -207,7 +207,7 @@ use yii\web\View;
 <br>
 
 <br>
-<h3> Total Income per Month </h3>
+<h3> Predicted Income per Month </h3>
 <div class="chart-container">
     <p style="display: flex; justify-content: center; align-items: center;"> National Metrology Division </p>
     <canvas id="transaction-chart6" style="width: 30rem; height: 20rem;" ></canvas>
@@ -224,7 +224,7 @@ use yii\web\View;
 
 
 <br>
-<h3> Total Income</h3>
+<h3> Predicted Income Comparison </h3>
 <div class="chart-container">
     <p style="display: flex; justify-content: center; align-items: center;"> National Metrology Division </p>
     <canvas id="transaction-chart7" style="width: 30rem; height: 20rem;" ></canvas>
