@@ -2037,7 +2037,7 @@ $targetIncome = [
 
         // dashboard total income
         const totalsalesChartB = new Chart(totalsalesCtx, {
-            type: 'bar', // This specifies a bar chart
+            type: 'line', // This specifies a bar chart
             data: {
                 labels: global_label_day,
                 datasets: totalSum.datasets,
