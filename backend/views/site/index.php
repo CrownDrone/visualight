@@ -2340,7 +2340,7 @@ $targetIncome = [
                     ctx.font = 'bolder 15px Poppins';
                     ctx.fillStyle = 'rgb(3, 98, 186, 1)';
                     ctx.textAlign = 'center';
-                    ctx.fillText('Average income', width / 2.1, height / 10 + top);
+                    ctx.fillText('Total Average Income', width / 2.1, height / 10 + top);
 
                     // Count and display the numbers
                     let total1 = 0;
@@ -2352,10 +2352,10 @@ $targetIncome = [
                         total2 += value;
                     });
 
-                    ctx.fillStyle = 'rgb(255,204,51)';
-                    ctx.fillText(`STD Total: ${total1}`, width / 2.1, height / 2 + top);
-                    ctx.fillStyle = 'rgb(0, 0, 255)';
-                    ctx.fillText(`NMD Total: ${total2}`, width / 2.1, height / 2 + top + 20);
+                    ctx.fillStyle = 'rgb(0, 115, 230)';
+                    ctx.fillText(`STD Total: ${total1.toLocaleString()}`, width / 2.1, height / 2 + top);
+                    ctx.fillStyle = 'rgb(17, 163, 76)';
+                    ctx.fillText(`NMD Total: ${total2.toLocaleString()}`, width / 2.1, height / 2 + top + 20);
 
 
                     ctx.restore();
