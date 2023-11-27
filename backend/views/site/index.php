@@ -302,6 +302,7 @@ $currentIndex = Url::to(['']);
         width: 100%;
         text-align: center;
         display: wrap;
+        margin-top: 50px;
 
     }
 
@@ -1302,6 +1303,21 @@ $targetIncome = [
         <canvas id="totalsalesChart"></canvas>
     </div>
 
+   
+
+    <div class="chart-container">
+        <p class="reportTitle" id=" "> Transaction Per Division</p>
+        <!-- <div class="containerBody"> -->
+        <canvas id="transactionChart"></canvas>
+        <!-- </div> -->
+    </div>
+
+
+    <div class="chart-container">
+        <p class="reportTitle" id=" "> Income per Division</p>
+        <canvas id="salesChart"></canvas>
+    </div>
+
     <div class="chart-container3" id="avgSales">
         <p class="reportTitle" id=" "></p>
         <div class="asOne">
@@ -1318,21 +1334,6 @@ $targetIncome = [
             </div>
         </div>
     </div>
-
-    <div class="chart-container">
-        <p class="reportTitle" id=" "> Transaction Per Division</p>
-        <!-- <div class="containerBody"> -->
-        <canvas id="transactionChart"></canvas>
-        <!-- </div> -->
-    </div>
-
-
-    <div class="chart-container">
-        <p class="reportTitle" id=" "> Income per Division</p>
-        <canvas id="salesChart"></canvas>
-    </div>
-
-
 
 
     <div class="popup" id="popup">
