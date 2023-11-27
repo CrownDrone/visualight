@@ -62,7 +62,7 @@ $this->title = '';
         .aveSalesDiv {
             background-color: #B526C2;
             color: white;
-            width: 220px;
+            width: 400px;
             height: 130px;
             border-radius: 20px;
             display: flex;
@@ -203,7 +203,7 @@ $this->title = '';
         }
 
         #valueIncrease {
-            font-size: 0.5rem;
+            font-size: 1.2rem;
             font-weight: 400;
             letter-spacing: .15rem;
             grid-column: 3;
