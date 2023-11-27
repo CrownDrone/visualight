@@ -2340,7 +2340,7 @@ $targetIncome = [
                     ctx.font = 'bolder 15px Poppins';
                     ctx.fillStyle = 'rgb(3, 98, 186, 1)';
                     ctx.textAlign = 'center';
-                    ctx.fillText('Total Average Income', width / 2.1, height / 10 + top);
+                    ctx.fillText(' Average Income', width / 2.1, height / 10 + top);
 
                     // Count and display the numbers
                     let total1 = 0;
