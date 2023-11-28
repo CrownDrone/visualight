@@ -287,8 +287,18 @@ class SiteController extends BaseController
                 ->groupBy('label')
                 ->all();
 
+            $forMyChart = (new Query())
+                ->select(['division as label', 'ROUND(AVG(amount), 2) as data'])
+                ->from('transaction')
+                ->where(['between', 'transaction_date', $fromDate, $toDate])
+                ->groupBy('division')
+                ->all();
 
-
+            $forMyChartAvgTransaction = (new Query())
+                ->select(['division as label', 'count(*) as data'])
+                ->from('transaction')
+                ->where(['between', 'transaction_date', $fromDate, $toDate])
+                ->all();
 
             return json_encode([
                 'custmerPerProvinceNCR' => $custmerPerProvinceNCR,
@@ -315,6 +325,8 @@ class SiteController extends BaseController
                 'forPaymendtMethodChart' => $forPaymendtMethodChart,
                 'forTransactionTypeChart' => $forTransactionTypeChart,
                 'forCustomerTypeChart' => $forCustomerTypeChart,
+                'forMyChart' => $forMyChart,
+                'forMyChartAvgTransaction' => $forMyChartAvgTransaction,
             ]);
         }
 
