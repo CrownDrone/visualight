@@ -364,15 +364,16 @@ $currentIndex = Url::to(['']);
         left: 0;
         width: 100%;
         height: 100%;
-        background: rgba(0, 0, 0, 0.7);
     }
 
     .popup-content {
+        width: 50%;
         position: absolute;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        background: #fff;
+        background: black;
+        color: gray;
         padding: 20px;
         border: 1px solid #333;
         box-shadow: 2px 2px 10px #888;
@@ -883,6 +884,7 @@ $customerTypeDatapertransaction = (new \yii\db\Query())
         'ts.status as transaction_status',
         't.transaction_date',
         'pm.method as payment_method',
+        'c.address', // Add the address column from the customer table
     ])
     ->from('transaction t')
     ->join('INNER JOIN', 'customer c', 't.customer_id = c.id')
@@ -890,7 +892,7 @@ $customerTypeDatapertransaction = (new \yii\db\Query())
     ->join('INNER JOIN', 'transaction_type tt', 't.transaction_type = tt.id')
     ->join('INNER JOIN', 'transaction_status ts', 't.transaction_status = ts.id')
     ->join('INNER JOIN', 'payment_method pm', 't.payment_method = pm.id')
-    ->groupBy(['ct.type', 'tt.type', 'ts.status', 't.transaction_date', 'pm.method'])
+    ->groupBy(['ct.type', 'tt.type', 'ts.status', 't.transaction_date', 'pm.method', 'c.address']) 
     ->orderBy(['transaction_count' => SORT_DESC])
     ->all();
 
@@ -900,6 +902,7 @@ $ctamt = [0];
 $ctstatus = [''];
 $cttd = [''];
 $ctpm = [''];
+$ctaddress = ['']; 
 
 foreach ($customerTypeDatapertransaction as $type) {
     $ctpt[] = $type['customer_type'];
@@ -907,8 +910,10 @@ foreach ($customerTypeDatapertransaction as $type) {
     $ctamt[] = $type['total_amount'];
     $ctstatus[] = $type['transaction_status'];
     $cttd[] = $type['transaction_date'];
-    $ctpm[] = $type['payment_method']; // Store the payment_method value
+    $ctpm[] = $type['payment_method'];
+    $ctaddress[] = $type['address']; 
 }
+
 
 $TransactionYear = (new \yii\db\Query())
     ->select(['YEAR(t.transaction_date) as year'])
@@ -952,7 +957,6 @@ foreach ($transactionStatusData as $status) {
 $PaymentMethodData = $query->select(['payment_method', 'COUNT(*) as customer_count'])
     ->from('transaction')
     ->where(['transaction_status' => ['1']])
-    // ->where(['between', 'transaction_date', $fromDate, $toDate])
     ->groupBy(['payment_method'])
     ->orderBy(['customer_count' => SORT_DESC])
     ->all();
@@ -2460,72 +2464,216 @@ $targetIncome = [
     </div>
 
 </div>
-<!-- 
-<div class="popup" id="Provincespopupcontent">
-        <div class="popup-content">
-            <span class="close" id="closeProvincespopup">&times;</span>
 
-            <h2 id="header2"></h2>
+<div class="popup" id="ProvinceopenPopup">
+        <div class="popup-content" style="width: 50%; height:auto">
+            <span class="close" id="ProvinceclosePopup">&times;</span>
 
-            <div id="yearPickerContainer" style="margin-bottom: 20px;">
-                <label for="yearPicker">Select Year:</label>
-                <select id="yearPicker">
-                    <?php foreach ($distinctYears as $year) : ?>
-                        <option value="<?php echo htmlspecialchars($year); ?>">
-                            <?php echo htmlspecialchars($year); ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
+            <h1 id="header"></h1>
+            <h5>Paid Transactions</h5>
+
             <div style="text-align: left; margin: 0 auto; width: 80%;">
-               <h4 id="type"></h4>
-               <p id="hightype"></p> 
-                        
+                    <label for="transactionTypeDropdown">Top 5 Provinces</label> 
+                    <select id="provinceDropdown">
+                    </select> <br><br>
+ 
+
+                <div style="text-align: left; margin: 0 auto; width: 80%;">
+                    <h4 id="typeprovince"></h4>
+                    <p id="contentprovince"></p>
+
+                </div>
             </div>
         </div>
+
     </div>
-
-</div>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // Reference datas current
-        const currentDate = new Date();
-        const month = currentDate.getMonth();
-        const year = currentDate.getFullYear();
-
-        //for clickable reference
-        const Provincespopup = document.getElementById("Provincespopup");
-        const Provincespopupcontent = document.getElementById("Provincespopupcontent");
-        const closeProvincespopup = document.getElementById("closeProvincespopup");
-
+    <script>
+document.addEventListener('DOMContentLoaded', function () {
+    const provincesPopup = document.getElementById("Provincespopup");
+    const ProvinceopenPopup = document.getElementById("ProvinceopenPopup");
+    const ProvinceclosePopup = document.getElementById("ProvinceclosePopup");
+    const header = document.getElementById("header");
+    const provinceDropdown = document.getElementById("provinceDropdown");
+    const typeprovince = document.getElementById("typeprovince");
+    const contentprovince = document.getElementById("contentprovince");
     
+
         const startDate = document.getElementById("startDate").value;
         const endDate = document.getElementById("endDate").value;
-       
+
         const technicalServicesData = <?php echo json_encode($customerTypeDatapertransaction); ?>;
         const customerTypeData = technicalServicesData.filter(item =>
             item.transaction_date >= startDate &&
-            item.transaction_date <= endDate
-        );
-        
-        // province pop-up analyzation
-        if (Provincespopup) {
-            Provincespopup.addEventListener("click", () => {
+            item.transaction_date <= endDate &&
+            item.transaction_status==  "Paid"
+        )
+        const provinceTransactionCounts = {};
+        customerTypeData.forEach(item => {
+        const province = item.address;
 
-                
+        if (!provinceTransactionCounts[province]) {
+            provinceTransactionCounts[province] = 0;
+        }
 
+        provinceTransactionCounts[province]++;
+    });
+
+    // Sort provinces based on transaction counts in descending order
+    const sortedProvinces = Object.keys(provinceTransactionCounts).sort((a, b) =>
+        provinceTransactionCounts[b] - provinceTransactionCounts[a]
+    );
+
+    // Get the top 5 provinces
+    const topProvinces = sortedProvinces.slice(0, 5);
+
+    provincesPopup.addEventListener("click", () => {
+        provinceDropdown.innerHTML = '';
+        topProvinces.forEach(function (province) {
+            var option = document.createElement('option');
+            option.value = province;
+            option.text = province.charAt(0).toUpperCase() + province.slice(1);
+            provinceDropdown.add(option);
         });
 
-        if (closeProvincespopup) {
-            Provincespopupcontent.addEventListener("click", () => {
-            customerpopup.style.display = "none";
+        header.innerText = 'Top 5 Provinces';
+        provinceDropdown.value = topProvinces[0];
+        ProvinceopenPopup.style.display = "block";
     });
-}
-    
-    }
+
+    provinceDropdown.addEventListener("change", function () {
+        const selectedValue = this.options[this.selectedIndex].value;
+        const formattedProvince = selectedValue.charAt(0).toUpperCase() + selectedValue.slice(1);
+
+        typeprovince.innerText = '';
+        contentprovince.innerText = '';
+
+        function updateProvinceData(provinceName) {
+            const province1data = customerTypeData.filter(item => item.address === formattedProvince ); 
+                const province1datafiltered = province1data.reduce((result, item) => {
+                        const existingTransactionTypeIndex = result.findIndex(entry => entry.transaction_type === item.transaction_type);
+
+                        if (existingTransactionTypeIndex !== -1) {
+                            const existingCustomerTypeIndex = result[existingTransactionTypeIndex].customer_types.findIndex(
+                                customer => customer.customer_type === item.customer_type
+                            );
+
+                            if (existingCustomerTypeIndex !== -1) {
+                                result[existingTransactionTypeIndex].customer_types[existingCustomerTypeIndex].transaction_count += Number(item.transaction_count);
+                                result[existingTransactionTypeIndex].customer_types[existingCustomerTypeIndex].total_amount += Number(item.total_amount);
+                            } else {
+                                result[existingTransactionTypeIndex].customer_types.push({
+                                    customer_type: item.customer_type,
+                                    transaction_count: Number(item.transaction_count),
+                                    total_amount: Number(item.total_amount)
+                                });
+                            }
+                        } else {
+                            result.push({
+                                transaction_type: item.transaction_type,
+                                customer_types: [{
+                                    customer_type: item.customer_type,
+                                    transaction_count: Number(item.transaction_count),
+                                    total_amount: Number(item.total_amount)
+                                }]
+                            });
+                        }
+
+                        return result;
+                    }, []);
+
+                    // if null or empty dataset
+                    function handleNullDataset(dataset) {
+                        if (!dataset || dataset.length === 0) {
+                            return [{
+                                transaction_type: ' ',
+                                customer_types: [{
+                                    customer_type: ' ',
+                                    transaction_count: 0,
+                                    total_amount: 0
+                                }]
+                            }];
+                        }
+                        return dataset;
+                    }
+                    let province1Transactions = handleNullDataset(province1datafiltered);
+                    let sumOfAllProvince1TransactionCounts = 0;
+                    let sumOfAllProvince1TransactionAmounts = 0;
+                    province1Transactions.forEach(transaction => {
+                        transaction.customer_types.forEach(customer => {
+                            sumOfAllProvince1TransactionCounts += customer.transaction_count;
+                            sumOfAllProvince1TransactionAmounts += customer.total_amount;
+                        });
+                    });
+
+                    // table
+                    let tableHtml = '<table style="border-collapse: collapse; width: 100%;">';
+                    tableHtml += `
+                <tr>
+                    <th style="border: 1px solid white; padding: 8px; text-align: left;">Transaction Type</th>
+                    <th style="border: 1px solid white; padding: 8px; text-align: left;">Customer Type</th>
+                    <th style="border: 1px solid white; padding: 8px; text-align: left;">Transaction Count</th>
+                    <th style="border: 1px solid white; padding: 8px; text-align: left;">Amount</th>
+                </tr>`;
+
+                    // column/row each transaction type
+                    province1Transactions.forEach(transaction => {
+                        let totalRowsForTransactionType = transaction.customer_types.length;
+                        transaction.customer_types.forEach((customer, customerIndex) => {
+                            tableHtml += '<tr style="border: 1px solid white;">';
+                            if (customerIndex === 0) {
+                                tableHtml += `<td rowspan="${totalRowsForTransactionType}" style="border: 1px solid white; padding: 8px;">${transaction.transaction_type}</td>`;
+                            }
+                            tableHtml += `
+                        <td style="border: 1px solid white; padding: 8px;">${customer.customer_type}</td>
+                        <td style="border: 1px solid white; padding: 8px;">${customer.transaction_count}</td>
+                        <td style="border: 1px solid white; padding: 8px;">${customer.total_amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                    </tr>`;
+                        });
+                    });
+
+                    tableHtml += '</table>';
+                    typeprovince.innerHTML = "<span style='color: Red;'>"+formattedProvince+" <br>";
+                    contentprovince.innerHTML = "Total "+formattedProvince +" Transaction:  <span style='color: red;'>" + sumOfAllProvince1TransactionCounts + "</span> amounting of  <span style='color: red;'>" + Number(sumOfAllProvince1TransactionAmounts).toLocaleString('en-US', {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2
+                        }) +
+                        "</span><br><br>" + tableHtml;
+
+        }
+
+        // Handling content update based on the selected province
+        switch (selectedValue) {
+            case topProvinces[0]:
+                updateProvinceData(selectedValue);
+                break;
+            case topProvinces[1]:
+                updateProvinceData(selectedValue);
+              break;
+            
+            case topProvinces[2]:
+                updateProvinceData(selectedValue);
+                break;
+            
+            case topProvinces[3]:
+                updateProvinceData(selectedValue);
+                break;
+
+            case topProvinces[4]:
+                updateProvinceData(selectedValue);
+                break;
+        }
+    });
+
+    ProvinceclosePopup.addEventListener("click", () => {
+        ProvinceopenPopup.style.display = "none";
+    });
 });
-</script> -->
+</script>
+
+
+
+
+
 
 <!-- scriptfor customers graph -->
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
@@ -2562,7 +2710,7 @@ $targetIncome = [
                     align: 'end',
                     offset: 4,
                     display: 'auto',
-                    color: 'black',
+                    color: 'white',
                 },
                 bgColor: {
                     backgroundColor: 'white'
@@ -2843,7 +2991,7 @@ $targetIncome = [
 
                 case "pending":
                     const pendingdata = customerTypeData.filter(item => item.transaction_status === 'Pending');
-
+    
                     const pendingdatafiltered = pendingdata.reduce((result, item) => {
                         const existingTransactionTypeIndex = result.findIndex(entry => entry.transaction_type === item.transaction_type);
 
@@ -2905,24 +3053,24 @@ $targetIncome = [
                     let tableHtml = '<table style="border-collapse: collapse; width: 100%;">';
                     tableHtml += `
                 <tr>
-                    <th style="border: 1px solid black; padding: 8px; text-align: left;">Transaction Type</th>
-                    <th style="border: 1px solid black; padding: 8px; text-align: left;">Customer Type</th>
-                    <th style="border: 1px solid black; padding: 8px; text-align: left;">Transaction Count</th>
-                    <th style="border: 1px solid black; padding: 8px; text-align: left;">Amount</th>
+                    <th style="border: 1px solid white; padding: 8px; text-align: left;">Transaction Type</th>
+                    <th style="border: 1px solid white; padding: 8px; text-align: left;">Customer Type</th>
+                    <th style="border: 1px solid white; padding: 8px; text-align: left;">Transaction Count</th>
+                    <th style="border: 1px solid white; padding: 8px; text-align: left;">Amount</th>
                 </tr>`;
 
                     // column/row each transaction type
                     pendingTransactions.forEach(transaction => {
                         let totalRowsForTransactionType = transaction.customer_types.length;
                         transaction.customer_types.forEach((customer, customerIndex) => {
-                            tableHtml += '<tr style="border: 1px solid black;">';
+                            tableHtml += '<tr style="border: 1px solid white;">';
                             if (customerIndex === 0) {
-                                tableHtml += `<td rowspan="${totalRowsForTransactionType}" style="border: 1px solid black; padding: 8px;">${transaction.transaction_type}</td>`;
+                                tableHtml += `<td rowspan="${totalRowsForTransactionType}" style="border: 1px solid white; padding: 8px;">${transaction.transaction_type}</td>`;
                             }
                             tableHtml += `
-                        <td style="border: 1px solid black; padding: 8px;">${customer.customer_type}</td>
-                        <td style="border: 1px solid black; padding: 8px;">${customer.transaction_count}</td>
-                        <td style="border: 1px solid black; padding: 8px;">${customer.total_amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                        <td style="border: 1px solid white; padding: 8px;">${customer.customer_type}</td>
+                        <td style="border: 1px solid white; padding: 8px;">${customer.transaction_count}</td>
+                        <td style="border: 1px solid white; padding: 8px;">${customer.total_amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
                     </tr>`;
                         });
                     });
@@ -3001,24 +3149,24 @@ $targetIncome = [
                     let tableHtmlcancelled = '<table style="border-collapse: collapse; width: 100%;">';
                     tableHtmlcancelled += `
                 <tr>
-                    <th style="border: 1px solid black; padding: 8px; text-align: left;">Transaction Type</th>
-                    <th style="border: 1px solid black; padding: 8px; text-align: left;">Customer Type</th>
-                    <th style="border: 1px solid black; padding: 8px; text-align: left;">Transaction Count</th>
-                    <th style="border: 1px solid black; padding: 8px; text-align: left;">Amount</th>
+                    <th style="border: 1px solid white; padding: 8px; text-align: left;">Transaction Type</th>
+                    <th style="border: 1px solid white; padding: 8px; text-align: left;">Customer Type</th>
+                    <th style="border: 1px solid white; padding: 8px; text-align: left;">Transaction Count</th>
+                    <th style="border: 1px solid white; padding: 8px; text-align: left;">Amount</th>
                 </tr>`;
 
                     // column/row each transaction type
                     cancelledTransactions.forEach(transaction => {
                         let totalRowsForTransactionType = transaction.customer_types.length;
                         transaction.customer_types.forEach((customer, customerIndex) => {
-                            tableHtmlcancelled += '<tr style="border: 1px solid black;">';
+                            tableHtmlcancelled += '<tr style="border: 1px solid white;">';
                             if (customerIndex === 0) {
-                                tableHtmlcancelled += `<td rowspan="${totalRowsForTransactionType}" style="border: 1px solid black; padding: 8px;">${transaction.transaction_type}</td>`;
+                                tableHtmlcancelled += `<td rowspan="${totalRowsForTransactionType}" style="border: 1px solid white; padding: 8px;">${transaction.transaction_type}</td>`;
                             }
                             tableHtmlcancelled += `
-                        <td style="border: 1px solid black; padding: 8px;">${customer.customer_type}</td>
-                        <td style="border: 1px solid black; padding: 8px;">${customer.transaction_count}</td>
-                        <td style="border: 1px solid black; padding: 8px;">${customer.total_amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                        <td style="border: 1px solid white; padding: 8px;">${customer.customer_type}</td>
+                        <td style="border: 1px solid white; padding: 8px;">${customer.transaction_count}</td>
+                        <td style="border: 1px solid white; padding: 8px;">${customer.total_amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
                     </tr>`;
                         });
                     });
@@ -3142,24 +3290,24 @@ $targetIncome = [
                             let tableHtml = '<table style="border-collapse: collapse; width: 100%;">';
                             tableHtml += `
                 <tr>
-                    <th style="border: 1px solid black; padding: 8px; text-align: left;">Transaction Type</th>
-                    <th style="border: 1px solid black; padding: 8px; text-align: left;">Customer Type</th>
-                    <th style="border: 1px solid black; padding: 8px; text-align: left;">Transaction Count</th>
-                    <th style="border: 1px solid black; padding: 8px; text-align: left;">Amount</th>
+                    <th style="border: 1px solid white; padding: 8px; text-align: left;">Transaction Type</th>
+                    <th style="border: 1px solid white; padding: 8px; text-align: left;">Customer Type</th>
+                    <th style="border: 1px solid white; padding: 8px; text-align: left;">Transaction Count</th>
+                    <th style="border: 1px solid white; padding: 8px; text-align: left;">Amount</th>
                 </tr>`;
 
                             // column/row each transaction type
                             otcTransactions.forEach(transaction => {
                                 let totalRowsForTransactionType = transaction.customer_types.length;
                                 transaction.customer_types.forEach((customer, customerIndex) => {
-                                    tableHtml += '<tr style="border: 1px solid black;">';
+                                    tableHtml += '<tr style="border: 1px solid white;">';
                                     if (customerIndex === 0) {
-                                        tableHtml += `<td rowspan="${totalRowsForTransactionType}" style="border: 1px solid black; padding: 8px;">${transaction.transaction_type}</td>`;
+                                        tableHtml += `<td rowspan="${totalRowsForTransactionType}" style="border: 1px solid white; padding: 8px;">${transaction.transaction_type}</td>`;
                                     }
                                     tableHtml += `
-                        <td style="border: 1px solid black; padding: 8px;">${customer.customer_type}</td>
-                        <td style="border: 1px solid black; padding: 8px;">${customer.transaction_count}</td>
-                        <td style="border: 1px solid black; padding: 8px;">${customer.total_amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                        <td style="border: 1px solid white; padding: 8px;">${customer.customer_type}</td>
+                        <td style="border: 1px solid white; padding: 8px;">${customer.transaction_count}</td>
+                        <td style="border: 1px solid white; padding: 8px;">${customer.total_amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
                     </tr>`;
                                 });
                             });
@@ -3237,24 +3385,24 @@ $targetIncome = [
                             let tableHtmlOP = '<table style="border-collapse: collapse; width: 100%;">';
                             tableHtmlOP += `
                 <tr>
-                    <th style="border: 1px solid black; padding: 8px; text-align: left;">Transaction Type</th>
-                    <th style="border: 1px solid black; padding: 8px; text-align: left;">Customer Type</th>
-                    <th style="border: 1px solid black; padding: 8px; text-align: left;">Transaction Count</th>
-                    <th style="border: 1px solid black; padding: 8px; text-align: left;">Amount</th>
+                    <th style="border: 1px solid white; padding: 8px; text-align: left;">Transaction Type</th>
+                    <th style="border: 1px solid white; padding: 8px; text-align: left;">Customer Type</th>
+                    <th style="border: 1px solid white; padding: 8px; text-align: left;">Transaction Count</th>
+                    <th style="border: 1px solid white; padding: 8px; text-align: left;">Amount</th>
                 </tr>`;
 
                             // column/row each transaction type
                             opTransactions.forEach(transaction => {
                                 let totalRowsForTransactionType = transaction.customer_types.length;
                                 transaction.customer_types.forEach((customer, customerIndex) => {
-                                    tableHtmlOP += '<tr style="border: 1px solid black;">';
+                                    tableHtmlOP += '<tr style="border: 1px solid white;">';
                                     if (customerIndex === 0) {
-                                        tableHtmlOP += `<td rowspan="${totalRowsForTransactionType}" style="border: 1px solid black; padding: 8px;">${transaction.transaction_type}</td>`;
+                                        tableHtmlOP += `<td rowspan="${totalRowsForTransactionType}" style="border: 1px solid white; padding: 8px;">${transaction.transaction_type}</td>`;
                                     }
                                     tableHtmlOP += `
-                        <td style="border: 1px solid black; padding: 8px;">${customer.customer_type}</td>
-                        <td style="border: 1px solid black; padding: 8px;">${customer.transaction_count}</td>
-                        <td style="border: 1px solid black; padding: 8px;">${customer.total_amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                        <td style="border: 1px solid white; padding: 8px;">${customer.customer_type}</td>
+                        <td style="border: 1px solid white; padding: 8px;">${customer.transaction_count}</td>
+                        <td style="border: 1px solid white; padding: 8px;">${customer.total_amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
                     </tr>`;
                                 });
                             });
@@ -3332,24 +3480,24 @@ $targetIncome = [
                             let tableHtmlCheque = '<table style="border-collapse: collapse; width: 100%;">';
                             tableHtmlCheque += `
                 <tr>
-                    <th style="border: 1px solid black; padding: 8px; text-align: left;">Transaction Type</th>
-                    <th style="border: 1px solid black; padding: 8px; text-align: left;">Customer Type</th>
-                    <th style="border: 1px solid black; padding: 8px; text-align: left;">Transaction Count</th>
-                    <th style="border: 1px solid black; padding: 8px; text-align: left;">Amount</th>
+                    <th style="border: 1px solid white; padding: 8px; text-align: left;">Transaction Type</th>
+                    <th style="border: 1px solid white; padding: 8px; text-align: left;">Customer Type</th>
+                    <th style="border: 1px solid white; padding: 8px; text-align: left;">Transaction Count</th>
+                    <th style="border: 1px solid white; padding: 8px; text-align: left;">Amount</th>
                 </tr>`;
 
                             // column/row each transaction type
                             chequeTransactions.forEach(transaction => {
                                 let totalRowsForTransactionType = transaction.customer_types.length;
                                 transaction.customer_types.forEach((customer, customerIndex) => {
-                                    tableHtmlCheque += '<tr style="border: 1px solid black;">';
+                                    tableHtmlCheque += '<tr style="border: 1px solid white;">';
                                     if (customerIndex === 0) {
-                                        tableHtmlCheque += `<td rowspan="${totalRowsForTransactionType}" style="border: 1px solid black; padding: 8px;">${transaction.transaction_type}</td>`;
+                                        tableHtmlCheque += `<td rowspan="${totalRowsForTransactionType}" style="border: 1px solid white; padding: 8px;">${transaction.transaction_type}</td>`;
                                     }
                                     tableHtmlCheque += `
-                        <td style="border: 1px solid black; padding: 8px;">${customer.customer_type}</td>
-                        <td style="border: 1px solid black; padding: 8px;">${customer.transaction_count}</td>
-                        <td style="border: 1px solid black; padding: 8px;">${customer.total_amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                        <td style="border: 1px solid white; padding: 8px;">${customer.customer_type}</td>
+                        <td style="border: 1px solid white; padding: 8px;">${customer.transaction_count}</td>
+                        <td style="border: 1px solid white; padding: 8px;">${customer.total_amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
                     </tr>`;
                                 });
                             });
@@ -3802,10 +3950,10 @@ $targetIncome = [
                     let tableHtml = '<table style="width: 100%; text-align: center;">';
                     tableHtml += `
                 <tr>
-                    <th style="border: 1px solid black; padding: 8px;">Month</th>
-                    <th style="border: 1px solid black; padding: 8px; ">Customer Type</th>
-                    <th style="border: 1px solid black; padding: 8px; ">Transaction Count</th>
-                    <th style="border: 1px solid black; padding: 8px; ">Income</th>
+                    <th style="border: 1px solid white; padding: 8px;">Month</th>
+                    <th style="border: 1px solid white; padding: 8px; ">Customer Type</th>
+                    <th style="border: 1px solid white; padding: 8px; ">Transaction Count</th>
+                    <th style="border: 1px solid white; padding: 8px; ">Income</th>
                 </tr>`;
 
                     const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -3813,11 +3961,11 @@ $targetIncome = [
                     Object.entries(highestTransactionsPerMonth).forEach(([month, data]) => {
                         const monthName = monthNames[parseInt(month) - 1]; // Convert numeric month to month name
                         tableHtml += `
-                    <tr style="border: 1px solid black;">
-                        <td style="border: 1px solid black; padding: 8px;">${monthName}</td>
-                        <td style="border: 1px solid black; padding: 8px;">${data.customer_type}</td>
-                        <td style="border: 1px solid black; padding: 8px;">${data.transaction_count}</td>
-                        <td style="border: 1px solid black; padding: 8px;">${data.income}</td>
+                    <tr style="border: 1px solid white;">
+                        <td style="border: 1px solid white; padding: 8px;">${monthName}</td>
+                        <td style="border: 1px solid white; padding: 8px;">${data.customer_type}</td>
+                        <td style="border: 1px solid white; padding: 8px;">${data.transaction_count}</td>
+                        <td style="border: 1px solid white; padding: 8px;">${data.income}</td>
                     </tr>`;
                     });
 
