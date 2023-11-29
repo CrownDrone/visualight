@@ -22,7 +22,7 @@ $currentIndex = Url::to(['']);
     /* Default styles */
     .chart-container {
         top: 20px;
-        bottom: 20px;
+        bottom: 15px;
         position: relative;
         display: flex;
         flex-direction: column;
@@ -372,13 +372,25 @@ $currentIndex = Url::to(['']);
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        background: black;
-        color: gray;
+        background: darkgray;
+        color: black;
         padding: 20px;
         border: 1px solid #333;
         box-shadow: 2px 2px 10px #888;
         text-align: center;
     }
+    .division-content {
+        width: 48%;  
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: darkgray;
+        color: black;
+        padding: 20px;
+        border: 1px solid #333;
+        box-shadow: 2px 2px 10px #888;
+        text-align: center;}
 
     .close {
         position: absolute;
@@ -874,7 +886,6 @@ foreach ($transactionTypeincomeData as $type) {
 }
 
 
-//transaction used per customer type
 $customerTypeDatapertransaction = (new \yii\db\Query())
     ->select([
         'ct.type as customer_type',
@@ -884,7 +895,8 @@ $customerTypeDatapertransaction = (new \yii\db\Query())
         'ts.status as transaction_status',
         't.transaction_date',
         'pm.method as payment_method',
-        'c.address', // Add the address column from the customer table
+        'c.address',  
+        'd.division'
     ])
     ->from('transaction t')
     ->join('INNER JOIN', 'customer c', 't.customer_id = c.id')
@@ -892,7 +904,8 @@ $customerTypeDatapertransaction = (new \yii\db\Query())
     ->join('INNER JOIN', 'transaction_type tt', 't.transaction_type = tt.id')
     ->join('INNER JOIN', 'transaction_status ts', 't.transaction_status = ts.id')
     ->join('INNER JOIN', 'payment_method pm', 't.payment_method = pm.id')
-    ->groupBy(['ct.type', 'tt.type', 'ts.status', 't.transaction_date', 'pm.method', 'c.address']) 
+    ->join('INNER JOIN', 'division d', 't.division= d.id')  
+    ->groupBy(['ct.type', 'tt.type', 'ts.status', 't.transaction_date', 'pm.method', 'c.address', 'd.division']) 
     ->orderBy(['transaction_count' => SORT_DESC])
     ->all();
 
@@ -902,7 +915,8 @@ $ctamt = [0];
 $ctstatus = [''];
 $cttd = [''];
 $ctpm = [''];
-$ctaddress = ['']; 
+$ctaddress = [];
+$ctdivision = [];  
 
 foreach ($customerTypeDatapertransaction as $type) {
     $ctpt[] = $type['customer_type'];
@@ -911,7 +925,8 @@ foreach ($customerTypeDatapertransaction as $type) {
     $ctstatus[] = $type['transaction_status'];
     $cttd[] = $type['transaction_date'];
     $ctpm[] = $type['payment_method'];
-    $ctaddress[] = $type['address']; 
+    $ctaddress[] = $type['address'];
+    $ctdivision[] = $type['division'];  
 }
 
 
@@ -1199,8 +1214,8 @@ $targetIncome = [
 ?>
 <?php \yii\widgets\Pjax::begin(); ?>
 <div class="DailyTransaction">
-    <p>Total Transactions Daily</p>
-    <!-- <p id="totalTransactionsTitle">Total Transactions Daily</p> -->
+<p >Total Transactions Daily</p>
+<!-- <p id="totalTransactionsTitle">Total Transactions Daily</p> -->
 
     <div class="deptransaction">
         <p>National Metrology</p>
@@ -1221,22 +1236,18 @@ $targetIncome = [
 </div>
 
 <script>
-    // Get the current date
-    const currentDate1 = new Date();
-
-    // Format the date as "Month Day, Year"
-    const formattedDate = currentDate1.toLocaleDateString('en-US', {
-        month: 'long',
-        day: 'numeric',
-        year: 'numeric'
-    });
-
-    // Get the element with the ID "totalTransactionsTitle"
-    const titleElement = document.getElementById('totalTransactionsTitle');
-
-    // Update the HTML content to include the formatted date
-    titleElement.innerHTML += `: ${formattedDate}`;
-</script>
+        // Get the current date
+        const currentDate1 = new Date();
+        
+        // Format the date as "Month Day, Year"
+        const formattedDate = currentDate1.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+        
+        // Get the element with the ID "totalTransactionsTitle"
+        const titleElement = document.getElementById('totalTransactionsTitle');
+        
+        // Update the HTML content to include the formatted date
+        titleElement.innerHTML += `: ${formattedDate}`;
+    </script>
 
 <div id="sending-email-message" class="alert alert-info hidden" style="display:none;">
     PDF file is downloading, please wait...
@@ -1272,6 +1283,8 @@ $targetIncome = [
                         <option value="transactionChart">Transaction Per Division</option>
                         <option value="salesChart">Income per Division</option>
                         <option value="avgSales">Average Income</option>
+                        <option value="Provinces">Provinces</option>
+                        <option value="transaction">Transaction Types</option>
                         <!-- Add more options based on the IDs of your other sections -->
                     </select>
                 </div>
@@ -1347,11 +1360,11 @@ $targetIncome = [
             <div class="average">
                 <div class="aveTransactionDiv">
                     <p class="texty"> Average Transactions </p>
-                    <p class="number" id="avgTransaction"> <?= $average ?> </p>
+                    <p class="number"> <?= $average ?> </p>
                 </div>
                 <div class="aveSalesDiv">
                     <p class="texty"> Combined Average Income </p>
-                    <p class="number" id="avgIncome"> <?= $saleaverage ?> </p>
+                    <p class="number"> <?= $saleaverage ?> </p>
                 </div>
             </div>
         </div>
@@ -1396,6 +1409,53 @@ $targetIncome = [
 
         </div>
     </div>
+    <div class="popup" id="transactiondivisionpopup">
+    <div class="popup-content">
+        <span class="close" id="close-transaction-popup">&times;</span>
+
+        <div class="division-content">
+            <h2 id="MetrologyPopupHeader">National Metrology Division</h2>
+            <div class="speedometer">
+                <p>Color of speedometer will identify if the target is meet</p>
+                <p><span style="color: red">Low </span>
+                    <span style="color: orange">Moderate </span>
+                    <span style="color: yellow">High </span>
+                    <span style="color: green">Satisfaction </span>
+                </p>
+                <div class="speedometer-dial">
+                    <div class="speedometer-reading" id="speedometer-reading"></div>
+                    <div class="speedometer-arrow" id="speedometer-arrow"></div>
+                </div>
+            </div>
+            <p id="targetTransaction"></p>
+            <p id="percentTransaction"></p>
+            <p></p>
+
+
+            <div style="text-align: left; margin: 0 auto; width: 80%;">
+                <p id="highest"> </p>
+                <p id="least"> </p>
+
+                <p id="mostTransactionType"> </p>
+                <p id="leastTransactionType"> </p>
+
+                <p id="mostCustomerType"> </p>
+                <p id="leastCustomerType"> </p>
+
+                <p id="mostCustomerProvince"> </p>
+                <p id="leastCustomerProvince"> </p>
+            </div>
+        </div>
+
+        <div class="division-content">
+            <h2 id="TestingPopupHeader">Standard and Testing Division</h2>
+        </div>
+
+    </div>
+</div>
+
+
+    
 
     <script>
         // Reference datas
@@ -1916,12 +1976,10 @@ $targetIncome = [
         });
 
 
-        closePopup.addEventListener("click", () => {
-            // Close the pop-up when the close button is clicked
+        closePopup.addEventListener("click", () => { 
             popup.style.display = "none";
         });
     </script>
-
 
     <script>
         // Reference datas
@@ -2535,8 +2593,9 @@ document.addEventListener('DOMContentLoaded', function () {
             provinceDropdown.add(option);
         });
 
-        header.innerText = 'Top 5 Provinces';
-        provinceDropdown.value = topProvinces[0];
+        header.innerText = 'Top 5 Provinces'; 
+        provinceDropdown.value = topProvinces[0]; 
+        provinceDropdown.dispatchEvent(new Event('change'));
         ProvinceopenPopup.style.display = "block";
     });
 
@@ -2750,7 +2809,7 @@ document.addEventListener('DOMContentLoaded', function () {
         </div>
     </div>
 
-    <div class="graph2" style="margin-top:20px">
+    <div class="graph2" id="transaction" style="margin-top:20px">
         <div class="chart-container2">
             <p class="reportTitle" id="transactionStatuspopup">Transaction Status</p>
             <canvas id="transactionStatus"></canvas>
