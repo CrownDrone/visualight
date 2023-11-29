@@ -19,11 +19,13 @@ $chartLabel = (new Query())
     ->all();
 
 $queryAllMonth = (new Query())
-    ->select(['DATE_FORMAT(transDate, \'%Y-%m\') AS labels', 'COUNT(*) AS datasets', '_div AS label'])
+    ->select(['DATE_FORMAT(transDate, \'%Y-%m\') AS labels', 
+    'COUNT(*) AS datasets', '_div AS label'])
     ->from('mock_data')
     ->groupBy('labels, _div')
     ->orderBy('transDate')
     ->all();
+
 $monthLabel = (new Query())
     ->select(['DATE_FORMAT(transDate, \'%Y-%m\') AS labels'])
     ->from('mock_data')
@@ -112,6 +114,7 @@ $monthLabel = (new Query())
         var queryAllDates = (<?= json_encode($queryAllDate) ?>);
         var queryAllLabel = (<?= json_encode($chartLabel) ?>);
         var queryAllMonth = (<?= json_encode($queryAllMonth) ?>);
+        console.log(queryAllMonth)
         var monthLabel = (<?= json_encode($monthLabel) ?>);
 
 
@@ -398,6 +401,8 @@ $monthLabel = (new Query())
             x = 0;
 
         }
+        console.log("month label")
+        console.log(monthLabel)
         toMonthAssign() //grabs the earliest month record
         let janm = mbs.slice(0, 1).toString().split("-");
         let janMonth = janm[1].toString();
@@ -407,10 +412,12 @@ $monthLabel = (new Query())
         function dateChange() {
             var selectedValue = dateTypeSelect.value;
             if (selectedValue === 'Months') {
+                
                 document.getElementById('fromDate').setAttribute('type', 'month');
                 document.getElementById('fromDate').value = `${year}-${janMonth}`;
                 document.getElementById('toDate').setAttribute('type', 'month');
                 document.getElementById('toDate').value = `${year}-${currMonth}`;
+
                 monthFilter();
                 dateFilter();
             } else if (selectedValue === 'Years') {
@@ -457,7 +464,6 @@ $monthLabel = (new Query())
                         newDataLog[key] = originalDataLog[key];
                     }
                     datasets.data = newDataLog;
-                    
                 });
                 console.log(newDataCon);
                 barChart.config.data.datasets = newDataCon.datasets; //replace the current chart dataset

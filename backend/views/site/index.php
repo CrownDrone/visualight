@@ -1262,10 +1262,10 @@ $targetIncome = [
                 <form>
                     <label for="date_type" class="date_type_label">
                         <strong>Date Filter:</strong></label>
-                    <select name="date_type" id="date_type" class="dropdown-content" onchange="dateChange()">
-                        <option value="_day">Days</option>
-                        <option value="_week">Months</option>
-                        <option value="_year">Years</option>
+                    <select id="date_type" class="dropdown-content" onchange="dateChange()">
+                        <option value="Days">Days</option>
+                        <option value="Months">Months</option>
+                        <!-- <option value="Years">Years</option> -->
                     </select>
                 </form>
             </div>
@@ -1306,9 +1306,9 @@ $targetIncome = [
     <div class="containers">
         <div class="datePicker">
             <label>From: </label>
-            <input type="date" id="startDate" name="startDate" class="datePicker_label" onchange="dateFilter(); updateProvince()">
+            <input type="date" id="startDate" class="datePicker_label" onchange="dateFilter(); updateProvince()">
             <label>&nbsp;&nbsp;&nbsp;&nbsp;To:</label>
-            <input type="date" id="endDate" name="endDate" class="datePicker_label" onchange="dateFilter(); updateProvince()">
+            <input type="date" id="endDate" class="datePicker_label" onchange="dateFilter(); updateProvince()">
         </div>
     </div>
 </div>
@@ -1488,8 +1488,8 @@ $targetIncome = [
         const mostCustomerProvince = document.getElementById("mostCustomerProvince");
         const leastCustomerProvince = document.getElementById("leastCustomerProvince");
 
-        const startDate = document.getElementById("startDate").value;
-        const endDate = document.getElementById("endDate").value;
+        const startDateS = document.getElementById("startDate").value;
+        const endDateS = document.getElementById("endDate").value;
 
 
         //totaltransaction popup
@@ -1622,8 +1622,8 @@ $targetIncome = [
             percentTransaction.innerHTML = "Achieved <span style='color: " + percentagecolor + ";'>" + percentage + "%</span> of target transaction.";
             PopupHeader.innerHTML = "Total Transaction";
 
-            const startDateObj = new Date(startDate);
-            const endDateObj = new Date(endDate);
+            const startDateObj = new Date(startDateS);
+            const endDateObj = new Date(endDateS);
 
             //sum of transaction per div (dataset)
             const sumTransactionDataset = {
@@ -2347,26 +2347,85 @@ $targetIncome = [
             plugins: [bgColor],
         });
 
-        function dateFilterRefresh() { // asign current week's sunday and saturday to datepicker
-            //duh
-            const today = new Date();
-            //get date of this week's sunday
-            const sunDay = new Date(
-                today.setDate(today.getDate() - today.getDay()),
-            );
-            //get date of this week's saturday
-            const satDay = new Date(
-                today.setDate(today.getDate() - today.getDay() + 6),
-            );
-            //"yyyy-mm-dd" format
-            var toSunDay = sunDay.toISOString().slice(0, 10);
-            var toSatDay = satDay.toISOString().slice(0, 10);
 
-            //calculated dates as input values
-            document.getElementById('startDate').value = toSunDay;
-            document.getElementById('endDate').value = toSatDay;
+        function dateChange() {
+            let dateTypeSelect = document.getElementById('date_type');
+            //console.log(dateTypeSelect);
+            let selectedValue = dateTypeSelect.value;
+            if (selectedValue === 'Months') {
+
+                document.getElementById('startDate').setAttribute('type', 'month');
+                document.getElementById('endDate').setAttribute('type', 'month');
+
+                var monthLabelZ = (<?= json_encode($monthLabel) ?>);
+                const dX = new Date();
+                let yearX = dX.getFullYear();
+                var listers = []; //for months
+
+                function monthAssign() {
+                    var x = 0;
+                    while (monthLabelZ[x] != null) {
+                        var lab = monthLabelZ[x].month;
+                        listers[x] = lab;
+                        x++;
+                    }
+                }
+                monthAssign();
+
+                let janm = listers.slice(0, 1).toString().split("-");
+                let janMonth = janm[1].toString();
+                let currMonth = ("0" + (dX.getMonth() + 1)).slice(-2); //get current month
+
+                document.getElementById('startDate').value = yearX + "-" + janMonth;
+                document.getElementById('endDate').value = yearX + "-" + currMonth;
+
+            } else if (selectedValue === 'Years') {
+
+                const dX = new Date();
+                let yearX = dX.getFullYear();
+
+                document.getElementById('startDate').setAttribute('type', 'number');
+                document.getElementById('startDate').value = "2023";
+                document.getElementById('endDate').setAttribute('type', 'number');
+                document.getElementById('endDate').value = yearX;
+
+            } else {
+
+                document.getElementById('startDate').setAttribute('type', 'date');
+                document.getElementById('endDate').setAttribute('type', 'date');
+
+                dateFilterRefresh();
+            }
+            dateFilter();
+        };
+
+        function dateFilterRefresh() { // asign current week's sunday and saturday to datepicker
+
+            let dateTypeSelect = document.getElementById('date_type');
+            //console.log(dateTypeSelect);
+            let selectedValue = dateTypeSelect.value;
+            if (selectedValue === 'Days') {
+
+                //duh
+                const today = new Date();
+                //get date of this week's sunday
+                const sunDay = new Date(
+                    today.setDate(today.getDate() - today.getDay() + 1),
+                );
+                //get date of this week's saturday
+                const satDay = new Date(
+                    today.setDate(today.getDate() - today.getDay() + 7),
+                );
+                //"yyyy-mm-dd" format
+                var toSunDay = sunDay.toISOString().slice(0, 10);
+                var toSatDay = satDay.toISOString().slice(0, 10);
+
+                //calculated dates as input values
+                document.getElementById('startDate').value = toSunDay;
+                document.getElementById('endDate').value = toSatDay;
+            }
         }
-        dateFilterRefresh(); //call the function to update the pickerz
+        dateFilterRefresh();
 
         // Function to calculate the average of an array of numbers
         const calculateAverage = (array) => {
@@ -2524,37 +2583,37 @@ $targetIncome = [
 </div>
 
 <div class="popup" id="ProvinceopenPopup">
-        <div class="popup-content" style="width: 50%; height:auto">
-            <span class="close" id="ProvinceclosePopup">&times;</span>
+    <div class="popup-content" style="width: 50%; height:auto">
+        <span class="close" id="ProvinceclosePopup">&times;</span>
 
-            <h1 id="header"></h1>
-            <h5>Paid Transactions</h5>
+        <h1 id="header"></h1>
+        <h5>Paid Transactions</h5>
+
+        <div style="text-align: left; margin: 0 auto; width: 80%;">
+            <label for="transactionTypeDropdown">Top 5 Provinces</label>
+            <select id="provinceDropdown">
+            </select> <br><br>
+
 
             <div style="text-align: left; margin: 0 auto; width: 80%;">
-                    <label for="transactionTypeDropdown">Top 5 Provinces</label> 
-                    <select id="provinceDropdown">
-                    </select> <br><br>
- 
+                <h4 id="typeprovince"></h4>
+                <p id="contentprovince"></p>
 
-                <div style="text-align: left; margin: 0 auto; width: 80%;">
-                    <h4 id="typeprovince"></h4>
-                    <p id="contentprovince"></p>
-
-                </div>
             </div>
         </div>
-
     </div>
-    <script>
-document.addEventListener('DOMContentLoaded', function () {
-    const provincesPopup = document.getElementById("Provincespopup");
-    const ProvinceopenPopup = document.getElementById("ProvinceopenPopup");
-    const ProvinceclosePopup = document.getElementById("ProvinceclosePopup");
-    const header = document.getElementById("header");
-    const provinceDropdown = document.getElementById("provinceDropdown");
-    const typeprovince = document.getElementById("typeprovince");
-    const contentprovince = document.getElementById("contentprovince");
-    
+
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const provincesPopup = document.getElementById("Provincespopup");
+        const ProvinceopenPopup = document.getElementById("ProvinceopenPopup");
+        const ProvinceclosePopup = document.getElementById("ProvinceclosePopup");
+        const header = document.getElementById("header");
+        const provinceDropdown = document.getElementById("provinceDropdown");
+        const typeprovince = document.getElementById("typeprovince");
+        const contentprovince = document.getElementById("contentprovince");
+
 
         const startDate = document.getElementById("startDate").value;
         const endDate = document.getElementById("endDate").value;
@@ -2563,35 +2622,35 @@ document.addEventListener('DOMContentLoaded', function () {
         const customerTypeData = technicalServicesData.filter(item =>
             item.transaction_date >= startDate &&
             item.transaction_date <= endDate &&
-            item.transaction_status==  "Paid"
+            item.transaction_status == "Paid"
         )
         const provinceTransactionCounts = {};
         customerTypeData.forEach(item => {
-        const province = item.address;
+            const province = item.address;
 
-        if (!provinceTransactionCounts[province]) {
-            provinceTransactionCounts[province] = 0;
-        }
+            if (!provinceTransactionCounts[province]) {
+                provinceTransactionCounts[province] = 0;
+            }
 
-        provinceTransactionCounts[province]++;
-    });
-
-    // Sort provinces based on transaction counts in descending order
-    const sortedProvinces = Object.keys(provinceTransactionCounts).sort((a, b) =>
-        provinceTransactionCounts[b] - provinceTransactionCounts[a]
-    );
-
-    // Get the top 5 provinces
-    const topProvinces = sortedProvinces.slice(0, 5);
-
-    provincesPopup.addEventListener("click", () => {
-        provinceDropdown.innerHTML = '';
-        topProvinces.forEach(function (province) {
-            var option = document.createElement('option');
-            option.value = province;
-            option.text = province.charAt(0).toUpperCase() + province.slice(1);
-            provinceDropdown.add(option);
+            provinceTransactionCounts[province]++;
         });
+
+        // Sort provinces based on transaction counts in descending order
+        const sortedProvinces = Object.keys(provinceTransactionCounts).sort((a, b) =>
+            provinceTransactionCounts[b] - provinceTransactionCounts[a]
+        );
+
+        // Get the top 5 provinces
+        const topProvinces = sortedProvinces.slice(0, 5);
+
+        provincesPopup.addEventListener("click", () => {
+            provinceDropdown.innerHTML = '';
+            topProvinces.forEach(function(province) {
+                var option = document.createElement('option');
+                option.value = province;
+                option.text = province.charAt(0).toUpperCase() + province.slice(1);
+                provinceDropdown.add(option);
+            });
 
         header.innerText = 'Top 5 Provinces'; 
         provinceDropdown.value = topProvinces[0]; 
@@ -2599,74 +2658,74 @@ document.addEventListener('DOMContentLoaded', function () {
         ProvinceopenPopup.style.display = "block";
     });
 
-    provinceDropdown.addEventListener("change", function () {
-        const selectedValue = this.options[this.selectedIndex].value;
-        const formattedProvince = selectedValue.charAt(0).toUpperCase() + selectedValue.slice(1);
+        provinceDropdown.addEventListener("change", function() {
+            const selectedValue = this.options[this.selectedIndex].value;
+            const formattedProvince = selectedValue.charAt(0).toUpperCase() + selectedValue.slice(1);
 
-        typeprovince.innerText = '';
-        contentprovince.innerText = '';
+            typeprovince.innerText = '';
+            contentprovince.innerText = '';
 
-        function updateProvinceData(provinceName) {
-            const province1data = customerTypeData.filter(item => item.address === formattedProvince ); 
+            function updateProvinceData(provinceName) {
+                const province1data = customerTypeData.filter(item => item.address === formattedProvince);
                 const province1datafiltered = province1data.reduce((result, item) => {
-                        const existingTransactionTypeIndex = result.findIndex(entry => entry.transaction_type === item.transaction_type);
+                    const existingTransactionTypeIndex = result.findIndex(entry => entry.transaction_type === item.transaction_type);
 
-                        if (existingTransactionTypeIndex !== -1) {
-                            const existingCustomerTypeIndex = result[existingTransactionTypeIndex].customer_types.findIndex(
-                                customer => customer.customer_type === item.customer_type
-                            );
+                    if (existingTransactionTypeIndex !== -1) {
+                        const existingCustomerTypeIndex = result[existingTransactionTypeIndex].customer_types.findIndex(
+                            customer => customer.customer_type === item.customer_type
+                        );
 
-                            if (existingCustomerTypeIndex !== -1) {
-                                result[existingTransactionTypeIndex].customer_types[existingCustomerTypeIndex].transaction_count += Number(item.transaction_count);
-                                result[existingTransactionTypeIndex].customer_types[existingCustomerTypeIndex].total_amount += Number(item.total_amount);
-                            } else {
-                                result[existingTransactionTypeIndex].customer_types.push({
-                                    customer_type: item.customer_type,
-                                    transaction_count: Number(item.transaction_count),
-                                    total_amount: Number(item.total_amount)
-                                });
-                            }
+                        if (existingCustomerTypeIndex !== -1) {
+                            result[existingTransactionTypeIndex].customer_types[existingCustomerTypeIndex].transaction_count += Number(item.transaction_count);
+                            result[existingTransactionTypeIndex].customer_types[existingCustomerTypeIndex].total_amount += Number(item.total_amount);
                         } else {
-                            result.push({
-                                transaction_type: item.transaction_type,
-                                customer_types: [{
-                                    customer_type: item.customer_type,
-                                    transaction_count: Number(item.transaction_count),
-                                    total_amount: Number(item.total_amount)
-                                }]
+                            result[existingTransactionTypeIndex].customer_types.push({
+                                customer_type: item.customer_type,
+                                transaction_count: Number(item.transaction_count),
+                                total_amount: Number(item.total_amount)
                             });
                         }
-
-                        return result;
-                    }, []);
-
-                    // if null or empty dataset
-                    function handleNullDataset(dataset) {
-                        if (!dataset || dataset.length === 0) {
-                            return [{
-                                transaction_type: ' ',
-                                customer_types: [{
-                                    customer_type: ' ',
-                                    transaction_count: 0,
-                                    total_amount: 0
-                                }]
-                            }];
-                        }
-                        return dataset;
-                    }
-                    let province1Transactions = handleNullDataset(province1datafiltered);
-                    let sumOfAllProvince1TransactionCounts = 0;
-                    let sumOfAllProvince1TransactionAmounts = 0;
-                    province1Transactions.forEach(transaction => {
-                        transaction.customer_types.forEach(customer => {
-                            sumOfAllProvince1TransactionCounts += customer.transaction_count;
-                            sumOfAllProvince1TransactionAmounts += customer.total_amount;
+                    } else {
+                        result.push({
+                            transaction_type: item.transaction_type,
+                            customer_types: [{
+                                customer_type: item.customer_type,
+                                transaction_count: Number(item.transaction_count),
+                                total_amount: Number(item.total_amount)
+                            }]
                         });
-                    });
+                    }
 
-                    // table
-                    let tableHtml = '<table style="border-collapse: collapse; width: 100%;">';
-                    tableHtml += `
+                    return result;
+                }, []);
+
+                // if null or empty dataset
+                function handleNullDataset(dataset) {
+                    if (!dataset || dataset.length === 0) {
+                        return [{
+                            transaction_type: ' ',
+                            customer_types: [{
+                                customer_type: ' ',
+                                transaction_count: 0,
+                                total_amount: 0
+                            }]
+                        }];
+                    }
+                    return dataset;
+                }
+                let province1Transactions = handleNullDataset(province1datafiltered);
+                let sumOfAllProvince1TransactionCounts = 0;
+                let sumOfAllProvince1TransactionAmounts = 0;
+                province1Transactions.forEach(transaction => {
+                    transaction.customer_types.forEach(customer => {
+                        sumOfAllProvince1TransactionCounts += customer.transaction_count;
+                        sumOfAllProvince1TransactionAmounts += customer.total_amount;
+                    });
+                });
+
+                // table
+                let tableHtml = '<table style="border-collapse: collapse; width: 100%;">';
+                tableHtml += `
                 <tr>
                     <th style="border: 1px solid white; padding: 8px; text-align: left;">Transaction Type</th>
                     <th style="border: 1px solid white; padding: 8px; text-align: left;">Customer Type</th>
@@ -2674,59 +2733,59 @@ document.addEventListener('DOMContentLoaded', function () {
                     <th style="border: 1px solid white; padding: 8px; text-align: left;">Amount</th>
                 </tr>`;
 
-                    // column/row each transaction type
-                    province1Transactions.forEach(transaction => {
-                        let totalRowsForTransactionType = transaction.customer_types.length;
-                        transaction.customer_types.forEach((customer, customerIndex) => {
-                            tableHtml += '<tr style="border: 1px solid white;">';
-                            if (customerIndex === 0) {
-                                tableHtml += `<td rowspan="${totalRowsForTransactionType}" style="border: 1px solid white; padding: 8px;">${transaction.transaction_type}</td>`;
-                            }
-                            tableHtml += `
+                // column/row each transaction type
+                province1Transactions.forEach(transaction => {
+                    let totalRowsForTransactionType = transaction.customer_types.length;
+                    transaction.customer_types.forEach((customer, customerIndex) => {
+                        tableHtml += '<tr style="border: 1px solid white;">';
+                        if (customerIndex === 0) {
+                            tableHtml += `<td rowspan="${totalRowsForTransactionType}" style="border: 1px solid white; padding: 8px;">${transaction.transaction_type}</td>`;
+                        }
+                        tableHtml += `
                         <td style="border: 1px solid white; padding: 8px;">${customer.customer_type}</td>
                         <td style="border: 1px solid white; padding: 8px;">${customer.transaction_count}</td>
                         <td style="border: 1px solid white; padding: 8px;">${customer.total_amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
                     </tr>`;
-                        });
                     });
+                });
 
-                    tableHtml += '</table>';
-                    typeprovince.innerHTML = "<span style='color: Red;'>"+formattedProvince+" <br>";
-                    contentprovince.innerHTML = "Total "+formattedProvince +" Transaction:  <span style='color: red;'>" + sumOfAllProvince1TransactionCounts + "</span> amounting of  <span style='color: red;'>" + Number(sumOfAllProvince1TransactionAmounts).toLocaleString('en-US', {
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 2
-                        }) +
-                        "</span><br><br>" + tableHtml;
+                tableHtml += '</table>';
+                typeprovince.innerHTML = "<span style='color: Red;'>" + formattedProvince + " <br>";
+                contentprovince.innerHTML = "Total " + formattedProvince + " Transaction:  <span style='color: red;'>" + sumOfAllProvince1TransactionCounts + "</span> amounting of  <span style='color: red;'>" + Number(sumOfAllProvince1TransactionAmounts).toLocaleString('en-US', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    }) +
+                    "</span><br><br>" + tableHtml;
 
-        }
+            }
 
-        // Handling content update based on the selected province
-        switch (selectedValue) {
-            case topProvinces[0]:
-                updateProvinceData(selectedValue);
-                break;
-            case topProvinces[1]:
-                updateProvinceData(selectedValue);
-              break;
-            
-            case topProvinces[2]:
-                updateProvinceData(selectedValue);
-                break;
-            
-            case topProvinces[3]:
-                updateProvinceData(selectedValue);
-                break;
+            // Handling content update based on the selected province
+            switch (selectedValue) {
+                case topProvinces[0]:
+                    updateProvinceData(selectedValue);
+                    break;
+                case topProvinces[1]:
+                    updateProvinceData(selectedValue);
+                    break;
 
-            case topProvinces[4]:
-                updateProvinceData(selectedValue);
-                break;
-        }
+                case topProvinces[2]:
+                    updateProvinceData(selectedValue);
+                    break;
+
+                case topProvinces[3]:
+                    updateProvinceData(selectedValue);
+                    break;
+
+                case topProvinces[4]:
+                    updateProvinceData(selectedValue);
+                    break;
+            }
+        });
+
+        ProvinceclosePopup.addEventListener("click", () => {
+            ProvinceopenPopup.style.display = "none";
+        });
     });
-
-    ProvinceclosePopup.addEventListener("click", () => {
-        ProvinceopenPopup.style.display = "none";
-    });
-});
 </script>
 
 
@@ -2908,13 +2967,13 @@ document.addEventListener('DOMContentLoaded', function () {
         const close2 = document.getElementById("close2");
 
 
-        const startDate = document.getElementById("startDate").value;
-        const endDate = document.getElementById("endDate").value;
+        const startDateS = document.getElementById("startDate").value;
+        const endDateS = document.getElementById("endDate").value;
 
         const technicalServicesData = <?php echo json_encode($customerTypeDatapertransaction); ?>;
         const customerTypeData = technicalServicesData.filter(item =>
-            item.transaction_date >= startDate &&
-            item.transaction_date <= endDate
+            item.transaction_date >= startDateS &&
+            item.transaction_date <= endDateS
         );
 
         // Transaction status pop-up analyzation
@@ -3050,7 +3109,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 case "pending":
                     const pendingdata = customerTypeData.filter(item => item.transaction_status === 'Pending');
-    
+
                     const pendingdatafiltered = pendingdata.reduce((result, item) => {
                         const existingTransactionTypeIndex = result.findIndex(entry => entry.transaction_type === item.transaction_type);
 
@@ -4294,47 +4353,23 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
     //--------------------------------------------------------------------------------------------------------------
-
-    var dateTypeSelect = document.getElementById('date_type');
-    var selectedValue = dateTypeSelect.value;
-
-    function dateChange() {
-        if (selectedValue === '_day') {
-            document.getElementById('startDate').setAttribute('type', 'date');
-            document.getElementById('endDate').setAttribute('type', 'date');
-
-            dateFilterRefresh();
-            dateFilter();
-        }
-    };
 </script>
 
 
 
 <script>
     function dateFilter() {
-        //console.log(<?php echo json_encode($PaymentMethod) ?>);
-        //console.log(<?php echo json_encode($PaymentMethodcounts); ?>);
-        if (selectedValue === '_day') {
+        var dateTypeSelect = document.getElementById('date_type');
+        var selectedValue = dateTypeSelect.value;
+
+        if (selectedValue === 'Days') {
 
             var csrfToken = $('meta[name="csrf-token"]').attr('content');
-            //using Date() functionality, PC local time
-            const today = new Date();
-            //get date of this week's sunday
-            const sunDay = new Date(
-                today.setDate(today.getDate() - today.getDay() + 1),
-            );
-            //get date of this week's saturday
-            const satDay = new Date(
-                today.setDate(today.getDate() - today.getDay() + 7),
-            );
-            //"yyyy-mm-dd" format
-            var toSunDay = sunDay.toISOString().slice(0, 10);
-            var toSatDay = satDay.toISOString().slice(0, 10);
 
             //get the contents of the html datepicker
             const fromDateValue = document.getElementById('startDate');
             const toDatevalue = document.getElementById('endDate');
+
             const fDate = fromDateValue.value;
             const tDate = toDatevalue.value;
 
@@ -4433,21 +4468,259 @@ document.addEventListener('DOMContentLoaded', function () {
             newTotalSum = JSON.parse(JSON.stringify(cacheTotalSum));
             new_divData = JSON.parse(JSON.stringify(cachePerDivData));
             newSoldPerDivs = JSON.parse(JSON.stringify(cacheSoldPerDivs));
+
+        } else if (selectedValue === 'Months') {
+
+            var monthtotalTransaction = (<?= json_encode($monthqueryAllDate) ?>); // dashboard total transaction
+            var monthLabel = (<?= json_encode($monthLabel) ?>);
+            //preparing array to store the retrieved data
+            var monthttotalTransactionDataset = {
+                datasets: [{
+                    backgroundColor: "#274690",
+                    label: 'Total Transaction',
+                    data: {}
+                }, ],
+            }
+
+            var x = 0;
+
+            function cusmo() {
+                while (monthtotalTransaction[x] != null) {
+                    var samp = monthtotalTransaction[x].labels;
+                    var sampo = parseInt(monthtotalTransaction[x].datasets);
+                    if (monthtotalTransaction[x].label == "Total") {
+                        monthttotalTransactionDataset.datasets[0].data[samp] = sampo;
+                    }
+                    x++
+                }
+            }
+            cusmo();
+            x = 0;
+
+
+            var global_label_month = []; //for months
+
+            while (monthLabel[x] != null) {
+                var lab = monthLabel[x].labels;
+                global_label_month[x] = lab;
+                x++;
+            }
+            x = 0;
+
+            var monthtotal_Income = (<?= json_encode($monthqueryTotalSale) ?>);
+            console.log(monthtotal_Income)
+
+            var monthtotalSum = {
+                datasets: [{
+                    backgroundColor: "#fccb06",
+                    borderColor: "#fccb06",
+                    label: 'Total Income',
+                    data: {}
+                }]
+            }
+
+            function calInc() {
+                while (monthtotal_Income[x] != null) {
+                    var samp = monthtotal_Income[x].labels;
+                    var sampo = parseInt(monthtotal_Income[x].datasets);
+                    if (monthtotal_Income[x].label === "Total") {
+                        monthtotalSum.datasets[0].data[samp] = sampo;
+                        console.log(monthtotalSum.datasets[0].data[samp] = sampo)
+                    }
+                    x++
+                }
+            }
+            calInc();
+            x = 0;
+
+            var monthtPerDivData = (<?= json_encode($monthqueryAllDate) ?>); //retrieve data from controller
+            var monthperDivData = { //prepare array for translated data
+                datasets: [{
+                        backgroundColor: "#06d6a0",
+                        label: 'National Metrology Division',
+                        data: {}
+                    },
+                    {
+                        backgroundColor: "#0073e6",
+                        label: 'Standards and Testing Division',
+                        data: {}
+                    }
+                ],
+            }
+            while (monthtPerDivData[x] != null) {
+                var samp = monthtPerDivData[x].labels;
+                var sampo = parseInt(monthtPerDivData[x].datasets);
+                if (monthtPerDivData[x].label == 'National Metrology Division') {
+                    monthperDivData.datasets[0].data[samp] = sampo;
+                } else if (monthtPerDivData[x].label == 'Standards and Testing Division') {
+                    monthperDivData.datasets[1].data[samp] = sampo;
+                }
+                x++
+            }
+            x = 0;
+
+            var monthsoldPerDivs = { //prepare array for translated data
+                datasets: [{
+                        backgroundColor: "#06d6a0",
+                        borderColor: "#06d6a0",
+                        label: 'National Metrology Division',
+                        data: {}
+                    },
+                    {
+                        backgroundColor: "#0073e6",
+                        borderColor: "#0073e6",
+                        label: 'Standards and Testing Division',
+                        data: {}
+                    }
+                ]
+            }
+
+            while (monthtotal_Income[x] != null) {
+                var samp = monthtotal_Income[x].labels;
+                var sampo = parseInt(monthtotal_Income[x].datasets);
+                if (monthtotal_Income[x].label == 'National Metrology Division') {
+                    monthsoldPerDivs.datasets[0].data[samp] = sampo;
+                } else if (monthtotal_Income[x].label == 'Standards and Testing Division') {
+                    monthsoldPerDivs.datasets[1].data[samp] = sampo;
+                }
+                x++
+            }
+            x = 0;
+
+            var csrfToken = $('meta[name="csrf-token"]').attr('content');
+
+            //get the contents of the html datepicker
+            const fromDateValue = document.getElementById('startDate');
+            const toDatevalue = document.getElementById('endDate');
+
+            const fDate = fromDateValue.value;
+            const tDate = toDatevalue.value;
+
+            //send datepicker data to controller, 
+            $.ajax({
+                url: '<?php echo Yii::$app->request->baseUrl . '/site/month' ?>', // from index to controller then action
+                method: 'POST',
+                headers: {
+                    'X-CSRF-Token': csrfToken
+                },
+                dataType: 'json',
+                data: {
+                    fromDate: fDate,
+                    toDate: tDate
+                },
+                success: function(response) {
+                    //assign new value from controller to variables
+                    updateProvince(response)
+                },
+                error: function(error) {
+                    console.error(error);
+                }
+            });
+
+            const monthList = [...global_label_month];
+
+            //get the index of the labels array based on the value of datepicker
+            //both array value and date picker value must be matching cAsE sEnSiTiVe to give a result
+
+            const sunIndex = monthList.indexOf(fromDateValue.value);
+            const satIndex = monthList.indexOf(toDatevalue.value);
+
+            //slice the labels array based on the sunIndex and satIndex
+            const new_monthList = monthList.slice(sunIndex, satIndex + 1);
+
+
+            //------------------------------------------------1st
+
+            // Remove old data
+            totaltransactionChartB.data.labels = [];
+            totaltransactionChartB.data.datasets.forEach((dataset) => {
+                dataset.data = [];
+            });
+
+            monthttotalTransactionDataset.datasets.forEach(function(dataset) {
+                dataset.data = Object.keys(dataset.data)
+                    .filter((date) => date >= fromDateValue.value && date <= toDatevalue.value)
+                    .reduce((obj, date) => {
+                        obj[date] = dataset.data[date];
+                        return obj;
+                    }, {});
+            });
+            totaltransactionChartB.config.data.datasets = monthttotalTransactionDataset.datasets; //replace the current chart dataset
+            //now repeating the process for the other chart---2nd
+
+            // Remove old data
+            totalsalesChartB.data.labels = [];
+            totalsalesChartB.data.datasets.forEach((dataset) => {
+                dataset.data = [];
+            });
+
+            monthtotalSum.datasets.forEach(function(dataset) {
+                dataset.data = Object.keys(dataset.data)
+                    .filter((date) => date >= fromDateValue.value && date <= toDatevalue.value)
+                    .reduce((obj, date) => {
+                        obj[date] = dataset.data[date];
+                        return obj;
+                    }, {});
+            });
+            console.log(monthtotalSum);
+            totalsalesChartB.config.data.datasets = monthtotalSum.datasets
+            //------------------------------------------------3rd
+
+            // Remove old data
+            transactionChartB.data.labels = [];
+            transactionChartB.data.datasets.forEach((dataset) => {
+                dataset.data = [];
+            });
+
+            monthperDivData.datasets.forEach(function(dataset) {
+                dataset.data = Object.keys(dataset.data)
+                    .filter((date) => date >= fromDateValue.value && date <= toDatevalue.value)
+                    .reduce((obj, date) => {
+                        obj[date] = dataset.data[date];
+                        return obj;
+                    }, {});
+            });
+            transactionChartB.config.data.datasets = monthperDivData.datasets;
+            //------------------------------------------------4th
+
+            // Remove old data
+            salesChart.data.labels = [];
+            salesChart.data.datasets.forEach((dataset) => {
+                dataset.data = [];
+            });
+
+            monthsoldPerDivs.datasets.forEach(function(dataset) {
+                dataset.data = Object.keys(dataset.data)
+                    .filter((date) => date >= fromDateValue.value && date <= toDatevalue.value)
+                    .reduce((obj, date) => {
+                        obj[date] = dataset.data[date];
+                        return obj;
+                    }, {});
+            });
+            salesChart.config.data.datasets = monthsoldPerDivs.datasets;
+            //------------------------------------------------------------
+
+            totaltransactionChartB.config.data.labels = new_monthList; //assign new label to the chart
+            transactionChartB.config.data.labels = new_monthList;
+            totalsalesChartB.config.data.labels = new_monthList;
+            salesChart.config.data.labels = new_monthList;
+
+            totaltransactionChartB.update(); //udpate the chart
+            totalsalesChartB.update();
+            transactionChartB.update();
+            salesChart.update();
+            //
         }
     }
 
-    //declare variables to hold the data from ajax response
-    // var custmerPerProvinceNCR, custmerPerProvinceRI, custmerPerProvinceRII, custmerPerProvinceRIII, custmerPerProvinceRIVA, custmerPerProvinceMIMAROPA,
-    //     custmerPerProvinceV, custmerPerProvinceCAR, custmerPerProvinceVI, custmerPerProvinceVII, custmerPerProvinceVIII, custmerPerProvinceIX,
-    //     custmerPerProvinceX, custmerPerProvinceXI, custmerPerProvinceXIII, custmerPerProvinceBARMM
 
-    var statusChartData = []
-    var methodChartData = []
-    var tTypeChartData = []
-    var cTypeChartData = []
 
     function updateProvince(response) {
-        if (selectedValue === '_day') {
+
+        var dateTypeSelect = document.getElementById('date_type');
+        var selectedValue = dateTypeSelect.value;
+
+        if (selectedValue === 'Days') {
             //START OF Total Customers per Province
             const selectedType = chartTypeDropdown.value;
             var selected_data;
@@ -4651,24 +4924,239 @@ document.addEventListener('DOMContentLoaded', function () {
             customerTypeChart.update();
 
             //myChart
-            console.log(response.forMyChart[0].data)
-            console.log(response.forMyChart[1].data)
-            console.log(myChart.config.data.datasets[2].data[0])
+            //console.log(response.forMyChart[0].data)
+            //console.log(response.forMyChart[1].data)
+            //console.log(myChart.config.data.datasets[2].data[0])
             myChart.config.data.datasets[2].data[0] = response.forMyChart[0].data;
             myChart.config.data.datasets[3].data[0] = response.forMyChart[1].data;
             myChart.update();
 
-            console.log(response.forMyChartAvgTransaction[0].data)
+            //console.log(response.forMyChartAvgTransaction[0].data)
             document.getElementById('avgTransaction').innerHTML = response.forMyChartAvgTransaction[0].data;
-            let number = parseInt(response.forMyChart[0].data)  + parseInt(response.forMyChart[1].data)
-            let fixedNumber = Math.round(number*100)/100;
-            console.log(number)
+            let number = parseInt(response.forMyChart[0].data) + parseInt(response.forMyChart[1].data)
+            let fixedNumber = Math.round(number * 100) / 100;
+            //console.log(number)
+            document.getElementById('avgIncome').innerHTML = fixedNumber.toLocaleString("en-US");
+        } else if (selectedValue === 'Months') {
+            //START OF Total Customers per Province
+            const selectedType = chartTypeDropdown.value;
+            var selected_data;
+            switch (selectedType) {
+                case "ncr":
+                    selected_data = response.monthcustmerPerProvinceNCR
+                    break;
+                case "region-1":
+                    selected_data = response.monthcustmerPerProvinceRI
+                    break;
+                case "region-2":
+                    selected_data = response.monthcustmerPerProvinceRII
+                    break;
+                case "region-3":
+                    selected_data = response.monthcustmerPerProvinceRIII
+                    break;
+                case "region-4a":
+                    selected_data = response.monthcustmerPerProvinceRIVA
+                    break;
+                case "mimaropa":
+                    selected_data = response.monthcustmerPerProvinceMIMAROPA
+                    break;
+                case "region-5":
+                    selected_data = response.monthcustmerPerProvinceV
+                    break;
+                case "car":
+                    selected_data = response.monthcustmerPerProvinceCAR
+                    break;
+                case "region-6":
+                    selected_data = response.monthcustmerPerProvinceVI
+                    break;
+                case "region-7":
+                    selected_data = response.monthcustmerPerProvinceVII
+                    break;
+                case "region-8":
+                    selected_data = response.monthcustmerPerProvinceVIII
+                    break;
+                case "region-9":
+                    selected_data = response.monthcustmerPerProvinceIX
+                    break;
+                case "region-10":
+                    selected_data = response.monthcustmerPerProvinceX
+                    break;
+                case "region-11":
+                    selected_data = response.monthcustmerPerProvinceXI
+                    break;
+                case "region-12":
+                    selected_data = response.monthcustmerPerProvinceXII
+                    break;
+                case "region-13":
+                    selected_data = response.monthcustmerPerProvinceXIII
+                    break;
+                case "barm":
+                    selected_data = response.monthcustmerPerProvinceBARMM
+                    break;
+            }
+
+            // Remove old data
+            constprovincesChart.data.labels = [];
+            constprovincesChart.data.datasets.forEach((dataset) => {
+                dataset.data = [];
+            });
+
+            //convert data into usable chartjs labels
+            var x = 0
+            while (selected_data[x] != null) {
+                var dataA = selected_data[x].label;
+                var dataB = selected_data[x].data;
+                var arrayZ = [{
+                    backgroundColor: getRandomColor(),
+                    data: {
+                        [dataA]: parseInt(dataB)
+                    },
+                    label: dataA
+                }]
+                for (var i = 0; i < arrayZ.length; i++) {
+                    provinceData.push(arrayZ[i]);
+                }
+                x++
+            }
+            constprovincesChart.data.datasets = provinceData;
+            constprovincesChart.config.data.labels = [];
+            constprovincesChart.update();
+            provinceData = [];
+
+            // for transactionStatusChart / Transaction Status
+            x = 0
+            var TSChart1 = response.monthforTransactionStatusChart;
+            //console.log("TestChart1")
+            //console.log(TSChart1)
+
+            var data1 = TSChart1.map(item => item.data);
+
+            transactionStatusChart.config.data = {
+                labels: ["Paid", "Cancelled", "Pending"],
+                datasets: [{
+                    data: data1,
+                    backgroundColor: ['rgba(229, 247, 48, 0.2)', //red
+                        'rgba(241, 37, 150, 0.2)', //yellow
+                        'rgba(0, 215, 132, 0.2)', //green
+                    ],
+                    borderColor: ['rgba(229, 247, 48, 0.8)', //red
+                        'rgba(241, 37, 150, 0.8)', //yellow
+                        'rgba(0, 215, 132, 0.93)', //green
+                    ],
+                    borderWidth: 2
+                }],
+            }
+            //console.log(transactionStatusChart.config.data.labels)
+            //console.log(data)
+            transactionStatusChart.update();
+
+            //paymendtMethodChart
+            x = 0
+            var TSChart2 = response.monthforPaymendtMethodChart;
+            //console.log("TestChart2")
+            //console.log(TSChart2)
+
+            var data2 = TSChart2.map(item => item.data);
+
+            paymendtMethodChart.config.data = {
+                labels: ["Over the Counter", "Online Payment", "Cheque"],
+                datasets: [{
+                    data: data2,
+                    backgroundColor: ['rgba(0, 21, 215, 0.2)',
+                        'rgba(0, 215, 132, 0.2)',
+                        'rgba(118, 0, 186, 0.2)',
+                    ],
+                    borderColor: ['rgba(0, 21, 215, 0.93)',
+                        'rgba(0, 215, 132, 1)',
+                        'rgba(118, 0, 186, 0.93)',
+                    ],
+                    borderWidth: 2
+                }],
+            }
+            //console.log(paymendtMethodChart.config.data.labels)
+            //console.log(data2)
+            paymendtMethodChart.update();
+
+            //transactionTypeChart
+            x = 0
+            var TSChart3 = response.monthforTransactionTypeChart;
+            //console.log("TestChart3")
+            //console.log(TSChart3)
+
+            var data3 = TSChart3.map(item => item.data);
+
+            transactionTypeChart.config.data = {
+                labels: ["Technical Services", "NLIMS", "ULIMS"],
+                datasets: [{
+                    data: data3,
+                    backgroundColor: ['rgba(186, 0, 0, 0.2)',
+                        'rgba(250, 154, 37, 0.2)',
+                        'rgba(37, 202, 247, 0.2)',
+                    ],
+                    borderColor: ['rgba(186, 0, 0, 0.93)',
+                        'rgba(250, 154, 37, 0.81)',
+                        'rgba(37, 202, 247, 0.81)',
+                    ],
+                    borderWidth: 2
+                }],
+            }
+            //console.log(transactionTypeChart.config.data.labels)
+            //console.log(data3)
+            transactionTypeChart.update();
+
+            //customerTypeChart
+            x = 0
+            var TSChart4 = response.monthforCustomerTypeChart;
+            //console.log("TestChart4")
+            //console.log(response.monthforCustomerTypeChart)
+
+            var data4 = TSChart4.map(item => item.data);
+
+            customerTypeChart.config.data = {
+                labels: ["Student", "Individual", "Private", "Government", "Internal", "Academe", "Not Applicable", ],
+                datasets: [{
+                    data: data4,
+                    backgroundColor: ['rgba(247, 37, 149, 0.2)',
+                        'rgba(166, 37, 247, 0.2)',
+                        'rgba(255, 155, 22, 0.2)',
+                        'rgba(255, 213, 22, 0.2)',
+                        'rgba(49, 255, 22, 0.2)',
+                        'rgba(73, 0, 242, 0.2)',
+                        'rgba(0, 220, 242, 0.2)'
+
+                    ],
+                    borderColor: ['rgba(247, 37, 149, 0.81)',
+                        'rgba(166, 37, 247, 0.83)',
+                        'rgba(255, 155, 22, 0.83)',
+                        'rgba(255, 213, 22, 0.83)',
+                        'rgba(49, 255, 22, 0.83)',
+                        'rgba(73, 0, 242, 0.83)',
+                        'rgba(0, 220, 242, 0.83)'
+                    ],
+                    borderWidth: 2
+                }],
+            }
+            //console.log(customerTypeChart.config.data.labels)
+            //console.log(data4)
+            customerTypeChart.update();
+
+            //myChart
+            //console.log(response.monthforMyChart[0].data)
+            //console.log(response.monthforMyChart[1].data)
+            //console.log(myChart.config.data.datasets[2].data[0])
+            myChart.config.data.datasets[2].data[0] = response.monthforMyChart[0].data;
+            myChart.config.data.datasets[3].data[0] = response.monthforMyChart[1].data;
+            myChart.update();
+
+            //console.log(response.monthforMyChartAvgTransaction[0].data)
+            document.getElementById('avgTransaction').innerHTML = response.monthforMyChartAvgTransaction[0].data;
+            let number = parseInt(response.monthforMyChart[0].data) + parseInt(response.monthforMyChart[1].data)
+            let fixedNumber = Math.round(number * 100) / 100;
+            //console.log(number)
             document.getElementById('avgIncome').innerHTML = fixedNumber.toLocaleString("en-US");
         } // end of _day filter
     }
-
     dateFilter();
-    updateProvince();
 </script>
 <script>
     function downloadPDF() {

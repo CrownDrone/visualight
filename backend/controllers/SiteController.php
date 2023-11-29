@@ -102,7 +102,7 @@ class SiteController extends BaseController
             $fromDate = Yii::$app->request->post('fromDate');
             $toDate = Yii::$app->request->post('toDate');
 
-            //----------------------START OF REGIONAL PROVINCE-----------------------------------
+            //----------------------START OF REGIONAL PROVINCE DAYS-----------------------------------
 
             $custmerPerProvinceNCR = (new Query())
                 ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
@@ -256,7 +256,7 @@ class SiteController extends BaseController
                 ->andwhere(['between', 't1.transaction_date', $fromDate, $toDate])
                 ->groupBy('label')
                 ->all();
-            //---------END OF PROVINCE
+            //---------END OF PROVINCE----START OF OTHER CHART DAYS
 
             $forTransactionStatusChart = (new Query())
                 ->select(['transaction_status as label', 'COUNT(*) as data'])
@@ -300,7 +300,10 @@ class SiteController extends BaseController
                 ->where(['between', 'transaction_date', $fromDate, $toDate])
                 ->all();
 
+
+
             return json_encode([
+                //day
                 'custmerPerProvinceNCR' => $custmerPerProvinceNCR,
                 'custmerPerProvinceRI' => $custmerPerProvinceRI,
                 'custmerPerProvinceRII' => $custmerPerProvinceRII,
@@ -339,6 +342,256 @@ class SiteController extends BaseController
         ]);
     }
 
+    public function actionMonth()
+    {
+        Yii::$app->set('db', [ //reroute default connection 
+            'class' => \yii\db\Connection::class,
+            'dsn' => 'mysql:host=localhost;dbname=visualight2data',
+            'username' => 'root',
+            'password' => '',
+            'charset' => 'utf8',
+        ]);
+
+        $fromDate = Yii::$app->request->post('fromDate');
+        $toDate = Yii::$app->request->post('toDate');
+
+        if (Yii::$app->request->isAjax) {
+
+            //----------------------START OF REGIONAL PROVINCE MONTHS-----------------------------------
+
+            $monthcustmerPerProvinceNCR = (new Query())
+                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->from(['t2' => 'customer'])
+                ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
+                ->where(['t2.address' => ['Metro Manila']])
+                ->andwhere(['between', 'DATE_FORMAT(t1.transaction_date, "%Y-%m")', $fromDate, $toDate])
+                ->groupBy('label')
+                ->all();
+
+            $monthcustmerPerProvinceRI = (new Query())
+                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->from(['t2' => 'customer'])
+                ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
+                ->where(['t2.address' => ['Ilocos Norte', 'Ilocos Sur', 'La Union', 'Pangasinan']])
+                ->andwhere(['between', 'DATE_FORMAT(t1.transaction_date, "%Y-%m")', $fromDate, $toDate])
+                ->groupBy('label')
+                ->all();
+
+            $monthcustmerPerProvinceRII = (new Query())
+                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->from(['t2' => 'customer'])
+                ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
+                ->where(['t2.address' => ['Batanes', 'Cagayan', 'La Union', 'Isabela', 'Quirino', 'Nueva Vizcaya']])
+                ->andwhere(['between', 'DATE_FORMAT(t1.transaction_date, "%Y-%m")', $fromDate, $toDate])
+                ->groupBy('label')
+                ->all();
+
+            $monthcustmerPerProvinceRIII = (new Query())
+                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->from(['t2' => 'customer'])
+                ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
+                ->where(['t2.address' => ['Aurora', 'Bataan', 'Bulacan', 'Nueba Ecija', 'Pampanga', 'Tarlac', 'Zambales']])
+                ->andwhere(['between', 'DATE_FORMAT(t1.transaction_date, "%Y-%m")', $fromDate, $toDate])
+                ->groupBy('label')
+                ->all();
+
+            $monthcustmerPerProvinceRIVA = (new Query())
+                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->from(['t2' => 'customer'])
+                ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
+                ->where(['t2.address' => ['Batangas', 'Cavite', 'Laguna', 'Quezon', 'Rizal',]])
+                ->andwhere(['between', 'DATE_FORMAT(t1.transaction_date, "%Y-%m")', $fromDate, $toDate])
+                ->groupBy('label')
+                ->all();
+
+            $monthcustmerPerProvinceMIMAROPA = (new Query()) //use MIMAROPA as desc please
+                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->from(['t2' => 'customer'])
+                ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
+                ->where(['t2.address' => ['Marinduque', 'Occidental Mindoro', 'Oriental Mindoro', 'Palawan', 'Romblon']])
+                ->andwhere(['between', 'DATE_FORMAT(t1.transaction_date, "%Y-%m")', $fromDate, $toDate])
+                ->groupBy('label')
+                ->all();
+
+            $monthcustmerPerProvinceV = (new Query())
+                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->from(['t2' => 'customer'])
+                ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
+                ->where(['t2.address' => ['Albay', 'Camarines Sur', 'Camarines Norte', 'Catanduanes', 'Masbate', 'Sorsogon']])
+                ->andwhere(['between', 'DATE_FORMAT(t1.transaction_date, "%Y-%m")', $fromDate, $toDate])
+                ->groupBy('label')
+                ->all();
+
+            $monthcustmerPerProvinceCAR = (new Query())
+                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->from(['t2' => 'customer'])
+                ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
+                ->where(['t2.address' => ['Abra', 'Apayao', 'Benguet', 'Ifugao', 'Kalinga', 'Mountain Province']])
+                ->andwhere(['between', 'DATE_FORMAT(t1.transaction_date, "%Y-%m")', $fromDate, $toDate])
+                ->groupBy('label')
+                ->all();
+
+            $monthcustmerPerProvinceVI = (new Query())
+                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->from(['t2' => 'customer'])
+                ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
+                ->where(['t2.address' => ['Aklan', 'Antique', 'Capiz', 'Guimaras', 'Iloilo', 'Negros Occidental']])
+                ->andwhere(['between', 'DATE_FORMAT(t1.transaction_date, "%Y-%m")', $fromDate, $toDate])
+                ->groupBy('label')
+                ->all();
+
+            $monthcustmerPerProvinceVII = (new Query())
+                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->from(['t2' => 'customer'])
+                ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
+                ->where(['t2.address' => ['Bohol', 'Cebu', 'Negros Oriental', 'Siquijor']])
+                ->andwhere(['between', 'DATE_FORMAT(t1.transaction_date, "%Y-%m")', $fromDate, $toDate])
+                ->groupBy('label')
+                ->all();
+
+            $monthcustmerPerProvinceVIII = (new Query())
+                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->from(['t2' => 'customer'])
+                ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
+                ->where(['t2.address' => ['Biliran', 'Eastern Samar', 'Leyte', 'Western Samar', 'Samar', 'Southern Leyte']])
+                ->andwhere(['between', 'DATE_FORMAT(t1.transaction_date, "%Y-%m")', $fromDate, $toDate])
+                ->groupBy('label')
+                ->all();
+
+            $monthcustmerPerProvinceIX = (new Query())
+                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->from(['t2' => 'customer'])
+                ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
+                ->where(['t2.address' => ['Zamboanga del Sur', 'Zamboanga del Norte', 'Zamboanga Sibugay']])
+                ->andwhere(['between', 'DATE_FORMAT(t1.transaction_date, "%Y-%m")', $fromDate, $toDate])
+                ->groupBy('label')
+                ->all();
+
+            $monthcustmerPerProvinceX = (new Query())
+                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->from(['t2' => 'customer'])
+                ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
+                ->where(['t2.address' => ['Bukidnon', 'Camiguin', 'Lanao del Norte', 'Misamis Oriental', 'Misamis Occidental']])
+                ->andwhere(['between', 'DATE_FORMAT(t1.transaction_date, "%Y-%m")', $fromDate, $toDate])
+                ->groupBy('label')
+                ->all();
+
+            $monthcustmerPerProvinceXI = (new Query())
+                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->from(['t2' => 'customer'])
+                ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
+                ->where(['t2.address' => ['Davao de Oro', 'Davao del Norte', 'Davao del Sur', 'Davao Oriental', 'Davao Occidental']])
+                ->andwhere(['between', 'DATE_FORMAT(t1.transaction_date, "%Y-%m")', $fromDate, $toDate])
+                ->groupBy('label')
+                ->all();
+
+            $monthcustmerPerProvinceXII = (new Query())
+                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->from(['t2' => 'customer'])
+                ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
+                ->where(['t2.address' => ['Cotabato', 'Sarangani', 'South Cotabato', 'Sultan Kudarat']])
+                ->andwhere(['between', 'DATE_FORMAT(t1.transaction_date, "%Y-%m")', $fromDate, $toDate])
+                ->groupBy('label')
+                ->all();
+
+            $monthcustmerPerProvinceXIII = (new Query())
+                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->from(['t2' => 'customer'])
+                ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
+                ->where(['t2.address' => ['Agusan del Norte', 'Agusan del Sur', 'Dinagat Islands', 'Surigao del Norte', 'Surigao del Sur']])
+                ->andwhere(['between', 'DATE_FORMAT(t1.transaction_date, "%Y-%m")', $fromDate, $toDate])
+                ->groupBy('label')
+                ->all();
+
+            $monthcustmerPerProvinceBARMM = (new Query())
+                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->from(['t2' => 'customer'])
+                ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
+                ->where(['t2.address' => ['Basilan', 'Lanao del Sur', 'Maguindanao del Norte', 'Sulu', 'Maguindanao del Sur', 'Tawi-Tawi']])
+                ->andwhere(['between', 'DATE_FORMAT(t1.transaction_date, "%Y-%m")', $fromDate, $toDate])
+                ->groupBy('label')
+                ->all();
+            //---------END OF PROVINCE----START OF OTHER CHART MONTHS
+
+            $monthforTransactionStatusChart = (new Query())
+                ->select(['transaction_status as label', 'COUNT(*) as data'])
+                ->from(['transaction'])
+                ->where(['between', 'DATE_FORMAT(transaction_date, "%Y-%m")', $fromDate, $toDate])
+                ->groupBy('label')
+                ->all();
+
+            $monthforPaymendtMethodChart = (new Query())
+                ->select(['payment_method as label', 'COUNT(*) as data'])
+                ->from(['transaction'])
+                ->where(['between', 'DATE_FORMAT(transaction_date, "%Y-%m")', $fromDate, $toDate])
+                ->groupBy('label')
+                ->all();
+
+            $monthforTransactionTypeChart = (new Query())
+                ->select(['transaction_type as label', 'COUNT(*) as data'])
+                ->from(['transaction'])
+                ->where(['between', 'DATE_FORMAT(transaction_date, "%Y-%m")', $fromDate, $toDate])
+                ->groupBy('label')
+                ->all();
+
+            $monthforCustomerTypeChart = (new Query())
+                ->select(['t2.customer_type as label', 'COUNT(*) AS data'])
+                ->from(['t1' => 'transaction'])
+                ->join('JOIN', 'customer t2', 't1.customer_id = t2.id')
+                ->where(['between', 'DATE_FORMAT(t1.transaction_date, "%Y-%m")', $fromDate, $toDate])
+                ->groupBy('label')
+                ->all();
+
+            $monthforMyChart = (new Query())
+                ->select(['division as label', 'ROUND(AVG(amount), 2) as data'])
+                ->from('transaction')
+                ->where(['between', 'DATE_FORMAT(transaction_date, "%Y-%m")', $fromDate, $toDate])
+                ->groupBy('division')
+                ->all();
+
+            $monthforMyChartAvgTransaction = (new Query())
+                ->select(['division as label', 'count(*) as data'])
+                ->from('transaction')
+                ->where(['between', 'DATE_FORMAT(transaction_date, "%Y-%m")', $fromDate, $toDate])
+                ->all();
+
+            return json_encode([
+                //month
+                'monthcustmerPerProvinceNCR' => $monthcustmerPerProvinceNCR,
+                'monthcustmerPerProvinceRI' => $monthcustmerPerProvinceRI,
+                'monthcustmerPerProvinceRII' => $monthcustmerPerProvinceRII,
+                'monthcustmerPerProvinceRIII' => $monthcustmerPerProvinceRIII,
+                'monthcustmerPerProvinceRIVA' => $monthcustmerPerProvinceRIVA,
+                'monthcustmerPerProvinceMIMAROPA' => $monthcustmerPerProvinceMIMAROPA,
+                'monthcustmerPerProvinceV' => $monthcustmerPerProvinceV,
+                'monthcustmerPerProvinceCAR' => $monthcustmerPerProvinceCAR,
+                'monthcustmerPerProvinceVI' => $monthcustmerPerProvinceVI,
+                'monthcustmerPerProvinceVII' => $monthcustmerPerProvinceVII,
+                'monthcustmerPerProvinceVIII' => $monthcustmerPerProvinceVIII,
+                'monthcustmerPerProvinceIX' => $monthcustmerPerProvinceIX,
+                'monthcustmerPerProvinceX' => $monthcustmerPerProvinceX,
+                'monthcustmerPerProvinceXI' => $monthcustmerPerProvinceXI,
+                'monthcustmerPerProvinceXII' => $monthcustmerPerProvinceXII,
+                'monthcustmerPerProvinceXIII' => $monthcustmerPerProvinceXIII,
+                'monthcustmerPerProvinceBARMM' => $monthcustmerPerProvinceBARMM,
+                //
+                'monthforTransactionStatusChart' => $monthforTransactionStatusChart,
+                'monthforPaymendtMethodChart' => $monthforPaymendtMethodChart,
+                'monthforTransactionTypeChart' => $monthforTransactionTypeChart,
+                'monthforCustomerTypeChart' => $monthforCustomerTypeChart,
+                'monthforMyChart' => $monthforMyChart,
+                'monthforMyChartAvgTransaction' => $monthforMyChartAvgTransaction,
+            ]);
+        }
+        Yii::$app->set('db', [ //revert default connection 
+            'class' => \yii\db\Connection::class,
+            'dsn' => 'mysql:host=localhost;dbname=visualight2user',
+            'username' => 'root',
+            'password' => '',
+            'charset' => 'utf8',
+        ]);
+    }
+
     public function actionIndex() //this is for the dashboard keme keme chemerut
     {
 
@@ -349,7 +602,7 @@ class SiteController extends BaseController
             'password' => '',
             'charset' => 'utf8',
         ]);
-
+        //days
         $queryAllDate = (new Query()) //daily transaction record seperated by division, Y axis for the chart
             ->select(['transaction_date AS labels', 'COUNT(*) AS datasets', 'division AS label'])
             ->from('visualight2data.transaction') //from visualight2data database within transaction table
@@ -486,8 +739,6 @@ class SiteController extends BaseController
 
         //------FOR DATE FORMATTING-------END
 
-
-
         $chartLabel = (new Query()) //YYYY-MM-DD will serve as label for the chart, the X axis if you may
             ->select('date AS labels')
             ->from('date_label')
@@ -495,7 +746,160 @@ class SiteController extends BaseController
             ->orderBy('date')
             ->all();
 
+        //---------------------------------for month
+        $monthqueryAllDate = (new Query()) //daily transaction record seperated by division, Y axis for the chart
+            ->select([
+                'DATE_FORMAT(transaction_date, "%Y-%m") AS labels',
+                'COUNT(*) AS datasets', 'division AS label'
+            ])
+            ->from('visualight2data.transaction') //from visualight2data database within transaction table
+            ->groupBy('labels, label')
+            ->orderBy('transaction_date')
+            ->all();
 
+        $monthdailyMapping = [ //to be used on renaming divisions
+            "1" => "National Metrology Division",
+            "2" => "Standards and Testing Division",
+        ];
+
+        foreach ($monthqueryAllDate as &$item) { //to change division 1 & 2 into actual division name
+            if (isset($item['label']) && isset($monthdailyMapping[$item['label']])) {
+                $item['label'] = $monthdailyMapping[$item['label']];
+            }
+        }
+
+        $monthqueryAllDate2 = (new Query()) //daily transaction record, separated kasi eto yung total transaction of 2 divisions
+            ->select([
+                'DATE_FORMAT(transaction_date, "%Y-%m") AS labels',
+                'COUNT(*) AS datasets',
+                new \yii\db\Expression("CASE WHEN division IS NOT NULL THEN 'Total' ELSE NULL END AS label")
+            ])
+            ->from('visualight2data.transaction')
+            ->groupBy('labels')
+            ->orderBy('labels')
+            ->all();
+
+        array_splice($monthqueryAllDate, 0, 0, $monthqueryAllDate2); //splice the transaction per div array
+        $monthqueryAllDate = array_values($monthqueryAllDate); //insert total transaction into transaction per div array
+
+        //--------------
+        $monthqueryTotalSale = (new Query()) //daily sales record seperated by division
+            ->select(['DATE_FORMAT(transaction_date, "%Y-%m") AS labels', 'SUM(amount) AS datasets', 'division AS label'])
+            ->from('visualight2data.transaction') //from visualight2data database within transaction table
+            ->groupBy('labels, label')
+            ->orderBy('labels')
+            ->all();
+
+        foreach ($monthqueryTotalSale as &$item) { //to change division 1 & 2 into actual division name
+            if (isset($item['label']) && isset($monthdailyMapping[$item['label']])) {
+                $item['label'] = $monthdailyMapping[$item['label']];
+            }
+        }
+
+        $monthqueryTotalSale2 = (new Query()) //daily total sales record, separated kasi eto yung total transaction of 2 divisions
+            ->select([
+                'DATE_FORMAT(transaction_date, "%Y-%m") AS labels',
+                'SUM(amount) AS datasets',
+                new \yii\db\Expression("CASE WHEN division IS NOT NULL THEN 'Total' ELSE NULL END AS label")
+            ])
+            ->from('visualight2data.transaction')
+            ->groupBy('labels')
+            ->orderBy('labels')
+            ->all();
+
+        array_splice($monthqueryTotalSale, 2, 0, $monthqueryTotalSale2); //splice the sales per div array
+        $monthqueryTotalSale = array_values($monthqueryTotalSale); //insert total sales into transaction per div array
+
+        //--------------------
+        $monthqueryDivAverageSale = (new Query()) //daily average sales record seperated by division
+            ->select(['DATE_FORMAT(transaction_date, "%Y-%m") AS labels', 'AVG(amount) AS datasets', 'division AS label'])
+            ->from('visualight2data.transaction') //from visualight2data database within transaction table
+            ->groupBy('labels, label')
+            ->orderBy('labels')
+            ->all();
+
+        foreach ($monthqueryDivAverageSale as &$item) { //to change division 1 & 2 into actual division name
+            if (isset($item['label']) && isset($monthdailyMapping[$item['label']])) {
+                $item['label'] = $monthdailyMapping[$item['label']];
+            }
+        }
+
+        $monthqueryTotalAverageSale = (new Query()) //daily total average sales record, separated kasi eto yung total transaction of 2 divisions
+            ->select([
+                'DATE_FORMAT(transaction_date, "%Y-%m") AS labels',
+                'AVG(amount) AS datasets',
+                new \yii\db\Expression("CASE WHEN division IS NOT NULL THEN 'Total' ELSE NULL END AS label")
+            ])
+            ->from('visualight2data.transaction')
+            ->groupBy('labels')
+            ->orderBy('labels')
+            ->all();
+
+        $monthqueryAddress = (new Query()) //total customer per province
+            ->select(['address AS labels', 'COUNT(*) as datasets'])
+            ->from('customer')
+            ->groupBy(['labels'])
+            ->orderBy(['datasets' => SORT_DESC])
+            ->all();
+
+        $monthqueryTransactionTypePerProvince = (new Query()) //total of type of tranasction per province
+            ->select([
+                'c.address AS labels',
+                'datasets' => new \yii\db\Expression('COUNT(*)')
+            ])
+            ->from(['bs' => 'transaction']) // Assign an alias 'bs' to the 'transaction' table
+            ->innerJoin(['c' => 'customer'], 'bs.customer_id = c.id') // Assign an alias 'c' to the 'customer' table
+            ->groupBy('c.address')
+            ->orderBy(['bs.transaction_date']);
+
+        //------FOR DATE FORMATTING MONTH-------START
+        $monthcurrentYear = date('Y'); //gets year in YYYY format
+        $monthstartDate = "$monthcurrentYear-01-01"; //first date of the current year
+        $monthendDate = "$monthcurrentYear-12-31"; //last date of the current year
+
+        $monthdateRange = [];
+        $monthcurrentDate = new DateTime($monthstartDate);
+        while ($monthcurrentDate->format('Y-m-d') <= $monthendDate) { //formats the date into like 2023-12-31
+            $monthdateRange[] = $monthcurrentDate->format('Y-m');
+            $monthcurrentDate->modify('+1 month');
+        }
+
+        $monthexistingDates = Site::find() //looks for existing date(YYY-MM) record
+            ->select(['DATE_FORMAT(month, "%Y-%m") AS month'])
+            ->from('month_label')
+            ->groupBy('month')
+            ->orderBy(['month' => SORT_ASC])
+            ->asArray()
+            ->column();
+
+        $monthnewDates = array_diff($monthdateRange, $monthexistingDates); //creates an array from early query
+
+        if (!empty($monthnewDates)) { //if the date does not exist, creates it
+            $monthinsertData = array_map(function ($date) {
+                return [date('Y-m-d', strtotime($date))]; // Ensure 'YYYY-MM' format
+            }, $monthnewDates);
+
+            Yii::$app->db->createCommand() //inserts all created date to database
+                ->batchInsert('month_label', ['month'], $monthinsertData)
+                ->execute();
+        }
+
+        //------FOR DATE FORMATTING MONTH-------END
+
+        $monthLabel = (new Query()) //YYYY-MM-DD will serve as label for the chart, the X axis if you may
+            ->select(['DATE_FORMAT(month, "%Y-%m") AS month'])
+            ->from('month_label')
+            ->groupBy('month')
+            ->orderBy(['month' => SORT_ASC])
+            ->all();
+
+        Yii::$app->set('db', [ //revert default connection 
+            'class' => \yii\db\Connection::class,
+            'dsn' => 'mysql:host=localhost;dbname=visualight2user',
+            'username' => 'root',
+            'password' => '',
+            'charset' => 'utf8',
+        ]);
 
         return $this->render('index', [
             'queryAllDate' => $queryAllDate,
@@ -505,15 +909,14 @@ class SiteController extends BaseController
             'queryAddress' => $queryAddress,
             'queryTransactionTypePerProvince' => $queryTransactionTypePerProvince,
             'chartLabel' => $chartLabel, // to be used as label to all chart label that uses yyyy-mm-dd format
-        ]);
 
-
-        Yii::$app->set('db', [ //revert default connection 
-            'class' => \yii\db\Connection::class,
-            'dsn' => 'mysql:host=localhost;dbname=visualight2user',
-            'username' => 'root',
-            'password' => '',
-            'charset' => 'utf8',
+            'monthqueryAllDate' => $monthqueryAllDate,
+            'monthqueryTotalSale' => $monthqueryTotalSale,
+            'monthqueryDivAverageSale' => $monthqueryDivAverageSale,
+            'monthqueryTotalAverageSale' => $monthqueryTotalAverageSale,
+            'monthqueryAddress' => $monthqueryAddress,
+            'monthqueryTransactionTypePerProvince' => $monthqueryTransactionTypePerProvince,
+            'monthLabel' => $monthLabel, // to be used as label to all chart label that uses yyyy-mm-dd format
         ]);
     }
 
