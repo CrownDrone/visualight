@@ -63,6 +63,12 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
     .alert {
         border-radius: 5px;
     }
+
+    .alert-danger, .help-block {
+        color: red;
+    }
+</style>
+
 </style>
 
 <div class="container">
@@ -72,8 +78,8 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
         </div>
 
         <div class="card-body">
-            <?php if (Yii::$app->session->hasFlash('success')): ?>
-                <div class="alert alert-success">
+                <?php if (Yii::$app->session->hasFlash('success')): ?>
+                <div class="alert alert-success" id="success-flash">
                     <?= Yii::$app->session->getFlash('success') ?>
                 </div>
             <?php elseif (Yii::$app->session->hasFlash('error')): ?>
@@ -86,24 +92,35 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
                 </div>
             <?php endif; ?>
 
+
             <div id="sending-email-message" class="alert alert-info hidden" style ="display:none;">
                 <strong>PDF attachments are sending, please wait...</strong>
             </div>
 
             <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data', 'class' => 'mt-1']]); ?>
 
-            <?= $form->field($model, 'pdfFile[]')->fileInput(['id' => 'your-file-input-id','multiple' => true, 'class' => 'form-control-file'])->label('Select PDF Files') ?>
+            <?= $form->field($model, 'pdfFile[]')->fileInput(['id' => 'your-file-input-id', 'multiple' => true, 'class' => 'form-control-file', 'accept' => 'application/pdf'])->label('Select PDF Files') ?>
             <br>
             <?= $form->field($model, 'selectedRoles')->checkboxList(
                 ArrayHelper::map(Yii::$app->authManager->getRoles(), 'name', 'name'),
                 [
+                    'id' => 'role-checkboxes',
                     'class' => 'mt-3',
                     'itemOptions' => ['labelOptions' => ['class' => 'normal-checkbox-label']],
                 ]
             )->label('Select User Roles') ?>
 
+            <?= $form->field($model, 'selectedEmails')->checkboxList(
+                $model->getEmailsList(),
+                [
+                    'id' => 'email-checkboxes',
+                    'class' => 'mt-3',
+                    'itemOptions' => ['labelOptions' => ['class' => 'normal-checkbox-label']],
+                ]
+            )->label('Select User Emails');?>
+
             <div class="form-group mt-4">
-                <?= Html::submitButton('Send PDF', ['class' => 'btn btn-primary btn-block', 'id' => 'send-email-button']) ?>
+                <?= Html::submitButton('Send PDF', ['class' => 'btn btn-primary btn-block', 'id' => 'send-email-button', 'disabled' => true]) ?>
             </div>
 
             <?php ActiveForm::end(); ?>
@@ -114,8 +131,9 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
 <?php
 $js = <<< JS
 $(document).ready(function() {
+    // Existing click event listener
     $('#send-email-button').click(function() {
-        var fileInput = $('#your-file-input-id'); // Replace 'your-file-input-id' with the actual ID of your file input
+        var fileInput = $('#your-file-input-id');
         if (fileInput[0].files.length > 0) {
             $('#sending-email-message').hide();
             $('#sending-email-message').show();
@@ -123,7 +141,32 @@ $(document).ready(function() {
             $('#sending-email-message').hide();
         }
     });
+
+    // New functionality to enable/disable the submit button
+    function updateButtonState() {
+        var filesSelected = $('#your-file-input-id')[0].files.length > 0;
+        var rolesSelected = $('#role-checkboxes input:checked').length > 0;
+        var emailSelected = $('#email-checkboxes input:checked').length > 0;
+
+        $('#send-email-button').prop('disabled', !(filesSelected && rolesSelected || filesSelected && emailSelected));
+    }
+
+    $('#your-file-input-id, #role-checkboxes input, #email-checkboxes input' ).change(updateButtonState);
+
+    updateButtonState(); // Call it once on page load
 });
 JS;
 $this->registerJs($js, \yii\web\View::POS_READY);
+?>
+
+
+<?php
+$this->registerJs("
+    setTimeout(function() {
+        $('#success-flash').fadeOut('slow');
+    }, 3000); // 3000 milliseconds = 3 seconds
+", \yii\web\View::POS_READY);
+
+$this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position' => \yii\web\View::POS_HEAD]);
+
 ?>

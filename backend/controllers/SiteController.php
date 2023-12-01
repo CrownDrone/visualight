@@ -1117,71 +1117,84 @@ class SiteController extends BaseController
     }
 
     public function actionUploadPdf()
-    {
+{
+    $model = new PdfUploadForm();
 
-        $model = new PdfUploadForm();
+    if (Yii::$app->request->isPost) {
 
-        if (Yii::$app->request->isPost) {
+        $model->pdfFile = UploadedFile::getInstances($model, 'pdfFile');
 
-            $model->pdfFile = UploadedFile::getInstances($model, 'pdfFile');
+        $uploadSuccessful = true;
+        $filePaths = [];
 
-            $uploadSuccessful = true;
-            $filePaths = [];
+        foreach ($model->pdfFile as $file) {
+            $fileName = time() . '_' . $file->name;
+            $uploadPath = 'C:/xampp/htdocs/visualight/common/temp_pdf/' . $fileName;
 
-            foreach ($model->pdfFile as $file) {
-                $fileName = time() . '_' . $file->name;
-                $uploadPath = 'C:/xampp/htdocs/visualight/common/temp_pdf/' . $fileName;
-
-                if (!$file->saveAs($uploadPath)) {
-                    $uploadSuccessful = false;
-                    Yii::$app->session->setFlash('error', 'Error while uploading one or more files.');
-                    break;
-                }
-
-                $filePaths[] = $uploadPath;
+            if (!$file->saveAs($uploadPath)) {
+                $uploadSuccessful = false;
+                Yii::$app->session->setFlash('error', 'Error while uploading one or more files.');
+                break;
             }
 
-            if ($uploadSuccessful) {
-                // Retrieve the selected roles from POST data as an array
-                $selectedRoles = Yii::$app->request->post('PdfUploadForm')['selectedRoles'];
+            $filePaths[] = $uploadPath;
+        }
 
+        if ($uploadSuccessful) {
+            $selectedRoles = Yii::$app->request->post('PdfUploadForm')['selectedRoles'];
+            $selectedEmails = Yii::$app->request->post('PdfUploadForm')['selectedEmails'];
+
+            $emailsToSend = [];
+
+            // Check if selectedRoles is an array before iterating
+            if (is_array($selectedRoles)) {
                 foreach ($selectedRoles as $selectedRole) {
-                    $topManagers = Yii::$app->authManager->getUserIdsByRole($selectedRole);
-
-                    foreach ($topManagers as $managerId) {
-                        $user = User::findOne($managerId); // Replace 'User' with your user model class
-
+                    $userIds = Yii::$app->authManager->getUserIdsByRole($selectedRole);
+                    foreach ($userIds as $userId) {
+                        $user = User::findOne($userId);
                         if ($user) {
-                            $message = Yii::$app->mailer->compose()
-                                ->setFrom([Yii::$app->params['adminEmail'] => 'Visualight Team'])
-                                ->setTo($user->email)
-                                ->setSubject('PDF Files')
-                                ->setTextBody('These are the attached PDF files.');
-
-                            // Attach all the uploaded files to the email
-                            foreach ($filePaths as $filePath) {
-                                $message->attach($filePath);
-                            }
-
-                            if (!$message->send()) {
-                                Yii::$app->session->setFlash('error', 'Error while sending one or more emails.');
-                                break;
-                            }
+                            $emailsToSend[] = $user->email;
                         }
                     }
                 }
+            }
 
-                if (!Yii::$app->session->hasFlash('error')) {
-                    Yii::$app->session->setFlash('success', 'PDF attachments are sent successfully.');
-
-                    // Redirect to prevent repeated form submissions
-                    return $this->redirect(['site/upload-pdf']);
+            // Process selectedEmails
+            if (is_array($selectedEmails)) {
+                foreach ($selectedEmails as $email) {
+                    $emailsToSend[] = $email;
                 }
             }
-        }
 
-        return $this->render('upload-pdf', ['model' => $model]);
+            $emailsToSend = array_unique($emailsToSend); // Remove duplicate emails
+
+            foreach ($emailsToSend as $email) {
+                $message = Yii::$app->mailer->compose()
+                    ->setFrom([Yii::$app->params['adminEmail'] => 'Visualight Team'])
+                    ->setTo($email)
+                    ->setSubject('PDF Files')
+                    ->setTextBody('These are the attached PDF files.');
+
+                foreach ($filePaths as $filePath) {
+                    $message->attach($filePath);
+                }
+
+                if (!$message->send()) {
+                    Yii::$app->session->setFlash('error', 'Error while sending one or more emails.');
+                    break;
+                }
+            }
+
+            if (!Yii::$app->session->hasFlash('error')) {
+                Yii::$app->session->setFlash('success', 'PDF attachments are sent successfully.');
+
+                return $this->redirect(['site/upload-pdf']);
+            }
+        }
     }
+
+    return $this->render('upload-pdf', ['model' => $model]);
+}
 
 
     public function actionUpload()
