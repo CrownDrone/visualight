@@ -11,13 +11,17 @@ class PdfUploadForm extends Model
 {
     public $pdfFile;
     public $selectedRoles;
+    public $selectedEmails;
+
 
     public function rules()
     {
         return [
-            [['pdfFile', 'selectedRoles'], 'required'], // Make sure to add selectedRoles to the required rule
+            [['pdfFile'], 'required'], // Make sure to add selectedRoles to the required rule
             [['pdfFile'], 'file', 'extensions' => 'pdf', 'maxFiles' => 10], // Allow up to 10 PDF files
             ['selectedRoles', 'validateSelectedRoles'],
+            ['selectedEmails', 'each', 'rule' => ['email']],
+
         ];
     }
 
@@ -31,5 +35,10 @@ class PdfUploadForm extends Model
     public function getRolesList()
     {
         return ArrayHelper::map(Yii::$app->authManager->getRoles(), 'name', 'name');
+    }
+
+    public function getEmailsList()
+    {
+        return ArrayHelper::map(User::find()->all(), 'email', 'email');
     }
 }
