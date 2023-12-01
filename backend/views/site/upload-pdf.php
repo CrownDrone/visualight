@@ -30,7 +30,7 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
     }
 
     .card-header {
-        background-color: #234d90;
+        background-color: #007bff;
         color: white;
         text-align: center;
         padding: 1.5rem;
@@ -38,7 +38,7 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
     }
 
     .card-body {
-        background-color: #ffffff;
+        background-color: #f8f9fa;
         padding: 2rem;
         border-radius: 0 0 10px 10px;
     }
@@ -83,7 +83,7 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
     }
 
     .role-selection-header {
-        background-color: #007bff; /* Blue background */
+        background-color: #ff8400; /* Blue background */
         color: white; /* White text */
         padding: 10px;
         border-radius: 5px 5px 0 0;
@@ -93,6 +93,12 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
     .normal-checkbox-label {
         display: block;
         margin-bottom: 10px;
+    }
+
+    .scrollable-checkbox-list {
+        height: 250px; /* Adjust the height as needed */
+        overflow-y: auto;
+        padding-right: 15px; /* Adjust the padding to avoid cutting the scrollbar */
     }
 </style>
 
@@ -134,6 +140,7 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
                     <div class="role-selection-header">
                         <strong>Select User Roles</strong>
                     </div>
+                    <div class="scrollable-checkbox-list">
                     <?= $form->field($model, 'selectedRoles')->checkboxList(
                         ArrayHelper::map(Yii::$app->authManager->getRoles(), 'name', 'name'),
                         [
@@ -143,20 +150,24 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
                         ]
                     )->label(false) ?>
                 </div>
+                </div>
 
                 <div class="email-selection-box">
                     <div class="role-selection-header">
                         <strong>Select User Emails</strong>
                     </div>
-                    <?= $form->field($model, 'selectedEmails')->checkboxList(
-                        $model->getEmailsList(),
-                        [
-                            'id' => 'email-checkboxes',
-                            'class' => 'mt-3',
-                            'itemOptions' => ['labelOptions' => ['class' => 'normal-checkbox-label']],
-                        ]
-                    )->label(false) ?>
+                    <div class="scrollable-checkbox-list">
+                        <?= $form->field($model, 'selectedEmails')->checkboxList(
+                            $model->getEmailsList(),
+                            [
+                                'id' => 'email-checkboxes',
+                                'class' => 'mt-3',
+                                'itemOptions' => ['labelOptions' => ['class' => 'normal-checkbox-label']],
+                            ]
+                        )->label(false) ?>
+                    </div>
                 </div>
+
             </div>
 
             <div class="form-group mt-4">
