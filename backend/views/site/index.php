@@ -4818,13 +4818,19 @@ $targetIncome = [
                 labels: ["Paid", "Cancelled", "Pending"],
                 datasets: [{
                     data: data1,
-                    backgroundColor: ['rgba(229, 247, 48, 0.2)', //red
-                        'rgba(241, 37, 150, 0.2)', //yellow
+                    backgroundColor: [
                         'rgba(0, 215, 132, 0.2)', //green
+                        'rgba(241, 37, 150, 0.2)', //yellow
+                        'rgba(229, 247, 48, 0.2)', //red
+                        
+                        
                     ],
-                    borderColor: ['rgba(229, 247, 48, 0.8)', //red
-                        'rgba(241, 37, 150, 0.8)', //yellow
+                    borderColor: [
                         'rgba(0, 215, 132, 0.93)', //green
+                        'rgba(241, 37, 150, 0.8)', //yellow
+                        'rgba(229, 247, 48, 0.8)', //red
+                        
+                        
                     ],
                     borderWidth: 2
                 }],
@@ -5035,13 +5041,19 @@ $targetIncome = [
                 labels: ["Paid", "Cancelled", "Pending"],
                 datasets: [{
                     data: data1,
-                    backgroundColor: ['rgba(229, 247, 48, 0.2)', //red
-                        'rgba(241, 37, 150, 0.2)', //yellow
+                    backgroundColor: [
                         'rgba(0, 215, 132, 0.2)', //green
+                        'rgba(241, 37, 150, 0.2)', //yellow
+                        'rgba(229, 247, 48, 0.2)', //red
+                        
+                        
                     ],
-                    borderColor: ['rgba(229, 247, 48, 0.8)', //red
-                        'rgba(241, 37, 150, 0.8)', //yellow
+                    borderColor: [
                         'rgba(0, 215, 132, 0.93)', //green
+                        'rgba(241, 37, 150, 0.8)', //yellow
+                        'rgba(229, 247, 48, 0.8)', //red
+                        
+                        
                     ],
                     borderWidth: 2
                 }],
