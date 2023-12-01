@@ -18,7 +18,7 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
         display: flex;
         justify-content: center;
         align-items: center;
-        min-height: 100vh;
+        min-height: 115vh;
         margin-top:-70px;
     }
 
@@ -67,6 +67,33 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
     .alert-danger, .help-block {
         color: red;
     }
+
+    .checkboxes-container {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .role-selection-box, .email-selection-box {
+        background-color: white;
+        border-radius: 5px;
+        padding: 15px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        flex: 1; /* Allows boxes to grow and take up equal space */
+        margin: 10px; /* Adds some space between the two boxes */
+    }
+
+    .role-selection-header {
+        background-color: #007bff; /* Blue background */
+        color: white; /* White text */
+        padding: 10px;
+        border-radius: 5px 5px 0 0;
+        margin: -15px -15px 15px -15px;
+    }
+
+    .normal-checkbox-label {
+        display: block;
+        margin-bottom: 10px;
+    }
 </style>
 
 </style>
@@ -101,23 +128,36 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
 
             <?= $form->field($model, 'pdfFile[]')->fileInput(['id' => 'your-file-input-id', 'multiple' => true, 'class' => 'form-control-file', 'accept' => 'application/pdf'])->label('Select PDF Files') ?>
             <br>
-            <?= $form->field($model, 'selectedRoles')->checkboxList(
-                ArrayHelper::map(Yii::$app->authManager->getRoles(), 'name', 'name'),
-                [
-                    'id' => 'role-checkboxes',
-                    'class' => 'mt-3',
-                    'itemOptions' => ['labelOptions' => ['class' => 'normal-checkbox-label']],
-                ]
-            )->label('Select User Roles') ?>
 
-            <?= $form->field($model, 'selectedEmails')->checkboxList(
-                $model->getEmailsList(),
-                [
-                    'id' => 'email-checkboxes',
-                    'class' => 'mt-3',
-                    'itemOptions' => ['labelOptions' => ['class' => 'normal-checkbox-label']],
-                ]
-            )->label('Select User Emails');?>
+            <div class="checkboxes-container">
+                <div class="role-selection-box">
+                    <div class="role-selection-header">
+                        <strong>Select User Roles</strong>
+                    </div>
+                    <?= $form->field($model, 'selectedRoles')->checkboxList(
+                        ArrayHelper::map(Yii::$app->authManager->getRoles(), 'name', 'name'),
+                        [
+                            'id' => 'role-checkboxes',
+                            'class' => 'mt-3',
+                            'itemOptions' => ['labelOptions' => ['class' => 'normal-checkbox-label']],
+                        ]
+                    )->label(false) ?>
+                </div>
+
+                <div class="email-selection-box">
+                    <div class="role-selection-header">
+                        <strong>Select User Emails</strong>
+                    </div>
+                    <?= $form->field($model, 'selectedEmails')->checkboxList(
+                        $model->getEmailsList(),
+                        [
+                            'id' => 'email-checkboxes',
+                            'class' => 'mt-3',
+                            'itemOptions' => ['labelOptions' => ['class' => 'normal-checkbox-label']],
+                        ]
+                    )->label(false) ?>
+                </div>
+            </div>
 
             <div class="form-group mt-4">
                 <?= Html::submitButton('Send PDF', ['class' => 'btn btn-primary btn-block', 'id' => 'send-email-button', 'disabled' => true]) ?>

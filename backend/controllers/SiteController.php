@@ -1172,7 +1172,7 @@ class SiteController extends BaseController
                 $message = Yii::$app->mailer->compose()
                     ->setFrom([Yii::$app->params['adminEmail'] => 'Visualight Team'])
                     ->setTo($email)
-                    ->setSubject('PDF Files')
+                    ->setSubject('Visualight Chart Report PDF Files')
                     ->setTextBody('These are the attached PDF files.');
 
                 foreach ($filePaths as $filePath) {
