@@ -18,7 +18,7 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
         display: flex;
         justify-content: center;
         align-items: center;
-        min-height: 115vh;
+        min-height: 120vh;
         margin-top:-70px;
     }
 
@@ -83,7 +83,7 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
     }
 
     .role-selection-header {
-        background-color: #ff8400; /* Blue background */
+        background-color: #54af00; /* yellow-orange background */
         color: white; /* White text */
         padding: 10px;
         border-radius: 5px 5px 0 0;
@@ -153,7 +153,7 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
                 </div>
 
                 <div class="email-selection-box">
-                    <div class="role-selection-header">
+                    <div class="role-selection-header" style ="background: #FF007B">
                         <strong>Select User Emails</strong>
                     </div>
                     <div class="scrollable-checkbox-list">
