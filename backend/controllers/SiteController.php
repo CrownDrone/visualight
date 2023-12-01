@@ -17,6 +17,9 @@ use common\models\User;
 use yii\web\UploadedFile;
 use yii\db\Query;
 use DateTime;
+use Exception; 
+use yii\base\InvalidConfigException;
+
 
 
 /**
@@ -1179,10 +1182,17 @@ class SiteController extends BaseController
                     $message->attach($filePath);
                 }
 
-                if (!$message->send()) {
-                    Yii::$app->session->setFlash('error', 'Error while sending one or more emails.');
-                    break;
+                try {
+                    if (!$message->send()) {
+                        Yii::$app->session->setFlash('error', 'Error while sending one or more emails.');
+                        break;
+                    }   
+                } catch (Exception $e) {
+                    Yii::$app->session->setFlash('error', 'Failed to send email. Please check your internet connection and try again.');
+                    break; // Stop sending to the rest of the emails once an error is encountered
                 }
+                
+
             }
 
             if (!Yii::$app->session->hasFlash('error')) {
