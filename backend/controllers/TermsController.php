@@ -28,7 +28,7 @@ class TermsController extends Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             Yii::$app->session->setFlash('success', 'TOS accepted successfully.');
-            return $this->refresh();
+            return $this->refresh();        
         }
 
         return $this->render('index', [

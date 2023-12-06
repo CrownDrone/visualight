@@ -6,6 +6,9 @@ use yii\widgets\ActiveForm;
 
 // $this->title = 'Terms of Service';
 // $this->params['breadcrumbs'][] = $this->title;
+
+
+
 ?>
 
 <div class="terms-and-conditions" style = "background: white; padding: 1rem; border-radius: 20px; box-shadow: -4px 4px 8px rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.25);">
@@ -57,8 +60,10 @@ $recordExists = !empty($model->tos);
     <?php ActiveForm::end(); ?>
 </div>
 </div>
+
+
 <?php
-// Add JavaScript code to handle form submission and disable checkbox when clicked
+
 $js = <<< JS
 document.getElementById('accept-tos-checkbox').addEventListener('change', function(event) {
     var checkbox = event.target;
@@ -93,6 +98,7 @@ document.getElementById('accept-tos-checkbox').addEventListener('change', functi
 });
 JS;
 $this->registerJs($js);
+
 ?>
 
 <style>
