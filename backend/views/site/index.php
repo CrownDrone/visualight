@@ -2559,10 +2559,9 @@ $targetIncome = [
                     });
 
                     ctx.fillStyle = 'rgb(0, 115, 230)';
-                    ctx.fillText(`STD: ${total1.toLocaleString()}`, width / 2.1, height / 2 + top);
+                    ctx.fillText(`STD: ${parseInt(total1.toLocaleString(), 10).toLocaleString()}`, width / 2.1, height / 2 + top);
                     ctx.fillStyle = 'rgb(17, 163, 76)';
-                    ctx.fillText(`NMD: ${total2.toLocaleString()}`, width / 2.1, height / 2 + top + 20);
-
+                    ctx.fillText(`NMD: ${parseInt(total2.toLocaleString(), 10).toLocaleString()}`, width / 2.1, height / 2 + top + 20);
                     ctx.restore();
                 }
             }]
