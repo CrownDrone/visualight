@@ -364,10 +364,25 @@ $currentIndex = Url::to(['']);
         left: 0;
         width: 100%;
         height: 100%;
+        z-index: 1000;
     }
 
     .popup-content {
-        width: 50%;
+        width: 69%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-40%, -46%);
+        background: white;
+        color: black;
+        padding: 20px;
+        border: 1px solid #333;
+        box-shadow: 2px 2px 10px #888;
+        text-align: center;
+    }
+
+    .division-content {
+        width: 48%;
         position: absolute;
         top: 50%;
         left: 50%;
@@ -379,18 +394,6 @@ $currentIndex = Url::to(['']);
         box-shadow: 2px 2px 10px #888;
         text-align: center;
     }
-    .division-content {
-        width: 48%;  
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background: darkgray;
-        color: black;
-        padding: 20px;
-        border: 1px solid #333;
-        box-shadow: 2px 2px 10px #888;
-        text-align: center;}
 
     .close {
         position: absolute;
@@ -407,13 +410,16 @@ $currentIndex = Url::to(['']);
 
     .speedometer-dial {
         width: 150px;
-        height: 75px;
+        height: 85px;
+        top: 10%;
         /* Half the height of the full dial */
         background-color: red;
         border-radius: 75px 75px 0 0;
         /* Round the top corners */
         position: relative;
         margin: 0 auto;
+        overflow: hidden;
+
     }
 
     .speedometer-reading {
@@ -435,6 +441,21 @@ $currentIndex = Url::to(['']);
         transform-origin: 50% 0;
         transform: translateX(-50%) rotate(0deg);
         transition: transform 1s ease;
+    }
+
+    .speedometer {
+        background-color: black;
+        position: absolute;
+        right: 40%;
+        top: 55%;
+        transform: translate(-50%, -50%);
+        width: 400px;
+        height: 200px;
+        justify-content: left;
+        align-items: left;
+        font-size: 1.5rem;
+        font-weight: bold;
+        border-radius: 1rem;
     }
 
 
@@ -895,7 +916,7 @@ $customerTypeDatapertransaction = (new \yii\db\Query())
         'ts.status as transaction_status',
         't.transaction_date',
         'pm.method as payment_method',
-        'c.address',  
+        'c.address',
         'd.division'
     ])
     ->from('transaction t')
@@ -904,8 +925,8 @@ $customerTypeDatapertransaction = (new \yii\db\Query())
     ->join('INNER JOIN', 'transaction_type tt', 't.transaction_type = tt.id')
     ->join('INNER JOIN', 'transaction_status ts', 't.transaction_status = ts.id')
     ->join('INNER JOIN', 'payment_method pm', 't.payment_method = pm.id')
-    ->join('INNER JOIN', 'division d', 't.division= d.id')  
-    ->groupBy(['ct.type', 'tt.type', 'ts.status', 't.transaction_date', 'pm.method', 'c.address', 'd.division']) 
+    ->join('INNER JOIN', 'division d', 't.division= d.id')
+    ->groupBy(['ct.type', 'tt.type', 'ts.status', 't.transaction_date', 'pm.method', 'c.address', 'd.division'])
     ->orderBy(['transaction_count' => SORT_DESC])
     ->all();
 
@@ -916,7 +937,7 @@ $ctstatus = [''];
 $cttd = [''];
 $ctpm = [''];
 $ctaddress = [];
-$ctdivision = [];  
+$ctdivision = [];
 
 foreach ($customerTypeDatapertransaction as $type) {
     $ctpt[] = $type['customer_type'];
@@ -926,7 +947,7 @@ foreach ($customerTypeDatapertransaction as $type) {
     $cttd[] = $type['transaction_date'];
     $ctpm[] = $type['payment_method'];
     $ctaddress[] = $type['address'];
-    $ctdivision[] = $type['division'];  
+    $ctdivision[] = $type['division'];
 }
 
 
@@ -1121,7 +1142,7 @@ if ($todaymettrans == 0) {
 } else {
     //dito magcocompute ng percentage ng increase or decrease ng number of past transaction at today's transaction (tinatype ko pa din yung sa last transaction kunwari kasi di pa ko marunong)
     $metdailytransincrease = (($todaymettrans - $lastmettrans) / $todaymettrans) * 100;
-    $metdailytransincrease = number_format($metdailytransincrease, 2);
+    $metdailytransincrease = number_format($metdailytransincrease);
     if ($metdailytransincrease > 1) {
         $metdailytransincrease = '+' . $metdailytransincrease . '%';
     } else {
@@ -1156,7 +1177,7 @@ if ($todaySandTtrans == 0) {
 } else {
 
     $SandTdailytransincrease = (($todaySandTtrans - $lastSandTtrans) / $todaySandTtrans) * 100;
-    $SandTdailytransincrease = number_format($SandTdailytransincrease, 2);
+    $SandTdailytransincrease = number_format($SandTdailytransincrease);
     if ($SandTdailytransincrease > 1) {
         $SandTdailytransincrease = '+' . $SandTdailytransincrease . '%';
     } else {
@@ -1214,8 +1235,8 @@ $targetIncome = [
 ?>
 <?php \yii\widgets\Pjax::begin(); ?>
 <div class="DailyTransaction">
-<p >Total Transactions Daily</p>
-<!-- <p id="totalTransactionsTitle">Total Transactions Daily</p> -->
+    <p>Total Transactions Daily</p>
+    <!-- <p id="totalTransactionsTitle">Total Transactions Daily</p> -->
 
     <div class="deptransaction">
         <p>National Metrology</p>
@@ -1236,18 +1257,22 @@ $targetIncome = [
 </div>
 
 <script>
-        // Get the current date
-        const currentDate1 = new Date();
-        
-        // Format the date as "Month Day, Year"
-        const formattedDate = currentDate1.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
-        
-        // Get the element with the ID "totalTransactionsTitle"
-        const titleElement = document.getElementById('totalTransactionsTitle');
-        
-        // Update the HTML content to include the formatted date
-        titleElement.innerHTML += `: ${formattedDate}`;
-    </script>
+    // Get the current date
+    const currentDate1 = new Date();
+
+    // Format the date as "Month Day, Year"
+    const formattedDate = currentDate1.toLocaleDateString('en-US', {
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric'
+    });
+
+    // Get the element with the ID "totalTransactionsTitle"
+    const titleElement = document.getElementById('totalTransactionsTitle');
+
+    // Update the HTML content to include the formatted date
+    titleElement.innerHTML += `: ${formattedDate}`;
+</script>
 
 <div id="sending-email-message" class="alert alert-info hidden" style="display:none;">
     PDF file is downloading, please wait...
@@ -1376,8 +1401,9 @@ $targetIncome = [
 
             <h2 id="PopupHeader"></h2>
 
+            <p style="color: black;">Color of speedometer will identify if the target is meet</p>
+
             <div class="speedometer">
-                <p>Color of speedometer will identify if the target is meet</p>
                 <p><span style="color: red">Low </span>
                     <span style="color: orange">Moderate </span>
                     <span style="color: yellow">High </span>
@@ -1388,74 +1414,90 @@ $targetIncome = [
                     <div class="speedometer-arrow" id="speedometer-arrow"></div>
                 </div>
             </div>
+            <p id="percentTransaction" style="position: absolute; bottom: 90px; width: 100%; right: 290px;"></p>
+
             <p id="targetTransaction"></p>
-            <p id="percentTransaction"></p>
-            <p></p>
 
 
-            <div style="text-align: left; margin: 0 auto; width: 80%;">
-                <p id="highest"> </p>
-                <p id="least"> </p>
-
-                <p id="mostTransactionType"> </p>
-                <p id="leastTransactionType"> </p>
-
-                <p id="mostCustomerType"> </p>
-                <p id="leastCustomerType"> </p>
-
-                <p id="mostCustomerProvince"> </p>
-                <p id="leastCustomerProvince"> </p>
+            <div style="text-align: right; margin: 0 auto; width: 80%;">
+                <ul style="padding-left: 500px;">
+                    <li>
+                        <p id="highest"></p>
+                    </li>
+                    <li>
+                        <p id="least"></p>
+                    </li>
+                    <li>
+                        <p id="mostTransactionType"></p>
+                    </li>
+                    <li>
+                        <p id="leastTransactionType"></p>
+                    </li>
+                    <li>
+                        <p id="mostCustomerType"></p>
+                    </li>
+                    <li>
+                        <p id="leastCustomerType"></p>
+                    </li>
+                    <li>
+                        <p id="mostCustomerProvince"></p>
+                    </li>
+                    <li>
+                        <p id="leastCustomerProvince"></p>
+                    </li>
+                </ul>
             </div>
 
+            
         </div>
     </div>
     <div class="popup" id="transactiondivisionpopup">
-    <div class="popup-content">
-        <span class="close" id="close-transaction-popup">&times;</span>
+        <div class="popup-content">
+            <span class="close" id="close-transaction-popup">&times;</span>
 
-        <div class="division-content">
-            <h2 id="MetrologyPopupHeader">National Metrology Division</h2>
-            <div class="speedometer">
-                <p>Color of speedometer will identify if the target is meet</p>
-                <p><span style="color: red">Low </span>
-                    <span style="color: orange">Moderate </span>
-                    <span style="color: yellow">High </span>
-                    <span style="color: green">Satisfaction </span>
-                </p>
-                <div class="speedometer-dial">
-                    <div class="speedometer-reading" id="speedometer-reading"></div>
-                    <div class="speedometer-arrow" id="speedometer-arrow"></div>
+            <div class="division-content">
+                <h2 id="MetrologyPopupHeader">National Metrology Division</h2>
+                <div class="speedometer">
+                    <p>Color of speedometer will identify if the target is meet</p>
+                    <p><span style="color: red">Low </span>
+                        <span style="color: orange">Moderate </span>
+                        <span style="color: yellow">High </span>
+                        <span style="color: green">Satisfaction </span>
+                    </p>
+                    <div class="speedometer-dial">
+                        <div class="speedometer-reading" id="speedometer-reading"></div>
+                        <div class="speedometer-arrow" id="speedometer-arrow"></div>
+                    </div>
+                </div>
+                <p id="targetTransaction"></p>
+                <p id="percentTransaction"></p>
+                <p></p>
+
+
+                <div style="text-align: left; margin: 0 auto; width: 80%;">
+                    <p id="highest"> </p>
+                    <p id="least"> </p>
+
+                    <p id="mostTransactionType"> </p>
+                    <p id="leastTransactionType"> </p>
+
+                    <p id="mostCustomerType"> </p>
+                    <p id="leastCustomerType"> </p>
+
+                    <p id="mostCustomerProvince"> </p>
+                    <p id="leastCustomerProvince"> </p>
                 </div>
             </div>
-            <p id="targetTransaction"></p>
-            <p id="percentTransaction"></p>
-            <p></p>
 
-
-            <div style="text-align: left; margin: 0 auto; width: 80%;">
-                <p id="highest"> </p>
-                <p id="least"> </p>
-
-                <p id="mostTransactionType"> </p>
-                <p id="leastTransactionType"> </p>
-
-                <p id="mostCustomerType"> </p>
-                <p id="leastCustomerType"> </p>
-
-                <p id="mostCustomerProvince"> </p>
-                <p id="leastCustomerProvince"> </p>
+            <div class="division-content">
+                <h2 id="TestingPopupHeader">Standard and Testing Division</h2>
             </div>
-        </div>
 
-        <div class="division-content">
-            <h2 id="TestingPopupHeader">Standard and Testing Division</h2>
         </div>
-
     </div>
-</div>
 
 
-    
+
 
     <script>
         // Reference datas
@@ -1976,7 +2018,7 @@ $targetIncome = [
         });
 
 
-        closePopup.addEventListener("click", () => { 
+        closePopup.addEventListener("click", () => {
             popup.style.display = "none";
         });
     </script>
@@ -2652,11 +2694,11 @@ $targetIncome = [
                 provinceDropdown.add(option);
             });
 
-        header.innerText = 'Top 5 Provinces'; 
-        provinceDropdown.value = topProvinces[0]; 
-        provinceDropdown.dispatchEvent(new Event('change'));
-        ProvinceopenPopup.style.display = "block";
-    });
+            header.innerText = 'Top 5 Provinces';
+            provinceDropdown.value = topProvinces[0];
+            provinceDropdown.dispatchEvent(new Event('change'));
+            ProvinceopenPopup.style.display = "block";
+        });
 
         provinceDropdown.addEventListener("change", function() {
             const selectedValue = this.options[this.selectedIndex].value;
@@ -4142,6 +4184,18 @@ $targetIncome = [
 
     const doughnutOptions = {
         plugins: {
+            scales: {
+                y: {
+                    grid: {
+                        display: false,
+                    }
+                },
+                x: {
+                    grid: {
+                        display: false,
+                    }
+                },
+            },
             bgColor: {
                 backgroundColor: 'white',
             },
@@ -4258,6 +4312,8 @@ $targetIncome = [
 
         // Remove cutout if the selected type is 'bar'
         doughnutOptions.cutout = typeSelect === 'pie' ? 0 : '70%';
+
+
 
         transactionStatusChart.config.type = typeSelect;
         paymendtMethodChart.config.type = typeSelect;
@@ -4822,15 +4878,15 @@ $targetIncome = [
                         'rgba(0, 215, 132, 0.2)', //green
                         'rgba(241, 37, 150, 0.2)', //yellow
                         'rgba(229, 247, 48, 0.2)', //red
-                        
-                        
+
+
                     ],
                     borderColor: [
                         'rgba(0, 215, 132, 0.93)', //green
                         'rgba(241, 37, 150, 0.8)', //yellow
                         'rgba(229, 247, 48, 0.8)', //red
-                        
-                        
+
+
                     ],
                     borderWidth: 2
                 }],
@@ -5045,15 +5101,15 @@ $targetIncome = [
                         'rgba(0, 215, 132, 0.2)', //green
                         'rgba(241, 37, 150, 0.2)', //yellow
                         'rgba(229, 247, 48, 0.2)', //red
-                        
-                        
+
+
                     ],
                     borderColor: [
                         'rgba(0, 215, 132, 0.93)', //green
                         'rgba(241, 37, 150, 0.8)', //yellow
                         'rgba(229, 247, 48, 0.8)', //red
-                        
-                        
+
+
                     ],
                     borderWidth: 2
                 }],
