@@ -79,7 +79,7 @@ document.getElementById('accept-tos-checkbox').addEventListener('change', functi
                 checkbox.disabled = true;
 
                 // Redirect to site/index after successful TOS acceptance
-                window.location.href = 'site/index';
+                window.location.href = '/site/index';
 
             } else {
                 // Handle error response (optional)
