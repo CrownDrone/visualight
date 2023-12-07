@@ -1290,7 +1290,7 @@ $targetIncome = [
                     <select id="date_type" class="dropdown-content" onchange="dateChange()">
                         <option value="Days">Days</option>
                         <option value="Months">Months</option>
-                        <!-- <option value="Years">Years</option> -->
+                        <option value="Years">Years</option>
                     </select>
                 </form>
             </div>
@@ -1331,7 +1331,7 @@ $targetIncome = [
     <div class="containers">
         <div class="datePicker">
             <label>From: </label>
-            <input type="date" id="startDate" class="datePicker_label" onchange="dateFilter(); updateProvince()">
+            <input type="date" id="startDate" class="datePicker_label" onchange="dateFilter(); updateProvince()"> <!-- look for updateProvince(response) -->
             <label>&nbsp;&nbsp;&nbsp;&nbsp;To:</label>
             <input type="date" id="endDate" class="datePicker_label" onchange="dateFilter(); updateProvince()">
         </div>
@@ -1385,11 +1385,11 @@ $targetIncome = [
             <div class="average">
                 <div class="aveTransactionDiv">
                     <p class="texty"> Average Transactions </p>
-                    <p class="number"> <?= $average ?> </p>
+                    <p class="number" id="avgTransaction"> No Data</p>
                 </div>
                 <div class="aveSalesDiv">
                     <p class="texty"> Combined Average Income </p>
-                    <p class="number"> <?= $saleaverage ?> </p>
+                    <p class="number" id="avgIncome"> No Data </p>
                 </div>
             </div>
         </div>
@@ -1448,7 +1448,7 @@ $targetIncome = [
                 </ul>
             </div>
 
-            
+
         </div>
     </div>
     <div class="popup" id="transactiondivisionpopup">
@@ -2073,6 +2073,8 @@ $targetIncome = [
             }, ],
         }
 
+        console.log("before: ")
+        console.log(totalTransaction)
         //populate json; create child inside of another child, function to translate data of division and total transaction from controller
         function totalTransactionTranslate() {
             var x = 0;
@@ -2090,6 +2092,8 @@ $targetIncome = [
             }
             x = 0;
         }
+        console.log("after: ")
+        console.log(totalTransactionDataset)
 
         var global_label_day = []; //use this label as duh label for all chart that uses yyyy-mm-dd format label
 
@@ -2392,7 +2396,6 @@ $targetIncome = [
 
         function dateChange() {
             let dateTypeSelect = document.getElementById('date_type');
-            //console.log(dateTypeSelect);
             let selectedValue = dateTypeSelect.value;
             if (selectedValue === 'Months') {
 
@@ -2423,8 +2426,20 @@ $targetIncome = [
 
             } else if (selectedValue === 'Years') {
 
+                var yearLabelZ = (<?= json_encode($yearLabel) ?>);
                 const dX = new Date();
                 let yearX = dX.getFullYear();
+                var listers = []; //for years
+
+                function yearAssign() {
+                    var x = 0;
+                    while (yearLabelZ[x] != null) {
+                        var lab = yearLabelZ[x].year;
+                        listers[x] = lab;
+                        x++;
+                    }
+                }
+                yearAssign();
 
                 document.getElementById('startDate').setAttribute('type', 'number');
                 document.getElementById('startDate').value = "2023";
@@ -2444,7 +2459,6 @@ $targetIncome = [
         function dateFilterRefresh() { // asign current week's sunday and saturday to datepicker
 
             let dateTypeSelect = document.getElementById('date_type');
-            //console.log(dateTypeSelect);
             let selectedValue = dateTypeSelect.value;
             if (selectedValue === 'Days') {
 
@@ -2840,8 +2854,6 @@ $targetIncome = [
     // Get references to chart containers and the dropdown
     const provincesChartContainer = document.getElementById('Provinces').getContext('2d');
     const chartTypeDropdown = document.getElementById('chart_type');
-    const provinces = <?php echo json_encode($provinces); ?>;
-    const deselected_data = (<?= json_encode($queryTransactionTypePerProvince) ?>);
     const constprovincesChart = new Chart(provincesChartContainer, {
         type: 'bar',
         options: {
@@ -2888,7 +2900,7 @@ $targetIncome = [
     }
 
     var provinceData = [];
-    //look for updateProvince()
+    //look for updateProvince(response)
 </script>
 
 <!-- All about customer graphs -->
@@ -3117,7 +3129,6 @@ $targetIncome = [
                         }
                         return dataset;
                     }
-                    //console.log(customertransactiontypePaid);
 
                     let paidTransactions = customertransactiontypePaid;
                     paidTransactions = handleNullDataset(paidTransactions);
@@ -4170,7 +4181,7 @@ $targetIncome = [
 </script>
 
 <script>
-    //3bm60
+    //3bm75
     // Get references to chart containers and the dropdown
     const transactionStatusChartContainer = document.getElementById('transactionStatus');
     const paymendtMethodChartContainer = document.getElementById('paymendtMethod');
@@ -4332,6 +4343,7 @@ $targetIncome = [
         typeSelect = "";
     }
 </script>
+
 <script>
     //script for date filter, at the bottom so all functions can be called
     var newTotalTransaction = {
@@ -4563,7 +4575,6 @@ $targetIncome = [
             x = 0;
 
             var monthtotal_Income = (<?= json_encode($monthqueryTotalSale) ?>);
-            console.log(monthtotal_Income)
 
             var monthtotalSum = {
                 datasets: [{
@@ -4580,7 +4591,6 @@ $targetIncome = [
                     var sampo = parseInt(monthtotal_Income[x].datasets);
                     if (monthtotal_Income[x].label === "Total") {
                         monthtotalSum.datasets[0].data[samp] = sampo;
-                        console.log(monthtotalSum.datasets[0].data[samp] = sampo)
                     }
                     x++
                 }
@@ -4717,7 +4727,6 @@ $targetIncome = [
                         return obj;
                     }, {});
             });
-            console.log(monthtotalSum);
             totalsalesChartB.config.data.datasets = monthtotalSum.datasets
             //------------------------------------------------3rd
 
@@ -4765,6 +4774,246 @@ $targetIncome = [
             transactionChartB.update();
             salesChart.update();
             //
+        } else if (selectedValue === 'Years') {
+
+
+            var yeartotalTransaction = (<?= json_encode($yearqueryAllDate) ?>); // dashboard total transaction
+            var yearLabel = (<?= json_encode($yearLabel) ?>);
+            //preparing array to store the retrieved data
+            var yearttotalTransactionDataset = {
+                datasets: [{
+                    backgroundColor: "#274690",
+                    label: 'Total Transaction',
+                    data: {}
+                }, ],
+            }
+
+            var x = 0;
+
+            function cusmo() {
+                while (yeartotalTransaction[x] != null) {
+                    var samp = yeartotalTransaction[x].labels;
+                    var sampo = parseInt(yeartotalTransaction[x].datasets);
+                    if (yeartotalTransaction[x].label == "Total") {
+                        yearttotalTransactionDataset.datasets[0].data[samp] = sampo;
+                    }
+                    x++
+                }
+            }
+            cusmo();
+            x = 0;
+
+
+            var global_label_year = []; //for years
+
+            while (yearLabel[x] != null) {
+                var lab = yearLabel[x].labels;
+                global_label_year[x] = lab;
+                x++;
+            }
+            x = 0;
+
+            var yeartotal_Income = (<?= json_encode($yearqueryTotalSale) ?>);
+
+            var yeartotalSum = {
+                datasets: [{
+                    backgroundColor: "#fccb06",
+                    borderColor: "#fccb06",
+                    label: 'Total Income',
+                    data: {}
+                }]
+            }
+
+            function calInc() {
+                while (yeartotal_Income[x] != null) {
+                    var samp = yeartotal_Income[x].labels;
+                    var sampo = parseInt(yeartotal_Income[x].datasets);
+                    if (yeartotal_Income[x].label === "Total") {
+                        yeartotalSum.datasets[0].data[samp] = sampo;
+                    }
+                    x++
+                }
+            }
+            calInc();
+            x = 0;
+
+            var yeartPerDivData = (<?= json_encode($yearqueryAllDate) ?>); //retrieve data from controller
+            var yearperDivData = { //prepare array for translated data
+                datasets: [{
+                        backgroundColor: "#06d6a0",
+                        label: 'National Metrology Division',
+                        data: {}
+                    },
+                    {
+                        backgroundColor: "#0073e6",
+                        label: 'Standards and Testing Division',
+                        data: {}
+                    }
+                ],
+            }
+            while (yeartPerDivData[x] != null) {
+                var samp = yeartPerDivData[x].labels;
+                var sampo = parseInt(yeartPerDivData[x].datasets);
+                if (yeartPerDivData[x].label == 'National Metrology Division') {
+                    yearperDivData.datasets[0].data[samp] = sampo;
+                } else if (yeartPerDivData[x].label == 'Standards and Testing Division') {
+                    yearperDivData.datasets[1].data[samp] = sampo;
+                }
+                x++
+            }
+            x = 0;
+
+            var yearsoldPerDivs = { //prepare array for translated data
+                datasets: [{
+                        backgroundColor: "#06d6a0",
+                        borderColor: "#06d6a0",
+                        label: 'National Metrology Division',
+                        data: {}
+                    },
+                    {
+                        backgroundColor: "#0073e6",
+                        borderColor: "#0073e6",
+                        label: 'Standards and Testing Division',
+                        data: {}
+                    }
+                ]
+            }
+
+            while (yeartotal_Income[x] != null) {
+                var samp = yeartotal_Income[x].labels;
+                var sampo = parseInt(yeartotal_Income[x].datasets);
+                if (yeartotal_Income[x].label == 'National Metrology Division') {
+                    yearsoldPerDivs.datasets[0].data[samp] = sampo;
+                } else if (yeartotal_Income[x].label == 'Standards and Testing Division') {
+                    yearsoldPerDivs.datasets[1].data[samp] = sampo;
+                }
+                x++
+            }
+            x = 0;
+
+            var csrfToken = $('meta[name="csrf-token"]').attr('content');
+
+            //get the contents of the html datepicker
+            const fromDateValue = document.getElementById('startDate');
+            const toDatevalue = document.getElementById('endDate');
+
+            const fDate = fromDateValue.value;
+            const tDate = toDatevalue.value;
+
+            //send datepicker data to controller, 
+            $.ajax({
+                url: '<?php echo Yii::$app->request->baseUrl . '/site/yearly' ?>', // from index to controller then action
+                method: 'POST',
+                headers: {
+                    'X-CSRF-Token': csrfToken
+                },
+                dataType: 'json',
+                data: {
+                    fromDate: fDate,
+                    toDate: tDate
+                },
+                success: function(response) {
+                    //assign new value from controller to variables
+                    updateProvince(response)
+                },
+                error: function(error) {
+                    console.error(error);
+                }
+            });
+
+            const yearList = [...global_label_year];
+
+            //get the index of the labels array based on the value of datepicker
+            //both array value and date picker value must be matching cAsE sEnSiTiVe to give a result
+
+            const sunIndex = yearList.indexOf(fromDateValue.value);
+            const satIndex = yearList.indexOf(toDatevalue.value);
+
+            //slice the labels array based on the sunIndex and satIndex
+            const new_yearList = yearList.slice(sunIndex, satIndex + 1);
+
+
+            //------------------------------------------------1st
+
+            // Remove old data
+            totaltransactionChartB.data.labels = [];
+            totaltransactionChartB.data.datasets.forEach((dataset) => {
+                dataset.data = [];
+            });
+
+            yearttotalTransactionDataset.datasets.forEach(function(dataset) {
+                dataset.data = Object.keys(dataset.data)
+                    .filter((date) => date >= fromDateValue.value && date <= toDatevalue.value)
+                    .reduce((obj, date) => {
+                        obj[date] = dataset.data[date];
+                        return obj;
+                    }, {});
+            });
+            totaltransactionChartB.config.data.datasets = yearttotalTransactionDataset.datasets; //replace the current chart dataset
+            //now repeating the process for the other chart---2nd
+
+            // Remove old data
+            totalsalesChartB.data.labels = [];
+            totalsalesChartB.data.datasets.forEach((dataset) => {
+                dataset.data = [];
+            });
+
+            yeartotalSum.datasets.forEach(function(dataset) {
+                dataset.data = Object.keys(dataset.data)
+                    .filter((date) => date >= fromDateValue.value && date <= toDatevalue.value)
+                    .reduce((obj, date) => {
+                        obj[date] = dataset.data[date];
+                        return obj;
+                    }, {});
+            });
+            totalsalesChartB.config.data.datasets = yeartotalSum.datasets
+            //------------------------------------------------3rd
+
+            // Remove old data
+            transactionChartB.data.labels = [];
+            transactionChartB.data.datasets.forEach((dataset) => {
+                dataset.data = [];
+            });
+
+            yearperDivData.datasets.forEach(function(dataset) {
+                dataset.data = Object.keys(dataset.data)
+                    .filter((date) => date >= fromDateValue.value && date <= toDatevalue.value)
+                    .reduce((obj, date) => {
+                        obj[date] = dataset.data[date];
+                        return obj;
+                    }, {});
+            });
+            transactionChartB.config.data.datasets = yearperDivData.datasets;
+            //------------------------------------------------4th
+
+            // Remove old data
+            salesChart.data.labels = [];
+            salesChart.data.datasets.forEach((dataset) => {
+                dataset.data = [];
+            });
+
+            yearsoldPerDivs.datasets.forEach(function(dataset) {
+                dataset.data = Object.keys(dataset.data)
+                    .filter((date) => date >= fromDateValue.value && date <= toDatevalue.value)
+                    .reduce((obj, date) => {
+                        obj[date] = dataset.data[date];
+                        return obj;
+                    }, {});
+            });
+            salesChart.config.data.datasets = yearsoldPerDivs.datasets;
+            //------------------------------------------------------------
+
+            totaltransactionChartB.config.data.labels = new_yearList; //assign new label to the chart
+            transactionChartB.config.data.labels = new_yearList;
+            totalsalesChartB.config.data.labels = new_yearList;
+            salesChart.config.data.labels = new_yearList;
+
+            totaltransactionChartB.update(); //udpate the chart
+            totalsalesChartB.update();
+            transactionChartB.update();
+            salesChart.update();
+            //
+
         }
     }
 
@@ -4864,8 +5113,6 @@ $targetIncome = [
             // for transactionStatusChart / Transaction Status
             x = 0
             var TSChart1 = response.forTransactionStatusChart;
-            //console.log("TestChart1")
-            //console.log(TSChart1)
 
             var data1 = TSChart1.map(item => item.data);
 
@@ -4890,15 +5137,11 @@ $targetIncome = [
                     borderWidth: 2
                 }],
             }
-            //console.log(transactionStatusChart.config.data.labels)
-            //console.log(data)
             transactionStatusChart.update();
 
             //paymendtMethodChart
             x = 0
             var TSChart2 = response.forPaymendtMethodChart;
-            //console.log("TestChart2")
-            //console.log(TSChart2)
 
             var data2 = TSChart2.map(item => item.data);
 
@@ -4917,15 +5160,11 @@ $targetIncome = [
                     borderWidth: 2
                 }],
             }
-            //console.log(paymendtMethodChart.config.data.labels)
-            //console.log(data2)
             paymendtMethodChart.update();
 
             //transactionTypeChart
             x = 0
             var TSChart3 = response.forTransactionTypeChart;
-            //console.log("TestChart3")
-            //console.log(TSChart3)
 
             var data3 = TSChart3.map(item => item.data);
 
@@ -4944,15 +5183,11 @@ $targetIncome = [
                     borderWidth: 2
                 }],
             }
-            //console.log(transactionTypeChart.config.data.labels)
-            //console.log(data3)
             transactionTypeChart.update();
 
             //customerTypeChart
             x = 0
             var TSChart4 = response.forCustomerTypeChart;
-            //console.log("TestChart4")
-            //console.log(response.forCustomerTypeChart)
 
             var data4 = TSChart4.map(item => item.data);
 
@@ -4980,25 +5215,28 @@ $targetIncome = [
                     borderWidth: 2
                 }],
             }
-            //console.log(customerTypeChart.config.data.labels)
-            //console.log(data4)
             customerTypeChart.update();
 
             //myChart
-            //console.log(response.forMyChart[0].data)
-            //console.log(response.forMyChart[1].data)
-            //console.log(myChart.config.data.datasets[2].data[0])
             myChart.config.data.datasets[2].data[0] = response.forMyChart[0].data;
             myChart.config.data.datasets[3].data[0] = response.forMyChart[1].data;
             myChart.update();
 
-            //console.log(response.forMyChartAvgTransaction[0].data)
-            document.getElementById('avgTransaction').innerHTML = response.forMyChartAvgTransaction[0].data;
+            let fDate = new Date(document.getElementById('startDate').value);
+            let tDate = new Date(document.getElementById('endDate').value);
+
+            const timeDifference = tDate.getTime() - fDate.getTime();
+            const numberOfDays = Math.floor(timeDifference / (1000 * 3600 * 24)) + 1;
+            const digi = response.forMyChartAvgTransaction[0].data
+            const avgThis = Math.floor(digi / numberOfDays);
+            console.log(`Math.floor( AVG: ${response.forMyChartAvgTransaction[0].data} / ${numberOfDays} = ${avgThis} )`); // mema lang to di yan actual formula
+
+            document.getElementById('avgTransaction').innerHTML = avgThis;
             let number = parseInt(response.forMyChart[0].data) + parseInt(response.forMyChart[1].data)
             let fixedNumber = Math.round(number * 100) / 100;
-            //console.log(number)
             document.getElementById('avgIncome').innerHTML = fixedNumber.toLocaleString("en-US");
-        } else if (selectedValue === 'Months') {
+        } // end of day filter
+        else if (selectedValue === 'Months') {
             //START OF Total Customers per Province
             const selectedType = chartTypeDropdown.value;
             var selected_data;
@@ -5087,8 +5325,6 @@ $targetIncome = [
             // for transactionStatusChart / Transaction Status
             x = 0
             var TSChart1 = response.monthforTransactionStatusChart;
-            //console.log("TestChart1")
-            //console.log(TSChart1)
 
             var data1 = TSChart1.map(item => item.data);
 
@@ -5113,15 +5349,11 @@ $targetIncome = [
                     borderWidth: 2
                 }],
             }
-            //console.log(transactionStatusChart.config.data.labels)
-            //console.log(data)
             transactionStatusChart.update();
 
             //paymendtMethodChart
             x = 0
             var TSChart2 = response.monthforPaymendtMethodChart;
-            //console.log("TestChart2")
-            //console.log(TSChart2)
 
             var data2 = TSChart2.map(item => item.data);
 
@@ -5140,15 +5372,11 @@ $targetIncome = [
                     borderWidth: 2
                 }],
             }
-            //console.log(paymendtMethodChart.config.data.labels)
-            //console.log(data2)
             paymendtMethodChart.update();
 
             //transactionTypeChart
             x = 0
             var TSChart3 = response.monthforTransactionTypeChart;
-            //console.log("TestChart3")
-            //console.log(TSChart3)
 
             var data3 = TSChart3.map(item => item.data);
 
@@ -5167,15 +5395,11 @@ $targetIncome = [
                     borderWidth: 2
                 }],
             }
-            //console.log(transactionTypeChart.config.data.labels)
-            //console.log(data3)
             transactionTypeChart.update();
 
             //customerTypeChart
             x = 0
             var TSChart4 = response.monthforCustomerTypeChart;
-            //console.log("TestChart4")
-            //console.log(response.monthforCustomerTypeChart)
 
             var data4 = TSChart4.map(item => item.data);
 
@@ -5203,25 +5427,233 @@ $targetIncome = [
                     borderWidth: 2
                 }],
             }
-            //console.log(customerTypeChart.config.data.labels)
-            //console.log(data4)
             customerTypeChart.update();
 
-            //myChart
-            //console.log(response.monthforMyChart[0].data)
-            //console.log(response.monthforMyChart[1].data)
-            //console.log(myChart.config.data.datasets[2].data[0])
+            console.log(response.monthforMyChart[0].data);
+
             myChart.config.data.datasets[2].data[0] = response.monthforMyChart[0].data;
             myChart.config.data.datasets[3].data[0] = response.monthforMyChart[1].data;
             myChart.update();
 
-            //console.log(response.monthforMyChartAvgTransaction[0].data)
-            document.getElementById('avgTransaction').innerHTML = response.monthforMyChartAvgTransaction[0].data;
+
+            let fDate = new Date(document.getElementById('startDate').value);
+            let tDate = new Date(document.getElementById('endDate').value);
+
+            const timeDifference = tDate.getTime() - fDate.getTime();
+            const numberOfDays = Math.floor(timeDifference / (1000 * 3600 * 24)) + 1;
+            const digi = response.monthforMyChartAvgTransaction[0].data
+            const avgThis = Math.floor(digi / numberOfDays);
+            console.log(`Math.floor( AVG: ${response.monthforMyChartAvgTransaction[0].data} / ${numberOfDays} = ${avgThis} )`); // mema lang to di yan actual formula
+
+            document.getElementById('avgTransaction').innerHTML = avgThis;
             let number = parseInt(response.monthforMyChart[0].data) + parseInt(response.monthforMyChart[1].data)
             let fixedNumber = Math.round(number * 100) / 100;
-            //console.log(number)
             document.getElementById('avgIncome').innerHTML = fixedNumber.toLocaleString("en-US");
-        } // end of _day filter
+        } // end of month filter
+        else if (selectedValue === 'Years') {
+            //START OF Total Customers per Province
+            const selectedType = chartTypeDropdown.value;
+            var selected_data;
+            switch (selectedType) {
+                case "ncr":
+                    selected_data = response.yearcustmerPerProvinceNCR
+                    break;
+                case "region-1":
+                    selected_data = response.yearcustmerPerProvinceRI
+                    break;
+                case "region-2":
+                    selected_data = response.yearcustmerPerProvinceRII
+                    break;
+                case "region-3":
+                    selected_data = response.yearcustmerPerProvinceRIII
+                    break;
+                case "region-4a":
+                    selected_data = response.yearcustmerPerProvinceRIVA
+                    break;
+                case "mimaropa":
+                    selected_data = response.yearcustmerPerProvinceMIMAROPA
+                    break;
+                case "region-5":
+                    selected_data = response.yearcustmerPerProvinceV
+                    break;
+                case "car":
+                    selected_data = response.yearcustmerPerProvinceCAR
+                    break;
+                case "region-6":
+                    selected_data = response.yearcustmerPerProvinceVI
+                    break;
+                case "region-7":
+                    selected_data = response.yearcustmerPerProvinceVII
+                    break;
+                case "region-8":
+                    selected_data = response.yearcustmerPerProvinceVIII
+                    break;
+                case "region-9":
+                    selected_data = response.yearcustmerPerProvinceIX
+                    break;
+                case "region-10":
+                    selected_data = response.yearcustmerPerProvinceX
+                    break;
+                case "region-11":
+                    selected_data = response.yearcustmerPerProvinceXI
+                    break;
+                case "region-12":
+                    selected_data = response.yearcustmerPerProvinceXII
+                    break;
+                case "region-13":
+                    selected_data = response.yearcustmerPerProvinceXIII
+                    break;
+                case "barm":
+                    selected_data = response.yearcustmerPerProvinceBARMM
+                    break;
+            }
+
+            constprovincesChart.data.labels = [];
+            constprovincesChart.data.datasets.forEach((dataset) => {
+                dataset.data = [];
+            });
+
+            var x = 0
+            while (selected_data[x] != null) {
+                var dataA = selected_data[x].label;
+                var dataB = selected_data[x].data;
+                var arrayZ = [{
+                    backgroundColor: getRandomColor(),
+                    data: {
+                        [dataA]: parseInt(dataB)
+                    },
+                    label: dataA
+                }]
+                for (var i = 0; i < arrayZ.length; i++) {
+                    provinceData.push(arrayZ[i]);
+                }
+                x++
+            }
+            constprovincesChart.data.datasets = provinceData;
+            constprovincesChart.config.data.labels = [];
+            constprovincesChart.update();
+            provinceData = [];
+
+            x = 0
+            var TSChart1 = response.yearforTransactionStatusChart;
+
+            var data1 = TSChart1.map(item => item.data);
+
+            transactionStatusChart.config.data = {
+                labels: ["Paid", "Cancelled", "Pending"],
+                datasets: [{
+                    data: data1,
+                    backgroundColor: [
+                        'rgba(0, 215, 132, 0.2)', //green
+                        'rgba(241, 37, 150, 0.2)', //yellow
+                        'rgba(229, 247, 48, 0.2)', //red
+
+
+                    ],
+                    borderColor: [
+                        'rgba(0, 215, 132, 0.93)', //green
+                        'rgba(241, 37, 150, 0.8)', //yellow
+                        'rgba(229, 247, 48, 0.8)', //red
+
+
+                    ],
+                    borderWidth: 2
+                }],
+            }
+            transactionStatusChart.update();
+            x = 0
+
+            var TSChart2 = response.yearforPaymendtMethodChart
+
+            var data2 = TSChart2.map(item => item.data);
+
+            paymendtMethodChart.config.data = {
+                labels: ["Over the Counter", "Online Payment", "Cheque"],
+                datasets: [{
+                    data: data2,
+                    backgroundColor: ['rgba(0, 21, 215, 0.2)',
+                        'rgba(0, 215, 132, 0.2)',
+                        'rgba(118, 0, 186, 0.2)',
+                    ],
+                    borderColor: ['rgba(0, 21, 215, 0.93)',
+                        'rgba(0, 215, 132, 1)',
+                        'rgba(118, 0, 186, 0.93)',
+                    ],
+                    borderWidth: 2
+                }],
+            }
+            paymendtMethodChart.update();
+
+            x = 0
+
+            var TSChart3 = response.yearforTransactionTypeChart;
+            var data3 = TSChart3.map(item => item.data);
+
+            transactionTypeChart.config.data = {
+                labels: ["Technical Services", "NLIMS", "ULIMS"],
+                datasets: [{
+                    data: data3,
+                    backgroundColor: ['rgba(186, 0, 0, 0.2)',
+                        'rgba(250, 154, 37, 0.2)',
+                        'rgba(37, 202, 247, 0.2)',
+                    ],
+                    borderColor: ['rgba(186, 0, 0, 0.93)',
+                        'rgba(250, 154, 37, 0.81)',
+                        'rgba(37, 202, 247, 0.81)',
+                    ],
+                    borderWidth: 2
+                }],
+            }
+            transactionTypeChart.update();
+
+            x = 0
+            var TSChart4 = response.yearforCustomerTypeChart;
+            var data4 = TSChart4.map(item => item.data);
+
+            customerTypeChart.config.data = {
+                labels: ["Student", "Individual", "Private", "Government", "Internal", "Academe", "Not Applicable", ],
+                datasets: [{
+                    data: data4,
+                    backgroundColor: ['rgba(247, 37, 149, 0.2)',
+                        'rgba(166, 37, 247, 0.2)',
+                        'rgba(255, 155, 22, 0.2)',
+                        'rgba(255, 213, 22, 0.2)',
+                        'rgba(49, 255, 22, 0.2)',
+                        'rgba(73, 0, 242, 0.2)',
+                        'rgba(0, 220, 242, 0.2)'
+
+                    ],
+                    borderColor: ['rgba(247, 37, 149, 0.81)',
+                        'rgba(166, 37, 247, 0.83)',
+                        'rgba(255, 155, 22, 0.83)',
+                        'rgba(255, 213, 22, 0.83)',
+                        'rgba(49, 255, 22, 0.83)',
+                        'rgba(73, 0, 242, 0.83)',
+                        'rgba(0, 220, 242, 0.83)'
+                    ],
+                    borderWidth: 2
+                }],
+            }
+            customerTypeChart.update();
+
+            myChart.config.data.datasets[2].data[0] = response.yearforMyChart[0].data;
+            myChart.config.data.datasets[3].data[0] = response.yearforMyChart[1].data;
+            myChart.update();
+
+            let fDate = new Date(document.getElementById('startDate').value);
+            let tDate = new Date(document.getElementById('endDate').value);
+
+            const timeDifference = tDate.getTime() - fDate.getTime();
+            const numberOfDays = Math.floor(timeDifference / (1000 * 3600 * 24)) + 1;
+            const digi = response.yearforMyChartAvgTransaction[0].data
+            const avgThis = Math.floor(digi / numberOfDays);
+            console.log(`Math.floor( AVG: ${response.yearforMyChartAvgTransaction[0].data} / ${numberOfDays} = ${avgThis} )`); // mema lang to di yan actual formula
+
+            document.getElementById('avgTransaction').innerHTML = avgThis;
+            let number = parseInt(response.yearforMyChart[0].data) + parseInt(response.yearforMyChart[1].data)
+            let fixedNumber = Math.round(number * 100) / 100;
+            document.getElementById('avgIncome').innerHTML = fixedNumber.toLocaleString("en-US");
+        } // end of year filter
     }
     dateFilter();
 </script>

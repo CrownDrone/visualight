@@ -17,7 +17,7 @@ use common\models\User;
 use yii\web\UploadedFile;
 use yii\db\Query;
 use DateTime;
-use Exception; 
+use Exception;
 use yii\base\InvalidConfigException;
 
 
@@ -290,20 +290,26 @@ class SiteController extends BaseController
                 ->groupBy('label')
                 ->all();
 
-            $forMyChart = (new Query())
-                ->select(['division as label', 'ROUND(AVG(amount), 2) as data'])
+            $forMyChart = (new Query()) //average income per division
+                ->select(['division as label', 'ROUND(AVG(amount)) as data'])
                 ->from('transaction')
                 ->where(['between', 'transaction_date', $fromDate, $toDate])
                 ->groupBy('division')
                 ->all();
 
             $forMyChartAvgTransaction = (new Query())
-                ->select(['division as label', 'count(*) as data'])
+                ->select(['COUNT(*) AS data'])
                 ->from('transaction')
                 ->where(['between', 'transaction_date', $fromDate, $toDate])
                 ->all();
 
-
+            Yii::$app->set('db', [ //revert default connection 
+                'class' => \yii\db\Connection::class,
+                'dsn' => 'mysql:host=localhost;dbname=visualight2user',
+                'username' => 'root',
+                'password' => '',
+                'charset' => 'utf8',
+            ]);
 
             return json_encode([
                 //day
@@ -335,14 +341,6 @@ class SiteController extends BaseController
                 'forMyChartAvgTransaction' => $forMyChartAvgTransaction,
             ]);
         }
-
-        Yii::$app->set('db', [ //revert default connection 
-            'class' => \yii\db\Connection::class,
-            'dsn' => 'mysql:host=localhost;dbname=visualight2user',
-            'username' => 'root',
-            'password' => '',
-            'charset' => 'utf8',
-        ]);
     }
 
     public function actionMonth()
@@ -558,6 +556,14 @@ class SiteController extends BaseController
                 ->where(['between', 'DATE_FORMAT(transaction_date, "%Y-%m")', $fromDate, $toDate])
                 ->all();
 
+            Yii::$app->set('db', [ //revert default connection 
+                'class' => \yii\db\Connection::class,
+                'dsn' => 'mysql:host=localhost;dbname=visualight2user',
+                'username' => 'root',
+                'password' => '',
+                'charset' => 'utf8',
+            ]);
+
             return json_encode([
                 //month
                 'monthcustmerPerProvinceNCR' => $monthcustmerPerProvinceNCR,
@@ -586,15 +592,259 @@ class SiteController extends BaseController
                 'monthforMyChartAvgTransaction' => $monthforMyChartAvgTransaction,
             ]);
         }
-        Yii::$app->set('db', [ //revert default connection 
+    }
+
+    public function actionYearly()
+    {
+
+        Yii::$app->set('db', [ //reroute default connection 
             'class' => \yii\db\Connection::class,
-            'dsn' => 'mysql:host=localhost;dbname=visualight2user',
+            'dsn' => 'mysql:host=localhost;dbname=visualight2data',
             'username' => 'root',
             'password' => '',
             'charset' => 'utf8',
         ]);
-    }
 
+        $fromDate = Yii::$app->request->post('fromDate');
+        $toDate = Yii::$app->request->post('toDate');
+
+        if (Yii::$app->request->isAjax) {
+
+            //----------------------START OF REGIONAL PROVINCE MONTHS-----------------------------------
+
+            $yearcustmerPerProvinceNCR = (new Query())
+                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->from(['t2' => 'customer'])
+                ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
+                ->where(['t2.address' => ['Metro Manila']])
+                ->andwhere(['between', 'YEAR(t1.transaction_date)', $fromDate, $toDate])
+                ->groupBy('label')
+                ->all();
+
+            $yearcustmerPerProvinceRI = (new Query())
+                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->from(['t2' => 'customer'])
+                ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
+                ->where(['t2.address' => ['Ilocos Norte', 'Ilocos Sur', 'La Union', 'Pangasinan']])
+                ->andwhere(['between', 'YEAR(t1.transaction_date)', $fromDate, $toDate])
+                ->groupBy('label')
+                ->all();
+
+            $yearcustmerPerProvinceRII = (new Query())
+                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->from(['t2' => 'customer'])
+                ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
+                ->where(['t2.address' => ['Batanes', 'Cagayan', 'La Union', 'Isabela', 'Quirino', 'Nueva Vizcaya']])
+                ->andwhere(['between', 'YEAR(t1.transaction_date)', $fromDate, $toDate])
+                ->groupBy('label')
+                ->all();
+
+            $yearcustmerPerProvinceRIII = (new Query())
+                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->from(['t2' => 'customer'])
+                ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
+                ->where(['t2.address' => ['Aurora', 'Bataan', 'Bulacan', 'Nueba Ecija', 'Pampanga', 'Tarlac', 'Zambales']])
+                ->andwhere(['between', 'YEAR(t1.transaction_date)', $fromDate, $toDate])
+                ->groupBy('label')
+                ->all();
+
+            $yearcustmerPerProvinceRIVA = (new Query())
+                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->from(['t2' => 'customer'])
+                ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
+                ->where(['t2.address' => ['Batangas', 'Cavite', 'Laguna', 'Quezon', 'Rizal',]])
+                ->andwhere(['between', 'YEAR(t1.transaction_date)', $fromDate, $toDate])
+                ->groupBy('label')
+                ->all();
+
+            $yearcustmerPerProvinceMIMAROPA = (new Query()) //use MIMAROPA as desc please
+                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->from(['t2' => 'customer'])
+                ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
+                ->where(['t2.address' => ['Marinduque', 'Occidental Mindoro', 'Oriental Mindoro', 'Palawan', 'Romblon']])
+                ->andwhere(['between', 'YEAR(t1.transaction_date)', $fromDate, $toDate])
+                ->groupBy('label')
+                ->all();
+
+            $yearcustmerPerProvinceV = (new Query())
+                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->from(['t2' => 'customer'])
+                ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
+                ->where(['t2.address' => ['Albay', 'Camarines Sur', 'Camarines Norte', 'Catanduanes', 'Masbate', 'Sorsogon']])
+                ->andwhere(['between', 'YEAR(t1.transaction_date)', $fromDate, $toDate])
+                ->groupBy('label')
+                ->all();
+
+            $yearcustmerPerProvinceCAR = (new Query())
+                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->from(['t2' => 'customer'])
+                ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
+                ->where(['t2.address' => ['Abra', 'Apayao', 'Benguet', 'Ifugao', 'Kalinga', 'Mountain Province']])
+                ->andwhere(['between', 'YEAR(t1.transaction_date)', $fromDate, $toDate])
+                ->groupBy('label')
+                ->all();
+
+            $yearcustmerPerProvinceVI = (new Query())
+                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->from(['t2' => 'customer'])
+                ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
+                ->where(['t2.address' => ['Aklan', 'Antique', 'Capiz', 'Guimaras', 'Iloilo', 'Negros Occidental']])
+                ->andwhere(['between', 'YEAR(t1.transaction_date)', $fromDate, $toDate])
+                ->groupBy('label')
+                ->all();
+
+            $yearcustmerPerProvinceVII = (new Query())
+                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->from(['t2' => 'customer'])
+                ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
+                ->where(['t2.address' => ['Bohol', 'Cebu', 'Negros Oriental', 'Siquijor']])
+                ->andwhere(['between', 'YEAR(t1.transaction_date)', $fromDate, $toDate])
+                ->groupBy('label')
+                ->all();
+
+            $yearcustmerPerProvinceVIII = (new Query())
+                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->from(['t2' => 'customer'])
+                ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
+                ->where(['t2.address' => ['Biliran', 'Eastern Samar', 'Leyte', 'Western Samar', 'Samar', 'Southern Leyte']])
+                ->andwhere(['between', 'YEAR(t1.transaction_date)', $fromDate, $toDate])
+                ->groupBy('label')
+                ->all();
+
+            $yearcustmerPerProvinceIX = (new Query())
+                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->from(['t2' => 'customer'])
+                ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
+                ->where(['t2.address' => ['Zamboanga del Sur', 'Zamboanga del Norte', 'Zamboanga Sibugay']])
+                ->andwhere(['between', 'YEAR(t1.transaction_date)', $fromDate, $toDate])
+                ->groupBy('label')
+                ->all();
+
+            $yearcustmerPerProvinceX = (new Query())
+                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->from(['t2' => 'customer'])
+                ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
+                ->where(['t2.address' => ['Bukidnon', 'Camiguin', 'Lanao del Norte', 'Misamis Oriental', 'Misamis Occidental']])
+                ->andwhere(['between', 'YEAR(t1.transaction_date)', $fromDate, $toDate])
+                ->groupBy('label')
+                ->all();
+
+            $yearcustmerPerProvinceXI = (new Query())
+                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->from(['t2' => 'customer'])
+                ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
+                ->where(['t2.address' => ['Davao de Oro', 'Davao del Norte', 'Davao del Sur', 'Davao Oriental', 'Davao Occidental']])
+                ->andwhere(['between', 'YEAR(t1.transaction_date)', $fromDate, $toDate])
+                ->groupBy('label')
+                ->all();
+
+            $yearcustmerPerProvinceXII = (new Query())
+                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->from(['t2' => 'customer'])
+                ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
+                ->where(['t2.address' => ['Cotabato', 'Sarangani', 'South Cotabato', 'Sultan Kudarat']])
+                ->andwhere(['between', 'YEAR(t1.transaction_date)', $fromDate, $toDate])
+                ->groupBy('label')
+                ->all();
+
+            $yearcustmerPerProvinceXIII = (new Query())
+                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->from(['t2' => 'customer'])
+                ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
+                ->where(['t2.address' => ['Agusan del Norte', 'Agusan del Sur', 'Dinagat Islands', 'Surigao del Norte', 'Surigao del Sur']])
+                ->andwhere(['between', 'YEAR(t1.transaction_date)', $fromDate, $toDate])
+                ->groupBy('label')
+                ->all();
+
+            $yearcustmerPerProvinceBARMM = (new Query())
+                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->from(['t2' => 'customer'])
+                ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
+                ->where(['t2.address' => ['Basilan', 'Lanao del Sur', 'Maguindanao del Norte', 'Sulu', 'Maguindanao del Sur', 'Tawi-Tawi']])
+                ->andwhere(['between', 'YEAR(t1.transaction_date)', $fromDate, $toDate])
+                ->groupBy('label')
+                ->all();
+            //---------END OF PROVINCE----START OF OTHER CHART MONTHS
+
+            $yearforTransactionStatusChart = (new Query())
+                ->select(['transaction_status as label', 'COUNT(*) as data'])
+                ->from(['transaction'])
+                ->where(['between', 'YEAR(transaction_date)', $fromDate, $toDate])
+                ->groupBy('label')
+                ->all();
+
+            $yearforPaymendtMethodChart = (new Query())
+                ->select(['payment_method as label', 'COUNT(*) as data'])
+                ->from(['transaction'])
+                ->where(['between', 'YEAR(transaction_date)', $fromDate, $toDate])
+                ->groupBy('label')
+                ->all();
+
+            $yearforTransactionTypeChart = (new Query())
+                ->select(['transaction_type as label', 'COUNT(*) as data'])
+                ->from(['transaction'])
+                ->where(['between', 'YEAR(transaction_date)', $fromDate, $toDate])
+                ->groupBy('label')
+                ->all();
+
+            $yearforCustomerTypeChart = (new Query())
+                ->select(['t2.customer_type as label', 'COUNT(*) AS data'])
+                ->from(['t1' => 'transaction'])
+                ->join('JOIN', 'customer t2', 't1.customer_id = t2.id')
+                ->where(['between', 'YEAR(t1.transaction_date)', $fromDate, $toDate])
+                ->groupBy('label')
+                ->all();
+
+            $yearforMyChart = (new Query())
+                ->select(['division as label', 'ROUND(AVG(amount), 2) as data'])
+                ->from('transaction')
+                ->where(['between', 'YEAR(transaction_date)', $fromDate, $toDate])
+                ->groupBy('division')
+                ->all();
+
+            $yearforMyChartAvgTransaction = (new Query())
+                ->select(['division as label', 'count(*) as data'])
+                ->from('transaction')
+                ->where(['between', 'YEAR(transaction_date)', $fromDate, $toDate])
+                ->all();
+
+            Yii::$app->set('db', [ //revert default connection 
+                'class' => \yii\db\Connection::class,
+                'dsn' => 'mysql:host=localhost;dbname=visualight2user',
+                'username' => 'root',
+                'password' => '',
+                'charset' => 'utf8',
+            ]);
+
+            return json_encode([
+                //month
+                'yearcustmerPerProvinceNCR' => $yearcustmerPerProvinceNCR,
+                'yearcustmerPerProvinceRI' => $yearcustmerPerProvinceRI,
+                'yearcustmerPerProvinceRII' => $yearcustmerPerProvinceRII,
+                'yearcustmerPerProvinceRIII' => $yearcustmerPerProvinceRIII,
+                'yearcustmerPerProvinceRIVA' => $yearcustmerPerProvinceRIVA,
+                'yearcustmerPerProvinceMIMAROPA' => $yearcustmerPerProvinceMIMAROPA,
+                'yearcustmerPerProvinceV' => $yearcustmerPerProvinceV,
+                'yearcustmerPerProvinceCAR' => $yearcustmerPerProvinceCAR,
+                'yearcustmerPerProvinceVI' => $yearcustmerPerProvinceVI,
+                'yearcustmerPerProvinceVII' => $yearcustmerPerProvinceVII,
+                'yearcustmerPerProvinceVIII' => $yearcustmerPerProvinceVIII,
+                'yearcustmerPerProvinceIX' => $yearcustmerPerProvinceIX,
+                'yearcustmerPerProvinceX' => $yearcustmerPerProvinceX,
+                'yearcustmerPerProvinceXI' => $yearcustmerPerProvinceXI,
+                'yearcustmerPerProvinceXII' => $yearcustmerPerProvinceXII,
+                'yearcustmerPerProvinceXIII' => $yearcustmerPerProvinceXIII,
+                'yearcustmerPerProvinceBARMM' => $yearcustmerPerProvinceBARMM,
+                //
+                'yearforTransactionStatusChart' => $yearforTransactionStatusChart,
+                'yearforPaymendtMethodChart' => $yearforPaymendtMethodChart,
+                'yearforTransactionTypeChart' => $yearforTransactionTypeChart,
+                'yearforCustomerTypeChart' => $yearforCustomerTypeChart,
+                'yearforMyChart' => $yearforMyChart,
+                'yearforMyChartAvgTransaction' => $yearforMyChartAvgTransaction,
+            ]);
+        }
+    }
     public function actionIndex() //this is for the dashboard keme keme chemerut
     {
 
@@ -896,6 +1146,119 @@ class SiteController extends BaseController
             ->orderBy(['month' => SORT_ASC])
             ->all();
 
+        //---------------------------------for year
+        $yearqueryAllDate = (new Query()) //daily transaction record seperated by division, Y axis for the chart
+            ->select([
+                'DATE_FORMAT(transaction_date, "%Y") AS labels',
+                'COUNT(*) AS datasets', 'division AS label'
+            ])
+            ->from('visualight2data.transaction') //from visualight2data database within transaction table
+            ->groupBy('labels, label')
+            ->orderBy('transaction_date')
+            ->all();
+
+        $yeardailyMapping = [ //to be used on renaming divisions
+            "1" => "National Metrology Division",
+            "2" => "Standards and Testing Division",
+        ];
+
+        foreach ($yearqueryAllDate as &$item) { //to change division 1 & 2 into actual division name
+            if (isset($item['label']) && isset($yeardailyMapping[$item['label']])) {
+                $item['label'] = $yeardailyMapping[$item['label']];
+            }
+        }
+
+        $yearqueryAllDate2 = (new Query()) //daily transaction record, separated kasi eto yung total transaction of 2 divisions
+            ->select([
+                'DATE_FORMAT(transaction_date, "%Y") AS labels',
+                'COUNT(*) AS datasets',
+                new \yii\db\Expression("CASE WHEN division IS NOT NULL THEN 'Total' ELSE NULL END AS label")
+            ])
+            ->from('visualight2data.transaction')
+            ->groupBy('labels')
+            ->orderBy('labels')
+            ->all();
+
+        array_splice($yearqueryAllDate, 0, 0, $yearqueryAllDate2); //splice the transaction per div array
+        $yearqueryAllDate = array_values($yearqueryAllDate); //insert total transaction into transaction per div array
+
+        //--------------
+        $yearqueryTotalSale = (new Query()) //daily sales record seperated by division
+            ->select(['DATE_FORMAT(transaction_date, "%Y") AS labels', 'SUM(amount) AS datasets', 'division AS label'])
+            ->from('visualight2data.transaction') //from visualight2data database within transaction table
+            ->groupBy('labels, label')
+            ->orderBy('labels')
+            ->all();
+
+        foreach ($yearqueryTotalSale as &$item) { //to change division 1 & 2 into actual division name
+            if (isset($item['label']) && isset($yeardailyMapping[$item['label']])) {
+                $item['label'] = $yeardailyMapping[$item['label']];
+            }
+        }
+
+        $yearqueryTotalSale2 = (new Query()) //daily total sales record, separated kasi eto yung total transaction of 2 divisions
+            ->select([
+                'DATE_FORMAT(transaction_date, "%Y") AS labels',
+                'SUM(amount) AS datasets',
+                new \yii\db\Expression("CASE WHEN division IS NOT NULL THEN 'Total' ELSE NULL END AS label")
+            ])
+            ->from('visualight2data.transaction')
+            ->groupBy('labels')
+            ->orderBy('labels')
+            ->all();
+
+        array_splice($yearqueryTotalSale, 2, 0, $yearqueryTotalSale2); //splice the sales per div array
+        $yearqueryTotalSale = array_values($yearqueryTotalSale); //insert total sales into transaction per div array
+
+        //--------------------
+        $yearqueryDivAverageSale = (new Query()) //daily average sales record seperated by division
+            ->select(['DATE_FORMAT(transaction_date, "%Y") AS labels', 'AVG(amount) AS datasets', 'division AS label'])
+            ->from('visualight2data.transaction') //from visualight2data database within transaction table
+            ->groupBy('labels, label')
+            ->orderBy('labels')
+            ->all();
+
+        foreach ($yearqueryDivAverageSale as &$item) { //to change division 1 & 2 into actual division name
+            if (isset($item['label']) && isset($yeardailyMapping[$item['label']])) {
+                $item['label'] = $yeardailyMapping[$item['label']];
+            }
+        }
+
+        $yearqueryTotalAverageSale = (new Query()) //daily total average sales record, separated kasi eto yung total transaction of 2 divisions
+            ->select([
+                'DATE_FORMAT(transaction_date, "%Y") AS labels',
+                'AVG(amount) AS datasets',
+                new \yii\db\Expression("CASE WHEN division IS NOT NULL THEN 'Total' ELSE NULL END AS label")
+            ])
+            ->from('visualight2data.transaction')
+            ->groupBy('labels')
+            ->orderBy('labels')
+            ->all();
+
+        $yearqueryAddress = (new Query()) //total customer per province
+            ->select(['address AS labels', 'COUNT(*) as datasets'])
+            ->from('customer')
+            ->groupBy(['labels'])
+            ->orderBy(['datasets' => SORT_DESC])
+            ->all();
+
+        $yearqueryTransactionTypePerProvince = (new Query()) //total of type of tranasction per province
+            ->select([
+                'c.address AS labels',
+                'datasets' => new \yii\db\Expression('COUNT(*)')
+            ])
+            ->from(['bs' => 'transaction']) // Assign an alias 'bs' to the 'transaction' table
+            ->innerJoin(['c' => 'customer'], 'bs.customer_id = c.id') // Assign an alias 'c' to the 'customer' table
+            ->groupBy('c.address')
+            ->orderBy(['bs.transaction_date']);
+
+        $yearLabel = (new Query()) //YYYY-MM-DD will serve as label for the chart, the X axis if you may
+            ->select(['DATE_FORMAT(month, "%Y") AS year'])
+            ->from('month_label')
+            ->groupBy('year')
+            ->orderBy(['year' => SORT_ASC])
+            ->all();
+
         Yii::$app->set('db', [ //revert default connection 
             'class' => \yii\db\Connection::class,
             'dsn' => 'mysql:host=localhost;dbname=visualight2user',
@@ -903,6 +1266,7 @@ class SiteController extends BaseController
             'password' => '',
             'charset' => 'utf8',
         ]);
+        //-------END OF YEAR
 
         return $this->render('index', [
             'queryAllDate' => $queryAllDate,
@@ -919,7 +1283,15 @@ class SiteController extends BaseController
             'monthqueryTotalAverageSale' => $monthqueryTotalAverageSale,
             'monthqueryAddress' => $monthqueryAddress,
             'monthqueryTransactionTypePerProvince' => $monthqueryTransactionTypePerProvince,
-            'monthLabel' => $monthLabel, // to be used as label to all chart label that uses yyyy-mm-dd format
+            'monthLabel' => $monthLabel, // to be used as label to all chart label that uses yyyy-mm format
+
+            'yearqueryAllDate' => $yearqueryAllDate,
+            'yearqueryTotalSale' => $yearqueryTotalSale,
+            'yearqueryDivAverageSale' => $yearqueryDivAverageSale,
+            'yearqueryTotalAverageSale' => $yearqueryTotalAverageSale,
+            'yearqueryAddress' => $yearqueryAddress,
+            'yearqueryTransactionTypePerProvince' => $yearqueryTransactionTypePerProvince,
+            'yearLabel' => $yearLabel, // to be used as label to all chart label that uses yyyy format
         ]);
     }
 
@@ -1120,91 +1492,89 @@ class SiteController extends BaseController
     }
 
     public function actionUploadPdf()
-{
-    $model = new PdfUploadForm();
+    {
+        $model = new PdfUploadForm();
 
-    if (Yii::$app->request->isPost) {
+        if (Yii::$app->request->isPost) {
 
-        $model->pdfFile = UploadedFile::getInstances($model, 'pdfFile');
+            $model->pdfFile = UploadedFile::getInstances($model, 'pdfFile');
 
-        $uploadSuccessful = true;
-        $filePaths = [];
+            $uploadSuccessful = true;
+            $filePaths = [];
 
-        foreach ($model->pdfFile as $file) {
-            $fileName = time() . '_' . $file->name;
-            $uploadPath = 'C:/xampp/htdocs/visualight/common/temp_pdf/' . $fileName;
+            foreach ($model->pdfFile as $file) {
+                $fileName = time() . '_' . $file->name;
+                $uploadPath = 'C:/xampp/htdocs/visualight/common/temp_pdf/' . $fileName;
 
-            if (!$file->saveAs($uploadPath)) {
-                $uploadSuccessful = false;
-                Yii::$app->session->setFlash('error', 'Error while uploading one or more files.');
-                break;
+                if (!$file->saveAs($uploadPath)) {
+                    $uploadSuccessful = false;
+                    Yii::$app->session->setFlash('error', 'Error while uploading one or more files.');
+                    break;
+                }
+
+                $filePaths[] = $uploadPath;
             }
 
-            $filePaths[] = $uploadPath;
-        }
+            if ($uploadSuccessful) {
+                $selectedRoles = Yii::$app->request->post('PdfUploadForm')['selectedRoles'];
+                $selectedEmails = Yii::$app->request->post('PdfUploadForm')['selectedEmails'];
 
-        if ($uploadSuccessful) {
-            $selectedRoles = Yii::$app->request->post('PdfUploadForm')['selectedRoles'];
-            $selectedEmails = Yii::$app->request->post('PdfUploadForm')['selectedEmails'];
+                $emailsToSend = [];
 
-            $emailsToSend = [];
-
-            // Check if selectedRoles is an array before iterating
-            if (is_array($selectedRoles)) {
-                foreach ($selectedRoles as $selectedRole) {
-                    $userIds = Yii::$app->authManager->getUserIdsByRole($selectedRole);
-                    foreach ($userIds as $userId) {
-                        $user = User::findOne($userId);
-                        if ($user) {
-                            $emailsToSend[] = $user->email;
+                // Check if selectedRoles is an array before iterating
+                if (is_array($selectedRoles)) {
+                    foreach ($selectedRoles as $selectedRole) {
+                        $userIds = Yii::$app->authManager->getUserIdsByRole($selectedRole);
+                        foreach ($userIds as $userId) {
+                            $user = User::findOne($userId);
+                            if ($user) {
+                                $emailsToSend[] = $user->email;
+                            }
                         }
                     }
                 }
-            }
 
-            // Process selectedEmails
-            if (is_array($selectedEmails)) {
-                foreach ($selectedEmails as $email) {
-                    $emailsToSend[] = $email;
-                }
-            }
-
-            $emailsToSend = array_unique($emailsToSend); // Remove duplicate emails
-
-            foreach ($emailsToSend as $email) {
-                $message = Yii::$app->mailer->compose()
-                    ->setFrom([Yii::$app->params['adminEmail'] => 'Visualight Team'])
-                    ->setTo($email)
-                    ->setSubject('Visualight Chart Report PDF Files')
-                    ->setTextBody('These are the attached PDF files.');
-
-                foreach ($filePaths as $filePath) {
-                    $message->attach($filePath);
+                // Process selectedEmails
+                if (is_array($selectedEmails)) {
+                    foreach ($selectedEmails as $email) {
+                        $emailsToSend[] = $email;
+                    }
                 }
 
-                try {
-                    if (!$message->send()) {
-                        Yii::$app->session->setFlash('error', 'Error while sending one or more emails.');
-                        break;
-                    }   
-                } catch (Exception $e) {
-                    Yii::$app->session->setFlash('error', 'Failed to send email. Please check your internet connection and try again.');
-                    break; // Stop sending to the rest of the emails once an error is encountered
+                $emailsToSend = array_unique($emailsToSend); // Remove duplicate emails
+
+                foreach ($emailsToSend as $email) {
+                    $message = Yii::$app->mailer->compose()
+                        ->setFrom([Yii::$app->params['adminEmail'] => 'Visualight Team'])
+                        ->setTo($email)
+                        ->setSubject('Visualight Chart Report PDF Files')
+                        ->setTextBody('These are the attached PDF files.');
+
+                    foreach ($filePaths as $filePath) {
+                        $message->attach($filePath);
+                    }
+
+                    try {
+                        if (!$message->send()) {
+                            Yii::$app->session->setFlash('error', 'Error while sending one or more emails.');
+                            break;
+                        }
+                    } catch (Exception $e) {
+                        Yii::$app->session->setFlash('error', 'Failed to send email. Please check your internet connection and try again.');
+                        break; // Stop sending to the rest of the emails once an error is encountered
+                    }
                 }
-                
 
-            }
+                if (!Yii::$app->session->hasFlash('error')) {
+                    Yii::$app->session->setFlash('success', 'PDF attachments are sent successfully.');
 
-            if (!Yii::$app->session->hasFlash('error')) {
-                Yii::$app->session->setFlash('success', 'PDF attachments are sent successfully.');
-
-                return $this->redirect(['site/upload-pdf']);
+                    return $this->redirect(['site/upload-pdf']);
+                }
             }
         }
-    }
 
-    return $this->render('upload-pdf', ['model' => $model]);
-}
+        return $this->render('upload-pdf', ['model' => $model]);
+    }
 
 
     public function actionUpload()

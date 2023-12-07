@@ -102,6 +102,13 @@ return [ //routes, if you cannot see your created route gamitin nyo this sa term
                 'site/success' => 'site/success',
                 'dbeditor' => 'dbeditor/default/index',
                 'assignment/view/<id:\d+>' => 'assignment/view',
+                'chart/days' => 'nmd/chart/days',
+                'chart/months' => 'nmd/chart/months',
+                'chart/years' => 'nmd/chart/years',
+
+                'chart/day' => 'std/chart/day',
+                'chart/month' => 'std/chart/month',
+                'chart/year' => 'std/chart/year',
                 // '<controller:[\w-]+>/<id:\d+>' => '<controller>/view',
                 // '<controller:[\w-]+>/<action:[\w-]+>/<id:\d+>' => '<controller>/<action>',
                 // '<controller:[\w\-]+>/<action:[\w\-]+>/<id:[\w]+>' => '<controller>/<action>',
