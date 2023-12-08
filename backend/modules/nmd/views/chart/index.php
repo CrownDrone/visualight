@@ -373,21 +373,23 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
         left: 0;
         width: 100%;
         height: 100%;
-        background: rgba(0, 0, 0, 0.7);
         z-index: 1000;
     }
 
     .popup-content {
+        width: 69%;
         position: absolute;
         top: 50%;
         left: 50%;
-        transform: translate(-50%, -50%);
-        background: #fff;
+        transform: translate(-40%, -46%);
+        background: white;
+        color: black;
         padding: 20px;
         border: 1px solid #333;
         box-shadow: 2px 2px 10px #888;
         text-align: center;
     }
+
 
     .close {
         position: absolute;
@@ -404,13 +406,16 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
 
     .speedometer-dial {
         width: 150px;
-        height: 75px;
+        height: 85px;
+        top: 10%;
         /* Half the height of the full dial */
         background-color: red;
         border-radius: 75px 75px 0 0;
         /* Round the top corners */
         position: relative;
         margin: 0 auto;
+        overflow: hidden;
+
     }
 
     .speedometer-reading {
@@ -432,6 +437,22 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
         transform-origin: 50% 0;
         transform: translateX(-50%) rotate(0deg);
         transition: transform 1s ease;
+    }
+
+    /* background */
+    .speedometer {
+        background-color: #E2EBEC;
+        position: absolute;
+        right: 40%;
+        top: 55%;
+        transform: translate(-50%, -50%);
+        width: 400px;
+        height: 200px;
+        justify-content: left;
+        align-items: left;
+        font-size: 1.5rem;
+        font-weight: bold;
+        border-radius: 1rem;
     }
 
 
@@ -1398,33 +1419,48 @@ $targetIncome =
             <h2 id="PopupHeader"></h2>
 
             <div class="speedometer">
-                <p>Color of speedometer will identify if the target is meet</p>
-                <p><span style="color: red">Low </span>
-                    <span style="color: orange">Moderate </span>
-                    <span style="color: yellow">High </span>
-                    <span style="color: green">Satisfaction </span>
+                <p><span style="color: #C70039 ">Low </span>
+                    <span style="color: #FF5733 ">Moderate </span>
+                    <span style="color: #FFC300 ">High </span>
+                    <span style="color: #6ABF70">Satisfaction </span>
                 </p>
                 <div class="speedometer-dial">
                     <div class="speedometer-reading" id="speedometer-reading"></div>
                     <div class="speedometer-arrow" id="speedometer-arrow"></div>
                 </div>
             </div>
+            <p id="percentTransaction" style="position: absolute; bottom: 90px; width: 100%; right: 290px;"></p>
+
             <p id="targetTransaction"></p>
-            <p id="percentTransaction"></p>
-            <p></p>
 
-            <div style="text-align: left; margin: 0 auto; width: 80%;">
-                <p id="highest"> </p>
-                <p id="least"> </p>
 
-                <p id="mostTransactionType"> </p>
-                <p id="leastTransactionType"> </p>
-
-                <p id="mostCustomerType"> </p>
-                <p id="leastCustomerType"> </p>
-
-                <p id="mostCustomerProvince"> </p>
-                <p id="leastCustomerProvince"> </p>
+            <div style="text-align: right; margin: 0 auto; width: 80%;">
+                <ul style="padding-left: 500px;">
+                    <li>
+                        <p id="highest"></p>
+                    </li>
+                    <li>
+                        <p id="least"></p>
+                    </li>
+                    <li>
+                        <p id="mostTransactionType"></p>
+                    </li>
+                    <li>
+                        <p id="leastTransactionType"></p>
+                    </li>
+                    <li>
+                        <p id="mostCustomerType"></p>
+                    </li>
+                    <li>
+                        <p id="leastCustomerType"></p>
+                    </li>
+                    <li>
+                        <p id="mostCustomerProvince"></p>
+                    </li>
+                    <li>
+                        <p id="leastCustomerProvince"></p>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>

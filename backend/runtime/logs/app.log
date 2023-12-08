@@ -45977,3 +45977,2454 @@ $_SERVER = [
     'REQUEST_TIME_FLOAT' => 1701921249.9084
     'REQUEST_TIME' => 1701921249
 ]
+2023-12-07 08:26:58 [127.0.0.1][1][dmaoijddkm4uu03vl134jbj6m0][error][yii\web\HttpException:404] yii\base\InvalidRouteException: Unable to resolve the request "std/chart/path/to/Chart.min.js". in D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Module.php:561
+Stack trace:
+#0 D:\new\htdocs\visualight\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('std/chart/path/...', Array)
+#1 D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Application.php(384): yii\web\Application->handleRequest(Object(yii\web\Request))
+#2 D:\new\htdocs\visualight\backend\web\index.php(18): yii\base\Application->run()
+#3 {main}
+
+Next yii\web\NotFoundHttpException: Page not found. in D:\new\htdocs\visualight\vendor\yiisoft\yii2\web\Application.php:115
+Stack trace:
+#0 D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Application.php(384): yii\web\Application->handleRequest(Object(yii\web\Request))
+#1 D:\new\htdocs\visualight\backend\web\index.php(18): yii\base\Application->run()
+#2 {main}
+2023-12-07 08:26:58 [127.0.0.1][1][dmaoijddkm4uu03vl134jbj6m0][info][application] $_GET = []
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = [
+    '_identity-backend' => 'faabc4de6d90adad4c2dd4d9214aaab678cc4097c3d17a8d4e1df273fd0c4178a:2:{i:0;s:17:\"_identity-backend\";i:1;s:46:\"[1,\"ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i\",2592000]\";}'
+    'advanced-backend' => 'dmaoijddkm4uu03vl134jbj6m0'
+    '_csrf-backend' => 'd3a186c8cf6b4b3d8200f84e14ae73d332e67aeabaa25dd605a3d8cdcd4c12c9a:2:{i:0;s:13:\"_csrf-backend\";i:1;s:32:\"dLODo-iZBR_QkMXsa0HLciGbdvZRbq7Y\";}'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__id' => 1
+    '__authKey' => 'ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i'
+    '__expire' => 1701935218
+]
+
+$_SERVER = [
+    'REDIRECT_MIBDIRS' => 'D:/new/php/extras/mibs'
+    'REDIRECT_MYSQL_HOME' => '\\xampp\\mysql\\bin'
+    'REDIRECT_OPENSSL_CONF' => 'D:/new/apache/bin/openssl.cnf'
+    'REDIRECT_PHP_PEAR_SYSCONF_DIR' => '\\xampp\\php'
+    'REDIRECT_PHPRC' => '\\xampp\\php'
+    'REDIRECT_TMP' => '\\xampp\\tmp'
+    'REDIRECT_STATUS' => '200'
+    'MIBDIRS' => 'D:/new/php/extras/mibs'
+    'MYSQL_HOME' => '\\xampp\\mysql\\bin'
+    'OPENSSL_CONF' => 'D:/new/apache/bin/openssl.cnf'
+    'PHP_PEAR_SYSCONF_DIR' => '\\xampp\\php'
+    'PHPRC' => '\\xampp\\php'
+    'TMP' => '\\xampp\\tmp'
+    'HTTP_HOST' => 'studio.visualight.test'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+    'HTTP_ACCEPT' => '*/*'
+    'HTTP_SEC_GPC' => '1'
+    'HTTP_ACCEPT_LANGUAGE' => 'en-US,en;q=0.7'
+    'HTTP_REFERER' => 'http://studio.visualight.test/std/chart/index'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_COOKIE' => '_identity-backend=faabc4de6d90adad4c2dd4d9214aaab678cc4097c3d17a8d4e1df273fd0c4178a%3A2%3A%7Bi%3A0%3Bs%3A17%3A%22_identity-backend%22%3Bi%3A1%3Bs%3A46%3A%22%5B1%2C%22ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i%22%2C2592000%5D%22%3B%7D; advanced-backend=dmaoijddkm4uu03vl134jbj6m0; _csrf-backend=d3a186c8cf6b4b3d8200f84e14ae73d332e67aeabaa25dd605a3d8cdcd4c12c9a%3A2%3A%7Bi%3A0%3Bs%3A13%3A%22_csrf-backend%22%3Bi%3A1%3Bs%3A32%3A%22dLODo-iZBR_QkMXsa0HLciGbdvZRbq7Y%22%3B%7D'
+    'PATH' => 'D:\\PYTHONG\\Scripts\\;D:\\PYTHONG\\;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Windows\\System32\\OpenSSH\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\NVIDIA Corporation\\NVIDIA NvDLISR;C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\dotnet\\;C:\\Program Files\\Azure Data Studio\\bin;C:\\Program Files\\Microsoft SQL Server\\Client SDK\\ODBC\\170\\Tools\\Binn\\;C:\\Program Files (x86)\\Microsoft SQL Server\\150\\Tools\\Binn\\;C:\\Program Files\\Microsoft SQL Server\\150\\Tools\\Binn\\;C:\\Program Files\\Microsoft SQL Server\\150\\DTS\\Binn\\;C:\\Program Files (x86)\\Microsoft SQL Server\\150\\DTS\\Binn\\;C:\\Program Files\\Git\\cmd;C:\\ProgramData\\ComposerSetup\\bin;D:\\new\\php;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC;.PY;.PYW'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => '<address>Apache/2.4.56 (Win64) OpenSSL/1.1.1t PHP/8.0.29 Server at studio.visualight.test Port 80</address>
+'
+    'SERVER_SOFTWARE' => 'Apache/2.4.56 (Win64) OpenSSL/1.1.1t PHP/8.0.29'
+    'SERVER_NAME' => 'studio.visualight.test'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/new/htdocs/visualight/backend/web'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/new/htdocs/visualight/backend/web'
+    'SERVER_ADMIN' => 'postmaster@localhost'
+    'SCRIPT_FILENAME' => 'D:/new/htdocs/visualight/backend/web/index.php'
+    'REMOTE_PORT' => '54088'
+    'REDIRECT_URL' => '/std/chart/path/to/Chart.min.js'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'REQUEST_URI' => '/std/chart/path/to/Chart.min.js'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1701934018.6662
+    'REQUEST_TIME' => 1701934018
+]
+2023-12-07 08:27:58 [127.0.0.1][1][dmaoijddkm4uu03vl134jbj6m0][error][yii\web\HttpException:404] yii\base\InvalidRouteException: Unable to resolve the request "std/chart/path/to/Chart.min.js". in D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Module.php:561
+Stack trace:
+#0 D:\new\htdocs\visualight\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('std/chart/path/...', Array)
+#1 D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Application.php(384): yii\web\Application->handleRequest(Object(yii\web\Request))
+#2 D:\new\htdocs\visualight\backend\web\index.php(18): yii\base\Application->run()
+#3 {main}
+
+Next yii\web\NotFoundHttpException: Page not found. in D:\new\htdocs\visualight\vendor\yiisoft\yii2\web\Application.php:115
+Stack trace:
+#0 D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Application.php(384): yii\web\Application->handleRequest(Object(yii\web\Request))
+#1 D:\new\htdocs\visualight\backend\web\index.php(18): yii\base\Application->run()
+#2 {main}
+2023-12-07 08:27:57 [127.0.0.1][1][dmaoijddkm4uu03vl134jbj6m0][info][application] $_GET = []
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = [
+    '_identity-backend' => 'faabc4de6d90adad4c2dd4d9214aaab678cc4097c3d17a8d4e1df273fd0c4178a:2:{i:0;s:17:\"_identity-backend\";i:1;s:46:\"[1,\"ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i\",2592000]\";}'
+    'advanced-backend' => 'dmaoijddkm4uu03vl134jbj6m0'
+    '_csrf-backend' => 'd3a186c8cf6b4b3d8200f84e14ae73d332e67aeabaa25dd605a3d8cdcd4c12c9a:2:{i:0;s:13:\"_csrf-backend\";i:1;s:32:\"dLODo-iZBR_QkMXsa0HLciGbdvZRbq7Y\";}'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__id' => 1
+    '__authKey' => 'ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i'
+    '__expire' => 1701935277
+]
+
+$_SERVER = [
+    'REDIRECT_MIBDIRS' => 'D:/new/php/extras/mibs'
+    'REDIRECT_MYSQL_HOME' => '\\xampp\\mysql\\bin'
+    'REDIRECT_OPENSSL_CONF' => 'D:/new/apache/bin/openssl.cnf'
+    'REDIRECT_PHP_PEAR_SYSCONF_DIR' => '\\xampp\\php'
+    'REDIRECT_PHPRC' => '\\xampp\\php'
+    'REDIRECT_TMP' => '\\xampp\\tmp'
+    'REDIRECT_STATUS' => '200'
+    'MIBDIRS' => 'D:/new/php/extras/mibs'
+    'MYSQL_HOME' => '\\xampp\\mysql\\bin'
+    'OPENSSL_CONF' => 'D:/new/apache/bin/openssl.cnf'
+    'PHP_PEAR_SYSCONF_DIR' => '\\xampp\\php'
+    'PHPRC' => '\\xampp\\php'
+    'TMP' => '\\xampp\\tmp'
+    'HTTP_HOST' => 'studio.visualight.test'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+    'HTTP_ACCEPT' => '*/*'
+    'HTTP_SEC_GPC' => '1'
+    'HTTP_ACCEPT_LANGUAGE' => 'en-US,en;q=0.7'
+    'HTTP_REFERER' => 'http://studio.visualight.test/std/chart/index'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_COOKIE' => '_identity-backend=faabc4de6d90adad4c2dd4d9214aaab678cc4097c3d17a8d4e1df273fd0c4178a%3A2%3A%7Bi%3A0%3Bs%3A17%3A%22_identity-backend%22%3Bi%3A1%3Bs%3A46%3A%22%5B1%2C%22ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i%22%2C2592000%5D%22%3B%7D; advanced-backend=dmaoijddkm4uu03vl134jbj6m0; _csrf-backend=d3a186c8cf6b4b3d8200f84e14ae73d332e67aeabaa25dd605a3d8cdcd4c12c9a%3A2%3A%7Bi%3A0%3Bs%3A13%3A%22_csrf-backend%22%3Bi%3A1%3Bs%3A32%3A%22dLODo-iZBR_QkMXsa0HLciGbdvZRbq7Y%22%3B%7D'
+    'PATH' => 'D:\\PYTHONG\\Scripts\\;D:\\PYTHONG\\;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Windows\\System32\\OpenSSH\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\NVIDIA Corporation\\NVIDIA NvDLISR;C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\dotnet\\;C:\\Program Files\\Azure Data Studio\\bin;C:\\Program Files\\Microsoft SQL Server\\Client SDK\\ODBC\\170\\Tools\\Binn\\;C:\\Program Files (x86)\\Microsoft SQL Server\\150\\Tools\\Binn\\;C:\\Program Files\\Microsoft SQL Server\\150\\Tools\\Binn\\;C:\\Program Files\\Microsoft SQL Server\\150\\DTS\\Binn\\;C:\\Program Files (x86)\\Microsoft SQL Server\\150\\DTS\\Binn\\;C:\\Program Files\\Git\\cmd;C:\\ProgramData\\ComposerSetup\\bin;D:\\new\\php;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC;.PY;.PYW'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => '<address>Apache/2.4.56 (Win64) OpenSSL/1.1.1t PHP/8.0.29 Server at studio.visualight.test Port 80</address>
+'
+    'SERVER_SOFTWARE' => 'Apache/2.4.56 (Win64) OpenSSL/1.1.1t PHP/8.0.29'
+    'SERVER_NAME' => 'studio.visualight.test'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/new/htdocs/visualight/backend/web'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/new/htdocs/visualight/backend/web'
+    'SERVER_ADMIN' => 'postmaster@localhost'
+    'SCRIPT_FILENAME' => 'D:/new/htdocs/visualight/backend/web/index.php'
+    'REMOTE_PORT' => '54126'
+    'REDIRECT_URL' => '/std/chart/path/to/Chart.min.js'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'REQUEST_URI' => '/std/chart/path/to/Chart.min.js'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1701934077.8196
+    'REQUEST_TIME' => 1701934077
+]
+2023-12-07 08:28:14 [127.0.0.1][1][dmaoijddkm4uu03vl134jbj6m0][error][yii\web\HttpException:404] yii\base\InvalidRouteException: Unable to resolve the request "nmd/chart/path/to/Chart.min.js". in D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Module.php:561
+Stack trace:
+#0 D:\new\htdocs\visualight\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('nmd/chart/path/...', Array)
+#1 D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Application.php(384): yii\web\Application->handleRequest(Object(yii\web\Request))
+#2 D:\new\htdocs\visualight\backend\web\index.php(18): yii\base\Application->run()
+#3 {main}
+
+Next yii\web\NotFoundHttpException: Page not found. in D:\new\htdocs\visualight\vendor\yiisoft\yii2\web\Application.php:115
+Stack trace:
+#0 D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Application.php(384): yii\web\Application->handleRequest(Object(yii\web\Request))
+#1 D:\new\htdocs\visualight\backend\web\index.php(18): yii\base\Application->run()
+#2 {main}
+2023-12-07 08:28:14 [127.0.0.1][1][dmaoijddkm4uu03vl134jbj6m0][info][application] $_GET = []
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = [
+    '_identity-backend' => 'faabc4de6d90adad4c2dd4d9214aaab678cc4097c3d17a8d4e1df273fd0c4178a:2:{i:0;s:17:\"_identity-backend\";i:1;s:46:\"[1,\"ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i\",2592000]\";}'
+    'advanced-backend' => 'dmaoijddkm4uu03vl134jbj6m0'
+    '_csrf-backend' => 'd3a186c8cf6b4b3d8200f84e14ae73d332e67aeabaa25dd605a3d8cdcd4c12c9a:2:{i:0;s:13:\"_csrf-backend\";i:1;s:32:\"dLODo-iZBR_QkMXsa0HLciGbdvZRbq7Y\";}'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__id' => 1
+    '__authKey' => 'ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i'
+    '__expire' => 1701935294
+]
+
+$_SERVER = [
+    'REDIRECT_MIBDIRS' => 'D:/new/php/extras/mibs'
+    'REDIRECT_MYSQL_HOME' => '\\xampp\\mysql\\bin'
+    'REDIRECT_OPENSSL_CONF' => 'D:/new/apache/bin/openssl.cnf'
+    'REDIRECT_PHP_PEAR_SYSCONF_DIR' => '\\xampp\\php'
+    'REDIRECT_PHPRC' => '\\xampp\\php'
+    'REDIRECT_TMP' => '\\xampp\\tmp'
+    'REDIRECT_STATUS' => '200'
+    'MIBDIRS' => 'D:/new/php/extras/mibs'
+    'MYSQL_HOME' => '\\xampp\\mysql\\bin'
+    'OPENSSL_CONF' => 'D:/new/apache/bin/openssl.cnf'
+    'PHP_PEAR_SYSCONF_DIR' => '\\xampp\\php'
+    'PHPRC' => '\\xampp\\php'
+    'TMP' => '\\xampp\\tmp'
+    'HTTP_HOST' => 'studio.visualight.test'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+    'HTTP_ACCEPT' => '*/*'
+    'HTTP_SEC_GPC' => '1'
+    'HTTP_ACCEPT_LANGUAGE' => 'en-US,en;q=0.7'
+    'HTTP_REFERER' => 'http://studio.visualight.test/nmd/chart/index'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_COOKIE' => '_identity-backend=faabc4de6d90adad4c2dd4d9214aaab678cc4097c3d17a8d4e1df273fd0c4178a%3A2%3A%7Bi%3A0%3Bs%3A17%3A%22_identity-backend%22%3Bi%3A1%3Bs%3A46%3A%22%5B1%2C%22ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i%22%2C2592000%5D%22%3B%7D; advanced-backend=dmaoijddkm4uu03vl134jbj6m0; _csrf-backend=d3a186c8cf6b4b3d8200f84e14ae73d332e67aeabaa25dd605a3d8cdcd4c12c9a%3A2%3A%7Bi%3A0%3Bs%3A13%3A%22_csrf-backend%22%3Bi%3A1%3Bs%3A32%3A%22dLODo-iZBR_QkMXsa0HLciGbdvZRbq7Y%22%3B%7D'
+    'PATH' => 'D:\\PYTHONG\\Scripts\\;D:\\PYTHONG\\;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Windows\\System32\\OpenSSH\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\NVIDIA Corporation\\NVIDIA NvDLISR;C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\dotnet\\;C:\\Program Files\\Azure Data Studio\\bin;C:\\Program Files\\Microsoft SQL Server\\Client SDK\\ODBC\\170\\Tools\\Binn\\;C:\\Program Files (x86)\\Microsoft SQL Server\\150\\Tools\\Binn\\;C:\\Program Files\\Microsoft SQL Server\\150\\Tools\\Binn\\;C:\\Program Files\\Microsoft SQL Server\\150\\DTS\\Binn\\;C:\\Program Files (x86)\\Microsoft SQL Server\\150\\DTS\\Binn\\;C:\\Program Files\\Git\\cmd;C:\\ProgramData\\ComposerSetup\\bin;D:\\new\\php;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC;.PY;.PYW'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => '<address>Apache/2.4.56 (Win64) OpenSSL/1.1.1t PHP/8.0.29 Server at studio.visualight.test Port 80</address>
+'
+    'SERVER_SOFTWARE' => 'Apache/2.4.56 (Win64) OpenSSL/1.1.1t PHP/8.0.29'
+    'SERVER_NAME' => 'studio.visualight.test'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/new/htdocs/visualight/backend/web'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/new/htdocs/visualight/backend/web'
+    'SERVER_ADMIN' => 'postmaster@localhost'
+    'SCRIPT_FILENAME' => 'D:/new/htdocs/visualight/backend/web/index.php'
+    'REMOTE_PORT' => '54156'
+    'REDIRECT_URL' => '/nmd/chart/path/to/Chart.min.js'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'REQUEST_URI' => '/nmd/chart/path/to/Chart.min.js'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1701934094.8423
+    'REQUEST_TIME' => 1701934094
+]
+2023-12-07 08:28:23 [127.0.0.1][1][dmaoijddkm4uu03vl134jbj6m0][error][yii\web\HttpException:404] yii\base\InvalidRouteException: Unable to resolve the request "std/chart/path/to/Chart.min.js". in D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Module.php:561
+Stack trace:
+#0 D:\new\htdocs\visualight\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('std/chart/path/...', Array)
+#1 D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Application.php(384): yii\web\Application->handleRequest(Object(yii\web\Request))
+#2 D:\new\htdocs\visualight\backend\web\index.php(18): yii\base\Application->run()
+#3 {main}
+
+Next yii\web\NotFoundHttpException: Page not found. in D:\new\htdocs\visualight\vendor\yiisoft\yii2\web\Application.php:115
+Stack trace:
+#0 D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Application.php(384): yii\web\Application->handleRequest(Object(yii\web\Request))
+#1 D:\new\htdocs\visualight\backend\web\index.php(18): yii\base\Application->run()
+#2 {main}
+2023-12-07 08:28:23 [127.0.0.1][1][dmaoijddkm4uu03vl134jbj6m0][info][application] $_GET = []
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = [
+    '_identity-backend' => 'faabc4de6d90adad4c2dd4d9214aaab678cc4097c3d17a8d4e1df273fd0c4178a:2:{i:0;s:17:\"_identity-backend\";i:1;s:46:\"[1,\"ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i\",2592000]\";}'
+    'advanced-backend' => 'dmaoijddkm4uu03vl134jbj6m0'
+    '_csrf-backend' => 'd3a186c8cf6b4b3d8200f84e14ae73d332e67aeabaa25dd605a3d8cdcd4c12c9a:2:{i:0;s:13:\"_csrf-backend\";i:1;s:32:\"dLODo-iZBR_QkMXsa0HLciGbdvZRbq7Y\";}'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__id' => 1
+    '__authKey' => 'ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i'
+    '__expire' => 1701935303
+]
+
+$_SERVER = [
+    'REDIRECT_MIBDIRS' => 'D:/new/php/extras/mibs'
+    'REDIRECT_MYSQL_HOME' => '\\xampp\\mysql\\bin'
+    'REDIRECT_OPENSSL_CONF' => 'D:/new/apache/bin/openssl.cnf'
+    'REDIRECT_PHP_PEAR_SYSCONF_DIR' => '\\xampp\\php'
+    'REDIRECT_PHPRC' => '\\xampp\\php'
+    'REDIRECT_TMP' => '\\xampp\\tmp'
+    'REDIRECT_STATUS' => '200'
+    'MIBDIRS' => 'D:/new/php/extras/mibs'
+    'MYSQL_HOME' => '\\xampp\\mysql\\bin'
+    'OPENSSL_CONF' => 'D:/new/apache/bin/openssl.cnf'
+    'PHP_PEAR_SYSCONF_DIR' => '\\xampp\\php'
+    'PHPRC' => '\\xampp\\php'
+    'TMP' => '\\xampp\\tmp'
+    'HTTP_HOST' => 'studio.visualight.test'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+    'HTTP_ACCEPT' => '*/*'
+    'HTTP_SEC_GPC' => '1'
+    'HTTP_ACCEPT_LANGUAGE' => 'en-US,en;q=0.7'
+    'HTTP_REFERER' => 'http://studio.visualight.test/std/chart/index'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_COOKIE' => '_identity-backend=faabc4de6d90adad4c2dd4d9214aaab678cc4097c3d17a8d4e1df273fd0c4178a%3A2%3A%7Bi%3A0%3Bs%3A17%3A%22_identity-backend%22%3Bi%3A1%3Bs%3A46%3A%22%5B1%2C%22ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i%22%2C2592000%5D%22%3B%7D; advanced-backend=dmaoijddkm4uu03vl134jbj6m0; _csrf-backend=d3a186c8cf6b4b3d8200f84e14ae73d332e67aeabaa25dd605a3d8cdcd4c12c9a%3A2%3A%7Bi%3A0%3Bs%3A13%3A%22_csrf-backend%22%3Bi%3A1%3Bs%3A32%3A%22dLODo-iZBR_QkMXsa0HLciGbdvZRbq7Y%22%3B%7D'
+    'PATH' => 'D:\\PYTHONG\\Scripts\\;D:\\PYTHONG\\;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Windows\\System32\\OpenSSH\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\NVIDIA Corporation\\NVIDIA NvDLISR;C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\dotnet\\;C:\\Program Files\\Azure Data Studio\\bin;C:\\Program Files\\Microsoft SQL Server\\Client SDK\\ODBC\\170\\Tools\\Binn\\;C:\\Program Files (x86)\\Microsoft SQL Server\\150\\Tools\\Binn\\;C:\\Program Files\\Microsoft SQL Server\\150\\Tools\\Binn\\;C:\\Program Files\\Microsoft SQL Server\\150\\DTS\\Binn\\;C:\\Program Files (x86)\\Microsoft SQL Server\\150\\DTS\\Binn\\;C:\\Program Files\\Git\\cmd;C:\\ProgramData\\ComposerSetup\\bin;D:\\new\\php;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC;.PY;.PYW'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => '<address>Apache/2.4.56 (Win64) OpenSSL/1.1.1t PHP/8.0.29 Server at studio.visualight.test Port 80</address>
+'
+    'SERVER_SOFTWARE' => 'Apache/2.4.56 (Win64) OpenSSL/1.1.1t PHP/8.0.29'
+    'SERVER_NAME' => 'studio.visualight.test'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/new/htdocs/visualight/backend/web'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/new/htdocs/visualight/backend/web'
+    'SERVER_ADMIN' => 'postmaster@localhost'
+    'SCRIPT_FILENAME' => 'D:/new/htdocs/visualight/backend/web/index.php'
+    'REMOTE_PORT' => '54184'
+    'REDIRECT_URL' => '/std/chart/path/to/Chart.min.js'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'REQUEST_URI' => '/std/chart/path/to/Chart.min.js'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1701934103.6469
+    'REQUEST_TIME' => 1701934103
+]
+2023-12-07 08:28:25 [127.0.0.1][1][dmaoijddkm4uu03vl134jbj6m0][error][yii\web\HttpException:404] yii\base\InvalidRouteException: Unable to resolve the request "nmd/chart/path/to/Chart.min.js". in D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Module.php:561
+Stack trace:
+#0 D:\new\htdocs\visualight\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('nmd/chart/path/...', Array)
+#1 D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Application.php(384): yii\web\Application->handleRequest(Object(yii\web\Request))
+#2 D:\new\htdocs\visualight\backend\web\index.php(18): yii\base\Application->run()
+#3 {main}
+
+Next yii\web\NotFoundHttpException: Page not found. in D:\new\htdocs\visualight\vendor\yiisoft\yii2\web\Application.php:115
+Stack trace:
+#0 D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Application.php(384): yii\web\Application->handleRequest(Object(yii\web\Request))
+#1 D:\new\htdocs\visualight\backend\web\index.php(18): yii\base\Application->run()
+#2 {main}
+2023-12-07 08:28:25 [127.0.0.1][1][dmaoijddkm4uu03vl134jbj6m0][info][application] $_GET = []
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = [
+    '_identity-backend' => 'faabc4de6d90adad4c2dd4d9214aaab678cc4097c3d17a8d4e1df273fd0c4178a:2:{i:0;s:17:\"_identity-backend\";i:1;s:46:\"[1,\"ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i\",2592000]\";}'
+    'advanced-backend' => 'dmaoijddkm4uu03vl134jbj6m0'
+    '_csrf-backend' => 'd3a186c8cf6b4b3d8200f84e14ae73d332e67aeabaa25dd605a3d8cdcd4c12c9a:2:{i:0;s:13:\"_csrf-backend\";i:1;s:32:\"dLODo-iZBR_QkMXsa0HLciGbdvZRbq7Y\";}'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__id' => 1
+    '__authKey' => 'ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i'
+    '__expire' => 1701935305
+]
+
+$_SERVER = [
+    'REDIRECT_MIBDIRS' => 'D:/new/php/extras/mibs'
+    'REDIRECT_MYSQL_HOME' => '\\xampp\\mysql\\bin'
+    'REDIRECT_OPENSSL_CONF' => 'D:/new/apache/bin/openssl.cnf'
+    'REDIRECT_PHP_PEAR_SYSCONF_DIR' => '\\xampp\\php'
+    'REDIRECT_PHPRC' => '\\xampp\\php'
+    'REDIRECT_TMP' => '\\xampp\\tmp'
+    'REDIRECT_STATUS' => '200'
+    'MIBDIRS' => 'D:/new/php/extras/mibs'
+    'MYSQL_HOME' => '\\xampp\\mysql\\bin'
+    'OPENSSL_CONF' => 'D:/new/apache/bin/openssl.cnf'
+    'PHP_PEAR_SYSCONF_DIR' => '\\xampp\\php'
+    'PHPRC' => '\\xampp\\php'
+    'TMP' => '\\xampp\\tmp'
+    'HTTP_HOST' => 'studio.visualight.test'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+    'HTTP_ACCEPT' => '*/*'
+    'HTTP_SEC_GPC' => '1'
+    'HTTP_ACCEPT_LANGUAGE' => 'en-US,en;q=0.7'
+    'HTTP_REFERER' => 'http://studio.visualight.test/nmd/chart/index'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_COOKIE' => '_identity-backend=faabc4de6d90adad4c2dd4d9214aaab678cc4097c3d17a8d4e1df273fd0c4178a%3A2%3A%7Bi%3A0%3Bs%3A17%3A%22_identity-backend%22%3Bi%3A1%3Bs%3A46%3A%22%5B1%2C%22ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i%22%2C2592000%5D%22%3B%7D; advanced-backend=dmaoijddkm4uu03vl134jbj6m0; _csrf-backend=d3a186c8cf6b4b3d8200f84e14ae73d332e67aeabaa25dd605a3d8cdcd4c12c9a%3A2%3A%7Bi%3A0%3Bs%3A13%3A%22_csrf-backend%22%3Bi%3A1%3Bs%3A32%3A%22dLODo-iZBR_QkMXsa0HLciGbdvZRbq7Y%22%3B%7D'
+    'PATH' => 'D:\\PYTHONG\\Scripts\\;D:\\PYTHONG\\;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Windows\\System32\\OpenSSH\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\NVIDIA Corporation\\NVIDIA NvDLISR;C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\dotnet\\;C:\\Program Files\\Azure Data Studio\\bin;C:\\Program Files\\Microsoft SQL Server\\Client SDK\\ODBC\\170\\Tools\\Binn\\;C:\\Program Files (x86)\\Microsoft SQL Server\\150\\Tools\\Binn\\;C:\\Program Files\\Microsoft SQL Server\\150\\Tools\\Binn\\;C:\\Program Files\\Microsoft SQL Server\\150\\DTS\\Binn\\;C:\\Program Files (x86)\\Microsoft SQL Server\\150\\DTS\\Binn\\;C:\\Program Files\\Git\\cmd;C:\\ProgramData\\ComposerSetup\\bin;D:\\new\\php;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC;.PY;.PYW'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => '<address>Apache/2.4.56 (Win64) OpenSSL/1.1.1t PHP/8.0.29 Server at studio.visualight.test Port 80</address>
+'
+    'SERVER_SOFTWARE' => 'Apache/2.4.56 (Win64) OpenSSL/1.1.1t PHP/8.0.29'
+    'SERVER_NAME' => 'studio.visualight.test'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/new/htdocs/visualight/backend/web'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/new/htdocs/visualight/backend/web'
+    'SERVER_ADMIN' => 'postmaster@localhost'
+    'SCRIPT_FILENAME' => 'D:/new/htdocs/visualight/backend/web/index.php'
+    'REMOTE_PORT' => '54173'
+    'REDIRECT_URL' => '/nmd/chart/path/to/Chart.min.js'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'REQUEST_URI' => '/nmd/chart/path/to/Chart.min.js'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1701934105.4709
+    'REQUEST_TIME' => 1701934105
+]
+2023-12-07 08:30:16 [127.0.0.1][1][dmaoijddkm4uu03vl134jbj6m0][error][yii\web\HttpException:404] yii\base\InvalidRouteException: Unable to resolve the request "nmd/chart/path/to/Chart.min.js". in D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Module.php:561
+Stack trace:
+#0 D:\new\htdocs\visualight\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('nmd/chart/path/...', Array)
+#1 D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Application.php(384): yii\web\Application->handleRequest(Object(yii\web\Request))
+#2 D:\new\htdocs\visualight\backend\web\index.php(18): yii\base\Application->run()
+#3 {main}
+
+Next yii\web\NotFoundHttpException: Page not found. in D:\new\htdocs\visualight\vendor\yiisoft\yii2\web\Application.php:115
+Stack trace:
+#0 D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Application.php(384): yii\web\Application->handleRequest(Object(yii\web\Request))
+#1 D:\new\htdocs\visualight\backend\web\index.php(18): yii\base\Application->run()
+#2 {main}
+2023-12-07 08:30:16 [127.0.0.1][1][dmaoijddkm4uu03vl134jbj6m0][info][application] $_GET = []
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = [
+    '_identity-backend' => 'faabc4de6d90adad4c2dd4d9214aaab678cc4097c3d17a8d4e1df273fd0c4178a:2:{i:0;s:17:\"_identity-backend\";i:1;s:46:\"[1,\"ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i\",2592000]\";}'
+    'advanced-backend' => 'dmaoijddkm4uu03vl134jbj6m0'
+    '_csrf-backend' => 'd3a186c8cf6b4b3d8200f84e14ae73d332e67aeabaa25dd605a3d8cdcd4c12c9a:2:{i:0;s:13:\"_csrf-backend\";i:1;s:32:\"dLODo-iZBR_QkMXsa0HLciGbdvZRbq7Y\";}'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__id' => 1
+    '__authKey' => 'ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i'
+    '__expire' => 1701935416
+]
+
+$_SERVER = [
+    'REDIRECT_MIBDIRS' => 'D:/new/php/extras/mibs'
+    'REDIRECT_MYSQL_HOME' => '\\xampp\\mysql\\bin'
+    'REDIRECT_OPENSSL_CONF' => 'D:/new/apache/bin/openssl.cnf'
+    'REDIRECT_PHP_PEAR_SYSCONF_DIR' => '\\xampp\\php'
+    'REDIRECT_PHPRC' => '\\xampp\\php'
+    'REDIRECT_TMP' => '\\xampp\\tmp'
+    'REDIRECT_STATUS' => '200'
+    'MIBDIRS' => 'D:/new/php/extras/mibs'
+    'MYSQL_HOME' => '\\xampp\\mysql\\bin'
+    'OPENSSL_CONF' => 'D:/new/apache/bin/openssl.cnf'
+    'PHP_PEAR_SYSCONF_DIR' => '\\xampp\\php'
+    'PHPRC' => '\\xampp\\php'
+    'TMP' => '\\xampp\\tmp'
+    'HTTP_HOST' => 'studio.visualight.test'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+    'HTTP_ACCEPT' => '*/*'
+    'HTTP_SEC_GPC' => '1'
+    'HTTP_ACCEPT_LANGUAGE' => 'en-US,en;q=0.7'
+    'HTTP_REFERER' => 'http://studio.visualight.test/nmd/chart/index'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_COOKIE' => '_identity-backend=faabc4de6d90adad4c2dd4d9214aaab678cc4097c3d17a8d4e1df273fd0c4178a%3A2%3A%7Bi%3A0%3Bs%3A17%3A%22_identity-backend%22%3Bi%3A1%3Bs%3A46%3A%22%5B1%2C%22ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i%22%2C2592000%5D%22%3B%7D; advanced-backend=dmaoijddkm4uu03vl134jbj6m0; _csrf-backend=d3a186c8cf6b4b3d8200f84e14ae73d332e67aeabaa25dd605a3d8cdcd4c12c9a%3A2%3A%7Bi%3A0%3Bs%3A13%3A%22_csrf-backend%22%3Bi%3A1%3Bs%3A32%3A%22dLODo-iZBR_QkMXsa0HLciGbdvZRbq7Y%22%3B%7D'
+    'PATH' => 'D:\\PYTHONG\\Scripts\\;D:\\PYTHONG\\;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Windows\\System32\\OpenSSH\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\NVIDIA Corporation\\NVIDIA NvDLISR;C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\dotnet\\;C:\\Program Files\\Azure Data Studio\\bin;C:\\Program Files\\Microsoft SQL Server\\Client SDK\\ODBC\\170\\Tools\\Binn\\;C:\\Program Files (x86)\\Microsoft SQL Server\\150\\Tools\\Binn\\;C:\\Program Files\\Microsoft SQL Server\\150\\Tools\\Binn\\;C:\\Program Files\\Microsoft SQL Server\\150\\DTS\\Binn\\;C:\\Program Files (x86)\\Microsoft SQL Server\\150\\DTS\\Binn\\;C:\\Program Files\\Git\\cmd;C:\\ProgramData\\ComposerSetup\\bin;D:\\new\\php;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC;.PY;.PYW'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => '<address>Apache/2.4.56 (Win64) OpenSSL/1.1.1t PHP/8.0.29 Server at studio.visualight.test Port 80</address>
+'
+    'SERVER_SOFTWARE' => 'Apache/2.4.56 (Win64) OpenSSL/1.1.1t PHP/8.0.29'
+    'SERVER_NAME' => 'studio.visualight.test'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/new/htdocs/visualight/backend/web'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/new/htdocs/visualight/backend/web'
+    'SERVER_ADMIN' => 'postmaster@localhost'
+    'SCRIPT_FILENAME' => 'D:/new/htdocs/visualight/backend/web/index.php'
+    'REMOTE_PORT' => '54280'
+    'REDIRECT_URL' => '/nmd/chart/path/to/Chart.min.js'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'REQUEST_URI' => '/nmd/chart/path/to/Chart.min.js'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1701934216.61
+    'REQUEST_TIME' => 1701934216
+]
+2023-12-07 08:30:36 [127.0.0.1][1][dmaoijddkm4uu03vl134jbj6m0][error][yii\web\HttpException:404] yii\base\InvalidRouteException: Unable to resolve the request "nmd/chart/path/to/Chart.min.js". in D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Module.php:561
+Stack trace:
+#0 D:\new\htdocs\visualight\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('nmd/chart/path/...', Array)
+#1 D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Application.php(384): yii\web\Application->handleRequest(Object(yii\web\Request))
+#2 D:\new\htdocs\visualight\backend\web\index.php(18): yii\base\Application->run()
+#3 {main}
+
+Next yii\web\NotFoundHttpException: Page not found. in D:\new\htdocs\visualight\vendor\yiisoft\yii2\web\Application.php:115
+Stack trace:
+#0 D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Application.php(384): yii\web\Application->handleRequest(Object(yii\web\Request))
+#1 D:\new\htdocs\visualight\backend\web\index.php(18): yii\base\Application->run()
+#2 {main}
+2023-12-07 08:30:36 [127.0.0.1][1][dmaoijddkm4uu03vl134jbj6m0][info][application] $_GET = []
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = [
+    '_identity-backend' => 'faabc4de6d90adad4c2dd4d9214aaab678cc4097c3d17a8d4e1df273fd0c4178a:2:{i:0;s:17:\"_identity-backend\";i:1;s:46:\"[1,\"ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i\",2592000]\";}'
+    'advanced-backend' => 'dmaoijddkm4uu03vl134jbj6m0'
+    '_csrf-backend' => 'd3a186c8cf6b4b3d8200f84e14ae73d332e67aeabaa25dd605a3d8cdcd4c12c9a:2:{i:0;s:13:\"_csrf-backend\";i:1;s:32:\"dLODo-iZBR_QkMXsa0HLciGbdvZRbq7Y\";}'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__id' => 1
+    '__authKey' => 'ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i'
+    '__expire' => 1701935436
+]
+
+$_SERVER = [
+    'REDIRECT_MIBDIRS' => 'D:/new/php/extras/mibs'
+    'REDIRECT_MYSQL_HOME' => '\\xampp\\mysql\\bin'
+    'REDIRECT_OPENSSL_CONF' => 'D:/new/apache/bin/openssl.cnf'
+    'REDIRECT_PHP_PEAR_SYSCONF_DIR' => '\\xampp\\php'
+    'REDIRECT_PHPRC' => '\\xampp\\php'
+    'REDIRECT_TMP' => '\\xampp\\tmp'
+    'REDIRECT_STATUS' => '200'
+    'MIBDIRS' => 'D:/new/php/extras/mibs'
+    'MYSQL_HOME' => '\\xampp\\mysql\\bin'
+    'OPENSSL_CONF' => 'D:/new/apache/bin/openssl.cnf'
+    'PHP_PEAR_SYSCONF_DIR' => '\\xampp\\php'
+    'PHPRC' => '\\xampp\\php'
+    'TMP' => '\\xampp\\tmp'
+    'HTTP_HOST' => 'studio.visualight.test'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+    'HTTP_ACCEPT' => '*/*'
+    'HTTP_SEC_GPC' => '1'
+    'HTTP_ACCEPT_LANGUAGE' => 'en-US,en;q=0.7'
+    'HTTP_REFERER' => 'http://studio.visualight.test/nmd/chart/index'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_COOKIE' => '_identity-backend=faabc4de6d90adad4c2dd4d9214aaab678cc4097c3d17a8d4e1df273fd0c4178a%3A2%3A%7Bi%3A0%3Bs%3A17%3A%22_identity-backend%22%3Bi%3A1%3Bs%3A46%3A%22%5B1%2C%22ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i%22%2C2592000%5D%22%3B%7D; advanced-backend=dmaoijddkm4uu03vl134jbj6m0; _csrf-backend=d3a186c8cf6b4b3d8200f84e14ae73d332e67aeabaa25dd605a3d8cdcd4c12c9a%3A2%3A%7Bi%3A0%3Bs%3A13%3A%22_csrf-backend%22%3Bi%3A1%3Bs%3A32%3A%22dLODo-iZBR_QkMXsa0HLciGbdvZRbq7Y%22%3B%7D'
+    'PATH' => 'D:\\PYTHONG\\Scripts\\;D:\\PYTHONG\\;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Windows\\System32\\OpenSSH\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\NVIDIA Corporation\\NVIDIA NvDLISR;C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\dotnet\\;C:\\Program Files\\Azure Data Studio\\bin;C:\\Program Files\\Microsoft SQL Server\\Client SDK\\ODBC\\170\\Tools\\Binn\\;C:\\Program Files (x86)\\Microsoft SQL Server\\150\\Tools\\Binn\\;C:\\Program Files\\Microsoft SQL Server\\150\\Tools\\Binn\\;C:\\Program Files\\Microsoft SQL Server\\150\\DTS\\Binn\\;C:\\Program Files (x86)\\Microsoft SQL Server\\150\\DTS\\Binn\\;C:\\Program Files\\Git\\cmd;C:\\ProgramData\\ComposerSetup\\bin;D:\\new\\php;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC;.PY;.PYW'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => '<address>Apache/2.4.56 (Win64) OpenSSL/1.1.1t PHP/8.0.29 Server at studio.visualight.test Port 80</address>
+'
+    'SERVER_SOFTWARE' => 'Apache/2.4.56 (Win64) OpenSSL/1.1.1t PHP/8.0.29'
+    'SERVER_NAME' => 'studio.visualight.test'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/new/htdocs/visualight/backend/web'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/new/htdocs/visualight/backend/web'
+    'SERVER_ADMIN' => 'postmaster@localhost'
+    'SCRIPT_FILENAME' => 'D:/new/htdocs/visualight/backend/web/index.php'
+    'REMOTE_PORT' => '54309'
+    'REDIRECT_URL' => '/nmd/chart/path/to/Chart.min.js'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'REQUEST_URI' => '/nmd/chart/path/to/Chart.min.js'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1701934236.6909
+    'REQUEST_TIME' => 1701934236
+]
+2023-12-07 08:31:45 [127.0.0.1][1][dmaoijddkm4uu03vl134jbj6m0][error][yii\web\HttpException:404] yii\base\InvalidRouteException: Unable to resolve the request "nmd/chart/path/to/Chart.min.js". in D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Module.php:561
+Stack trace:
+#0 D:\new\htdocs\visualight\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('nmd/chart/path/...', Array)
+#1 D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Application.php(384): yii\web\Application->handleRequest(Object(yii\web\Request))
+#2 D:\new\htdocs\visualight\backend\web\index.php(18): yii\base\Application->run()
+#3 {main}
+
+Next yii\web\NotFoundHttpException: Page not found. in D:\new\htdocs\visualight\vendor\yiisoft\yii2\web\Application.php:115
+Stack trace:
+#0 D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Application.php(384): yii\web\Application->handleRequest(Object(yii\web\Request))
+#1 D:\new\htdocs\visualight\backend\web\index.php(18): yii\base\Application->run()
+#2 {main}
+2023-12-07 08:31:45 [127.0.0.1][1][dmaoijddkm4uu03vl134jbj6m0][info][application] $_GET = []
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = [
+    '_identity-backend' => 'faabc4de6d90adad4c2dd4d9214aaab678cc4097c3d17a8d4e1df273fd0c4178a:2:{i:0;s:17:\"_identity-backend\";i:1;s:46:\"[1,\"ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i\",2592000]\";}'
+    'advanced-backend' => 'dmaoijddkm4uu03vl134jbj6m0'
+    '_csrf-backend' => 'd3a186c8cf6b4b3d8200f84e14ae73d332e67aeabaa25dd605a3d8cdcd4c12c9a:2:{i:0;s:13:\"_csrf-backend\";i:1;s:32:\"dLODo-iZBR_QkMXsa0HLciGbdvZRbq7Y\";}'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__id' => 1
+    '__authKey' => 'ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i'
+    '__expire' => 1701935505
+]
+
+$_SERVER = [
+    'REDIRECT_MIBDIRS' => 'D:/new/php/extras/mibs'
+    'REDIRECT_MYSQL_HOME' => '\\xampp\\mysql\\bin'
+    'REDIRECT_OPENSSL_CONF' => 'D:/new/apache/bin/openssl.cnf'
+    'REDIRECT_PHP_PEAR_SYSCONF_DIR' => '\\xampp\\php'
+    'REDIRECT_PHPRC' => '\\xampp\\php'
+    'REDIRECT_TMP' => '\\xampp\\tmp'
+    'REDIRECT_STATUS' => '200'
+    'MIBDIRS' => 'D:/new/php/extras/mibs'
+    'MYSQL_HOME' => '\\xampp\\mysql\\bin'
+    'OPENSSL_CONF' => 'D:/new/apache/bin/openssl.cnf'
+    'PHP_PEAR_SYSCONF_DIR' => '\\xampp\\php'
+    'PHPRC' => '\\xampp\\php'
+    'TMP' => '\\xampp\\tmp'
+    'HTTP_HOST' => 'studio.visualight.test'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+    'HTTP_ACCEPT' => '*/*'
+    'HTTP_SEC_GPC' => '1'
+    'HTTP_ACCEPT_LANGUAGE' => 'en-US,en;q=0.7'
+    'HTTP_REFERER' => 'http://studio.visualight.test/nmd/chart/index'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_COOKIE' => '_identity-backend=faabc4de6d90adad4c2dd4d9214aaab678cc4097c3d17a8d4e1df273fd0c4178a%3A2%3A%7Bi%3A0%3Bs%3A17%3A%22_identity-backend%22%3Bi%3A1%3Bs%3A46%3A%22%5B1%2C%22ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i%22%2C2592000%5D%22%3B%7D; advanced-backend=dmaoijddkm4uu03vl134jbj6m0; _csrf-backend=d3a186c8cf6b4b3d8200f84e14ae73d332e67aeabaa25dd605a3d8cdcd4c12c9a%3A2%3A%7Bi%3A0%3Bs%3A13%3A%22_csrf-backend%22%3Bi%3A1%3Bs%3A32%3A%22dLODo-iZBR_QkMXsa0HLciGbdvZRbq7Y%22%3B%7D'
+    'PATH' => 'D:\\PYTHONG\\Scripts\\;D:\\PYTHONG\\;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Windows\\System32\\OpenSSH\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\NVIDIA Corporation\\NVIDIA NvDLISR;C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\dotnet\\;C:\\Program Files\\Azure Data Studio\\bin;C:\\Program Files\\Microsoft SQL Server\\Client SDK\\ODBC\\170\\Tools\\Binn\\;C:\\Program Files (x86)\\Microsoft SQL Server\\150\\Tools\\Binn\\;C:\\Program Files\\Microsoft SQL Server\\150\\Tools\\Binn\\;C:\\Program Files\\Microsoft SQL Server\\150\\DTS\\Binn\\;C:\\Program Files (x86)\\Microsoft SQL Server\\150\\DTS\\Binn\\;C:\\Program Files\\Git\\cmd;C:\\ProgramData\\ComposerSetup\\bin;D:\\new\\php;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC;.PY;.PYW'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => '<address>Apache/2.4.56 (Win64) OpenSSL/1.1.1t PHP/8.0.29 Server at studio.visualight.test Port 80</address>
+'
+    'SERVER_SOFTWARE' => 'Apache/2.4.56 (Win64) OpenSSL/1.1.1t PHP/8.0.29'
+    'SERVER_NAME' => 'studio.visualight.test'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/new/htdocs/visualight/backend/web'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/new/htdocs/visualight/backend/web'
+    'SERVER_ADMIN' => 'postmaster@localhost'
+    'SCRIPT_FILENAME' => 'D:/new/htdocs/visualight/backend/web/index.php'
+    'REMOTE_PORT' => '54368'
+    'REDIRECT_URL' => '/nmd/chart/path/to/Chart.min.js'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'REQUEST_URI' => '/nmd/chart/path/to/Chart.min.js'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1701934305.4717
+    'REQUEST_TIME' => 1701934305
+]
+2023-12-07 08:32:17 [127.0.0.1][1][dmaoijddkm4uu03vl134jbj6m0][error][yii\web\HttpException:404] yii\base\InvalidRouteException: Unable to resolve the request "std/chart/path/to/Chart.min.js". in D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Module.php:561
+Stack trace:
+#0 D:\new\htdocs\visualight\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('std/chart/path/...', Array)
+#1 D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Application.php(384): yii\web\Application->handleRequest(Object(yii\web\Request))
+#2 D:\new\htdocs\visualight\backend\web\index.php(18): yii\base\Application->run()
+#3 {main}
+
+Next yii\web\NotFoundHttpException: Page not found. in D:\new\htdocs\visualight\vendor\yiisoft\yii2\web\Application.php:115
+Stack trace:
+#0 D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Application.php(384): yii\web\Application->handleRequest(Object(yii\web\Request))
+#1 D:\new\htdocs\visualight\backend\web\index.php(18): yii\base\Application->run()
+#2 {main}
+2023-12-07 08:32:16 [127.0.0.1][1][dmaoijddkm4uu03vl134jbj6m0][info][application] $_GET = []
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = [
+    '_identity-backend' => 'faabc4de6d90adad4c2dd4d9214aaab678cc4097c3d17a8d4e1df273fd0c4178a:2:{i:0;s:17:\"_identity-backend\";i:1;s:46:\"[1,\"ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i\",2592000]\";}'
+    'advanced-backend' => 'dmaoijddkm4uu03vl134jbj6m0'
+    '_csrf-backend' => 'd3a186c8cf6b4b3d8200f84e14ae73d332e67aeabaa25dd605a3d8cdcd4c12c9a:2:{i:0;s:13:\"_csrf-backend\";i:1;s:32:\"dLODo-iZBR_QkMXsa0HLciGbdvZRbq7Y\";}'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__id' => 1
+    '__authKey' => 'ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i'
+    '__expire' => 1701935537
+]
+
+$_SERVER = [
+    'REDIRECT_MIBDIRS' => 'D:/new/php/extras/mibs'
+    'REDIRECT_MYSQL_HOME' => '\\xampp\\mysql\\bin'
+    'REDIRECT_OPENSSL_CONF' => 'D:/new/apache/bin/openssl.cnf'
+    'REDIRECT_PHP_PEAR_SYSCONF_DIR' => '\\xampp\\php'
+    'REDIRECT_PHPRC' => '\\xampp\\php'
+    'REDIRECT_TMP' => '\\xampp\\tmp'
+    'REDIRECT_STATUS' => '200'
+    'MIBDIRS' => 'D:/new/php/extras/mibs'
+    'MYSQL_HOME' => '\\xampp\\mysql\\bin'
+    'OPENSSL_CONF' => 'D:/new/apache/bin/openssl.cnf'
+    'PHP_PEAR_SYSCONF_DIR' => '\\xampp\\php'
+    'PHPRC' => '\\xampp\\php'
+    'TMP' => '\\xampp\\tmp'
+    'HTTP_HOST' => 'studio.visualight.test'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+    'HTTP_ACCEPT' => '*/*'
+    'HTTP_SEC_GPC' => '1'
+    'HTTP_ACCEPT_LANGUAGE' => 'en-US,en;q=0.7'
+    'HTTP_REFERER' => 'http://studio.visualight.test/std/chart/index'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_COOKIE' => '_identity-backend=faabc4de6d90adad4c2dd4d9214aaab678cc4097c3d17a8d4e1df273fd0c4178a%3A2%3A%7Bi%3A0%3Bs%3A17%3A%22_identity-backend%22%3Bi%3A1%3Bs%3A46%3A%22%5B1%2C%22ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i%22%2C2592000%5D%22%3B%7D; advanced-backend=dmaoijddkm4uu03vl134jbj6m0; _csrf-backend=d3a186c8cf6b4b3d8200f84e14ae73d332e67aeabaa25dd605a3d8cdcd4c12c9a%3A2%3A%7Bi%3A0%3Bs%3A13%3A%22_csrf-backend%22%3Bi%3A1%3Bs%3A32%3A%22dLODo-iZBR_QkMXsa0HLciGbdvZRbq7Y%22%3B%7D'
+    'PATH' => 'D:\\PYTHONG\\Scripts\\;D:\\PYTHONG\\;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Windows\\System32\\OpenSSH\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\NVIDIA Corporation\\NVIDIA NvDLISR;C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\dotnet\\;C:\\Program Files\\Azure Data Studio\\bin;C:\\Program Files\\Microsoft SQL Server\\Client SDK\\ODBC\\170\\Tools\\Binn\\;C:\\Program Files (x86)\\Microsoft SQL Server\\150\\Tools\\Binn\\;C:\\Program Files\\Microsoft SQL Server\\150\\Tools\\Binn\\;C:\\Program Files\\Microsoft SQL Server\\150\\DTS\\Binn\\;C:\\Program Files (x86)\\Microsoft SQL Server\\150\\DTS\\Binn\\;C:\\Program Files\\Git\\cmd;C:\\ProgramData\\ComposerSetup\\bin;D:\\new\\php;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC;.PY;.PYW'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => '<address>Apache/2.4.56 (Win64) OpenSSL/1.1.1t PHP/8.0.29 Server at studio.visualight.test Port 80</address>
+'
+    'SERVER_SOFTWARE' => 'Apache/2.4.56 (Win64) OpenSSL/1.1.1t PHP/8.0.29'
+    'SERVER_NAME' => 'studio.visualight.test'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/new/htdocs/visualight/backend/web'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/new/htdocs/visualight/backend/web'
+    'SERVER_ADMIN' => 'postmaster@localhost'
+    'SCRIPT_FILENAME' => 'D:/new/htdocs/visualight/backend/web/index.php'
+    'REMOTE_PORT' => '54388'
+    'REDIRECT_URL' => '/std/chart/path/to/Chart.min.js'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'REQUEST_URI' => '/std/chart/path/to/Chart.min.js'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1701934336.916
+    'REQUEST_TIME' => 1701934336
+]
+2023-12-07 08:33:46 [127.0.0.1][1][dmaoijddkm4uu03vl134jbj6m0][error][yii\web\HttpException:404] yii\base\InvalidRouteException: Unable to resolve the request "std/chart/path/to/Chart.min.js". in D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Module.php:561
+Stack trace:
+#0 D:\new\htdocs\visualight\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('std/chart/path/...', Array)
+#1 D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Application.php(384): yii\web\Application->handleRequest(Object(yii\web\Request))
+#2 D:\new\htdocs\visualight\backend\web\index.php(18): yii\base\Application->run()
+#3 {main}
+
+Next yii\web\NotFoundHttpException: Page not found. in D:\new\htdocs\visualight\vendor\yiisoft\yii2\web\Application.php:115
+Stack trace:
+#0 D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Application.php(384): yii\web\Application->handleRequest(Object(yii\web\Request))
+#1 D:\new\htdocs\visualight\backend\web\index.php(18): yii\base\Application->run()
+#2 {main}
+2023-12-07 08:33:46 [127.0.0.1][1][dmaoijddkm4uu03vl134jbj6m0][info][application] $_GET = []
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = [
+    '_identity-backend' => 'faabc4de6d90adad4c2dd4d9214aaab678cc4097c3d17a8d4e1df273fd0c4178a:2:{i:0;s:17:\"_identity-backend\";i:1;s:46:\"[1,\"ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i\",2592000]\";}'
+    'advanced-backend' => 'dmaoijddkm4uu03vl134jbj6m0'
+    '_csrf-backend' => 'd3a186c8cf6b4b3d8200f84e14ae73d332e67aeabaa25dd605a3d8cdcd4c12c9a:2:{i:0;s:13:\"_csrf-backend\";i:1;s:32:\"dLODo-iZBR_QkMXsa0HLciGbdvZRbq7Y\";}'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__id' => 1
+    '__authKey' => 'ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i'
+    '__expire' => 1701935626
+]
+
+$_SERVER = [
+    'REDIRECT_MIBDIRS' => 'D:/new/php/extras/mibs'
+    'REDIRECT_MYSQL_HOME' => '\\xampp\\mysql\\bin'
+    'REDIRECT_OPENSSL_CONF' => 'D:/new/apache/bin/openssl.cnf'
+    'REDIRECT_PHP_PEAR_SYSCONF_DIR' => '\\xampp\\php'
+    'REDIRECT_PHPRC' => '\\xampp\\php'
+    'REDIRECT_TMP' => '\\xampp\\tmp'
+    'REDIRECT_STATUS' => '200'
+    'MIBDIRS' => 'D:/new/php/extras/mibs'
+    'MYSQL_HOME' => '\\xampp\\mysql\\bin'
+    'OPENSSL_CONF' => 'D:/new/apache/bin/openssl.cnf'
+    'PHP_PEAR_SYSCONF_DIR' => '\\xampp\\php'
+    'PHPRC' => '\\xampp\\php'
+    'TMP' => '\\xampp\\tmp'
+    'HTTP_HOST' => 'studio.visualight.test'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+    'HTTP_ACCEPT' => '*/*'
+    'HTTP_SEC_GPC' => '1'
+    'HTTP_ACCEPT_LANGUAGE' => 'en-US,en;q=0.7'
+    'HTTP_REFERER' => 'http://studio.visualight.test/std/chart/index'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_COOKIE' => '_identity-backend=faabc4de6d90adad4c2dd4d9214aaab678cc4097c3d17a8d4e1df273fd0c4178a%3A2%3A%7Bi%3A0%3Bs%3A17%3A%22_identity-backend%22%3Bi%3A1%3Bs%3A46%3A%22%5B1%2C%22ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i%22%2C2592000%5D%22%3B%7D; advanced-backend=dmaoijddkm4uu03vl134jbj6m0; _csrf-backend=d3a186c8cf6b4b3d8200f84e14ae73d332e67aeabaa25dd605a3d8cdcd4c12c9a%3A2%3A%7Bi%3A0%3Bs%3A13%3A%22_csrf-backend%22%3Bi%3A1%3Bs%3A32%3A%22dLODo-iZBR_QkMXsa0HLciGbdvZRbq7Y%22%3B%7D'
+    'PATH' => 'D:\\PYTHONG\\Scripts\\;D:\\PYTHONG\\;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Windows\\System32\\OpenSSH\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\NVIDIA Corporation\\NVIDIA NvDLISR;C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\dotnet\\;C:\\Program Files\\Azure Data Studio\\bin;C:\\Program Files\\Microsoft SQL Server\\Client SDK\\ODBC\\170\\Tools\\Binn\\;C:\\Program Files (x86)\\Microsoft SQL Server\\150\\Tools\\Binn\\;C:\\Program Files\\Microsoft SQL Server\\150\\Tools\\Binn\\;C:\\Program Files\\Microsoft SQL Server\\150\\DTS\\Binn\\;C:\\Program Files (x86)\\Microsoft SQL Server\\150\\DTS\\Binn\\;C:\\Program Files\\Git\\cmd;C:\\ProgramData\\ComposerSetup\\bin;D:\\new\\php;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC;.PY;.PYW'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => '<address>Apache/2.4.56 (Win64) OpenSSL/1.1.1t PHP/8.0.29 Server at studio.visualight.test Port 80</address>
+'
+    'SERVER_SOFTWARE' => 'Apache/2.4.56 (Win64) OpenSSL/1.1.1t PHP/8.0.29'
+    'SERVER_NAME' => 'studio.visualight.test'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/new/htdocs/visualight/backend/web'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/new/htdocs/visualight/backend/web'
+    'SERVER_ADMIN' => 'postmaster@localhost'
+    'SCRIPT_FILENAME' => 'D:/new/htdocs/visualight/backend/web/index.php'
+    'REMOTE_PORT' => '54494'
+    'REDIRECT_URL' => '/std/chart/path/to/Chart.min.js'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'REQUEST_URI' => '/std/chart/path/to/Chart.min.js'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1701934426.6167
+    'REQUEST_TIME' => 1701934426
+]
+2023-12-07 08:33:59 [127.0.0.1][1][dmaoijddkm4uu03vl134jbj6m0][error][yii\web\HttpException:404] yii\base\InvalidRouteException: Unable to resolve the request "std/chart/path/to/Chart.min.js". in D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Module.php:561
+Stack trace:
+#0 D:\new\htdocs\visualight\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('std/chart/path/...', Array)
+#1 D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Application.php(384): yii\web\Application->handleRequest(Object(yii\web\Request))
+#2 D:\new\htdocs\visualight\backend\web\index.php(18): yii\base\Application->run()
+#3 {main}
+
+Next yii\web\NotFoundHttpException: Page not found. in D:\new\htdocs\visualight\vendor\yiisoft\yii2\web\Application.php:115
+Stack trace:
+#0 D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Application.php(384): yii\web\Application->handleRequest(Object(yii\web\Request))
+#1 D:\new\htdocs\visualight\backend\web\index.php(18): yii\base\Application->run()
+#2 {main}
+2023-12-07 08:33:58 [127.0.0.1][1][dmaoijddkm4uu03vl134jbj6m0][info][application] $_GET = []
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = [
+    '_identity-backend' => 'faabc4de6d90adad4c2dd4d9214aaab678cc4097c3d17a8d4e1df273fd0c4178a:2:{i:0;s:17:\"_identity-backend\";i:1;s:46:\"[1,\"ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i\",2592000]\";}'
+    'advanced-backend' => 'dmaoijddkm4uu03vl134jbj6m0'
+    '_csrf-backend' => 'd3a186c8cf6b4b3d8200f84e14ae73d332e67aeabaa25dd605a3d8cdcd4c12c9a:2:{i:0;s:13:\"_csrf-backend\";i:1;s:32:\"dLODo-iZBR_QkMXsa0HLciGbdvZRbq7Y\";}'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__id' => 1
+    '__authKey' => 'ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i'
+    '__expire' => 1701935639
+]
+
+$_SERVER = [
+    'REDIRECT_MIBDIRS' => 'D:/new/php/extras/mibs'
+    'REDIRECT_MYSQL_HOME' => '\\xampp\\mysql\\bin'
+    'REDIRECT_OPENSSL_CONF' => 'D:/new/apache/bin/openssl.cnf'
+    'REDIRECT_PHP_PEAR_SYSCONF_DIR' => '\\xampp\\php'
+    'REDIRECT_PHPRC' => '\\xampp\\php'
+    'REDIRECT_TMP' => '\\xampp\\tmp'
+    'REDIRECT_STATUS' => '200'
+    'MIBDIRS' => 'D:/new/php/extras/mibs'
+    'MYSQL_HOME' => '\\xampp\\mysql\\bin'
+    'OPENSSL_CONF' => 'D:/new/apache/bin/openssl.cnf'
+    'PHP_PEAR_SYSCONF_DIR' => '\\xampp\\php'
+    'PHPRC' => '\\xampp\\php'
+    'TMP' => '\\xampp\\tmp'
+    'HTTP_HOST' => 'studio.visualight.test'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+    'HTTP_ACCEPT' => '*/*'
+    'HTTP_SEC_GPC' => '1'
+    'HTTP_ACCEPT_LANGUAGE' => 'en-US,en;q=0.7'
+    'HTTP_REFERER' => 'http://studio.visualight.test/std/chart/index'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_COOKIE' => '_identity-backend=faabc4de6d90adad4c2dd4d9214aaab678cc4097c3d17a8d4e1df273fd0c4178a%3A2%3A%7Bi%3A0%3Bs%3A17%3A%22_identity-backend%22%3Bi%3A1%3Bs%3A46%3A%22%5B1%2C%22ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i%22%2C2592000%5D%22%3B%7D; advanced-backend=dmaoijddkm4uu03vl134jbj6m0; _csrf-backend=d3a186c8cf6b4b3d8200f84e14ae73d332e67aeabaa25dd605a3d8cdcd4c12c9a%3A2%3A%7Bi%3A0%3Bs%3A13%3A%22_csrf-backend%22%3Bi%3A1%3Bs%3A32%3A%22dLODo-iZBR_QkMXsa0HLciGbdvZRbq7Y%22%3B%7D'
+    'PATH' => 'D:\\PYTHONG\\Scripts\\;D:\\PYTHONG\\;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Windows\\System32\\OpenSSH\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\NVIDIA Corporation\\NVIDIA NvDLISR;C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\dotnet\\;C:\\Program Files\\Azure Data Studio\\bin;C:\\Program Files\\Microsoft SQL Server\\Client SDK\\ODBC\\170\\Tools\\Binn\\;C:\\Program Files (x86)\\Microsoft SQL Server\\150\\Tools\\Binn\\;C:\\Program Files\\Microsoft SQL Server\\150\\Tools\\Binn\\;C:\\Program Files\\Microsoft SQL Server\\150\\DTS\\Binn\\;C:\\Program Files (x86)\\Microsoft SQL Server\\150\\DTS\\Binn\\;C:\\Program Files\\Git\\cmd;C:\\ProgramData\\ComposerSetup\\bin;D:\\new\\php;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC;.PY;.PYW'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => '<address>Apache/2.4.56 (Win64) OpenSSL/1.1.1t PHP/8.0.29 Server at studio.visualight.test Port 80</address>
+'
+    'SERVER_SOFTWARE' => 'Apache/2.4.56 (Win64) OpenSSL/1.1.1t PHP/8.0.29'
+    'SERVER_NAME' => 'studio.visualight.test'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/new/htdocs/visualight/backend/web'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/new/htdocs/visualight/backend/web'
+    'SERVER_ADMIN' => 'postmaster@localhost'
+    'SCRIPT_FILENAME' => 'D:/new/htdocs/visualight/backend/web/index.php'
+    'REMOTE_PORT' => '54534'
+    'REDIRECT_URL' => '/std/chart/path/to/Chart.min.js'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'REQUEST_URI' => '/std/chart/path/to/Chart.min.js'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1701934438.9175
+    'REQUEST_TIME' => 1701934438
+]
+2023-12-07 08:34:07 [127.0.0.1][1][dmaoijddkm4uu03vl134jbj6m0][error][yii\web\HttpException:404] yii\base\InvalidRouteException: Unable to resolve the request "nmd/chart/path/to/Chart.min.js". in D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Module.php:561
+Stack trace:
+#0 D:\new\htdocs\visualight\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('nmd/chart/path/...', Array)
+#1 D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Application.php(384): yii\web\Application->handleRequest(Object(yii\web\Request))
+#2 D:\new\htdocs\visualight\backend\web\index.php(18): yii\base\Application->run()
+#3 {main}
+
+Next yii\web\NotFoundHttpException: Page not found. in D:\new\htdocs\visualight\vendor\yiisoft\yii2\web\Application.php:115
+Stack trace:
+#0 D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Application.php(384): yii\web\Application->handleRequest(Object(yii\web\Request))
+#1 D:\new\htdocs\visualight\backend\web\index.php(18): yii\base\Application->run()
+#2 {main}
+2023-12-07 08:34:07 [127.0.0.1][1][dmaoijddkm4uu03vl134jbj6m0][info][application] $_GET = []
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = [
+    '_identity-backend' => 'faabc4de6d90adad4c2dd4d9214aaab678cc4097c3d17a8d4e1df273fd0c4178a:2:{i:0;s:17:\"_identity-backend\";i:1;s:46:\"[1,\"ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i\",2592000]\";}'
+    'advanced-backend' => 'dmaoijddkm4uu03vl134jbj6m0'
+    '_csrf-backend' => 'd3a186c8cf6b4b3d8200f84e14ae73d332e67aeabaa25dd605a3d8cdcd4c12c9a:2:{i:0;s:13:\"_csrf-backend\";i:1;s:32:\"dLODo-iZBR_QkMXsa0HLciGbdvZRbq7Y\";}'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__id' => 1
+    '__authKey' => 'ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i'
+    '__expire' => 1701935647
+]
+
+$_SERVER = [
+    'REDIRECT_MIBDIRS' => 'D:/new/php/extras/mibs'
+    'REDIRECT_MYSQL_HOME' => '\\xampp\\mysql\\bin'
+    'REDIRECT_OPENSSL_CONF' => 'D:/new/apache/bin/openssl.cnf'
+    'REDIRECT_PHP_PEAR_SYSCONF_DIR' => '\\xampp\\php'
+    'REDIRECT_PHPRC' => '\\xampp\\php'
+    'REDIRECT_TMP' => '\\xampp\\tmp'
+    'REDIRECT_STATUS' => '200'
+    'MIBDIRS' => 'D:/new/php/extras/mibs'
+    'MYSQL_HOME' => '\\xampp\\mysql\\bin'
+    'OPENSSL_CONF' => 'D:/new/apache/bin/openssl.cnf'
+    'PHP_PEAR_SYSCONF_DIR' => '\\xampp\\php'
+    'PHPRC' => '\\xampp\\php'
+    'TMP' => '\\xampp\\tmp'
+    'HTTP_HOST' => 'studio.visualight.test'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+    'HTTP_ACCEPT' => '*/*'
+    'HTTP_SEC_GPC' => '1'
+    'HTTP_ACCEPT_LANGUAGE' => 'en-US,en;q=0.7'
+    'HTTP_REFERER' => 'http://studio.visualight.test/nmd/chart/index'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_COOKIE' => '_identity-backend=faabc4de6d90adad4c2dd4d9214aaab678cc4097c3d17a8d4e1df273fd0c4178a%3A2%3A%7Bi%3A0%3Bs%3A17%3A%22_identity-backend%22%3Bi%3A1%3Bs%3A46%3A%22%5B1%2C%22ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i%22%2C2592000%5D%22%3B%7D; advanced-backend=dmaoijddkm4uu03vl134jbj6m0; _csrf-backend=d3a186c8cf6b4b3d8200f84e14ae73d332e67aeabaa25dd605a3d8cdcd4c12c9a%3A2%3A%7Bi%3A0%3Bs%3A13%3A%22_csrf-backend%22%3Bi%3A1%3Bs%3A32%3A%22dLODo-iZBR_QkMXsa0HLciGbdvZRbq7Y%22%3B%7D'
+    'PATH' => 'D:\\PYTHONG\\Scripts\\;D:\\PYTHONG\\;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Windows\\System32\\OpenSSH\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\NVIDIA Corporation\\NVIDIA NvDLISR;C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\dotnet\\;C:\\Program Files\\Azure Data Studio\\bin;C:\\Program Files\\Microsoft SQL Server\\Client SDK\\ODBC\\170\\Tools\\Binn\\;C:\\Program Files (x86)\\Microsoft SQL Server\\150\\Tools\\Binn\\;C:\\Program Files\\Microsoft SQL Server\\150\\Tools\\Binn\\;C:\\Program Files\\Microsoft SQL Server\\150\\DTS\\Binn\\;C:\\Program Files (x86)\\Microsoft SQL Server\\150\\DTS\\Binn\\;C:\\Program Files\\Git\\cmd;C:\\ProgramData\\ComposerSetup\\bin;D:\\new\\php;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC;.PY;.PYW'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => '<address>Apache/2.4.56 (Win64) OpenSSL/1.1.1t PHP/8.0.29 Server at studio.visualight.test Port 80</address>
+'
+    'SERVER_SOFTWARE' => 'Apache/2.4.56 (Win64) OpenSSL/1.1.1t PHP/8.0.29'
+    'SERVER_NAME' => 'studio.visualight.test'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/new/htdocs/visualight/backend/web'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/new/htdocs/visualight/backend/web'
+    'SERVER_ADMIN' => 'postmaster@localhost'
+    'SCRIPT_FILENAME' => 'D:/new/htdocs/visualight/backend/web/index.php'
+    'REMOTE_PORT' => '54534'
+    'REDIRECT_URL' => '/nmd/chart/path/to/Chart.min.js'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'REQUEST_URI' => '/nmd/chart/path/to/Chart.min.js'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1701934446.9979
+    'REQUEST_TIME' => 1701934446
+]
+2023-12-07 08:36:10 [127.0.0.1][1][dmaoijddkm4uu03vl134jbj6m0][error][yii\web\HttpException:404] yii\base\InvalidRouteException: Unable to resolve the request "std/chart/path/to/Chart.min.js". in D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Module.php:561
+Stack trace:
+#0 D:\new\htdocs\visualight\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('std/chart/path/...', Array)
+#1 D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Application.php(384): yii\web\Application->handleRequest(Object(yii\web\Request))
+#2 D:\new\htdocs\visualight\backend\web\index.php(18): yii\base\Application->run()
+#3 {main}
+
+Next yii\web\NotFoundHttpException: Page not found. in D:\new\htdocs\visualight\vendor\yiisoft\yii2\web\Application.php:115
+Stack trace:
+#0 D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Application.php(384): yii\web\Application->handleRequest(Object(yii\web\Request))
+#1 D:\new\htdocs\visualight\backend\web\index.php(18): yii\base\Application->run()
+#2 {main}
+2023-12-07 08:36:09 [127.0.0.1][1][dmaoijddkm4uu03vl134jbj6m0][info][application] $_GET = []
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = [
+    '_identity-backend' => 'faabc4de6d90adad4c2dd4d9214aaab678cc4097c3d17a8d4e1df273fd0c4178a:2:{i:0;s:17:\"_identity-backend\";i:1;s:46:\"[1,\"ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i\",2592000]\";}'
+    'advanced-backend' => 'dmaoijddkm4uu03vl134jbj6m0'
+    '_csrf-backend' => 'd3a186c8cf6b4b3d8200f84e14ae73d332e67aeabaa25dd605a3d8cdcd4c12c9a:2:{i:0;s:13:\"_csrf-backend\";i:1;s:32:\"dLODo-iZBR_QkMXsa0HLciGbdvZRbq7Y\";}'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__id' => 1
+    '__authKey' => 'ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i'
+    '__expire' => 1701935769
+]
+
+$_SERVER = [
+    'REDIRECT_MIBDIRS' => 'D:/new/php/extras/mibs'
+    'REDIRECT_MYSQL_HOME' => '\\xampp\\mysql\\bin'
+    'REDIRECT_OPENSSL_CONF' => 'D:/new/apache/bin/openssl.cnf'
+    'REDIRECT_PHP_PEAR_SYSCONF_DIR' => '\\xampp\\php'
+    'REDIRECT_PHPRC' => '\\xampp\\php'
+    'REDIRECT_TMP' => '\\xampp\\tmp'
+    'REDIRECT_STATUS' => '200'
+    'MIBDIRS' => 'D:/new/php/extras/mibs'
+    'MYSQL_HOME' => '\\xampp\\mysql\\bin'
+    'OPENSSL_CONF' => 'D:/new/apache/bin/openssl.cnf'
+    'PHP_PEAR_SYSCONF_DIR' => '\\xampp\\php'
+    'PHPRC' => '\\xampp\\php'
+    'TMP' => '\\xampp\\tmp'
+    'HTTP_HOST' => 'studio.visualight.test'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+    'HTTP_ACCEPT' => '*/*'
+    'HTTP_SEC_GPC' => '1'
+    'HTTP_ACCEPT_LANGUAGE' => 'en-US,en;q=0.7'
+    'HTTP_REFERER' => 'http://studio.visualight.test/std/chart/index'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_COOKIE' => '_identity-backend=faabc4de6d90adad4c2dd4d9214aaab678cc4097c3d17a8d4e1df273fd0c4178a%3A2%3A%7Bi%3A0%3Bs%3A17%3A%22_identity-backend%22%3Bi%3A1%3Bs%3A46%3A%22%5B1%2C%22ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i%22%2C2592000%5D%22%3B%7D; advanced-backend=dmaoijddkm4uu03vl134jbj6m0; _csrf-backend=d3a186c8cf6b4b3d8200f84e14ae73d332e67aeabaa25dd605a3d8cdcd4c12c9a%3A2%3A%7Bi%3A0%3Bs%3A13%3A%22_csrf-backend%22%3Bi%3A1%3Bs%3A32%3A%22dLODo-iZBR_QkMXsa0HLciGbdvZRbq7Y%22%3B%7D'
+    'PATH' => 'D:\\PYTHONG\\Scripts\\;D:\\PYTHONG\\;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Windows\\System32\\OpenSSH\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\NVIDIA Corporation\\NVIDIA NvDLISR;C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\dotnet\\;C:\\Program Files\\Azure Data Studio\\bin;C:\\Program Files\\Microsoft SQL Server\\Client SDK\\ODBC\\170\\Tools\\Binn\\;C:\\Program Files (x86)\\Microsoft SQL Server\\150\\Tools\\Binn\\;C:\\Program Files\\Microsoft SQL Server\\150\\Tools\\Binn\\;C:\\Program Files\\Microsoft SQL Server\\150\\DTS\\Binn\\;C:\\Program Files (x86)\\Microsoft SQL Server\\150\\DTS\\Binn\\;C:\\Program Files\\Git\\cmd;C:\\ProgramData\\ComposerSetup\\bin;D:\\new\\php;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC;.PY;.PYW'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => '<address>Apache/2.4.56 (Win64) OpenSSL/1.1.1t PHP/8.0.29 Server at studio.visualight.test Port 80</address>
+'
+    'SERVER_SOFTWARE' => 'Apache/2.4.56 (Win64) OpenSSL/1.1.1t PHP/8.0.29'
+    'SERVER_NAME' => 'studio.visualight.test'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/new/htdocs/visualight/backend/web'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/new/htdocs/visualight/backend/web'
+    'SERVER_ADMIN' => 'postmaster@localhost'
+    'SCRIPT_FILENAME' => 'D:/new/htdocs/visualight/backend/web/index.php'
+    'REMOTE_PORT' => '54658'
+    'REDIRECT_URL' => '/std/chart/path/to/Chart.min.js'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'REQUEST_URI' => '/std/chart/path/to/Chart.min.js'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1701934569.8312
+    'REQUEST_TIME' => 1701934569
+]
+2023-12-07 08:36:36 [127.0.0.1][1][dmaoijddkm4uu03vl134jbj6m0][error][yii\web\HttpException:404] yii\base\InvalidRouteException: Unable to resolve the request "nmd/chart/path/to/Chart.min.js". in D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Module.php:561
+Stack trace:
+#0 D:\new\htdocs\visualight\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('nmd/chart/path/...', Array)
+#1 D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Application.php(384): yii\web\Application->handleRequest(Object(yii\web\Request))
+#2 D:\new\htdocs\visualight\backend\web\index.php(18): yii\base\Application->run()
+#3 {main}
+
+Next yii\web\NotFoundHttpException: Page not found. in D:\new\htdocs\visualight\vendor\yiisoft\yii2\web\Application.php:115
+Stack trace:
+#0 D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Application.php(384): yii\web\Application->handleRequest(Object(yii\web\Request))
+#1 D:\new\htdocs\visualight\backend\web\index.php(18): yii\base\Application->run()
+#2 {main}
+2023-12-07 08:36:35 [127.0.0.1][1][dmaoijddkm4uu03vl134jbj6m0][info][application] $_GET = []
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = [
+    '_identity-backend' => 'faabc4de6d90adad4c2dd4d9214aaab678cc4097c3d17a8d4e1df273fd0c4178a:2:{i:0;s:17:\"_identity-backend\";i:1;s:46:\"[1,\"ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i\",2592000]\";}'
+    'advanced-backend' => 'dmaoijddkm4uu03vl134jbj6m0'
+    '_csrf-backend' => 'd3a186c8cf6b4b3d8200f84e14ae73d332e67aeabaa25dd605a3d8cdcd4c12c9a:2:{i:0;s:13:\"_csrf-backend\";i:1;s:32:\"dLODo-iZBR_QkMXsa0HLciGbdvZRbq7Y\";}'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__id' => 1
+    '__authKey' => 'ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i'
+    '__expire' => 1701935796
+]
+
+$_SERVER = [
+    'REDIRECT_MIBDIRS' => 'D:/new/php/extras/mibs'
+    'REDIRECT_MYSQL_HOME' => '\\xampp\\mysql\\bin'
+    'REDIRECT_OPENSSL_CONF' => 'D:/new/apache/bin/openssl.cnf'
+    'REDIRECT_PHP_PEAR_SYSCONF_DIR' => '\\xampp\\php'
+    'REDIRECT_PHPRC' => '\\xampp\\php'
+    'REDIRECT_TMP' => '\\xampp\\tmp'
+    'REDIRECT_STATUS' => '200'
+    'MIBDIRS' => 'D:/new/php/extras/mibs'
+    'MYSQL_HOME' => '\\xampp\\mysql\\bin'
+    'OPENSSL_CONF' => 'D:/new/apache/bin/openssl.cnf'
+    'PHP_PEAR_SYSCONF_DIR' => '\\xampp\\php'
+    'PHPRC' => '\\xampp\\php'
+    'TMP' => '\\xampp\\tmp'
+    'HTTP_HOST' => 'studio.visualight.test'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+    'HTTP_ACCEPT' => '*/*'
+    'HTTP_SEC_GPC' => '1'
+    'HTTP_ACCEPT_LANGUAGE' => 'en-US,en;q=0.7'
+    'HTTP_REFERER' => 'http://studio.visualight.test/nmd/chart/index'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_COOKIE' => '_identity-backend=faabc4de6d90adad4c2dd4d9214aaab678cc4097c3d17a8d4e1df273fd0c4178a%3A2%3A%7Bi%3A0%3Bs%3A17%3A%22_identity-backend%22%3Bi%3A1%3Bs%3A46%3A%22%5B1%2C%22ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i%22%2C2592000%5D%22%3B%7D; advanced-backend=dmaoijddkm4uu03vl134jbj6m0; _csrf-backend=d3a186c8cf6b4b3d8200f84e14ae73d332e67aeabaa25dd605a3d8cdcd4c12c9a%3A2%3A%7Bi%3A0%3Bs%3A13%3A%22_csrf-backend%22%3Bi%3A1%3Bs%3A32%3A%22dLODo-iZBR_QkMXsa0HLciGbdvZRbq7Y%22%3B%7D'
+    'PATH' => 'D:\\PYTHONG\\Scripts\\;D:\\PYTHONG\\;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Windows\\System32\\OpenSSH\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\NVIDIA Corporation\\NVIDIA NvDLISR;C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\dotnet\\;C:\\Program Files\\Azure Data Studio\\bin;C:\\Program Files\\Microsoft SQL Server\\Client SDK\\ODBC\\170\\Tools\\Binn\\;C:\\Program Files (x86)\\Microsoft SQL Server\\150\\Tools\\Binn\\;C:\\Program Files\\Microsoft SQL Server\\150\\Tools\\Binn\\;C:\\Program Files\\Microsoft SQL Server\\150\\DTS\\Binn\\;C:\\Program Files (x86)\\Microsoft SQL Server\\150\\DTS\\Binn\\;C:\\Program Files\\Git\\cmd;C:\\ProgramData\\ComposerSetup\\bin;D:\\new\\php;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC;.PY;.PYW'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => '<address>Apache/2.4.56 (Win64) OpenSSL/1.1.1t PHP/8.0.29 Server at studio.visualight.test Port 80</address>
+'
+    'SERVER_SOFTWARE' => 'Apache/2.4.56 (Win64) OpenSSL/1.1.1t PHP/8.0.29'
+    'SERVER_NAME' => 'studio.visualight.test'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/new/htdocs/visualight/backend/web'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/new/htdocs/visualight/backend/web'
+    'SERVER_ADMIN' => 'postmaster@localhost'
+    'SCRIPT_FILENAME' => 'D:/new/htdocs/visualight/backend/web/index.php'
+    'REMOTE_PORT' => '54710'
+    'REDIRECT_URL' => '/nmd/chart/path/to/Chart.min.js'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'REQUEST_URI' => '/nmd/chart/path/to/Chart.min.js'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1701934595.9658
+    'REQUEST_TIME' => 1701934595
+]
+2023-12-08 03:19:40 [127.0.0.1][1][gro0e40o5818gn705jgovm4ljt][error][yii\web\HttpException:404] yii\base\InvalidRouteException: Unable to resolve the request "std/chart/path/to/Chart.min.js". in D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Module.php:561
+Stack trace:
+#0 D:\new\htdocs\visualight\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('std/chart/path/...', Array)
+#1 D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Application.php(384): yii\web\Application->handleRequest(Object(yii\web\Request))
+#2 D:\new\htdocs\visualight\backend\web\index.php(18): yii\base\Application->run()
+#3 {main}
+
+Next yii\web\NotFoundHttpException: Page not found. in D:\new\htdocs\visualight\vendor\yiisoft\yii2\web\Application.php:115
+Stack trace:
+#0 D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Application.php(384): yii\web\Application->handleRequest(Object(yii\web\Request))
+#1 D:\new\htdocs\visualight\backend\web\index.php(18): yii\base\Application->run()
+#2 {main}
+2023-12-08 03:19:40 [127.0.0.1][1][gro0e40o5818gn705jgovm4ljt][info][application] $_GET = []
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = [
+    'advanced-backend' => 'gro0e40o5818gn705jgovm4ljt'
+    '_identity-backend' => '6b512b106ffaf5d53a104194dc0c555e428b107a9835fdaf3e02ccd54ea7009ea:2:{i:0;s:17:\"_identity-backend\";i:1;s:46:\"[1,\"ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i\",2592000]\";}'
+    '_csrf-backend' => '4be1db47d1a80b45e1ba572cda95478b1f5837cb874308a559dbf961cf2c0bc7a:2:{i:0;s:13:\"_csrf-backend\";i:1;s:32:\"RHWijbHtPyUjgkwQfFpgxyGrHnE9yfNb\";}'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__returnUrl' => 'http://studio.visualight.test/'
+    '__id' => 1
+    '__authKey' => 'ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i'
+    '__expire' => 1702003180
+]
+
+$_SERVER = [
+    'REDIRECT_MIBDIRS' => 'D:/new/php/extras/mibs'
+    'REDIRECT_MYSQL_HOME' => '\\xampp\\mysql\\bin'
+    'REDIRECT_OPENSSL_CONF' => 'D:/new/apache/bin/openssl.cnf'
+    'REDIRECT_PHP_PEAR_SYSCONF_DIR' => '\\xampp\\php'
+    'REDIRECT_PHPRC' => '\\xampp\\php'
+    'REDIRECT_TMP' => '\\xampp\\tmp'
+    'REDIRECT_STATUS' => '200'
+    'MIBDIRS' => 'D:/new/php/extras/mibs'
+    'MYSQL_HOME' => '\\xampp\\mysql\\bin'
+    'OPENSSL_CONF' => 'D:/new/apache/bin/openssl.cnf'
+    'PHP_PEAR_SYSCONF_DIR' => '\\xampp\\php'
+    'PHPRC' => '\\xampp\\php'
+    'TMP' => '\\xampp\\tmp'
+    'HTTP_HOST' => 'studio.visualight.test'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+    'HTTP_ACCEPT' => '*/*'
+    'HTTP_SEC_GPC' => '1'
+    'HTTP_ACCEPT_LANGUAGE' => 'en-US,en;q=0.5'
+    'HTTP_REFERER' => 'http://studio.visualight.test/std/chart/index'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_COOKIE' => 'advanced-backend=gro0e40o5818gn705jgovm4ljt; _identity-backend=6b512b106ffaf5d53a104194dc0c555e428b107a9835fdaf3e02ccd54ea7009ea%3A2%3A%7Bi%3A0%3Bs%3A17%3A%22_identity-backend%22%3Bi%3A1%3Bs%3A46%3A%22%5B1%2C%22ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i%22%2C2592000%5D%22%3B%7D; _csrf-backend=4be1db47d1a80b45e1ba572cda95478b1f5837cb874308a559dbf961cf2c0bc7a%3A2%3A%7Bi%3A0%3Bs%3A13%3A%22_csrf-backend%22%3Bi%3A1%3Bs%3A32%3A%22RHWijbHtPyUjgkwQfFpgxyGrHnE9yfNb%22%3B%7D'
+    'PATH' => 'D:\\PYTHONG\\Scripts\\;D:\\PYTHONG\\;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Windows\\System32\\OpenSSH\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\NVIDIA Corporation\\NVIDIA NvDLISR;C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\dotnet\\;C:\\Program Files\\Azure Data Studio\\bin;C:\\Program Files\\Microsoft SQL Server\\Client SDK\\ODBC\\170\\Tools\\Binn\\;C:\\Program Files (x86)\\Microsoft SQL Server\\150\\Tools\\Binn\\;C:\\Program Files\\Microsoft SQL Server\\150\\Tools\\Binn\\;C:\\Program Files\\Microsoft SQL Server\\150\\DTS\\Binn\\;C:\\Program Files (x86)\\Microsoft SQL Server\\150\\DTS\\Binn\\;C:\\Program Files\\Git\\cmd;C:\\ProgramData\\ComposerSetup\\bin;D:\\new\\php;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC;.PY;.PYW'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => '<address>Apache/2.4.56 (Win64) OpenSSL/1.1.1t PHP/8.0.29 Server at studio.visualight.test Port 80</address>
+'
+    'SERVER_SOFTWARE' => 'Apache/2.4.56 (Win64) OpenSSL/1.1.1t PHP/8.0.29'
+    'SERVER_NAME' => 'studio.visualight.test'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/new/htdocs/visualight/backend/web'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/new/htdocs/visualight/backend/web'
+    'SERVER_ADMIN' => 'postmaster@localhost'
+    'SCRIPT_FILENAME' => 'D:/new/htdocs/visualight/backend/web/index.php'
+    'REMOTE_PORT' => '50123'
+    'REDIRECT_URL' => '/std/chart/path/to/Chart.min.js'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'REQUEST_URI' => '/std/chart/path/to/Chart.min.js'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1702001980.5031
+    'REQUEST_TIME' => 1702001980
+]
+2023-12-08 03:21:14 [127.0.0.1][1][gro0e40o5818gn705jgovm4ljt][error][yii\web\HttpException:404] yii\base\InvalidRouteException: Unable to resolve the request "std/chart/path/to/Chart.min.js". in D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Module.php:561
+Stack trace:
+#0 D:\new\htdocs\visualight\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('std/chart/path/...', Array)
+#1 D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Application.php(384): yii\web\Application->handleRequest(Object(yii\web\Request))
+#2 D:\new\htdocs\visualight\backend\web\index.php(18): yii\base\Application->run()
+#3 {main}
+
+Next yii\web\NotFoundHttpException: Page not found. in D:\new\htdocs\visualight\vendor\yiisoft\yii2\web\Application.php:115
+Stack trace:
+#0 D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Application.php(384): yii\web\Application->handleRequest(Object(yii\web\Request))
+#1 D:\new\htdocs\visualight\backend\web\index.php(18): yii\base\Application->run()
+#2 {main}
+2023-12-08 03:21:13 [127.0.0.1][1][gro0e40o5818gn705jgovm4ljt][info][application] $_GET = []
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = [
+    'advanced-backend' => 'gro0e40o5818gn705jgovm4ljt'
+    '_identity-backend' => '6b512b106ffaf5d53a104194dc0c555e428b107a9835fdaf3e02ccd54ea7009ea:2:{i:0;s:17:\"_identity-backend\";i:1;s:46:\"[1,\"ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i\",2592000]\";}'
+    '_csrf-backend' => '4be1db47d1a80b45e1ba572cda95478b1f5837cb874308a559dbf961cf2c0bc7a:2:{i:0;s:13:\"_csrf-backend\";i:1;s:32:\"RHWijbHtPyUjgkwQfFpgxyGrHnE9yfNb\";}'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__returnUrl' => 'http://studio.visualight.test/'
+    '__id' => 1
+    '__authKey' => 'ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i'
+    '__expire' => 1702003273
+]
+
+$_SERVER = [
+    'REDIRECT_MIBDIRS' => 'D:/new/php/extras/mibs'
+    'REDIRECT_MYSQL_HOME' => '\\xampp\\mysql\\bin'
+    'REDIRECT_OPENSSL_CONF' => 'D:/new/apache/bin/openssl.cnf'
+    'REDIRECT_PHP_PEAR_SYSCONF_DIR' => '\\xampp\\php'
+    'REDIRECT_PHPRC' => '\\xampp\\php'
+    'REDIRECT_TMP' => '\\xampp\\tmp'
+    'REDIRECT_STATUS' => '200'
+    'MIBDIRS' => 'D:/new/php/extras/mibs'
+    'MYSQL_HOME' => '\\xampp\\mysql\\bin'
+    'OPENSSL_CONF' => 'D:/new/apache/bin/openssl.cnf'
+    'PHP_PEAR_SYSCONF_DIR' => '\\xampp\\php'
+    'PHPRC' => '\\xampp\\php'
+    'TMP' => '\\xampp\\tmp'
+    'HTTP_HOST' => 'studio.visualight.test'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+    'HTTP_ACCEPT' => '*/*'
+    'HTTP_SEC_GPC' => '1'
+    'HTTP_ACCEPT_LANGUAGE' => 'en-US,en;q=0.5'
+    'HTTP_REFERER' => 'http://studio.visualight.test/std/chart/index'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_COOKIE' => 'advanced-backend=gro0e40o5818gn705jgovm4ljt; _identity-backend=6b512b106ffaf5d53a104194dc0c555e428b107a9835fdaf3e02ccd54ea7009ea%3A2%3A%7Bi%3A0%3Bs%3A17%3A%22_identity-backend%22%3Bi%3A1%3Bs%3A46%3A%22%5B1%2C%22ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i%22%2C2592000%5D%22%3B%7D; _csrf-backend=4be1db47d1a80b45e1ba572cda95478b1f5837cb874308a559dbf961cf2c0bc7a%3A2%3A%7Bi%3A0%3Bs%3A13%3A%22_csrf-backend%22%3Bi%3A1%3Bs%3A32%3A%22RHWijbHtPyUjgkwQfFpgxyGrHnE9yfNb%22%3B%7D'
+    'PATH' => 'D:\\PYTHONG\\Scripts\\;D:\\PYTHONG\\;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Windows\\System32\\OpenSSH\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\NVIDIA Corporation\\NVIDIA NvDLISR;C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\dotnet\\;C:\\Program Files\\Azure Data Studio\\bin;C:\\Program Files\\Microsoft SQL Server\\Client SDK\\ODBC\\170\\Tools\\Binn\\;C:\\Program Files (x86)\\Microsoft SQL Server\\150\\Tools\\Binn\\;C:\\Program Files\\Microsoft SQL Server\\150\\Tools\\Binn\\;C:\\Program Files\\Microsoft SQL Server\\150\\DTS\\Binn\\;C:\\Program Files (x86)\\Microsoft SQL Server\\150\\DTS\\Binn\\;C:\\Program Files\\Git\\cmd;C:\\ProgramData\\ComposerSetup\\bin;D:\\new\\php;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC;.PY;.PYW'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => '<address>Apache/2.4.56 (Win64) OpenSSL/1.1.1t PHP/8.0.29 Server at studio.visualight.test Port 80</address>
+'
+    'SERVER_SOFTWARE' => 'Apache/2.4.56 (Win64) OpenSSL/1.1.1t PHP/8.0.29'
+    'SERVER_NAME' => 'studio.visualight.test'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/new/htdocs/visualight/backend/web'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/new/htdocs/visualight/backend/web'
+    'SERVER_ADMIN' => 'postmaster@localhost'
+    'SCRIPT_FILENAME' => 'D:/new/htdocs/visualight/backend/web/index.php'
+    'REMOTE_PORT' => '50199'
+    'REDIRECT_URL' => '/std/chart/path/to/Chart.min.js'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'REQUEST_URI' => '/std/chart/path/to/Chart.min.js'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1702002073.6124
+    'REQUEST_TIME' => 1702002073
+]
+2023-12-08 03:22:03 [127.0.0.1][1][gro0e40o5818gn705jgovm4ljt][error][yii\web\HttpException:404] yii\base\InvalidRouteException: Unable to resolve the request "std/chart/path/to/Chart.min.js". in D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Module.php:561
+Stack trace:
+#0 D:\new\htdocs\visualight\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('std/chart/path/...', Array)
+#1 D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Application.php(384): yii\web\Application->handleRequest(Object(yii\web\Request))
+#2 D:\new\htdocs\visualight\backend\web\index.php(18): yii\base\Application->run()
+#3 {main}
+
+Next yii\web\NotFoundHttpException: Page not found. in D:\new\htdocs\visualight\vendor\yiisoft\yii2\web\Application.php:115
+Stack trace:
+#0 D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Application.php(384): yii\web\Application->handleRequest(Object(yii\web\Request))
+#1 D:\new\htdocs\visualight\backend\web\index.php(18): yii\base\Application->run()
+#2 {main}
+2023-12-08 03:22:03 [127.0.0.1][1][gro0e40o5818gn705jgovm4ljt][info][application] $_GET = []
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = [
+    'advanced-backend' => 'gro0e40o5818gn705jgovm4ljt'
+    '_identity-backend' => '6b512b106ffaf5d53a104194dc0c555e428b107a9835fdaf3e02ccd54ea7009ea:2:{i:0;s:17:\"_identity-backend\";i:1;s:46:\"[1,\"ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i\",2592000]\";}'
+    '_csrf-backend' => '4be1db47d1a80b45e1ba572cda95478b1f5837cb874308a559dbf961cf2c0bc7a:2:{i:0;s:13:\"_csrf-backend\";i:1;s:32:\"RHWijbHtPyUjgkwQfFpgxyGrHnE9yfNb\";}'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__returnUrl' => 'http://studio.visualight.test/'
+    '__id' => 1
+    '__authKey' => 'ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i'
+    '__expire' => 1702003323
+]
+
+$_SERVER = [
+    'REDIRECT_MIBDIRS' => 'D:/new/php/extras/mibs'
+    'REDIRECT_MYSQL_HOME' => '\\xampp\\mysql\\bin'
+    'REDIRECT_OPENSSL_CONF' => 'D:/new/apache/bin/openssl.cnf'
+    'REDIRECT_PHP_PEAR_SYSCONF_DIR' => '\\xampp\\php'
+    'REDIRECT_PHPRC' => '\\xampp\\php'
+    'REDIRECT_TMP' => '\\xampp\\tmp'
+    'REDIRECT_STATUS' => '200'
+    'MIBDIRS' => 'D:/new/php/extras/mibs'
+    'MYSQL_HOME' => '\\xampp\\mysql\\bin'
+    'OPENSSL_CONF' => 'D:/new/apache/bin/openssl.cnf'
+    'PHP_PEAR_SYSCONF_DIR' => '\\xampp\\php'
+    'PHPRC' => '\\xampp\\php'
+    'TMP' => '\\xampp\\tmp'
+    'HTTP_HOST' => 'studio.visualight.test'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+    'HTTP_ACCEPT' => '*/*'
+    'HTTP_SEC_GPC' => '1'
+    'HTTP_ACCEPT_LANGUAGE' => 'en-US,en;q=0.5'
+    'HTTP_REFERER' => 'http://studio.visualight.test/std/chart/index'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_COOKIE' => 'advanced-backend=gro0e40o5818gn705jgovm4ljt; _identity-backend=6b512b106ffaf5d53a104194dc0c555e428b107a9835fdaf3e02ccd54ea7009ea%3A2%3A%7Bi%3A0%3Bs%3A17%3A%22_identity-backend%22%3Bi%3A1%3Bs%3A46%3A%22%5B1%2C%22ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i%22%2C2592000%5D%22%3B%7D; _csrf-backend=4be1db47d1a80b45e1ba572cda95478b1f5837cb874308a559dbf961cf2c0bc7a%3A2%3A%7Bi%3A0%3Bs%3A13%3A%22_csrf-backend%22%3Bi%3A1%3Bs%3A32%3A%22RHWijbHtPyUjgkwQfFpgxyGrHnE9yfNb%22%3B%7D'
+    'PATH' => 'D:\\PYTHONG\\Scripts\\;D:\\PYTHONG\\;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Windows\\System32\\OpenSSH\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\NVIDIA Corporation\\NVIDIA NvDLISR;C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\dotnet\\;C:\\Program Files\\Azure Data Studio\\bin;C:\\Program Files\\Microsoft SQL Server\\Client SDK\\ODBC\\170\\Tools\\Binn\\;C:\\Program Files (x86)\\Microsoft SQL Server\\150\\Tools\\Binn\\;C:\\Program Files\\Microsoft SQL Server\\150\\Tools\\Binn\\;C:\\Program Files\\Microsoft SQL Server\\150\\DTS\\Binn\\;C:\\Program Files (x86)\\Microsoft SQL Server\\150\\DTS\\Binn\\;C:\\Program Files\\Git\\cmd;C:\\ProgramData\\ComposerSetup\\bin;D:\\new\\php;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC;.PY;.PYW'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => '<address>Apache/2.4.56 (Win64) OpenSSL/1.1.1t PHP/8.0.29 Server at studio.visualight.test Port 80</address>
+'
+    'SERVER_SOFTWARE' => 'Apache/2.4.56 (Win64) OpenSSL/1.1.1t PHP/8.0.29'
+    'SERVER_NAME' => 'studio.visualight.test'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/new/htdocs/visualight/backend/web'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/new/htdocs/visualight/backend/web'
+    'SERVER_ADMIN' => 'postmaster@localhost'
+    'SCRIPT_FILENAME' => 'D:/new/htdocs/visualight/backend/web/index.php'
+    'REMOTE_PORT' => '50214'
+    'REDIRECT_URL' => '/std/chart/path/to/Chart.min.js'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'REQUEST_URI' => '/std/chart/path/to/Chart.min.js'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1702002123.141
+    'REQUEST_TIME' => 1702002123
+]
+2023-12-08 03:22:59 [127.0.0.1][1][gro0e40o5818gn705jgovm4ljt][error][yii\web\HttpException:404] yii\base\InvalidRouteException: Unable to resolve the request "std/chart/path/to/Chart.min.js". in D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Module.php:561
+Stack trace:
+#0 D:\new\htdocs\visualight\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('std/chart/path/...', Array)
+#1 D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Application.php(384): yii\web\Application->handleRequest(Object(yii\web\Request))
+#2 D:\new\htdocs\visualight\backend\web\index.php(18): yii\base\Application->run()
+#3 {main}
+
+Next yii\web\NotFoundHttpException: Page not found. in D:\new\htdocs\visualight\vendor\yiisoft\yii2\web\Application.php:115
+Stack trace:
+#0 D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Application.php(384): yii\web\Application->handleRequest(Object(yii\web\Request))
+#1 D:\new\htdocs\visualight\backend\web\index.php(18): yii\base\Application->run()
+#2 {main}
+2023-12-08 03:22:58 [127.0.0.1][1][gro0e40o5818gn705jgovm4ljt][info][application] $_GET = []
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = [
+    'advanced-backend' => 'gro0e40o5818gn705jgovm4ljt'
+    '_identity-backend' => '6b512b106ffaf5d53a104194dc0c555e428b107a9835fdaf3e02ccd54ea7009ea:2:{i:0;s:17:\"_identity-backend\";i:1;s:46:\"[1,\"ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i\",2592000]\";}'
+    '_csrf-backend' => '4be1db47d1a80b45e1ba572cda95478b1f5837cb874308a559dbf961cf2c0bc7a:2:{i:0;s:13:\"_csrf-backend\";i:1;s:32:\"RHWijbHtPyUjgkwQfFpgxyGrHnE9yfNb\";}'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__returnUrl' => 'http://studio.visualight.test/'
+    '__id' => 1
+    '__authKey' => 'ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i'
+    '__expire' => 1702003379
+]
+
+$_SERVER = [
+    'REDIRECT_MIBDIRS' => 'D:/new/php/extras/mibs'
+    'REDIRECT_MYSQL_HOME' => '\\xampp\\mysql\\bin'
+    'REDIRECT_OPENSSL_CONF' => 'D:/new/apache/bin/openssl.cnf'
+    'REDIRECT_PHP_PEAR_SYSCONF_DIR' => '\\xampp\\php'
+    'REDIRECT_PHPRC' => '\\xampp\\php'
+    'REDIRECT_TMP' => '\\xampp\\tmp'
+    'REDIRECT_STATUS' => '200'
+    'MIBDIRS' => 'D:/new/php/extras/mibs'
+    'MYSQL_HOME' => '\\xampp\\mysql\\bin'
+    'OPENSSL_CONF' => 'D:/new/apache/bin/openssl.cnf'
+    'PHP_PEAR_SYSCONF_DIR' => '\\xampp\\php'
+    'PHPRC' => '\\xampp\\php'
+    'TMP' => '\\xampp\\tmp'
+    'HTTP_HOST' => 'studio.visualight.test'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+    'HTTP_ACCEPT' => '*/*'
+    'HTTP_SEC_GPC' => '1'
+    'HTTP_ACCEPT_LANGUAGE' => 'en-US,en;q=0.5'
+    'HTTP_REFERER' => 'http://studio.visualight.test/std/chart/index'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_COOKIE' => 'advanced-backend=gro0e40o5818gn705jgovm4ljt; _identity-backend=6b512b106ffaf5d53a104194dc0c555e428b107a9835fdaf3e02ccd54ea7009ea%3A2%3A%7Bi%3A0%3Bs%3A17%3A%22_identity-backend%22%3Bi%3A1%3Bs%3A46%3A%22%5B1%2C%22ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i%22%2C2592000%5D%22%3B%7D; _csrf-backend=4be1db47d1a80b45e1ba572cda95478b1f5837cb874308a559dbf961cf2c0bc7a%3A2%3A%7Bi%3A0%3Bs%3A13%3A%22_csrf-backend%22%3Bi%3A1%3Bs%3A32%3A%22RHWijbHtPyUjgkwQfFpgxyGrHnE9yfNb%22%3B%7D'
+    'PATH' => 'D:\\PYTHONG\\Scripts\\;D:\\PYTHONG\\;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Windows\\System32\\OpenSSH\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\NVIDIA Corporation\\NVIDIA NvDLISR;C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\dotnet\\;C:\\Program Files\\Azure Data Studio\\bin;C:\\Program Files\\Microsoft SQL Server\\Client SDK\\ODBC\\170\\Tools\\Binn\\;C:\\Program Files (x86)\\Microsoft SQL Server\\150\\Tools\\Binn\\;C:\\Program Files\\Microsoft SQL Server\\150\\Tools\\Binn\\;C:\\Program Files\\Microsoft SQL Server\\150\\DTS\\Binn\\;C:\\Program Files (x86)\\Microsoft SQL Server\\150\\DTS\\Binn\\;C:\\Program Files\\Git\\cmd;C:\\ProgramData\\ComposerSetup\\bin;D:\\new\\php;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC;.PY;.PYW'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => '<address>Apache/2.4.56 (Win64) OpenSSL/1.1.1t PHP/8.0.29 Server at studio.visualight.test Port 80</address>
+'
+    'SERVER_SOFTWARE' => 'Apache/2.4.56 (Win64) OpenSSL/1.1.1t PHP/8.0.29'
+    'SERVER_NAME' => 'studio.visualight.test'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/new/htdocs/visualight/backend/web'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/new/htdocs/visualight/backend/web'
+    'SERVER_ADMIN' => 'postmaster@localhost'
+    'SCRIPT_FILENAME' => 'D:/new/htdocs/visualight/backend/web/index.php'
+    'REMOTE_PORT' => '50231'
+    'REDIRECT_URL' => '/std/chart/path/to/Chart.min.js'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'REQUEST_URI' => '/std/chart/path/to/Chart.min.js'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1702002178.8634
+    'REQUEST_TIME' => 1702002178
+]
+2023-12-08 03:23:05 [127.0.0.1][1][gro0e40o5818gn705jgovm4ljt][error][yii\web\HttpException:404] yii\base\InvalidRouteException: Unable to resolve the request "std/chart/path/to/Chart.min.js". in D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Module.php:561
+Stack trace:
+#0 D:\new\htdocs\visualight\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('std/chart/path/...', Array)
+#1 D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Application.php(384): yii\web\Application->handleRequest(Object(yii\web\Request))
+#2 D:\new\htdocs\visualight\backend\web\index.php(18): yii\base\Application->run()
+#3 {main}
+
+Next yii\web\NotFoundHttpException: Page not found. in D:\new\htdocs\visualight\vendor\yiisoft\yii2\web\Application.php:115
+Stack trace:
+#0 D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Application.php(384): yii\web\Application->handleRequest(Object(yii\web\Request))
+#1 D:\new\htdocs\visualight\backend\web\index.php(18): yii\base\Application->run()
+#2 {main}
+2023-12-08 03:23:04 [127.0.0.1][1][gro0e40o5818gn705jgovm4ljt][info][application] $_GET = []
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = [
+    'advanced-backend' => 'gro0e40o5818gn705jgovm4ljt'
+    '_identity-backend' => '6b512b106ffaf5d53a104194dc0c555e428b107a9835fdaf3e02ccd54ea7009ea:2:{i:0;s:17:\"_identity-backend\";i:1;s:46:\"[1,\"ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i\",2592000]\";}'
+    '_csrf-backend' => '4be1db47d1a80b45e1ba572cda95478b1f5837cb874308a559dbf961cf2c0bc7a:2:{i:0;s:13:\"_csrf-backend\";i:1;s:32:\"RHWijbHtPyUjgkwQfFpgxyGrHnE9yfNb\";}'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__returnUrl' => 'http://studio.visualight.test/'
+    '__id' => 1
+    '__authKey' => 'ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i'
+    '__expire' => 1702003385
+]
+
+$_SERVER = [
+    'REDIRECT_MIBDIRS' => 'D:/new/php/extras/mibs'
+    'REDIRECT_MYSQL_HOME' => '\\xampp\\mysql\\bin'
+    'REDIRECT_OPENSSL_CONF' => 'D:/new/apache/bin/openssl.cnf'
+    'REDIRECT_PHP_PEAR_SYSCONF_DIR' => '\\xampp\\php'
+    'REDIRECT_PHPRC' => '\\xampp\\php'
+    'REDIRECT_TMP' => '\\xampp\\tmp'
+    'REDIRECT_STATUS' => '200'
+    'MIBDIRS' => 'D:/new/php/extras/mibs'
+    'MYSQL_HOME' => '\\xampp\\mysql\\bin'
+    'OPENSSL_CONF' => 'D:/new/apache/bin/openssl.cnf'
+    'PHP_PEAR_SYSCONF_DIR' => '\\xampp\\php'
+    'PHPRC' => '\\xampp\\php'
+    'TMP' => '\\xampp\\tmp'
+    'HTTP_HOST' => 'studio.visualight.test'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+    'HTTP_ACCEPT' => '*/*'
+    'HTTP_SEC_GPC' => '1'
+    'HTTP_ACCEPT_LANGUAGE' => 'en-US,en;q=0.5'
+    'HTTP_REFERER' => 'http://studio.visualight.test/std/chart/index'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_COOKIE' => 'advanced-backend=gro0e40o5818gn705jgovm4ljt; _identity-backend=6b512b106ffaf5d53a104194dc0c555e428b107a9835fdaf3e02ccd54ea7009ea%3A2%3A%7Bi%3A0%3Bs%3A17%3A%22_identity-backend%22%3Bi%3A1%3Bs%3A46%3A%22%5B1%2C%22ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i%22%2C2592000%5D%22%3B%7D; _csrf-backend=4be1db47d1a80b45e1ba572cda95478b1f5837cb874308a559dbf961cf2c0bc7a%3A2%3A%7Bi%3A0%3Bs%3A13%3A%22_csrf-backend%22%3Bi%3A1%3Bs%3A32%3A%22RHWijbHtPyUjgkwQfFpgxyGrHnE9yfNb%22%3B%7D'
+    'PATH' => 'D:\\PYTHONG\\Scripts\\;D:\\PYTHONG\\;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Windows\\System32\\OpenSSH\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\NVIDIA Corporation\\NVIDIA NvDLISR;C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\dotnet\\;C:\\Program Files\\Azure Data Studio\\bin;C:\\Program Files\\Microsoft SQL Server\\Client SDK\\ODBC\\170\\Tools\\Binn\\;C:\\Program Files (x86)\\Microsoft SQL Server\\150\\Tools\\Binn\\;C:\\Program Files\\Microsoft SQL Server\\150\\Tools\\Binn\\;C:\\Program Files\\Microsoft SQL Server\\150\\DTS\\Binn\\;C:\\Program Files (x86)\\Microsoft SQL Server\\150\\DTS\\Binn\\;C:\\Program Files\\Git\\cmd;C:\\ProgramData\\ComposerSetup\\bin;D:\\new\\php;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC;.PY;.PYW'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => '<address>Apache/2.4.56 (Win64) OpenSSL/1.1.1t PHP/8.0.29 Server at studio.visualight.test Port 80</address>
+'
+    'SERVER_SOFTWARE' => 'Apache/2.4.56 (Win64) OpenSSL/1.1.1t PHP/8.0.29'
+    'SERVER_NAME' => 'studio.visualight.test'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/new/htdocs/visualight/backend/web'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/new/htdocs/visualight/backend/web'
+    'SERVER_ADMIN' => 'postmaster@localhost'
+    'SCRIPT_FILENAME' => 'D:/new/htdocs/visualight/backend/web/index.php'
+    'REMOTE_PORT' => '50244'
+    'REDIRECT_URL' => '/std/chart/path/to/Chart.min.js'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'REQUEST_URI' => '/std/chart/path/to/Chart.min.js'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1702002184.8606
+    'REQUEST_TIME' => 1702002184
+]
+2023-12-08 03:23:44 [127.0.0.1][1][gro0e40o5818gn705jgovm4ljt][error][yii\web\HttpException:404] yii\base\InvalidRouteException: Unable to resolve the request "std/chart/path/to/Chart.min.js". in D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Module.php:561
+Stack trace:
+#0 D:\new\htdocs\visualight\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('std/chart/path/...', Array)
+#1 D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Application.php(384): yii\web\Application->handleRequest(Object(yii\web\Request))
+#2 D:\new\htdocs\visualight\backend\web\index.php(18): yii\base\Application->run()
+#3 {main}
+
+Next yii\web\NotFoundHttpException: Page not found. in D:\new\htdocs\visualight\vendor\yiisoft\yii2\web\Application.php:115
+Stack trace:
+#0 D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Application.php(384): yii\web\Application->handleRequest(Object(yii\web\Request))
+#1 D:\new\htdocs\visualight\backend\web\index.php(18): yii\base\Application->run()
+#2 {main}
+2023-12-08 03:23:44 [127.0.0.1][1][gro0e40o5818gn705jgovm4ljt][info][application] $_GET = []
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = [
+    'advanced-backend' => 'gro0e40o5818gn705jgovm4ljt'
+    '_identity-backend' => '6b512b106ffaf5d53a104194dc0c555e428b107a9835fdaf3e02ccd54ea7009ea:2:{i:0;s:17:\"_identity-backend\";i:1;s:46:\"[1,\"ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i\",2592000]\";}'
+    '_csrf-backend' => '4be1db47d1a80b45e1ba572cda95478b1f5837cb874308a559dbf961cf2c0bc7a:2:{i:0;s:13:\"_csrf-backend\";i:1;s:32:\"RHWijbHtPyUjgkwQfFpgxyGrHnE9yfNb\";}'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__returnUrl' => 'http://studio.visualight.test/'
+    '__id' => 1
+    '__authKey' => 'ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i'
+    '__expire' => 1702003424
+]
+
+$_SERVER = [
+    'REDIRECT_MIBDIRS' => 'D:/new/php/extras/mibs'
+    'REDIRECT_MYSQL_HOME' => '\\xampp\\mysql\\bin'
+    'REDIRECT_OPENSSL_CONF' => 'D:/new/apache/bin/openssl.cnf'
+    'REDIRECT_PHP_PEAR_SYSCONF_DIR' => '\\xampp\\php'
+    'REDIRECT_PHPRC' => '\\xampp\\php'
+    'REDIRECT_TMP' => '\\xampp\\tmp'
+    'REDIRECT_STATUS' => '200'
+    'MIBDIRS' => 'D:/new/php/extras/mibs'
+    'MYSQL_HOME' => '\\xampp\\mysql\\bin'
+    'OPENSSL_CONF' => 'D:/new/apache/bin/openssl.cnf'
+    'PHP_PEAR_SYSCONF_DIR' => '\\xampp\\php'
+    'PHPRC' => '\\xampp\\php'
+    'TMP' => '\\xampp\\tmp'
+    'HTTP_HOST' => 'studio.visualight.test'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+    'HTTP_ACCEPT' => '*/*'
+    'HTTP_SEC_GPC' => '1'
+    'HTTP_ACCEPT_LANGUAGE' => 'en-US,en;q=0.5'
+    'HTTP_REFERER' => 'http://studio.visualight.test/std/chart/index'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_COOKIE' => 'advanced-backend=gro0e40o5818gn705jgovm4ljt; _identity-backend=6b512b106ffaf5d53a104194dc0c555e428b107a9835fdaf3e02ccd54ea7009ea%3A2%3A%7Bi%3A0%3Bs%3A17%3A%22_identity-backend%22%3Bi%3A1%3Bs%3A46%3A%22%5B1%2C%22ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i%22%2C2592000%5D%22%3B%7D; _csrf-backend=4be1db47d1a80b45e1ba572cda95478b1f5837cb874308a559dbf961cf2c0bc7a%3A2%3A%7Bi%3A0%3Bs%3A13%3A%22_csrf-backend%22%3Bi%3A1%3Bs%3A32%3A%22RHWijbHtPyUjgkwQfFpgxyGrHnE9yfNb%22%3B%7D'
+    'PATH' => 'D:\\PYTHONG\\Scripts\\;D:\\PYTHONG\\;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Windows\\System32\\OpenSSH\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\NVIDIA Corporation\\NVIDIA NvDLISR;C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\dotnet\\;C:\\Program Files\\Azure Data Studio\\bin;C:\\Program Files\\Microsoft SQL Server\\Client SDK\\ODBC\\170\\Tools\\Binn\\;C:\\Program Files (x86)\\Microsoft SQL Server\\150\\Tools\\Binn\\;C:\\Program Files\\Microsoft SQL Server\\150\\Tools\\Binn\\;C:\\Program Files\\Microsoft SQL Server\\150\\DTS\\Binn\\;C:\\Program Files (x86)\\Microsoft SQL Server\\150\\DTS\\Binn\\;C:\\Program Files\\Git\\cmd;C:\\ProgramData\\ComposerSetup\\bin;D:\\new\\php;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC;.PY;.PYW'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => '<address>Apache/2.4.56 (Win64) OpenSSL/1.1.1t PHP/8.0.29 Server at studio.visualight.test Port 80</address>
+'
+    'SERVER_SOFTWARE' => 'Apache/2.4.56 (Win64) OpenSSL/1.1.1t PHP/8.0.29'
+    'SERVER_NAME' => 'studio.visualight.test'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/new/htdocs/visualight/backend/web'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/new/htdocs/visualight/backend/web'
+    'SERVER_ADMIN' => 'postmaster@localhost'
+    'SCRIPT_FILENAME' => 'D:/new/htdocs/visualight/backend/web/index.php'
+    'REMOTE_PORT' => '50287'
+    'REDIRECT_URL' => '/std/chart/path/to/Chart.min.js'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'REQUEST_URI' => '/std/chart/path/to/Chart.min.js'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1702002224.0984
+    'REQUEST_TIME' => 1702002224
+]
+2023-12-08 03:25:12 [127.0.0.1][1][gro0e40o5818gn705jgovm4ljt][error][yii\web\HttpException:404] yii\base\InvalidRouteException: Unable to resolve the request "std/chart/path/to/Chart.min.js". in D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Module.php:561
+Stack trace:
+#0 D:\new\htdocs\visualight\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('std/chart/path/...', Array)
+#1 D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Application.php(384): yii\web\Application->handleRequest(Object(yii\web\Request))
+#2 D:\new\htdocs\visualight\backend\web\index.php(18): yii\base\Application->run()
+#3 {main}
+
+Next yii\web\NotFoundHttpException: Page not found. in D:\new\htdocs\visualight\vendor\yiisoft\yii2\web\Application.php:115
+Stack trace:
+#0 D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Application.php(384): yii\web\Application->handleRequest(Object(yii\web\Request))
+#1 D:\new\htdocs\visualight\backend\web\index.php(18): yii\base\Application->run()
+#2 {main}
+2023-12-08 03:25:12 [127.0.0.1][1][gro0e40o5818gn705jgovm4ljt][info][application] $_GET = []
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = [
+    'advanced-backend' => 'gro0e40o5818gn705jgovm4ljt'
+    '_identity-backend' => '6b512b106ffaf5d53a104194dc0c555e428b107a9835fdaf3e02ccd54ea7009ea:2:{i:0;s:17:\"_identity-backend\";i:1;s:46:\"[1,\"ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i\",2592000]\";}'
+    '_csrf-backend' => '4be1db47d1a80b45e1ba572cda95478b1f5837cb874308a559dbf961cf2c0bc7a:2:{i:0;s:13:\"_csrf-backend\";i:1;s:32:\"RHWijbHtPyUjgkwQfFpgxyGrHnE9yfNb\";}'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__returnUrl' => 'http://studio.visualight.test/'
+    '__id' => 1
+    '__authKey' => 'ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i'
+    '__expire' => 1702003512
+]
+
+$_SERVER = [
+    'REDIRECT_MIBDIRS' => 'D:/new/php/extras/mibs'
+    'REDIRECT_MYSQL_HOME' => '\\xampp\\mysql\\bin'
+    'REDIRECT_OPENSSL_CONF' => 'D:/new/apache/bin/openssl.cnf'
+    'REDIRECT_PHP_PEAR_SYSCONF_DIR' => '\\xampp\\php'
+    'REDIRECT_PHPRC' => '\\xampp\\php'
+    'REDIRECT_TMP' => '\\xampp\\tmp'
+    'REDIRECT_STATUS' => '200'
+    'MIBDIRS' => 'D:/new/php/extras/mibs'
+    'MYSQL_HOME' => '\\xampp\\mysql\\bin'
+    'OPENSSL_CONF' => 'D:/new/apache/bin/openssl.cnf'
+    'PHP_PEAR_SYSCONF_DIR' => '\\xampp\\php'
+    'PHPRC' => '\\xampp\\php'
+    'TMP' => '\\xampp\\tmp'
+    'HTTP_HOST' => 'studio.visualight.test'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+    'HTTP_ACCEPT' => '*/*'
+    'HTTP_SEC_GPC' => '1'
+    'HTTP_ACCEPT_LANGUAGE' => 'en-US,en;q=0.5'
+    'HTTP_REFERER' => 'http://studio.visualight.test/std/chart/index'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_COOKIE' => 'advanced-backend=gro0e40o5818gn705jgovm4ljt; _identity-backend=6b512b106ffaf5d53a104194dc0c555e428b107a9835fdaf3e02ccd54ea7009ea%3A2%3A%7Bi%3A0%3Bs%3A17%3A%22_identity-backend%22%3Bi%3A1%3Bs%3A46%3A%22%5B1%2C%22ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i%22%2C2592000%5D%22%3B%7D; _csrf-backend=4be1db47d1a80b45e1ba572cda95478b1f5837cb874308a559dbf961cf2c0bc7a%3A2%3A%7Bi%3A0%3Bs%3A13%3A%22_csrf-backend%22%3Bi%3A1%3Bs%3A32%3A%22RHWijbHtPyUjgkwQfFpgxyGrHnE9yfNb%22%3B%7D'
+    'PATH' => 'D:\\PYTHONG\\Scripts\\;D:\\PYTHONG\\;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Windows\\System32\\OpenSSH\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\NVIDIA Corporation\\NVIDIA NvDLISR;C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\dotnet\\;C:\\Program Files\\Azure Data Studio\\bin;C:\\Program Files\\Microsoft SQL Server\\Client SDK\\ODBC\\170\\Tools\\Binn\\;C:\\Program Files (x86)\\Microsoft SQL Server\\150\\Tools\\Binn\\;C:\\Program Files\\Microsoft SQL Server\\150\\Tools\\Binn\\;C:\\Program Files\\Microsoft SQL Server\\150\\DTS\\Binn\\;C:\\Program Files (x86)\\Microsoft SQL Server\\150\\DTS\\Binn\\;C:\\Program Files\\Git\\cmd;C:\\ProgramData\\ComposerSetup\\bin;D:\\new\\php;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC;.PY;.PYW'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => '<address>Apache/2.4.56 (Win64) OpenSSL/1.1.1t PHP/8.0.29 Server at studio.visualight.test Port 80</address>
+'
+    'SERVER_SOFTWARE' => 'Apache/2.4.56 (Win64) OpenSSL/1.1.1t PHP/8.0.29'
+    'SERVER_NAME' => 'studio.visualight.test'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/new/htdocs/visualight/backend/web'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/new/htdocs/visualight/backend/web'
+    'SERVER_ADMIN' => 'postmaster@localhost'
+    'SCRIPT_FILENAME' => 'D:/new/htdocs/visualight/backend/web/index.php'
+    'REMOTE_PORT' => '50344'
+    'REDIRECT_URL' => '/std/chart/path/to/Chart.min.js'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'REQUEST_URI' => '/std/chart/path/to/Chart.min.js'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1702002312.2469
+    'REQUEST_TIME' => 1702002312
+]
+2023-12-08 03:25:39 [127.0.0.1][1][gro0e40o5818gn705jgovm4ljt][error][yii\web\HttpException:404] yii\base\InvalidRouteException: Unable to resolve the request "std/chart/path/to/Chart.min.js". in D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Module.php:561
+Stack trace:
+#0 D:\new\htdocs\visualight\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('std/chart/path/...', Array)
+#1 D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Application.php(384): yii\web\Application->handleRequest(Object(yii\web\Request))
+#2 D:\new\htdocs\visualight\backend\web\index.php(18): yii\base\Application->run()
+#3 {main}
+
+Next yii\web\NotFoundHttpException: Page not found. in D:\new\htdocs\visualight\vendor\yiisoft\yii2\web\Application.php:115
+Stack trace:
+#0 D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Application.php(384): yii\web\Application->handleRequest(Object(yii\web\Request))
+#1 D:\new\htdocs\visualight\backend\web\index.php(18): yii\base\Application->run()
+#2 {main}
+2023-12-08 03:25:38 [127.0.0.1][1][gro0e40o5818gn705jgovm4ljt][info][application] $_GET = []
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = [
+    'advanced-backend' => 'gro0e40o5818gn705jgovm4ljt'
+    '_identity-backend' => '6b512b106ffaf5d53a104194dc0c555e428b107a9835fdaf3e02ccd54ea7009ea:2:{i:0;s:17:\"_identity-backend\";i:1;s:46:\"[1,\"ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i\",2592000]\";}'
+    '_csrf-backend' => '4be1db47d1a80b45e1ba572cda95478b1f5837cb874308a559dbf961cf2c0bc7a:2:{i:0;s:13:\"_csrf-backend\";i:1;s:32:\"RHWijbHtPyUjgkwQfFpgxyGrHnE9yfNb\";}'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__returnUrl' => 'http://studio.visualight.test/'
+    '__id' => 1
+    '__authKey' => 'ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i'
+    '__expire' => 1702003538
+]
+
+$_SERVER = [
+    'REDIRECT_MIBDIRS' => 'D:/new/php/extras/mibs'
+    'REDIRECT_MYSQL_HOME' => '\\xampp\\mysql\\bin'
+    'REDIRECT_OPENSSL_CONF' => 'D:/new/apache/bin/openssl.cnf'
+    'REDIRECT_PHP_PEAR_SYSCONF_DIR' => '\\xampp\\php'
+    'REDIRECT_PHPRC' => '\\xampp\\php'
+    'REDIRECT_TMP' => '\\xampp\\tmp'
+    'REDIRECT_STATUS' => '200'
+    'MIBDIRS' => 'D:/new/php/extras/mibs'
+    'MYSQL_HOME' => '\\xampp\\mysql\\bin'
+    'OPENSSL_CONF' => 'D:/new/apache/bin/openssl.cnf'
+    'PHP_PEAR_SYSCONF_DIR' => '\\xampp\\php'
+    'PHPRC' => '\\xampp\\php'
+    'TMP' => '\\xampp\\tmp'
+    'HTTP_HOST' => 'studio.visualight.test'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+    'HTTP_ACCEPT' => '*/*'
+    'HTTP_SEC_GPC' => '1'
+    'HTTP_ACCEPT_LANGUAGE' => 'en-US,en;q=0.5'
+    'HTTP_REFERER' => 'http://studio.visualight.test/std/chart/index'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_COOKIE' => 'advanced-backend=gro0e40o5818gn705jgovm4ljt; _identity-backend=6b512b106ffaf5d53a104194dc0c555e428b107a9835fdaf3e02ccd54ea7009ea%3A2%3A%7Bi%3A0%3Bs%3A17%3A%22_identity-backend%22%3Bi%3A1%3Bs%3A46%3A%22%5B1%2C%22ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i%22%2C2592000%5D%22%3B%7D; _csrf-backend=4be1db47d1a80b45e1ba572cda95478b1f5837cb874308a559dbf961cf2c0bc7a%3A2%3A%7Bi%3A0%3Bs%3A13%3A%22_csrf-backend%22%3Bi%3A1%3Bs%3A32%3A%22RHWijbHtPyUjgkwQfFpgxyGrHnE9yfNb%22%3B%7D'
+    'PATH' => 'D:\\PYTHONG\\Scripts\\;D:\\PYTHONG\\;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Windows\\System32\\OpenSSH\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\NVIDIA Corporation\\NVIDIA NvDLISR;C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\dotnet\\;C:\\Program Files\\Azure Data Studio\\bin;C:\\Program Files\\Microsoft SQL Server\\Client SDK\\ODBC\\170\\Tools\\Binn\\;C:\\Program Files (x86)\\Microsoft SQL Server\\150\\Tools\\Binn\\;C:\\Program Files\\Microsoft SQL Server\\150\\Tools\\Binn\\;C:\\Program Files\\Microsoft SQL Server\\150\\DTS\\Binn\\;C:\\Program Files (x86)\\Microsoft SQL Server\\150\\DTS\\Binn\\;C:\\Program Files\\Git\\cmd;C:\\ProgramData\\ComposerSetup\\bin;D:\\new\\php;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC;.PY;.PYW'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => '<address>Apache/2.4.56 (Win64) OpenSSL/1.1.1t PHP/8.0.29 Server at studio.visualight.test Port 80</address>
+'
+    'SERVER_SOFTWARE' => 'Apache/2.4.56 (Win64) OpenSSL/1.1.1t PHP/8.0.29'
+    'SERVER_NAME' => 'studio.visualight.test'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/new/htdocs/visualight/backend/web'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/new/htdocs/visualight/backend/web'
+    'SERVER_ADMIN' => 'postmaster@localhost'
+    'SCRIPT_FILENAME' => 'D:/new/htdocs/visualight/backend/web/index.php'
+    'REMOTE_PORT' => '50365'
+    'REDIRECT_URL' => '/std/chart/path/to/Chart.min.js'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'REQUEST_URI' => '/std/chart/path/to/Chart.min.js'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1702002338.7597
+    'REQUEST_TIME' => 1702002338
+]
+2023-12-08 03:26:20 [127.0.0.1][1][gro0e40o5818gn705jgovm4ljt][error][yii\web\HttpException:404] yii\base\InvalidRouteException: Unable to resolve the request "nmd/chart/path/to/Chart.min.js". in D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Module.php:561
+Stack trace:
+#0 D:\new\htdocs\visualight\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('nmd/chart/path/...', Array)
+#1 D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Application.php(384): yii\web\Application->handleRequest(Object(yii\web\Request))
+#2 D:\new\htdocs\visualight\backend\web\index.php(18): yii\base\Application->run()
+#3 {main}
+
+Next yii\web\NotFoundHttpException: Page not found. in D:\new\htdocs\visualight\vendor\yiisoft\yii2\web\Application.php:115
+Stack trace:
+#0 D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Application.php(384): yii\web\Application->handleRequest(Object(yii\web\Request))
+#1 D:\new\htdocs\visualight\backend\web\index.php(18): yii\base\Application->run()
+#2 {main}
+2023-12-08 03:26:19 [127.0.0.1][1][gro0e40o5818gn705jgovm4ljt][info][application] $_GET = []
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = [
+    'advanced-backend' => 'gro0e40o5818gn705jgovm4ljt'
+    '_identity-backend' => '6b512b106ffaf5d53a104194dc0c555e428b107a9835fdaf3e02ccd54ea7009ea:2:{i:0;s:17:\"_identity-backend\";i:1;s:46:\"[1,\"ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i\",2592000]\";}'
+    '_csrf-backend' => '4be1db47d1a80b45e1ba572cda95478b1f5837cb874308a559dbf961cf2c0bc7a:2:{i:0;s:13:\"_csrf-backend\";i:1;s:32:\"RHWijbHtPyUjgkwQfFpgxyGrHnE9yfNb\";}'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__returnUrl' => 'http://studio.visualight.test/'
+    '__id' => 1
+    '__authKey' => 'ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i'
+    '__expire' => 1702003579
+]
+
+$_SERVER = [
+    'REDIRECT_MIBDIRS' => 'D:/new/php/extras/mibs'
+    'REDIRECT_MYSQL_HOME' => '\\xampp\\mysql\\bin'
+    'REDIRECT_OPENSSL_CONF' => 'D:/new/apache/bin/openssl.cnf'
+    'REDIRECT_PHP_PEAR_SYSCONF_DIR' => '\\xampp\\php'
+    'REDIRECT_PHPRC' => '\\xampp\\php'
+    'REDIRECT_TMP' => '\\xampp\\tmp'
+    'REDIRECT_STATUS' => '200'
+    'MIBDIRS' => 'D:/new/php/extras/mibs'
+    'MYSQL_HOME' => '\\xampp\\mysql\\bin'
+    'OPENSSL_CONF' => 'D:/new/apache/bin/openssl.cnf'
+    'PHP_PEAR_SYSCONF_DIR' => '\\xampp\\php'
+    'PHPRC' => '\\xampp\\php'
+    'TMP' => '\\xampp\\tmp'
+    'HTTP_HOST' => 'studio.visualight.test'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+    'HTTP_ACCEPT' => '*/*'
+    'HTTP_SEC_GPC' => '1'
+    'HTTP_ACCEPT_LANGUAGE' => 'en-US,en;q=0.5'
+    'HTTP_REFERER' => 'http://studio.visualight.test/nmd/chart/index'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_COOKIE' => 'advanced-backend=gro0e40o5818gn705jgovm4ljt; _identity-backend=6b512b106ffaf5d53a104194dc0c555e428b107a9835fdaf3e02ccd54ea7009ea%3A2%3A%7Bi%3A0%3Bs%3A17%3A%22_identity-backend%22%3Bi%3A1%3Bs%3A46%3A%22%5B1%2C%22ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i%22%2C2592000%5D%22%3B%7D; _csrf-backend=4be1db47d1a80b45e1ba572cda95478b1f5837cb874308a559dbf961cf2c0bc7a%3A2%3A%7Bi%3A0%3Bs%3A13%3A%22_csrf-backend%22%3Bi%3A1%3Bs%3A32%3A%22RHWijbHtPyUjgkwQfFpgxyGrHnE9yfNb%22%3B%7D'
+    'PATH' => 'D:\\PYTHONG\\Scripts\\;D:\\PYTHONG\\;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Windows\\System32\\OpenSSH\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\NVIDIA Corporation\\NVIDIA NvDLISR;C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\dotnet\\;C:\\Program Files\\Azure Data Studio\\bin;C:\\Program Files\\Microsoft SQL Server\\Client SDK\\ODBC\\170\\Tools\\Binn\\;C:\\Program Files (x86)\\Microsoft SQL Server\\150\\Tools\\Binn\\;C:\\Program Files\\Microsoft SQL Server\\150\\Tools\\Binn\\;C:\\Program Files\\Microsoft SQL Server\\150\\DTS\\Binn\\;C:\\Program Files (x86)\\Microsoft SQL Server\\150\\DTS\\Binn\\;C:\\Program Files\\Git\\cmd;C:\\ProgramData\\ComposerSetup\\bin;D:\\new\\php;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC;.PY;.PYW'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => '<address>Apache/2.4.56 (Win64) OpenSSL/1.1.1t PHP/8.0.29 Server at studio.visualight.test Port 80</address>
+'
+    'SERVER_SOFTWARE' => 'Apache/2.4.56 (Win64) OpenSSL/1.1.1t PHP/8.0.29'
+    'SERVER_NAME' => 'studio.visualight.test'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/new/htdocs/visualight/backend/web'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/new/htdocs/visualight/backend/web'
+    'SERVER_ADMIN' => 'postmaster@localhost'
+    'SCRIPT_FILENAME' => 'D:/new/htdocs/visualight/backend/web/index.php'
+    'REMOTE_PORT' => '50374'
+    'REDIRECT_URL' => '/nmd/chart/path/to/Chart.min.js'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'REQUEST_URI' => '/nmd/chart/path/to/Chart.min.js'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1702002379.8461
+    'REQUEST_TIME' => 1702002379
+]
+2023-12-08 03:30:54 [127.0.0.1][1][gro0e40o5818gn705jgovm4ljt][error][yii\web\HttpException:404] yii\base\InvalidRouteException: Unable to resolve the request "nmd/chart/path/to/Chart.min.js". in D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Module.php:561
+Stack trace:
+#0 D:\new\htdocs\visualight\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('nmd/chart/path/...', Array)
+#1 D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Application.php(384): yii\web\Application->handleRequest(Object(yii\web\Request))
+#2 D:\new\htdocs\visualight\backend\web\index.php(18): yii\base\Application->run()
+#3 {main}
+
+Next yii\web\NotFoundHttpException: Page not found. in D:\new\htdocs\visualight\vendor\yiisoft\yii2\web\Application.php:115
+Stack trace:
+#0 D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Application.php(384): yii\web\Application->handleRequest(Object(yii\web\Request))
+#1 D:\new\htdocs\visualight\backend\web\index.php(18): yii\base\Application->run()
+#2 {main}
+2023-12-08 03:30:54 [127.0.0.1][1][gro0e40o5818gn705jgovm4ljt][info][application] $_GET = []
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = [
+    'advanced-backend' => 'gro0e40o5818gn705jgovm4ljt'
+    '_identity-backend' => '6b512b106ffaf5d53a104194dc0c555e428b107a9835fdaf3e02ccd54ea7009ea:2:{i:0;s:17:\"_identity-backend\";i:1;s:46:\"[1,\"ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i\",2592000]\";}'
+    '_csrf-backend' => '4be1db47d1a80b45e1ba572cda95478b1f5837cb874308a559dbf961cf2c0bc7a:2:{i:0;s:13:\"_csrf-backend\";i:1;s:32:\"RHWijbHtPyUjgkwQfFpgxyGrHnE9yfNb\";}'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__returnUrl' => 'http://studio.visualight.test/'
+    '__id' => 1
+    '__authKey' => 'ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i'
+    '__expire' => 1702003854
+]
+
+$_SERVER = [
+    'REDIRECT_MIBDIRS' => 'D:/new/php/extras/mibs'
+    'REDIRECT_MYSQL_HOME' => '\\xampp\\mysql\\bin'
+    'REDIRECT_OPENSSL_CONF' => 'D:/new/apache/bin/openssl.cnf'
+    'REDIRECT_PHP_PEAR_SYSCONF_DIR' => '\\xampp\\php'
+    'REDIRECT_PHPRC' => '\\xampp\\php'
+    'REDIRECT_TMP' => '\\xampp\\tmp'
+    'REDIRECT_STATUS' => '200'
+    'MIBDIRS' => 'D:/new/php/extras/mibs'
+    'MYSQL_HOME' => '\\xampp\\mysql\\bin'
+    'OPENSSL_CONF' => 'D:/new/apache/bin/openssl.cnf'
+    'PHP_PEAR_SYSCONF_DIR' => '\\xampp\\php'
+    'PHPRC' => '\\xampp\\php'
+    'TMP' => '\\xampp\\tmp'
+    'HTTP_HOST' => 'studio.visualight.test'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+    'HTTP_ACCEPT' => '*/*'
+    'HTTP_SEC_GPC' => '1'
+    'HTTP_ACCEPT_LANGUAGE' => 'en-US,en;q=0.5'
+    'HTTP_REFERER' => 'http://studio.visualight.test/nmd/chart/index'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_COOKIE' => 'advanced-backend=gro0e40o5818gn705jgovm4ljt; _identity-backend=6b512b106ffaf5d53a104194dc0c555e428b107a9835fdaf3e02ccd54ea7009ea%3A2%3A%7Bi%3A0%3Bs%3A17%3A%22_identity-backend%22%3Bi%3A1%3Bs%3A46%3A%22%5B1%2C%22ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i%22%2C2592000%5D%22%3B%7D; _csrf-backend=4be1db47d1a80b45e1ba572cda95478b1f5837cb874308a559dbf961cf2c0bc7a%3A2%3A%7Bi%3A0%3Bs%3A13%3A%22_csrf-backend%22%3Bi%3A1%3Bs%3A32%3A%22RHWijbHtPyUjgkwQfFpgxyGrHnE9yfNb%22%3B%7D'
+    'PATH' => 'D:\\PYTHONG\\Scripts\\;D:\\PYTHONG\\;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Windows\\System32\\OpenSSH\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\NVIDIA Corporation\\NVIDIA NvDLISR;C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\dotnet\\;C:\\Program Files\\Azure Data Studio\\bin;C:\\Program Files\\Microsoft SQL Server\\Client SDK\\ODBC\\170\\Tools\\Binn\\;C:\\Program Files (x86)\\Microsoft SQL Server\\150\\Tools\\Binn\\;C:\\Program Files\\Microsoft SQL Server\\150\\Tools\\Binn\\;C:\\Program Files\\Microsoft SQL Server\\150\\DTS\\Binn\\;C:\\Program Files (x86)\\Microsoft SQL Server\\150\\DTS\\Binn\\;C:\\Program Files\\Git\\cmd;C:\\ProgramData\\ComposerSetup\\bin;D:\\new\\php;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC;.PY;.PYW'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => '<address>Apache/2.4.56 (Win64) OpenSSL/1.1.1t PHP/8.0.29 Server at studio.visualight.test Port 80</address>
+'
+    'SERVER_SOFTWARE' => 'Apache/2.4.56 (Win64) OpenSSL/1.1.1t PHP/8.0.29'
+    'SERVER_NAME' => 'studio.visualight.test'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/new/htdocs/visualight/backend/web'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/new/htdocs/visualight/backend/web'
+    'SERVER_ADMIN' => 'postmaster@localhost'
+    'SCRIPT_FILENAME' => 'D:/new/htdocs/visualight/backend/web/index.php'
+    'REMOTE_PORT' => '50415'
+    'REDIRECT_URL' => '/nmd/chart/path/to/Chart.min.js'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'REQUEST_URI' => '/nmd/chart/path/to/Chart.min.js'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1702002654.2973
+    'REQUEST_TIME' => 1702002654
+]
+2023-12-08 03:30:56 [127.0.0.1][1][gro0e40o5818gn705jgovm4ljt][error][yii\web\HttpException:404] yii\base\InvalidRouteException: Unable to resolve the request "std/chart/path/to/Chart.min.js". in D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Module.php:561
+Stack trace:
+#0 D:\new\htdocs\visualight\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('std/chart/path/...', Array)
+#1 D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Application.php(384): yii\web\Application->handleRequest(Object(yii\web\Request))
+#2 D:\new\htdocs\visualight\backend\web\index.php(18): yii\base\Application->run()
+#3 {main}
+
+Next yii\web\NotFoundHttpException: Page not found. in D:\new\htdocs\visualight\vendor\yiisoft\yii2\web\Application.php:115
+Stack trace:
+#0 D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Application.php(384): yii\web\Application->handleRequest(Object(yii\web\Request))
+#1 D:\new\htdocs\visualight\backend\web\index.php(18): yii\base\Application->run()
+#2 {main}
+2023-12-08 03:30:56 [127.0.0.1][1][gro0e40o5818gn705jgovm4ljt][info][application] $_GET = []
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = [
+    'advanced-backend' => 'gro0e40o5818gn705jgovm4ljt'
+    '_identity-backend' => '6b512b106ffaf5d53a104194dc0c555e428b107a9835fdaf3e02ccd54ea7009ea:2:{i:0;s:17:\"_identity-backend\";i:1;s:46:\"[1,\"ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i\",2592000]\";}'
+    '_csrf-backend' => '4be1db47d1a80b45e1ba572cda95478b1f5837cb874308a559dbf961cf2c0bc7a:2:{i:0;s:13:\"_csrf-backend\";i:1;s:32:\"RHWijbHtPyUjgkwQfFpgxyGrHnE9yfNb\";}'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__returnUrl' => 'http://studio.visualight.test/'
+    '__id' => 1
+    '__authKey' => 'ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i'
+    '__expire' => 1702003856
+]
+
+$_SERVER = [
+    'REDIRECT_MIBDIRS' => 'D:/new/php/extras/mibs'
+    'REDIRECT_MYSQL_HOME' => '\\xampp\\mysql\\bin'
+    'REDIRECT_OPENSSL_CONF' => 'D:/new/apache/bin/openssl.cnf'
+    'REDIRECT_PHP_PEAR_SYSCONF_DIR' => '\\xampp\\php'
+    'REDIRECT_PHPRC' => '\\xampp\\php'
+    'REDIRECT_TMP' => '\\xampp\\tmp'
+    'REDIRECT_STATUS' => '200'
+    'MIBDIRS' => 'D:/new/php/extras/mibs'
+    'MYSQL_HOME' => '\\xampp\\mysql\\bin'
+    'OPENSSL_CONF' => 'D:/new/apache/bin/openssl.cnf'
+    'PHP_PEAR_SYSCONF_DIR' => '\\xampp\\php'
+    'PHPRC' => '\\xampp\\php'
+    'TMP' => '\\xampp\\tmp'
+    'HTTP_HOST' => 'studio.visualight.test'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+    'HTTP_ACCEPT' => '*/*'
+    'HTTP_SEC_GPC' => '1'
+    'HTTP_ACCEPT_LANGUAGE' => 'en-US,en;q=0.5'
+    'HTTP_REFERER' => 'http://studio.visualight.test/std/chart/index'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_COOKIE' => 'advanced-backend=gro0e40o5818gn705jgovm4ljt; _identity-backend=6b512b106ffaf5d53a104194dc0c555e428b107a9835fdaf3e02ccd54ea7009ea%3A2%3A%7Bi%3A0%3Bs%3A17%3A%22_identity-backend%22%3Bi%3A1%3Bs%3A46%3A%22%5B1%2C%22ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i%22%2C2592000%5D%22%3B%7D; _csrf-backend=4be1db47d1a80b45e1ba572cda95478b1f5837cb874308a559dbf961cf2c0bc7a%3A2%3A%7Bi%3A0%3Bs%3A13%3A%22_csrf-backend%22%3Bi%3A1%3Bs%3A32%3A%22RHWijbHtPyUjgkwQfFpgxyGrHnE9yfNb%22%3B%7D'
+    'PATH' => 'D:\\PYTHONG\\Scripts\\;D:\\PYTHONG\\;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Windows\\System32\\OpenSSH\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\NVIDIA Corporation\\NVIDIA NvDLISR;C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\dotnet\\;C:\\Program Files\\Azure Data Studio\\bin;C:\\Program Files\\Microsoft SQL Server\\Client SDK\\ODBC\\170\\Tools\\Binn\\;C:\\Program Files (x86)\\Microsoft SQL Server\\150\\Tools\\Binn\\;C:\\Program Files\\Microsoft SQL Server\\150\\Tools\\Binn\\;C:\\Program Files\\Microsoft SQL Server\\150\\DTS\\Binn\\;C:\\Program Files (x86)\\Microsoft SQL Server\\150\\DTS\\Binn\\;C:\\Program Files\\Git\\cmd;C:\\ProgramData\\ComposerSetup\\bin;D:\\new\\php;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC;.PY;.PYW'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => '<address>Apache/2.4.56 (Win64) OpenSSL/1.1.1t PHP/8.0.29 Server at studio.visualight.test Port 80</address>
+'
+    'SERVER_SOFTWARE' => 'Apache/2.4.56 (Win64) OpenSSL/1.1.1t PHP/8.0.29'
+    'SERVER_NAME' => 'studio.visualight.test'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/new/htdocs/visualight/backend/web'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/new/htdocs/visualight/backend/web'
+    'SERVER_ADMIN' => 'postmaster@localhost'
+    'SCRIPT_FILENAME' => 'D:/new/htdocs/visualight/backend/web/index.php'
+    'REMOTE_PORT' => '50427'
+    'REDIRECT_URL' => '/std/chart/path/to/Chart.min.js'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'REQUEST_URI' => '/std/chart/path/to/Chart.min.js'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1702002656.6489
+    'REQUEST_TIME' => 1702002656
+]
+2023-12-08 03:31:03 [127.0.0.1][1][gro0e40o5818gn705jgovm4ljt][error][yii\web\HttpException:404] yii\base\InvalidRouteException: Unable to resolve the request "nmd/chart/path/to/Chart.min.js". in D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Module.php:561
+Stack trace:
+#0 D:\new\htdocs\visualight\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('nmd/chart/path/...', Array)
+#1 D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Application.php(384): yii\web\Application->handleRequest(Object(yii\web\Request))
+#2 D:\new\htdocs\visualight\backend\web\index.php(18): yii\base\Application->run()
+#3 {main}
+
+Next yii\web\NotFoundHttpException: Page not found. in D:\new\htdocs\visualight\vendor\yiisoft\yii2\web\Application.php:115
+Stack trace:
+#0 D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Application.php(384): yii\web\Application->handleRequest(Object(yii\web\Request))
+#1 D:\new\htdocs\visualight\backend\web\index.php(18): yii\base\Application->run()
+#2 {main}
+2023-12-08 03:31:03 [127.0.0.1][1][gro0e40o5818gn705jgovm4ljt][info][application] $_GET = []
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = [
+    'advanced-backend' => 'gro0e40o5818gn705jgovm4ljt'
+    '_identity-backend' => '6b512b106ffaf5d53a104194dc0c555e428b107a9835fdaf3e02ccd54ea7009ea:2:{i:0;s:17:\"_identity-backend\";i:1;s:46:\"[1,\"ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i\",2592000]\";}'
+    '_csrf-backend' => '4be1db47d1a80b45e1ba572cda95478b1f5837cb874308a559dbf961cf2c0bc7a:2:{i:0;s:13:\"_csrf-backend\";i:1;s:32:\"RHWijbHtPyUjgkwQfFpgxyGrHnE9yfNb\";}'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__returnUrl' => 'http://studio.visualight.test/'
+    '__id' => 1
+    '__authKey' => 'ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i'
+    '__expire' => 1702003863
+]
+
+$_SERVER = [
+    'REDIRECT_MIBDIRS' => 'D:/new/php/extras/mibs'
+    'REDIRECT_MYSQL_HOME' => '\\xampp\\mysql\\bin'
+    'REDIRECT_OPENSSL_CONF' => 'D:/new/apache/bin/openssl.cnf'
+    'REDIRECT_PHP_PEAR_SYSCONF_DIR' => '\\xampp\\php'
+    'REDIRECT_PHPRC' => '\\xampp\\php'
+    'REDIRECT_TMP' => '\\xampp\\tmp'
+    'REDIRECT_STATUS' => '200'
+    'MIBDIRS' => 'D:/new/php/extras/mibs'
+    'MYSQL_HOME' => '\\xampp\\mysql\\bin'
+    'OPENSSL_CONF' => 'D:/new/apache/bin/openssl.cnf'
+    'PHP_PEAR_SYSCONF_DIR' => '\\xampp\\php'
+    'PHPRC' => '\\xampp\\php'
+    'TMP' => '\\xampp\\tmp'
+    'HTTP_HOST' => 'studio.visualight.test'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+    'HTTP_ACCEPT' => '*/*'
+    'HTTP_SEC_GPC' => '1'
+    'HTTP_ACCEPT_LANGUAGE' => 'en-US,en;q=0.5'
+    'HTTP_REFERER' => 'http://studio.visualight.test/nmd/chart/index'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_COOKIE' => 'advanced-backend=gro0e40o5818gn705jgovm4ljt; _identity-backend=6b512b106ffaf5d53a104194dc0c555e428b107a9835fdaf3e02ccd54ea7009ea%3A2%3A%7Bi%3A0%3Bs%3A17%3A%22_identity-backend%22%3Bi%3A1%3Bs%3A46%3A%22%5B1%2C%22ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i%22%2C2592000%5D%22%3B%7D; _csrf-backend=4be1db47d1a80b45e1ba572cda95478b1f5837cb874308a559dbf961cf2c0bc7a%3A2%3A%7Bi%3A0%3Bs%3A13%3A%22_csrf-backend%22%3Bi%3A1%3Bs%3A32%3A%22RHWijbHtPyUjgkwQfFpgxyGrHnE9yfNb%22%3B%7D'
+    'PATH' => 'D:\\PYTHONG\\Scripts\\;D:\\PYTHONG\\;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Windows\\System32\\OpenSSH\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\NVIDIA Corporation\\NVIDIA NvDLISR;C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\dotnet\\;C:\\Program Files\\Azure Data Studio\\bin;C:\\Program Files\\Microsoft SQL Server\\Client SDK\\ODBC\\170\\Tools\\Binn\\;C:\\Program Files (x86)\\Microsoft SQL Server\\150\\Tools\\Binn\\;C:\\Program Files\\Microsoft SQL Server\\150\\Tools\\Binn\\;C:\\Program Files\\Microsoft SQL Server\\150\\DTS\\Binn\\;C:\\Program Files (x86)\\Microsoft SQL Server\\150\\DTS\\Binn\\;C:\\Program Files\\Git\\cmd;C:\\ProgramData\\ComposerSetup\\bin;D:\\new\\php;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC;.PY;.PYW'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => '<address>Apache/2.4.56 (Win64) OpenSSL/1.1.1t PHP/8.0.29 Server at studio.visualight.test Port 80</address>
+'
+    'SERVER_SOFTWARE' => 'Apache/2.4.56 (Win64) OpenSSL/1.1.1t PHP/8.0.29'
+    'SERVER_NAME' => 'studio.visualight.test'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/new/htdocs/visualight/backend/web'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/new/htdocs/visualight/backend/web'
+    'SERVER_ADMIN' => 'postmaster@localhost'
+    'SCRIPT_FILENAME' => 'D:/new/htdocs/visualight/backend/web/index.php'
+    'REMOTE_PORT' => '50441'
+    'REDIRECT_URL' => '/nmd/chart/path/to/Chart.min.js'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'REQUEST_URI' => '/nmd/chart/path/to/Chart.min.js'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1702002663.0301
+    'REQUEST_TIME' => 1702002663
+]
+2023-12-08 03:33:21 [127.0.0.1][1][gro0e40o5818gn705jgovm4ljt][error][yii\web\HttpException:404] yii\base\InvalidRouteException: Unable to resolve the request "nmd/chart/path/to/Chart.min.js". in D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Module.php:561
+Stack trace:
+#0 D:\new\htdocs\visualight\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('nmd/chart/path/...', Array)
+#1 D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Application.php(384): yii\web\Application->handleRequest(Object(yii\web\Request))
+#2 D:\new\htdocs\visualight\backend\web\index.php(18): yii\base\Application->run()
+#3 {main}
+
+Next yii\web\NotFoundHttpException: Page not found. in D:\new\htdocs\visualight\vendor\yiisoft\yii2\web\Application.php:115
+Stack trace:
+#0 D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Application.php(384): yii\web\Application->handleRequest(Object(yii\web\Request))
+#1 D:\new\htdocs\visualight\backend\web\index.php(18): yii\base\Application->run()
+#2 {main}
+2023-12-08 03:33:21 [127.0.0.1][1][gro0e40o5818gn705jgovm4ljt][info][application] $_GET = []
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = [
+    'advanced-backend' => 'gro0e40o5818gn705jgovm4ljt'
+    '_identity-backend' => '6b512b106ffaf5d53a104194dc0c555e428b107a9835fdaf3e02ccd54ea7009ea:2:{i:0;s:17:\"_identity-backend\";i:1;s:46:\"[1,\"ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i\",2592000]\";}'
+    '_csrf-backend' => '4be1db47d1a80b45e1ba572cda95478b1f5837cb874308a559dbf961cf2c0bc7a:2:{i:0;s:13:\"_csrf-backend\";i:1;s:32:\"RHWijbHtPyUjgkwQfFpgxyGrHnE9yfNb\";}'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__returnUrl' => 'http://studio.visualight.test/'
+    '__id' => 1
+    '__authKey' => 'ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i'
+    '__expire' => 1702004001
+]
+
+$_SERVER = [
+    'REDIRECT_MIBDIRS' => 'D:/new/php/extras/mibs'
+    'REDIRECT_MYSQL_HOME' => '\\xampp\\mysql\\bin'
+    'REDIRECT_OPENSSL_CONF' => 'D:/new/apache/bin/openssl.cnf'
+    'REDIRECT_PHP_PEAR_SYSCONF_DIR' => '\\xampp\\php'
+    'REDIRECT_PHPRC' => '\\xampp\\php'
+    'REDIRECT_TMP' => '\\xampp\\tmp'
+    'REDIRECT_STATUS' => '200'
+    'MIBDIRS' => 'D:/new/php/extras/mibs'
+    'MYSQL_HOME' => '\\xampp\\mysql\\bin'
+    'OPENSSL_CONF' => 'D:/new/apache/bin/openssl.cnf'
+    'PHP_PEAR_SYSCONF_DIR' => '\\xampp\\php'
+    'PHPRC' => '\\xampp\\php'
+    'TMP' => '\\xampp\\tmp'
+    'HTTP_HOST' => 'studio.visualight.test'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+    'HTTP_ACCEPT' => '*/*'
+    'HTTP_SEC_GPC' => '1'
+    'HTTP_ACCEPT_LANGUAGE' => 'en-US,en;q=0.5'
+    'HTTP_REFERER' => 'http://studio.visualight.test/nmd/chart/index'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_COOKIE' => 'advanced-backend=gro0e40o5818gn705jgovm4ljt; _identity-backend=6b512b106ffaf5d53a104194dc0c555e428b107a9835fdaf3e02ccd54ea7009ea%3A2%3A%7Bi%3A0%3Bs%3A17%3A%22_identity-backend%22%3Bi%3A1%3Bs%3A46%3A%22%5B1%2C%22ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i%22%2C2592000%5D%22%3B%7D; _csrf-backend=4be1db47d1a80b45e1ba572cda95478b1f5837cb874308a559dbf961cf2c0bc7a%3A2%3A%7Bi%3A0%3Bs%3A13%3A%22_csrf-backend%22%3Bi%3A1%3Bs%3A32%3A%22RHWijbHtPyUjgkwQfFpgxyGrHnE9yfNb%22%3B%7D'
+    'PATH' => 'D:\\PYTHONG\\Scripts\\;D:\\PYTHONG\\;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Windows\\System32\\OpenSSH\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\NVIDIA Corporation\\NVIDIA NvDLISR;C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\dotnet\\;C:\\Program Files\\Azure Data Studio\\bin;C:\\Program Files\\Microsoft SQL Server\\Client SDK\\ODBC\\170\\Tools\\Binn\\;C:\\Program Files (x86)\\Microsoft SQL Server\\150\\Tools\\Binn\\;C:\\Program Files\\Microsoft SQL Server\\150\\Tools\\Binn\\;C:\\Program Files\\Microsoft SQL Server\\150\\DTS\\Binn\\;C:\\Program Files (x86)\\Microsoft SQL Server\\150\\DTS\\Binn\\;C:\\Program Files\\Git\\cmd;C:\\ProgramData\\ComposerSetup\\bin;D:\\new\\php;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC;.PY;.PYW'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => '<address>Apache/2.4.56 (Win64) OpenSSL/1.1.1t PHP/8.0.29 Server at studio.visualight.test Port 80</address>
+'
+    'SERVER_SOFTWARE' => 'Apache/2.4.56 (Win64) OpenSSL/1.1.1t PHP/8.0.29'
+    'SERVER_NAME' => 'studio.visualight.test'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/new/htdocs/visualight/backend/web'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/new/htdocs/visualight/backend/web'
+    'SERVER_ADMIN' => 'postmaster@localhost'
+    'SCRIPT_FILENAME' => 'D:/new/htdocs/visualight/backend/web/index.php'
+    'REMOTE_PORT' => '50479'
+    'REDIRECT_URL' => '/nmd/chart/path/to/Chart.min.js'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'REQUEST_URI' => '/nmd/chart/path/to/Chart.min.js'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1702002801.3136
+    'REQUEST_TIME' => 1702002801
+]
+2023-12-08 03:34:44 [127.0.0.1][1][gro0e40o5818gn705jgovm4ljt][error][yii\web\HttpException:404] yii\base\InvalidRouteException: Unable to resolve the request "nmd/chart/path/to/Chart.min.js". in D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Module.php:561
+Stack trace:
+#0 D:\new\htdocs\visualight\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('nmd/chart/path/...', Array)
+#1 D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Application.php(384): yii\web\Application->handleRequest(Object(yii\web\Request))
+#2 D:\new\htdocs\visualight\backend\web\index.php(18): yii\base\Application->run()
+#3 {main}
+
+Next yii\web\NotFoundHttpException: Page not found. in D:\new\htdocs\visualight\vendor\yiisoft\yii2\web\Application.php:115
+Stack trace:
+#0 D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Application.php(384): yii\web\Application->handleRequest(Object(yii\web\Request))
+#1 D:\new\htdocs\visualight\backend\web\index.php(18): yii\base\Application->run()
+#2 {main}
+2023-12-08 03:34:44 [127.0.0.1][1][gro0e40o5818gn705jgovm4ljt][info][application] $_GET = []
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = [
+    'advanced-backend' => 'gro0e40o5818gn705jgovm4ljt'
+    '_identity-backend' => '6b512b106ffaf5d53a104194dc0c555e428b107a9835fdaf3e02ccd54ea7009ea:2:{i:0;s:17:\"_identity-backend\";i:1;s:46:\"[1,\"ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i\",2592000]\";}'
+    '_csrf-backend' => '4be1db47d1a80b45e1ba572cda95478b1f5837cb874308a559dbf961cf2c0bc7a:2:{i:0;s:13:\"_csrf-backend\";i:1;s:32:\"RHWijbHtPyUjgkwQfFpgxyGrHnE9yfNb\";}'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__returnUrl' => 'http://studio.visualight.test/'
+    '__id' => 1
+    '__authKey' => 'ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i'
+    '__expire' => 1702004084
+]
+
+$_SERVER = [
+    'REDIRECT_MIBDIRS' => 'D:/new/php/extras/mibs'
+    'REDIRECT_MYSQL_HOME' => '\\xampp\\mysql\\bin'
+    'REDIRECT_OPENSSL_CONF' => 'D:/new/apache/bin/openssl.cnf'
+    'REDIRECT_PHP_PEAR_SYSCONF_DIR' => '\\xampp\\php'
+    'REDIRECT_PHPRC' => '\\xampp\\php'
+    'REDIRECT_TMP' => '\\xampp\\tmp'
+    'REDIRECT_STATUS' => '200'
+    'MIBDIRS' => 'D:/new/php/extras/mibs'
+    'MYSQL_HOME' => '\\xampp\\mysql\\bin'
+    'OPENSSL_CONF' => 'D:/new/apache/bin/openssl.cnf'
+    'PHP_PEAR_SYSCONF_DIR' => '\\xampp\\php'
+    'PHPRC' => '\\xampp\\php'
+    'TMP' => '\\xampp\\tmp'
+    'HTTP_HOST' => 'studio.visualight.test'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+    'HTTP_ACCEPT' => '*/*'
+    'HTTP_SEC_GPC' => '1'
+    'HTTP_ACCEPT_LANGUAGE' => 'en-US,en;q=0.5'
+    'HTTP_REFERER' => 'http://studio.visualight.test/nmd/chart/index'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_COOKIE' => 'advanced-backend=gro0e40o5818gn705jgovm4ljt; _identity-backend=6b512b106ffaf5d53a104194dc0c555e428b107a9835fdaf3e02ccd54ea7009ea%3A2%3A%7Bi%3A0%3Bs%3A17%3A%22_identity-backend%22%3Bi%3A1%3Bs%3A46%3A%22%5B1%2C%22ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i%22%2C2592000%5D%22%3B%7D; _csrf-backend=4be1db47d1a80b45e1ba572cda95478b1f5837cb874308a559dbf961cf2c0bc7a%3A2%3A%7Bi%3A0%3Bs%3A13%3A%22_csrf-backend%22%3Bi%3A1%3Bs%3A32%3A%22RHWijbHtPyUjgkwQfFpgxyGrHnE9yfNb%22%3B%7D'
+    'PATH' => 'D:\\PYTHONG\\Scripts\\;D:\\PYTHONG\\;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Windows\\System32\\OpenSSH\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\NVIDIA Corporation\\NVIDIA NvDLISR;C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\dotnet\\;C:\\Program Files\\Azure Data Studio\\bin;C:\\Program Files\\Microsoft SQL Server\\Client SDK\\ODBC\\170\\Tools\\Binn\\;C:\\Program Files (x86)\\Microsoft SQL Server\\150\\Tools\\Binn\\;C:\\Program Files\\Microsoft SQL Server\\150\\Tools\\Binn\\;C:\\Program Files\\Microsoft SQL Server\\150\\DTS\\Binn\\;C:\\Program Files (x86)\\Microsoft SQL Server\\150\\DTS\\Binn\\;C:\\Program Files\\Git\\cmd;C:\\ProgramData\\ComposerSetup\\bin;D:\\new\\php;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC;.PY;.PYW'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => '<address>Apache/2.4.56 (Win64) OpenSSL/1.1.1t PHP/8.0.29 Server at studio.visualight.test Port 80</address>
+'
+    'SERVER_SOFTWARE' => 'Apache/2.4.56 (Win64) OpenSSL/1.1.1t PHP/8.0.29'
+    'SERVER_NAME' => 'studio.visualight.test'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/new/htdocs/visualight/backend/web'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/new/htdocs/visualight/backend/web'
+    'SERVER_ADMIN' => 'postmaster@localhost'
+    'SCRIPT_FILENAME' => 'D:/new/htdocs/visualight/backend/web/index.php'
+    'REMOTE_PORT' => '50508'
+    'REDIRECT_URL' => '/nmd/chart/path/to/Chart.min.js'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'REQUEST_URI' => '/nmd/chart/path/to/Chart.min.js'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1702002884.7221
+    'REQUEST_TIME' => 1702002884
+]
+2023-12-08 03:34:49 [127.0.0.1][1][gro0e40o5818gn705jgovm4ljt][error][yii\web\HttpException:404] yii\base\InvalidRouteException: Unable to resolve the request "std/chart/path/to/Chart.min.js". in D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Module.php:561
+Stack trace:
+#0 D:\new\htdocs\visualight\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('std/chart/path/...', Array)
+#1 D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Application.php(384): yii\web\Application->handleRequest(Object(yii\web\Request))
+#2 D:\new\htdocs\visualight\backend\web\index.php(18): yii\base\Application->run()
+#3 {main}
+
+Next yii\web\NotFoundHttpException: Page not found. in D:\new\htdocs\visualight\vendor\yiisoft\yii2\web\Application.php:115
+Stack trace:
+#0 D:\new\htdocs\visualight\vendor\yiisoft\yii2\base\Application.php(384): yii\web\Application->handleRequest(Object(yii\web\Request))
+#1 D:\new\htdocs\visualight\backend\web\index.php(18): yii\base\Application->run()
+#2 {main}
+2023-12-08 03:34:49 [127.0.0.1][1][gro0e40o5818gn705jgovm4ljt][info][application] $_GET = []
+
+$_POST = []
+
+$_FILES = []
+
+$_COOKIE = [
+    'advanced-backend' => 'gro0e40o5818gn705jgovm4ljt'
+    '_identity-backend' => '6b512b106ffaf5d53a104194dc0c555e428b107a9835fdaf3e02ccd54ea7009ea:2:{i:0;s:17:\"_identity-backend\";i:1;s:46:\"[1,\"ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i\",2592000]\";}'
+    '_csrf-backend' => '4be1db47d1a80b45e1ba572cda95478b1f5837cb874308a559dbf961cf2c0bc7a:2:{i:0;s:13:\"_csrf-backend\";i:1;s:32:\"RHWijbHtPyUjgkwQfFpgxyGrHnE9yfNb\";}'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__returnUrl' => 'http://studio.visualight.test/'
+    '__id' => 1
+    '__authKey' => 'ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i'
+    '__expire' => 1702004089
+]
+
+$_SERVER = [
+    'REDIRECT_MIBDIRS' => 'D:/new/php/extras/mibs'
+    'REDIRECT_MYSQL_HOME' => '\\xampp\\mysql\\bin'
+    'REDIRECT_OPENSSL_CONF' => 'D:/new/apache/bin/openssl.cnf'
+    'REDIRECT_PHP_PEAR_SYSCONF_DIR' => '\\xampp\\php'
+    'REDIRECT_PHPRC' => '\\xampp\\php'
+    'REDIRECT_TMP' => '\\xampp\\tmp'
+    'REDIRECT_STATUS' => '200'
+    'MIBDIRS' => 'D:/new/php/extras/mibs'
+    'MYSQL_HOME' => '\\xampp\\mysql\\bin'
+    'OPENSSL_CONF' => 'D:/new/apache/bin/openssl.cnf'
+    'PHP_PEAR_SYSCONF_DIR' => '\\xampp\\php'
+    'PHPRC' => '\\xampp\\php'
+    'TMP' => '\\xampp\\tmp'
+    'HTTP_HOST' => 'studio.visualight.test'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+    'HTTP_ACCEPT' => '*/*'
+    'HTTP_SEC_GPC' => '1'
+    'HTTP_ACCEPT_LANGUAGE' => 'en-US,en;q=0.5'
+    'HTTP_REFERER' => 'http://studio.visualight.test/std/chart/index'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_COOKIE' => 'advanced-backend=gro0e40o5818gn705jgovm4ljt; _identity-backend=6b512b106ffaf5d53a104194dc0c555e428b107a9835fdaf3e02ccd54ea7009ea%3A2%3A%7Bi%3A0%3Bs%3A17%3A%22_identity-backend%22%3Bi%3A1%3Bs%3A46%3A%22%5B1%2C%22ZEE6NAhDein0tnHGLhu24aJbKQKuA2_i%22%2C2592000%5D%22%3B%7D; _csrf-backend=4be1db47d1a80b45e1ba572cda95478b1f5837cb874308a559dbf961cf2c0bc7a%3A2%3A%7Bi%3A0%3Bs%3A13%3A%22_csrf-backend%22%3Bi%3A1%3Bs%3A32%3A%22RHWijbHtPyUjgkwQfFpgxyGrHnE9yfNb%22%3B%7D'
+    'PATH' => 'D:\\PYTHONG\\Scripts\\;D:\\PYTHONG\\;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Windows\\System32\\OpenSSH\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\NVIDIA Corporation\\NVIDIA NvDLISR;C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\dotnet\\;C:\\Program Files\\Azure Data Studio\\bin;C:\\Program Files\\Microsoft SQL Server\\Client SDK\\ODBC\\170\\Tools\\Binn\\;C:\\Program Files (x86)\\Microsoft SQL Server\\150\\Tools\\Binn\\;C:\\Program Files\\Microsoft SQL Server\\150\\Tools\\Binn\\;C:\\Program Files\\Microsoft SQL Server\\150\\DTS\\Binn\\;C:\\Program Files (x86)\\Microsoft SQL Server\\150\\DTS\\Binn\\;C:\\Program Files\\Git\\cmd;C:\\ProgramData\\ComposerSetup\\bin;D:\\new\\php;C:\\WINDOWS\\system32\\config\\systemprofile\\AppData\\Local\\Microsoft\\WindowsApps'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'COMSPEC' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC;.PY;.PYW'
+    'WINDIR' => 'C:\\WINDOWS'
+    'SERVER_SIGNATURE' => '<address>Apache/2.4.56 (Win64) OpenSSL/1.1.1t PHP/8.0.29 Server at studio.visualight.test Port 80</address>
+'
+    'SERVER_SOFTWARE' => 'Apache/2.4.56 (Win64) OpenSSL/1.1.1t PHP/8.0.29'
+    'SERVER_NAME' => 'studio.visualight.test'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'D:/new/htdocs/visualight/backend/web'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'D:/new/htdocs/visualight/backend/web'
+    'SERVER_ADMIN' => 'postmaster@localhost'
+    'SCRIPT_FILENAME' => 'D:/new/htdocs/visualight/backend/web/index.php'
+    'REMOTE_PORT' => '50518'
+    'REDIRECT_URL' => '/std/chart/path/to/Chart.min.js'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'REQUEST_URI' => '/std/chart/path/to/Chart.min.js'
+    'SCRIPT_NAME' => '/index.php'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1702002889.535
+    'REQUEST_TIME' => 1702002889
+]

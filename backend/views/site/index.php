@@ -443,8 +443,9 @@ $currentIndex = Url::to(['']);
         transition: transform 1s ease;
     }
 
+    /* background */
     .speedometer {
-        background-color: black;
+        background-color: #E2EBEC;
         position: absolute;
         right: 40%;
         top: 55%;
@@ -1404,10 +1405,10 @@ $targetIncome = [
             <p style="color: black;">Color of speedometer will identify if the target is meet</p>
 
             <div class="speedometer">
-                <p><span style="color: red">Low </span>
-                    <span style="color: orange">Moderate </span>
-                    <span style="color: yellow">High </span>
-                    <span style="color: green">Satisfaction </span>
+                <p><span style="color: #C70039 ">Low </span>
+                    <span style="color: #FF5733 ">Moderate </span>
+                    <span style="color: #FFC300 ">High </span>
+                    <span style="color: #6ABF70">Satisfaction </span>
                 </p>
                 <div class="speedometer-dial">
                     <div class="speedometer-reading" id="speedometer-reading"></div>

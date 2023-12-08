@@ -567,7 +567,7 @@ class ChartController extends BaseController
             }
 
             $queryTotalSale = (new Query()) //daily sales record seperated by division
-                ->select(['transaction_date AS labels', 'SUM(amount) AS datasets', 'division AS label'])
+                ->select(['DATE_FORMAT(transaction_date, "%Y-%m") AS labels', 'SUM(amount) AS datasets', 'division AS label'])
                 ->from('visualight2data.transaction') //from visualight2data database within transaction table
                 ->where(['division' => ['2']])
                 ->andWhere(['between', 'DATE_FORMAT(transaction_date, "%Y-%m")', $fromDate, $toDate])
