@@ -2255,41 +2255,41 @@ $targetIncome = [
         income_load();
 
            // barPosition plugin block
-           const barPositions1 = {
-                id: 'barPositions1',
-                beforeDatasetsDraw: (chart, args, pluginOptions) => {
-                    const { ctx, data, chartArea: { top, bottom, left, right, width, height }, scales: { x, y } } = chart;
+        //    const barPositions1 = {
+        //         id: 'barPositions1',
+        //         beforeDatasetsDraw: (chart, args, pluginOptions) => {
+        //             const { ctx, data, chartArea: { top, bottom, left, right, width, height }, scales: { x, y } } = chart;
 
-                    // Calculate the width for each dataset based on the total number of datasets.
-                    // This assumes that the labels array length is equal to the number of x-axis categories.
-                    const barWidth = width / data.labels.length;
+        //             // Calculate the width for each dataset based on the total number of datasets.
+        //             // This assumes that the labels array length is equal to the number of x-axis categories.
+        //             const barWidth = width / data.labels.length;
 
-                    // Loop through each dataset.
-                    data.datasets.forEach((dataset, datasetIndex) => {
-                    // Get the meta for the current dataset.
-                    const datasetMeta = chart.getDatasetMeta(datasetIndex);
+        //             // Loop through each dataset.
+        //             data.datasets.forEach((dataset, datasetIndex) => {
+        //             // Get the meta for the current dataset.
+        //             const datasetMeta = chart.getDatasetMeta(datasetIndex);
 
-                    // Loop through each datapoint in the current dataset.
-                    datasetMeta.data.forEach((datapoint, index) => {
-                        // Adjust the x position of the datapoint.
-                        // This centers the bar within the allocated space for each x-axis category.
-                        datapoint.x = left + (barWidth * (index + 0.5));
-                        datapoint.x += (barWidth / data.datasets.length) * datasetIndex - (barWidth / 4);
-                    });
-                    });
-                }
-                };
+        //             // Loop through each datapoint in the current dataset.
+        //             datasetMeta.data.forEach((datapoint, index) => {
+        //                 // Adjust the x position of the datapoint.
+        //                 // This centers the bar within the allocated space for each x-axis category.
+        //                 datapoint.x = left + (barWidth * (index + 0.5));
+        //                 datapoint.x += (barWidth / data.datasets.length) * datasetIndex - (barWidth / 4);
+        //             });
+        //             });
+        //         }
+        //         };
 
         const totalsalesCtx = document.getElementById('totalsalesChart').getContext('2d');
 
         // dashboard total income
         const totalsalesChartB = new Chart(totalsalesCtx, {
-            type: 'line', // This specifies a bar chart
+            type: 'bar', // This specifies a bar chart
             data: {
                 labels: global_label_day,
                 datasets: totalSum.datasets,
             },
-            plugins: [barPositions1],
+            //plugins: [barPositions1],
             options: {
                 tension: 0.4,
                 responsive: true,
@@ -2307,12 +2307,12 @@ $targetIncome = [
                         }
                     },
                 },
-                plugins: {
-                    // Here's how you would add the plugin configuration directly to the options
-                    barPositions1: false // Assuming you want to set it to false initially
-                },
+                // plugins: {
+                //     // Here's how you would add the plugin configuration directly to the options
+                //     barPositions1: false // Assuming you want to set it to false initially
+                // },
             },
-            plugins: [barPositions1],
+            //plugins: [barPositions1],
         });
 
 
@@ -2546,14 +2546,14 @@ $targetIncome = [
 
             if (selectedValue === 'Days') {
 
-                totalsalesChartB.config.type = "line";
-                totalsalesChartB.update();
+                // totalsalesChartB.config.type = "bar";
+                // totalsalesChartB.update();
 
                 salesChart.config.type = "line";
                 salesChart.update();
 
-                totalsalesChartB.options.plugins.barPositions1 = false; // Or any other setting you wish to apply
-                totalsalesChartB.update(); 
+                // totalsalesChartB.options.plugins.barPositions1 = false; // Or any other setting you wish to apply
+                // totalsalesChartB.update(); 
 
                 salesChart.options.plugins.barPosition = false; // Or any other setting you wish to apply
                 salesChart.update(); 
@@ -2580,8 +2580,8 @@ $targetIncome = [
                 }
                 monthAssign();
 
-                totalsalesChartB.config.type = "line";
-                totalsalesChartB.update();
+                // totalsalesChartB.config.type = "bar";
+                // totalsalesChartB.update();
 
                 salesChart.config.type = "line";
                 salesChart.update();
@@ -2593,8 +2593,8 @@ $targetIncome = [
                 document.getElementById('startDate').value = yearX + "-" + janMonth;
                 document.getElementById('endDate').value = yearX + "-" + currMonth;
 
-                totalsalesChartB.options.plugins.barPositions1 = false; // Or any other setting you wish to apply
-                totalsalesChartB.update(); 
+                // totalsalesChartB.options.plugins.barPositions1 = false; // Or any other setting you wish to apply
+                // totalsalesChartB.update(); 
                 
                 salesChart.options.plugins.barPosition = false; // Or any other setting you wish to apply
                 salesChart.update(); 
@@ -2621,14 +2621,14 @@ $targetIncome = [
                 document.getElementById('endDate').setAttribute('type', 'number');
                 document.getElementById('endDate').value = yearX;
     
-                totalsalesChartB.config.type = "bar";
-                totalsalesChartB.update();
+                // totalsalesChartB.config.type = "bar";
+                // totalsalesChartB.update();
 
                 salesChart.config.type = "bar";
                 salesChart.update();
 
-                totalsalesChartB.options.plugins.barPositions1 = true; // Or any other setting you wish to apply
-                totalsalesChartB.update(); 
+                // totalsalesChartB.options.plugins.barPositions1 = true; // Or any other setting you wish to apply
+                // totalsalesChartB.update(); 
 
                 salesChart.options.plugins.barPosition = true; // Or any other setting you wish to apply
                 salesChart.update(); 
