@@ -2253,6 +2253,33 @@ $targetIncome = [
         }
 
         income_load();
+
+           // barPosition plugin block
+           const barPositions1 = {
+                id: 'barPositions1',
+                beforeDatasetsDraw: (chart, args, pluginOptions) => {
+                    const { ctx, data, chartArea: { top, bottom, left, right, width, height }, scales: { x, y } } = chart;
+
+                    // Calculate the width for each dataset based on the total number of datasets.
+                    // This assumes that the labels array length is equal to the number of x-axis categories.
+                    const barWidth = width / data.labels.length;
+
+                    // Loop through each dataset.
+                    data.datasets.forEach((dataset, datasetIndex) => {
+                    // Get the meta for the current dataset.
+                    const datasetMeta = chart.getDatasetMeta(datasetIndex);
+
+                    // Loop through each datapoint in the current dataset.
+                    datasetMeta.data.forEach((datapoint, index) => {
+                        // Adjust the x position of the datapoint.
+                        // This centers the bar within the allocated space for each x-axis category.
+                        datapoint.x = left + (barWidth * (index + 0.5));
+                        datapoint.x += (barWidth / data.datasets.length) * datasetIndex - (barWidth / 50);
+                    });
+                    });
+                }
+                };
+
         const totalsalesCtx = document.getElementById('totalsalesChart').getContext('2d');
 
         // dashboard total income
@@ -2262,6 +2289,7 @@ $targetIncome = [
                 labels: global_label_day,
                 datasets: totalSum.datasets,
             },
+            plugins: [barPositions1],
             options: {
                 tension: 0.4,
                 responsive: true,
@@ -2279,8 +2307,15 @@ $targetIncome = [
                         }
                     },
                 },
+                plugins: {
+                    // Here's how you would add the plugin configuration directly to the options
+                    barPositions1: false // Assuming you want to set it to false initially
+                },
             },
+            plugins: [barPositions1],
         });
+
+
 
         //what this for bruh?
         //Creating a combined data using the sumTransactionDataset and sumSalesDataset (to be used/call in creating combined chart)
@@ -2439,6 +2474,35 @@ $targetIncome = [
         }
         loadPerDivSales(); //call the function to translate
 
+
+        const barPosition = {
+            id: 'barPosition',
+            beforeDatasetsDraw: (chart, args, pluginOptions) => {
+                const { ctx, data, chartArea: { top, bottom, left, right, width, height }, scales: { x, y } } = chart;
+
+                // Calculate the width for each dataset based on the total number of datasets.
+                // This assumes that the labels array length is equal to the number of x-axis categories.
+                // Adding "_unique" to the variable name to make it unique.
+                const barWidth_unique = width / data.labels.length;
+
+                // Loop through each dataset.
+                data.datasets.forEach((dataset, datasetIndex) => {
+                // Get the meta for the current dataset.
+                const datasetMeta = chart.getDatasetMeta(datasetIndex);
+
+                // Loop through each datapoint in the current dataset.
+                datasetMeta.data.forEach((datapoint, index) => {
+                    // Adjust the x position of the datapoint.
+                    // This centers the bar within the allocated space for each x-axis category.
+                    // Now using "barWidth_unique" to reflect the unique variable name.
+                    datapoint.x = left + (barWidth_unique * (index + 0.5));
+                    datapoint.x += (barWidth_unique / data.datasets.length) * datasetIndex - (barWidth_unique/4);
+                });
+                });
+            }
+            };
+
+
         //dashboard income per division
         const salesCtx = document.getElementById('salesChart').getContext('2d');
         const salesChart = new Chart(salesCtx, {
@@ -2456,29 +2520,46 @@ $targetIncome = [
                         beginAtZero: true,
                         grid: {
                             drawOnChartArea: false,
-                            display: false
+                            display: false,
                         }
                     },
                     x: {
                         grid: {
-                            display: false
-                        }
+                            display: false,
+                        },
                     },
                 },
                 plugins: {
                     bgColor: {
                         backgroundColor: 'white'
-                    }
+                    },
+                    barPosition: false 
                 },
 
             },
-            plugins: [bgColor],
+            plugins: [bgColor, barPosition],
         });
-
 
         function dateChange() {
             let dateTypeSelect = document.getElementById('date_type');
             let selectedValue = dateTypeSelect.value;
+
+            if (selectedValue === 'Days') {
+
+                totalsalesChartB.config.type = "line";
+                totalsalesChartB.update();
+
+                salesChart.config.type = "line";
+                salesChart.update();
+
+                totalsalesChartB.options.plugins.barPositions1 = false; // Or any other setting you wish to apply
+                totalsalesChartB.update(); 
+
+                salesChart.options.plugins.barPosition = false; // Or any other setting you wish to apply
+                salesChart.update(); 
+
+            }    
+
             if (selectedValue === 'Months') {
 
                 document.getElementById('startDate').setAttribute('type', 'month');
@@ -2499,12 +2580,24 @@ $targetIncome = [
                 }
                 monthAssign();
 
+                totalsalesChartB.config.type = "line";
+                totalsalesChartB.update();
+
+                salesChart.config.type = "line";
+                salesChart.update();
+
                 let janm = listers.slice(0, 1).toString().split("-");
                 let janMonth = janm[1].toString();
                 let currMonth = ("0" + (dX.getMonth() + 1)).slice(-2); //get current month
 
                 document.getElementById('startDate').value = yearX + "-" + janMonth;
                 document.getElementById('endDate').value = yearX + "-" + currMonth;
+
+                totalsalesChartB.options.plugins.barPositions1 = false; // Or any other setting you wish to apply
+                totalsalesChartB.update(); 
+                
+                salesChart.options.plugins.barPosition = false; // Or any other setting you wish to apply
+                salesChart.update(); 
 
             } else if (selectedValue === 'Years') {
 
@@ -2527,6 +2620,18 @@ $targetIncome = [
                 document.getElementById('startDate').value = "2023";
                 document.getElementById('endDate').setAttribute('type', 'number');
                 document.getElementById('endDate').value = yearX;
+    
+                totalsalesChartB.config.type = "bar";
+                totalsalesChartB.update();
+
+                salesChart.config.type = "bar";
+                salesChart.update();
+
+                totalsalesChartB.options.plugins.barPositions1 = true; // Or any other setting you wish to apply
+                totalsalesChartB.update(); 
+
+                salesChart.options.plugins.barPosition = true; // Or any other setting you wish to apply
+                salesChart.update(); 
 
             } else {
 
