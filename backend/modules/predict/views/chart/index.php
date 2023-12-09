@@ -121,7 +121,8 @@ use yii\web\View;
     <label for="years">Enter the number of year(s) for prediction:</label>
     <input type="number" id="years" name="years" step="0.01" value="">
     <button type="submit">Compute Predictions</button>
-</form>
+    </form>
+    
 <script>
     window.onscroll = function() { scrollFunction(); };
     
@@ -133,6 +134,7 @@ use yii\web\View;
             form.style.position = "fixed";
             form.style.top = "20px"; // Add "px" for the top value
             form.style.width = "77%";
+            form.style.left = "20%";
             toggleButton.style.display = "block";
             toggleButton.style.position = "fixed";
             toggleButton.style.top = "10px"; // Add "px" for the top value
@@ -148,6 +150,7 @@ use yii\web\View;
             form.style.position = "static";
             form.style.top = "20px"; // Adjust this value based on your design
             form.style.width = "100%";
+            form.style.left = "0"; 
             toggleButton.style.display = "none";
 
             if (toggleButton.innerHTML == "+") {

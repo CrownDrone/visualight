@@ -455,6 +455,28 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
         border-radius: 1rem;
     }
 
+    #toggleButton{
+            background-color: #0073D8;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-left: 1000px;
+            margin-bottom:10px;
+            font-weight: bold;
+            position:static;
+            font-size: 20px;
+            display:none;
+
+        }
+
+        #toggleButton:hover {
+            background-color: #6BBAFF;
+        }
+
+
 
 
 
@@ -1332,8 +1354,11 @@ $targetIncome =
     PDF file is downloading, please wait...
 </div>
 
+<button id="toggleButton">—</button>
+
+
 <!-- Date Filter Div -->
-<div class="date_filter">
+<div class="date_filter" id = "prediction-form">
 
     <div class="containers">
         <div class="dropdown_pdf_container">
@@ -1368,6 +1393,60 @@ $targetIncome =
         <!-- </form> -->
     </div>
 </div>
+
+<script>
+    window.onscroll = function() { scrollFunction(); };
+    
+    function scrollFunction() {
+        var form = document.getElementById("prediction-form");
+        var toggleButton = document.getElementById("toggleButton");
+
+        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+            form.style.position = "fixed";
+            form.style.top = "20px"; // Add "px" for the top value
+            form.style.width = "68%";
+            form.style.height = "17%";
+            form.style.zIndex = "1000";
+            form.style.background = "white";
+            form.style.boxShadow= "-4px 4px 8px rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.15)";
+            form.style.left = "20%";
+
+            toggleButton.style.display = "block";
+            toggleButton.style.position = "fixed";
+            toggleButton.style.top = "10px"; // Add "px" for the top value
+            toggleButton.style.right = "170px"; // Adjust this value based on your design
+            toggleButton.style.zIndex = "1500";
+            
+
+            if (toggleButton.innerHTML == "+") {
+                toggleButton.innerHTML = "+";
+            }
+
+        } else {
+            form.style.position = "static";
+            form.style.top = "20px"; // Add "px" for the top value
+            form.style.width = "100%";
+            form.style.marginBottom = "-30%";
+            form.style.background = "none";
+            form.style.boxShadow= "none";
+            toggleButton.style.display = "none";
+
+            if (toggleButton.innerHTML == "+") {
+                toggleButton.innerHTML = "+";
+            }
+            
+        }
+    }
+
+    var form = document.getElementById("prediction-form");
+    var toggleButton = document.getElementById("toggleButton");
+
+    toggleButton.addEventListener("click", function() {
+        form.style.display = (form.style.display === "none") ? "block" : "none";
+        toggleButton.innerHTML = (form.style.display === "none") ? "+" : "—";
+
+    });
+</script>
 
 <script>
     // Attach an event listener to the date picker fields

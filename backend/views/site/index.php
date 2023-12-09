@@ -291,8 +291,7 @@ $currentIndex = Url::to(['']);
     }
 
     .navigation {
-        margin-right: 10px;
-        /* Adjust the margin as needed */
+        
     }
 
 
@@ -301,6 +300,7 @@ $currentIndex = Url::to(['']);
         width: 100%;
         text-align: center;
         display: wrap;
+
 
     }
 
@@ -324,6 +324,7 @@ $currentIndex = Url::to(['']);
         display: wrap;
         background-color: white;
         box-shadow: -4px 4px 8px rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.15);
+        z-index: 0;
 
     }
 
@@ -458,6 +459,27 @@ $currentIndex = Url::to(['']);
         font-weight: bold;
         border-radius: 1rem;
     }
+
+        #toggleButton{
+            background-color: #0073D8;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-left: 1000px;
+            margin-bottom:10px;
+            font-weight: bold;
+            position:static;
+            font-size: 20px;
+            display:none;
+
+        }
+
+        #toggleButton:hover {
+            background-color: #6BBAFF;
+        }
 
 
 
@@ -1279,8 +1301,10 @@ $targetIncome = [
     PDF file is downloading, please wait...
 </div>
 
+<button id="toggleButton">—</button>
+
 <!-- Date Filter Div -->
-<div class="date_filter">
+<div class="date_filter" id = "prediction-form">
 
     <div class="containers">
         <div class="dropdown_pdf_container">
@@ -1301,9 +1325,9 @@ $targetIncome = [
                     <Button class="print_pdf_label" onclick="downloadPDF()">Chart Download</Button>
                 </div>
 
-                <div class="navigation">
+                <div class="navigation" style ="margin-right:345px; z-index:2000;">
                     <label for="navigationDropdown">Navigate to:</label>
-                    <select id="navigationDropdown" onchange="navigateToSection()">
+                    <select id="navigationDropdown" onchange="navigateToSection()" >
                         <option value="totaltransaction">Total Transaction</option>
                         <option value="totalsales">Total Income</option>
                         <option value="transactionChart">Transaction Per Division</option>
@@ -1339,6 +1363,63 @@ $targetIncome = [
     </div>
 </div>
 
+
+
+<script>
+    window.onscroll = function() { scrollFunction(); };
+    
+    function scrollFunction() {
+        var form = document.getElementById("prediction-form");
+        var toggleButton = document.getElementById("toggleButton");
+
+        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+            form.style.position = "fixed";
+            form.style.top = "20px"; // Add "px" for the top value
+            form.style.width = "78%";
+            form.style.height = "21%";
+            form.style.zIndex = "1000";
+            form.style.background = "white";
+            form.style.boxShadow= "-4px 4px 8px rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.15)";
+            form.style.left = "20%";
+            toggleButton.style.display = "block";
+            toggleButton.style.position = "fixed";
+            toggleButton.style.top = "10px"; // Add "px" for the top value
+            toggleButton.style.right = "20px"; // Adjust this value based on your design
+            toggleButton.style.zIndex = "1500";
+            
+
+            if (toggleButton.innerHTML == "+") {
+                toggleButton.innerHTML = "+";
+            }
+
+        } else {
+            form.style.position = "static";
+            form.style.top = "20px"; // Add "px" for the top value
+            form.style.width = "100%";
+            form.style.height = "17%";
+            form.style.marginBottom = "-7%";
+            form.style.background = "none";
+            form.style.boxShadow= "none";
+            toggleButton.style.display = "none";
+
+            if (toggleButton.innerHTML == "+") {
+                toggleButton.innerHTML = "+";
+            }
+            
+        }
+    }
+
+    var form = document.getElementById("prediction-form");
+    var toggleButton = document.getElementById("toggleButton");
+
+    toggleButton.addEventListener("click", function() {
+        form.style.display = (form.style.display === "none") ? "block" : "none";
+        toggleButton.innerHTML = (form.style.display === "none") ? "+" : "—";
+
+    });
+</script>
+
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js" integrity="sha512-JPcRR8yFa8mmCsfrw4TNte1ZvF1e3+1SdGMslZvmrzDYxS69J7J49vkFL8u6u8PlPJK+H3voElBtUCzaXj+6ig==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 
@@ -1353,7 +1434,7 @@ $targetIncome = [
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 
-    <div class="chart-container">
+    <div class="chart-container" style= "z-index:0;">
 
         <p class="reportTitle" id="totaltransaction"> Total Transaction</p>
         <canvas id="totaltransactionChart"></canvas>
