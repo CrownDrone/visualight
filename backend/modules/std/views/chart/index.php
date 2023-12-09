@@ -2187,7 +2187,10 @@ $targetIncome =
                             drawOnChartArea: false
                         }
                     },
-                }
+                },
+                ticks: {
+                    precision: 0,
+                },
             }
         });
 
@@ -2501,6 +2504,9 @@ $targetIncome =
                     },
                 },
             },
+            ticks: {
+                    precision: 0,
+                },
             plugins: {
                 datalabels: {
                     anchor: 'end',
@@ -2537,11 +2543,10 @@ $targetIncome =
             <div class="date_dropdown">
                 <label for="chart_type2" class="chart_type_label2">
                     <strong>Chart Filter</strong></label>
-                <select name="chart_type2" id="chart_type2" class="dropdown-content">
+                <select name="chart_type2" id="chart_type2" class="dropdown-content" onchange="changeChart()">
                     <option value="doughnut">Doughnut</option>
                     <option value="pie">Pie</option>
                     <option value="bar">Bar</option>
-                    <option value="line">Line</option>
 
                     <!-- <option value="horizontal_bar">Horizontal chart</option> -->
                 </select>
@@ -2601,6 +2606,12 @@ $targetIncome =
                         display: false,
                     }
                 },
+                ticks: {
+                    precision: 0,
+                },
+            },
+            legend:{
+                    display: true,
             },
             bgColor: {
                 backgroundColor: 'white',
@@ -2719,6 +2730,18 @@ $targetIncome =
         // Remove cutout if the selected type is 'bar'
         doughnutOptions.cutout = typeSelect === 'pie' ? 0 : '70%';
 
+        if (typeSelect === 'bar') {
+        // Remove gridlines for x and y axes
+        doughnutOptions.plugins.scales.x.grid.display = false;
+        doughnutOptions.plugins.scales.y.grid.display = false;
+       doughnutOptions.plugins.legend.display = false;
+
+        } else {
+            // For other chart types, display gridlines
+            doughnutOptions.plugins.scales.x.grid.display = true;
+            doughnutOptions.plugins.scales.y.grid.display = true;
+            doughnutOptions.plugins.legend.display = true;    
+        }
 
 
         transactionStatusChart.config.type = typeSelect;
@@ -2726,10 +2749,10 @@ $targetIncome =
         transactionTypeChart.config.type = typeSelect;
         customerTypeChart.config.type = typeSelect;
 
-        transactionStatusChart.options = doughnutOptions;
-        paymendtMethodChart.options = doughnutOptions;
-        transactionTypeChart.options = doughnutOptions;
-        customerTypeChart.options = doughnutOptions;
+        transactionStatusChart.options = JSON.parse(JSON.stringify(doughnutOptions));
+        paymendtMethodChart.options = JSON.parse(JSON.stringify(doughnutOptions));
+        transactionTypeChart.options = JSON.parse(JSON.stringify(doughnutOptions));
+        customerTypeChart.options = JSON.parse(JSON.stringify(doughnutOptions));
 
         transactionStatusChart.update();
         paymendtMethodChart.update();

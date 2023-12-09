@@ -2957,6 +2957,9 @@ $targetIncome = [
                     },
                 },
             },
+            ticks: {
+                    precision: 0,
+                },
             plugins: {
                 datalabels: {
                     anchor: 'end',
@@ -4287,6 +4290,12 @@ $targetIncome = [
                         display: false,
                     }
                 },
+                ticks: {
+                    precision: 0,
+                },
+            },
+            legend:{
+                    display: true,
             },
             bgColor: {
                 backgroundColor: 'white',
@@ -4397,33 +4406,50 @@ $targetIncome = [
     });
 
     // dashboard design end
+function changeChart() {
+    var type = document.getElementById('chart_type2');
+    var typeSelect = type.value;
 
-    function changeChart() {
-        var type = document.getElementById('chart_type2');
-        var typeSelect = type.value;
+    // Remove cutout if the selected type is 'bar'
+    doughnutOptions.cutout = typeSelect === 'pie' ? 0 : '70%';
 
-        // Remove cutout if the selected type is 'bar'
-        doughnutOptions.cutout = typeSelect === 'pie' ? 0 : '70%';
+    // Check if the selected type is 'bar' and adjust options accordingly
+    if (typeSelect === 'bar') {
+        // Remove gridlines for x and y axes
+        doughnutOptions.plugins.scales.x.grid.display = false;
+        doughnutOptions.plugins.scales.y.grid.display = false;
+        doughnutOptions.plugins.legend.display = false;
 
-
-
-        transactionStatusChart.config.type = typeSelect;
-        paymendtMethodChart.config.type = typeSelect;
-        transactionTypeChart.config.type = typeSelect;
-        customerTypeChart.config.type = typeSelect;
-
-        transactionStatusChart.options = doughnutOptions;
-        paymendtMethodChart.options = doughnutOptions;
-        transactionTypeChart.options = doughnutOptions;
-        customerTypeChart.options = doughnutOptions;
-
-        transactionStatusChart.update();
-        paymendtMethodChart.update();
-        transactionTypeChart.update();
-        customerTypeChart.update();
-
-        typeSelect = "";
+    } else {
+        // For other chart types, display gridlines
+        doughnutOptions.plugins.scales.x.grid.display = true;
+        doughnutOptions.plugins.scales.y.grid.display = true;
+        doughnutOptions.plugins.legend.display = true;    
     }
+
+    // Update options and then update the charts
+    transactionStatusChart.config.type = typeSelect;
+    paymendtMethodChart.config.type = typeSelect;
+    transactionTypeChart.config.type = typeSelect;
+    customerTypeChart.config.type = typeSelect;
+
+    // Clone the options to avoid modifying the shared options object
+    transactionStatusChart.options = JSON.parse(JSON.stringify(doughnutOptions));
+    paymendtMethodChart.options = JSON.parse(JSON.stringify(doughnutOptions));
+    transactionTypeChart.options = JSON.parse(JSON.stringify(doughnutOptions));
+    customerTypeChart.options = JSON.parse(JSON.stringify(doughnutOptions));
+
+    // Update the charts
+    transactionStatusChart.update();
+    paymendtMethodChart.update();
+    transactionTypeChart.update();
+    customerTypeChart.update();
+
+    typeSelect = "";
+}
+
+
+
 </script>
 
 <script>
