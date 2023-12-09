@@ -2274,7 +2274,7 @@ $targetIncome = [
                         // Adjust the x position of the datapoint.
                         // This centers the bar within the allocated space for each x-axis category.
                         datapoint.x = left + (barWidth * (index + 0.5));
-                        datapoint.x += (barWidth / data.datasets.length) * datasetIndex - (barWidth / 50);
+                        datapoint.x += (barWidth / data.datasets.length) * datasetIndex - (barWidth / 4);
                     });
                     });
                 }

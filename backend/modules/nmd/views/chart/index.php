@@ -2182,6 +2182,34 @@ $targetIncome =
             }
         });
 
+        const barPosition = {
+            id: 'barPosition',
+            beforeDatasetsDraw: (chart, args, pluginOptions) => {
+                const { ctx, data, chartArea: { top, bottom, left, right, width, height }, scales: { x, y } } = chart;
+
+                // Calculate the width for each dataset based on the total number of datasets.
+                // This assumes that the labels array length is equal to the number of x-axis categories.
+                // Adding "_unique" to the variable name to make it unique.
+                const barWidth_unique = width / data.labels.length;
+
+                // Loop through each dataset.
+                data.datasets.forEach((dataset, datasetIndex) => {
+                // Get the meta for the current dataset.
+                const datasetMeta = chart.getDatasetMeta(datasetIndex);
+
+                // Loop through each datapoint in the current dataset.
+                datasetMeta.data.forEach((datapoint, index) => {
+                    // Adjust the x position of the datapoint.
+                    // This centers the bar within the allocated space for each x-axis category.
+                    // Now using "barWidth_unique" to reflect the unique variable name.
+                    datapoint.x = left + (barWidth_unique * (index + 0.5));
+                    datapoint.x += (barWidth_unique / data.datasets.length) * datasetIndex - (barWidth_unique/4);
+                });
+                });
+            }
+            };
+
+
 
         //sales bar graph
         const salesCtx = document.getElementById('salesChart').getContext('2d');
@@ -2209,8 +2237,12 @@ $targetIncome =
                     }
 
                 },
+                plugins: {
+                    barPosition: false 
+                },
 
-            }
+            },
+            plugins: [barPosition],
         });
 
         const bgColor = {
@@ -2232,6 +2264,15 @@ $targetIncome =
             let dateTypeSelect = document.getElementById('date_type');
             let selectedValue = dateTypeSelect.value;
 
+            if (selectedValue === 'Days') {
+
+            salesChart.config.type = "line";
+            salesChart.update();
+
+            salesChart.options.plugins.barPosition = false; // Or any other setting you wish to apply
+            salesChart.update(); 
+
+            }    
             if (selectedValue === 'Months') {
 
                 document.getElementById('startDate').setAttribute('type', 'month');
@@ -2258,6 +2299,12 @@ $targetIncome =
                 document.getElementById('startDate').value = yearX + "-" + janMonth;
                 document.getElementById('endDate').value = yearX + "-" + currMonth;
 
+                salesChart.config.type = "line";
+                salesChart.update();
+
+                salesChart.options.plugins.barPosition = false; // Or any other setting you wish to apply
+                salesChart.update(); 
+
             } else if (selectedValue === 'Years') {
 
                 var yearLabelZ = (<?= json_encode($yearLabel) ?>);
@@ -2279,6 +2326,13 @@ $targetIncome =
                 document.getElementById('startDate').value = "2023";
                 document.getElementById('endDate').setAttribute('type', 'number');
                 document.getElementById('endDate').value = yearX;
+
+
+                salesChart.config.type = "bar";
+                salesChart.update();
+
+                salesChart.options.plugins.barPosition = true; // Or any other setting you wish to apply
+                salesChart.update(); 
 
             } else { //Days
 
