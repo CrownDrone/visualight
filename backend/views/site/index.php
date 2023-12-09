@@ -1325,7 +1325,7 @@ $targetIncome = [
                     <Button class="print_pdf_label" onclick="downloadPDF()">Chart Download</Button>
                 </div>
 
-                <div class="navigation" style ="margin-right:345px; z-index:2000;">
+                <div class="navigation" style ="margin-right:360px; margin-left:-20px; z-index:1000;">
                     <label for="navigationDropdown">Navigate to:</label>
                     <select id="navigationDropdown" onchange="navigateToSection()" >
                         <option value="totaltransaction">Total Transaction Report</option>
