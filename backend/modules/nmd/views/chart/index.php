@@ -195,7 +195,7 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
 
     }
 
-    #dailyTrans {
+    #dailyTrans, #dailyIncome, #avgTrans {
         font-size: 3.375rem;
         font-style: normal;
         font-weight: 700;
@@ -1169,14 +1169,14 @@ $divisionColors = [
 //dito yung pag lalagay nung naka set na color
 foreach ($SalesperDiv['datasets'] as &$dataset) {
     $divisionName = $dataset['label'];
-    $dataset['backgroundColor'] = isset($divisionColors[$divisionName]['#70507c']) ? $divisionColors[$divisionName]['backgroundColor'] : '#bf60e2'; // Default background color if division not found
+    $dataset['backgroundColor'] = isset($divisionColors[$divisionName]['#bf60e2']) ? $divisionColors[$divisionName]['backgroundColor'] : '#bf60e2'; // Default background color if division not found
     $dataset['borderColor'] = isset($divisionColors[$divisionName]['borderColor']) ? $divisionColors[$divisionName]['borderColor'] : '#bf60e2'; // Default border color if division not found
     // $dataset['borderWidth'] = isset($divisionColors[$divisionName]['borderWidth']) ? $divisionColors[$divisionName]['borderWidth'] : '#0362BA';
 }
 
 foreach ($TransactionperDiv['datasets'] as &$dataset) {
     $divisionName = $dataset['label'];
-    $dataset['backgroundColor'] = isset($divisionColors[$divisionName]['backgroundColor']) ? $divisionColors[$divisionName]['backgroundColor'] : '#EFF5FF'; // Default background color if division not found
+    $dataset['backgroundColor'] = isset($divisionColors[$divisionName]['#06d6a0']) ? $divisionColors[$divisionName]['backgroundColor'] : '#06d6a0'; // Default background color if division not found
     $dataset['borderColor'] = isset($divisionColors[$divisionName]['borderColor']) ? $divisionColors[$divisionName]['borderColor'] : '#0362BA'; // Default border color if division not found
     // $dataset['borderWidth'] = isset($divisionColors[$divisionName]['borderWidth']) ? $divisionColors[$divisionName]['borderWidth'] : '#0362BA';
 }

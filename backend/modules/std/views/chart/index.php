@@ -196,14 +196,13 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
 
     }
 
-    #dailyTrans {
+    #dailyTrans, #dailyIncome, #avgTrans {
         font-size: 3.375rem;
         font-style: normal;
         font-weight: 700;
         line-height: normal;
         letter-spacing: .5rem;
     }
-
     #valueIncrease {
         font-size: 1.2rem;
         font-weight: 400;
