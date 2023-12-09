@@ -228,8 +228,8 @@ class ChartController extends BaseController
                 ->from('visualight2data.transaction') //from visualight2data database within transaction table
                 ->where(['division' => ['2']])
                 ->andWhere(['between', 'transaction_date', $fromDate, $toDate])
-                ->groupBy('transaction_date, division')
-                ->orderBy('transaction_date')
+                ->groupBy('labels, division')
+                ->orderBy('labels')
                 ->all();
 
             $dailyMapping = [ //to be used on renaming
@@ -247,8 +247,8 @@ class ChartController extends BaseController
                 ->from('visualight2data.transaction') //from visualight2data database within transaction table
                 ->where(['division' => ['2']])
                 ->andWhere(['between', 'transaction_date', $fromDate, $toDate])
-                ->groupBy('transaction_date, division')
-                ->orderBy('transaction_date')
+                ->groupBy('labels, division')
+                ->orderBy('labels')
                 ->all();
 
             foreach ($queryTotalSale as &$item) { //to change division 1 & 2 into actual division name
@@ -552,8 +552,8 @@ class ChartController extends BaseController
                 ->from('visualight2data.transaction') //from visualight2data database within transaction table
                 ->where(['division' => ['2']])
                 ->andWhere(['between', 'DATE_FORMAT(transaction_date, "%Y-%m")', $fromDate, $toDate])
-                ->groupBy('transaction_date, division')
-                ->orderBy('transaction_date')
+                ->groupBy('labels, division')
+                ->orderBy('labels')
                 ->all();
 
             $dailyMapping = [ //to be used on renaming
@@ -571,8 +571,8 @@ class ChartController extends BaseController
                 ->from('visualight2data.transaction') //from visualight2data database within transaction table
                 ->where(['division' => ['2']])
                 ->andWhere(['between', 'DATE_FORMAT(transaction_date, "%Y-%m")', $fromDate, $toDate])
-                ->groupBy('transaction_date, division')
-                ->orderBy('transaction_date')
+                ->groupBy('labels, division')
+                ->orderBy('labels')
                 ->all();
 
             foreach ($queryTotalSale as &$item) { //to change division 1 & 2 into actual division name
@@ -875,8 +875,8 @@ class ChartController extends BaseController
                 ->from('visualight2data.transaction') //from visualight2data database within transaction table
                 ->where(['division' => ['2']])
                 ->andWhere(['between', 'DATE_FORMAT(transaction_date, "%Y")', $fromDate, $toDate])
-                ->groupBy('transaction_date, division')
-                ->orderBy('transaction_date')
+                ->groupBy('labels, division')
+                ->orderBy('labels')
                 ->all();
 
             $dailyMapping = [ //to be used on renaming
@@ -894,8 +894,8 @@ class ChartController extends BaseController
                 ->from('visualight2data.transaction') //from visualight2data database within transaction table
                 ->where(['division' => ['2']])
                 ->andWhere(['between', 'DATE_FORMAT(transaction_date, "%Y")', $fromDate, $toDate])
-                ->groupBy('transaction_date, division')
-                ->orderBy('transaction_date')
+                ->groupBy('labels, division')
+                ->orderBy('labels')
                 ->all();
 
             foreach ($queryTotalSale as &$item) { //to change division 1 & 2 into actual division name
