@@ -19,19 +19,19 @@ class ChartController extends BaseController
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['login','index'],
+                'only' => ['login', 'index'],
                 'rules' => [
-                  [
-                      'allow' => true,
-                      'actions' => ['index'],
-                      'permissions' => ['STDpermission'], 
-                  ]
+                    [
+                        'allow' => true,
+                        'actions' => ['index'],
+                        'permissions' => ['STDpermission'],
+                    ]
                 ],
             ],
         ];
     }
-    
-    
+
+
     public function actionDay()
     {
 
@@ -294,7 +294,7 @@ class ChartController extends BaseController
             $forMyChart = (new Query()) //average income per division
                 ->select(['division as label', 'ROUND(AVG(amount)) as data'])
                 ->from('transaction')
-                ->where(['division' => ['2']])
+                ->where(['division' => ['1']])
                 ->andWhere(['between', 'transaction_date', $fromDate, $toDate])
                 ->groupBy('division')
                 ->all();
@@ -370,7 +370,7 @@ class ChartController extends BaseController
         $fromDate = "";
         $toDate = "";
         if (Yii::$app->request->isAjax) {
-            
+
             $fromDate = Yii::$app->request->post('fromDate');
             $toDate = Yii::$app->request->post('toDate');
 
@@ -620,7 +620,7 @@ class ChartController extends BaseController
                 ->from('transaction')
                 ->where(['division' => ['2']])
                 ->andWhere(['between', 'DATE_FORMAT(transaction_date, "%Y-%m")', $fromDate, $toDate])
-                ->groupBy('division')
+                ->groupBy('label')
                 ->all();
 
             $forMyChartAvgTransaction = (new Query())
@@ -693,7 +693,7 @@ class ChartController extends BaseController
         $fromDate = "";
         $toDate = "";
         if (Yii::$app->request->isAjax) {
-            
+
             $fromDate = Yii::$app->request->post('fromDate');
             $toDate = Yii::$app->request->post('toDate');
 
@@ -890,7 +890,7 @@ class ChartController extends BaseController
             }
 
             $queryTotalSale = (new Query()) //daily sales record seperated by division
-                ->select(['transaction_date AS labels', 'SUM(amount) AS datasets', 'division AS label'])
+                ->select(['DATE_FORMAT(transaction_date, "%Y") AS labels', 'SUM(amount) AS datasets', 'division AS label'])
                 ->from('visualight2data.transaction') //from visualight2data database within transaction table
                 ->where(['division' => ['2']])
                 ->andWhere(['between', 'DATE_FORMAT(transaction_date, "%Y")', $fromDate, $toDate])

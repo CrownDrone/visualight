@@ -2935,6 +2935,7 @@ $targetIncome =
 
         var totalTransactionDataset = {
             datasets: [{
+                backgroundColor: '#06d6a0',
                 label: 'National Metrology Division',
                 data: {}
             }, ],
@@ -2956,7 +2957,7 @@ $targetIncome =
         totalTransactionTranslate();
 
         transactionChart.config.data.datasets = totalTransactionDataset.datasets; //replace the current chart dataset
-        console.log(transactionChart.config.data.datasets)
+        console.log(totalTransactionDataset.datasets)
         //------------------------------------------------2nd//3bm40
         // Remove old data
         salesChart.data.datasets.forEach((dataset) => {
@@ -2965,6 +2966,7 @@ $targetIncome =
 
         var totalIncomeDataset = {
             datasets: [{
+                backgroundColor: '#bf60e2',
                 label: 'National Metrology Division',
                 data: {}
             }, ],
@@ -3005,8 +3007,6 @@ $targetIncome =
                 monthList[x] = lab1;
                 x++;
             }
-            var resultString = monthList.join(', ');
-            console.log(resultString)
         } else {
             while (response.yearLabel[x] != null) {
                 var lab1 = response.yearLabel[x].labels;

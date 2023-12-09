@@ -196,13 +196,16 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
 
     }
 
-    #dailyTrans, #dailyIncome, #avgTrans {
+    #dailyTrans,
+    #dailyIncome,
+    #avgTrans {
         font-size: 3.375rem;
         font-style: normal;
         font-weight: 700;
         line-height: normal;
         letter-spacing: .5rem;
     }
+
     #valueIncrease {
         font-size: 1.2rem;
         font-weight: 400;
@@ -454,26 +457,26 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
         border-radius: 1rem;
     }
 
-    #toggleButton{
-            background-color: #0073D8;
-            color: #fff;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-            margin-left: 1000px;
-            margin-bottom:10px;
-            font-weight: bold;
-            position:static;
-            font-size: 20px;
-            display:none;
+    #toggleButton {
+        background-color: #0073D8;
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        margin-left: 1000px;
+        margin-bottom: 10px;
+        font-weight: bold;
+        position: static;
+        font-size: 20px;
+        display: none;
 
-        }
+    }
 
-        #toggleButton:hover {
-            background-color: #6BBAFF;
-        }
+    #toggleButton:hover {
+        background-color: #6BBAFF;
+    }
 
 
 
@@ -1365,7 +1368,7 @@ $targetIncome =
 <button id="toggleButton">—</button>
 
 <!-- Date Filter Div -->
-<div class="date_filter"  id = "prediction-form">
+<div class="date_filter" id="prediction-form">
 
     <div class="containers">
         <div class="dropdown_pdf_container">
@@ -1402,8 +1405,10 @@ $targetIncome =
 </div>
 
 <script>
-    window.onscroll = function() { scrollFunction(); };
-    
+    window.onscroll = function() {
+        scrollFunction();
+    };
+
     function scrollFunction() {
         var form = document.getElementById("prediction-form");
         var toggleButton = document.getElementById("toggleButton");
@@ -1415,7 +1420,7 @@ $targetIncome =
             form.style.height = "17%";
             form.style.zIndex = "1000";
             form.style.background = "white";
-            form.style.boxShadow= "-4px 4px 8px rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.15)";
+            form.style.boxShadow = "-4px 4px 8px rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.15)";
             form.style.left = "20%";
 
             toggleButton.style.display = "block";
@@ -1423,7 +1428,7 @@ $targetIncome =
             toggleButton.style.top = "10px"; // Add "px" for the top value
             toggleButton.style.right = "170px"; // Adjust this value based on your design
             toggleButton.style.zIndex = "1500";
-            
+
 
             if (toggleButton.innerHTML == "+") {
                 toggleButton.innerHTML = "+";
@@ -1435,13 +1440,13 @@ $targetIncome =
             form.style.width = "100%";
             form.style.marginBottom = "-30%";
             form.style.background = "none";
-            form.style.boxShadow= "none";
+            form.style.boxShadow = "none";
             toggleButton.style.display = "none";
 
             if (toggleButton.innerHTML == "+") {
                 toggleButton.innerHTML = "+";
             }
-            
+
         }
     }
 
@@ -2270,8 +2275,8 @@ $targetIncome =
 
 
         function dateChange() {
-            let dateTypeSelect = document.getElementById('date_type');
-            let selectedValue = dateTypeSelect.value;
+            const dateTypeSelect = document.getElementById('date_type');
+            const selectedValue = dateTypeSelect.value;
 
 
             // if (selectedValue === 'Days') {
@@ -2344,6 +2349,12 @@ $targetIncome =
                 // salesChart.options.plugins.barPosition = true; // Or any other setting you wish to apply
                 // salesChart.update(); 
 
+
+                dateFilterRefresh();
+            } else { //Days
+
+                document.getElementById('startDate').setAttribute('type', 'date');
+                document.getElementById('endDate').setAttribute('type', 'date');
 
                 dateFilterRefresh();
             }
@@ -2550,8 +2561,8 @@ $targetIncome =
                 },
             },
             ticks: {
-                    precision: 0,
-                },
+                precision: 0,
+            },
             plugins: {
                 datalabels: {
                     anchor: 'end',
@@ -2655,8 +2666,8 @@ $targetIncome =
                     precision: 0,
                 },
             },
-            legend:{
-                    display: true,
+            legend: {
+                display: true,
             },
             bgColor: {
                 backgroundColor: 'white',
@@ -2776,16 +2787,16 @@ $targetIncome =
         doughnutOptions.cutout = typeSelect === 'pie' ? 0 : '70%';
 
         if (typeSelect === 'bar') {
-        // Remove gridlines for x and y axes
-        doughnutOptions.plugins.scales.x.grid.display = false;
-        doughnutOptions.plugins.scales.y.grid.display = false;
-       doughnutOptions.plugins.legend.display = false;
+            // Remove gridlines for x and y axes
+            doughnutOptions.plugins.scales.x.grid.display = false;
+            doughnutOptions.plugins.scales.y.grid.display = false;
+            doughnutOptions.plugins.legend.display = false;
 
         } else {
             // For other chart types, display gridlines
             doughnutOptions.plugins.scales.x.grid.display = true;
             doughnutOptions.plugins.scales.y.grid.display = true;
-            doughnutOptions.plugins.legend.display = true;    
+            doughnutOptions.plugins.legend.display = true;
         }
 
 
@@ -2824,6 +2835,8 @@ $targetIncome =
             const fDate = fromDateValue.value;
             const tDate = toDatevalue.value;
 
+            console.log(fDate + " to " + tDate);
+
             //send datepicker data to controller, 
             $.ajax({
                 url: '<?php echo Yii::$app->request->baseUrl . '/chart/day' ?>', // from index to controller then action
@@ -2856,7 +2869,6 @@ $targetIncome =
 
             const fDate = fromDateValue.value;
             const tDate = toDatevalue.value;
-            console.log(fDate + " to " + tDate)
 
             //send datepicker data to controller, 
             $.ajax({
@@ -2889,7 +2901,6 @@ $targetIncome =
 
             const fDate = fromDateValue.value;
             const tDate = toDatevalue.value;
-            console.log(fDate + " to " + tDate)
 
             //send datepicker data to controller, 
             $.ajax({
@@ -2931,6 +2942,7 @@ $targetIncome =
 
         var totalTransactionDataset = {
             datasets: [{
+                backgroundColor: '#3499ff',
                 label: 'Standard and Testing Division',
                 data: {}
             }, ],
@@ -2952,6 +2964,7 @@ $targetIncome =
         totalTransactionTranslate();
 
         transactionChart.config.data.datasets = totalTransactionDataset.datasets; //replace the current chart dataset
+        console.log('transaction data: ')
         console.log(transactionChart.config.data.datasets)
         //------------------------------------------------2nd//3bm40
         // Remove old data
@@ -2961,6 +2974,7 @@ $targetIncome =
 
         var totalIncomeDataset = {
             datasets: [{
+                backgroundColor: '#ff9a34',
                 label: 'Standard and Testing Division',
                 data: {}
             }, ],
@@ -2993,7 +3007,6 @@ $targetIncome =
                 dateList[x] = lab1;
                 x++;
             }
-            console.log(dateList)
 
         } else if (selectedValue === 'Months') {
             while (response.monthLabel[x] != null) {
@@ -3001,15 +3014,12 @@ $targetIncome =
                 monthList[x] = lab1;
                 x++;
             }
-            var resultString = monthList.join(', ');
-            console.log(resultString)
         } else {
             while (response.yearLabel[x] != null) {
                 var lab1 = response.yearLabel[x].labels;
                 yearList[x] = lab1;
                 x++;
             }
-            console.log(yearList)
         }
 
         x = 0;
