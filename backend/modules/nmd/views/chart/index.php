@@ -1479,7 +1479,7 @@ $targetIncome =
 
 
     <div class="chart-container">
-        <p class="reportTitle" id="transaction">Transaction Report</p>
+        <p class="reportTitle" id="transaction">Total Transaction Report</p>
         <!-- <div class="containerBody"> -->
         <canvas id="transactionChart"></canvas>
         <!-- </div> -->
@@ -1487,7 +1487,7 @@ $targetIncome =
 
 
     <div class="chart-container">
-        <p class="reportTitle" id="sales"> Income Report</p>
+        <p class="reportTitle" id="sales"> Total Income Report</p>
         <canvas id="salesChart"></canvas>
     </div>
 

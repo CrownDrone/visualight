@@ -1328,8 +1328,8 @@ $targetIncome = [
                 <div class="navigation" style ="margin-right:345px; z-index:2000;">
                     <label for="navigationDropdown">Navigate to:</label>
                     <select id="navigationDropdown" onchange="navigateToSection()" >
-                        <option value="totaltransaction">Total Transaction</option>
-                        <option value="totalsales">Total Income</option>
+                        <option value="totaltransaction">Total Transaction Report</option>
+                        <option value="totalsales">Total Income Report</option>
                         <option value="transactionChart">Transaction Per Division</option>
                         <option value="salesChart">Income per Division</option>
                         <option value="avgSales">Average Income</option>
@@ -1436,13 +1436,13 @@ $targetIncome = [
 
     <div class="chart-container" style= "z-index:0;">
 
-        <p class="reportTitle" id="totaltransaction"> Total Transaction</p>
+        <p class="reportTitle" id="totaltransaction"> Total Transaction Report</p>
         <canvas id="totaltransactionChart"></canvas>
     </div>
 
 
     <div class="chart-container">
-        <p class="reportTitle" id="totalsales"> Total Income </p>
+        <p class="reportTitle" id="totalsales"> Total Income Report </p>
         <canvas id="totalsalesChart"></canvas>
     </div>
 
