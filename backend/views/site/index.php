@@ -1527,7 +1527,7 @@ $targetIncome = [
 
             <h2 id="PopupHeader"></h2>
 
-            <p style="color: black;">Color of speedometer will identify if the target is meet</p>
+            <p style="color: black;">Color of speedometer will identify if the target is met</p>
 
             <div class="speedometer">
                 <p><span style="color: #C70039 ">Low </span>
@@ -1584,7 +1584,7 @@ $targetIncome = [
             <div class="division-content">
                 <h2 id="MetrologyPopupHeader">National Metrology Division</h2>
                 <div class="speedometer">
-                    <p>Color of speedometer will identify if the target is meet</p>
+                    <p>Color of speedometer will identify if the target is met</p>
                     <p><span style="color: red">Low </span>
                         <span style="color: orange">Moderate </span>
                         <span style="color: yellow">High </span>
