@@ -195,7 +195,9 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
 
     }
 
-    #dailyTrans, #dailyIncome, #avgTrans {
+    #dailyTrans,
+    #dailyIncome,
+    #avgTrans {
         font-size: 3.375rem;
         font-style: normal;
         font-weight: 700;
@@ -243,15 +245,17 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
     }
 
     .date_type_label {
-        font-style: Poppins;
+        font-family: 'Poppins', sans-serif;
         color: #F8B200;
         font-size: 1.3rem;
         letter-spacing: .30rem;
+        /* Removed margins if present, and let flexbox handle the spacing */
     }
 
     .dropdown {
         position: relative;
         display: inline-block;
+        /* Set to flex for inline-flex behavior */
     }
 
     .dropdown-content {
@@ -259,17 +263,18 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
         z-index: 1;
         text-align: center;
         border-radius: 0.5rem;
+        /* Align dropdown content here if necessary */
     }
 
     .date_type {
-        border-radius: 0.5rem
+        border-radius: 0.5rem;
+        /* Additional styling for the date type elements */
     }
 
     .print_pdf {
-        padding-right: 8.7rem;
-        padding-top: 1.3rem;
-        padding-bottom: 1.1rem;
-        right: 1rem;
+        /* Removed padding and right positioning */
+        display: flex;
+        /* Set to flex to use the flex properties */
     }
 
     .print_pdf_label {
@@ -277,19 +282,13 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
         background-color: #00BDB2;
         font-size: .7rem;
         text-align: center;
-        margin: auto;
-        padding: 0.2rem;
-        padding-left: 1rem;
-        padding-right: 1rem;
+        margin-top: 10%;
+        margin-left: 10%;
+        padding: 0.2rem 1rem;
+        /* Combined padding properties */
         color: white;
         width: 7rem;
-    }
-
-    .datePicker_label {
-        border-radius: 0.5rem;
-        width: 8rem;
-        text-align: center;
-        font-size: 0.9rem;
+        /* Adjust alignment if needed */
     }
 
     .datePicker {
@@ -455,26 +454,26 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
         border-radius: 1rem;
     }
 
-    #toggleButton{
-            background-color: #0073D8;
-            color: #fff;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-            margin-left: 1000px;
-            margin-bottom:10px;
-            font-weight: bold;
-            position:static;
-            font-size: 20px;
-            display:none;
+    #toggleButton {
+        background-color: #0073D8;
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        margin-left: 1000px;
+        margin-bottom: 10px;
+        font-weight: bold;
+        position: static;
+        font-size: 20px;
+        display: none;
 
-        }
+    }
 
-        #toggleButton:hover {
-            background-color: #6BBAFF;
-        }
+    #toggleButton:hover {
+        background-color: #6BBAFF;
+    }
 
 
 
@@ -1358,7 +1357,7 @@ $targetIncome =
 
 
 <!-- Date Filter Div -->
-<div class="date_filter" id = "prediction-form">
+<div class="date_filter" id="prediction-form">
 
     <div class="containers">
         <div class="dropdown_pdf_container">
@@ -1395,8 +1394,10 @@ $targetIncome =
 </div>
 
 <script>
-    window.onscroll = function() { scrollFunction(); };
-    
+    window.onscroll = function() {
+        scrollFunction();
+    };
+
     function scrollFunction() {
         var form = document.getElementById("prediction-form");
         var toggleButton = document.getElementById("toggleButton");
@@ -1405,10 +1406,12 @@ $targetIncome =
             form.style.position = "fixed";
             form.style.top = "20px"; // Add "px" for the top value
             form.style.width = "68%";
-            form.style.height = "17%";
+            form.style.height = "10"; // Set height to auto
+            form.style.maxHeight = "50px"; // Set a maximum height
+            form.style.marginBottom = "-50%";
             form.style.zIndex = "1000";
             form.style.background = "white";
-            form.style.boxShadow= "-4px 4px 8px rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.15)";
+            form.style.boxShadow = "-4px 4px 8px rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.15)";
             form.style.left = "20%";
 
             toggleButton.style.display = "block";
@@ -1416,7 +1419,6 @@ $targetIncome =
             toggleButton.style.top = "10px"; // Add "px" for the top value
             toggleButton.style.right = "170px"; // Adjust this value based on your design
             toggleButton.style.zIndex = "1500";
-            
 
             if (toggleButton.innerHTML == "+") {
                 toggleButton.innerHTML = "+";
@@ -1424,18 +1426,20 @@ $targetIncome =
 
         } else {
             form.style.position = "static";
-            form.style.top = "20px"; // Add "px" for the top value
+            form.style.top = "0px"; // It should probably be 0px when it's static
             form.style.width = "100%";
-            form.style.marginBottom = "-30%";
+            form.style.height = "auto"; // Set height to auto
+            form.style.marginBottom = "0"; // It should probably be 0 when it's static
             form.style.background = "none";
-            form.style.boxShadow= "none";
+            form.style.boxShadow = "none";
             toggleButton.style.display = "none";
 
             if (toggleButton.innerHTML == "+") {
                 toggleButton.innerHTML = "+";
             }
-            
+
         }
+
     }
 
     var form = document.getElementById("prediction-form");
@@ -2554,8 +2558,8 @@ $targetIncome =
                 },
             },
             ticks: {
-                    precision: 0,
-                },
+                precision: 0,
+            },
             plugins: {
                 datalabels: {
                     anchor: 'end',
@@ -2659,8 +2663,8 @@ $targetIncome =
                     precision: 0,
                 },
             },
-            legend:{
-                    display: true,
+            legend: {
+                display: true,
             },
             bgColor: {
                 backgroundColor: 'white',
@@ -2780,16 +2784,16 @@ $targetIncome =
         doughnutOptions.cutout = typeSelect === 'pie' ? 0 : '70%';
 
         if (typeSelect === 'bar') {
-        // Remove gridlines for x and y axes
-        doughnutOptions.plugins.scales.x.grid.display = false;
-        doughnutOptions.plugins.scales.y.grid.display = false;
-        doughnutOptions.plugins.legend.display = false;
+            // Remove gridlines for x and y axes
+            doughnutOptions.plugins.scales.x.grid.display = false;
+            doughnutOptions.plugins.scales.y.grid.display = false;
+            doughnutOptions.plugins.legend.display = false;
 
         } else {
             // For other chart types, display gridlines
             doughnutOptions.plugins.scales.x.grid.display = true;
             doughnutOptions.plugins.scales.y.grid.display = true;
-            doughnutOptions.plugins.legend.display = true;    
+            doughnutOptions.plugins.legend.display = true;
         }
 
 
