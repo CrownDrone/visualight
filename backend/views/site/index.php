@@ -1746,100 +1746,100 @@ $targetIncome = [
             percentTransaction.innerHTML = "Achieved <span style='color: " + percentagecolor + ";'>" + percentage + "%</span> of target transaction.";
             PopupHeader.innerHTML = "Total Transaction";
 
-            const startDateObj = new Date(startDateS);
-            const endDateObj = new Date(endDateS);
+            // const startDateObj = new Date(startDateS);
+            // const endDateObj = new Date(endDateS);
 
-            //sum of transaction per div (dataset)
-            const sumTransactionDataset = {
-                data: TransactionperDiv.labels.map((date, index) => {
-                    let sum = 0;
-                    TransactionperDiv.datasets.forEach(dataset => {
-                        if (dataset.data[index] !== undefined) {
-                            sum += dataset.data[index];
-                        }
-                    });
-                    return sum;
-                }),
-                // Set labels to transaction_date values
-                labels: TransactionperDiv.labels,
-            };
-            const maxIndex = sumTransactionDataset.data.indexOf(Math.max(...sumTransactionDataset.data));
-            const highestTransactionCount = sumTransactionDataset.data[maxIndex];
-            const dateofhighest = sumTransactionDataset.labels[maxIndex];
-            const minIndex = sumTransactionDataset.data.indexOf(Math.min(...sumTransactionDataset.data));
-            const leastTransactionCount = sumTransactionDataset.data[minIndex];
-            const dateofleast = sumTransactionDataset.labels[minIndex];
+            // //sum of transaction per div (dataset)
+            // const sumTransactionDataset = {
+            //     data: TransactionperDiv.labels.map((date, index) => {
+            //         let sum = 0;
+            //         TransactionperDiv.datasets.forEach(dataset => {
+            //             if (dataset.data[index] !== undefined) {
+            //                 sum += dataset.data[index];
+            //             }
+            //         });
+            //         return sum;
+            //     }),
+            //     // Set labels to transaction_date values
+            //     labels: TransactionperDiv.labels,
+            // };
+            // const maxIndex = sumTransactionDataset.data.indexOf(Math.max(...sumTransactionDataset.data));
+            // const highestTransactionCount = sumTransactionDataset.data[maxIndex];
+            // const dateofhighest = sumTransactionDataset.labels[maxIndex];
+            // const minIndex = sumTransactionDataset.data.indexOf(Math.min(...sumTransactionDataset.data));
+            // const leastTransactionCount = sumTransactionDataset.data[minIndex];
+            // const dateofleast = sumTransactionDataset.labels[minIndex];
 
-            //Transaction type dataset
-            const transactionTypeData = <?php
-                                        $data = array();
-                                        for ($i = 0; $i < count($transactionType); $i++) {
-                                            $data[] = array('label' => $transactionType[$i], 'data' => $transactionTypecounts[$i]);
-                                        }
-                                        echo json_encode($data);
-                                        ?>;
+            // //Transaction type dataset
+            // const transactionTypeData = <?php
+            //                             $data = array();
+            //                             for ($i = 0; $i < count($transactionType); $i++) {
+            //                                 $data[] = array('label' => $transactionType[$i], 'data' => $transactionTypecounts[$i]);
+            //                             }
+            //                             echo json_encode($data);
+            //                             ?>;
 
-            const maxtransactionTypeData = transactionTypeData.reduce((max, obj) => (obj.data > max.data ? obj : max), {
-                data: -Infinity
-            });
-            const maxData = maxtransactionTypeData.data;
-            const maxtransactionType = transactionTypeData.filter(obj => obj.data === maxData).map(obj => obj.label);
-            const minTransactionTypeData = transactionTypeData.reduce((min, obj) => (obj.data < min.data ? obj : min), {
-                data: Infinity
-            });
-            const minData = minTransactionTypeData.data;
-            const minTransactionType = transactionTypeData.filter(obj => obj.data === minData).map(obj => obj.label);
+            // const maxtransactionTypeData = transactionTypeData.reduce((max, obj) => (obj.data > max.data ? obj : max), {
+            //     data: -Infinity
+            // });
+            // const maxData = maxtransactionTypeData.data;
+            // const maxtransactionType = transactionTypeData.filter(obj => obj.data === maxData).map(obj => obj.label);
+            // const minTransactionTypeData = transactionTypeData.reduce((min, obj) => (obj.data < min.data ? obj : min), {
+            //     data: Infinity
+            // });
+            // const minData = minTransactionTypeData.data;
+            // const minTransactionType = transactionTypeData.filter(obj => obj.data === minData).map(obj => obj.label);
 
-            const customerTypeData = <?php
-                                        $data = array();
-                                        for ($i = 0; $i < count($customerTypetransaction); $i++) {
-                                            $data[] = array('label' => $customerTypetransaction[$i], 'data' => $customerTypecounttransaction[$i]);
-                                        }
-                                        echo json_encode($data);
-                                        ?>;
+            // const customerTypeData = <?php
+            //                             $data = array();
+            //                             for ($i = 0; $i < count($customerTypetransaction); $i++) {
+            //                                 $data[] = array('label' => $customerTypetransaction[$i], 'data' => $customerTypecounttransaction[$i]);
+            //                             }
+            //                             echo json_encode($data);
+            //                             ?>;
 
-            const maxCustomerTypeData = customerTypeData.reduce((max, obj) => (obj.data >= max.data ? obj : max), {
-                data: -Infinity
-            });
-            const maxCustomerData = maxCustomerTypeData.data;
-            const maxCustomerTypes = customerTypeData.filter(obj => obj.data === maxCustomerData).map(obj => obj.label);
-            const minCustomerTypeData = customerTypeData.reduce((min, obj) => (obj.data <= min.data ? obj : min), {
-                data: Infinity
-            });
-            const minCustomerData = minCustomerTypeData.data;
-            const minCustomerType = customerTypeData.filter(obj => obj.data === minCustomerData).map(obj => obj.label);
+            // const maxCustomerTypeData = customerTypeData.reduce((max, obj) => (obj.data >= max.data ? obj : max), {
+            //     data: -Infinity
+            // });
+            // const maxCustomerData = maxCustomerTypeData.data;
+            // const maxCustomerTypes = customerTypeData.filter(obj => obj.data === maxCustomerData).map(obj => obj.label);
+            // const minCustomerTypeData = customerTypeData.reduce((min, obj) => (obj.data <= min.data ? obj : min), {
+            //     data: Infinity
+            // });
+            // const minCustomerData = minCustomerTypeData.data;
+            // const minCustomerType = customerTypeData.filter(obj => obj.data === minCustomerData).map(obj => obj.label);
 
-            const Province = {
-                data: province.datasets,
-                labels: province.labels,
-            };
+            // const Province = {
+            //     data: province.datasets,
+            //     labels: province.labels,
+            // };
 
-            const highestprovincedata = Math.max(...Province.data);
-            const tolerance = 0.0001;
-            const highestprovinces = [];
-            Province.labels.forEach((label, index) => {
-                if (Math.abs(Province.data[index] - highestprovincedata) < tolerance) {
-                    highestprovinces.push(label);
-                }
-            });
+            // const highestprovincedata = Math.max(...Province.data);
+            // const tolerance = 0.0001;
+            // const highestprovinces = [];
+            // Province.labels.forEach((label, index) => {
+            //     if (Math.abs(Province.data[index] - highestprovincedata) < tolerance) {
+            //         highestprovinces.push(label);
+            //     }
+            // });
 
-            const leastprovincedata = Math.min(...Province.data);
-            const leastprovinces = [];
-            Province.labels.forEach((label, index) => {
-                if (Math.abs(Province.data[index] - leastprovincedata) < tolerance) {
-                    leastprovinces.push(label);
-                }
-            });
+            // const leastprovincedata = Math.min(...Province.data);
+            // const leastprovinces = [];
+            // Province.labels.forEach((label, index) => {
+            //     if (Math.abs(Province.data[index] - leastprovincedata) < tolerance) {
+            //         leastprovinces.push(label);
+            //     }
+            // });
 
-            //analyzation that should depends in the date filter or chart
-            highest.innerHTML = "Highest transaction: <span style='color: red;'>" + dateofleast + "</span> with <span style='color: blue;'> " + highestTransactionCount + "</span> transaction/s.";
-            least.innerHTML = "Least transaction: <span style='color: red;'>" + dateofhighest + "</span> with <span style='color: blue;'> " + leastTransactionCount + "</span> transaction/s.";
-            mostTransactionType.innerHTML = "Highest transaction type:  <span style='color:green;'>" + maxtransactionType.join(', ') + "</span> having  <span style='color: blue;'> " + maxData + "</span> transaction/s.";
-            leastTransactionType.innerHTML = "Least transaction type:   <span style='color:green;'>" + minTransactionType.join(', ') + "</span> having  <span style='color: blue;'> " + minData + "</span> transaction/s.";
-            mostCustomerType.innerHTML = "Highest customer type(s): <span style='color:green;'>" + maxCustomerTypes.join(', ') + "</span> having <span style='color: blue;'> " + maxCustomerData + "</span> transaction/s.";
-            leastCustomerType.innerHTML = "Least customer type: <span style='color:green;'>" + minCustomerType.join(', ') + "</span> having <span style='color: blue;'> " + minCustomerData + "</span> transaction/s.";
-            mostCustomerProvince.innerHTML = "Provinces with the highest transactions: <span style='color:green;'>" + highestprovinces.join(', ') + "</span> having <span style='color: blue;'> " + highestprovincedata + "</span> transaction/s.";
-            leastCustomerProvince.innerHTML = "Provinces with the least transactions: <span style='color:green;'>" + leastprovinces.join(', ') + "</span> having <span style='color: blue;'> " + leastprovincedata + "</span> transaction/s.";
+            // //analyzation that should depends in the date filter or chart
+            // highest.innerHTML = "Highest transaction: <span style='color: red;'>" + dateofleast + "</span> with <span style='color: blue;'> " + highestTransactionCount + "</span> transaction/s.";
+            // least.innerHTML = "Least transaction: <span style='color: red;'>" + dateofhighest + "</span> with <span style='color: blue;'> " + leastTransactionCount + "</span> transaction/s.";
+            // mostTransactionType.innerHTML = "Highest transaction type:  <span style='color:green;'>" + maxtransactionType.join(', ') + "</span> having  <span style='color: blue;'> " + maxData + "</span> transaction/s.";
+            // leastTransactionType.innerHTML = "Least transaction type:   <span style='color:green;'>" + minTransactionType.join(', ') + "</span> having  <span style='color: blue;'> " + minData + "</span> transaction/s.";
+            // mostCustomerType.innerHTML = "Highest customer type(s): <span style='color:green;'>" + maxCustomerTypes.join(', ') + "</span> having <span style='color: blue;'> " + maxCustomerData + "</span> transaction/s.";
+            // leastCustomerType.innerHTML = "Least customer type: <span style='color:green;'>" + minCustomerType.join(', ') + "</span> having <span style='color: blue;'> " + minCustomerData + "</span> transaction/s.";
+            // mostCustomerProvince.innerHTML = "Provinces with the highest transactions: <span style='color:green;'>" + highestprovinces.join(', ') + "</span> having <span style='color: blue;'> " + highestprovincedata + "</span> transaction/s.";
+            // leastCustomerProvince.innerHTML = "Provinces with the least transactions: <span style='color:green;'>" + leastprovinces.join(', ') + "</span> having <span style='color: blue;'> " + leastprovincedata + "</span> transaction/s.";
 
         });
         closePopup.addEventListener("click", () => {
@@ -1985,117 +1985,117 @@ $targetIncome = [
             PopupHeader.innerHTML = "Total Income";
 
 
-            //sum of transaction per div (dataset)
-            const sumIncomeDataset = {
-                data: SalesperDiv.labels.map((date, index) => {
-                    let sum = 0;
-                    SalesperDiv.datasets.forEach(dataset => {
-                        if (dataset.data[index] !== undefined) {
-                            sum += dataset.data[index];
-                        }
-                    });
-                    return sum;
-                }),
-                // Set labels to transaction_date values
-                labels: SalesperDiv.labels,
-            };
+            // //sum of transaction per div (dataset)
+            // const sumIncomeDataset = {
+            //     data: SalesperDiv.labels.map((date, index) => {
+            //         let sum = 0;
+            //         SalesperDiv.datasets.forEach(dataset => {
+            //             if (dataset.data[index] !== undefined) {
+            //                 sum += dataset.data[index];
+            //             }
+            //         });
+            //         return sum;
+            //     }),
+            //     // Set labels to transaction_date values
+            //     labels: SalesperDiv.labels,
+            // };
 
-            const maxIndex = sumIncomeDataset.data.indexOf(Math.max(...sumIncomeDataset.data));
-            const highestIncomeCount = parseFloat(sumIncomeDataset.data[maxIndex]).toFixed(2);
-            const dateofhighest = sumIncomeDataset.labels[maxIndex];
-            const minIndex = sumIncomeDataset.data.indexOf(Math.min(...sumIncomeDataset.data));
-            const leastIncomeCount = parseFloat(sumIncomeDataset.data[minIndex]).toFixed(2);
-            const dateofleast = sumIncomeDataset.labels[minIndex];
+            // const maxIndex = sumIncomeDataset.data.indexOf(Math.max(...sumIncomeDataset.data));
+            // const highestIncomeCount = parseFloat(sumIncomeDataset.data[maxIndex]).toFixed(2);
+            // const dateofhighest = sumIncomeDataset.labels[maxIndex];
+            // const minIndex = sumIncomeDataset.data.indexOf(Math.min(...sumIncomeDataset.data));
+            // const leastIncomeCount = parseFloat(sumIncomeDataset.data[minIndex]).toFixed(2);
+            // const dateofleast = sumIncomeDataset.labels[minIndex];
 
-            const transactionTypeData = <?php
-                                        $data = array();
-                                        for ($i = 0; $i < count($transactionTypeincome); $i++) {
-                                            $data[] = array('label' => $transactionTypeincome[$i], 'data' => $transactionTypesumincome[$i]);
-                                        }
-                                        echo json_encode($data);
-                                        ?>;
+            // const transactionTypeData = <?php
+            //                             $data = array();
+            //                             for ($i = 0; $i < count($transactionTypeincome); $i++) {
+            //                                 $data[] = array('label' => $transactionTypeincome[$i], 'data' => $transactionTypesumincome[$i]);
+            //                             }
+            //                             echo json_encode($data);
+            //                             ?>;
 
-            const maxtransactionTypeData = transactionTypeData.reduce((max, obj) => (obj.data > max.data ? obj : max), {
-                data: -Infinity
-            });
-            const maxData = maxtransactionTypeData.data;
-            const maxtransactionType = transactionTypeData.filter(obj => obj.data === maxData).map(obj => obj.label);
-            const minTransactionTypeData = transactionTypeData.reduce((min, obj) => (obj.data < min.data ? obj : min), {
-                data: Infinity
-            });
-            const minData = minTransactionTypeData.data;
-            const minTransactionType = transactionTypeData.filter(obj => obj.data === minData).map(obj => obj.label);
+            // const maxtransactionTypeData = transactionTypeData.reduce((max, obj) => (obj.data > max.data ? obj : max), {
+            //     data: -Infinity
+            // });
+            // const maxData = maxtransactionTypeData.data;
+            // const maxtransactionType = transactionTypeData.filter(obj => obj.data === maxData).map(obj => obj.label);
+            // const minTransactionTypeData = transactionTypeData.reduce((min, obj) => (obj.data < min.data ? obj : min), {
+            //     data: Infinity
+            // });
+            // const minData = minTransactionTypeData.data;
+            // const minTransactionType = transactionTypeData.filter(obj => obj.data === minData).map(obj => obj.label);
 
-            const customerTypeData = <?php
-                                        $data = array();
-                                        for ($i = 0; $i < count($customerTypeincome); $i++) {
-                                            $data[] = array('label' => $customerTypeincome[$i], 'data' => $customerTypecountincome[$i]);
-                                        }
-                                        echo json_encode($data);
-                                        ?>;
+            // const customerTypeData = <?php
+            //                             $data = array();
+            //                             for ($i = 0; $i < count($customerTypeincome); $i++) {
+            //                                 $data[] = array('label' => $customerTypeincome[$i], 'data' => $customerTypecountincome[$i]);
+            //                             }
+            //                             echo json_encode($data);
+            //                             ?>;
 
-            const maxCustomerTypeData = customerTypeData.reduce((max, obj) => (obj.data >= max.data ? obj : max), {
-                data: -Infinity
-            });
-            const maxCustomerData = maxCustomerTypeData.data;
-            const maxCustomerTypes = customerTypeData.filter(obj => obj.data === maxCustomerData).map(obj => obj.label);
-            const minCustomerTypeData = customerTypeData.reduce((min, obj) => (obj.data <= min.data ? obj : min), {
-                data: Infinity
-            });
-            const minCustomerData = minCustomerTypeData.data;
-            const minCustomerType = customerTypeData.filter(obj => obj.data === minCustomerData).map(obj => obj.label);
+            // const maxCustomerTypeData = customerTypeData.reduce((max, obj) => (obj.data >= max.data ? obj : max), {
+            //     data: -Infinity
+            // });
+            // const maxCustomerData = maxCustomerTypeData.data;
+            // const maxCustomerTypes = customerTypeData.filter(obj => obj.data === maxCustomerData).map(obj => obj.label);
+            // const minCustomerTypeData = customerTypeData.reduce((min, obj) => (obj.data <= min.data ? obj : min), {
+            //     data: Infinity
+            // });
+            // const minCustomerData = minCustomerTypeData.data;
+            // const minCustomerType = customerTypeData.filter(obj => obj.data === minCustomerData).map(obj => obj.label);
 
-            const ProvinceIncome = {
-                data: provinceincome.datasets,
-                labels: provinceincome.labels,
-            };
+            // const ProvinceIncome = {
+            //     data: provinceincome.datasets,
+            //     labels: provinceincome.labels,
+            // };
 
-            const highestIncomeData = Math.max(...ProvinceIncome.data);
-            const tolerance = 0.0001;
-            const highestIncomeProvinces = [];
-            ProvinceIncome.labels.forEach((label, index) => {
-                if (Math.abs(ProvinceIncome.data[index] - highestIncomeData) < tolerance) {
-                    highestIncomeProvinces.push(label);
-                }
-            });
+            // const highestIncomeData = Math.max(...ProvinceIncome.data);
+            // const tolerance = 0.0001;
+            // const highestIncomeProvinces = [];
+            // ProvinceIncome.labels.forEach((label, index) => {
+            //     if (Math.abs(ProvinceIncome.data[index] - highestIncomeData) < tolerance) {
+            //         highestIncomeProvinces.push(label);
+            //     }
+            // });
 
-            const leastIncomeData = Math.min(...ProvinceIncome.data);
-            const leastIncomeProvinces = [];
-            ProvinceIncome.labels.forEach((label, index) => {
-                if (Math.abs(ProvinceIncome.data[index] - leastIncomeData) < tolerance) {
-                    leastIncomeProvinces.push(label);
-                }
-            });
-
-
+            // const leastIncomeData = Math.min(...ProvinceIncome.data);
+            // const leastIncomeProvinces = [];
+            // ProvinceIncome.labels.forEach((label, index) => {
+            //     if (Math.abs(ProvinceIncome.data[index] - leastIncomeData) < tolerance) {
+            //         leastIncomeProvinces.push(label);
+            //     }
+            // });
 
 
-            highest.innerHTML = "Highest income: <span style='color: red;'>" + dateofleast + "</span> with <span style='color: blue;'> " + highestIncomeCount + "</span> total income.";
-            least.innerHTML = "Least income: <span style='color: red;'>" + dateofhighest + "</span> with <span style='color: blue;'> " + leastIncomeCount + "</span> total income.";
-            mostTransactionType.innerHTML = "Highest transaction type:  <span style='color:green;'>" + maxtransactionType.join(', ') + "</span> having  <span style='color: blue;'> " + Number(maxData).toLocaleString('en-US', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-            }) + "</span> total income.";
-            leastTransactionType.innerHTML = "Least transaction type:   <span style='color:green;'>" + minTransactionType.join(', ') + "</span> having  <span style='color: blue;'> " + Number(minData).toLocaleString('en-US', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-            }) + "</span> total income.";
-            mostCustomerType.innerHTML = "Highest customer type(s): <span style='color:green;'>" + maxCustomerTypes.join(', ') + "</span> having <span style='color: blue;'> " + Number(maxCustomerData).toLocaleString('en-US', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-            }) + "</span> total income.";
-            leastCustomerType.innerHTML = "Least customer type: <span style='color:green;'>" + minCustomerType.join(', ') + "</span> having <span style='color: blue;'> " + Number(minCustomerData).toLocaleString('en-US', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-            }) + "</span> total income.";
-            mostCustomerProvince.innerHTML = "Provinces with the highest income: <span style='color:green;'>" + highestIncomeProvinces.join(', ') + "</span> having <span style='color: blue;'> " + Number(highestIncomeData).toLocaleString('en-US', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-            }) + "</span>.";
-            leastCustomerProvince.innerHTML = "Provinces with the least income: <span style='color:green;'>" + leastIncomeProvinces.join(', ') + "</span> having <span style='color: blue;'> " + Number(leastIncomeData).toLocaleString('en-US', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-            }) + "</span>.";
+
+
+            // highest.innerHTML = "Highest income: <span style='color: red;'>" + dateofleast + "</span> with <span style='color: blue;'> " + highestIncomeCount + "</span> total income.";
+            // least.innerHTML = "Least income: <span style='color: red;'>" + dateofhighest + "</span> with <span style='color: blue;'> " + leastIncomeCount + "</span> total income.";
+            // mostTransactionType.innerHTML = "Highest transaction type:  <span style='color:green;'>" + maxtransactionType.join(', ') + "</span> having  <span style='color: blue;'> " + Number(maxData).toLocaleString('en-US', {
+            //     minimumFractionDigits: 2,
+            //     maximumFractionDigits: 2
+            // }) + "</span> total income.";
+            // leastTransactionType.innerHTML = "Least transaction type:   <span style='color:green;'>" + minTransactionType.join(', ') + "</span> having  <span style='color: blue;'> " + Number(minData).toLocaleString('en-US', {
+            //     minimumFractionDigits: 2,
+            //     maximumFractionDigits: 2
+            // }) + "</span> total income.";
+            // mostCustomerType.innerHTML = "Highest customer type(s): <span style='color:green;'>" + maxCustomerTypes.join(', ') + "</span> having <span style='color: blue;'> " + Number(maxCustomerData).toLocaleString('en-US', {
+            //     minimumFractionDigits: 2,
+            //     maximumFractionDigits: 2
+            // }) + "</span> total income.";
+            // leastCustomerType.innerHTML = "Least customer type: <span style='color:green;'>" + minCustomerType.join(', ') + "</span> having <span style='color: blue;'> " + Number(minCustomerData).toLocaleString('en-US', {
+            //     minimumFractionDigits: 2,
+            //     maximumFractionDigits: 2
+            // }) + "</span> total income.";
+            // mostCustomerProvince.innerHTML = "Provinces with the highest income: <span style='color:green;'>" + highestIncomeProvinces.join(', ') + "</span> having <span style='color: blue;'> " + Number(highestIncomeData).toLocaleString('en-US', {
+            //     minimumFractionDigits: 2,
+            //     maximumFractionDigits: 2
+            // }) + "</span>.";
+            // leastCustomerProvince.innerHTML = "Provinces with the least income: <span style='color:green;'>" + leastIncomeProvinces.join(', ') + "</span> having <span style='color: blue;'> " + Number(leastIncomeData).toLocaleString('en-US', {
+            //     minimumFractionDigits: 2,
+            //     maximumFractionDigits: 2
+            // }) + "</span>.";
 
         });
 
@@ -2848,69 +2848,78 @@ $targetIncome = [
 </div>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const provincesPopup = document.getElementById("Provincespopup");
-        const ProvinceopenPopup = document.getElementById("ProvinceopenPopup");
-        const ProvinceclosePopup = document.getElementById("ProvinceclosePopup");
-        const header = document.getElementById("header");
-        const provinceDropdown = document.getElementById("provinceDropdown");
-        const typeprovince = document.getElementById("typeprovince");
-        const contentprovince = document.getElementById("contentprovince");
+    const provincesPopup = document.getElementById("Provincespopup");
+    const ProvinceopenPopup = document.getElementById("ProvinceopenPopup");
+    const ProvinceclosePopup = document.getElementById("ProvinceclosePopup");
+    const header = document.getElementById("header");
+    const provinceDropdown = document.getElementById("provinceDropdown");
+    const typeprovince = document.getElementById("typeprovince");
+    const contentprovince = document.getElementById("contentprovince");
+    const startDateElement = document.getElementById("startDate");
+    const endDateElement = document.getElementById("endDate");
 
+    let technicalServicesData = <?php echo json_encode($customerTypeDatapertransaction); ?>;
 
-        const startDate = document.getElementById("startDate").value;
-        const endDate = document.getElementById("endDate").value;
+    function filterDataByDateRange(inputStartDate, inputEndDate) {
+        let startDate, endDate;
+        const startInput = inputStartDate.split('-');
+        const endInput = inputEndDate.split('-');
 
-        const technicalServicesData = <?php echo json_encode($customerTypeDatapertransaction); ?>;
-        const customerTypeData = technicalServicesData.filter(item =>
-            item.transaction_date >= startDate &&
-            item.transaction_date <= endDate &&
-            item.transaction_status == "Paid"
-        )
-        const provinceTransactionCounts = {};
-        customerTypeData.forEach(item => {
-            const province = item.address;
+        // Start date
+        if (startInput.length === 2) { 
+            const [startYear, startMonth] = startInput.map(Number);
+            startDate = new Date(startYear, startMonth - 1, 1);
+        } else if (startInput.length === 1) { 
+            startDate = new Date(startInput[0], 0, 1); 
+        } else {
+            startDate = new Date(inputStartDate); 
+        }
 
-            if (!provinceTransactionCounts[province]) {
-                provinceTransactionCounts[province] = 0;
-            }
+        // End date
+        if (endInput.length === 2) { 
+            const [endYear, endMonth] = endInput.map(Number);
+            endDate = new Date(endYear, endMonth, 0);
+        } else if (endInput.length === 1) { 
+            endDate = new Date(endInput[0], 11, 31); 
+        } else {
+            endDate = new Date(inputEndDate);
+        }
 
-            provinceTransactionCounts[province]++;
-        });
-
-        // Sort provinces based on transaction counts in descending order
-        const sortedProvinces = Object.keys(provinceTransactionCounts).sort((a, b) =>
-            provinceTransactionCounts[b] - provinceTransactionCounts[a]
+        return technicalServicesData.filter(item =>
+            new Date(item.transaction_date) >= startDate &&
+            new Date(item.transaction_date) <= endDate
         );
+    }
 
-        // Get the top 5 provinces
-        const topProvinces = sortedProvinces.slice(0, 5);
+    const customerstatpopup = `
+            <style>
+                .scrollable-table {
+                    height: 100%; /* Adjust the height as needed */
+                    overflow-y: auto;
+                }
+                .scrollable-table table {
+                    width: 100%;
+                    border-collapse: collapse;
+                }
+                .scrollable-table th, .scrollable-table td {
+                    border: 1px solid black;
+                    text-align: left;
+                    padding: 8px;
+                }
+                .scrollable-table tr {
+                    height: 100%;
+                }
+            </style>
+        `;
 
-        provincesPopup.addEventListener("click", () => {
-            provinceDropdown.innerHTML = '';
-            topProvinces.forEach(function(province) {
-                var option = document.createElement('option');
-                option.value = province;
-                option.text = province.charAt(0).toUpperCase() + province.slice(1);
-                provinceDropdown.add(option);
-            });
+        // Add this style to your HTML
+        document.head.insertAdjacentHTML('beforeend', customerstatpopup);
 
-            header.innerText = 'Top 5 Provinces';
-            provinceDropdown.value = topProvinces[0];
-            provinceDropdown.dispatchEvent(new Event('change'));
-            ProvinceopenPopup.style.display = "block";
-        });
-
-        provinceDropdown.addEventListener("change", function() {
-            const selectedValue = this.options[this.selectedIndex].value;
-            const formattedProvince = selectedValue.charAt(0).toUpperCase() + selectedValue.slice(1);
-
-            typeprovince.innerText = '';
-            contentprovince.innerText = '';
-
-            function updateProvinceData(provinceName) {
-                const province1data = customerTypeData.filter(item => item.address === formattedProvince);
-                const province1datafiltered = province1data.reduce((result, item) => {
-                    const existingTransactionTypeIndex = result.findIndex(entry => entry.transaction_type === item.transaction_type);
+    function updateProvinceData(customerTypeData, provinceName) {
+        const formattedProvince = provinceName.charAt(0).toUpperCase() + provinceName.slice(1);
+        const provinceData = customerTypeData.filter(item => item.address === formattedProvince);
+        const provinceDataFiltered = provinceData.reduce((result, item) => {
+            const existingTransactionTypeIndex = result.findIndex(entry => entry.transaction_type === item.transaction_type);
 
                     if (existingTransactionTypeIndex !== -1) {
                         const existingCustomerTypeIndex = result[existingTransactionTypeIndex].customer_types.findIndex(
@@ -2955,7 +2964,7 @@ $targetIncome = [
                     }
                     return dataset;
                 }
-                let province1Transactions = handleNullDataset(province1datafiltered);
+                let province1Transactions = handleNullDataset(provinceDataFiltered);
                 let sumOfAllProvince1TransactionCounts = 0;
                 let sumOfAllProvince1TransactionAmounts = 0;
                 province1Transactions.forEach(transaction => {
@@ -2965,69 +2974,101 @@ $targetIncome = [
                     });
                 });
 
-                // table
-                let tableHtml = '<table style="border-collapse: collapse; width: 100%;">';
-                tableHtml += `
-                <tr>
-                    <th style="border: 1px solid white; padding: 8px; text-align: left;">Transaction Type</th>
-                    <th style="border: 1px solid white; padding: 8px; text-align: left;">Customer Type</th>
-                    <th style="border: 1px solid white; padding: 8px; text-align: left;">Transaction Count</th>
-                    <th style="border: 1px solid white; padding: 8px; text-align: left;">Amount</th>
-                </tr>`;
+                const Provincewidths = {
+                                type: '25%',  
+                                customer: '25%',
+                                count: '25%',
+                                amount: '25%'
+                            };
 
-                // column/row each transaction type
-                province1Transactions.forEach(transaction => {
-                    let totalRowsForTransactionType = transaction.customer_types.length;
-                    transaction.customer_types.forEach((customer, customerIndex) => {
-                        tableHtml += '<tr style="border: 1px solid white;">';
-                        if (customerIndex === 0) {
-                            tableHtml += `<td rowspan="${totalRowsForTransactionType}" style="border: 1px solid white; padding: 8px;">${transaction.transaction_type}</td>`;
-                        }
-                        tableHtml += `
-                        <td style="border: 1px solid white; padding: 8px;">${customer.customer_type}</td>
-                        <td style="border: 1px solid white; padding: 8px;">${customer.transaction_count}</td>
-                        <td style="border: 1px solid white; padding: 8px;">${customer.total_amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
-                    </tr>`;
-                    });
-                });
+                            let cancelledTableHeader = `<table style="border-collapse: collapse; width: 98%;">
+                                <tr>
+                                    <th style="border: 1px solid black; padding: 8px; width: ${Provincewidths.type}; text-align: left;">Transaction Type</th>
+                                    <th style="border: 1px solid black; padding: 8px; width: ${Provincewidths.customer}; text-align: left;">Customer Type</th>
+                                    <th style="border: 1px solid black; padding: 8px; width: ${Provincewidths.count}; text-align: left;">Transaction Count</th>
+                                    <th style="border: 1px solid black; padding: 8px; width: ${Provincewidths.amount}; text-align: left;">Amount</th>
+                                </tr>
+                            </table>`;
 
-                tableHtml += '</table>';
-                typeprovince.innerHTML = "<span style='color: Red;'>" + formattedProvince + " <br>";
-                contentprovince.innerHTML = "Total " + formattedProvince + " Transaction:  <span style='color: red;'>" + sumOfAllProvince1TransactionCounts + "</span> amounting of  <span style='color: red;'>" + Number(sumOfAllProvince1TransactionAmounts).toLocaleString('en-US', {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2
-                    }) +
-                    "</span><br><br>" + tableHtml;
+                            // Start of the scrollable table body
+                            let cancelledTableScrollable = `<div class="scrollable-table"><table style="border-collapse: collapse; width: 100%;">`;
 
+        provinceDataFiltered.forEach(transaction => {
+            let totalRowsForTransactionType = transaction.customer_types.length;
+                                transaction.customer_types.forEach((customer, customerIndex) => {
+                                    cancelledTableScrollable += '<tr style="border: 1px solid black;">';
+                                    if (customerIndex === 0) {
+                                        cancelledTableScrollable += `<td rowspan="${totalRowsForTransactionType}" style="border: 1px solid black; padding: 8px; width: ${Provincewidths.type};">${transaction.transaction_type}</td>`;
+                                    }
+                                    cancelledTableScrollable += `
+                                        <td style="border: 1px solid black; padding: 8px; width: ${Provincewidths.customer};">${customer.customer_type}</td>
+                                        <td style="border: 1px solid black; padding: 8px; width: ${Provincewidths.count};">${customer.transaction_count}</td>
+                                        <td style="border: 1px solid black; padding: 8px; width: ${Provincewidths.amount};">${customer.total_amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                                    </tr>`;
+                                });
+                            });
+
+                            cancelledTableScrollable += '</table></div>';
+
+        typeprovince.innerHTML = "<span style='color: Red;'>" + formattedProvince + " <br>";
+        contentprovince.innerHTML = "Total " + formattedProvince + " Transaction: <span style='color: red;'>" + sumOfAllProvince1TransactionCounts + "</span> amounting of <span style='color: red;'>" + Number(sumOfAllProvince1TransactionAmounts).toLocaleString('en-US', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        }) + "</span><br><br>" + cancelledTableHeader + cancelledTableScrollable;
+    }
+
+    function updateDataAndPopup() {
+        const startDate = startDateElement.value;
+        const endDate = endDateElement.value;
+        const customerTypeData = filterDataByDateRange(startDate, endDate);
+
+        const provinceTransactionCounts = {};
+        customerTypeData.forEach(item => {
+            const province = item.address;
+            if (!provinceTransactionCounts[province]) {
+                provinceTransactionCounts[province] = 0;
             }
-
-            // Handling content update based on the selected province
-            switch (selectedValue) {
-                case topProvinces[0]:
-                    updateProvinceData(selectedValue);
-                    break;
-                case topProvinces[1]:
-                    updateProvinceData(selectedValue);
-                    break;
-
-                case topProvinces[2]:
-                    updateProvinceData(selectedValue);
-                    break;
-
-                case topProvinces[3]:
-                    updateProvinceData(selectedValue);
-                    break;
-
-                case topProvinces[4]:
-                    updateProvinceData(selectedValue);
-                    break;
-            }
+            provinceTransactionCounts[province]++;
         });
 
-        ProvinceclosePopup.addEventListener("click", () => {
-            ProvinceopenPopup.style.display = "none";
+        const sortedProvinces = Object.keys(provinceTransactionCounts).sort((a, b) =>
+            provinceTransactionCounts[b] - provinceTransactionCounts[a]
+        );
+
+        const topProvinces = sortedProvinces.slice(0, 5);
+
+        provinceDropdown.innerHTML = '';
+        topProvinces.forEach(function(province) {
+            var option = document.createElement('option');
+            option.value = province;
+            option.text = province.charAt(0).toUpperCase() + province.slice(1);
+            provinceDropdown.add(option);
         });
+
+        header.innerText = 'Top 5 Provinces';
+        provinceDropdown.value = topProvinces[0];
+        provinceDropdown.dispatchEvent(new Event('change'));
+    }
+
+    startDateElement.addEventListener('change', updateDataAndPopup);
+    endDateElement.addEventListener('change', updateDataAndPopup);
+
+    provinceDropdown.addEventListener("change", function() {
+        const selectedValue = this.value;
+        updateProvinceData(filterDataByDateRange(startDateElement.value, endDateElement.value), selectedValue);
     });
+
+    provincesPopup.addEventListener("click", () => {
+        updateDataAndPopup();
+        ProvinceopenPopup.style.display = "block";
+    });
+
+    ProvinceclosePopup.addEventListener("click", () => {
+        ProvinceopenPopup.style.display = "none";
+    });
+
+    updateDataAndPopup();
+});
 </script>
 
 
