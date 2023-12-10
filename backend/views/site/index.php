@@ -1368,7 +1368,7 @@ $targetIncome = [
                 </div>
 
                 <div class="navigation" style="margin-right:360px; margin-left:-20px; z-index:1000;">
-                    <label for="navigationDropdown" style="margin-left:-30px;">Navigate to:</label>
+                    <label for="navigationDropdown" style="margin-left:-35px;">Navigate to:</label>
                     <select id="navigationDropdown" onchange="navigateToSection()">
                         <option value="totaltransaction">Total Transaction Report</option>
                         <option value="totalsales">Total Income Report</option>
@@ -1398,8 +1398,8 @@ $targetIncome = [
     <div class="containers">
         <div class="datePicker">
             <label style="margin-right:5px;">From: </label>
-            <input type="date" id="startDate" class="datePicker_label" onchange="dateFilter(); updateProvince()" style="margin-right:-15px;"> <!-- look for updateProvince(response) -->
-            <label>&nbsp;&nbsp;&nbsp;&nbsp;To:</label>
+            <input type="date" id="startDate" class="datePicker_label" onchange="dateFilter(); updateProvince()" style="margin-right:-12px;"> <!-- look for updateProvince(response) -->
+            <label>&nbsp;&nbsp;&nbsp;&nbsp; To:</label>
             <input type="date" id="endDate" class="datePicker_label" onchange="dateFilter(); updateProvince()">
         </div>
     </div>
