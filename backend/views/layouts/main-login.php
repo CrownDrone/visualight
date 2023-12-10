@@ -12,6 +12,22 @@ $this->registerCssFile('https://code.ionicframework.com/ionicons/2.0.1/css/ionic
 <!DOCTYPE html>
 <html>
 
+<style>
+
+
+@font-face {
+        font-family: 'Poppins';
+        src: url('<?= Yii::$app->request->baseUrl ?>/fonts/Poppins-Light.ttf') format('truetype'),
+            url('<?= Yii::$app->request->baseUrl ?>/fonts/Poppins-Light.woff') format('woff');
+
+    }
+
+    body{
+        font-family:'Poppins';
+    }
+
+    </style>
+
 <head>
     <link rel="icon" type="image/x-icon" href="/HeaderLogs.ico">
     <title>VISUALIGHT LOG IN</title>

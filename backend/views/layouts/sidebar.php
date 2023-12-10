@@ -27,6 +27,19 @@ $defaultImagePath = Yii::getAlias('@web') . '/images/user2.jpg';
         object-fit: cover;
     }
 
+    @font-face {
+        font-family: 'Poppins';
+        src: url('<?= Yii::$app->request->baseUrl ?>/fonts/Poppins-Light.ttf') format('truetype'),
+            url('<?= Yii::$app->request->baseUrl ?>/fonts/Poppins-Light.woff') format('woff');
+
+    }
+
+    body {
+        background-color: #f8f9fa;
+        font-family:'Poppins';
+
+    }
+
 </style>
 
 <!-- <nav style="position: fixed; top: 0; height: 100%;"> -->

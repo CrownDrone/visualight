@@ -14,6 +14,7 @@ $profilePicturePath = $model->profile_picture
 $this->title = '';
 ?>
 
+
 <h4 style="color: #0362BA; font-family: Poppins; font-size: 24px; font-style: normal; font-weight: 600; line-height: normal; letter-spacing: 2.5px;">Edit Profile:</h4>
 
 <div class="user-profile-update">
@@ -98,10 +99,19 @@ $this->title = '';
         /* Use percentage */
         margin-top: 2%;
 
+        transition: background-color 0.3s, color 0.3s;
+
         border-radius: 10px;
         /* Use percentage */
 
     }
+
+    
+.upload-btn-wrapper:hover {
+    background-color: #026d98; /* Darker shade of the original color for hover */
+    color: #ffffff; /* Change text color if needed */
+    /* Add any other hover effects you desire */
+}
 
     .upload-btn {
         display: none;

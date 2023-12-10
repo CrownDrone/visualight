@@ -30,6 +30,22 @@ $this->registerJsFile($publishedRes[1] . '/control_sidebar.js', ['depends' => '\
     <?php $this->head() ?>
 </head>
 
+<style>
+
+
+@font-face {
+        font-family: 'Poppins';
+        src: url('<?= Yii::$app->request->baseUrl ?>/fonts/Poppins-Light.ttf') format('truetype'),
+            url('<?= Yii::$app->request->baseUrl ?>/fonts/Poppins-Light.woff') format('woff');
+
+    }
+
+    body{
+        font-family:'Poppins';
+    }
+
+    </style>
+
 <body class="hold-transition sidebar-mini">
     <?php $this->beginBody() ?>
 

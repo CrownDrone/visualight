@@ -10,8 +10,18 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
 ?>
 
 <style>
+
+@font-face {
+        font-family: 'Poppins';
+        src: url('<?= Yii::$app->request->baseUrl ?>/fonts/Poppins-Light.ttf') format('truetype'),
+            url('<?= Yii::$app->request->baseUrl ?>/fonts/Poppins-Light.woff') format('woff');
+
+    }
+
     body {
         background-color: #f8f9fa;
+        font-family:'Poppins';
+
     }
 
     .container {

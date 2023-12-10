@@ -21,6 +21,10 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
 
     }
 
+    body{
+                font-family:'Poppins';
+            }
+
     /* Default styles */
     .chart-container {
         position: relative;

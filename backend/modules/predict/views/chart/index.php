@@ -13,6 +13,9 @@ use yii\web\View;
 
 <style>
 
+        body{
+                font-family:'Poppins';
+            }
 
         #prediction-form {
             background-color: #fff;

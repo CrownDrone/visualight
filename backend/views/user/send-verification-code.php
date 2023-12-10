@@ -14,7 +14,7 @@ $this->registerCssFile(Url::to(['/css/custom.css']));
     body {
         background-color: #f8f9fa;
         margin: 0;
-        font-family: 'Arial', sans-serif;
+        font-family: 'Poppins';
     }
 
     .container {
