@@ -19,6 +19,10 @@ $currentIndex = Url::to(['']);
 
     }
 
+    body{
+        font-family:'Poppins';
+    }
+
     /* Default styles */
     .chart-container {
         top: 20px;
@@ -284,7 +288,7 @@ $currentIndex = Url::to(['']);
         padding-left: 1rem;
         padding-right: 1rem;
         color: white;
-        width: 7rem;
+        width: 8rem;
         /* Add display: inline-block or block if the label is not within a flex container */
         display: inline-block;
     }
@@ -1364,7 +1368,7 @@ $targetIncome = [
                 </div>
 
                 <div class="navigation" style="margin-right:360px; margin-left:-20px; z-index:1000;">
-                    <label for="navigationDropdown">Navigate to:</label>
+                    <label for="navigationDropdown" style="margin-left:-30px;">Navigate to:</label>
                     <select id="navigationDropdown" onchange="navigateToSection()">
                         <option value="totaltransaction">Total Transaction Report</option>
                         <option value="totalsales">Total Income Report</option>
@@ -1393,8 +1397,8 @@ $targetIncome = [
     </div>
     <div class="containers">
         <div class="datePicker">
-            <label>From: </label>
-            <input type="date" id="startDate" class="datePicker_label" onchange="dateFilter(); updateProvince()"> <!-- look for updateProvince(response) -->
+            <label style="margin-right:5px;">From: </label>
+            <input type="date" id="startDate" class="datePicker_label" onchange="dateFilter(); updateProvince()" style="margin-right:-15px;"> <!-- look for updateProvince(response) -->
             <label>&nbsp;&nbsp;&nbsp;&nbsp;To:</label>
             <input type="date" id="endDate" class="datePicker_label" onchange="dateFilter(); updateProvince()">
         </div>
@@ -1415,12 +1419,12 @@ $targetIncome = [
         if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
             form.style.position = "fixed";
             form.style.top = "20px"; // Add "px" for the top value
-            form.style.width = "78%";
+            form.style.width = "81%";
             form.style.height = "10%";
             form.style.zIndex = "1000";
             form.style.background = "white";
             form.style.boxShadow = "-4px 4px 8px rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.15)";
-            form.style.left = "20%";
+            form.style.left = "17%";
             toggleButton.style.display = "block";
             toggleButton.style.position = "fixed";
             toggleButton.style.top = "10px"; // Add "px" for the top value
