@@ -292,7 +292,7 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
         padding: 0.2rem 1rem;
         /* Combined padding properties */
         color: white;
-        width: 7rem;
+        width: 8rem;
         /* Adjust alignment if needed */
     }
 
