@@ -264,7 +264,7 @@ WITH RECURSIVE AllMonths AS (
 )
 SELECT
     AllMonths.first_month AS month_date,
-    IFNULL(SUM(CASE WHEN t.transaction_status = 1 OR t.transaction_status = 3 THEN 1 ELSE 0 END), 0) AS paid_and_pending_count
+    IFNULL(SUM(CASE WHEN t.transaction_status = 1  THEN 1 ELSE 0 END), 0) AS paid_and_pending_count
 FROM AllMonths
 LEFT JOIN transaction t ON DATE_FORMAT(t.transaction_date, '%Y-%m-01') = AllMonths.first_month
 GROUP BY AllMonths.first_month
@@ -315,7 +315,7 @@ WITH RECURSIVE AllMonths AS (
 )
 SELECT
     AllMonths.first_month AS month_date,
-    IFNULL(SUM(CASE WHEN t.transaction_status = 1 OR t.transaction_status = 3 THEN 1 ELSE 0 END), 0) AS paid_and_pending_count
+    IFNULL(SUM(CASE WHEN t.transaction_status = 1 THEN 1 ELSE 0 END), 0) AS paid_and_pending_count
 FROM AllMonths
 LEFT JOIN transaction t ON DATE_FORMAT(t.transaction_date, '%Y-%m-01') = AllMonths.first_month AND t.division = (SELECT id FROM division WHERE division_code = 'NMD')
 GROUP BY AllMonths.first_month
@@ -364,7 +364,7 @@ WITH RECURSIVE AllMonths AS (
 )
 SELECT
     AllMonths.first_month AS month_date,
-    IFNULL(SUM(CASE WHEN t.transaction_status = 1 OR t.transaction_status = 3 THEN 1 ELSE 0 END), 0) AS paid_and_pending_count
+    IFNULL(SUM(CASE WHEN t.transaction_status = 1 THEN 1 ELSE 0 END), 0) AS paid_and_pending_count
 FROM AllMonths
 LEFT JOIN transaction t ON DATE_FORMAT(t.transaction_date, '%Y-%m-01') = AllMonths.first_month AND t.division = (SELECT id FROM division WHERE division_code = 'STD')
 GROUP BY AllMonths.first_month
