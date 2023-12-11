@@ -1013,7 +1013,7 @@ foreach ($transactionTypeincomeData as $type) {
     $transactionTypesumincome[] = $type['total_amount'];
 }
 
-//transaction used per customer type
+
 $customerTypeDatapertransaction = (new \yii\db\Query())
     ->select([
         'ct.type as customer_type',
@@ -1023,6 +1023,8 @@ $customerTypeDatapertransaction = (new \yii\db\Query())
         'ts.status as transaction_status',
         't.transaction_date',
         'pm.method as payment_method',
+        'c.address',
+        'd.division'
     ])
     ->from('transaction t')
     ->where(['t.division' => '1',])
@@ -1031,7 +1033,8 @@ $customerTypeDatapertransaction = (new \yii\db\Query())
     ->join('INNER JOIN', 'transaction_type tt', 't.transaction_type = tt.id')
     ->join('INNER JOIN', 'transaction_status ts', 't.transaction_status = ts.id')
     ->join('INNER JOIN', 'payment_method pm', 't.payment_method = pm.id')
-    ->groupBy(['ct.type', 'tt.type', 'ts.status', 't.transaction_date', 'pm.method'])
+    ->join('INNER JOIN', 'division d', 't.division= d.id')
+    ->groupBy(['ct.type', 'tt.type', 'ts.status', 't.transaction_date', 'pm.method', 'c.address', 'd.division'])
     ->orderBy(['transaction_count' => SORT_DESC])
     ->all();
 
@@ -1041,6 +1044,8 @@ $ctamt = [0];
 $ctstatus = [''];
 $cttd = [''];
 $ctpm = [''];
+$ctaddress = [];
+$ctdivision = [];
 
 foreach ($customerTypeDatapertransaction as $type) {
     $ctpt[] = $type['customer_type'];
@@ -1048,8 +1053,23 @@ foreach ($customerTypeDatapertransaction as $type) {
     $ctamt[] = $type['total_amount'];
     $ctstatus[] = $type['transaction_status'];
     $cttd[] = $type['transaction_date'];
-    $ctpm[] = $type['payment_method']; // Store the payment_method value
+    $ctpm[] = $type['payment_method'];
+    $ctaddress[] = $type['address'];
+    $ctdivision[] = $type['division'];
 }
+
+
+$TransactionYear = (new \yii\db\Query())
+    ->select(['YEAR(t.transaction_date) as year'])
+    ->distinct()
+    ->from('transaction t')
+    ->where(['t.division' => '1',])
+    ->orderBy(['year' => SORT_ASC])
+    ->all();
+
+$distinctYears = array_column($TransactionYear, 'year');
+
+
 
 $TransactionYear = (new \yii\db\Query())
     ->select(['YEAR(t.transaction_date) as year'])
@@ -1566,6 +1586,7 @@ $targetIncome =
         const currentMonth = currentDate.getMonth();
         const currentYear = currentDate.getFullYear();
 
+
         const totaltransactionChart = document.getElementById("transaction");
         const totalsalesChart = document.getElementById("sales");
         const popup = document.getElementById("popup");
@@ -1584,7 +1605,616 @@ $targetIncome =
         const mostCustomerProvince = document.getElementById("mostCustomerProvince");
         const leastCustomerProvince = document.getElementById("leastCustomerProvince");
 
+        const startDateElements = document.getElementById("startDate");
+        const endDateElements = document.getElementById("endDate");
+     
+        startDateElements.valueAsDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+        endDateElements.valueAsDate = currentDate;
 
+    // Initialize data from PHP
+    let technicalServicesData = <?php echo json_encode($customerTypeDatapertransaction); ?>;
+    let DatacustomerType = [];
+    function getMonthDateRange(year, month) {
+            const startDate = new Date(year, month - 1, 1);
+            const endDate = new Date(year, month, 0);
+            return { startDate, endDate };
+        }
+
+        function updateData() {
+    let startDate, endDate;
+    const startInput = startDateElements.value.split('-');
+    const endInput = endDateElements.value.split('-');
+
+    // Start date
+    if (startInput.length === 2) { // Format is 'mm-yyyy'
+        const [startYear, startMonth] = startInput.map(Number);
+        startDate = new Date(startYear, startMonth - 1, 1); // First day of the start month
+    } else if (startInput.length === 1) { // Format is 'yyyy'
+        startDate = new Date(startInput[0], 0, 1); // January 1st of the year
+    } else {
+        startDate = new Date(startDateElements.value); // Full date format
+    }
+
+    // End date
+    if (endInput.length === 2) { // Format is 'mm-yyyy'
+        const [endYear, endMonth] = endInput.map(Number);
+        endDate = new Date(endYear, endMonth, 0); // Last day of the end month
+    } else if (endInput.length === 1) { // Format is 'yyyy'
+        endDate = new Date(endInput[0], 11, 31); // December 31st of the year
+    } else {
+        endDate = new Date(endDateElements.value); // Full date format
+    }
+
+    // Filter technicalServicesData based on the date range
+    DatacustomerType = technicalServicesData.filter(item =>
+        new Date(item.transaction_date) >= startDate &&
+        new Date(item.transaction_date) <= endDate
+    );
+    
+    processFilteredData();
+    processFilteredDataAmount();
+}
+
+function processFilteredData() {
+    const customerData = {};
+
+    const filteredData = DatacustomerType.filter(
+        item => item.transaction_status === 'Paid' || item.transaction_status === 'Pending'
+    );
+
+    filteredData.forEach(item => {
+        const transactionDate = item.transaction_date;
+        const transactionType = item.transaction_type;
+        const customerType = item.customer_type;
+        const address = item.address;
+        const transactionCount = Number(item.transaction_count);
+        const totalAmount = Number(item.total_amount);
+
+        if (!customerData[transactionDate]) {
+            customerData[transactionDate] = {};
+        }
+
+        if (!customerData[transactionDate][transactionType]) {
+            customerData[transactionDate][transactionType] = {};
+        }
+
+        if (!customerData[transactionDate][transactionType][customerType]) {
+            customerData[transactionDate][transactionType][customerType] = {};
+        }
+
+        if (!customerData[transactionDate][transactionType][customerType][address]) {
+            customerData[transactionDate][transactionType][customerType][address] = {
+                transaction_count: 0,
+                total_amount: 0,
+            };
+        }
+
+        customerData[transactionDate][transactionType][customerType][address].transaction_count += transactionCount;
+        customerData[transactionDate][transactionType][customerType][address].total_amount += totalAmount;
+    });
+
+    const processedData = {};
+
+for (const transactionDate in customerData) {
+    if (!processedData[transactionDate]) {
+        processedData[transactionDate] = {};
+    }
+
+    const transactionTypes = customerData[transactionDate];
+    for (const transactionType in transactionTypes) {
+        if (!processedData[transactionDate][transactionType]) {
+            processedData[transactionDate][transactionType] = {};
+        }
+
+        const customerTypes = transactionTypes[transactionType];
+        for (const customerType in customerTypes) {
+            if (!processedData[transactionDate][transactionType][customerType]) {
+                processedData[transactionDate][transactionType][customerType] = {};
+            }
+
+            const addresses = customerTypes[customerType];
+            for (const address in addresses) {
+                processedData[transactionDate][transactionType][customerType][address] = {
+                    transaction_count: addresses[address].transaction_count,
+                    total_amount: addresses[address].total_amount
+                };
+            }
+        }
+    }
+}
+
+console.log(JSON.stringify(processedData, null, 2));
+    if (!processedData || processedData.length === 0) {
+        processedData.push({
+            transaction_date: ' ',
+            transaction_type: ' ',
+            customer_type: ' ',
+            province: ' ',
+            transaction_count: 0,
+            total_amount: 0,
+        });
+    }
+
+let maxTransactionCount = 0;
+let minTransactionCount = Infinity;
+let datesWithMaxTransaction = [];
+let datesWithMinTransaction = [];
+
+function findDatesWithExtremeTransactions(customerData) {
+  Object.keys(customerData).forEach(date => {
+    let totalCountForDate = 0;
+
+    Object.keys(customerData[date]).forEach(type => {
+      Object.keys(customerData[date][type]).forEach(customerType => {
+        Object.keys(customerData[date][type][customerType]).forEach(address => {
+          totalCountForDate += customerData[date][type][customerType][address].transaction_count;
+        });
+      });
+    });
+
+    // Check for max transactions
+    if (totalCountForDate > maxTransactionCount) {
+      maxTransactionCount = totalCountForDate;
+      datesWithMaxTransaction = [date];
+    } else if (totalCountForDate === maxTransactionCount) {
+      datesWithMaxTransaction.push(date);
+    }
+
+    // Check for min transactions
+    if (totalCountForDate < minTransactionCount && totalCountForDate > 0) { // Assuming you don't want to consider days with zero transactions
+      minTransactionCount = totalCountForDate;
+      datesWithMinTransaction = [date];
+    } else if (totalCountForDate === minTransactionCount) {
+      datesWithMinTransaction.push(date);
+    }
+  });
+}
+
+findDatesWithExtremeTransactions(customerData);
+
+//Transaction Type
+let maxTransactionCountByType = 0;
+let minTransactionCountByType = Infinity;
+let maxtransactionType = [];
+let minTransactionType = [];
+
+function findTransactionTypesWithExtremeTransactions(customerData) {
+  let transactionCountByType = {};
+
+  // Calculate total transactions for each transaction type
+  Object.keys(customerData).forEach(date => {
+    Object.keys(customerData[date]).forEach(type => {
+      transactionCountByType[type] = (transactionCountByType[type] || 0);
+
+      Object.keys(customerData[date][type]).forEach(customerType => {
+        Object.keys(customerData[date][type][customerType]).forEach(address => {
+          transactionCountByType[type] += customerData[date][type][customerType][address].transaction_count;
+        });
+      });
+    });
+  });
+ 
+  Object.keys(transactionCountByType).forEach(type => {
+    const count = transactionCountByType[type];
+
+    // Max transactions
+    if (count > maxTransactionCountByType) {
+      maxTransactionCountByType = count;
+      maxtransactionType = [type];
+    } else if (count === maxTransactionCountByType) {
+        maxtransactionType.push(type);
+    }
+
+    // Min transactions 
+    if (count < minTransactionCountByType && count > 0) {
+      minTransactionCountByType = count;
+      minTransactionType = [type];
+    } else if (count === minTransactionCountByType) {
+        minTransactionType.push(type);
+    }
+  });
+}
+
+findTransactionTypesWithExtremeTransactions(customerData);
+
+//customer type
+let maxTransactionCountByCustomerType = 0;
+let minTransactionCountByCustomerType = Infinity;
+let maxCustomerTypes = [];
+let minCustomerType = [];
+
+function findCustomerTypesWithExtremeTransactions(customerData) {
+  let transactionCountByCustomerType = {};
+
+  // Calculate total transactions for each customer type
+  Object.keys(customerData).forEach(date => {
+    Object.keys(customerData[date]).forEach(type => {
+      Object.keys(customerData[date][type]).forEach(customerType => {
+        transactionCountByCustomerType[customerType] = (transactionCountByCustomerType[customerType] || 0);
+
+        Object.keys(customerData[date][type][customerType]).forEach(address => {
+          transactionCountByCustomerType[customerType] += customerData[date][type][customerType][address].transaction_count;
+        });
+      });
+    });
+  });
+
+  Object.keys(transactionCountByCustomerType).forEach(customerType => {
+    const count = transactionCountByCustomerType[customerType];
+
+    // Max transactions
+    if (count > maxTransactionCountByCustomerType) {
+      maxTransactionCountByCustomerType = count;
+      maxCustomerTypes = [customerType];
+    } else if (count === maxTransactionCountByCustomerType) {
+        maxCustomerTypes.push(customerType);
+    }
+
+    // Min transactions 
+    if (count < minTransactionCountByCustomerType && count > 0) {
+      minTransactionCountByCustomerType = count;
+      minCustomerType = [customerType];
+    } else if (count === minTransactionCountByCustomerType) {
+        minCustomerType.push(customerType);
+    }
+  });
+}
+findCustomerTypesWithExtremeTransactions(customerData);
+
+let maxTransactionCountByProvince = 0;
+let minTransactionCountByProvince = Infinity;
+let highestprovinces = [];
+let leastprovinces = [];
+
+function findProvincesWithExtremeTransactions(customerData) {
+  let transactionCountByProvince = {};
+ 
+  Object.keys(customerData).forEach(date => {
+    Object.keys(customerData[date]).forEach(type => {
+      Object.keys(customerData[date][type]).forEach(customerType => {
+        Object.keys(customerData[date][type][customerType]).forEach(province => {
+          transactionCountByProvince[province] = (transactionCountByProvince[province] || 0);
+          transactionCountByProvince[province] += customerData[date][type][customerType][province].transaction_count;
+        });
+      });
+    });
+  });
+ 
+  Object.keys(transactionCountByProvince).forEach(province => {
+    const count = transactionCountByProvince[province];
+
+    // Max transactions
+    if (count > maxTransactionCountByProvince) {
+      maxTransactionCountByProvince = count;
+      highestprovinces = [province];
+    } else if (count === maxTransactionCountByProvince) {
+      highestprovinces.push(province);
+    }
+
+    // Min transactions
+    if (count < minTransactionCountByProvince && count > 0) {
+      minTransactionCountByProvince = count;
+      leastprovinces = [province];
+    } else if (count === minTransactionCountByProvince) {
+      leastprovinces.push(province);
+    }
+  });
+}
+findProvincesWithExtremeTransactions(customerData);
+
+    //analyzation that should depends in the date filter or chart
+            highest.innerHTML = "Highest transaction: <span style='color: red;'>" + datesWithMaxTransaction.join(', ') + "</span> with <span style='color: blue;'> " + maxTransactionCount + "</span> transaction/s." ;
+            least.innerHTML = "Least transaction: <span style='color: red;'>" + datesWithMinTransaction.join(', ') + "</span> with <span style='color: blue;'> " + minTransactionCount + "</span> transaction/s.";
+            mostTransactionType.innerHTML = "Highest transaction type:  <span style='color:green;'>" + maxtransactionType.join(', ') + "</span> having  <span style='color: blue;'> " + maxTransactionCountByType + "</span> transaction/s.";
+            leastTransactionType.innerHTML =  "Least transaction type:   <span style='color:green;'>" + minTransactionType.join(', ') + "</span> having  <span style='color: blue;'> " + minTransactionCountByType + "</span> transaction/s.";
+            mostCustomerType.innerHTML =  "Highest customer type(s): <span style='color:green;'>" + maxCustomerTypes.join(', ') + "</span> having <span style='color: blue;'> " + maxTransactionCountByCustomerType + "</span> transaction/s.";
+            leastCustomerType.innerHTML = "Least customer type: <span style='color:green;'>" + minCustomerType.join(', ') + "</span> having <span style='color: blue;'> " + minTransactionCountByCustomerType + "</span> transaction/s.";
+            mostCustomerProvince.innerHTML = "Provinces with the highest transactions: <span style='color:green;'>" + highestprovinces.join(', ') + "</span> having <span style='color: blue;'> " + maxTransactionCountByProvince + "</span> transaction/s.";
+            leastCustomerProvince.innerHTML = "Provinces with the least transactions: <span style='color:green;'>" + leastprovinces.join(', ') + "</span> having <span style='color: blue;'> " + minTransactionCountByProvince + "</span> transaction/s.";
+
+    
+}
+
+function processFilteredDataAmount() {
+    const customerData = {};
+
+    const filteredData = DatacustomerType.filter(
+        item => item.transaction_status === 'Paid' || item.transaction_status === 'Pending'
+    );
+
+    filteredData.forEach(item => {
+        const transactionDate = item.transaction_date;
+        const transactionType = item.transaction_type;
+        const customerType = item.customer_type;
+        const address = item.address;
+        const transactionCount = Number(item.transaction_count);
+        const totalAmount = Number(item.total_amount);
+
+        if (!customerData[transactionDate]) {
+            customerData[transactionDate] = {};
+        }
+
+        if (!customerData[transactionDate][transactionType]) {
+            customerData[transactionDate][transactionType] = {};
+        }
+
+        if (!customerData[transactionDate][transactionType][customerType]) {
+            customerData[transactionDate][transactionType][customerType] = {};
+        }
+
+        if (!customerData[transactionDate][transactionType][customerType][address]) {
+            customerData[transactionDate][transactionType][customerType][address] = {
+                transaction_count: 0,
+                total_amount: 0,
+            };
+        }
+
+        customerData[transactionDate][transactionType][customerType][address].transaction_count += transactionCount;
+        customerData[transactionDate][transactionType][customerType][address].total_amount += totalAmount;
+    });
+
+    const processedData = {};
+
+for (const transactionDate in customerData) {
+    if (!processedData[transactionDate]) {
+        processedData[transactionDate] = {};
+    }
+
+    const transactionTypes = customerData[transactionDate];
+    for (const transactionType in transactionTypes) {
+        if (!processedData[transactionDate][transactionType]) {
+            processedData[transactionDate][transactionType] = {};
+        }
+
+        const customerTypes = transactionTypes[transactionType];
+        for (const customerType in customerTypes) {
+            if (!processedData[transactionDate][transactionType][customerType]) {
+                processedData[transactionDate][transactionType][customerType] = {};
+            }
+
+            const addresses = customerTypes[customerType];
+            for (const address in addresses) {
+                processedData[transactionDate][transactionType][customerType][address] = {
+                    transaction_count: addresses[address].transaction_count,
+                    total_amount: addresses[address].total_amount
+                };
+            }
+        }
+    }
+}
+
+console.log(JSON.stringify(processedData, null, 2));
+    if (!processedData || processedData.length === 0) {
+        processedData.push({
+            transaction_date: ' ',
+            transaction_type: ' ',
+            customer_type: ' ',
+            province: ' ',
+            transaction_count: 0,
+            total_amount: 0,
+        });
+    }
+
+//highest date
+let maxTransactionAmount = 0;
+let minTransactionAmount = Infinity;
+let datesWithMaxTransactionAmount = [];
+let datesWithMinTransactionAmount = [];
+
+function findDatesWithExtremeTransactionAmounts(customerData) {
+  Object.keys(customerData).forEach(date => {
+    let totalAmountForDate = 0;
+
+    Object.keys(customerData[date]).forEach(type => {
+      Object.keys(customerData[date][type]).forEach(customerType => {
+        Object.keys(customerData[date][type][customerType]).forEach(address => {
+          totalAmountForDate += customerData[date][type][customerType][address].total_amount;
+        });
+      });
+    });
+
+    // Check for max transaction amount
+    if (totalAmountForDate > maxTransactionAmount) {
+      maxTransactionAmount = totalAmountForDate;
+      datesWithMaxTransactionAmount = [date];
+    } else if (totalAmountForDate === maxTransactionAmount) {
+      datesWithMaxTransactionAmount.push(date);
+    }
+
+    // Check for min transaction amount
+    if (totalAmountForDate < minTransactionAmount && totalAmountForDate > 0) {
+      minTransactionAmount = totalAmountForDate;
+      datesWithMinTransactionAmount = [date];
+    } else if (totalAmountForDate === minTransactionAmount) {
+      datesWithMinTransactionAmount.push(date);
+    }
+  });
+}
+
+findDatesWithExtremeTransactionAmounts(customerData);
+
+//transaction type income
+let maxTransactionAmountByType = 0;
+let minTransactionAmountByType = Infinity;
+let maxTransactionTypeByAmount = [];
+let minTransactionTypeByAmount = [];
+
+function findTransactionTypesWithExtremeTransactionAmounts(customerData) {
+  let transactionAmountByType = {};
+
+  Object.keys(customerData).forEach(date => {
+    Object.keys(customerData[date]).forEach(type => {
+      transactionAmountByType[type] = (transactionAmountByType[type] || 0);
+
+      Object.keys(customerData[date][type]).forEach(customerType => {
+        Object.keys(customerData[date][type][customerType]).forEach(address => {
+          transactionAmountByType[type] += customerData[date][type][customerType][address].total_amount;
+        });
+      });
+    });
+  });
+
+  Object.keys(transactionAmountByType).forEach(type => {
+    const amount = transactionAmountByType[type];
+
+    // Max transaction amount
+    if (amount > maxTransactionAmountByType) {
+      maxTransactionAmountByType = amount;
+      maxTransactionTypeByAmount = [type];
+    } else if (amount === maxTransactionAmountByType) {
+      maxTransactionTypeByAmount.push(type);
+    }
+
+    // Min transaction amount
+    if (amount < minTransactionAmountByType && amount > 0) {
+      minTransactionAmountByType = amount;
+      minTransactionTypeByAmount = [type];
+    } else if (amount === minTransactionAmountByType) {
+      minTransactionTypeByAmount.push(type);
+    }
+  });
+}
+findTransactionTypesWithExtremeTransactionAmounts(customerData);
+
+//customer type income 
+let maxTransactionAmountByCustomerType = 0;
+let minTransactionAmountByCustomerType = Infinity;
+let maxCustomerTypeByAmount = [];
+let minCustomerTypeByAmount = [];
+
+function findCustomerTypesWithExtremeTransactionAmounts(customerData) {
+  let transactionAmountByCustomerType = {};
+
+  Object.keys(customerData).forEach(date => {
+    Object.keys(customerData[date]).forEach(type => {
+      Object.keys(customerData[date][type]).forEach(customerType => {
+        transactionAmountByCustomerType[customerType] = (transactionAmountByCustomerType[customerType] || 0);
+
+        Object.keys(customerData[date][type][customerType]).forEach(address => {
+          transactionAmountByCustomerType[customerType] += customerData[date][type][customerType][address].total_amount;
+        });
+      });
+    });
+  });
+
+  Object.keys(transactionAmountByCustomerType).forEach(customerType => {
+    const amount = transactionAmountByCustomerType[customerType];
+
+    // Max transaction amount
+    if (amount > maxTransactionAmountByCustomerType) {
+      maxTransactionAmountByCustomerType = amount;
+      maxCustomerTypeByAmount = [customerType];
+    } else if (amount === maxTransactionAmountByCustomerType) {
+      maxCustomerTypeByAmount.push(customerType);
+    }
+
+    // Min transaction amount
+    if (amount < minTransactionAmountByCustomerType && amount > 0) {
+      minTransactionAmountByCustomerType = amount;
+      minCustomerTypeByAmount = [customerType];
+    } else if (amount === minTransactionAmountByCustomerType) {
+      minCustomerTypeByAmount.push(customerType);
+    }
+  });
+}
+findCustomerTypesWithExtremeTransactionAmounts(customerData);
+
+//province income
+let maxTransactionAmountByProvince = 0;
+let minTransactionAmountByProvince = Infinity;
+let highestProvincesByAmount = [];
+let leastProvincesByAmount = [];
+
+function findProvincesWithExtremeTransactionAmounts(customerData) {
+  let transactionAmountByProvince = {};
+
+  // Calculate total transaction amounts for each province
+  Object.keys(customerData).forEach(date => {
+    Object.keys(customerData[date]).forEach(type => {
+      Object.keys(customerData[date][type]).forEach(customerType => {
+        Object.keys(customerData[date][type][customerType]).forEach(province => {
+          transactionAmountByProvince[province] = (transactionAmountByProvince[province] || 0);
+          transactionAmountByProvince[province] += customerData[date][type][customerType][province].total_amount;
+        });
+      });
+    });
+  });
+
+  // Find the max and min transaction amounts for provinces
+  Object.keys(transactionAmountByProvince).forEach(province => {
+    const amount = transactionAmountByProvince[province];
+
+    // Max transaction amount
+    if (amount > maxTransactionAmountByProvince) {
+      maxTransactionAmountByProvince = amount;
+      highestProvincesByAmount = [province];
+    } else if (amount === maxTransactionAmountByProvince) {
+      highestProvincesByAmount.push(province);
+    }
+
+    // Min transaction amount (ignoring provinces with zero transactions)
+    if (amount < minTransactionAmountByProvince && amount > 0) {
+      minTransactionAmountByProvince = amount;
+      leastProvincesByAmount = [province];
+    } else if (amount === minTransactionAmountByProvince) {
+      leastProvincesByAmount.push(province);
+    }
+  });
+}
+findProvincesWithExtremeTransactionAmounts(customerData);
+
+
+    //analyzation that should depends in the date filter or chart
+            highest.innerHTML = "Highest income: <span style='color: red;'>" + datesWithMaxTransactionAmount.join(', ') + "</span> with <span style='color: blue;'> " + Number(maxTransactionAmount).toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }) + "</span> total income.";
+            least.innerHTML = "Least income: <span style='color: red;'>" + datesWithMinTransactionAmount.join(', ') + "</span> with <span style='color: blue;'> " + Number(minTransactionAmount).toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }) + "</span> total income.";
+            mostTransactionType.innerHTML = "Highest transaction type:  <span style='color:green;'>" + maxTransactionTypeByAmount.join(', ') + "</span> having  <span style='color: blue;'> " + Number(maxTransactionAmountByType).toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }) + "</span> total income.";
+            leastTransactionType.innerHTML = "Least transaction type:   <span style='color:green;'>" + minTransactionTypeByAmount.join(', ') + "</span> having  <span style='color: blue;'> " + Number(minTransactionAmountByType).toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }) + "</span> total income.";
+            mostCustomerType.innerHTML = "Highest customer type(s): <span style='color:green;'>" + maxCustomerTypeByAmount.join(', ') + "</span> having <span style='color: blue;'> " + Number(maxTransactionAmountByCustomerType).toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }) + "</span> total income.";
+            leastCustomerType.innerHTML = "Least customer type: <span style='color:green;'>" + minCustomerTypeByAmount.join(', ') + "</span> having <span style='color: blue;'> " + Number(minTransactionAmountByCustomerType).toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }) + "</span> total income.";
+            mostCustomerProvince.innerHTML = "Provinces with the highest income: <span style='color:green;'>" + highestProvincesByAmount.join(', ') + "</span> having <span style='color: blue;'> " + Number(maxTransactionAmountByProvince).toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }) + "</span>.";
+            leastCustomerProvince.innerHTML = "Provinces with the least income: <span style='color:green;'>" + leastProvincesByAmount.join(', ') + "</span> having <span style='color: blue;'> " + Number(minTransactionAmountByProvince).toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }) + "</span>.";    
+}
+
+function refreshContent() 
+{
+    processFilteredData();
+    processFilteredDataAmount();
+}
+startDateElements.addEventListener('change', function() {
+        updateData();
+        refreshContent();
+    });
+endDateElements.addEventListener('change', function() {
+        updateData();
+        refreshContent();
+    });
+
+    updateData();
+    refreshContent();
         //totaltransaction popup
         totaltransactionChart.addEventListener("click", () => {
 
@@ -1712,135 +2342,11 @@ $targetIncome =
             targetTransaction.innerHTML = "Target transaction for this quarter is <span style='color: blue;'>" + Target;
             percentTransaction.innerHTML = "Achieved <span style='color: " + percentagecolor + ";'>" + percentage + "%</span> of target transaction.";
             PopupHeader.innerHTML = "Total Transaction";
-
-            // Extract transactionlabel and transactiondata from the PHP
-            const transactionlabel = transaction.labels;
-            const transactiondata = transaction.datasets;
-
-            // Initialize variables for overall highest and least values
-            let overallHighestTransactionCount = 0;
-            let overallLeastTransactionCount = Infinity;
-            let overallHighestTransactionDate = null;
-            let overallLeastTransactionDate = null;
-
-            // Iterate through the datasets
-            transactiondata.forEach(dataset => {
-                // Find the highest transaction count in the dataset
-                const highestTransactionCountInDataset = Math.max(...dataset.data);
-
-                // Find the least transaction count in the dataset
-                const leastTransactionCountInDataset = Math.min(...dataset.data);
-
-                // Check for the overall highest transaction count
-                if (highestTransactionCountInDataset > overallHighestTransactionCount) {
-                    overallHighestTransactionCount = highestTransactionCountInDataset;
-                    overallHighestTransactionDate = transactionlabel[dataset.data.indexOf(overallHighestTransactionCount)];
-                }
-
-                // Check for the overall least transaction count
-                if (leastTransactionCountInDataset < overallLeastTransactionCount) {
-                    overallLeastTransactionCount = leastTransactionCountInDataset;
-                    overallLeastTransactionDate = transactionlabel[dataset.data.indexOf(overallLeastTransactionCount)];
-                }
-            });
-
-
-            //Transaction type dataset
-            const transactionTypeData = <?php
-                                        $data = array();
-                                        for ($i = 0; $i < count($transactionType); $i++) {
-                                            $data[] = array('label' => $transactionType[$i], 'data' => $transactionTypecounts[$i]);
-                                        }
-                                        echo json_encode($data);
-                                        ?>;
-            if (transactionTypeData.length === 0) {
-                transactionTypeData.push({
-                    label: 'No customer saved',
-                    data: 0
-                });
-            }
-
-            const maxtransactionTypeData = transactionTypeData.reduce((max, obj) => (obj.data > max.data ? obj : max), {
-                data: -Infinity
-            });
-            const maxData = maxtransactionTypeData.data;
-            const maxtransactionType = transactionTypeData.filter(obj => obj.data === maxData).map(obj => obj.label);
-            const minTransactionTypeData = transactionTypeData.reduce((min, obj) => (obj.data < min.data ? obj : min), {
-                data: Infinity
-            });
-            const minData = minTransactionTypeData.data;
-            const minTransactionType = transactionTypeData.filter(obj => obj.data === minData).map(obj => obj.label);
-
-            const customerTypeData = <?php
-                                        $data = array();
-                                        for ($i = 0; $i < count($customerTypetransaction); $i++) {
-                                            $data[] = array('label' => $customerTypetransaction[$i], 'data' => $customerTypecounttransaction[$i]);
-                                        }
-                                        echo json_encode($data);
-                                        ?>;
-            if (customerTypeData.length === 0) {
-                customerTypeData.push({
-                    label: 'No customer saved',
-                    data: 0
-                });
-            }
-
-            const maxCustomerTypeData = customerTypeData.reduce((max, obj) => (obj.data >= max.data ? obj : max), {
-                data: -Infinity
-            });
-            const maxCustomerData = maxCustomerTypeData.data;
-            const maxCustomerTypes = customerTypeData.filter(obj => obj.data === maxCustomerData).map(obj => obj.label);
-            const minCustomerTypeData = customerTypeData.reduce((min, obj) => (obj.data <= min.data ? obj : min), {
-                data: Infinity
-            });
-            const minCustomerData = minCustomerTypeData.data;
-            const minCustomerType = customerTypeData.filter(obj => obj.data === minCustomerData).map(obj => obj.label);
-
-            const Province = {
-                data: province.datasets,
-                labels: province.labels,
-            };
-
-            // Check if the data array is empty
-            if (Province.data.length === 0) {
-                const defaultLabel = 'none';
-                const defaultData = 0;
-
-                mostCustomerProvince.innerHTML = "Provinces with the highest transactions: <span style='color:green;'>" + defaultLabel + "</span> having <span style='color: blue;'> " + defaultData + "</span> transaction/s.";
-                leastCustomerProvince.innerHTML = "Provinces with the least transactions: <span style='color:green;'>" + defaultLabel + "</span> having <span style='color: blue;'> " + defaultData + "</span> transaction/s.";
-            } else {
-                const tolerance = 0.0001;
-
-                const highestprovincedata = Math.max(...Province.data);
-                const leastprovincedata = Math.min(...Province.data);
-
-                const highestprovinces = [];
-                const leastprovinces = [];
-
-                Province.labels.forEach((label, index) => {
-                    if (Math.abs(Province.data[index] - highestprovincedata) < tolerance) {
-                        highestprovinces.push(label);
-                    }
-
-                    if (Math.abs(Province.data[index] - leastprovincedata) < tolerance) {
-                        leastprovinces.push(label);
-                    }
-                });
-
-                mostCustomerProvince.innerHTML = "Provinces with the highest transactions: <span style='color:green;'>" + highestprovinces.join(', ') + "</span> having <span style='color: blue;'> " + highestprovincedata + "</span> transaction/s.";
-                leastCustomerProvince.innerHTML = "Provinces with the least transactions: <span style='color:green;'>" + leastprovinces.join(', ') + "</span> having <span style='color: blue;'> " + leastprovincedata + "</span> transaction/s.";
-            }
-
-
-
-            // Display the results in your HTML elements
-            highest.innerHTML = "Highest transaction: <span style='color: red;'>" + overallHighestTransactionDate + "</span> with <span style='color: blue;'> " + overallHighestTransactionCount + "</span> transaction/s.";
-            least.innerHTML = "Least transaction: <span style='color: red;'>" + overallLeastTransactionDate + "</span> with <span style='color: blue;'> " + overallLeastTransactionCount + "</span> transaction/s.";
-            mostTransactionType.innerHTML = "Highest transaction type:  <span style='color:green;'>" + maxtransactionType.join(', ') + "</span> having  <span style='color: blue;'> " + maxData + "</span> transaction/s.";
-            leastTransactionType.innerHTML = "Least transaction type:   <span style='color:green;'>" + minTransactionType.join(', ') + "</span> having  <span style='color: blue;'> " + minData + "</span> transaction/s.";
-            mostCustomerType.innerHTML = "Highest customer type(s): <span style='color:green;'>" + maxCustomerTypes.join(', ') + "</span> having <span style='color: blue;'> " + maxCustomerData + "</span> transaction/s.";
-            leastCustomerType.innerHTML = "Least customer type: <span style='color:green;'>" + minCustomerType.join(', ') + "</span> having <span style='color: blue;'> " + minCustomerData + "</span> transaction/s.";
+            processFilteredData();
         });
+        updateData();
+        refreshContent();
+ 
 
         closePopup.addEventListener("click", () => {
             // Close the pop-up when the close button is clicked
@@ -1980,167 +2486,10 @@ $targetIncome =
             targetTransaction.innerHTML = "Target income for this quarter is <span style='color: blue;'>" + Target;
             percentTransaction.innerHTML = "Achieved <span style='color: " + percentagecolor + ";'>" + percentage + "%</span> of target income";
             PopupHeader.innerHTML = "Total Income";
-
-
-            // Extract incomelabel and incomedata from the PHP data
-            const incomelabel = income.labels;
-            const incomedata = income.datasets;
-
-            // Initialize variables for overall highest and least values
-            let overallHighestIncome = 0;
-            let overallLeastIncome = Infinity;
-            let overallHighestIncomeDate = null;
-            let overallLeastIncomeDate = null;
-
-            // Iterate through the datasets
-            incomedata.forEach(dataset => {
-                // Find the highest income in the dataset
-                const highestIncomeInDataset = Math.max(...dataset.data);
-
-                // Find the least income in the dataset
-                const leastIncomeInDataset = Math.min(...dataset.data);
-
-                // Check for the overall highest income
-                if (highestIncomeInDataset > overallHighestIncome) {
-                    overallHighestIncome = highestIncomeInDataset;
-                    overallHighestIncomeDate = incomelabel[dataset.data.indexOf(overallHighestIncome)];
-                }
-
-                // Check for the overall least income
-                if (leastIncomeInDataset < overallLeastIncome) {
-                    overallLeastIncome = leastIncomeInDataset;
-                    overallLeastIncomeDate = incomelabel[dataset.data.indexOf(overallLeastIncome)];
-                }
-            });
-
-            const transactionTypeData = <?php
-                                        $data = array();
-                                        for ($i = 0; $i < count($transactionTypeincome); $i++) {
-                                            $data[] = array('label' => $transactionTypeincome[$i], 'data' => $transactionTypesumincome[$i]);
-                                        }
-                                        echo json_encode($data);
-                                        ?>;
-            if (transactionTypeData.length === 0) {
-                transactionTypeData.push({
-                    label: 'No customer saved',
-                    data: 0
-                });
-            }
-
-
-            const maxtransactionTypeData = transactionTypeData.reduce((max, obj) => (obj.data > max.data ? obj : max), {
-                data: -Infinity
-            });
-            const maxData = maxtransactionTypeData.data;
-            const maxtransactionType = transactionTypeData.filter(obj => obj.data === maxData).map(obj => obj.label);
-            const minTransactionTypeData = transactionTypeData.reduce((min, obj) => (obj.data < min.data ? obj : min), {
-                data: Infinity
-            });
-            const minData = minTransactionTypeData.data;
-            const minTransactionType = transactionTypeData.filter(obj => obj.data === minData).map(obj => obj.label);
-
-            const customerTypeData = <?php
-                                        $data = array();
-                                        for ($i = 0; $i < count($customerTypeincome); $i++) {
-                                            $data[] = array('label' => $customerTypeincome[$i], 'data' => $customerTypecountincome[$i]);
-                                        }
-                                        echo json_encode($data);
-                                        ?>;
-            if (customerTypeData.length === 0) {
-                customerTypeData.push({
-                    label: 'No customer saved',
-                    data: 0
-                });
-            }
-
-
-            const maxCustomerTypeData = customerTypeData.reduce((max, obj) => (obj.data >= max.data ? obj : max), {
-                data: -Infinity
-            });
-            const maxCustomerData = maxCustomerTypeData.data;
-            const maxCustomerTypes = customerTypeData.filter(obj => obj.data === maxCustomerData).map(obj => obj.label);
-            const minCustomerTypeData = customerTypeData.reduce((min, obj) => (obj.data <= min.data ? obj : min), {
-                data: Infinity
-            });
-            const minCustomerData = minCustomerTypeData.data;
-            const minCustomerType = customerTypeData.filter(obj => obj.data === minCustomerData).map(obj => obj.label);
-
-            const Province = {
-                data: provinceincome.datasets,
-                labels: provinceincome.labels,
-            };
-
-            // Check if the data array is empty
-            if (Province.data.length === 0) {
-                const defaultLabel = 'none';
-                const defaultData = 0;
-
-                mostCustomerProvince.innerHTML = "Provinces with the highest income: <span style='color:green;'>" + defaultLabel + "</span> having <span style='color: blue;'> " + Number(defaultData).toLocaleString('en-US', {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2
-                }) + "</span> total income.";
-                leastCustomerProvince.innerHTML = "Provinces with the least income: <span style='color:green;'>" + defaultLabel + "</span> having <span style='color: blue;'> " + Number(defaultData).toLocaleString('en-US', {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2
-                }) + "</span> total income.";
-            } else {
-                const tolerance = 0.0001;
-
-                const highestprovincedata = Math.max(...Province.data);
-                const leastprovincedata = Math.min(...Province.data);
-
-                const highestprovinces = [];
-                const leastprovinces = [];
-
-                Province.labels.forEach((label, index) => {
-                    if (Math.abs(Province.data[index] - highestprovincedata) < tolerance) {
-                        highestprovinces.push(label);
-                    }
-
-                    if (Math.abs(Province.data[index] - leastprovincedata) < tolerance) {
-                        leastprovinces.push(label);
-                    }
-                });
-
-                mostCustomerProvince.innerHTML = "Provinces with the highest income: <span style='color:green;'>" + highestprovinces.join(', ') + "</span> having <span style='color: blue;'> " + Number(highestprovincedata).toLocaleString('en-US', {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2
-                }) + "</span> total income.";
-                leastCustomerProvince.innerHTML = "Provinces with the least income: <span style='color:green;'>" + leastprovinces.join(', ') + "</span> having <span style='color: blue;'> " + Number(leastprovincedata).toLocaleString('en-US', {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2
-                }) + "</span> total income.";
-            }
-
-            highest.innerHTML = "Highest income: <span style='color: red;'>" + overallHighestIncomeDate + "</span> with <span style='color: blue;'> " + Number(overallHighestIncome).toLocaleString('en-US', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-            }) + "</span>.";
-            least.innerHTML = "Least income: <span style='color: red;'>" + overallLeastIncomeDate + "</span> with <span style='color: blue;'> " + Number(overallLeastIncome).toLocaleString('en-US', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-            }) + "</span>.";
-            mostTransactionType.innerHTML = "Highest transaction type:  <span style='color:green;'>" + maxtransactionType.join(', ') + "</span> having  <span style='color: blue;'> " + Number(maxData).toLocaleString('en-US', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-            }) + "</span> total income.";
-            leastTransactionType.innerHTML = "Least transaction type:   <span style='color:green;'>" + minTransactionType.join(', ') + "</span> having  <span style='color: blue;'> " + Number(minData).toLocaleString('en-US', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-            }) + "</span> total income.";
-            mostCustomerType.innerHTML = "Highest customer type(s): <span style='color:green;'>" + maxCustomerTypes.join(', ') + "</span> having <span style='color: blue;'> " + Number(maxCustomerData).toLocaleString('en-US', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-            }) + "</span> total income.";
-            leastCustomerType.innerHTML = "Least customer type: <span style='color:green;'>" + minCustomerType.join(', ') + "</span> having <span style='color: blue;'> " + Number(minCustomerData).toLocaleString('en-US', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-            }) + "</span> total income.";
-
-
+            processFilteredDataAmount();
         });
-
-
+        updateData();
+        refreshContent();
         closePopup.addEventListener("click", () => {
             // Close the pop-up when the close button is clicked
             popup.style.display = "none";
@@ -2514,26 +2863,260 @@ $targetIncome =
         </div>
 
         <div class="chart-container">
-            <p class="reportTitle" id=" ">Total Customers per Province</p>
-            <canvas id="Provinces"></canvas>
+        <p class="reportTitle" id="Provincespopup">Total Customers per Province</p>
+            <canvas id="Provinces" width="100%"></canvas>
         </div>
     </div>
 </div>
 
-<!-- <div class="chart-container" style="width: 47%; text-align: center;">
-                <p class="reportTitle" id=" ">Type of Customers per Province</p>
-                    <canvas id="TCProvinces"></canvas>
-            </div>
-            <div class="chart-container" style="width: 47%; text-align: center;">
-                <p class="reportTitle" id=" ">Type of Transaction per Province</p>
-                <div class="containerBody">
-                    <canvas id="TTProvinces"></canvas>
-                </div>
+<div class="popup" id="ProvinceopenPopup">
+    <div class="popup-content" style="width: 50%; height:auto">
+        <span class="close" id="ProvinceclosePopup">&times;</span>
+
+        <h1 id="header"></h1>
+        <h5>Paid Transactions</h5>
+
+        <div style="text-align: left; margin: 0 auto; width: 80%;">
+            <label for="transactionTypeDropdown">Top 5 Provinces</label>
+            <select id="provinceDropdown">
+            </select> <br><br>
+
+
+            <div style="text-align: left; margin: 0 auto; width: 80%;">
+                <h4 id="typeprovince"></h4>
+                <p id="contentprovince"></p>
+
             </div>
         </div>
+    </div>
 
-</div> -->
+</div>
 
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    const provincesPopup = document.getElementById("Provincespopup");
+    const ProvinceopenPopup = document.getElementById("ProvinceopenPopup");
+    const ProvinceclosePopup = document.getElementById("ProvinceclosePopup");
+    const header = document.getElementById("header");
+    const provinceDropdown = document.getElementById("provinceDropdown");
+    const typeprovince = document.getElementById("typeprovince");
+    const contentprovince = document.getElementById("contentprovince");
+    const startDateElement = document.getElementById("startDate");
+    const endDateElement = document.getElementById("endDate");
+
+    let technicalServicesData = <?php echo json_encode($customerTypeDatapertransaction); ?>;
+
+    function filterDataByDateRange(inputStartDate, inputEndDate) {
+        let startDate, endDate;
+        const startInput = inputStartDate.split('-');
+        const endInput = inputEndDate.split('-');
+
+        // Start date
+        if (startInput.length === 2) { 
+            const [startYear, startMonth] = startInput.map(Number);
+            startDate = new Date(startYear, startMonth - 1, 1);
+        } else if (startInput.length === 1) { 
+            startDate = new Date(startInput[0], 0, 1); 
+        } else {
+            startDate = new Date(inputStartDate); 
+        }
+
+        // End date
+        if (endInput.length === 2) { 
+            const [endYear, endMonth] = endInput.map(Number);
+            endDate = new Date(endYear, endMonth, 0);
+        } else if (endInput.length === 1) { 
+            endDate = new Date(endInput[0], 11, 31); 
+        } else {
+            endDate = new Date(inputEndDate);
+        }
+
+        return technicalServicesData.filter(item =>
+            new Date(item.transaction_date) >= startDate &&
+            new Date(item.transaction_date) <= endDate
+        );
+    }
+
+    const customerstatpopup = `
+            <style>
+                .scrollable-table {
+                    height: 20rem; /* Adjust the height as needed */
+                    overflow-y: auto;
+                }
+                .scrollable-table table {
+                    width: 100%;
+                    border-collapse: collapse;
+                }
+                .scrollable-table th, .scrollable-table td {
+                    border: 1px solid black;
+                    text-align: left;
+                    padding: 8px;
+                }
+                .scrollable-table tr {
+                    height: 100%;
+                }
+            </style>
+        `;
+
+        // Add this style to your HTML
+        document.head.insertAdjacentHTML('beforeend', customerstatpopup);
+
+    function updateProvinceData(customerTypeData, provinceName) {
+        const formattedProvince = provinceName.charAt(0).toUpperCase() + provinceName.slice(1);
+        const provinceData = customerTypeData.filter(item => item.address === formattedProvince);
+        const provinceDataFiltered = provinceData.reduce((result, item) => {
+            const existingTransactionTypeIndex = result.findIndex(entry => entry.transaction_type === item.transaction_type);
+
+                    if (existingTransactionTypeIndex !== -1) {
+                        const existingCustomerTypeIndex = result[existingTransactionTypeIndex].customer_types.findIndex(
+                            customer => customer.customer_type === item.customer_type
+                        );
+
+                        if (existingCustomerTypeIndex !== -1) {
+                            result[existingTransactionTypeIndex].customer_types[existingCustomerTypeIndex].transaction_count += Number(item.transaction_count);
+                            result[existingTransactionTypeIndex].customer_types[existingCustomerTypeIndex].total_amount += Number(item.total_amount);
+                        } else {
+                            result[existingTransactionTypeIndex].customer_types.push({
+                                customer_type: item.customer_type,
+                                transaction_count: Number(item.transaction_count),
+                                total_amount: Number(item.total_amount)
+                            });
+                        }
+                    } else {
+                        result.push({
+                            transaction_type: item.transaction_type,
+                            customer_types: [{
+                                customer_type: item.customer_type,
+                                transaction_count: Number(item.transaction_count),
+                                total_amount: Number(item.total_amount)
+                            }]
+                        });
+                    }
+
+                    return result;
+                }, []);
+
+                // if null or empty dataset
+                function handleNullDataset(dataset) {
+                    if (!dataset || dataset.length === 0) {
+                        return [{
+                            transaction_type: ' ',
+                            customer_types: [{
+                                customer_type: ' ',
+                                transaction_count: 0,
+                                total_amount: 0
+                            }]
+                        }];
+                    }
+                    return dataset;
+                }
+                let province1Transactions = handleNullDataset(provinceDataFiltered);
+                let sumOfAllProvince1TransactionCounts = 0;
+                let sumOfAllProvince1TransactionAmounts = 0;
+                province1Transactions.forEach(transaction => {
+                    transaction.customer_types.forEach(customer => {
+                        sumOfAllProvince1TransactionCounts += customer.transaction_count;
+                        sumOfAllProvince1TransactionAmounts += customer.total_amount;
+                    });
+                });
+
+                const Provincewidths = {
+                                type: '25%',  
+                                customer: '25%',
+                                count: '25%',
+                                amount: '25%'
+                            };
+
+                            let cancelledTableHeader = `<table style="border-collapse: collapse; width: 98%;">
+                                <tr>
+                                    <th style="border: 1px solid black; padding: 8px; width: ${Provincewidths.type}; text-align: left;">Transaction Type</th>
+                                    <th style="border: 1px solid black; padding: 8px; width: ${Provincewidths.customer}; text-align: left;">Customer Type</th>
+                                    <th style="border: 1px solid black; padding: 8px; width: ${Provincewidths.count}; text-align: left;">Transaction Count</th>
+                                    <th style="border: 1px solid black; padding: 8px; width: ${Provincewidths.amount}; text-align: left;">Amount</th>
+                                </tr>
+                            </table>`;
+
+                            // Start of the scrollable table body
+                            let cancelledTableScrollable = `<div class="scrollable-table"><table style="border-collapse: collapse; width: 100%;">`;
+
+        provinceDataFiltered.forEach(transaction => {
+            let totalRowsForTransactionType = transaction.customer_types.length;
+                                transaction.customer_types.forEach((customer, customerIndex) => {
+                                    cancelledTableScrollable += '<tr style="border: 1px solid black;">';
+                                    if (customerIndex === 0) {
+                                        cancelledTableScrollable += `<td rowspan="${totalRowsForTransactionType}" style="border: 1px solid black; padding: 8px; width: ${Provincewidths.type};">${transaction.transaction_type}</td>`;
+                                    }
+                                    cancelledTableScrollable += `
+                                        <td style="border: 1px solid black; padding: 8px; width: ${Provincewidths.customer};">${customer.customer_type}</td>
+                                        <td style="border: 1px solid black; padding: 8px; width: ${Provincewidths.count};">${customer.transaction_count}</td>
+                                        <td style="border: 1px solid black; padding: 8px; width: ${Provincewidths.amount};">${customer.total_amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                                    </tr>`;
+                                });
+                            });
+
+                            cancelledTableScrollable += '</table></div>';
+
+        typeprovince.innerHTML = "<span style='color: Red;'>" + formattedProvince + " <br>";
+        contentprovince.innerHTML = "Total " + formattedProvince + " Transaction: <span style='color: red;'>" + sumOfAllProvince1TransactionCounts + "</span> amounting of <span style='color: red;'>" + Number(sumOfAllProvince1TransactionAmounts).toLocaleString('en-US', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        }) + "</span><br><br>" + cancelledTableHeader + cancelledTableScrollable;
+    }
+
+    function updateDataAndPopup() {
+        const startDate = startDateElement.value;
+        const endDate = endDateElement.value;
+        const customerTypeData = filterDataByDateRange(startDate, endDate);
+
+        const provinceTransactionCounts = {};
+        customerTypeData.forEach(item => {
+            const province = item.address;
+            if (!provinceTransactionCounts[province]) {
+                provinceTransactionCounts[province] = 0;
+            }
+            provinceTransactionCounts[province]++;
+        });
+
+        const sortedProvinces = Object.keys(provinceTransactionCounts).sort((a, b) =>
+            provinceTransactionCounts[b] - provinceTransactionCounts[a]
+        );
+
+        const topProvinces = sortedProvinces.slice(0, 5);
+
+        provinceDropdown.innerHTML = '';
+        topProvinces.forEach(function(province) {
+            var option = document.createElement('option');
+            option.value = province;
+            option.text = province.charAt(0).toUpperCase() + province.slice(1);
+            provinceDropdown.add(option);
+        });
+
+        header.innerText = 'Top 5 Provinces';
+        provinceDropdown.value = topProvinces[0];
+        provinceDropdown.dispatchEvent(new Event('change'));
+    }
+
+    startDateElement.addEventListener('change', updateDataAndPopup);
+    endDateElement.addEventListener('change', updateDataAndPopup);
+
+    provinceDropdown.addEventListener("change", function() {
+        const selectedValue = this.value;
+        updateProvinceData(filterDataByDateRange(startDateElement.value, endDateElement.value), selectedValue);
+    });
+
+    provincesPopup.addEventListener("click", () => {
+        updateDataAndPopup();
+        ProvinceopenPopup.style.display = "block";
+    });
+
+    ProvinceclosePopup.addEventListener("click", () => {
+        ProvinceopenPopup.style.display = "none";
+    });
+
+    updateDataAndPopup();
+});
+</script>
 
 <!-- scriptfor customers graph -->
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
@@ -2612,28 +3195,1274 @@ $targetIncome =
         </div>
     </div>
 
-    <div class="graph2">
+    <div class="graph2" id="transaction" style="margin-top:20px">
         <div class="chart-container2">
-            <p class="reportTitle" id=" ">Transaction Status</p>
+            <p class="reportTitle" id="transactionStatuspopup">Transaction Status</p>
             <canvas id="transactionStatus"></canvas>
         </div>
         <div class="chart-container2">
-            <p class="reportTitle" id=" ">Payment Method</p>
+            <p class="reportTitle" id="paymentMethodpopup">Payment Method</p>
             <canvas id="paymendtMethod"></canvas>
         </div>
     </div>
     <div class="graph2">
         <div class="chart-container2">
-            <p class="reportTitle" id=" ">Type of Transaction</p>
+            <p class="reportTitle" id="transactionTypepoppup">Type of Transaction</p>
             <canvas id="transactionType"></canvas>
         </div>
 
         <div class="chart-container2">
-            <p class="reportTitle" id=" ">Type of Customers</p>
+            <p class="reportTitle" id="customerTypepoppup">Type of Customers</p>
             <canvas id="customerType"></canvas>
         </div>
     </div>
+
+ <!-- Pop-up for transaction type -->
+    <!-- Transaction status popup -->
+    <div class="popup" id="customerpopup">
+        <div class="popup-content">
+            <span class="close" id="close">&times;</span>
+
+            <h2 id="header"></h2>
+
+            <div style="text-align: left; margin: 0 auto; width: 80%;">
+                <div id="transactionTypeDropdownContainer">
+                    <label for="transactionTypeDropdown"></label>
+                    <select id="transactionTypeDropdown">
+
+                    </select> <br><br>
+                </div>
+
+                <div style="text-align: left; margin: 0 auto; width: 80%;">
+                    <h4 id="type1"></h4>
+                    <p id="hightype1"></p>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Transaction Type popup -->
+    <div class="popup" id="customerpopup2">
+        <div class="popup-content">
+            <span class="close" id="close2">&times;</span>
+
+            <h2 id="header2"></h2>
+
+            <div style="text-align: left; margin: 0 auto; width: 80%;">
+                    <label for="transactionTypeDropdown2"></label>
+                    <select id="transactionTypeDropdown2">
+                    </select> <br><br>
+
+                <div style="text-align: left; margin: 0 auto; width: 80%;">
+                    <h4 id="type2"></h4>
+                    <p id="hightype2"></p>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Transaction Type popup -->
+    <div class="popup" id="customerpopup3">
+        <div class="popup-content">
+            <span class="close" id="close3">&times;</span>
+
+            <h2 id="header3"></h2>
+
+            <div style="text-align: left; margin: 0 auto; width: 80%;">
+                    <label for="transactionTypeDropdown3"></label>
+                    <select id="transactionTypeDropdown3">
+                        <option value="ts">Technical Services</option>
+                        <option value="nlims">National Laboratory Information Management System</option>
+                        <option value="ulims">Unified Laboratory Information Management System</option>
+
+
+                    </select> <br><br>
+
+                <div style="text-align: left; margin: 0 auto; width: 80%;">
+                    <h4 id="type3"></h4>
+                    <p id="hightype3"></p>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+    
+
+    <!-- Customer type popup -->
+    <div class="popup" id="customerpopup4">
+        <div class="popup-content">
+            <span class="close" id="close4">&times;</span>
+
+            <h2 id="header4"></h2>
+
+            <div id="yearPickerContainer" style="margin-bottom: 20px;">
+                <label for="yearPicker">Select Year:</label>
+                <select id="yearPicker">
+                    <?php foreach ($distinctYears as $year) : ?>
+                        <option value="<?php echo htmlspecialchars($year); ?>">
+                            <?php echo htmlspecialchars($year); ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <div style="text-align: left; margin: 0 auto; width: 80%;">
+                <h4 id="type"></h4>
+                <p id="hightype"></p>
+
+            </div>
+        </div>
+    </div>
+
 </div>
+<!-- popup script for customers -->
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const startDateElement = document.getElementById("startDate");
+        const endDateElement = document.getElementById("endDate");
+        const transactionTypeDropdown = document.getElementById("transactionTypeDropdown");
+        const transactionTypeDropdown2 = document.getElementById("transactionTypeDropdown2");
+        const transactionTypeDropdown3 = document.getElementById("transactionTypeDropdown3");
+        //for clickable reference
+        const transactionStatuspopup = document.getElementById("transactionStatuspopup");
+        const paymentMethodpopup = document.getElementById("paymentMethodpopup");
+        const transactionTypepoppup = document.getElementById("transactionTypepoppup");
+        const customerTypepoppup = document.getElementById("customerTypepoppup");
+        const customerpopup = document.getElementById("customerpopup");
+        const close = document.getElementById("close");
+        const customerpopup2 = document.getElementById("customerpopup2");
+        const close2 = document.getElementById("close2");
+        const customerpopup3 = document.getElementById("customerpopup3");
+        const close3 = document.getElementById("close3");
+        const customerpopup4 = document.getElementById("customerpopup4");
+        const close4 = document.getElementById("close4");
+
+        // Set default dates
+        const currentDate = new Date();
+        startDateElement.valueAsDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+        endDateElement.valueAsDate = currentDate;
+
+        // Initialize data
+        let technicalServicesData = <?php echo json_encode($customerTypeDatapertransaction); ?>;
+        let customerTypeData = [];
+
+        // Function to update customerTypeData based on date range
+        function getMonthDateRange(year, month) {
+            const startDate = new Date(year, month - 1, 1);
+            const endDate = new Date(year, month, 0);
+            return { startDate, endDate };
+        }
+
+    function updateData() {
+    let startDate, endDate;
+    const startInput = startDateElement.value.split('-');
+    const endInput = endDateElement.value.split('-');
+
+    //start date
+    if (startInput.length === 2) { // Format is 'mm-yyyy'
+        const [startYear, startMonth] = startInput.map(Number);
+        startDate = new Date(startYear, startMonth - 1, 1); // First day of the start month
+    } else if (startInput.length === 1) { // Format is 'yyyy'
+        startDate = new Date(startInput[0], 0, 1); // January 1st of the year
+    } else {
+        startDate = new Date(startDateElement.value); // Full date format
+    }
+
+    // end date
+    if (endInput.length === 2) { // Format is 'mm-yyyy'
+        const [endYear, endMonth] = endInput.map(Number);
+        endDate = new Date(endYear, endMonth, 1); // Last day of the end month
+    } else if (endInput.length === 1) { // Format is 'yyyy'
+        endDate = new Date(endInput[0], 11, 31); // December 31st of the year
+    } else {
+        endDate = new Date(endDateElement.value); // Full date format
+    }
+
+    customerTypeData = technicalServicesData.filter(item =>
+        new Date(item.transaction_date) >= startDate &&
+        new Date(item.transaction_date) <= endDate
+    );
+    updatePopupContent();
+}
+
+function refreshPopupContent() {
+        const selectedTransactionType = transactionTypeDropdown.value;
+        updatePopupContent(selectedTransactionType);
+        const selectedTransactionType2 = transactionTypeDropdown2.value;
+        updatePopupContent(selectedTransactionType2);
+        const selectedTransactionType3 = transactionTypeDropdown3.value;
+        updatePopupContent(selectedTransactionType3);
+
+    }
+
+    // Event listeners for date changes
+    startDateElement.addEventListener('change', function() {
+        updateData();
+        refreshPopupContent();
+    });
+
+    endDateElement.addEventListener('change', function() {
+        updateData();
+        refreshPopupContent();
+    });
+
+// Transaction status pop-up analyzation
+if (transactionStatuspopup) {
+
+    const customerstatpopup = `
+            <style>
+                .scrollable-table {
+                    height: 100%; /* Adjust the height as needed */
+                    overflow-y: auto;
+                }
+                .scrollable-table table {
+                    width: 100%;
+                    border-collapse: collapse;
+                }
+                .scrollable-table th, .scrollable-table td {
+                    border: 1px solid black;
+                    text-align: left;
+                    padding: 8px;
+                }
+                .scrollable-table tr {
+                    height: 100%;
+                }
+            </style>
+        `;
+
+        // Add this style to your HTML
+        document.head.insertAdjacentHTML('beforeend', customerstatpopup);
+
+    transactionStatuspopup.addEventListener("click", () => {
+        const dropdown = document.getElementById("transactionTypeDropdown");
+
+        // Clear existing options and add new options: Paid, Pending, Cancelled
+        dropdown.innerHTML = '';
+        const options = ["Paid", "Pending", "Cancelled"];
+        options.forEach(option => {
+            let opt = document.createElement('option');
+            opt.value = option.toLowerCase();
+            opt.innerHTML = option;
+            dropdown.appendChild(opt);
+        });
+
+        header.innerHTML = "Transaction Status <br>";
+
+        // Initialize the dropdown value to 'paid' and dispatch the change event
+        dropdown.value = 'paid';
+        dropdown.dispatchEvent(new Event('change'));
+        updateData();
+
+        // Update and display popup content for 'paid'
+        updatePopupContent('paid'); // Directly call with 'paid'
+        customerpopup.style.display = "block";
+
+        // Handle the change event for the dropdown
+        document.getElementById("transactionTypeDropdown").addEventListener("change", (event) => {
+            const selectedTransactionType = event.target.value;
+            updatePopupContent(selectedTransactionType);
+        });
+    });
+    function updatePopupContent(selectedTransactionType) { 
+            switch (selectedTransactionType) {
+                case "paid":
+                    const paiddata = customerTypeData.filter(item => item.transaction_status === 'Paid');
+                    
+                    const paiddatafiltered = paiddata.reduce((result, item) => {
+                        const existingTransactionTypeIndex = result.findIndex(entry => entry.transaction_type === item.transaction_type);
+
+                        if (existingTransactionTypeIndex !== -1) {
+                            const existingCustomerTypeIndex = result[existingTransactionTypeIndex].customer_types.findIndex(
+                                customer => customer.customer_type === item.customer_type
+                            );
+
+                            if (existingCustomerTypeIndex !== -1) {
+                                result[existingTransactionTypeIndex].customer_types[existingCustomerTypeIndex].transaction_count += Number(
+                                    item.transaction_count
+                                );
+                                result[existingTransactionTypeIndex].customer_types[existingCustomerTypeIndex].total_amount += Number(
+                                    item.total_amount
+                                );
+                            } else {
+                                result[existingTransactionTypeIndex].customer_types.push({
+                                    customer_type: item.customer_type,
+                                    transaction_count: Number(item.transaction_count),
+                                    total_amount: Number(item.total_amount),
+                                });
+                            }
+                        } else {
+                            result.push({
+                                transaction_type: item.transaction_type,
+                                customer_types: [{
+                                    customer_type: item.customer_type,
+                                    transaction_count: Number(item.transaction_count),
+                                    total_amount: Number(item.total_amount),
+                                }, ],
+                            });
+                        }
+
+                        return result;
+                    }, []);
+
+                    // assumming transaction_count for each transaction_type
+                    const transactionTypeSum = paiddatafiltered.map(entry => ({
+                        transaction_type: entry.transaction_type,
+                        total_transaction_count: entry.customer_types.reduce((sum, customer) => sum + customer.transaction_count, 0),
+                        total_transaction_income: entry.customer_types.reduce((sum, customer) => sum + customer.total_amount, 0),
+                    }));
+                    const customertypepaid = paiddatafiltered.map(item => item.customer_types.map(customer => customer.customer_type));
+                    const totalAmountpaiddata = transactionTypeSum.map(item => item.total_transaction_income);
+                    const transactionTypepaid = transactionTypeSum.map(item => item.transaction_type);
+                    const customertypepaiddata = transactionTypeSum.map(item => item.total_transaction_count);
+
+                    const customertransactiontypePaid = [];
+                    for (let i = 0; i < customertypepaid.length; i++) {
+                        customertransactiontypePaid.push({
+                            label: customertypepaid[i],
+                            data: customertypepaiddata[i],
+                            totalAmount: totalAmountpaiddata[i],
+                            transactionType: transactionTypepaid[i]
+                        });
+                    }
+
+                    function handleNullDataset(dataset) {
+                        if (!dataset || dataset.length === 0) {
+                            return [{
+                                label: 'no customer',
+                                data: 0,
+                                totalAmount: 0,
+                                transactionType: 'no transaction'
+                            }];
+                        }
+                        return dataset;
+                    }
+
+                    let paidTransactions = customertransactiontypePaid;
+                    paidTransactions = handleNullDataset(paidTransactions);
+                    const totalpaidTransaction = customertransactiontypePaid.reduce((sum, item) => sum + item.data, 0);
+                    const totalpaidAmount = customertransactiontypePaid.reduce((sum, item) => sum + item.totalAmount, 0);
+                    const highestPaidTransaction = paidTransactions.reduce((max, current) => (current.totalAmount > max.totalAmount) ? current : max, paidTransactions[0]);
+                    const leastPaidTransaction = paidTransactions.reduce((min, current) => (current.totalAmount < min.totalAmount) ? current : min, paidTransactions[0]);
+                    const highestlabelPaidransaction = paidTransactions.filter(obj => obj.totalAmount === highestPaidTransaction.totalAmount).map(obj => obj.label);
+                    const leastlabelPaidTransaction = paidTransactions.filter(obj => obj.totalAmount === leastPaidTransaction.totalAmount).map(obj => obj.label);
+                    const highestlabelPaidransactionTY = paidTransactions.filter(obj => obj.totalAmount === highestPaidTransaction.totalAmount).map(obj => obj.transactionType);
+                    const leastlabelPaidTransactionTY = paidTransactions.filter(obj => obj.totalAmount === leastPaidTransaction.totalAmount).map(obj => obj.transactionType);
+
+                    //get the highest & lowest customer type with paid transaction (customer, transaction, amount, transaction type)
+                    type1.innerHTML = "<span style='color: green;'> Paid Transaction <br> </span>"+"<span style='font-size:1rem'>Total of Paid transaction: <span style='color: red;'>" + totalpaidTransaction + "</span> with the amount of <span style='color: red;'>" + Number(totalpaidAmount).toLocaleString('en-US', {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2
+                        });
+                    let paidtransactions = `<div class="scrollable-table">`;
+
+                    paidtransactions +="</span>The highest paying transaction type: <span style='color: blue;'>" + highestlabelPaidransactionTY.join(' , ') + "</span> with total income of <span style='color: red;'>" + Number(highestPaidTransaction.totalAmount).toLocaleString('en-US', {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2
+                        }) +
+                        "</span> for <span style='color: red;'>" + highestPaidTransaction.data + "</span> transactions from customers; <br> <br> Customers with highest paying transactions: <span style='color: blue;'> " + highestlabelPaidransaction.join(', ') +
+                        "</span><br><br><br>The Least paying transaction type: <span style='color: blue;'>" + leastlabelPaidTransactionTY.join(' , ') + "</span> with total income of <span style='color: red;'>" + Number(leastPaidTransaction.totalAmount).toLocaleString('en-US', {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2
+                        }) +
+                        "</span> for <span style='color: red;'>" + leastPaidTransaction.data + "</span> transactions from customers; <br> <br> Customers with least paying transactions: <span style='color: blue;'> " + leastlabelPaidTransaction.join(', ');
+
+                        paidtransactions += "</div>";
+                        hightype1.innerHTML = paidtransactions;
+                    break;
+
+                case "pending":
+                    const pendingdata = customerTypeData.filter(item => item.transaction_status === 'Pending');
+
+                    const pendingdatafiltered = pendingdata.reduce((result, item) => {
+                        const existingTransactionTypeIndex = result.findIndex(entry => entry.transaction_type === item.transaction_type);
+
+                        if (existingTransactionTypeIndex !== -1) {
+                            const existingCustomerTypeIndex = result[existingTransactionTypeIndex].customer_types.findIndex(
+                                customer => customer.customer_type === item.customer_type
+                            );
+
+                            if (existingCustomerTypeIndex !== -1) {
+                                result[existingTransactionTypeIndex].customer_types[existingCustomerTypeIndex].transaction_count += Number(item.transaction_count);
+                                result[existingTransactionTypeIndex].customer_types[existingCustomerTypeIndex].total_amount += Number(item.total_amount);
+                            } else {
+                                result[existingTransactionTypeIndex].customer_types.push({
+                                    customer_type: item.customer_type,
+                                    transaction_count: Number(item.transaction_count),
+                                    total_amount: Number(item.total_amount)
+                                });
+                            }
+                        } else {
+                            result.push({
+                                transaction_type: item.transaction_type,
+                                customer_types: [{
+                                    customer_type: item.customer_type,
+                                    transaction_count: Number(item.transaction_count),
+                                    total_amount: Number(item.total_amount)
+                                }]
+                            });
+                        }
+
+                        return result;
+                    }, []);
+
+                    // if null or empty dataset
+                    function handleNullDataset(dataset) {
+                        if (!dataset || dataset.length === 0) {
+                            return [{
+                                transaction_type: ' ',
+                                customer_types: [{
+                                    customer_type: ' ',
+                                    transaction_count: 0,
+                                    total_amount: 0
+                                }]
+                            }];
+                        }
+                        return dataset;
+                    }
+
+                    let pendingTransactions = handleNullDataset(pendingdatafiltered);
+                    let sumOfAllPendingTransactionCounts = 0;
+                    let sumOfAllPendingTransactionAmounts = 0;
+                    pendingTransactions.forEach(transaction => {
+                        transaction.customer_types.forEach(customer => {
+                            sumOfAllPendingTransactionCounts += customer.transaction_count;
+                            sumOfAllPendingTransactionAmounts += customer.total_amount;
+                        });
+                    });
+                    
+                    const colWidths = {
+                    type: '25%', 
+                    customer: '25%',
+                    count: '25%',
+                    amount: '25%'
+                };
+
+                    
+                        let pendingTableHeader = `<table style="border-collapse: collapse; width: 98%;">
+                            <tr>
+                                <th style="border: 1px solid black; padding: 8px; width: ${colWidths.type}; text-align: left;">Transaction Type</th>
+                                <th style="border: 1px solid black; padding: 8px; width: ${colWidths.customer}; text-align: left;">Customer Type</th>
+                                <th style="border: 1px solid black; padding: 8px; width: ${colWidths.count}; text-align: left;">Transaction Count</th>
+                                <th style="border: 1px solid black; padding: 8px; width: ${colWidths.amount}; text-align: left;">Amount</th>
+                            </tr>
+                        </table>`;
+
+                        // Start of the scrollable table body
+                        let pendingTableScrollable = `<div class="scrollable-table"><table style="border-collapse: collapse; width: 100%;">`;
+
+                        // Adding rows for each transaction type
+                        pendingTransactions.forEach(transaction => {
+                            let totalRowsForTransactionType = transaction.customer_types.length;
+                            transaction.customer_types.forEach((customer, customerIndex) => {
+                                pendingTableScrollable += '<tr style="border: 1px solid black;">';
+                                if (customerIndex === 0) {
+                                    pendingTableScrollable += `<td rowspan="${totalRowsForTransactionType}" style="border: 1px solid black; padding: 8px; width: ${colWidths.type};">${transaction.transaction_type}</td>`;
+                                }
+                                pendingTableScrollable += `
+                                    <td style="border: 1px solid black; padding: 8px; width: ${colWidths.customer};">${customer.customer_type}</td>
+                                    <td style="border: 1px solid black; padding: 8px; width: ${colWidths.count};">${customer.transaction_count}</td>
+                                    <td style="border: 1px solid black; padding: 8px; width: ${colWidths.amount};">${customer.total_amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                                </tr>`;
+                            });
+                        });
+
+                        pendingTableScrollable += '</table></div>';
+
+                        type1.innerHTML = "<span style='color: Yellow;'>Pending Transaction </span><br>";
+                        hightype1.innerHTML = "Total Pending Transaction: <span style='color: red;'>" + sumOfAllPendingTransactionCounts + "</span> amounting of <span style='color: red;'>" + Number(sumOfAllPendingTransactionAmounts).toLocaleString('en-US', {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2
+                        }) + "</span><br><br>" + pendingTableHeader + pendingTableScrollable;
+
+                        break;
+
+                        case "cancelled":
+                            const cancelleddata = customerTypeData.filter(item => item.transaction_status === 'Cancelled');
+
+                            const cancelleddatafiltered = cancelleddata.reduce((result, item) => {
+                                const existingTransactionTypeIndex = result.findIndex(entry => entry.transaction_type === item.transaction_type);
+
+                                if (existingTransactionTypeIndex !== -1) {
+                                    const existingCustomerTypeIndex = result[existingTransactionTypeIndex].customer_types.findIndex(
+                                        customer => customer.customer_type === item.customer_type
+                                    );
+
+                                    if (existingCustomerTypeIndex !== -1) {
+                                        result[existingTransactionTypeIndex].customer_types[existingCustomerTypeIndex].transaction_count += Number(item.transaction_count);
+                                        result[existingTransactionTypeIndex].customer_types[existingCustomerTypeIndex].total_amount += Number(item.total_amount);
+                                    } else {
+                                        result[existingTransactionTypeIndex].customer_types.push({
+                                            customer_type: item.customer_type,
+                                            transaction_count: Number(item.transaction_count),
+                                            total_amount: Number(item.total_amount)
+                                        });
+                                    }
+                                } else {
+                                    result.push({
+                                        transaction_type: item.transaction_type,
+                                        customer_types: [{
+                                            customer_type: item.customer_type,
+                                            transaction_count: Number(item.transaction_count),
+                                            total_amount: Number(item.total_amount)
+                                        }]
+                                    });
+                                }
+
+                                return result;
+                            }, []);
+
+                            // if null or empty dataset
+                            function handleNullDataset(dataset) {
+                                if (!dataset || dataset.length === 0) {
+                                    return [{
+                                        transaction_type: ' ',
+                                        customer_types: [{
+                                            customer_type: ' ',
+                                            transaction_count: 0,
+                                            total_amount: 0
+                                        }]
+                                    }];
+                                }
+                                return dataset;
+                            }
+
+                            let cancelledTransactions = handleNullDataset(cancelleddatafiltered);
+                            let sumOfAllCancelledTransactionCounts = 0;
+                            let sumOfAllCancelledTransactionAmounts = 0;
+                            cancelledTransactions.forEach(transaction => {
+                                transaction.customer_types.forEach(customer => {
+                                    sumOfAllCancelledTransactionCounts += customer.transaction_count;
+                                    sumOfAllCancelledTransactionAmounts += customer.total_amount;
+                                });
+                            });
+
+                            // Explicit widths for each column
+                            const widths = {
+                                type: '25%',  
+                                customer: '25%',
+                                count: '25%',
+                                amount: '25%'
+                            };
+                            
+                            let cancelledTableHeader = `<table style="border-collapse: collapse; width: 98%;">
+                                <tr>
+                                    <th style="border: 1px solid black; padding: 8px; width: ${widths.type}; text-align: left;">Transaction Type</th>
+                                    <th style="border: 1px solid black; padding: 8px; width: ${widths.customer}; text-align: left;">Customer Type</th>
+                                    <th style="border: 1px solid black; padding: 8px; width: ${widths.count}; text-align: left;">Transaction Count</th>
+                                    <th style="border: 1px solid black; padding: 8px; width: ${widths.amount}; text-align: left;">Amount</th>
+                                </tr>
+                            </table>`;
+
+                            // Start of the scrollable table body
+                            let cancelledTableScrollable = `<div class="scrollable-table"><table style="border-collapse: collapse; width: 100%;">`;
+
+                            // Adding rows for each transaction type
+                            cancelledTransactions.forEach(transaction => {
+                                let totalRowsForTransactionType = transaction.customer_types.length;
+                                transaction.customer_types.forEach((customer, customerIndex) => {
+                                    cancelledTableScrollable += '<tr style="border: 1px solid black;">';
+                                    if (customerIndex === 0) {
+                                        cancelledTableScrollable += `<td rowspan="${totalRowsForTransactionType}" style="border: 1px solid black; padding: 8px; width: ${widths.type};">${transaction.transaction_type}</td>`;
+                                    }
+                                    cancelledTableScrollable += `
+                                        <td style="border: 1px solid black; padding: 8px; width: ${widths.customer};">${customer.customer_type}</td>
+                                        <td style="border: 1px solid black; padding: 8px; width: ${widths.count};">${customer.transaction_count}</td>
+                                        <td style="border: 1px solid black; padding: 8px; width: ${widths.amount};">${customer.total_amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                                    </tr>`;
+                                });
+                            });
+
+                            cancelledTableScrollable += '</table></div>';
+
+                            type1.innerHTML = "<span style='color: Yellow;'>Cancelled Transaction </span><br>";
+                            hightype1.innerHTML = "Total Cancelled Transaction: <span style='color: red;'>" + sumOfAllCancelledTransactionCounts + "</span> amounting of <span style='color: red;'>" + Number(sumOfAllCancelledTransactionAmounts).toLocaleString('en-US', {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2
+                            }) + "</span><br><br>" + cancelledTableHeader + cancelledTableScrollable;
+
+                        break;
+ 
+            }
+        }
+
+// Initial data setup
+updateData();
+refreshPopupContent(); 
+ 
+        }
+
+         // Transaction status pop-up analyzation
+         if (paymentMethodpopup) {
+
+            const customerstatpopup = `
+            <style>
+                .scrollable-table {
+                    height: 100%; /* Adjust the height as needed */
+                    overflow-y: auto;
+                }
+                .scrollable-table table {
+                    width: 100%;
+                    border-collapse: collapse;
+                }
+                .scrollable-table th, .scrollable-table td {
+                    border: 1px solid black;
+                    text-align: left;
+                    padding: 8px;
+                }
+                .scrollable-table tr {
+                    height: 100%;
+                }
+            </style>
+        `;
+
+        // Add this style to your HTML
+        document.head.insertAdjacentHTML('beforeend', customerstatpopup);
+
+            paymentMethodpopup.addEventListener("click", () => {
+                const dropdown = document.getElementById("transactionTypeDropdown2");
+                dropdown.innerHTML = '';
+                const paymenMethod = [{
+                        value: "otc",
+                        text: "Ove the Counter"
+                    },
+                    {
+                        value: "op",
+                        text: "Online Payment"
+                    },
+                    {
+                        value: "cheque",
+                        text: "Cheque"
+                    }
+                ];
+                paymenMethod.forEach(option => {
+                    let opt = document.createElement('option');
+                    opt.value = option.value;
+                    opt.innerHTML = option.text;
+                    dropdown.appendChild(opt);
+                });
+                header2.innerHTML = "Transaction Type <br>";
+
+
+                // Initialize the dropdown value to 'paid' and dispatch the change event
+                dropdown.value = 'otc';
+                dropdown.dispatchEvent(new Event('change'));
+                updateData();
+
+                customerpopup2.style.display = "block";
+
+
+                // Handle the change event for the dropdown
+                document.getElementById("transactionTypeDropdown2").addEventListener("change", (event) => {
+                    const selectedTransactionType2 = event.target.value;
+
+                    switch (selectedTransactionType2) {
+                        case "otc":
+                            const otcdata = customerTypeData.filter(item => item.transaction_status === 'Paid' && item.payment_method === 'Over the Counter');
+
+                            const otcdatafiltered = otcdata.reduce((result, item) => {
+                                const existingTransactionTypeIndex = result.findIndex(entry => entry.transaction_type === item.transaction_type);
+
+                                if (existingTransactionTypeIndex !== -1) {
+                                    const existingCustomerTypeIndex = result[existingTransactionTypeIndex].customer_types.findIndex(
+                                        customer => customer.customer_type === item.customer_type
+                                    );
+
+                                    if (existingCustomerTypeIndex !== -1) {
+                                        result[existingTransactionTypeIndex].customer_types[existingCustomerTypeIndex].transaction_count += Number(item.transaction_count);
+                                        result[existingTransactionTypeIndex].customer_types[existingCustomerTypeIndex].total_amount += Number(item.total_amount);
+                                    } else {
+                                        result[existingTransactionTypeIndex].customer_types.push({
+                                            customer_type: item.customer_type,
+                                            transaction_count: Number(item.transaction_count),
+                                            total_amount: Number(item.total_amount)
+                                        });
+                                    }
+                                } else {
+                                    result.push({
+                                        transaction_type: item.transaction_type,
+                                        customer_types: [{
+                                            customer_type: item.customer_type,
+                                            transaction_count: Number(item.transaction_count),
+                                            total_amount: Number(item.total_amount)
+                                        }]
+                                    });
+                                }
+
+                                return result;
+                            }, []);
+
+                            // if null or empty dataset
+                            function handleNullDataset(dataset) {
+                                if (!dataset || dataset.length === 0) {
+                                    return [{
+                                        transaction_type: ' ',
+                                        customer_types: [{
+                                            customer_type: ' ',
+                                            transaction_count: 0,
+                                            total_amount: 0
+                                        }]
+                                    }];
+                                }
+                                return dataset;
+                            }
+
+                            let otcTransactions = handleNullDataset(otcdatafiltered);
+                            let sumOfAllOTCTransactionCounts = 0;
+                            let sumOfAllOTCTransactionAmounts = 0;
+                            otcTransactions.forEach(transaction => {
+                                transaction.customer_types.forEach(customer => {
+                                    sumOfAllOTCTransactionCounts += customer.transaction_count;
+                                    sumOfAllOTCTransactionAmounts += customer.total_amount;
+                                });
+                            });
+
+                            const widths = {
+                            type: '25%',  
+                            customer: '25%',
+                            count: '25%',
+                            amount: '25%'
+                        };
+
+                        // Fixed Header Table
+                        let otcTable = `<table style="border-collapse: collapse; width: 98%;">
+                            <tr>
+                                <th style="border: 1px solid black; width: ${widths.type}; padding: 8px; text-align: left;">Transaction Type</th>
+                                <th style="border: 1px solid black; width: ${widths.customer}; padding: 8px; text-align: left;">Customer Type</th>
+                                <th style="border: 1px solid black; width: ${widths.count}; padding: 8px; text-align: left;">Transaction Count</th>
+                                <th style="border: 1px solid black; width: ${widths.amount}; padding: 8px; text-align: left;">Amount</th>
+                            </tr>
+                        </table>`;
+
+                        // Scrollable Table for the Body
+                        let scrollableotcTable = `<div class="scrollable-table"><table style="border-collapse: collapse; width: 100%;">`;
+
+                        // Add rows to the scrollable body table
+                        otcTransactions.forEach(transaction => {
+                            let totalRowsForTransactionType = transaction.customer_types.length;
+                            transaction.customer_types.forEach((customer, customerIndex) => {
+                                scrollableotcTable += '<tr style="border: 1px solid black;">';
+                                if (customerIndex === 0) {
+                                    scrollableotcTable += `<td rowspan="${totalRowsForTransactionType}" style="border: 1px solid black; padding: 8px; width: ${widths.type};">${transaction.transaction_type}</td>`;
+                                }
+                                scrollableotcTable += `
+                                    <td style="border: 1px solid black; padding: 8px; width: ${widths.customer};">${customer.customer_type}</td>
+                                    <td style="border: 1px solid black; padding: 8px; width: ${widths.count};">${customer.transaction_count}</td>
+                                    <td style="border: 1px solid black; padding: 8px; width: ${widths.amount};">${customer.total_amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                                </tr>`;
+                            });
+                        });
+
+                        scrollableotcTable += '</table></div>';
+
+                        // Update the innerHTML of your display container
+                        type2.innerHTML = "<span style='color: blue;'>Over the Counter Payment<br>";
+                        hightype2.innerHTML = "Total Over the Counter Payment: <span style='color: red;'>" + sumOfAllOTCTransactionCounts + "</span> amounting of <span style='color: red;'>" + Number(sumOfAllOTCTransactionAmounts).toLocaleString('en-US', {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2
+                            }) + "</span><br><br>" + otcTable + scrollableotcTable;
+
+                        break;
+
+                        case "op":
+                            const opdata = customerTypeData.filter(item => item.transaction_status === 'Paid' && item.payment_method === 'Online Payment');
+
+                            const opdatafiltered = opdata.reduce((result, item) => {
+                                const existingTransactionTypeIndex = result.findIndex(entry => entry.transaction_type === item.transaction_type);
+
+                                if (existingTransactionTypeIndex !== -1) {
+                                    const existingCustomerTypeIndex = result[existingTransactionTypeIndex].customer_types.findIndex(
+                                        customer => customer.customer_type === item.customer_type
+                                    );
+
+                                    if (existingCustomerTypeIndex !== -1) {
+                                        result[existingTransactionTypeIndex].customer_types[existingCustomerTypeIndex].transaction_count += Number(item.transaction_count);
+                                        result[existingTransactionTypeIndex].customer_types[existingCustomerTypeIndex].total_amount += Number(item.total_amount);
+                                    } else {
+                                        result[existingTransactionTypeIndex].customer_types.push({
+                                            customer_type: item.customer_type,
+                                            transaction_count: Number(item.transaction_count),
+                                            total_amount: Number(item.total_amount)
+                                        });
+                                    }
+                                } else {
+                                    result.push({
+                                        transaction_type: item.transaction_type,
+                                        customer_types: [{
+                                            customer_type: item.customer_type,
+                                            transaction_count: Number(item.transaction_count),
+                                            total_amount: Number(item.total_amount)
+                                        }]
+                                    });
+                                }
+
+                                return result;
+                            }, []);
+
+                            // if null or empty dataset
+                            function handleNullDataset(dataset) {
+                                if (!dataset || dataset.length === 0) {
+                                    return [{
+                                        transaction_type: ' ',
+                                        customer_types: [{
+                                            customer_type: ' ',
+                                            transaction_count: 0,
+                                            total_amount: 0
+                                        }]
+                                    }];
+                                }
+                                return dataset;
+                            }
+
+                            let opTransactions = handleNullDataset(opdatafiltered);
+                            let sumOfAllOPTransactionCounts = 0;
+                            let sumOfAllOPTransactionAmounts = 0;
+                            opTransactions.forEach(transaction => {
+                                transaction.customer_types.forEach(customer => {
+                                    sumOfAllOPTransactionCounts += customer.transaction_count;
+                                    sumOfAllOPTransactionAmounts += customer.total_amount;
+                                });
+                            });
+
+                            const opwidths = {
+                            type: '25%',  
+                            customer: '25%',
+                            count: '25%',
+                            amount: '25%'
+                        };
+
+                        // Fixed Header Table
+                        let opTable = `<table style="border-collapse: collapse; width: 98%;">
+                            <tr>
+                                <th style="border: 1px solid black; width: ${opwidths.type}; padding: 8px; text-align: left;">Transaction Type</th>
+                                <th style="border: 1px solid black; width: ${opwidths.customer}; padding: 8px; text-align: left;">Customer Type</th>
+                                <th style="border: 1px solid black; width: ${opwidths.count}; padding: 8px; text-align: left;">Transaction Count</th>
+                                <th style="border: 1px solid black; width: ${opwidths.amount}; padding: 8px; text-align: left;">Amount</th>
+                            </tr>
+                        </table>`;
+
+                        // Scrollable Table for the Body
+                        let scrollableOPTable = `<div class="scrollable-table"><table style="border-collapse: collapse; width: 100%;">`;
+
+                       // column/row each transaction type
+                            opTransactions.forEach(transaction => {
+                                let totalRowsForTransactionType = transaction.customer_types.length;
+                                transaction.customer_types.forEach((customer, customerIndex) => {
+                                    scrollableOPTable += '<tr style="border: 1px solid black;">';
+                                if (customerIndex === 0) {
+                                    scrollableOPTable += `<td rowspan="${totalRowsForTransactionType}" style="border: 1px solid black; padding: 8px; width: ${opwidths.type};">${transaction.transaction_type}</td>`;
+                                }
+                                scrollableOPTable += `
+                                    <td style="border: 1px solid black; padding: 8px; width: ${opwidths.customer};">${customer.customer_type}</td>
+                                    <td style="border: 1px solid black; padding: 8px; width: ${opwidths.count};">${customer.transaction_count}</td>
+                                    <td style="border: 1px solid black; padding: 8px; width: ${opwidths.amount};">${customer.total_amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                                </tr>`;
+                            });
+                        });
+
+                        scrollableOPTable +='</table></div>';
+                            type2.innerHTML = "<span style='color: Blue;'>Online Payment<br>";
+                            hightype2.innerHTML = "Total Online Payment:  <span style='color: red;'>" + sumOfAllOPTransactionCounts + "</span> amounting of  <span style='color: red;'>" + Number(sumOfAllOPTransactionAmounts).toLocaleString('en-US', {
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2
+                                }) +
+                                "</span><br><br>" + opTable + scrollableOPTable;
+
+                            break;
+
+                        case "cheque":
+                            const chequedata = customerTypeData.filter(item => item.transaction_status === 'Paid' && item.payment_method === 'Cheque');
+
+                            const chequedatafiltered = chequedata.reduce((result, item) => {
+                                const existingTransactionTypeIndex = result.findIndex(entry => entry.transaction_type === item.transaction_type);
+
+                                if (existingTransactionTypeIndex !== -1) {
+                                    const existingCustomerTypeIndex = result[existingTransactionTypeIndex].customer_types.findIndex(
+                                        customer => customer.customer_type === item.customer_type
+                                    );
+
+                                    if (existingCustomerTypeIndex !== -1) {
+                                        result[existingTransactionTypeIndex].customer_types[existingCustomerTypeIndex].transaction_count += Number(item.transaction_count);
+                                        result[existingTransactionTypeIndex].customer_types[existingCustomerTypeIndex].total_amount += Number(item.total_amount);
+                                    } else {
+                                        result[existingTransactionTypeIndex].customer_types.push({
+                                            customer_type: item.customer_type,
+                                            transaction_count: Number(item.transaction_count),
+                                            total_amount: Number(item.total_amount)
+                                        });
+                                    }
+                                } else {
+                                    result.push({
+                                        transaction_type: item.transaction_type,
+                                        customer_types: [{
+                                            customer_type: item.customer_type,
+                                            transaction_count: Number(item.transaction_count),
+                                            total_amount: Number(item.total_amount)
+                                        }]
+                                    });
+                                }
+
+                                return result;
+                            }, []);
+
+                            // if null or empty dataset
+                            function handleNullDataset(dataset) {
+                                if (!dataset || dataset.length === 0) {
+                                    return [{
+                                        transaction_type: ' ',
+                                        customer_types: [{
+                                            customer_type: ' ',
+                                            transaction_count: 0,
+                                            total_amount: 0
+                                        }]
+                                    }];
+                                }
+                                return dataset;
+                            }
+
+                            let chequeTransactions = handleNullDataset(chequedatafiltered);
+                            let sumOfAllChequeTransactionCounts = 0;
+                            let sumOfAllChequeTransactionAmounts = 0;
+                            chequeTransactions.forEach(transaction => {
+                                transaction.customer_types.forEach(customer => {
+                                    sumOfAllChequeTransactionCounts += customer.transaction_count;
+                                    sumOfAllChequeTransactionAmounts += customer.total_amount;
+                                });
+                            });
+
+                            const Chequewidths = {
+                            type: '25%',  
+                            customer: '25%',
+                            count: '25%',
+                            amount: '25%'
+                        };
+
+                        // Fixed Header Table
+                        let ChequeTable = `<table style="border-collapse: collapse; width: 98%;">
+                            <tr>
+                                <th style="border: 1px solid black; width: ${Chequewidths.type}; padding: 8px; text-align: left;">Transaction Type</th>
+                                <th style="border: 1px solid black; width: ${Chequewidths.customer}; padding: 8px; text-align: left;">Customer Type</th>
+                                <th style="border: 1px solid black; width: ${Chequewidths.count}; padding: 8px; text-align: left;">Transaction Count</th>
+                                <th style="border: 1px solid black; width: ${Chequewidths.amount}; padding: 8px; text-align: left;">Amount</th>
+                            </tr>
+                        </table>`;
+
+                        // Scrollable Table for the Body
+                        let scrollableChequeTable = `<div class="scrollable-table"><table style="border-collapse: collapse; width: 100%;">`;
+
+
+                            // column/row each transaction type
+                            chequeTransactions.forEach(transaction => {
+                                let totalRowsForTransactionType = transaction.customer_types.length;
+                                transaction.customer_types.forEach((customer, customerIndex) => {
+                                    scrollableChequeTable += '<tr style="border: 1px solid black;">';
+                                if (customerIndex === 0) {
+                                    scrollableChequeTable += `<td rowspan="${totalRowsForTransactionType}" style="border: 1px solid black; padding: 8px; width: ${Chequewidths.type};">${transaction.transaction_type}</td>`;
+                                }
+                                scrollableChequeTable += `
+                                    <td style="border: 1px solid black; padding: 8px; width: ${Chequewidths.customer};">${customer.customer_type}</td>
+                                    <td style="border: 1px solid black; padding: 8px; width: ${Chequewidths.count};">${customer.transaction_count}</td>
+                                    <td style="border: 1px solid black; padding: 8px; width: ${Chequewidths.amount};">${customer.total_amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                                </tr>`;
+                            });
+                        });
+
+                        scrollableChequeTable += '</table></div>';
+                            type2.innerHTML = "<span style='color: Blue;'>Cheque Payment<br>";
+                            hightype2.innerHTML = "Total Cheque Payment:  <span style='color: red;'>" + sumOfAllChequeTransactionCounts + "</span> amounting of  <span style='color: red;'>" + Number(sumOfAllChequeTransactionAmounts).toLocaleString('en-US', {
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2
+                                }) +
+                                "</span><br><br>" + ChequeTable + scrollableChequeTable;
+
+                            break; 
+                    }
+                });
+                transactionTypeDropdown2.value = 'otc';
+                transactionTypeDropdown2.dispatchEvent(new Event('change'));
+
+                customerpopup2.style.display = "block";
+            });
+            // Initial data setup
+updateData();
+refreshPopupContent(); 
+        }
+
+        
+
+        if (transactionTypepoppup) {
+        function updatePopupContent() {
+            const selectedTransactionType3 = transactionTypeDropdown3.value;
+            let content = '';
+
+            switch (selectedTransactionType3) {
+                case "ts":
+                    content = processTransactionData('Technical Services');
+                    break;
+                case "nlims":
+                    content = processTransactionData('National Laboratory Information Management System');
+                    break;
+                case "ulims":
+                    content = processTransactionData('Unified Laboratory Information Management System');
+                    break;
+                default:
+                    content = "<div>No data available for the selected type.</div>";
+            }
+
+            hightype3.innerHTML = content;
+        }
+
+        //scrollable table
+        const style = `
+            <style>
+                .scrollable-table {
+                    height: 10rem; /* Adjust the height as needed */
+                    overflow-y: auto;
+                }
+                .scrollable-table table {
+                    width: 100%;
+                    border-collapse: collapse;
+                }
+                .scrollable-table th, .scrollable-table td {
+                    border: 1px solid black;
+                    text-align: left;
+                    padding: 8px;
+                }
+                .scrollable-table tr {
+                    height: 2rem; /* Fixed height for table rows */
+                }
+            </style>
+        `;
+        document.head.insertAdjacentHTML('beforeend', style);
+        
+        function processTransactionData(transactionType) {
+        const filteredData = customerTypeData.filter(item => item.transaction_type === transactionType);
+
+        // Aggregate data by customer type and transaction status
+        const summary = filteredData.reduce((acc, item) => {
+            const key = item.customer_type + '-' + item.transaction_status;
+            if (!acc[key]) {
+                acc[key] = {
+                    customer_type: item.customer_type,
+                    transaction_status: item.transaction_status,
+                    transaction_count: 0,
+                    total_amount: 0
+                };
+            }
+            acc[key].transaction_count += Number(item.transaction_count);
+            acc[key].total_amount += Number(item.total_amount);
+            return acc;
+        }, {});
+
+    let content = `<strong>${transactionType} Transactions</strong><br>`;
+
+    ['Paid', 'Cancelled', 'Pending'].forEach(status => {
+        // Find the highest transaction count for the status
+        let maxTransactionCount = Math.max(...Object.values(summary)
+            .filter(item => item.transaction_status === status)
+            .map(item => item.transaction_count));
+
+        // Filter out customer types that have the highest transaction count
+        let highestTransactions = Object.values(summary)
+            .filter(item => item.transaction_status === status && item.transaction_count === maxTransactionCount);
+        
+        let leastTransactionCount = Math.min(...Object.values(summary)
+            .filter(item => item.transaction_status === status)
+            .map(item => item.transaction_count));
+
+        // Filter out customer types that have the highest transaction count
+        let leastTransactions = Object.values(summary)
+            .filter(item => item.transaction_status === status && item.transaction_count === leastTransactionCount);
+
+            let tableHeader = `<div><br><span style="color:Red">${status}:</span>`;
+        tableHeader += `<table border="1" style="width:98%;"><tr>
+                          <th style="width: 30%;">Customer Type</th>
+                          <th style="width: 30%;">Transaction Count</th>
+                          <th style="width: 31%;">Total Amount</th>
+                        </tr></table></div>`;
+
+        // Table body - scrollable
+        let tableBody = `<div class="scrollable-table"><table border="1" style="width:100%;">`;
+
+        // Rows for highest transactions
+        tableBody += `<tr><td colspan="3" style="color:blue;text-align:center;">Highest Transactions</td></tr>`;
+        highestTransactions.forEach(item => {
+            tableBody += `<tr>
+                            <td style="width: 33%;">${item.customer_type}</td>
+                            <td style="width: 33%;">${item.transaction_count}</td>
+                            <td style="width: 34%;">${item.total_amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                        </tr>`;
+        });
+
+        // Rows for least transactions
+        tableBody += `<tr><td colspan="3" style="color:blue;text-align:center;">Least Transactions</td></tr>`;
+        leastTransactions.forEach(item => {
+            tableBody += `<tr>
+                            <td style="width: 33%;">${item.customer_type}</td>
+                            <td style="width: 33%;">${item.transaction_count}</td>
+                            <td style="width: 34%;">${item.total_amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                        </tr>`;
+        });
+
+        tableBody += `</table></div>`;
+
+        // Combine header and body
+        content += tableHeader + tableBody;
+    });
+
+    return content;
+}
+
+        transactionTypeDropdown3.addEventListener("change", updatePopupContent);
+        
+        refreshPopupContent(); 
+        updateData();
+
+        document.getElementById("transactionTypepoppup").addEventListener("click", () => {
+
+            customerpopup3.style.display = "block";
+        }); 
+    }
+
+
+ 
+    // customertype pop-up analyzation
+    if (customerTypepoppup) {
+            customerTypepoppup.addEventListener("click", () => { 
+                customerpopup4.style.display = "block"; 
+                header4.innerHTML = "Customer Type"; 
+                type.innerHTML = "Top Customer Transaction per Month";
+                document.getElementById("yearPicker").addEventListener("change", function() {
+                    const selectedYear = this.value;
+                    const filteredData = technicalServicesData.filter(item => {
+                        const transactionYear = new Date(item.transaction_date).getFullYear();
+                        return item.transaction_status === 'Paid' && transactionYear.toString() === selectedYear;
+                    });
+
+                    let monthlyDataAggregated = {};
+                    filteredData.forEach(item => {
+                        const transactionMonth = new Date(item.transaction_date).getMonth() + 1;
+                        const key = item.customer_type;
+
+                        if (!monthlyDataAggregated[transactionMonth]) {
+                            monthlyDataAggregated[transactionMonth] = {};
+                        }
+
+                        if (!monthlyDataAggregated[transactionMonth][key]) {
+                            monthlyDataAggregated[transactionMonth][key] = {
+                                transaction_count: 0,
+                                total_amount: 0
+                            };
+                        }
+
+                        monthlyDataAggregated[transactionMonth][key].transaction_count += Number(item.transaction_count);
+                        monthlyDataAggregated[transactionMonth][key].total_amount += Number(item.total_amount);
+                    });
+
+                    // Find the customer type with the highest transaction count for each month
+                    let highestTransactionsPerMonth = {};
+                    for (const month in monthlyDataAggregated) {
+                        let maxCount = 0;
+                        let customerTypeWithMaxCount = '';
+                        let maxIncome = 0;
+
+                        for (const customerType in monthlyDataAggregated[month]) {
+                            const {
+                                transaction_count,
+                                total_amount
+                            } = monthlyDataAggregated[month][customerType];
+
+                            if (transaction_count > maxCount) {
+                                maxCount = transaction_count;
+                                customerTypeWithMaxCount = customerType;
+                                maxIncome = total_amount; // Set the max income for the current customer type
+                            }
+                        }
+
+                        highestTransactionsPerMonth[month] = {
+                            customer_type: customerTypeWithMaxCount,
+                            transaction_count: maxCount,
+                            income: maxIncome.toLocaleString('en-US', {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2
+                            }),
+                        };
+                    }
+
+                    // Generate table HTML
+                    let tableHtml = '<table style="width: 100%; text-align: center;">';
+                    tableHtml += `
+                <tr>
+                    <th style="border: 1px solid black; padding: 8px;">Month</th>
+                    <th style="border: 1px solid black; padding: 8px; ">Customer Type</th>
+                    <th style="border: 1px solid black; padding: 8px; ">Transaction Count</th>
+                    <th style="border: 1px solid black; padding: 8px; ">Income</th>
+                </tr>`;
+
+                    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+                    Object.entries(highestTransactionsPerMonth).forEach(([month, data]) => {
+                        const monthName = monthNames[parseInt(month) - 1]; // Convert numeric month to month name
+                        tableHtml += `
+                    <tr style="border: 1px solid black;">
+                        <td style="border: 1px solid black; padding: 8px;">${monthName}</td>
+                        <td style="border: 1px solid black; padding: 8px;">${data.customer_type}</td>
+                        <td style="border: 1px solid black; padding: 8px;">${data.transaction_count}</td>
+                        <td style="border: 1px solid black; padding: 8px;">${data.income}</td>
+                    </tr>`;
+                    });
+
+                    tableHtml += '</table>';
+                    hightype.innerHTML = tableHtml;
+                });
+
+                const year = new Date().getFullYear(); // This will set 'year' to the current year
+                document.getElementById("yearPicker").value = year;
+
+                document.getElementById("yearPicker").dispatchEvent(new Event('change'));
+            });
+        }
+
+        function handleNullDataset(dataset) {
+            for (const month in dataset) {
+                if (dataset[month].length === 0) {
+                    dataset[month].push({
+                        customer_type: 'None',
+                        transaction_count: 0,
+                        total_amount: 0
+                    });
+                }
+            }
+            return dataset;
+        }
+
+        // Close button functionality
+        if (close) {
+            close.addEventListener("click", () => { 
+                customerpopup.style.display = "none";
+            });
+            close2.addEventListener("click", () => { 
+                customerpopup2.style.display = "none";
+            });
+            close3.addEventListener("click", () => { 
+                customerpopup3.style.display = "none";
+            });
+            close4.addEventListener("click", () => {
+                // Close the popup when the close button is clicked
+                customerpopup4.style.display = "none";
+
+            });
+           
+        }  
+
+
+    });
+    
+</script>   
 
 
 <!-- scriptfor customers graph -->

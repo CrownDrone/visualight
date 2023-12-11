@@ -474,17 +474,6 @@ $currentIndex = Url::to(['']);
         font-weight: bold;
     }
 
-    .speedometer-arrow {
-        position: absolute;
-        width: 2px;
-        height: 30px;
-        background-color: black;
-        top: 45%;
-        left: 50%;
-        transform-origin: 50% 0;
-        transform: translateX(-50%) rotate(0deg);
-        transition: transform 1s ease;
-    }
 
     /* background */
     .speedometer {
@@ -1545,8 +1534,8 @@ $targetIncome = [
             <p id="targetTransaction"></p>
 
 
-            <div style="text-align: right; margin: 0 auto; width: 80%;">
-                <ul style="padding-left: 500px;">
+            <div style="text-align: right; margin: 0 auto; width: 80%; max-height: 25rem; overflow-y: auto; ">
+                <ul style="padding-left: 500px; ">
                     <li>
                         <p id="highest"></p>
                     </li>
@@ -1656,8 +1645,619 @@ $targetIncome = [
         const mostCustomerProvince = document.getElementById("mostCustomerProvince");
         const leastCustomerProvince = document.getElementById("leastCustomerProvince");
 
-        const startDateS = document.getElementById("startDate").value;
-        const endDateS = document.getElementById("endDate").value;
+        const startDateElements = document.getElementById("startDate");
+        const endDateElements = document.getElementById("endDate");
+     
+        startDateElements.valueAsDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+        endDateElements.valueAsDate = currentDate;
+
+    // Initialize data from PHP
+    let technicalServicesData = <?php echo json_encode($customerTypeDatapertransaction); ?>;
+    let DatacustomerType = [];
+    function getMonthDateRange(year, month) {
+            const startDate = new Date(year, month - 1, 1);
+            const endDate = new Date(year, month, 0);
+            return { startDate, endDate };
+        }
+
+        function updateData() {
+    let startDate, endDate;
+    const startInput = startDateElements.value.split('-');
+    const endInput = endDateElements.value.split('-');
+
+    // Start date
+    if (startInput.length === 2) { // Format is 'mm-yyyy'
+        const [startYear, startMonth] = startInput.map(Number);
+        startDate = new Date(startYear, startMonth - 1, 1); // First day of the start month
+    } else if (startInput.length === 1) { // Format is 'yyyy'
+        startDate = new Date(startInput[0], 0, 1); // January 1st of the year
+    } else {
+        startDate = new Date(startDateElements.value); // Full date format
+    }
+
+    // End date
+    if (endInput.length === 2) { // Format is 'mm-yyyy'
+        const [endYear, endMonth] = endInput.map(Number);
+        endDate = new Date(endYear, endMonth, 0); // Last day of the end month
+    } else if (endInput.length === 1) { // Format is 'yyyy'
+        endDate = new Date(endInput[0], 11, 31); // December 31st of the year
+    } else {
+        endDate = new Date(endDateElements.value); // Full date format
+    }
+
+    // Filter technicalServicesData based on the date range
+    DatacustomerType = technicalServicesData.filter(item =>
+        new Date(item.transaction_date) >= startDate &&
+        new Date(item.transaction_date) <= endDate
+    );
+    
+    processFilteredData();
+    processFilteredDataAmount();
+}
+
+function processFilteredData() {
+    const customerData = {};
+
+    const filteredData = DatacustomerType.filter(
+        item => item.transaction_status === 'Paid' || item.transaction_status === 'Pending'
+    );
+
+    filteredData.forEach(item => {
+        const transactionDate = item.transaction_date;
+        const transactionType = item.transaction_type;
+        const customerType = item.customer_type;
+        const address = item.address;
+        const transactionCount = Number(item.transaction_count);
+        const totalAmount = Number(item.total_amount);
+
+        if (!customerData[transactionDate]) {
+            customerData[transactionDate] = {};
+        }
+
+        if (!customerData[transactionDate][transactionType]) {
+            customerData[transactionDate][transactionType] = {};
+        }
+
+        if (!customerData[transactionDate][transactionType][customerType]) {
+            customerData[transactionDate][transactionType][customerType] = {};
+        }
+
+        if (!customerData[transactionDate][transactionType][customerType][address]) {
+            customerData[transactionDate][transactionType][customerType][address] = {
+                transaction_count: 0,
+                total_amount: 0,
+            };
+        }
+
+        customerData[transactionDate][transactionType][customerType][address].transaction_count += transactionCount;
+        customerData[transactionDate][transactionType][customerType][address].total_amount += totalAmount;
+    });
+
+    const processedData = {};
+
+for (const transactionDate in customerData) {
+    if (!processedData[transactionDate]) {
+        processedData[transactionDate] = {};
+    }
+
+    const transactionTypes = customerData[transactionDate];
+    for (const transactionType in transactionTypes) {
+        if (!processedData[transactionDate][transactionType]) {
+            processedData[transactionDate][transactionType] = {};
+        }
+
+        const customerTypes = transactionTypes[transactionType];
+        for (const customerType in customerTypes) {
+            if (!processedData[transactionDate][transactionType][customerType]) {
+                processedData[transactionDate][transactionType][customerType] = {};
+            }
+
+            const addresses = customerTypes[customerType];
+            for (const address in addresses) {
+                processedData[transactionDate][transactionType][customerType][address] = {
+                    transaction_count: addresses[address].transaction_count,
+                    total_amount: addresses[address].total_amount
+                };
+            }
+        }
+    }
+}
+
+console.log(JSON.stringify(processedData, null, 2));
+    if (!processedData || processedData.length === 0) {
+        processedData.push({
+            transaction_date: ' ',
+            transaction_type: ' ',
+            customer_type: ' ',
+            province: ' ',
+            transaction_count: 0,
+            total_amount: 0,
+        });
+    }
+
+let maxTransactionCount = 0;
+let minTransactionCount = Infinity;
+let datesWithMaxTransaction = [];
+let datesWithMinTransaction = [];
+
+function findDatesWithExtremeTransactions(customerData) {
+  Object.keys(customerData).forEach(date => {
+    let totalCountForDate = 0;
+
+    Object.keys(customerData[date]).forEach(type => {
+      Object.keys(customerData[date][type]).forEach(customerType => {
+        Object.keys(customerData[date][type][customerType]).forEach(address => {
+          totalCountForDate += customerData[date][type][customerType][address].transaction_count;
+        });
+      });
+    });
+
+    // Check for max transactions
+    if (totalCountForDate > maxTransactionCount) {
+      maxTransactionCount = totalCountForDate;
+      datesWithMaxTransaction = [date];
+    } else if (totalCountForDate === maxTransactionCount) {
+      datesWithMaxTransaction.push(date);
+    }
+
+    // Check for min transactions
+    if (totalCountForDate < minTransactionCount && totalCountForDate > 0) { // Assuming you don't want to consider days with zero transactions
+      minTransactionCount = totalCountForDate;
+      datesWithMinTransaction = [date];
+    } else if (totalCountForDate === minTransactionCount) {
+      datesWithMinTransaction.push(date);
+    }
+  });
+}
+
+findDatesWithExtremeTransactions(customerData);
+
+//Transaction Type
+let maxTransactionCountByType = 0;
+let minTransactionCountByType = Infinity;
+let maxtransactionType = [];
+let minTransactionType = [];
+
+function findTransactionTypesWithExtremeTransactions(customerData) {
+  let transactionCountByType = {};
+
+  // Calculate total transactions for each transaction type
+  Object.keys(customerData).forEach(date => {
+    Object.keys(customerData[date]).forEach(type => {
+      transactionCountByType[type] = (transactionCountByType[type] || 0);
+
+      Object.keys(customerData[date][type]).forEach(customerType => {
+        Object.keys(customerData[date][type][customerType]).forEach(address => {
+          transactionCountByType[type] += customerData[date][type][customerType][address].transaction_count;
+        });
+      });
+    });
+  });
+ 
+  Object.keys(transactionCountByType).forEach(type => {
+    const count = transactionCountByType[type];
+
+    // Max transactions
+    if (count > maxTransactionCountByType) {
+      maxTransactionCountByType = count;
+      maxtransactionType = [type];
+    } else if (count === maxTransactionCountByType) {
+        maxtransactionType.push(type);
+    }
+
+    // Min transactions 
+    if (count < minTransactionCountByType && count > 0) {
+      minTransactionCountByType = count;
+      minTransactionType = [type];
+    } else if (count === minTransactionCountByType) {
+        minTransactionType.push(type);
+    }
+  });
+}
+
+findTransactionTypesWithExtremeTransactions(customerData);
+
+//customer type
+let maxTransactionCountByCustomerType = 0;
+let minTransactionCountByCustomerType = Infinity;
+let maxCustomerTypes = [];
+let minCustomerType = [];
+
+function findCustomerTypesWithExtremeTransactions(customerData) {
+  let transactionCountByCustomerType = {};
+
+  // Calculate total transactions for each customer type
+  Object.keys(customerData).forEach(date => {
+    Object.keys(customerData[date]).forEach(type => {
+      Object.keys(customerData[date][type]).forEach(customerType => {
+        transactionCountByCustomerType[customerType] = (transactionCountByCustomerType[customerType] || 0);
+
+        Object.keys(customerData[date][type][customerType]).forEach(address => {
+          transactionCountByCustomerType[customerType] += customerData[date][type][customerType][address].transaction_count;
+        });
+      });
+    });
+  });
+
+  Object.keys(transactionCountByCustomerType).forEach(customerType => {
+    const count = transactionCountByCustomerType[customerType];
+
+    // Max transactions
+    if (count > maxTransactionCountByCustomerType) {
+      maxTransactionCountByCustomerType = count;
+      maxCustomerTypes = [customerType];
+    } else if (count === maxTransactionCountByCustomerType) {
+        maxCustomerTypes.push(customerType);
+    }
+
+    // Min transactions 
+    if (count < minTransactionCountByCustomerType && count > 0) {
+      minTransactionCountByCustomerType = count;
+      minCustomerType = [customerType];
+    } else if (count === minTransactionCountByCustomerType) {
+        minCustomerType.push(customerType);
+    }
+  });
+}
+findCustomerTypesWithExtremeTransactions(customerData);
+
+let maxTransactionCountByProvince = 0;
+let minTransactionCountByProvince = Infinity;
+let highestprovinces = [];
+let leastprovinces = [];
+
+function findProvincesWithExtremeTransactions(customerData) {
+  let transactionCountByProvince = {};
+ 
+  Object.keys(customerData).forEach(date => {
+    Object.keys(customerData[date]).forEach(type => {
+      Object.keys(customerData[date][type]).forEach(customerType => {
+        Object.keys(customerData[date][type][customerType]).forEach(province => {
+          transactionCountByProvince[province] = (transactionCountByProvince[province] || 0);
+          transactionCountByProvince[province] += customerData[date][type][customerType][province].transaction_count;
+        });
+      });
+    });
+  });
+ 
+  Object.keys(transactionCountByProvince).forEach(province => {
+    const count = transactionCountByProvince[province];
+
+    // Max transactions
+    if (count > maxTransactionCountByProvince) {
+      maxTransactionCountByProvince = count;
+      highestprovinces = [province];
+    } else if (count === maxTransactionCountByProvince) {
+      highestprovinces.push(province);
+    }
+
+    // Min transactions
+    if (count < minTransactionCountByProvince && count > 0) {
+      minTransactionCountByProvince = count;
+      leastprovinces = [province];
+    } else if (count === minTransactionCountByProvince) {
+      leastprovinces.push(province);
+    }
+  });
+}
+findProvincesWithExtremeTransactions(customerData);
+
+    //analyzation that should depends in the date filter or chart
+            highest.innerHTML = "Highest transaction: <span style='color: red;'>" + datesWithMaxTransaction.join(', ') + "</span> with <span style='color: blue;'> " + maxTransactionCount + "</span> transaction/s." ;
+            least.innerHTML = "Least transaction: <span style='color: red;'>" + datesWithMinTransaction.join(', ') + "</span> with <span style='color: blue;'> " + minTransactionCount + "</span> transaction/s.";
+            mostTransactionType.innerHTML = "Highest transaction type:  <span style='color:green;'>" + maxtransactionType.join(', ') + "</span> having  <span style='color: blue;'> " + maxTransactionCountByType + "</span> transaction/s.";
+            leastTransactionType.innerHTML =  "Least transaction type:   <span style='color:green;'>" + minTransactionType.join(', ') + "</span> having  <span style='color: blue;'> " + minTransactionCountByType + "</span> transaction/s.";
+            mostCustomerType.innerHTML =  "Highest customer type(s): <span style='color:green;'>" + maxCustomerTypes.join(', ') + "</span> having <span style='color: blue;'> " + maxTransactionCountByCustomerType + "</span> transaction/s.";
+            leastCustomerType.innerHTML = "Least customer type: <span style='color:green;'>" + minCustomerType.join(', ') + "</span> having <span style='color: blue;'> " + minTransactionCountByCustomerType + "</span> transaction/s.";
+            mostCustomerProvince.innerHTML = "Provinces with the highest transactions: <span style='color:green;'>" + highestprovinces.join(', ') + "</span> having <span style='color: blue;'> " + maxTransactionCountByProvince + "</span> transaction/s.";
+            leastCustomerProvince.innerHTML = "Provinces with the least transactions: <span style='color:green;'>" + leastprovinces.join(', ') + "</span> having <span style='color: blue;'> " + minTransactionCountByProvince + "</span> transaction/s.";
+
+    
+}
+
+function processFilteredDataAmount() {
+    const customerData = {};
+
+    const filteredData = DatacustomerType.filter(
+        item => item.transaction_status === 'Paid' || item.transaction_status === 'Pending'
+    );
+
+    filteredData.forEach(item => {
+        const transactionDate = item.transaction_date;
+        const transactionType = item.transaction_type;
+        const customerType = item.customer_type;
+        const address = item.address;
+        const transactionCount = Number(item.transaction_count);
+        const totalAmount = Number(item.total_amount);
+
+        if (!customerData[transactionDate]) {
+            customerData[transactionDate] = {};
+        }
+
+        if (!customerData[transactionDate][transactionType]) {
+            customerData[transactionDate][transactionType] = {};
+        }
+
+        if (!customerData[transactionDate][transactionType][customerType]) {
+            customerData[transactionDate][transactionType][customerType] = {};
+        }
+
+        if (!customerData[transactionDate][transactionType][customerType][address]) {
+            customerData[transactionDate][transactionType][customerType][address] = {
+                transaction_count: 0,
+                total_amount: 0,
+            };
+        }
+
+        customerData[transactionDate][transactionType][customerType][address].transaction_count += transactionCount;
+        customerData[transactionDate][transactionType][customerType][address].total_amount += totalAmount;
+    });
+
+    const processedData = {};
+
+for (const transactionDate in customerData) {
+    if (!processedData[transactionDate]) {
+        processedData[transactionDate] = {};
+    }
+
+    const transactionTypes = customerData[transactionDate];
+    for (const transactionType in transactionTypes) {
+        if (!processedData[transactionDate][transactionType]) {
+            processedData[transactionDate][transactionType] = {};
+        }
+
+        const customerTypes = transactionTypes[transactionType];
+        for (const customerType in customerTypes) {
+            if (!processedData[transactionDate][transactionType][customerType]) {
+                processedData[transactionDate][transactionType][customerType] = {};
+            }
+
+            const addresses = customerTypes[customerType];
+            for (const address in addresses) {
+                processedData[transactionDate][transactionType][customerType][address] = {
+                    transaction_count: addresses[address].transaction_count,
+                    total_amount: addresses[address].total_amount
+                };
+            }
+        }
+    }
+}
+
+console.log(JSON.stringify(processedData, null, 2));
+    if (!processedData || processedData.length === 0) {
+        processedData.push({
+            transaction_date: ' ',
+            transaction_type: ' ',
+            customer_type: ' ',
+            province: ' ',
+            transaction_count: 0,
+            total_amount: 0,
+        });
+    }
+
+//highest date
+let maxTransactionAmount = 0;
+let minTransactionAmount = Infinity;
+let datesWithMaxTransactionAmount = [];
+let datesWithMinTransactionAmount = [];
+
+function findDatesWithExtremeTransactionAmounts(customerData) {
+  Object.keys(customerData).forEach(date => {
+    let totalAmountForDate = 0;
+
+    Object.keys(customerData[date]).forEach(type => {
+      Object.keys(customerData[date][type]).forEach(customerType => {
+        Object.keys(customerData[date][type][customerType]).forEach(address => {
+          totalAmountForDate += customerData[date][type][customerType][address].total_amount;
+        });
+      });
+    });
+
+    // Check for max transaction amount
+    if (totalAmountForDate > maxTransactionAmount) {
+      maxTransactionAmount = totalAmountForDate;
+      datesWithMaxTransactionAmount = [date];
+    } else if (totalAmountForDate === maxTransactionAmount) {
+      datesWithMaxTransactionAmount.push(date);
+    }
+
+    // Check for min transaction amount
+    if (totalAmountForDate < minTransactionAmount && totalAmountForDate > 0) {
+      minTransactionAmount = totalAmountForDate;
+      datesWithMinTransactionAmount = [date];
+    } else if (totalAmountForDate === minTransactionAmount) {
+      datesWithMinTransactionAmount.push(date);
+    }
+  });
+}
+
+findDatesWithExtremeTransactionAmounts(customerData);
+
+//transaction type income
+let maxTransactionAmountByType = 0;
+let minTransactionAmountByType = Infinity;
+let maxTransactionTypeByAmount = [];
+let minTransactionTypeByAmount = [];
+
+function findTransactionTypesWithExtremeTransactionAmounts(customerData) {
+  let transactionAmountByType = {};
+
+  Object.keys(customerData).forEach(date => {
+    Object.keys(customerData[date]).forEach(type => {
+      transactionAmountByType[type] = (transactionAmountByType[type] || 0);
+
+      Object.keys(customerData[date][type]).forEach(customerType => {
+        Object.keys(customerData[date][type][customerType]).forEach(address => {
+          transactionAmountByType[type] += customerData[date][type][customerType][address].total_amount;
+        });
+      });
+    });
+  });
+
+  Object.keys(transactionAmountByType).forEach(type => {
+    const amount = transactionAmountByType[type];
+
+    // Max transaction amount
+    if (amount > maxTransactionAmountByType) {
+      maxTransactionAmountByType = amount;
+      maxTransactionTypeByAmount = [type];
+    } else if (amount === maxTransactionAmountByType) {
+      maxTransactionTypeByAmount.push(type);
+    }
+
+    // Min transaction amount
+    if (amount < minTransactionAmountByType && amount > 0) {
+      minTransactionAmountByType = amount;
+      minTransactionTypeByAmount = [type];
+    } else if (amount === minTransactionAmountByType) {
+      minTransactionTypeByAmount.push(type);
+    }
+  });
+}
+findTransactionTypesWithExtremeTransactionAmounts(customerData);
+
+//customer type income 
+let maxTransactionAmountByCustomerType = 0;
+let minTransactionAmountByCustomerType = Infinity;
+let maxCustomerTypeByAmount = [];
+let minCustomerTypeByAmount = [];
+
+function findCustomerTypesWithExtremeTransactionAmounts(customerData) {
+  let transactionAmountByCustomerType = {};
+
+  Object.keys(customerData).forEach(date => {
+    Object.keys(customerData[date]).forEach(type => {
+      Object.keys(customerData[date][type]).forEach(customerType => {
+        transactionAmountByCustomerType[customerType] = (transactionAmountByCustomerType[customerType] || 0);
+
+        Object.keys(customerData[date][type][customerType]).forEach(address => {
+          transactionAmountByCustomerType[customerType] += customerData[date][type][customerType][address].total_amount;
+        });
+      });
+    });
+  });
+
+  Object.keys(transactionAmountByCustomerType).forEach(customerType => {
+    const amount = transactionAmountByCustomerType[customerType];
+
+    // Max transaction amount
+    if (amount > maxTransactionAmountByCustomerType) {
+      maxTransactionAmountByCustomerType = amount;
+      maxCustomerTypeByAmount = [customerType];
+    } else if (amount === maxTransactionAmountByCustomerType) {
+      maxCustomerTypeByAmount.push(customerType);
+    }
+
+    // Min transaction amount
+    if (amount < minTransactionAmountByCustomerType && amount > 0) {
+      minTransactionAmountByCustomerType = amount;
+      minCustomerTypeByAmount = [customerType];
+    } else if (amount === minTransactionAmountByCustomerType) {
+      minCustomerTypeByAmount.push(customerType);
+    }
+  });
+}
+findCustomerTypesWithExtremeTransactionAmounts(customerData);
+
+//province income
+let maxTransactionAmountByProvince = 0;
+let minTransactionAmountByProvince = Infinity;
+let highestProvincesByAmount = [];
+let leastProvincesByAmount = [];
+
+function findProvincesWithExtremeTransactionAmounts(customerData) {
+  let transactionAmountByProvince = {};
+
+  // Calculate total transaction amounts for each province
+  Object.keys(customerData).forEach(date => {
+    Object.keys(customerData[date]).forEach(type => {
+      Object.keys(customerData[date][type]).forEach(customerType => {
+        Object.keys(customerData[date][type][customerType]).forEach(province => {
+          transactionAmountByProvince[province] = (transactionAmountByProvince[province] || 0);
+          transactionAmountByProvince[province] += customerData[date][type][customerType][province].total_amount;
+        });
+      });
+    });
+  });
+
+  // Find the max and min transaction amounts for provinces
+  Object.keys(transactionAmountByProvince).forEach(province => {
+    const amount = transactionAmountByProvince[province];
+
+    // Max transaction amount
+    if (amount > maxTransactionAmountByProvince) {
+      maxTransactionAmountByProvince = amount;
+      highestProvincesByAmount = [province];
+    } else if (amount === maxTransactionAmountByProvince) {
+      highestProvincesByAmount.push(province);
+    }
+
+    // Min transaction amount (ignoring provinces with zero transactions)
+    if (amount < minTransactionAmountByProvince && amount > 0) {
+      minTransactionAmountByProvince = amount;
+      leastProvincesByAmount = [province];
+    } else if (amount === minTransactionAmountByProvince) {
+      leastProvincesByAmount.push(province);
+    }
+  });
+}
+findProvincesWithExtremeTransactionAmounts(customerData);
+
+
+    //analyzation that should depends in the date filter or chart
+            highest.innerHTML = "Highest income: <span style='color: red;'>" + datesWithMaxTransactionAmount.join(', ') + "</span> with <span style='color: blue;'> " + Number(maxTransactionAmount).toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }) + "</span> total income.";
+            least.innerHTML = "Least income: <span style='color: red;'>" + datesWithMinTransactionAmount.join(', ') + "</span> with <span style='color: blue;'> " + Number(minTransactionAmount).toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }) + "</span> total income.";
+            mostTransactionType.innerHTML = "Highest transaction type:  <span style='color:green;'>" + maxTransactionTypeByAmount.join(', ') + "</span> having  <span style='color: blue;'> " + Number(maxTransactionAmountByType).toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }) + "</span> total income.";
+            leastTransactionType.innerHTML = "Least transaction type:   <span style='color:green;'>" + minTransactionTypeByAmount.join(', ') + "</span> having  <span style='color: blue;'> " + Number(minTransactionAmountByType).toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }) + "</span> total income.";
+            mostCustomerType.innerHTML = "Highest customer type(s): <span style='color:green;'>" + maxCustomerTypeByAmount.join(', ') + "</span> having <span style='color: blue;'> " + Number(maxTransactionAmountByCustomerType).toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }) + "</span> total income.";
+            leastCustomerType.innerHTML = "Least customer type: <span style='color:green;'>" + minCustomerTypeByAmount.join(', ') + "</span> having <span style='color: blue;'> " + Number(minTransactionAmountByCustomerType).toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }) + "</span> total income.";
+            mostCustomerProvince.innerHTML = "Provinces with the highest income: <span style='color:green;'>" + highestProvincesByAmount.join(', ') + "</span> having <span style='color: blue;'> " + Number(maxTransactionAmountByProvince).toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }) + "</span>.";
+            leastCustomerProvince.innerHTML = "Provinces with the least income: <span style='color:green;'>" + leastProvincesByAmount.join(', ') + "</span> having <span style='color: blue;'> " + Number(minTransactionAmountByProvince).toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }) + "</span>.";    
+}
+
+function refreshContent() 
+{
+    processFilteredData();
+    processFilteredDataAmount();
+}
+startDateElements.addEventListener('change', function() {
+        updateData();
+        refreshContent();
+    });
+endDateElements.addEventListener('change', function() {
+        updateData();
+        refreshContent();
+    });
+
+    updateData();
+    refreshContent();
+
+
+        
 
 
         //totaltransaction popup
@@ -1789,103 +2389,11 @@ $targetIncome = [
             targetTransaction.innerHTML = "Target transaction for this quarter is <span style='color: blue;'>" + Target;
             percentTransaction.innerHTML = "Achieved <span style='color: " + percentagecolor + ";'>" + percentage + "%</span> of target transaction.";
             PopupHeader.innerHTML = "Total Transaction";
-
-            // const startDateObj = new Date(startDateS);
-            // const endDateObj = new Date(endDateS);
-
-            // //sum of transaction per div (dataset)
-            // const sumTransactionDataset = {
-            //     data: TransactionperDiv.labels.map((date, index) => {
-            //         let sum = 0;
-            //         TransactionperDiv.datasets.forEach(dataset => {
-            //             if (dataset.data[index] !== undefined) {
-            //                 sum += dataset.data[index];
-            //             }
-            //         });
-            //         return sum;
-            //     }),
-            //     // Set labels to transaction_date values
-            //     labels: TransactionperDiv.labels,
-            // };
-            // const maxIndex = sumTransactionDataset.data.indexOf(Math.max(...sumTransactionDataset.data));
-            // const highestTransactionCount = sumTransactionDataset.data[maxIndex];
-            // const dateofhighest = sumTransactionDataset.labels[maxIndex];
-            // const minIndex = sumTransactionDataset.data.indexOf(Math.min(...sumTransactionDataset.data));
-            // const leastTransactionCount = sumTransactionDataset.data[minIndex];
-            // const dateofleast = sumTransactionDataset.labels[minIndex];
-
-            // //Transaction type dataset
-            // const transactionTypeData = <?php
-            //                             $data = array();
-            //                             for ($i = 0; $i < count($transactionType); $i++) {
-            //                                 $data[] = array('label' => $transactionType[$i], 'data' => $transactionTypecounts[$i]);
-            //                             }
-            //                             echo json_encode($data);
-            //                             ?>;
-
-            // const maxtransactionTypeData = transactionTypeData.reduce((max, obj) => (obj.data > max.data ? obj : max), {
-            //     data: -Infinity
-            // });
-            // const maxData = maxtransactionTypeData.data;
-            // const maxtransactionType = transactionTypeData.filter(obj => obj.data === maxData).map(obj => obj.label);
-            // const minTransactionTypeData = transactionTypeData.reduce((min, obj) => (obj.data < min.data ? obj : min), {
-            //     data: Infinity
-            // });
-            // const minData = minTransactionTypeData.data;
-            // const minTransactionType = transactionTypeData.filter(obj => obj.data === minData).map(obj => obj.label);
-
-            // const customerTypeData = <?php
-            //                             $data = array();
-            //                             for ($i = 0; $i < count($customerTypetransaction); $i++) {
-            //                                 $data[] = array('label' => $customerTypetransaction[$i], 'data' => $customerTypecounttransaction[$i]);
-            //                             }
-            //                             echo json_encode($data);
-            //                             ?>;
-
-            // const maxCustomerTypeData = customerTypeData.reduce((max, obj) => (obj.data >= max.data ? obj : max), {
-            //     data: -Infinity
-            // });
-            // const maxCustomerData = maxCustomerTypeData.data;
-            // const maxCustomerTypes = customerTypeData.filter(obj => obj.data === maxCustomerData).map(obj => obj.label);
-            // const minCustomerTypeData = customerTypeData.reduce((min, obj) => (obj.data <= min.data ? obj : min), {
-            //     data: Infinity
-            // });
-            // const minCustomerData = minCustomerTypeData.data;
-            // const minCustomerType = customerTypeData.filter(obj => obj.data === minCustomerData).map(obj => obj.label);
-
-            // const Province = {
-            //     data: province.datasets,
-            //     labels: province.labels,
-            // };
-
-            // const highestprovincedata = Math.max(...Province.data);
-            // const tolerance = 0.0001;
-            // const highestprovinces = [];
-            // Province.labels.forEach((label, index) => {
-            //     if (Math.abs(Province.data[index] - highestprovincedata) < tolerance) {
-            //         highestprovinces.push(label);
-            //     }
-            // });
-
-            // const leastprovincedata = Math.min(...Province.data);
-            // const leastprovinces = [];
-            // Province.labels.forEach((label, index) => {
-            //     if (Math.abs(Province.data[index] - leastprovincedata) < tolerance) {
-            //         leastprovinces.push(label);
-            //     }
-            // });
-
-            // //analyzation that should depends in the date filter or chart
-            // highest.innerHTML = "Highest transaction: <span style='color: red;'>" + dateofleast + "</span> with <span style='color: blue;'> " + highestTransactionCount + "</span> transaction/s.";
-            // least.innerHTML = "Least transaction: <span style='color: red;'>" + dateofhighest + "</span> with <span style='color: blue;'> " + leastTransactionCount + "</span> transaction/s.";
-            // mostTransactionType.innerHTML = "Highest transaction type:  <span style='color:green;'>" + maxtransactionType.join(', ') + "</span> having  <span style='color: blue;'> " + maxData + "</span> transaction/s.";
-            // leastTransactionType.innerHTML = "Least transaction type:   <span style='color:green;'>" + minTransactionType.join(', ') + "</span> having  <span style='color: blue;'> " + minData + "</span> transaction/s.";
-            // mostCustomerType.innerHTML = "Highest customer type(s): <span style='color:green;'>" + maxCustomerTypes.join(', ') + "</span> having <span style='color: blue;'> " + maxCustomerData + "</span> transaction/s.";
-            // leastCustomerType.innerHTML = "Least customer type: <span style='color:green;'>" + minCustomerType.join(', ') + "</span> having <span style='color: blue;'> " + minCustomerData + "</span> transaction/s.";
-            // mostCustomerProvince.innerHTML = "Provinces with the highest transactions: <span style='color:green;'>" + highestprovinces.join(', ') + "</span> having <span style='color: blue;'> " + highestprovincedata + "</span> transaction/s.";
-            // leastCustomerProvince.innerHTML = "Provinces with the least transactions: <span style='color:green;'>" + leastprovinces.join(', ') + "</span> having <span style='color: blue;'> " + leastprovincedata + "</span> transaction/s.";
+            processFilteredData();
 
         });
+        updateData();
+        refreshContent();
         closePopup.addEventListener("click", () => {
             // Close the pop-up when the close button is clicked
             popup.style.display = "none";
@@ -2027,121 +2535,11 @@ $targetIncome = [
             targetTransaction.innerHTML = "Target income for this quarter is <span style='color: blue;'>" + Target;
             percentTransaction.innerHTML = "Achieved <span style='color: " + percentagecolor + ";'>" + percentage + "%</span> of target income";
             PopupHeader.innerHTML = "Total Income";
-
-
-            // //sum of transaction per div (dataset)
-            // const sumIncomeDataset = {
-            //     data: SalesperDiv.labels.map((date, index) => {
-            //         let sum = 0;
-            //         SalesperDiv.datasets.forEach(dataset => {
-            //             if (dataset.data[index] !== undefined) {
-            //                 sum += dataset.data[index];
-            //             }
-            //         });
-            //         return sum;
-            //     }),
-            //     // Set labels to transaction_date values
-            //     labels: SalesperDiv.labels,
-            // };
-
-            // const maxIndex = sumIncomeDataset.data.indexOf(Math.max(...sumIncomeDataset.data));
-            // const highestIncomeCount = parseFloat(sumIncomeDataset.data[maxIndex]).toFixed(2);
-            // const dateofhighest = sumIncomeDataset.labels[maxIndex];
-            // const minIndex = sumIncomeDataset.data.indexOf(Math.min(...sumIncomeDataset.data));
-            // const leastIncomeCount = parseFloat(sumIncomeDataset.data[minIndex]).toFixed(2);
-            // const dateofleast = sumIncomeDataset.labels[minIndex];
-
-            // const transactionTypeData = <?php
-            //                             $data = array();
-            //                             for ($i = 0; $i < count($transactionTypeincome); $i++) {
-            //                                 $data[] = array('label' => $transactionTypeincome[$i], 'data' => $transactionTypesumincome[$i]);
-            //                             }
-            //                             echo json_encode($data);
-            //                             ?>;
-
-            // const maxtransactionTypeData = transactionTypeData.reduce((max, obj) => (obj.data > max.data ? obj : max), {
-            //     data: -Infinity
-            // });
-            // const maxData = maxtransactionTypeData.data;
-            // const maxtransactionType = transactionTypeData.filter(obj => obj.data === maxData).map(obj => obj.label);
-            // const minTransactionTypeData = transactionTypeData.reduce((min, obj) => (obj.data < min.data ? obj : min), {
-            //     data: Infinity
-            // });
-            // const minData = minTransactionTypeData.data;
-            // const minTransactionType = transactionTypeData.filter(obj => obj.data === minData).map(obj => obj.label);
-
-            // const customerTypeData = <?php
-            //                             $data = array();
-            //                             for ($i = 0; $i < count($customerTypeincome); $i++) {
-            //                                 $data[] = array('label' => $customerTypeincome[$i], 'data' => $customerTypecountincome[$i]);
-            //                             }
-            //                             echo json_encode($data);
-            //                             ?>;
-
-            // const maxCustomerTypeData = customerTypeData.reduce((max, obj) => (obj.data >= max.data ? obj : max), {
-            //     data: -Infinity
-            // });
-            // const maxCustomerData = maxCustomerTypeData.data;
-            // const maxCustomerTypes = customerTypeData.filter(obj => obj.data === maxCustomerData).map(obj => obj.label);
-            // const minCustomerTypeData = customerTypeData.reduce((min, obj) => (obj.data <= min.data ? obj : min), {
-            //     data: Infinity
-            // });
-            // const minCustomerData = minCustomerTypeData.data;
-            // const minCustomerType = customerTypeData.filter(obj => obj.data === minCustomerData).map(obj => obj.label);
-
-            // const ProvinceIncome = {
-            //     data: provinceincome.datasets,
-            //     labels: provinceincome.labels,
-            // };
-
-            // const highestIncomeData = Math.max(...ProvinceIncome.data);
-            // const tolerance = 0.0001;
-            // const highestIncomeProvinces = [];
-            // ProvinceIncome.labels.forEach((label, index) => {
-            //     if (Math.abs(ProvinceIncome.data[index] - highestIncomeData) < tolerance) {
-            //         highestIncomeProvinces.push(label);
-            //     }
-            // });
-
-            // const leastIncomeData = Math.min(...ProvinceIncome.data);
-            // const leastIncomeProvinces = [];
-            // ProvinceIncome.labels.forEach((label, index) => {
-            //     if (Math.abs(ProvinceIncome.data[index] - leastIncomeData) < tolerance) {
-            //         leastIncomeProvinces.push(label);
-            //     }
-            // });
-
-
-
-
-            // highest.innerHTML = "Highest income: <span style='color: red;'>" + dateofleast + "</span> with <span style='color: blue;'> " + highestIncomeCount + "</span> total income.";
-            // least.innerHTML = "Least income: <span style='color: red;'>" + dateofhighest + "</span> with <span style='color: blue;'> " + leastIncomeCount + "</span> total income.";
-            // mostTransactionType.innerHTML = "Highest transaction type:  <span style='color:green;'>" + maxtransactionType.join(', ') + "</span> having  <span style='color: blue;'> " + Number(maxData).toLocaleString('en-US', {
-            //     minimumFractionDigits: 2,
-            //     maximumFractionDigits: 2
-            // }) + "</span> total income.";
-            // leastTransactionType.innerHTML = "Least transaction type:   <span style='color:green;'>" + minTransactionType.join(', ') + "</span> having  <span style='color: blue;'> " + Number(minData).toLocaleString('en-US', {
-            //     minimumFractionDigits: 2,
-            //     maximumFractionDigits: 2
-            // }) + "</span> total income.";
-            // mostCustomerType.innerHTML = "Highest customer type(s): <span style='color:green;'>" + maxCustomerTypes.join(', ') + "</span> having <span style='color: blue;'> " + Number(maxCustomerData).toLocaleString('en-US', {
-            //     minimumFractionDigits: 2,
-            //     maximumFractionDigits: 2
-            // }) + "</span> total income.";
-            // leastCustomerType.innerHTML = "Least customer type: <span style='color:green;'>" + minCustomerType.join(', ') + "</span> having <span style='color: blue;'> " + Number(minCustomerData).toLocaleString('en-US', {
-            //     minimumFractionDigits: 2,
-            //     maximumFractionDigits: 2
-            // }) + "</span> total income.";
-            // mostCustomerProvince.innerHTML = "Provinces with the highest income: <span style='color:green;'>" + highestIncomeProvinces.join(', ') + "</span> having <span style='color: blue;'> " + Number(highestIncomeData).toLocaleString('en-US', {
-            //     minimumFractionDigits: 2,
-            //     maximumFractionDigits: 2
-            // }) + "</span>.";
-            // leastCustomerProvince.innerHTML = "Provinces with the least income: <span style='color:green;'>" + leastIncomeProvinces.join(', ') + "</span> having <span style='color: blue;'> " + Number(leastIncomeData).toLocaleString('en-US', {
-            //     minimumFractionDigits: 2,
-            //     maximumFractionDigits: 2
-            // }) + "</span>.";
+            processFilteredDataAmount();
 
         });
+        updateData();
+        refreshContent();
 
 
         closePopup.addEventListener("click", () => {
@@ -2953,7 +3351,7 @@ $targetIncome = [
     const customerstatpopup = `
             <style>
                 .scrollable-table {
-                    height: 100%; /* Adjust the height as needed */
+                    height: 20rem;
                     overflow-y: auto;
                 }
                 .scrollable-table table {
@@ -3533,16 +3931,16 @@ $targetIncome = [
                             return result;
                         }, []);
 
-                        // Summing transaction_count for each transaction_type
-                        const transactionTypeSum = paiddatafiltered.map(entry => ({
-                            transaction_type: entry.transaction_type,
-                            total_transaction_count: entry.customer_types.reduce((sum, customer) => sum + customer.transaction_count, 0),
-                            total_transaction_income: entry.customer_types.reduce((sum, customer) => sum + customer.total_amount, 0),
-                        }));
-                        const customertypepaid = paiddatafiltered.map(item => item.customer_types.map(customer => customer.customer_type));
-                        const totalAmountpaiddata = transactionTypeSum.map(item => item.total_transaction_income);
-                        const transactionTypepaid = transactionTypeSum.map(item => item.transaction_type);
-                        const customertypepaiddata = transactionTypeSum.map(item => item.total_transaction_count);
+                    // Summing transaction_count for each transaction_type
+                    const transactionTypeSum = paiddatafiltered.map(entry => ({
+                        transaction_type: entry.transaction_type,
+                        total_transaction_count: entry.customer_types.reduce((sum, customer) => sum + customer.transaction_count, 0),
+                        total_transaction_income: entry.customer_types.reduce((sum, customer) => sum + customer.total_amount, 0),
+                    }));
+                    const customertypepaid = paiddatafiltered.map(item => item.customer_types.map(customer => customer.customer_type));
+                    const totalAmountpaiddata = transactionTypeSum.map(item => item.total_transaction_income);
+                    const transactionTypepaid = transactionTypeSum.map(item => item.transaction_type);
+                    const customertypepaiddata = transactionTypeSum.map(item => item.total_transaction_count);
 
                         const customertransactiontypePaid = [];
                         for (let i = 0; i < customertypepaid.length; i++) {
