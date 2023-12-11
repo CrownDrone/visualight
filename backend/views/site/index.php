@@ -11,6 +11,9 @@ $currentIndex = Url::to(['']);
 
 ?>
 
+<meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <style>
     @font-face {
         font-family: 'Poppins';
@@ -31,7 +34,7 @@ $currentIndex = Url::to(['']);
         display: flex;
         flex-direction: column;
         align-items: center;
-        box-shadow: -4px 4px 8px rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.15);
+        box-shadow: -4px 4px 8px rgba(0, 0, 0, 0.20), 0 6px 20px 0 rgba(0, 0, 0, 0.01);
         /* Updated box-shadow */
     }
 
@@ -365,7 +368,7 @@ $currentIndex = Url::to(['']);
         text-align: center;
         display: wrap;
         background-color: white;
-        box-shadow: -4px 4px 8px rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.15);
+        box-shadow: -4px 4px 8px rgba(0, 0, 0, 0.15), 0 6px 20px 0 rgba(0, 0, 0, 0.07);
         z-index: 0;
 
     }
@@ -510,6 +513,11 @@ $currentIndex = Url::to(['']);
 
     #toggleButton:hover {
         background-color: #6BBAFF;
+    }
+
+    .AllPage{
+        padding-left:7% ;
+        padding-right:7%
     }
 
 
@@ -1285,6 +1293,9 @@ $targetIncome = [
 
 ?>
 <?php \yii\widgets\Pjax::begin(); ?>
+
+
+<div class = "AllPage">
 <div class="DailyTransaction">
     <p>Total Transactions Daily</p>
     <!-- <p id="totalTransactionsTitle">Total Transactions Daily</p> -->
@@ -3623,8 +3634,9 @@ endDateElements.addEventListener('change', function() {
             </div>
         </div>
     </div>
-
-    <div class="graph2" id="transaction" style="margin-top:20px">
+    
+    <div class="graph2">
+    <div id="transaction" style="margin-top:20px">
         <div class="chart-container2">
             <p class="reportTitle" id="transactionStatuspopup">Transaction Status</p>
             <canvas id="transactionStatus"></canvas>
@@ -3634,7 +3646,7 @@ endDateElements.addEventListener('change', function() {
             <canvas id="paymendtMethod"></canvas>
         </div>
     </div>
-    <div class="graph2">
+    <div>
         <div class="chart-container2">
             <p class="reportTitle" id="transactionTypepoppup">Type of Transaction</p>
             <canvas id="transactionType"></canvas>
@@ -3644,6 +3656,7 @@ endDateElements.addEventListener('change', function() {
             <p class="reportTitle" id="customerTypepoppup">Type of Customers</p>
             <canvas id="customerType"></canvas>
         </div>
+    </div>
     </div>
 
     <!-- Pop-up for transaction type -->
@@ -3748,6 +3761,8 @@ endDateElements.addEventListener('change', function() {
     </div>
 
 </div>
+</div>
+
 
 <?php \yii\widgets\Pjax::end(); ?>
 

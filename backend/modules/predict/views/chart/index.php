@@ -5,7 +5,6 @@ use yii\helpers\Json;
 use yii\web\View;
 
 
-
 ?>
 
 <meta charset="UTF-8">
