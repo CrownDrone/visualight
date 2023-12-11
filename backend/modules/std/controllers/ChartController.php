@@ -45,15 +45,20 @@ class ChartController extends BaseController
 
         $fromDate = "";
         $toDate = "";
+        $qVal = "";
         if (Yii::$app->request->isAjax) {
-
             $fromDate = Yii::$app->request->post('fromDate');
             $toDate = Yii::$app->request->post('toDate');
+            if (Yii::$app->request->post('qVal') === "A") {
+                $qVal = "COUNT(t1.customer_id) as data";
+            } else {
+                $qVal = "SUM(t1.amount) as data";
+            };
 
             //----------------------START OF REGIONAL PROVINCE DAYS-----------------------------------
 
             $custmerPerProvinceNCR = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['division' => ['2']])
@@ -63,7 +68,7 @@ class ChartController extends BaseController
                 ->all();
 
             $custmerPerProvinceRI = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['division' => ['2']])
@@ -73,7 +78,7 @@ class ChartController extends BaseController
                 ->all();
 
             $custmerPerProvinceRII = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['division' => ['2']])
@@ -83,7 +88,7 @@ class ChartController extends BaseController
                 ->all();
 
             $custmerPerProvinceRIII = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['division' => ['2']])
@@ -93,7 +98,7 @@ class ChartController extends BaseController
                 ->all();
 
             $custmerPerProvinceRIVA = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['division' => ['2']])
@@ -103,7 +108,7 @@ class ChartController extends BaseController
                 ->all();
 
             $custmerPerProvinceMIMAROPA = (new Query()) //use MIMAROPA as desc please
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['division' => ['2']])
@@ -113,7 +118,7 @@ class ChartController extends BaseController
                 ->all();
 
             $custmerPerProvinceV = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['division' => ['2']])
@@ -123,7 +128,7 @@ class ChartController extends BaseController
                 ->all();
 
             $custmerPerProvinceCAR = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['division' => ['2']])
@@ -133,7 +138,7 @@ class ChartController extends BaseController
                 ->all();
 
             $custmerPerProvinceVI = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['division' => ['2']])
@@ -143,7 +148,7 @@ class ChartController extends BaseController
                 ->all();
 
             $custmerPerProvinceVII = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['division' => ['2']])
@@ -153,7 +158,7 @@ class ChartController extends BaseController
                 ->all();
 
             $custmerPerProvinceVIII = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['division' => ['2']])
@@ -163,7 +168,7 @@ class ChartController extends BaseController
                 ->all();
 
             $custmerPerProvinceIX = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['division' => ['2']])
@@ -173,7 +178,7 @@ class ChartController extends BaseController
                 ->all();
 
             $custmerPerProvinceX = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['division' => ['2']])
@@ -183,7 +188,7 @@ class ChartController extends BaseController
                 ->all();
 
             $custmerPerProvinceXI = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['division' => ['2']])
@@ -193,7 +198,7 @@ class ChartController extends BaseController
                 ->all();
 
             $custmerPerProvinceXII = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['division' => ['2']])
@@ -203,7 +208,7 @@ class ChartController extends BaseController
                 ->all();
 
             $custmerPerProvinceXIII = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['division' => ['2']])
@@ -213,7 +218,7 @@ class ChartController extends BaseController
                 ->all();
 
             $custmerPerProvinceBARMM = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['division' => ['2']])
@@ -369,15 +374,20 @@ class ChartController extends BaseController
 
         $fromDate = "";
         $toDate = "";
+        $qVal = "";
         if (Yii::$app->request->isAjax) {
-
             $fromDate = Yii::$app->request->post('fromDate');
             $toDate = Yii::$app->request->post('toDate');
+            if (Yii::$app->request->post('qVal') === "A") {
+                $qVal = "COUNT(t1.customer_id) as data";
+            } else {
+                $qVal = "SUM(t1.amount) as data";
+            };
 
             //----------------------START OF REGIONAL PROVINCE DAYS-----------------------------------
 
             $custmerPerProvinceNCR = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['division' => ['2']])
@@ -387,7 +397,7 @@ class ChartController extends BaseController
                 ->all();
 
             $custmerPerProvinceRI = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['division' => ['2']])
@@ -397,7 +407,7 @@ class ChartController extends BaseController
                 ->all();
 
             $custmerPerProvinceRII = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['division' => ['2']])
@@ -407,7 +417,7 @@ class ChartController extends BaseController
                 ->all();
 
             $custmerPerProvinceRIII = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['division' => ['2']])
@@ -417,7 +427,7 @@ class ChartController extends BaseController
                 ->all();
 
             $custmerPerProvinceRIVA = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['division' => ['2']])
@@ -427,7 +437,7 @@ class ChartController extends BaseController
                 ->all();
 
             $custmerPerProvinceMIMAROPA = (new Query()) //use MIMAROPA as desc please
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['division' => ['2']])
@@ -437,7 +447,7 @@ class ChartController extends BaseController
                 ->all();
 
             $custmerPerProvinceV = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['division' => ['2']])
@@ -447,7 +457,7 @@ class ChartController extends BaseController
                 ->all();
 
             $custmerPerProvinceCAR = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['division' => ['2']])
@@ -457,7 +467,7 @@ class ChartController extends BaseController
                 ->all();
 
             $custmerPerProvinceVI = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['division' => ['2']])
@@ -467,7 +477,7 @@ class ChartController extends BaseController
                 ->all();
 
             $custmerPerProvinceVII = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['division' => ['2']])
@@ -477,7 +487,7 @@ class ChartController extends BaseController
                 ->all();
 
             $custmerPerProvinceVIII = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['division' => ['2']])
@@ -487,7 +497,7 @@ class ChartController extends BaseController
                 ->all();
 
             $custmerPerProvinceIX = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['division' => ['2']])
@@ -497,7 +507,7 @@ class ChartController extends BaseController
                 ->all();
 
             $custmerPerProvinceX = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['division' => ['2']])
@@ -507,7 +517,7 @@ class ChartController extends BaseController
                 ->all();
 
             $custmerPerProvinceXI = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['division' => ['2']])
@@ -517,7 +527,7 @@ class ChartController extends BaseController
                 ->all();
 
             $custmerPerProvinceXII = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['division' => ['2']])
@@ -527,7 +537,7 @@ class ChartController extends BaseController
                 ->all();
 
             $custmerPerProvinceXIII = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['division' => ['2']])
@@ -537,7 +547,7 @@ class ChartController extends BaseController
                 ->all();
 
             $custmerPerProvinceBARMM = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['division' => ['2']])
@@ -692,15 +702,20 @@ class ChartController extends BaseController
 
         $fromDate = "";
         $toDate = "";
+        $qVal = "";
         if (Yii::$app->request->isAjax) {
-
             $fromDate = Yii::$app->request->post('fromDate');
             $toDate = Yii::$app->request->post('toDate');
+            if (Yii::$app->request->post('qVal') === "A") {
+                $qVal = "COUNT(t1.customer_id) as data";
+            } else {
+                $qVal = "SUM(t1.amount) as data";
+            };
 
             //----------------------START OF REGIONAL PROVINCE DAYS-----------------------------------
 
             $custmerPerProvinceNCR = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['division' => ['2']])
@@ -710,7 +725,7 @@ class ChartController extends BaseController
                 ->all();
 
             $custmerPerProvinceRI = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['division' => ['2']])
@@ -720,7 +735,7 @@ class ChartController extends BaseController
                 ->all();
 
             $custmerPerProvinceRII = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['division' => ['2']])
@@ -730,7 +745,7 @@ class ChartController extends BaseController
                 ->all();
 
             $custmerPerProvinceRIII = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['division' => ['2']])
@@ -740,7 +755,7 @@ class ChartController extends BaseController
                 ->all();
 
             $custmerPerProvinceRIVA = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['division' => ['2']])
@@ -750,7 +765,7 @@ class ChartController extends BaseController
                 ->all();
 
             $custmerPerProvinceMIMAROPA = (new Query()) //use MIMAROPA as desc please
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['division' => ['2']])
@@ -760,7 +775,7 @@ class ChartController extends BaseController
                 ->all();
 
             $custmerPerProvinceV = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['division' => ['2']])
@@ -770,7 +785,7 @@ class ChartController extends BaseController
                 ->all();
 
             $custmerPerProvinceCAR = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['division' => ['2']])
@@ -780,7 +795,7 @@ class ChartController extends BaseController
                 ->all();
 
             $custmerPerProvinceVI = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['division' => ['2']])
@@ -790,7 +805,7 @@ class ChartController extends BaseController
                 ->all();
 
             $custmerPerProvinceVII = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['division' => ['2']])
@@ -800,7 +815,7 @@ class ChartController extends BaseController
                 ->all();
 
             $custmerPerProvinceVIII = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['division' => ['2']])
@@ -810,7 +825,7 @@ class ChartController extends BaseController
                 ->all();
 
             $custmerPerProvinceIX = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['division' => ['2']])
@@ -820,7 +835,7 @@ class ChartController extends BaseController
                 ->all();
 
             $custmerPerProvinceX = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['division' => ['2']])
@@ -830,7 +845,7 @@ class ChartController extends BaseController
                 ->all();
 
             $custmerPerProvinceXI = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['division' => ['2']])
@@ -840,7 +855,7 @@ class ChartController extends BaseController
                 ->all();
 
             $custmerPerProvinceXII = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['division' => ['2']])
@@ -850,7 +865,7 @@ class ChartController extends BaseController
                 ->all();
 
             $custmerPerProvinceXIII = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['division' => ['2']])
@@ -860,7 +875,7 @@ class ChartController extends BaseController
                 ->all();
 
             $custmerPerProvinceBARMM = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['division' => ['2']])

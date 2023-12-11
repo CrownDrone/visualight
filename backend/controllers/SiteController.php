@@ -101,14 +101,20 @@ class SiteController extends BaseController
 
         $fromDate = "";
         $toDate = "";
+        $qVal = "";
         if (Yii::$app->request->isAjax) {
             $fromDate = Yii::$app->request->post('fromDate');
             $toDate = Yii::$app->request->post('toDate');
+            if (Yii::$app->request->post('qVal') === "A") {
+                $qVal = "COUNT(t1.customer_id) as data";
+            } else {
+                $qVal = "SUM(t1.amount) as data";
+            };
 
             //----------------------START OF REGIONAL PROVINCE DAYS-----------------------------------
 
             $custmerPerProvinceNCR = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['t2.address' => ['Metro Manila']])
@@ -117,7 +123,7 @@ class SiteController extends BaseController
                 ->all();
 
             $custmerPerProvinceRI = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['t2.address' => ['Ilocos Norte', 'Ilocos Sur', 'La Union', 'Pangasinan']])
@@ -126,7 +132,7 @@ class SiteController extends BaseController
                 ->all();
 
             $custmerPerProvinceRII = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['t2.address' => ['Batanes', 'Cagayan', 'La Union', 'Isabela', 'Quirino', 'Nueva Vizcaya']])
@@ -135,7 +141,7 @@ class SiteController extends BaseController
                 ->all();
 
             $custmerPerProvinceRIII = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['t2.address' => ['Aurora', 'Bataan', 'Bulacan', 'Nueba Ecija', 'Pampanga', 'Tarlac', 'Zambales']])
@@ -144,7 +150,7 @@ class SiteController extends BaseController
                 ->all();
 
             $custmerPerProvinceRIVA = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['t2.address' => ['Batangas', 'Cavite', 'Laguna', 'Quezon', 'Rizal',]])
@@ -153,7 +159,7 @@ class SiteController extends BaseController
                 ->all();
 
             $custmerPerProvinceMIMAROPA = (new Query()) //use MIMAROPA as desc please
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['t2.address' => ['Marinduque', 'Occidental Mindoro', 'Oriental Mindoro', 'Palawan', 'Romblon']])
@@ -162,7 +168,7 @@ class SiteController extends BaseController
                 ->all();
 
             $custmerPerProvinceV = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['t2.address' => ['Albay', 'Camarines Sur', 'Camarines Norte', 'Catanduanes', 'Masbate', 'Sorsogon']])
@@ -171,7 +177,7 @@ class SiteController extends BaseController
                 ->all();
 
             $custmerPerProvinceCAR = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['t2.address' => ['Abra', 'Apayao', 'Benguet', 'Ifugao', 'Kalinga', 'Mountain Province']])
@@ -180,7 +186,7 @@ class SiteController extends BaseController
                 ->all();
 
             $custmerPerProvinceVI = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['t2.address' => ['Aklan', 'Antique', 'Capiz', 'Guimaras', 'Iloilo', 'Negros Occidental']])
@@ -189,7 +195,7 @@ class SiteController extends BaseController
                 ->all();
 
             $custmerPerProvinceVII = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['t2.address' => ['Bohol', 'Cebu', 'Negros Oriental', 'Siquijor']])
@@ -198,7 +204,7 @@ class SiteController extends BaseController
                 ->all();
 
             $custmerPerProvinceVIII = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['t2.address' => ['Biliran', 'Eastern Samar', 'Leyte', 'Western Samar', 'Samar', 'Southern Leyte']])
@@ -207,7 +213,7 @@ class SiteController extends BaseController
                 ->all();
 
             $custmerPerProvinceIX = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['t2.address' => ['Zamboanga del Sur', 'Zamboanga del Norte', 'Zamboanga Sibugay']])
@@ -216,7 +222,7 @@ class SiteController extends BaseController
                 ->all();
 
             $custmerPerProvinceX = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['t2.address' => ['Bukidnon', 'Camiguin', 'Lanao del Norte', 'Misamis Oriental', 'Misamis Occidental']])
@@ -225,7 +231,7 @@ class SiteController extends BaseController
                 ->all();
 
             $custmerPerProvinceXI = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['t2.address' => ['Davao de Oro', 'Davao del Norte', 'Davao del Sur', 'Davao Oriental', 'Davao Occidental']])
@@ -234,7 +240,7 @@ class SiteController extends BaseController
                 ->all();
 
             $custmerPerProvinceXII = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['t2.address' => ['Cotabato', 'Sarangani', 'South Cotabato', 'Sultan Kudarat']])
@@ -243,7 +249,7 @@ class SiteController extends BaseController
                 ->all();
 
             $custmerPerProvinceXIII = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['t2.address' => ['Agusan del Norte', 'Agusan del Sur', 'Dinagat Islands', 'Surigao del Norte', 'Surigao del Sur']])
@@ -252,7 +258,7 @@ class SiteController extends BaseController
                 ->all();
 
             $custmerPerProvinceBARMM = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['t2.address' => ['Basilan', 'Lanao del Sur', 'Maguindanao del Norte', 'Sulu', 'Maguindanao del Sur', 'Tawi-Tawi']])
@@ -353,15 +359,22 @@ class SiteController extends BaseController
             'charset' => 'utf8',
         ]);
 
-        $fromDate = Yii::$app->request->post('fromDate');
-        $toDate = Yii::$app->request->post('toDate');
-
+        $fromDate = "";
+        $toDate = "";
+        $qVal = "";
         if (Yii::$app->request->isAjax) {
+            $fromDate = Yii::$app->request->post('fromDate');
+            $toDate = Yii::$app->request->post('toDate');
+            if (Yii::$app->request->post('qVal') === "A") {
+                $qVal = "COUNT(t1.customer_id) as data";
+            } else {
+                $qVal = "SUM(t1.amount) as data";
+            };
 
             //----------------------START OF REGIONAL PROVINCE MONTHS-----------------------------------
 
             $monthcustmerPerProvinceNCR = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['t2.address' => ['Metro Manila']])
@@ -370,7 +383,7 @@ class SiteController extends BaseController
                 ->all();
 
             $monthcustmerPerProvinceRI = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['t2.address' => ['Ilocos Norte', 'Ilocos Sur', 'La Union', 'Pangasinan']])
@@ -379,7 +392,7 @@ class SiteController extends BaseController
                 ->all();
 
             $monthcustmerPerProvinceRII = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['t2.address' => ['Batanes', 'Cagayan', 'La Union', 'Isabela', 'Quirino', 'Nueva Vizcaya']])
@@ -388,7 +401,7 @@ class SiteController extends BaseController
                 ->all();
 
             $monthcustmerPerProvinceRIII = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['t2.address' => ['Aurora', 'Bataan', 'Bulacan', 'Nueba Ecija', 'Pampanga', 'Tarlac', 'Zambales']])
@@ -397,7 +410,7 @@ class SiteController extends BaseController
                 ->all();
 
             $monthcustmerPerProvinceRIVA = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['t2.address' => ['Batangas', 'Cavite', 'Laguna', 'Quezon', 'Rizal',]])
@@ -406,7 +419,7 @@ class SiteController extends BaseController
                 ->all();
 
             $monthcustmerPerProvinceMIMAROPA = (new Query()) //use MIMAROPA as desc please
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['t2.address' => ['Marinduque', 'Occidental Mindoro', 'Oriental Mindoro', 'Palawan', 'Romblon']])
@@ -415,7 +428,7 @@ class SiteController extends BaseController
                 ->all();
 
             $monthcustmerPerProvinceV = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['t2.address' => ['Albay', 'Camarines Sur', 'Camarines Norte', 'Catanduanes', 'Masbate', 'Sorsogon']])
@@ -424,7 +437,7 @@ class SiteController extends BaseController
                 ->all();
 
             $monthcustmerPerProvinceCAR = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['t2.address' => ['Abra', 'Apayao', 'Benguet', 'Ifugao', 'Kalinga', 'Mountain Province']])
@@ -433,7 +446,7 @@ class SiteController extends BaseController
                 ->all();
 
             $monthcustmerPerProvinceVI = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['t2.address' => ['Aklan', 'Antique', 'Capiz', 'Guimaras', 'Iloilo', 'Negros Occidental']])
@@ -442,7 +455,7 @@ class SiteController extends BaseController
                 ->all();
 
             $monthcustmerPerProvinceVII = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['t2.address' => ['Bohol', 'Cebu', 'Negros Oriental', 'Siquijor']])
@@ -451,7 +464,7 @@ class SiteController extends BaseController
                 ->all();
 
             $monthcustmerPerProvinceVIII = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['t2.address' => ['Biliran', 'Eastern Samar', 'Leyte', 'Western Samar', 'Samar', 'Southern Leyte']])
@@ -460,7 +473,7 @@ class SiteController extends BaseController
                 ->all();
 
             $monthcustmerPerProvinceIX = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['t2.address' => ['Zamboanga del Sur', 'Zamboanga del Norte', 'Zamboanga Sibugay']])
@@ -469,7 +482,7 @@ class SiteController extends BaseController
                 ->all();
 
             $monthcustmerPerProvinceX = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['t2.address' => ['Bukidnon', 'Camiguin', 'Lanao del Norte', 'Misamis Oriental', 'Misamis Occidental']])
@@ -478,7 +491,7 @@ class SiteController extends BaseController
                 ->all();
 
             $monthcustmerPerProvinceXI = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['t2.address' => ['Davao de Oro', 'Davao del Norte', 'Davao del Sur', 'Davao Oriental', 'Davao Occidental']])
@@ -487,7 +500,7 @@ class SiteController extends BaseController
                 ->all();
 
             $monthcustmerPerProvinceXII = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['t2.address' => ['Cotabato', 'Sarangani', 'South Cotabato', 'Sultan Kudarat']])
@@ -496,7 +509,7 @@ class SiteController extends BaseController
                 ->all();
 
             $monthcustmerPerProvinceXIII = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['t2.address' => ['Agusan del Norte', 'Agusan del Sur', 'Dinagat Islands', 'Surigao del Norte', 'Surigao del Sur']])
@@ -505,7 +518,7 @@ class SiteController extends BaseController
                 ->all();
 
             $monthcustmerPerProvinceBARMM = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['t2.address' => ['Basilan', 'Lanao del Sur', 'Maguindanao del Norte', 'Sulu', 'Maguindanao del Sur', 'Tawi-Tawi']])
@@ -605,15 +618,22 @@ class SiteController extends BaseController
             'charset' => 'utf8',
         ]);
 
-        $fromDate = Yii::$app->request->post('fromDate');
-        $toDate = Yii::$app->request->post('toDate');
-
+        $fromDate = "";
+        $toDate = "";
+        $qVal = "";
         if (Yii::$app->request->isAjax) {
+            $fromDate = Yii::$app->request->post('fromDate');
+            $toDate = Yii::$app->request->post('toDate');
+            if (Yii::$app->request->post('qVal') === "A") {
+                $qVal = "COUNT(t1.customer_id) as data";
+            } else {
+                $qVal = "SUM(t1.amount) as data";
+            };
 
             //----------------------START OF REGIONAL PROVINCE MONTHS-----------------------------------
 
             $yearcustmerPerProvinceNCR = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['t2.address' => ['Metro Manila']])
@@ -622,7 +642,7 @@ class SiteController extends BaseController
                 ->all();
 
             $yearcustmerPerProvinceRI = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['t2.address' => ['Ilocos Norte', 'Ilocos Sur', 'La Union', 'Pangasinan']])
@@ -631,7 +651,7 @@ class SiteController extends BaseController
                 ->all();
 
             $yearcustmerPerProvinceRII = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['t2.address' => ['Batanes', 'Cagayan', 'La Union', 'Isabela', 'Quirino', 'Nueva Vizcaya']])
@@ -640,7 +660,7 @@ class SiteController extends BaseController
                 ->all();
 
             $yearcustmerPerProvinceRIII = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['t2.address' => ['Aurora', 'Bataan', 'Bulacan', 'Nueba Ecija', 'Pampanga', 'Tarlac', 'Zambales']])
@@ -649,7 +669,7 @@ class SiteController extends BaseController
                 ->all();
 
             $yearcustmerPerProvinceRIVA = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['t2.address' => ['Batangas', 'Cavite', 'Laguna', 'Quezon', 'Rizal',]])
@@ -658,7 +678,7 @@ class SiteController extends BaseController
                 ->all();
 
             $yearcustmerPerProvinceMIMAROPA = (new Query()) //use MIMAROPA as desc please
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['t2.address' => ['Marinduque', 'Occidental Mindoro', 'Oriental Mindoro', 'Palawan', 'Romblon']])
@@ -667,7 +687,7 @@ class SiteController extends BaseController
                 ->all();
 
             $yearcustmerPerProvinceV = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['t2.address' => ['Albay', 'Camarines Sur', 'Camarines Norte', 'Catanduanes', 'Masbate', 'Sorsogon']])
@@ -676,7 +696,7 @@ class SiteController extends BaseController
                 ->all();
 
             $yearcustmerPerProvinceCAR = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['t2.address' => ['Abra', 'Apayao', 'Benguet', 'Ifugao', 'Kalinga', 'Mountain Province']])
@@ -685,7 +705,7 @@ class SiteController extends BaseController
                 ->all();
 
             $yearcustmerPerProvinceVI = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['t2.address' => ['Aklan', 'Antique', 'Capiz', 'Guimaras', 'Iloilo', 'Negros Occidental']])
@@ -694,7 +714,7 @@ class SiteController extends BaseController
                 ->all();
 
             $yearcustmerPerProvinceVII = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['t2.address' => ['Bohol', 'Cebu', 'Negros Oriental', 'Siquijor']])
@@ -703,7 +723,7 @@ class SiteController extends BaseController
                 ->all();
 
             $yearcustmerPerProvinceVIII = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['t2.address' => ['Biliran', 'Eastern Samar', 'Leyte', 'Western Samar', 'Samar', 'Southern Leyte']])
@@ -712,7 +732,7 @@ class SiteController extends BaseController
                 ->all();
 
             $yearcustmerPerProvinceIX = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['t2.address' => ['Zamboanga del Sur', 'Zamboanga del Norte', 'Zamboanga Sibugay']])
@@ -721,7 +741,7 @@ class SiteController extends BaseController
                 ->all();
 
             $yearcustmerPerProvinceX = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['t2.address' => ['Bukidnon', 'Camiguin', 'Lanao del Norte', 'Misamis Oriental', 'Misamis Occidental']])
@@ -730,7 +750,7 @@ class SiteController extends BaseController
                 ->all();
 
             $yearcustmerPerProvinceXI = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['t2.address' => ['Davao de Oro', 'Davao del Norte', 'Davao del Sur', 'Davao Oriental', 'Davao Occidental']])
@@ -739,7 +759,7 @@ class SiteController extends BaseController
                 ->all();
 
             $yearcustmerPerProvinceXII = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['t2.address' => ['Cotabato', 'Sarangani', 'South Cotabato', 'Sultan Kudarat']])
@@ -748,7 +768,7 @@ class SiteController extends BaseController
                 ->all();
 
             $yearcustmerPerProvinceXIII = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['t2.address' => ['Agusan del Norte', 'Agusan del Sur', 'Dinagat Islands', 'Surigao del Norte', 'Surigao del Sur']])
@@ -757,7 +777,7 @@ class SiteController extends BaseController
                 ->all();
 
             $yearcustmerPerProvinceBARMM = (new Query())
-                ->select(['t2.address as label', 'COUNT(t1.customer_id) as data'])
+                ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
                 ->where(['t2.address' => ['Basilan', 'Lanao del Sur', 'Maguindanao del Norte', 'Sulu', 'Maguindanao del Sur', 'Tawi-Tawi']])

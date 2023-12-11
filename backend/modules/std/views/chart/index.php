@@ -811,14 +811,14 @@ foreach ($addressData as $customeraddress) {
     }
 }
 
-function debug_to_console($data)//dec 12 changed -Levi
+function debug_to_console($data) //dec 12 changed -Levi
 {
     $output = $data;
     if ($data != null) {
         if (is_array($output)) {
             $output = implode(', ', $output[0]);
         }
-    }else {
+    } else {
         $output = 0;
     };
 
@@ -1163,7 +1163,7 @@ $totalTransactions = 0;
 foreach ($transactionPerday as $result) {
     $totalTransactions += $result['transaction_count'];
 }
-if ($totalDays != 0){
+if ($totalDays != 0) {
     $average = round($totalTransactions / $totalDays); // Calculate the average
 }
 $SalesAve = (new Query())
@@ -1182,9 +1182,9 @@ $totalTransactions = 0;
 foreach ($SalesAve as $result) {
     $totalTransactions += $result['transaction_count'];
 }
-if ($totalDays != 0){
+if ($totalDays != 0) {
     $saleaverage = round($totalTransactions / $totalDays); // Calculate the average
-}else{
+} else {
     $saleaverage = 0;
 }
 if ($saleaverage >= 1000 && $saleaverage <= 999999) {
@@ -2891,6 +2891,14 @@ $targetIncome =
                         <option value="region-13">Region-XIII</option>
                         <option value="barm">Bangsamoro</option>
                     </select>
+                    <div class="date_dropdown" style="top: 25%; left: 5%;">
+                        <label for="customers_income" class="chart_type_label">
+                            <strong>Select Type: </strong></label>
+                        <select name="customers_income" id="customers_income" class="dropdown-content" onchange="dateFilter()">
+                            <option value="customer">Customer Count</option>
+                            <option value="income">Earned Amount</option>
+                        </select>
+                    </div>
                 </div>
             </div>
         </div>
@@ -4690,6 +4698,18 @@ $targetIncome =
         var dateTypeSelect = document.getElementById('date_type');
         var selectedValue = dateTypeSelect.value;
 
+        var customers_income = document.getElementById('customers_income');
+        var ciVal = customers_income.value;
+        var qVal = ""
+
+        if (ciVal === "customer") {
+            document.getElementById('Provincespopup').innerHTML = "Customers per Region"
+            qVal = "A"
+        } else {
+            document.getElementById('Provincespopup').innerHTML = "Income per Region"
+            qVal = "B"
+        }
+
         if (selectedValue === 'Days') {
 
             var csrfToken = $('meta[name="csrf-token"]').attr('content');
@@ -4713,7 +4733,8 @@ $targetIncome =
                 dataType: 'json',
                 data: {
                     fromDate: fDate,
-                    toDate: tDate
+                    toDate: tDate,
+                    qVal: qVal
                 },
                 success: function(response) {
                     updateChartContent(response);
@@ -4746,7 +4767,8 @@ $targetIncome =
                 dataType: 'json',
                 data: {
                     fromDate: fDate,
-                    toDate: tDate
+                    toDate: tDate,
+                    qVal: qVal
                 },
                 success: function(response) {
                     updateChartContent(response);
@@ -4778,7 +4800,8 @@ $targetIncome =
                 dataType: 'json',
                 data: {
                     fromDate: fDate,
-                    toDate: tDate
+                    toDate: tDate,
+                    qVal: qVal
                 },
                 success: function(response) {
                     updateChartContent(response);
