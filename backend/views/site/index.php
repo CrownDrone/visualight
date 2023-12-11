@@ -1117,7 +1117,9 @@ $totalTransactions = 0;
 foreach ($transactionPerday as $result) {
     $totalTransactions += $result['transaction_count'];
 }
-$average = round($totalTransactions / $totalDays); // Calculate the average
+if ($totalDays != 0){
+    $average = round($totalTransactions / $totalDays); // Calculate the average
+}
 
 $SalesAve = (new Query())
     ->select('transaction_date, SUM(amount) as transaction_count')
@@ -1132,7 +1134,12 @@ $totalTransactions = 0;
 foreach ($SalesAve as $result) {
     $totalTransactions += $result['transaction_count'];
 }
-$saleaverage = round($totalTransactions / $totalDays); // Calculate the average
+
+if ($totalDays != 0){
+    $saleaverage = round($totalTransactions / $totalDays); // Calculate the average
+}else{
+    $saleaverage = 0;
+}
 if ($saleaverage >= 1000 && $saleaverage <= 999999) {
     $saleaverage = round(($saleaverage / 1000), 2) . 'K';
 } else if ($saleaverage >= 1000000 && $saleaverage <= 999999999) {
@@ -1290,9 +1297,9 @@ $targetIncome = [
             <p id="valueIncrease">
                 <?php 
                 if ($metdailytransincrease > 1) {
-                    echo '<img src="/images/increase.png" alt="icon1" height=50rem;> ';
+                    echo "+";
                 } elseif ($metdailytransincrease < 1) {
-                    echo '<img src="/images/decrease.png" alt="icon1" height=50rem;> ';
+                    echo "-";
                 }
                 echo $metdailytransincrease, "%";
                 ?>
@@ -1307,9 +1314,9 @@ $targetIncome = [
             <p id="valueIncrease">
                 <?php 
                 if ($SandTdailytransincrease > 1) {
-                    echo '<img src="/images/increase.png" alt="icon1" height=50rem;> ';
+                    echo "+";
                 } elseif ($SandTdailytransincrease < 1) {
-                    echo '<img src="/images/decrease.png" alt="icon1" height=50rem;> ';
+                    echo "-";
                 }
                 echo $SandTdailytransincrease, "%";
                 ?>
