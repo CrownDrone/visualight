@@ -199,6 +199,7 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
         grid-template-rows: auto auto;
 
     }
+    
 
     #dailyTrans,
     #dailyIncome,
@@ -213,10 +214,10 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
     #valueIncrease {
         font-size: 1.2rem;
         font-weight: 400;
-        letter-spacing: .15rem;
-        grid-column: 3;
-        text-align: right;
+        letter-spacing: .1rem;
+        text-align: left;
         padding-top: 2.5rem;
+        padding-right: 0;
 
     }
 
@@ -1234,11 +1235,7 @@ if ($todaymettrans == 0) {
     //dito magcocompute ng percentage ng increase or decrease ng number of past transaction at today's transaction (tinatype ko pa din yung sa last transaction kunwari kasi di pa ko marunong)
     $metdailytransincrease = (($todaymettrans - $lastmettrans) / $todaymettrans) * 100;
     $metdailytransincrease = number_format($metdailytransincrease);
-    if ($metdailytransincrease > 1) {
-        $metdailytransincrease = '+' . $metdailytransincrease . '%';
-    } else {
-        $metdailytransincrease = $metdailytransincrease . '%';
-    }
+    
 }
 
 
@@ -1269,11 +1266,6 @@ if ($SalesToday == 0) {
 
     $SalesIncreasePercent = (($SalesToday - $SalesYesterday) / $SalesToday) * 100;
     $SalesIncreasePercent = number_format($SalesIncreasePercent);
-    if ($SalesIncreasePercent > 1) {
-        $SalesIncreasePercent = '+' . $SalesIncreasePercent . '%';
-    } else {
-        $SalesIncreasePercent = $SalesIncreasePercent . '%';
-    }
 
     if ($SalesToday >= 1000 && $SalesToday <= 999999) {
         $SalesToday = round(($SalesToday / 1000), 2) . 'K';
@@ -1353,7 +1345,16 @@ $targetIncome =
         <div class="grid">
             <img src="/images/Total Sales.png" alt="icon1">
             <p id="dailyTrans"><?= $todaymettrans ?></p>
-            <p id="valueIncrease"><?= $metdailytransincrease ?></p>
+            <p id="valueIncrease">
+                <?php 
+                if ($metdailytransincrease > 1) {
+                    echo '<img src="/images/increase.png" alt="icon1" height=35rem;> ';
+                } elseif ($metdailytransincrease < 1) {
+                    echo '<img src="/images/decrease.jpg" alt="icon1" height=35rem;> ';
+                }
+                echo $metdailytransincrease, "%";
+                ?>
+            </p>
         </div>
     </div>
     <div class="deptransaction">
@@ -1361,7 +1362,16 @@ $targetIncome =
         <div class="grid">
             <img src="/images/Sales Performance.png" alt="icon2">
             <p id="dailyIncome"><?= $SalesToday ?></p>
-            <p id="valueIncrease"><?= $SalesIncreasePercent ?></p>
+            <p id="valueIncrease">
+                <?php 
+                if ($SalesIncreasePercent > 1) {
+                    echo '<img src="/images/increase.png" alt="icon1" height=35rem;> ';
+                } elseif ($SalesIncreasePercent < 1) {
+                    echo '<img src="/images/decrease.jpg" alt="icon1" height=35rem;> ';
+                }
+                echo $SalesIncreasePercent, "%";
+                ?>
+            </p>
         </div>
     </div>
     <div class="deptransaction">

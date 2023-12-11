@@ -1197,11 +1197,6 @@ if ($todaymettrans == 0) {
     //dito magcocompute ng percentage ng increase or decrease ng number of past transaction at today's transaction (tinatype ko pa din yung sa last transaction kunwari kasi di pa ko marunong)
     $metdailytransincrease = (($todaymettrans - $lastmettrans) / $todaymettrans) * 100;
     $metdailytransincrease = number_format($metdailytransincrease);
-    if ($metdailytransincrease > 1) {
-        $metdailytransincrease = '+' . $metdailytransincrease . '%';
-    } else {
-        $metdailytransincrease = $metdailytransincrease . '%';
-    }
 }
 //same scenario sa taas
 
@@ -1232,11 +1227,6 @@ if ($todaySandTtrans == 0) {
 
     $SandTdailytransincrease = (($todaySandTtrans - $lastSandTtrans) / $todaySandTtrans) * 100;
     $SandTdailytransincrease = number_format($SandTdailytransincrease);
-    if ($SandTdailytransincrease > 1) {
-        $SandTdailytransincrease = '+' . $SandTdailytransincrease . '%';
-    } else {
-        $SandTdailytransincrease = $SandTdailytransincrease . '%';
-    }
 }
 
 Yii::$app->set('db', [ //revert default connection 
@@ -1297,7 +1287,16 @@ $targetIncome = [
         <div class="grid">
             <img src="/images/Pressure Gauge.png" alt="icon1">
             <p id="dailyTrans"><?= $todaymettrans ?></p>
-            <p id="valueIncrease"><?= $metdailytransincrease ?></p>
+            <p id="valueIncrease">
+                <?php 
+                if ($metdailytransincrease > 1) {
+                    echo '<img src="/images/increase.png" alt="icon1" height=50rem;> ';
+                } elseif ($metdailytransincrease < 1) {
+                    echo '<img src="/images/decrease.png" alt="icon1" height=50rem;> ';
+                }
+                echo $metdailytransincrease, "%";
+                ?>
+            </p>
         </div>
     </div>
     <div class="deptransaction" style="background-color:#0073e6;">
@@ -1305,7 +1304,16 @@ $targetIncome = [
         <div class="grid">
             <img src="/images/Pass Fail.png" alt="icon2">
             <p id="dailyTrans"><?= $todaySandTtrans ?></p>
-            <p id="valueIncrease"><?= $SandTdailytransincrease ?></p>
+            <p id="valueIncrease">
+                <?php 
+                if ($SandTdailytransincrease > 1) {
+                    echo '<img src="/images/increase.png" alt="icon1" height=50rem;> ';
+                } elseif ($SandTdailytransincrease < 1) {
+                    echo '<img src="/images/decrease.png" alt="icon1" height=50rem;> ';
+                }
+                echo $SandTdailytransincrease, "%";
+                ?>
+            </p>
         </div>
     </div>
 </div>
