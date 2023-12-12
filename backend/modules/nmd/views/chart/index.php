@@ -4322,18 +4322,33 @@ $targetIncome =
                     let leastTransactions = Object.values(summary)
                         .filter(item => item.transaction_status === status && item.transaction_count === leastTransactionCount);
 
-                    let tableHeader = `<div><br><span style="color:Red">${status}:</span>`;
+                        let color;
+                    switch (status) {
+                        case 'Paid':
+                            color = 'Green';
+                            break;
+                        case 'Pending':
+                            color = '#ff8c1a';
+                            break;
+                        case 'Cancelled':
+                            color = 'Red';
+                            break;
+                        default:
+                            color = 'Black'; // Default color if none of the statuses match
+                    }
+
+                        let tableHeader = `<div><br><span style="color:${color}">${status}:</span>`;
                     tableHeader += `<table border="1" style="width:98%;"><tr>
-                          <th style="width: 30%;">Customer Type</th>
-                          <th style="width: 30%;">Transaction Count</th>
-                          <th style="width: 31%;">Total Amount</th>
+                          <th style="width: 30%; color:white; background: #00997a; padding-left: 2%">Customer Type</th>
+                          <th style="width: 30%; color:white; background: #00997a; padding-left: 2%">Transaction Count</th>
+                          <th style="width: 31%; color:white; background: #00997a; padding-left: 2%">Total Amount</th>
                         </tr></table></div>`;
 
                     // Table body - scrollable
                     let tableBody = `<div class="scrollable-table"><table border="1" style="width:100%;">`;
 
                     // Rows for highest transactions
-                    tableBody += `<tr><td colspan="3" style="color:blue;text-align:center;">Highest Transactions</td></tr>`;
+                    tableBody += `<tr><td colspan="3" style="color:green;text-align:center;">Highest Transactions</td></tr>`;
                     highestTransactions.forEach(item => {
                         tableBody += `<tr>
                             <td style="width: 33%;">${item.customer_type}</td>
@@ -4343,7 +4358,7 @@ $targetIncome =
                     });
 
                     // Rows for least transactions
-                    tableBody += `<tr><td colspan="3" style="color:blue;text-align:center;">Least Transactions</td></tr>`;
+                    tableBody += `<tr><td colspan="3" style="color:red;text-align:center;">Least Transactions</td></tr>`;
                     leastTransactions.forEach(item => {
                         tableBody += `<tr>
                             <td style="width: 33%;">${item.customer_type}</td>
