@@ -444,6 +444,24 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
         transition: transform 1s ease;
     }
 
+    /* target form */
+
+    .form {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .column {
+        flex: 0 0 48%;
+        margin-bottom: 20px;
+        width: 20%;
+    }
+
+    
+
     /* background */
     .speedometer {
         background-color: #E2EBEC;
@@ -1433,6 +1451,111 @@ $targetIncome =
         <!-- </form> -->
     </div>
 </div>
+
+<div class="date_filter" id="prediction-form">
+    <div class="containers">
+        <div class="dropdown_pdf_container">
+            <div class="date_dropdown">
+            <div class="navigation">
+                    <label for="navigationDropdown">Navigate to:</label>
+                    <select id="navigationDropdown" onchange="navigateToSection()">
+                        <option value="transactionChart">Total Transaction</option>
+                        <option value="salesChart">Total Income</option>
+                        <option value="Provinces">Customers per Province</option>
+                        <option value="transaction">Transactions</option>
+                    </select>
+
+                    <script>
+                        function navigateToSection() {
+                            var dropdown = document.getElementById("navigationDropdown");
+                            var selectedOption = dropdown.options[dropdown.selectedIndex].value;
+
+                            // Scroll to the selected section
+                            var selectedSection = document.getElementById(selectedOption);
+                            selectedSection.scrollIntoView({
+                                behavior: "smooth"
+                            });
+                        }
+                    </script>
+
+                    <button onclick="openTargetPopup()" class="target">Set Targets</button>
+                </div>
+            </div>            
+        </div>
+    </div>
+</div>
+</div>
+<div class="popup" id="targetPopup">
+        <span class="close" onclick="closeTargetPopup()">&times;</span> 
+        <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; background-color: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);">
+
+            <span style="position: absolute; top: 10px; right: 10px; cursor: pointer; font-size: 20px; color: #888;" onclick="closeTargetPopup()">&times;</span>
+
+            <h2 style="color: #007bff; margin-bottom: 20px;">Set Targets</h2>
+
+            <form class="form">
+    <div class="column">
+        <h5>Target Transactin <br> <br></h5>
+        <label for="q1Income">Quarter 1:</label><br>
+        <label for="q2Income">Quarter 2:</label><br>
+        <label for="q1Income">Quarter 3:</label><br>
+        <label for="q2Income">Quarter 4: </label><br>
+    </div>
+    <div class="column">
+    <br><br><br>
+    <input type="text" id="q1transaction" name="q1Income" required><br>
+    <input type="text" id="q2transaction" name="q2Income" required><br>
+    <input type="text" id="q3transaction" name="q1Income" required><br>
+    <input type="text" id="q4transaction" name="q2Income" required> <br><br>
+                    </div>
+    <div class="column">
+        <h5>Target Income <br> <br></h5>
+        <label for="q1Income">Quarter 1:</label><br>
+        <label for="q2Income">Quarter 2:</label><br>
+        <label for="q1Income">Quarter 3:</label><br>
+        <label for="q2Income">Quarter 4:</label><br>
+    </div>
+    <div class="column">
+    <br><br><br>
+    <input type="text" id="q1Income" name="q1Income" required><br>
+    <input type="text" id="q2Income" name="q2Income" required><br>
+    <input type="text" id="q3Income" name="q1Income" required><br>
+    <input type="text" id="q4Income" name="q2Income" required><br>
+
+    </div>
+
+    <button type="button" onclick="submitTargets()">Submit</button>
+</form>
+        </div>
+        <script>
+        var targetPopup = document.getElementById('targetPopup');
+
+        function openTargetPopup() {
+            targetPopup.style.display = 'block';
+        }
+
+        function closeTargetPopup() {
+            targetPopup.style.display = 'none';
+        }
+
+        function submitTargets() {
+            // Get values from the form
+            var q1Income = document.getElementById('q1Income').value;
+            var q2Income = document.getElementById('q2Income').value;
+            var q3Income = document.getElementById('q3Income').value;
+            var q4Income = document.getElementById('q4Income').value;
+
+            var q1Transactions = document.getElementById('q1Transactions').value;
+            var q2Transactions = document.getElementById('q2Transactions').value;
+            var q3Transactions = document.getElementById('q3Transactions').value;
+            var q4Transactions = document.getElementById('q4Transactions').value;
+
+           
+            closeTargetPopup();
+        }
+        </script>
+    </div></div>
+
 
 <script>
     window.onscroll = function() {
