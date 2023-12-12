@@ -134,13 +134,14 @@ use yii\web\View;
 
         if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
             form.style.position = "fixed";
-            form.style.top = "20px"; // Add "px" for the top value
+            form.style.top = "1rem"; // Add "px" for the top value
             form.style.width = "77%";
             form.style.left = "20%";
+
             toggleButton.style.display = "block";
             toggleButton.style.position = "fixed";
-            toggleButton.style.top = "10px"; // Add "px" for the top value
-            toggleButton.style.right = "20px"; // Adjust this value based on your design
+            toggleButton.style.top = "1rem"; // Add "px" for the top value
+            toggleButton.style.right = "1rem"; // Adjust this value based on your design
             toggleButton.style.zIndex = "1000";
             
 
@@ -150,7 +151,7 @@ use yii\web\View;
 
         } else {
             form.style.position = "static";
-            form.style.top = "20px"; // Adjust this value based on your design
+            form.style.top = "0rem"; // Adjust this value based on your design
             form.style.width = "100%";
             form.style.left = "0"; 
             toggleButton.style.display = "none";

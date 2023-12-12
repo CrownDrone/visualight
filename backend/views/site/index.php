@@ -1431,8 +1431,17 @@ $targetIncome = [
     function scrollFunction() {
         var form = document.getElementById("prediction-form");
         var toggleButton = document.getElementById("toggleButton");
+        var message = document.getElementById("sending-email-message");
+
 
         if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+            message.style.position = "fixed";
+            message.style.zIndex = "1000";
+            message.style.top = "7rem"; 
+            message.style.width = "70%";
+            message.style.maxHeight = "7rem"; // Set a maximum height
+            message.style.marginBottom = "-50%";
+
             form.style.position = "fixed";
             form.style.top = "1rem"; 
             form.style.width = "68%";
@@ -1455,6 +1464,12 @@ $targetIncome = [
             }
 
         } else {
+            message.style.position = "static";
+            message.style.top = "0rem"; 
+            message.style.width = "100%";
+            message.style.height = "auto"; 
+            message.style.marginBottom = "0"; 
+
             form.style.position = "static";
             form.style.top = "0rem"; 
             form.style.width = "100%";
@@ -1462,6 +1477,7 @@ $targetIncome = [
             form.style.marginBottom = "0"; 
             form.style.background = "none";
             form.style.boxShadow = "none";
+            
             toggleButton.style.display = "none";
 
             if (toggleButton.innerHTML == "+") {
