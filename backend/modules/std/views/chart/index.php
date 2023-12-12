@@ -1452,20 +1452,20 @@ $targetIncome =
 
         if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
             form.style.position = "fixed";
-            form.style.top = "20px"; // Add "px" for the top value
+            form.style.top = "1rem"; 
             form.style.width = "68%";
-            form.style.height = "10"; // Set height to auto
-            form.style.maxHeight = "50px"; // Set a maximum height
+            form.style.height = "5rem"; 
+            form.style.maxHeight = "7rem"; // Set a maximum height
             form.style.marginBottom = "-50%";
             form.style.zIndex = "1000";
             form.style.background = "white";
-            form.style.boxShadow = "-4px 4px 8px rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.15)";
+            form.style.boxShadow = "-0.3rem 0.3rem 0.5rem rgba(0, 0, 0, 0.3), 0 0.1rem 0.5rem 0 rgba(0, 0, 0, 0.15)";
             form.style.left = "20%";
 
             toggleButton.style.display = "block";
             toggleButton.style.position = "fixed";
-            toggleButton.style.top = "10px"; // Add "px" for the top value
-            toggleButton.style.right = "170px"; // Adjust this value based on your design
+            toggleButton.style.top = "1rem"; 
+            toggleButton.style.right = "10rem"; // Adjust this???
             toggleButton.style.zIndex = "1500";
 
             if (toggleButton.innerHTML == "+") {
@@ -1474,10 +1474,10 @@ $targetIncome =
 
         } else {
             form.style.position = "static";
-            form.style.top = "0px"; // It should probably be 0px when it's static
+            form.style.top = "0rem"; 
             form.style.width = "100%";
-            form.style.height = "auto"; // Set height to auto
-            form.style.marginBottom = "0"; // It should probably be 0 when it's static
+            form.style.height = "auto"; 
+            form.style.marginBottom = "0"; 
             form.style.background = "none";
             form.style.boxShadow = "none";
             toggleButton.style.display = "none";
