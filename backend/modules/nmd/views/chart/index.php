@@ -392,6 +392,7 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
         padding: 20px;
         border: 1px solid #333;
         box-shadow: 2px 2px 10px #888;
+        border-radius: 15px;
         text-align: center;
     }
 
@@ -1476,7 +1477,9 @@ $targetIncome =
                         }
                     </script>
 
-                    <button onclick="openTargetPopup()" class="target">Set Targets</button>
+                    <?php if (Yii::$app->user->can('ADMINISTRATOR') || Yii::$app->user->can('TOP MANAGEMENT')) : ?>
+                        <button onclick="openTargetPopup()" class="target">Set Targets</button>
+                    <?php endif; ?>
                 </div>
             </div>            
         </div>

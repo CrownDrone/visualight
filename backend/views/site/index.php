@@ -424,6 +424,7 @@ $currentIndex = Url::to(['']);
         padding: 20px;
         border: 1px solid #333;
         box-shadow: 2px 2px 10px #888;
+        border-radius: 15px;
         text-align: center;
     }
 
