@@ -1497,8 +1497,12 @@ $targetIncome =
             <span style="position: absolute; top: 10px; right: 10px; cursor: pointer; font-size: 20px; color: #888;" onclick="closeTargetPopup()">&times;</span>
 
             <h2 style="color: #007bff; margin-bottom: 20px;">Set Targets</h2>
-
+            <div>
+            <label for="InputYear">Input Year:</label>
+                    <input type="text" id="InputYear" name="InputYear" required> <br><br>
+            </div> 
             <form class="form">
+    
     <div class="column">
         <h5>Target Transactin <br> <br></h5>
         <label for="q1Income">Quarter 1:</label><br>
@@ -1545,6 +1549,8 @@ $targetIncome =
 
         function submitTargets() {
             // Get values from the form
+            var InputYear = document.getElementById('InputYear').value;
+
             var q1Income = document.getElementById('q1Income').value;
             var q2Income = document.getElementById('q2Income').value;
             var q3Income = document.getElementById('q3Income').value;
