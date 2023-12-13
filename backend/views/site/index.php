@@ -12,7 +12,7 @@ $currentIndex = Url::to(['']);
 ?>
 
 <meta charset="UTF-8">
- <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
     @font-face {
@@ -515,9 +515,9 @@ $currentIndex = Url::to(['']);
         background-color: #6BBAFF;
     }
 
-    .AllPage{
-        padding-left:7% ;
-        padding-right:7%
+    .AllPage {
+        padding-left: 7%;
+        padding-right: 7%
     }
 
 
@@ -1243,7 +1243,7 @@ if ($todaySandTtrans == 0) {
     $SandTdailytransincrease = (($todaySandTtrans - $lastSandTtrans) / $todaySandTtrans) * 100;
     $SandTdailytransincrease = number_format($SandTdailytransincrease);
 }
- 
+
 $currentDate = new \DateTime();
 $targetStd = Yii::$app->db->createCommand('
 SELECT quarter_1, quarter_2, quarter_3, quarter_4
@@ -1294,2112 +1294,2097 @@ Yii::$app->set('db', [ //revert default connection
 <?php \yii\widgets\Pjax::begin(); ?>
 
 
-<div class = "AllPage">
-<div class="DailyTransaction">
-    <p>Total Transactions Daily</p>
-    <!-- <p id="totalTransactionsTitle">Total Transactions Daily</p> -->
+<div class="AllPage">
+    <div class="DailyTransaction">
+        <p>Total Transactions Daily</p>
+        <!-- <p id="totalTransactionsTitle">Total Transactions Daily</p> -->
 
-    <div class="deptransaction">
-        <p>National Metrology</p>
-        <div class="grid">
-            <img src="/images/Pressure Gauge.png" alt="icon1">
-            <p id="dailyTrans"><?= $todaymettrans ?></p>
-            <p id="valueIncrease">
-                <?php
-                if ($metdailytransincrease > 1) {
-                    echo "+";
-                } elseif ($metdailytransincrease < 1) {
-                    echo "-";
-                }
-                echo $metdailytransincrease, "%";
-                ?>
-            </p>
-        </div>
-    </div>
-    <div class="deptransaction" style="background-color:#0073e6;">
-        <p>Standards and Testing</p>
-        <div class="grid">
-            <img src="/images/Pass Fail.png" alt="icon2">
-            <p id="dailyTrans"><?= $todaySandTtrans ?></p>
-            <p id="valueIncrease">
-                <?php
-                if ($SandTdailytransincrease > 1) {
-                    echo "+";
-                } elseif ($SandTdailytransincrease < 1) {
-                    echo "-";
-                }
-                echo $SandTdailytransincrease, "%";
-                ?>
-            </p>
-        </div>
-    </div>
-</div>
-
-<script>
-    // Get the current date
-    const currentDate1 = new Date();
-
-    // Format the date as "Month Day, Year"
-    const formattedDate = currentDate1.toLocaleDateString('en-US', {
-        month: 'long',
-        day: 'numeric',
-        year: 'numeric'
-    });
-
-    // Get the element with the ID "totalTransactionsTitle"
-    const titleElement = document.getElementById('totalTransactionsTitle');
-
-    // Update the HTML content to include the formatted date
-    titleElement.innerHTML += `: ${formattedDate}`;
-</script>
-
-<div id="sending-email-message" class="alert alert-info hidden" style="display:none;">
-    PDF file is downloading, please wait...
-</div>
-
-<button id="toggleButton">—</button>
-
-<!-- Date Filter Div -->
-<div class="date_filter" id="prediction-form">
-
-    <div class="containers">
-        <div class="dropdown_pdf_container">
-            <div class="date_dropdown">
-                <form>
-                    <label for="date_type" class="date_type_label">
-                        <strong>Date Filter:</strong></label>
-                    <select id="date_type" class="dropdown-content" onchange="dateChange()">
-                        <option value="Days">Days</option>
-                        <option value="Months">Months</option>
-                        <option value="Years">Years</option>
-                    </select>
-                </form>
+        <div class="deptransaction">
+            <p>National Metrology</p>
+            <div class="grid">
+                <img src="/images/Pressure Gauge.png" alt="icon1">
+                <p id="dailyTrans"><?= $todaymettrans ?></p>
+                <p id="valueIncrease">
+                    <?php
+                    if ($metdailytransincrease > 1) {
+                        echo "+";
+                    } elseif ($metdailytransincrease < 1) {
+                        echo "-";
+                    }
+                    echo $metdailytransincrease, "%";
+                    ?>
+                </p>
             </div>
+        </div>
+        <div class="deptransaction" style="background-color:#0073e6;">
+            <p>Standards and Testing</p>
+            <div class="grid">
+                <img src="/images/Pass Fail.png" alt="icon2">
+                <p id="dailyTrans"><?= $todaySandTtrans ?></p>
+                <p id="valueIncrease">
+                    <?php
+                    if ($SandTdailytransincrease > 1) {
+                        echo "+";
+                    } elseif ($SandTdailytransincrease < 1) {
+                        echo "-";
+                    }
+                    echo $SandTdailytransincrease, "%";
+                    ?>
+                </p>
+            </div>
+        </div>
+    </div>
 
-            <div class="navigation-and-download">
-                <div class="print_pdf">
-                    <Button class="print_pdf_label" onclick="downloadPDF()">Chart Download</Button>
+    <script>
+        // Get the current date
+        const currentDate1 = new Date();
+
+        // Format the date as "Month Day, Year"
+        const formattedDate = currentDate1.toLocaleDateString('en-US', {
+            month: 'long',
+            day: 'numeric',
+            year: 'numeric'
+        });
+
+        // Get the element with the ID "totalTransactionsTitle"
+        const titleElement = document.getElementById('totalTransactionsTitle');
+
+        // Update the HTML content to include the formatted date
+        titleElement.innerHTML += `: ${formattedDate}`;
+    </script>
+
+    <div id="sending-email-message" class="alert alert-info hidden" style="display:none;">
+        PDF file is downloading, please wait...
+    </div>
+
+    <button id="toggleButton">—</button>
+
+    <!-- Date Filter Div -->
+    <div class="date_filter" id="prediction-form">
+
+        <div class="containers">
+            <div class="dropdown_pdf_container">
+                <div class="date_dropdown">
+                    <form>
+                        <label for="date_type" class="date_type_label">
+                            <strong>Date Filter:</strong></label>
+                        <select id="date_type" class="dropdown-content" onchange="dateChange()">
+                            <option value="Days">Days</option>
+                            <option value="Months">Months</option>
+                            <option value="Years">Years</option>
+                        </select>
+                    </form>
                 </div>
 
-                <div class="navigation" style="margin-right:360px; margin-left:-20px; z-index:1000;">
-                    <label for="navigationDropdown" style="margin-left:-35px;">Navigate to:</label>
-                    <select id="navigationDropdown" onchange="navigateToSection()">
-                        <option value="totaltransaction">Total Transaction Report</option>
-                        <option value="totalsales">Total Income Report</option>
-                        <option value="transactionChart">Transaction Per Division</option>
-                        <option value="salesChart">Income per Division</option>
-                        <option value="avgSales">Average Income</option>
-                        <option value="Provinces">Region</option>
-                        <option value="transaction">Transaction Types</option>
-                        <!-- Add more options based on the IDs of your other sections -->
-                    </select>
+                <div class="navigation-and-download">
+                    <div class="print_pdf">
+                        <Button class="print_pdf_label" onclick="downloadPDF()">Chart Download</Button>
+                    </div>
+
+                    <div class="navigation" style="margin-right:-160px; margin-left:-90px; z-index:1000;">
+                        <!-- <label for="navigationDropdown" style="margin-left:-55px;">Navigate to:</label> -->
+                        <select id="navigationDropdown" onchange="navigateToSection()">
+                            <option value="totaltransaction" id="navTo">Navigate to:</option>
+                            <option value="totaltransaction">Total Transaction Report</option>
+                            <option value="totalsales">Total Income Report</option>
+                            <option value="transactionChart">Transaction Per Division</option>
+                            <option value="salesChart">Income per Division</option>
+                            <option value="avgSales">Average Income</option>
+                            <option value="Provinces">Region</option>
+                            <option value="transaction">Transaction Types</option>
+                            <!-- Add more options based on the IDs of your other sections -->
+                        </select>
+                    </div>
                 </div>
+                <script>
+                    function navigateToSection() {
+                        var dropdown = document.getElementById("navigationDropdown");
+                    
+                        if (dropdown.value === "totaltransaction") {
+                            document.getElementById("navTo").innerHTML = "Navigate to:";
+                        } else {
+                            document.getElementById("navTo").innerHTML = "Go to Top";
+                        }
+                        console.log(document.getElementById("navTo").innerHTML)
+                        var selectedOption = dropdown.options[dropdown.selectedIndex].value;
+
+                        // Scroll to the selected section
+                        var selectedSection = document.getElementById(selectedOption);
+                        selectedSection.scrollIntoView({
+                            behavior: "smooth",
+                            block: 'center',
+                        });
+                    }
+                </script>
             </div>
-            <script>
-                function navigateToSection() {
-                    var dropdown = document.getElementById("navigationDropdown");
-                    var selectedOption = dropdown.options[dropdown.selectedIndex].value;
+        </div>
+        <div class="containers">
+            <div class="datePicker">
+                <label style="margin-right:5px;">From: </label>
+                <input type="date" id="startDate" class="datePicker_label" onchange="dateFilter(); updateProvince()" style="margin-right:-12px;"> <!-- look for updateProvince(response) -->
+                <label>&nbsp;&nbsp;&nbsp;&nbsp; To:</label>
+                <input type="date" id="endDate" class="datePicker_label" onchange="dateFilter(); updateProvince()">
+            </div>
+        </div>
+    </div>
 
-                    // Scroll to the selected section
-                    var selectedSection = document.getElementById(selectedOption);
-                    selectedSection.scrollIntoView({
-                        behavior: "smooth",
-                        block: 'center',
-                    });
+
+
+    <script>
+        window.onscroll = function() {
+            scrollFunction();
+        };
+
+        function scrollFunction() {
+            var form = document.getElementById("prediction-form");
+            var toggleButton = document.getElementById("toggleButton");
+
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                form.style.position = "fixed";
+                form.style.top = "20px"; // Add "px" for the top value
+                form.style.width = "81%";
+                form.style.height = "10%";
+                form.style.zIndex = "1000";
+                form.style.background = "white";
+                form.style.boxShadow = "-4px 4px 8px rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.15)";
+                form.style.left = "17%";
+                toggleButton.style.display = "block";
+                toggleButton.style.position = "fixed";
+                toggleButton.style.top = "10px"; // Add "px" for the top value
+                toggleButton.style.right = "20px"; // Adjust this value based on your design
+                toggleButton.style.zIndex = "1500";
+
+
+                if (toggleButton.innerHTML == "+") {
+                    toggleButton.innerHTML = "+";
                 }
-            </script>
-        </div>
-    </div>
-    <div class="containers">
-        <div class="datePicker">
-            <label style="margin-right:5px;">From: </label>
-            <input type="date" id="startDate" class="datePicker_label" onchange="dateFilter(); updateProvince()" style="margin-right:-12px;"> <!-- look for updateProvince(response) -->
-            <label>&nbsp;&nbsp;&nbsp;&nbsp; To:</label>
-            <input type="date" id="endDate" class="datePicker_label" onchange="dateFilter(); updateProvince()">
-        </div>
-    </div>
-</div>
 
+            } else {
+                form.style.position = "static";
+                form.style.top = "20px"; // Add "px" for the top value
+                form.style.width = "100%";
+                form.style.height = "17%";
+                form.style.marginBottom = "-7%";
+                form.style.background = "none";
+                form.style.boxShadow = "none";
+                toggleButton.style.display = "none";
 
+                if (toggleButton.innerHTML == "+") {
+                    toggleButton.innerHTML = "+";
+                }
 
-<script>
-    window.onscroll = function() {
-        scrollFunction();
-    };
+            }
+        }
 
-    function scrollFunction() {
         var form = document.getElementById("prediction-form");
         var toggleButton = document.getElementById("toggleButton");
-        var message = document.getElementById("sending-email-message");
+
+        toggleButton.addEventListener("click", function() {
+            form.style.display = (form.style.display === "none") ? "block" : "none";
+            toggleButton.innerHTML = (form.style.display === "none") ? "+" : "—";
+
+        });
+    </script>
 
 
-        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-            message.style.position = "fixed";
-            message.style.zIndex = "1000";
-            message.style.top = "7rem"; 
-            message.style.width = "70%";
-            message.style.maxHeight = "7rem"; // Set a maximum height
-            message.style.marginBottom = "-50%";
-
-            form.style.position = "fixed";
-            form.style.top = "1rem"; 
-            form.style.width = "68%";
-            form.style.height = "5rem"; 
-            form.style.maxHeight = "7rem"; // Set a maximum height
-            form.style.marginBottom = "-50%";
-            form.style.zIndex = "1000";
-            form.style.background = "white";
-            form.style.boxShadow = "-0.3rem 0.3rem 0.5rem rgba(0, 0, 0, 0.3), 0 0.1rem 0.5rem 0 rgba(0, 0, 0, 0.15)";
-            form.style.left = "20%";
-
-            toggleButton.style.display = "block";
-            toggleButton.style.position = "fixed";
-            toggleButton.style.top = "1rem"; 
-            toggleButton.style.right = "10rem"; // Adjust this???
-            toggleButton.style.zIndex = "1500";
-
-            if (toggleButton.innerHTML == "+") {
-                toggleButton.innerHTML = "+";
-            }
-
-        } else {
-            message.style.position = "static";
-            message.style.top = "0rem"; 
-            message.style.width = "100%";
-            message.style.height = "auto"; 
-            message.style.marginBottom = "0"; 
-
-            form.style.position = "static";
-            form.style.top = "0rem"; 
-            form.style.width = "100%";
-            form.style.height = "auto"; 
-            form.style.marginBottom = "0"; 
-            form.style.background = "none";
-            form.style.boxShadow = "none";
-            
-            toggleButton.style.display = "none";
-
-            if (toggleButton.innerHTML == "+") {
-                toggleButton.innerHTML = "+";
-            }
-
-        }
-    }
-    var form = document.getElementById("prediction-form");
-    var toggleButton = document.getElementById("toggleButton");
-
-    toggleButton.addEventListener("click", function() {
-        form.style.display = (form.style.display === "none") ? "block" : "none";
-        toggleButton.innerHTML = (form.style.display === "none") ? "+" : "—";
-
-    });
-</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js" integrity="sha512-JPcRR8yFa8mmCsfrw4TNte1ZvF1e3+1SdGMslZvmrzDYxS69J7J49vkFL8u6u8PlPJK+H3voElBtUCzaXj+6ig==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js" integrity="sha512-JPcRR8yFa8mmCsfrw4TNte1ZvF1e3+1SdGMslZvmrzDYxS69J7J49vkFL8u6u8PlPJK+H3voElBtUCzaXj+6ig==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- graph Div, holder of graphs -->
+    <div class="graph">
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.9.179/pdf.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.debug.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/dom-to-image/2.6.0/dom-to-image.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/brain.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 
-<!-- graph Div, holder of graphs -->
-<div class="graph">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.9.179/pdf.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.debug.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/dom-to-image/2.6.0/dom-to-image.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/brain.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <div class="chart-container" style="z-index:0;">
+
+            <p class="reportTitle" id="totaltransaction"> Total Transaction Report</p>
+            <canvas id="totaltransactionChart"></canvas>
+        </div>
 
 
-    <div class="chart-container" style="z-index:0;">
-
-        <p class="reportTitle" id="totaltransaction"> Total Transaction Report</p>
-        <canvas id="totaltransactionChart"></canvas>
-    </div>
-
-
-    <div class="chart-container">
-        <p class="reportTitle" id="totalsales"> Total Income Report </p>
-        <canvas id="totalsalesChart"></canvas>
-    </div>
+        <div class="chart-container">
+            <p class="reportTitle" id="totalsales"> Total Income Report </p>
+            <canvas id="totalsalesChart"></canvas>
+        </div>
 
 
-    <div class="chart-container">
-        <p class="reportTitle" id=" "> Transaction Per Division</p>
-        <!-- <div class="containerBody"> -->
-        <canvas id="transactionChart"></canvas>
-        <!-- </div> -->
-    </div>
+        <div class="chart-container">
+            <p class="reportTitle" id=" "> Transaction Per Division</p>
+            <!-- <div class="containerBody"> -->
+            <canvas id="transactionChart"></canvas>
+            <!-- </div> -->
+        </div>
 
 
-    <div class="chart-container">
-        <p class="reportTitle" id=" "> Income per Division</p>
-        <canvas id="salesChart"></canvas>
-    </div>
+        <div class="chart-container">
+            <p class="reportTitle" id=" "> Income per Division</p>
+            <canvas id="salesChart"></canvas>
+        </div>
 
-    <div class="chart-container" id="avgSales">
-        <p class="reportTitle" id=" "></p>
-        <div class="asOne">
-            <canvas id="myChart"></canvas>
-            <div class="average">
-                <div class="aveTransactionDiv">
-                    <p class="texty"> Average Transactions </p>
-                    <p class="number" id="avgTransaction"> No Data</p>
-                </div>
-                <div class="aveSalesDiv">
-                    <p class="texty"> Combined Average Income </p>
-                    <p class="number" id="avgIncome"> No Data </p>
+        <div class="chart-container" id="avgSales">
+            <p class="reportTitle" id=" "></p>
+            <div class="asOne">
+                <canvas id="myChart"></canvas>
+                <div class="average">
+                    <div class="aveTransactionDiv">
+                        <p class="texty"> Average Transactions </p>
+                        <p class="number" id="avgTransaction"> No Data</p>
+                    </div>
+                    <div class="aveSalesDiv">
+                        <p class="texty"> Combined Average Income </p>
+                        <p class="number" id="avgIncome"> No Data </p>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="popup" id="popup">
-        <div class="popup-content">
-            <span class="close" id="close-popup">&times;</span>
+        <div class="popup" id="popup">
+            <div class="popup-content">
+                <span class="close" id="close-popup">&times;</span>
 
-            <h2 id="PopupHeader"></h2>
+                <h2 id="PopupHeader"></h2>
 
-            <p style="color: black;">Color of speedometer will identify if the target is met</p>
+                <p style="color: black;">Color of speedometer will identify if the target is met</p>
 
-            <div class="speedometer">
-                <p><span style="color: #C70039 ">Low </span>
-                    <span style="color: #FF5733 ">Moderate </span>
-                    <span style="color: #FFC300 ">High </span>
-                    <span style="color: #6ABF70">Satisfaction </span>
-                </p>
-                <div class="speedometer-dial">
-                    <div class="speedometer-reading" id="speedometer-reading"></div>
-                    <div class="speedometer-arrow" id="speedometer-arrow"></div>
-                </div>
-            </div>
-            <p id="percentTransaction" style="position: absolute; bottom: 90px; width: 100%; right: 290px;"></p>
-
-            <p id="targetTransaction"></p>
-
-
-            <div style="text-align: right; margin: 0 auto; width: 80%; max-height: 25rem; overflow-y: auto; ">
-                <ul style="padding-left: 500px; ">
-                    <li>
-                        <p id="highest"></p>
-                    </li>
-                    <li>
-                        <p id="least"></p>
-                    </li>
-                    <li>
-                        <p id="mostTransactionType"></p>
-                    </li>
-                    <li>
-                        <p id="leastTransactionType"></p>
-                    </li>
-                    <li>
-                        <p id="mostCustomerType"></p>
-                    </li>
-                    <li>
-                        <p id="leastCustomerType"></p>
-                    </li>
-                    <li>
-                        <p id="mostCustomerProvince"></p>
-                    </li>
-                    <li>
-                        <p id="leastCustomerProvince"></p>
-                    </li>
-                </ul>
-            </div>
-
-
-        </div>
-    </div>
-    <div class="popup" id="transactiondivisionpopup">
-        <div class="popup-content">
-            <span class="close" id="close-transaction-popup">&times;</span>
-
-            <div class="division-content">
-                <h2 id="MetrologyPopupHeader">National Metrology Division</h2>
                 <div class="speedometer">
-                    <p>Color of speedometer will identify if the target is met</p>
-                    <p><span style="color: red">Low </span>
-                        <span style="color: orange">Moderate </span>
-                        <span style="color: yellow">High </span>
-                        <span style="color: green">Satisfaction </span>
+                    <p><span style="color: #C70039 ">Low </span>
+                        <span style="color: #FF5733 ">Moderate </span>
+                        <span style="color: #FFC300 ">High </span>
+                        <span style="color: #6ABF70">Satisfaction </span>
                     </p>
                     <div class="speedometer-dial">
                         <div class="speedometer-reading" id="speedometer-reading"></div>
                         <div class="speedometer-arrow" id="speedometer-arrow"></div>
                     </div>
                 </div>
+                <p id="percentTransaction" style="position: absolute; bottom: 90px; width: 100%; right: 290px;"></p>
+
                 <p id="targetTransaction"></p>
-                <p id="percentTransaction"></p>
-                <p></p>
 
 
-                <div style="text-align: left; margin: 0 auto; width: 80%;">
-                    <p id="highest"> </p>
-                    <p id="least"> </p>
-
-                    <p id="mostTransactionType"> </p>
-                    <p id="leastTransactionType"> </p>
-
-                    <p id="mostCustomerType"> </p>
-                    <p id="leastCustomerType"> </p>
-
-                    <p id="mostCustomerProvince"> </p>
-                    <p id="leastCustomerProvince"> </p>
+                <div style="text-align: right; margin: 0 auto; width: 80%; max-height: 25rem; overflow-y: auto; ">
+                    <ul style="padding-left: 500px; ">
+                        <li>
+                            <p id="highest"></p>
+                        </li>
+                        <li>
+                            <p id="least"></p>
+                        </li>
+                        <li>
+                            <p id="mostTransactionType"></p>
+                        </li>
+                        <li>
+                            <p id="leastTransactionType"></p>
+                        </li>
+                        <li>
+                            <p id="mostCustomerType"></p>
+                        </li>
+                        <li>
+                            <p id="leastCustomerType"></p>
+                        </li>
+                        <li>
+                            <p id="mostCustomerProvince"></p>
+                        </li>
+                        <li>
+                            <p id="leastCustomerProvince"></p>
+                        </li>
+                    </ul>
                 </div>
-            </div>
 
-            <div class="division-content">
-                <h2 id="TestingPopupHeader">Standard and Testing Division</h2>
-            </div>
 
+            </div>
         </div>
-    </div>
+        <div class="popup" id="transactiondivisionpopup">
+            <div class="popup-content">
+                <span class="close" id="close-transaction-popup">&times;</span>
+
+                <div class="division-content">
+                    <h2 id="MetrologyPopupHeader">National Metrology Division</h2>
+                    <div class="speedometer">
+                        <p>Color of speedometer will identify if the target is met</p>
+                        <p><span style="color: red">Low </span>
+                            <span style="color: orange">Moderate </span>
+                            <span style="color: yellow">High </span>
+                            <span style="color: green">Satisfaction </span>
+                        </p>
+                        <div class="speedometer-dial">
+                            <div class="speedometer-reading" id="speedometer-reading"></div>
+                            <div class="speedometer-arrow" id="speedometer-arrow"></div>
+                        </div>
+                    </div>
+                    <p id="targetTransaction"></p>
+                    <p id="percentTransaction"></p>
+                    <p></p>
+
+
+                    <div style="text-align: left; margin: 0 auto; width: 80%;">
+                        <p id="highest"> </p>
+                        <p id="least"> </p>
+
+                        <p id="mostTransactionType"> </p>
+                        <p id="leastTransactionType"> </p>
+
+                        <p id="mostCustomerType"> </p>
+                        <p id="leastCustomerType"> </p>
+
+                        <p id="mostCustomerProvince"> </p>
+                        <p id="leastCustomerProvince"> </p>
+                    </div>
+                </div>
+
+                <div class="division-content">
+                    <h2 id="TestingPopupHeader">Standard and Testing Division</h2>
+                </div>
+
+            </div>
+        </div>
 
 
 
 
-    <script>
-        // Reference datas
-        const transaction = <?php echo json_encode($TransactionperDiv); ?>;
-        const income = <?php echo json_encode($SalesperDiv); ?>;
-        const targetValues = <?php echo json_encode($targetTransaction); ?>;
-        const targetincomeValues = <?php echo json_encode($targetIncome); ?>;
-        const province = <?php echo json_encode($provincestransaction); ?>;
-        const provinceincome = <?php echo json_encode($provincesincome); ?>;
+        <script>
+            // Reference datas
+            const transaction = <?php echo json_encode($TransactionperDiv); ?>;
+            const income = <?php echo json_encode($SalesperDiv); ?>;
+            const targetValues = <?php echo json_encode($targetTransaction); ?>;
+            const targetincomeValues = <?php echo json_encode($targetIncome); ?>;
+            const province = <?php echo json_encode($provincestransaction); ?>;
+            const provinceincome = <?php echo json_encode($provincesincome); ?>;
 
-        const currentDate = new Date();
-        const currentMonth = currentDate.getMonth();
-        const currentYear = currentDate.getFullYear();
+            const currentDate = new Date();
+            const currentMonth = currentDate.getMonth();
+            const currentYear = currentDate.getFullYear();
 
-        const totaltransactionChart = document.getElementById("totaltransaction");
-        const totalsalesChart = document.getElementById("totalsales");
-        const popup = document.getElementById("popup");
-        const closePopup = document.getElementById("close-popup");
-        const targetTransaction = document.getElementById("targetTransaction");
-        const percentTransaction = document.getElementById("percentTransaction");
-        const PopupHeader = document.getElementById("PopupHeader");
-        const speedometerReading = document.getElementById("speedometer-reading");
-        const speedometerArrow = document.getElementById("speedometer-arrow");
-        const highest = document.getElementById("highest");
-        const least = document.getElementById("least");
-        const mostTransactionType = document.getElementById("mostTransactionType");
-        const leastTransactionType = document.getElementById("leastTransactionType");
-        const mostCustomerType = document.getElementById("mostCustomerType");
-        const leastCustomerType = document.getElementById("leastCustomerType");
-        const mostCustomerProvince = document.getElementById("mostCustomerProvince");
-        const leastCustomerProvince = document.getElementById("leastCustomerProvince");
+            const totaltransactionChart = document.getElementById("totaltransaction");
+            const totalsalesChart = document.getElementById("totalsales");
+            const popup = document.getElementById("popup");
+            const closePopup = document.getElementById("close-popup");
+            const targetTransaction = document.getElementById("targetTransaction");
+            const percentTransaction = document.getElementById("percentTransaction");
+            const PopupHeader = document.getElementById("PopupHeader");
+            const speedometerReading = document.getElementById("speedometer-reading");
+            const speedometerArrow = document.getElementById("speedometer-arrow");
+            const highest = document.getElementById("highest");
+            const least = document.getElementById("least");
+            const mostTransactionType = document.getElementById("mostTransactionType");
+            const leastTransactionType = document.getElementById("leastTransactionType");
+            const mostCustomerType = document.getElementById("mostCustomerType");
+            const leastCustomerType = document.getElementById("leastCustomerType");
+            const mostCustomerProvince = document.getElementById("mostCustomerProvince");
+            const leastCustomerProvince = document.getElementById("leastCustomerProvince");
 
-        const startDateElements = document.getElementById("startDate");
-        const endDateElements = document.getElementById("endDate");
+            const startDateElements = document.getElementById("startDate");
+            const endDateElements = document.getElementById("endDate");
 
-        startDateElements.valueAsDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
-        endDateElements.valueAsDate = currentDate;
+            startDateElements.valueAsDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+            endDateElements.valueAsDate = currentDate;
 
-        // Initialize data from PHP
-        let technicalServicesData = <?php echo json_encode($customerTypeDatapertransaction); ?>;
-        let DatacustomerType = [];
+            // Initialize data from PHP
+            let technicalServicesData = <?php echo json_encode($customerTypeDatapertransaction); ?>;
+            let DatacustomerType = [];
 
-        function getMonthDateRange(year, month) {
-            const startDate = new Date(year, month - 1, 1);
-            const endDate = new Date(year, month, 0);
-            return {
-                startDate,
-                endDate
-            };
-        }
-
-        function updateData() {
-            let startDate, endDate;
-            const startInput = startDateElements.value.split('-');
-            const endInput = endDateElements.value.split('-');
-
-            // Start date
-            if (startInput.length === 2) { // Format is 'mm-yyyy'
-                const [startYear, startMonth] = startInput.map(Number);
-                startDate = new Date(startYear, startMonth - 1, 1); // First day of the start month
-            } else if (startInput.length === 1) { // Format is 'yyyy'
-                startDate = new Date(startInput[0], 0, 1); // January 1st of the year
-            } else {
-                startDate = new Date(startDateElements.value); // Full date format
+            function getMonthDateRange(year, month) {
+                const startDate = new Date(year, month - 1, 1);
+                const endDate = new Date(year, month, 0);
+                return {
+                    startDate,
+                    endDate
+                };
             }
 
-            // End date
-            if (endInput.length === 2) { // Format is 'mm-yyyy'
-                const [endYear, endMonth] = endInput.map(Number);
-                endDate = new Date(endYear, endMonth, 0); // Last day of the end month
-            } else if (endInput.length === 1) { // Format is 'yyyy'
-                endDate = new Date(endInput[0], 11, 31); // December 31st of the year
-            } else {
-                endDate = new Date(endDateElements.value); // Full date format
+            function updateData() {
+                let startDate, endDate;
+                const startInput = startDateElements.value.split('-');
+                const endInput = endDateElements.value.split('-');
+
+                // Start date
+                if (startInput.length === 2) { // Format is 'mm-yyyy'
+                    const [startYear, startMonth] = startInput.map(Number);
+                    startDate = new Date(startYear, startMonth - 1, 1); // First day of the start month
+                } else if (startInput.length === 1) { // Format is 'yyyy'
+                    startDate = new Date(startInput[0], 0, 1); // January 1st of the year
+                } else {
+                    startDate = new Date(startDateElements.value); // Full date format
+                }
+
+                // End date
+                if (endInput.length === 2) { // Format is 'mm-yyyy'
+                    const [endYear, endMonth] = endInput.map(Number);
+                    endDate = new Date(endYear, endMonth, 0); // Last day of the end month
+                } else if (endInput.length === 1) { // Format is 'yyyy'
+                    endDate = new Date(endInput[0], 11, 31); // December 31st of the year
+                } else {
+                    endDate = new Date(endDateElements.value); // Full date format
+                }
+
+                // Filter technicalServicesData based on the date range
+                DatacustomerType = technicalServicesData.filter(item =>
+                    new Date(item.transaction_date) >= startDate &&
+                    new Date(item.transaction_date) <= endDate
+                );
+
+                processFilteredData();
+                processFilteredDataAmount();
             }
 
-            // Filter technicalServicesData based on the date range
-            DatacustomerType = technicalServicesData.filter(item =>
-                new Date(item.transaction_date) >= startDate &&
-                new Date(item.transaction_date) <= endDate
-            );
+            function processFilteredData() {
+                const customerData = {};
 
-            processFilteredData();
-            processFilteredDataAmount();
-        }
+                const filteredData = DatacustomerType.filter(
+                    item => item.transaction_status === 'Paid' || item.transaction_status === 'Pending'
+                );
 
-        function processFilteredData() {
-            const customerData = {};
+                filteredData.forEach(item => {
+                    const transactionDate = item.transaction_date;
+                    const transactionType = item.transaction_type;
+                    const customerType = item.customer_type;
+                    const address = item.address;
+                    const transactionCount = Number(item.transaction_count);
+                    const totalAmount = Number(item.total_amount);
 
-            const filteredData = DatacustomerType.filter(
-                item => item.transaction_status === 'Paid' || item.transaction_status === 'Pending'
-            );
+                    if (!customerData[transactionDate]) {
+                        customerData[transactionDate] = {};
+                    }
 
-            filteredData.forEach(item => {
-                const transactionDate = item.transaction_date;
-                const transactionType = item.transaction_type;
-                const customerType = item.customer_type;
-                const address = item.address;
-                const transactionCount = Number(item.transaction_count);
-                const totalAmount = Number(item.total_amount);
+                    if (!customerData[transactionDate][transactionType]) {
+                        customerData[transactionDate][transactionType] = {};
+                    }
 
-                if (!customerData[transactionDate]) {
-                    customerData[transactionDate] = {};
+                    if (!customerData[transactionDate][transactionType][customerType]) {
+                        customerData[transactionDate][transactionType][customerType] = {};
+                    }
+
+                    if (!customerData[transactionDate][transactionType][customerType][address]) {
+                        customerData[transactionDate][transactionType][customerType][address] = {
+                            transaction_count: 0,
+                            total_amount: 0,
+                        };
+                    }
+
+                    customerData[transactionDate][transactionType][customerType][address].transaction_count += transactionCount;
+                    customerData[transactionDate][transactionType][customerType][address].total_amount += totalAmount;
+                });
+
+                const processedData = {};
+
+                for (const transactionDate in customerData) {
+                    if (!processedData[transactionDate]) {
+                        processedData[transactionDate] = {};
+                    }
+
+                    const transactionTypes = customerData[transactionDate];
+                    for (const transactionType in transactionTypes) {
+                        if (!processedData[transactionDate][transactionType]) {
+                            processedData[transactionDate][transactionType] = {};
+                        }
+
+                        const customerTypes = transactionTypes[transactionType];
+                        for (const customerType in customerTypes) {
+                            if (!processedData[transactionDate][transactionType][customerType]) {
+                                processedData[transactionDate][transactionType][customerType] = {};
+                            }
+
+                            const addresses = customerTypes[customerType];
+                            for (const address in addresses) {
+                                processedData[transactionDate][transactionType][customerType][address] = {
+                                    transaction_count: addresses[address].transaction_count,
+                                    total_amount: addresses[address].total_amount
+                                };
+                            }
+                        }
+                    }
                 }
 
-                if (!customerData[transactionDate][transactionType]) {
-                    customerData[transactionDate][transactionType] = {};
-                }
-
-                if (!customerData[transactionDate][transactionType][customerType]) {
-                    customerData[transactionDate][transactionType][customerType] = {};
-                }
-
-                if (!customerData[transactionDate][transactionType][customerType][address]) {
-                    customerData[transactionDate][transactionType][customerType][address] = {
+                if (!processedData || processedData.length === 0) {
+                    processedData.push({
+                        transaction_date: ' ',
+                        transaction_type: ' ',
+                        customer_type: ' ',
+                        province: ' ',
                         transaction_count: 0,
                         total_amount: 0,
-                    };
+                    });
                 }
 
-                customerData[transactionDate][transactionType][customerType][address].transaction_count += transactionCount;
-                customerData[transactionDate][transactionType][customerType][address].total_amount += totalAmount;
-            });
+                let maxTransactionCount = 0;
+                let minTransactionCount = Infinity;
+                let datesWithMaxTransaction = [];
+                let datesWithMinTransaction = [];
 
-            const processedData = {};
+                function findDatesWithExtremeTransactions(customerData) {
+                    Object.keys(customerData).forEach(date => {
+                        let totalCountForDate = 0;
 
-            for (const transactionDate in customerData) {
-                if (!processedData[transactionDate]) {
-                    processedData[transactionDate] = {};
-                }
+                        Object.keys(customerData[date]).forEach(type => {
+                            Object.keys(customerData[date][type]).forEach(customerType => {
+                                Object.keys(customerData[date][type][customerType]).forEach(address => {
+                                    totalCountForDate += customerData[date][type][customerType][address].transaction_count;
+                                });
+                            });
+                        });
 
-                const transactionTypes = customerData[transactionDate];
-                for (const transactionType in transactionTypes) {
-                    if (!processedData[transactionDate][transactionType]) {
-                        processedData[transactionDate][transactionType] = {};
-                    }
-
-                    const customerTypes = transactionTypes[transactionType];
-                    for (const customerType in customerTypes) {
-                        if (!processedData[transactionDate][transactionType][customerType]) {
-                            processedData[transactionDate][transactionType][customerType] = {};
+                        // Check for max transactions
+                        if (totalCountForDate > maxTransactionCount) {
+                            maxTransactionCount = totalCountForDate;
+                            datesWithMaxTransaction = [date];
+                        } else if (totalCountForDate === maxTransactionCount) {
+                            datesWithMaxTransaction.push(date);
                         }
 
-                        const addresses = customerTypes[customerType];
-                        for (const address in addresses) {
-                            processedData[transactionDate][transactionType][customerType][address] = {
-                                transaction_count: addresses[address].transaction_count,
-                                total_amount: addresses[address].total_amount
-                            };
+                        // Check for min transactions
+                        if (totalCountForDate < minTransactionCount && totalCountForDate > 0) { // Assuming you don't want to consider days with zero transactions
+                            minTransactionCount = totalCountForDate;
+                            datesWithMinTransaction = [date];
+                        } else if (totalCountForDate === minTransactionCount) {
+                            datesWithMinTransaction.push(date);
+                        }
+                    });
+                }
+
+                findDatesWithExtremeTransactions(customerData);
+
+                //Transaction Type
+                let maxTransactionCountByType = 0;
+                let minTransactionCountByType = Infinity;
+                let maxtransactionType = [];
+                let minTransactionType = [];
+
+                function findTransactionTypesWithExtremeTransactions(customerData) {
+                    let transactionCountByType = {};
+
+                    // Calculate total transactions for each transaction type
+                    Object.keys(customerData).forEach(date => {
+                        Object.keys(customerData[date]).forEach(type => {
+                            transactionCountByType[type] = (transactionCountByType[type] || 0);
+
+                            Object.keys(customerData[date][type]).forEach(customerType => {
+                                Object.keys(customerData[date][type][customerType]).forEach(address => {
+                                    transactionCountByType[type] += customerData[date][type][customerType][address].transaction_count;
+                                });
+                            });
+                        });
+                    });
+
+                    Object.keys(transactionCountByType).forEach(type => {
+                        const count = transactionCountByType[type];
+
+                        // Max transactions
+                        if (count > maxTransactionCountByType) {
+                            maxTransactionCountByType = count;
+                            maxtransactionType = [type];
+                        } else if (count === maxTransactionCountByType) {
+                            maxtransactionType.push(type);
+                        }
+
+                        // Min transactions 
+                        if (count < minTransactionCountByType && count > 0) {
+                            minTransactionCountByType = count;
+                            minTransactionType = [type];
+                        } else if (count === minTransactionCountByType) {
+                            minTransactionType.push(type);
+                        }
+                    });
+                }
+
+                findTransactionTypesWithExtremeTransactions(customerData);
+
+                //customer type
+                let maxTransactionCountByCustomerType = 0;
+                let minTransactionCountByCustomerType = Infinity;
+                let maxCustomerTypes = [];
+                let minCustomerType = [];
+
+                function findCustomerTypesWithExtremeTransactions(customerData) {
+                    let transactionCountByCustomerType = {};
+
+                    // Calculate total transactions for each customer type
+                    Object.keys(customerData).forEach(date => {
+                        Object.keys(customerData[date]).forEach(type => {
+                            Object.keys(customerData[date][type]).forEach(customerType => {
+                                transactionCountByCustomerType[customerType] = (transactionCountByCustomerType[customerType] || 0);
+
+                                Object.keys(customerData[date][type][customerType]).forEach(address => {
+                                    transactionCountByCustomerType[customerType] += customerData[date][type][customerType][address].transaction_count;
+                                });
+                            });
+                        });
+                    });
+
+                    Object.keys(transactionCountByCustomerType).forEach(customerType => {
+                        const count = transactionCountByCustomerType[customerType];
+
+                        // Max transactions
+                        if (count > maxTransactionCountByCustomerType) {
+                            maxTransactionCountByCustomerType = count;
+                            maxCustomerTypes = [customerType];
+                        } else if (count === maxTransactionCountByCustomerType) {
+                            maxCustomerTypes.push(customerType);
+                        }
+
+                        // Min transactions 
+                        if (count < minTransactionCountByCustomerType && count > 0) {
+                            minTransactionCountByCustomerType = count;
+                            minCustomerType = [customerType];
+                        } else if (count === minTransactionCountByCustomerType) {
+                            minCustomerType.push(customerType);
+                        }
+                    });
+                }
+                findCustomerTypesWithExtremeTransactions(customerData);
+
+                let maxTransactionCountByProvince = 0;
+                let minTransactionCountByProvince = Infinity;
+                let highestprovinces = [];
+                let leastprovinces = [];
+
+                function findProvincesWithExtremeTransactions(customerData) {
+                    let transactionCountByProvince = {};
+
+                    Object.keys(customerData).forEach(date => {
+                        Object.keys(customerData[date]).forEach(type => {
+                            Object.keys(customerData[date][type]).forEach(customerType => {
+                                Object.keys(customerData[date][type][customerType]).forEach(province => {
+                                    transactionCountByProvince[province] = (transactionCountByProvince[province] || 0);
+                                    transactionCountByProvince[province] += customerData[date][type][customerType][province].transaction_count;
+                                });
+                            });
+                        });
+                    });
+
+                    Object.keys(transactionCountByProvince).forEach(province => {
+                        const count = transactionCountByProvince[province];
+
+                        // Max transactions
+                        if (count > maxTransactionCountByProvince) {
+                            maxTransactionCountByProvince = count;
+                            highestprovinces = [province];
+                        } else if (count === maxTransactionCountByProvince) {
+                            highestprovinces.push(province);
+                        }
+
+                        // Min transactions
+                        if (count < minTransactionCountByProvince && count > 0) {
+                            minTransactionCountByProvince = count;
+                            leastprovinces = [province];
+                        } else if (count === minTransactionCountByProvince) {
+                            leastprovinces.push(province);
+                        }
+                    });
+                }
+                findProvincesWithExtremeTransactions(customerData);
+
+                //analyzation that should depends in the date filter or chart
+                highest.innerHTML = "Highest transaction: <span style='color: red;'>" + datesWithMaxTransaction.join(', ') + "</span> with <span style='color: blue;'> " + maxTransactionCount + "</span> transaction/s.";
+                least.innerHTML = "Least transaction: <span style='color: red;'>" + datesWithMinTransaction.join(', ') + "</span> with <span style='color: blue;'> " + minTransactionCount + "</span> transaction/s.";
+                mostTransactionType.innerHTML = "Highest transaction type:  <span style='color:green;'>" + maxtransactionType.join(', ') + "</span> having  <span style='color: blue;'> " + maxTransactionCountByType + "</span> transaction/s.";
+                leastTransactionType.innerHTML = "Least transaction type:   <span style='color:green;'>" + minTransactionType.join(', ') + "</span> having  <span style='color: blue;'> " + minTransactionCountByType + "</span> transaction/s.";
+                mostCustomerType.innerHTML = "Highest customer type(s): <span style='color:green;'>" + maxCustomerTypes.join(', ') + "</span> having <span style='color: blue;'> " + maxTransactionCountByCustomerType + "</span> transaction/s.";
+                leastCustomerType.innerHTML = "Least customer type: <span style='color:green;'>" + minCustomerType.join(', ') + "</span> having <span style='color: blue;'> " + minTransactionCountByCustomerType + "</span> transaction/s.";
+                mostCustomerProvince.innerHTML = "Provinces with the highest transactions: <span style='color:green;'>" + highestprovinces.join(', ') + "</span> having <span style='color: blue;'> " + maxTransactionCountByProvince + "</span> transaction/s.";
+                leastCustomerProvince.innerHTML = "Provinces with the least transactions: <span style='color:green;'>" + leastprovinces.join(', ') + "</span> having <span style='color: blue;'> " + minTransactionCountByProvince + "</span> transaction/s.";
+
+
+            }
+
+            function processFilteredDataAmount() {
+                const customerData = {};
+
+                const filteredData = DatacustomerType.filter(
+                    item => item.transaction_status === 'Paid' || item.transaction_status === 'Pending'
+                );
+
+                filteredData.forEach(item => {
+                    const transactionDate = item.transaction_date;
+                    const transactionType = item.transaction_type;
+                    const customerType = item.customer_type;
+                    const address = item.address;
+                    const transactionCount = Number(item.transaction_count);
+                    const totalAmount = Number(item.total_amount);
+
+                    if (!customerData[transactionDate]) {
+                        customerData[transactionDate] = {};
+                    }
+
+                    if (!customerData[transactionDate][transactionType]) {
+                        customerData[transactionDate][transactionType] = {};
+                    }
+
+                    if (!customerData[transactionDate][transactionType][customerType]) {
+                        customerData[transactionDate][transactionType][customerType] = {};
+                    }
+
+                    if (!customerData[transactionDate][transactionType][customerType][address]) {
+                        customerData[transactionDate][transactionType][customerType][address] = {
+                            transaction_count: 0,
+                            total_amount: 0,
+                        };
+                    }
+
+                    customerData[transactionDate][transactionType][customerType][address].transaction_count += transactionCount;
+                    customerData[transactionDate][transactionType][customerType][address].total_amount += totalAmount;
+                });
+
+                const processedData = {};
+
+                for (const transactionDate in customerData) {
+                    if (!processedData[transactionDate]) {
+                        processedData[transactionDate] = {};
+                    }
+
+                    const transactionTypes = customerData[transactionDate];
+                    for (const transactionType in transactionTypes) {
+                        if (!processedData[transactionDate][transactionType]) {
+                            processedData[transactionDate][transactionType] = {};
+                        }
+
+                        const customerTypes = transactionTypes[transactionType];
+                        for (const customerType in customerTypes) {
+                            if (!processedData[transactionDate][transactionType][customerType]) {
+                                processedData[transactionDate][transactionType][customerType] = {};
+                            }
+
+                            const addresses = customerTypes[customerType];
+                            for (const address in addresses) {
+                                processedData[transactionDate][transactionType][customerType][address] = {
+                                    transaction_count: addresses[address].transaction_count,
+                                    total_amount: addresses[address].total_amount
+                                };
+                            }
                         }
                     }
                 }
-            }
 
-            console.log(JSON.stringify(processedData, null, 2));
-            if (!processedData || processedData.length === 0) {
-                processedData.push({
-                    transaction_date: ' ',
-                    transaction_type: ' ',
-                    customer_type: ' ',
-                    province: ' ',
-                    transaction_count: 0,
-                    total_amount: 0,
-                });
-            }
-
-            let maxTransactionCount = 0;
-            let minTransactionCount = Infinity;
-            let datesWithMaxTransaction = [];
-            let datesWithMinTransaction = [];
-
-            function findDatesWithExtremeTransactions(customerData) {
-                Object.keys(customerData).forEach(date => {
-                    let totalCountForDate = 0;
-
-                    Object.keys(customerData[date]).forEach(type => {
-                        Object.keys(customerData[date][type]).forEach(customerType => {
-                            Object.keys(customerData[date][type][customerType]).forEach(address => {
-                                totalCountForDate += customerData[date][type][customerType][address].transaction_count;
-                            });
-                        });
-                    });
-
-                    // Check for max transactions
-                    if (totalCountForDate > maxTransactionCount) {
-                        maxTransactionCount = totalCountForDate;
-                        datesWithMaxTransaction = [date];
-                    } else if (totalCountForDate === maxTransactionCount) {
-                        datesWithMaxTransaction.push(date);
-                    }
-
-                    // Check for min transactions
-                    if (totalCountForDate < minTransactionCount && totalCountForDate > 0) { // Assuming you don't want to consider days with zero transactions
-                        minTransactionCount = totalCountForDate;
-                        datesWithMinTransaction = [date];
-                    } else if (totalCountForDate === minTransactionCount) {
-                        datesWithMinTransaction.push(date);
-                    }
-                });
-            }
-
-            findDatesWithExtremeTransactions(customerData);
-
-            //Transaction Type
-            let maxTransactionCountByType = 0;
-            let minTransactionCountByType = Infinity;
-            let maxtransactionType = [];
-            let minTransactionType = [];
-
-            function findTransactionTypesWithExtremeTransactions(customerData) {
-                let transactionCountByType = {};
-
-                // Calculate total transactions for each transaction type
-                Object.keys(customerData).forEach(date => {
-                    Object.keys(customerData[date]).forEach(type => {
-                        transactionCountByType[type] = (transactionCountByType[type] || 0);
-
-                        Object.keys(customerData[date][type]).forEach(customerType => {
-                            Object.keys(customerData[date][type][customerType]).forEach(address => {
-                                transactionCountByType[type] += customerData[date][type][customerType][address].transaction_count;
-                            });
-                        });
-                    });
-                });
-
-                Object.keys(transactionCountByType).forEach(type => {
-                    const count = transactionCountByType[type];
-
-                    // Max transactions
-                    if (count > maxTransactionCountByType) {
-                        maxTransactionCountByType = count;
-                        maxtransactionType = [type];
-                    } else if (count === maxTransactionCountByType) {
-                        maxtransactionType.push(type);
-                    }
-
-                    // Min transactions 
-                    if (count < minTransactionCountByType && count > 0) {
-                        minTransactionCountByType = count;
-                        minTransactionType = [type];
-                    } else if (count === minTransactionCountByType) {
-                        minTransactionType.push(type);
-                    }
-                });
-            }
-
-            findTransactionTypesWithExtremeTransactions(customerData);
-
-            //customer type
-            let maxTransactionCountByCustomerType = 0;
-            let minTransactionCountByCustomerType = Infinity;
-            let maxCustomerTypes = [];
-            let minCustomerType = [];
-
-            function findCustomerTypesWithExtremeTransactions(customerData) {
-                let transactionCountByCustomerType = {};
-
-                // Calculate total transactions for each customer type
-                Object.keys(customerData).forEach(date => {
-                    Object.keys(customerData[date]).forEach(type => {
-                        Object.keys(customerData[date][type]).forEach(customerType => {
-                            transactionCountByCustomerType[customerType] = (transactionCountByCustomerType[customerType] || 0);
-
-                            Object.keys(customerData[date][type][customerType]).forEach(address => {
-                                transactionCountByCustomerType[customerType] += customerData[date][type][customerType][address].transaction_count;
-                            });
-                        });
-                    });
-                });
-
-                Object.keys(transactionCountByCustomerType).forEach(customerType => {
-                    const count = transactionCountByCustomerType[customerType];
-
-                    // Max transactions
-                    if (count > maxTransactionCountByCustomerType) {
-                        maxTransactionCountByCustomerType = count;
-                        maxCustomerTypes = [customerType];
-                    } else if (count === maxTransactionCountByCustomerType) {
-                        maxCustomerTypes.push(customerType);
-                    }
-
-                    // Min transactions 
-                    if (count < minTransactionCountByCustomerType && count > 0) {
-                        minTransactionCountByCustomerType = count;
-                        minCustomerType = [customerType];
-                    } else if (count === minTransactionCountByCustomerType) {
-                        minCustomerType.push(customerType);
-                    }
-                });
-            }
-            findCustomerTypesWithExtremeTransactions(customerData);
-
-            let maxTransactionCountByProvince = 0;
-            let minTransactionCountByProvince = Infinity;
-            let highestprovinces = [];
-            let leastprovinces = [];
-
-            function findProvincesWithExtremeTransactions(customerData) {
-                let transactionCountByProvince = {};
-
-                Object.keys(customerData).forEach(date => {
-                    Object.keys(customerData[date]).forEach(type => {
-                        Object.keys(customerData[date][type]).forEach(customerType => {
-                            Object.keys(customerData[date][type][customerType]).forEach(province => {
-                                transactionCountByProvince[province] = (transactionCountByProvince[province] || 0);
-                                transactionCountByProvince[province] += customerData[date][type][customerType][province].transaction_count;
-                            });
-                        });
-                    });
-                });
-
-                Object.keys(transactionCountByProvince).forEach(province => {
-                    const count = transactionCountByProvince[province];
-
-                    // Max transactions
-                    if (count > maxTransactionCountByProvince) {
-                        maxTransactionCountByProvince = count;
-                        highestprovinces = [province];
-                    } else if (count === maxTransactionCountByProvince) {
-                        highestprovinces.push(province);
-                    }
-
-                    // Min transactions
-                    if (count < minTransactionCountByProvince && count > 0) {
-                        minTransactionCountByProvince = count;
-                        leastprovinces = [province];
-                    } else if (count === minTransactionCountByProvince) {
-                        leastprovinces.push(province);
-                    }
-                });
-            }
-            findProvincesWithExtremeTransactions(customerData);
-
-            //analyzation that should depends in the date filter or chart
-            highest.innerHTML = "Highest transaction: <span style='color: red;'>" + datesWithMaxTransaction.join(', ') + "</span> with <span style='color: blue;'> " + maxTransactionCount + "</span> transaction/s.";
-            least.innerHTML = "Least transaction: <span style='color: red;'>" + datesWithMinTransaction.join(', ') + "</span> with <span style='color: blue;'> " + minTransactionCount + "</span> transaction/s.";
-            mostTransactionType.innerHTML = "Highest transaction type:  <span style='color:green;'>" + maxtransactionType.join(', ') + "</span> having  <span style='color: blue;'> " + maxTransactionCountByType + "</span> transaction/s.";
-            leastTransactionType.innerHTML = "Least transaction type:   <span style='color:green;'>" + minTransactionType.join(', ') + "</span> having  <span style='color: blue;'> " + minTransactionCountByType + "</span> transaction/s.";
-            mostCustomerType.innerHTML = "Highest customer type(s): <span style='color:green;'>" + maxCustomerTypes.join(', ') + "</span> having <span style='color: blue;'> " + maxTransactionCountByCustomerType + "</span> transaction/s.";
-            leastCustomerType.innerHTML = "Least customer type: <span style='color:green;'>" + minCustomerType.join(', ') + "</span> having <span style='color: blue;'> " + minTransactionCountByCustomerType + "</span> transaction/s.";
-            mostCustomerProvince.innerHTML = "Provinces with the highest transactions: <span style='color:green;'>" + highestprovinces.join(', ') + "</span> having <span style='color: blue;'> " + maxTransactionCountByProvince + "</span> transaction/s.";
-            leastCustomerProvince.innerHTML = "Provinces with the least transactions: <span style='color:green;'>" + leastprovinces.join(', ') + "</span> having <span style='color: blue;'> " + minTransactionCountByProvince + "</span> transaction/s.";
-
-
-        }
-
-        function processFilteredDataAmount() {
-            const customerData = {};
-
-            const filteredData = DatacustomerType.filter(
-                item => item.transaction_status === 'Paid' || item.transaction_status === 'Pending'
-            );
-
-            filteredData.forEach(item => {
-                const transactionDate = item.transaction_date;
-                const transactionType = item.transaction_type;
-                const customerType = item.customer_type;
-                const address = item.address;
-                const transactionCount = Number(item.transaction_count);
-                const totalAmount = Number(item.total_amount);
-
-                if (!customerData[transactionDate]) {
-                    customerData[transactionDate] = {};
-                }
-
-                if (!customerData[transactionDate][transactionType]) {
-                    customerData[transactionDate][transactionType] = {};
-                }
-
-                if (!customerData[transactionDate][transactionType][customerType]) {
-                    customerData[transactionDate][transactionType][customerType] = {};
-                }
-
-                if (!customerData[transactionDate][transactionType][customerType][address]) {
-                    customerData[transactionDate][transactionType][customerType][address] = {
+                if (!processedData || processedData.length === 0) {
+                    processedData.push({
+                        transaction_date: ' ',
+                        transaction_type: ' ',
+                        customer_type: ' ',
+                        province: ' ',
                         transaction_count: 0,
                         total_amount: 0,
-                    };
+                    });
                 }
 
-                customerData[transactionDate][transactionType][customerType][address].transaction_count += transactionCount;
-                customerData[transactionDate][transactionType][customerType][address].total_amount += totalAmount;
-            });
+                //highest date
+                let maxTransactionAmount = 0;
+                let minTransactionAmount = Infinity;
+                let datesWithMaxTransactionAmount = [];
+                let datesWithMinTransactionAmount = [];
 
-            const processedData = {};
+                function findDatesWithExtremeTransactionAmounts(customerData) {
+                    Object.keys(customerData).forEach(date => {
+                        let totalAmountForDate = 0;
 
-            for (const transactionDate in customerData) {
-                if (!processedData[transactionDate]) {
-                    processedData[transactionDate] = {};
-                }
+                        Object.keys(customerData[date]).forEach(type => {
+                            Object.keys(customerData[date][type]).forEach(customerType => {
+                                Object.keys(customerData[date][type][customerType]).forEach(address => {
+                                    totalAmountForDate += customerData[date][type][customerType][address].total_amount;
+                                });
+                            });
+                        });
 
-                const transactionTypes = customerData[transactionDate];
-                for (const transactionType in transactionTypes) {
-                    if (!processedData[transactionDate][transactionType]) {
-                        processedData[transactionDate][transactionType] = {};
-                    }
-
-                    const customerTypes = transactionTypes[transactionType];
-                    for (const customerType in customerTypes) {
-                        if (!processedData[transactionDate][transactionType][customerType]) {
-                            processedData[transactionDate][transactionType][customerType] = {};
+                        // Check for max transaction amount
+                        if (totalAmountForDate > maxTransactionAmount) {
+                            maxTransactionAmount = totalAmountForDate;
+                            datesWithMaxTransactionAmount = [date];
+                        } else if (totalAmountForDate === maxTransactionAmount) {
+                            datesWithMaxTransactionAmount.push(date);
                         }
 
-                        const addresses = customerTypes[customerType];
-                        for (const address in addresses) {
-                            processedData[transactionDate][transactionType][customerType][address] = {
-                                transaction_count: addresses[address].transaction_count,
-                                total_amount: addresses[address].total_amount
-                            };
+                        // Check for min transaction amount
+                        if (totalAmountForDate < minTransactionAmount && totalAmountForDate > 0) {
+                            minTransactionAmount = totalAmountForDate;
+                            datesWithMinTransactionAmount = [date];
+                        } else if (totalAmountForDate === minTransactionAmount) {
+                            datesWithMinTransactionAmount.push(date);
+                        }
+                    });
+                }
+
+                findDatesWithExtremeTransactionAmounts(customerData);
+
+                //transaction type income
+                let maxTransactionAmountByType = 0;
+                let minTransactionAmountByType = Infinity;
+                let maxTransactionTypeByAmount = [];
+                let minTransactionTypeByAmount = [];
+
+                function findTransactionTypesWithExtremeTransactionAmounts(customerData) {
+                    let transactionAmountByType = {};
+
+                    Object.keys(customerData).forEach(date => {
+                        Object.keys(customerData[date]).forEach(type => {
+                            transactionAmountByType[type] = (transactionAmountByType[type] || 0);
+
+                            Object.keys(customerData[date][type]).forEach(customerType => {
+                                Object.keys(customerData[date][type][customerType]).forEach(address => {
+                                    transactionAmountByType[type] += customerData[date][type][customerType][address].total_amount;
+                                });
+                            });
+                        });
+                    });
+
+                    Object.keys(transactionAmountByType).forEach(type => {
+                        const amount = transactionAmountByType[type];
+
+                        // Max transaction amount
+                        if (amount > maxTransactionAmountByType) {
+                            maxTransactionAmountByType = amount;
+                            maxTransactionTypeByAmount = [type];
+                        } else if (amount === maxTransactionAmountByType) {
+                            maxTransactionTypeByAmount.push(type);
+                        }
+
+                        // Min transaction amount
+                        if (amount < minTransactionAmountByType && amount > 0) {
+                            minTransactionAmountByType = amount;
+                            minTransactionTypeByAmount = [type];
+                        } else if (amount === minTransactionAmountByType) {
+                            minTransactionTypeByAmount.push(type);
+                        }
+                    });
+                }
+                findTransactionTypesWithExtremeTransactionAmounts(customerData);
+
+                //customer type income 
+                let maxTransactionAmountByCustomerType = 0;
+                let minTransactionAmountByCustomerType = Infinity;
+                let maxCustomerTypeByAmount = [];
+                let minCustomerTypeByAmount = [];
+
+                function findCustomerTypesWithExtremeTransactionAmounts(customerData) {
+                    let transactionAmountByCustomerType = {};
+
+                    Object.keys(customerData).forEach(date => {
+                        Object.keys(customerData[date]).forEach(type => {
+                            Object.keys(customerData[date][type]).forEach(customerType => {
+                                transactionAmountByCustomerType[customerType] = (transactionAmountByCustomerType[customerType] || 0);
+
+                                Object.keys(customerData[date][type][customerType]).forEach(address => {
+                                    transactionAmountByCustomerType[customerType] += customerData[date][type][customerType][address].total_amount;
+                                });
+                            });
+                        });
+                    });
+
+                    Object.keys(transactionAmountByCustomerType).forEach(customerType => {
+                        const amount = transactionAmountByCustomerType[customerType];
+
+                        // Max transaction amount
+                        if (amount > maxTransactionAmountByCustomerType) {
+                            maxTransactionAmountByCustomerType = amount;
+                            maxCustomerTypeByAmount = [customerType];
+                        } else if (amount === maxTransactionAmountByCustomerType) {
+                            maxCustomerTypeByAmount.push(customerType);
+                        }
+
+                        // Min transaction amount
+                        if (amount < minTransactionAmountByCustomerType && amount > 0) {
+                            minTransactionAmountByCustomerType = amount;
+                            minCustomerTypeByAmount = [customerType];
+                        } else if (amount === minTransactionAmountByCustomerType) {
+                            minCustomerTypeByAmount.push(customerType);
+                        }
+                    });
+                }
+                findCustomerTypesWithExtremeTransactionAmounts(customerData);
+
+                //province income
+                let maxTransactionAmountByProvince = 0;
+                let minTransactionAmountByProvince = Infinity;
+                let highestProvincesByAmount = [];
+                let leastProvincesByAmount = [];
+
+                function findProvincesWithExtremeTransactionAmounts(customerData) {
+                    let transactionAmountByProvince = {};
+
+                    // Calculate total transaction amounts for each province
+                    Object.keys(customerData).forEach(date => {
+                        Object.keys(customerData[date]).forEach(type => {
+                            Object.keys(customerData[date][type]).forEach(customerType => {
+                                Object.keys(customerData[date][type][customerType]).forEach(province => {
+                                    transactionAmountByProvince[province] = (transactionAmountByProvince[province] || 0);
+                                    transactionAmountByProvince[province] += customerData[date][type][customerType][province].total_amount;
+                                });
+                            });
+                        });
+                    });
+
+                    // Find the max and min transaction amounts for provinces
+                    Object.keys(transactionAmountByProvince).forEach(province => {
+                        const amount = transactionAmountByProvince[province];
+
+                        // Max transaction amount
+                        if (amount > maxTransactionAmountByProvince) {
+                            maxTransactionAmountByProvince = amount;
+                            highestProvincesByAmount = [province];
+                        } else if (amount === maxTransactionAmountByProvince) {
+                            highestProvincesByAmount.push(province);
+                        }
+
+                        // Min transaction amount (ignoring provinces with zero transactions)
+                        if (amount < minTransactionAmountByProvince && amount > 0) {
+                            minTransactionAmountByProvince = amount;
+                            leastProvincesByAmount = [province];
+                        } else if (amount === minTransactionAmountByProvince) {
+                            leastProvincesByAmount.push(province);
+                        }
+                    });
+                }
+                findProvincesWithExtremeTransactionAmounts(customerData);
+
+
+                //analyzation that should depends in the date filter or chart
+                highest.innerHTML = "Highest income: <span style='color: red;'>" + datesWithMaxTransactionAmount.join(', ') + "</span> with <span style='color: blue;'> " + Number(maxTransactionAmount).toLocaleString('en-US', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                }) + "</span> total income.";
+                least.innerHTML = "Least income: <span style='color: red;'>" + datesWithMinTransactionAmount.join(', ') + "</span> with <span style='color: blue;'> " + Number(minTransactionAmount).toLocaleString('en-US', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                }) + "</span> total income.";
+                mostTransactionType.innerHTML = "Highest transaction type:  <span style='color:green;'>" + maxTransactionTypeByAmount.join(', ') + "</span> having  <span style='color: blue;'> " + Number(maxTransactionAmountByType).toLocaleString('en-US', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                }) + "</span> total income.";
+                leastTransactionType.innerHTML = "Least transaction type:   <span style='color:green;'>" + minTransactionTypeByAmount.join(', ') + "</span> having  <span style='color: blue;'> " + Number(minTransactionAmountByType).toLocaleString('en-US', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                }) + "</span> total income.";
+                mostCustomerType.innerHTML = "Highest customer type(s): <span style='color:green;'>" + maxCustomerTypeByAmount.join(', ') + "</span> having <span style='color: blue;'> " + Number(maxTransactionAmountByCustomerType).toLocaleString('en-US', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                }) + "</span> total income.";
+                leastCustomerType.innerHTML = "Least customer type: <span style='color:green;'>" + minCustomerTypeByAmount.join(', ') + "</span> having <span style='color: blue;'> " + Number(minTransactionAmountByCustomerType).toLocaleString('en-US', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                }) + "</span> total income.";
+                mostCustomerProvince.innerHTML = "Provinces with the highest income: <span style='color:green;'>" + highestProvincesByAmount.join(', ') + "</span> having <span style='color: blue;'> " + Number(maxTransactionAmountByProvince).toLocaleString('en-US', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                }) + "</span>.";
+                leastCustomerProvince.innerHTML = "Provinces with the least income: <span style='color:green;'>" + leastProvincesByAmount.join(', ') + "</span> having <span style='color: blue;'> " + Number(minTransactionAmountByProvince).toLocaleString('en-US', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                }) + "</span>.";
+            }
+
+            function refreshContent() {
+                processFilteredData();
+                processFilteredDataAmount();
+            }
+            startDateElements.addEventListener('change', function() {
+                updateData();
+                refreshContent();
+            });
+            endDateElements.addEventListener('change', function() {
+                updateData();
+                refreshContent();
+            });
+
+            updateData();
+            refreshContent();
+
+
+
+
+
+            //totaltransaction popup
+            totaltransactionChart.addEventListener("click", () => {
+
+                // Initialize empty arrays for each quarter
+                const quarter1 = [];
+                const quarter2 = [];
+                const quarter3 = [];
+                const quarter4 = [];
+
+                // Iterate through the transaction data
+                transaction.labels.forEach((label, index) => {
+                    const date = new Date(label);
+                    const year = date.getFullYear();
+                    const quarter = Math.floor((date.getMonth() + 3) / 3);
+
+                    // Check if the transaction is from the current year
+                    if (year === currentYear) {
+                        const sumValue = transaction.datasets[0].data[index] + transaction.datasets[1].data[index];
+                        switch (quarter) {
+                            case 1:
+                                quarter1.push(sumValue);
+                                break;
+                            case 2:
+                                quarter2.push(sumValue);
+                                break;
+                            case 3:
+                                quarter3.push(sumValue);
+                                break;
+                            case 4:
+                                quarter4.push(sumValue);
+                                break;
                         }
                     }
+                });
+
+                // Calculate the sum of transactions for each quarter
+                const sumQuarter1 = quarter1.reduce((acc, value) => acc + value, 0);
+                const sumQuarter2 = quarter2.reduce((acc, value) => acc + value, 0);
+                const sumQuarter3 = quarter3.reduce((acc, value) => acc + value, 0);
+                const sumQuarter4 = quarter4.reduce((acc, value) => acc + value, 0);
+
+
+                // Get the appropriate target value based on the current month
+                const targetValue = getTargetValue(currentMonth);
+
+                // Function to determine the target value based on the current month
+                function getTargetValue(month) {
+                    if (month >= 0 && month < 3) {
+                        return targetValues[0]; // January to March
+                    } else if (month >= 3 && month < 6) {
+                        return targetValues[1]; // April to June
+                    } else if (month >= 6 && month < 9) {
+                        return targetValues[2]; // July to September
+                    } else {
+                        return targetValues[3]; // October to December
+                    }
                 }
-            }
 
-            console.log(JSON.stringify(processedData, null, 2));
-            if (!processedData || processedData.length === 0) {
-                processedData.push({
-                    transaction_date: ' ',
-                    transaction_type: ' ',
-                    customer_type: ' ',
-                    province: ' ',
-                    transaction_count: 0,
-                    total_amount: 0,
-                });
-            }
+                Target = targetValue;
+                let Total;
 
-            //highest date
-            let maxTransactionAmount = 0;
-            let minTransactionAmount = Infinity;
-            let datesWithMaxTransactionAmount = [];
-            let datesWithMinTransactionAmount = [];
+                if (currentMonth >= 0 && currentMonth < 3) {
+                    Total = sumQuarter1; // January to March
+                } else if (currentMonth >= 3 && currentMonth < 6) {
+                    Total = sumQuarter2; // April to June
+                } else if (currentMonth >= 6 && currentMonth < 9) {
+                    Total = sumQuarter3; // July to September
+                } else if (currentMonth >= 8 && currentMonth < 12) {
+                    Total = sumQuarter4; // October to December
+                }
 
-            function findDatesWithExtremeTransactionAmounts(customerData) {
-                Object.keys(customerData).forEach(date => {
-                    let totalAmountForDate = 0;
+                const needle = (Total / Target);
+                let percentage = needle * 100;
+                if (percentage > 100) {
+                    percentage = 100;
+                } else {
+                    percentage = percentage;
+                }
 
-                    Object.keys(customerData[date]).forEach(type => {
-                        Object.keys(customerData[date][type]).forEach(customerType => {
-                            Object.keys(customerData[date][type][customerType]).forEach(address => {
-                                totalAmountForDate += customerData[date][type][customerType][address].total_amount;
-                            });
-                        });
-                    });
+                speedometerReading.textContent = Total + " Transaction";
 
-                    // Check for max transaction amount
-                    if (totalAmountForDate > maxTransactionAmount) {
-                        maxTransactionAmount = totalAmountForDate;
-                        datesWithMaxTransactionAmount = [date];
-                    } else if (totalAmountForDate === maxTransactionAmount) {
-                        datesWithMaxTransactionAmount.push(date);
+                //rotation of the needle 
+                let rotation = (needle) * 180 - 90;
+                if (rotation > 180) {
+                    rotation = 180 - 90;
+                }
+
+                speedometerArrow.style.transformOrigin = "50% 100%";
+                speedometerArrow.style.transform = `translateX(-50%) rotate(${rotation}deg)`;
+
+                const speedometerDial = document.querySelector('.speedometer-dial');
+
+                // Get the total/target value (you can replace this with your actual value)
+                const totalValue = needle; // Change this value as needed
+
+                // Function to update the background color based on the value
+                function updateBackgroundColor(value) {
+                    if (value >= 0 && value <= 0.25) {
+                        speedometerDial.style.backgroundColor = 'red';
+                    } else if (value > 0.25 && value <= 0.5) {
+                        speedometerDial.style.backgroundColor = 'orange';
+                    } else if (value > 0.5 && value <= 0.75) {
+                        speedometerDial.style.backgroundColor = 'yellow';
+                    } else {
+                        speedometerDial.style.backgroundColor = 'green';
                     }
+                }
+                // Call the updateBackgroundColor function with the initial total/target value
+                updateBackgroundColor(totalValue);
 
-                    // Check for min transaction amount
-                    if (totalAmountForDate < minTransactionAmount && totalAmountForDate > 0) {
-                        minTransactionAmount = totalAmountForDate;
-                        datesWithMinTransactionAmount = [date];
-                    } else if (totalAmountForDate === minTransactionAmount) {
-                        datesWithMinTransactionAmount.push(date);
-                    }
-                });
-            }
-
-            findDatesWithExtremeTransactionAmounts(customerData);
-
-            //transaction type income
-            let maxTransactionAmountByType = 0;
-            let minTransactionAmountByType = Infinity;
-            let maxTransactionTypeByAmount = [];
-            let minTransactionTypeByAmount = [];
-
-            function findTransactionTypesWithExtremeTransactionAmounts(customerData) {
-                let transactionAmountByType = {};
-
-                Object.keys(customerData).forEach(date => {
-                    Object.keys(customerData[date]).forEach(type => {
-                        transactionAmountByType[type] = (transactionAmountByType[type] || 0);
-
-                        Object.keys(customerData[date][type]).forEach(customerType => {
-                            Object.keys(customerData[date][type][customerType]).forEach(address => {
-                                transactionAmountByType[type] += customerData[date][type][customerType][address].total_amount;
-                            });
-                        });
-                    });
-                });
-
-                Object.keys(transactionAmountByType).forEach(type => {
-                    const amount = transactionAmountByType[type];
-
-                    // Max transaction amount
-                    if (amount > maxTransactionAmountByType) {
-                        maxTransactionAmountByType = amount;
-                        maxTransactionTypeByAmount = [type];
-                    } else if (amount === maxTransactionAmountByType) {
-                        maxTransactionTypeByAmount.push(type);
-                    }
-
-                    // Min transaction amount
-                    if (amount < minTransactionAmountByType && amount > 0) {
-                        minTransactionAmountByType = amount;
-                        minTransactionTypeByAmount = [type];
-                    } else if (amount === minTransactionAmountByType) {
-                        minTransactionTypeByAmount.push(type);
-                    }
-                });
-            }
-            findTransactionTypesWithExtremeTransactionAmounts(customerData);
-
-            //customer type income 
-            let maxTransactionAmountByCustomerType = 0;
-            let minTransactionAmountByCustomerType = Infinity;
-            let maxCustomerTypeByAmount = [];
-            let minCustomerTypeByAmount = [];
-
-            function findCustomerTypesWithExtremeTransactionAmounts(customerData) {
-                let transactionAmountByCustomerType = {};
-
-                Object.keys(customerData).forEach(date => {
-                    Object.keys(customerData[date]).forEach(type => {
-                        Object.keys(customerData[date][type]).forEach(customerType => {
-                            transactionAmountByCustomerType[customerType] = (transactionAmountByCustomerType[customerType] || 0);
-
-                            Object.keys(customerData[date][type][customerType]).forEach(address => {
-                                transactionAmountByCustomerType[customerType] += customerData[date][type][customerType][address].total_amount;
-                            });
-                        });
-                    });
-                });
-
-                Object.keys(transactionAmountByCustomerType).forEach(customerType => {
-                    const amount = transactionAmountByCustomerType[customerType];
-
-                    // Max transaction amount
-                    if (amount > maxTransactionAmountByCustomerType) {
-                        maxTransactionAmountByCustomerType = amount;
-                        maxCustomerTypeByAmount = [customerType];
-                    } else if (amount === maxTransactionAmountByCustomerType) {
-                        maxCustomerTypeByAmount.push(customerType);
-                    }
-
-                    // Min transaction amount
-                    if (amount < minTransactionAmountByCustomerType && amount > 0) {
-                        minTransactionAmountByCustomerType = amount;
-                        minCustomerTypeByAmount = [customerType];
-                    } else if (amount === minTransactionAmountByCustomerType) {
-                        minCustomerTypeByAmount.push(customerType);
-                    }
-                });
-            }
-            findCustomerTypesWithExtremeTransactionAmounts(customerData);
-
-            //province income
-            let maxTransactionAmountByProvince = 0;
-            let minTransactionAmountByProvince = Infinity;
-            let highestProvincesByAmount = [];
-            let leastProvincesByAmount = [];
-
-            function findProvincesWithExtremeTransactionAmounts(customerData) {
-                let transactionAmountByProvince = {};
-
-                // Calculate total transaction amounts for each province
-                Object.keys(customerData).forEach(date => {
-                    Object.keys(customerData[date]).forEach(type => {
-                        Object.keys(customerData[date][type]).forEach(customerType => {
-                            Object.keys(customerData[date][type][customerType]).forEach(province => {
-                                transactionAmountByProvince[province] = (transactionAmountByProvince[province] || 0);
-                                transactionAmountByProvince[province] += customerData[date][type][customerType][province].total_amount;
-                            });
-                        });
-                    });
-                });
-
-                // Find the max and min transaction amounts for provinces
-                Object.keys(transactionAmountByProvince).forEach(province => {
-                    const amount = transactionAmountByProvince[province];
-
-                    // Max transaction amount
-                    if (amount > maxTransactionAmountByProvince) {
-                        maxTransactionAmountByProvince = amount;
-                        highestProvincesByAmount = [province];
-                    } else if (amount === maxTransactionAmountByProvince) {
-                        highestProvincesByAmount.push(province);
-                    }
-
-                    // Min transaction amount (ignoring provinces with zero transactions)
-                    if (amount < minTransactionAmountByProvince && amount > 0) {
-                        minTransactionAmountByProvince = amount;
-                        leastProvincesByAmount = [province];
-                    } else if (amount === minTransactionAmountByProvince) {
-                        leastProvincesByAmount.push(province);
-                    }
-                });
-            }
-            findProvincesWithExtremeTransactionAmounts(customerData);
+                //percentage text color
+                let percentagecolor = '';
+                if (percentage >= 76 && percentage <= 100) {
+                    percentagecolor = 'green';
+                } else if (percentage >= 51 && percentage <= 75) {
+                    percentagecolor = 'yellow';
+                } else if (percentage >= 26 && percentage <= 50) {
+                    percentagecolor = 'orange';
+                } else {
+                    percentagecolor = 'red';
+                }
 
 
-            //analyzation that should depends in the date filter or chart
-            highest.innerHTML = "Highest income: <span style='color: red;'>" + datesWithMaxTransactionAmount.join(', ') + "</span> with <span style='color: blue;'> " + Number(maxTransactionAmount).toLocaleString('en-US', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-            }) + "</span> total income.";
-            least.innerHTML = "Least income: <span style='color: red;'>" + datesWithMinTransactionAmount.join(', ') + "</span> with <span style='color: blue;'> " + Number(minTransactionAmount).toLocaleString('en-US', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-            }) + "</span> total income.";
-            mostTransactionType.innerHTML = "Highest transaction type:  <span style='color:green;'>" + maxTransactionTypeByAmount.join(', ') + "</span> having  <span style='color: blue;'> " + Number(maxTransactionAmountByType).toLocaleString('en-US', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-            }) + "</span> total income.";
-            leastTransactionType.innerHTML = "Least transaction type:   <span style='color:green;'>" + minTransactionTypeByAmount.join(', ') + "</span> having  <span style='color: blue;'> " + Number(minTransactionAmountByType).toLocaleString('en-US', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-            }) + "</span> total income.";
-            mostCustomerType.innerHTML = "Highest customer type(s): <span style='color:green;'>" + maxCustomerTypeByAmount.join(', ') + "</span> having <span style='color: blue;'> " + Number(maxTransactionAmountByCustomerType).toLocaleString('en-US', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-            }) + "</span> total income.";
-            leastCustomerType.innerHTML = "Least customer type: <span style='color:green;'>" + minCustomerTypeByAmount.join(', ') + "</span> having <span style='color: blue;'> " + Number(minTransactionAmountByCustomerType).toLocaleString('en-US', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-            }) + "</span> total income.";
-            mostCustomerProvince.innerHTML = "Provinces with the highest income: <span style='color:green;'>" + highestProvincesByAmount.join(', ') + "</span> having <span style='color: blue;'> " + Number(maxTransactionAmountByProvince).toLocaleString('en-US', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-            }) + "</span>.";
-            leastCustomerProvince.innerHTML = "Provinces with the least income: <span style='color:green;'>" + leastProvincesByAmount.join(', ') + "</span> having <span style='color: blue;'> " + Number(minTransactionAmountByProvince).toLocaleString('en-US', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-            }) + "</span>.";
-        }
+                // Display the pop-up
+                popup.style.display = "block";
 
-        function refreshContent() {
-            processFilteredData();
-            processFilteredDataAmount();
-        }
-        startDateElements.addEventListener('change', function() {
+                targetTransaction.innerHTML = "Target transaction for this quarter is <span style='color: blue;'>" + Target;
+                percentTransaction.innerHTML = "Achieved <span style='color: " + percentagecolor + ";'>" + percentage + "%</span> of target transaction.";
+                PopupHeader.innerHTML = "Total Transaction";
+                processFilteredData();
+
+            });
             updateData();
             refreshContent();
-        });
-        endDateElements.addEventListener('change', function() {
+            closePopup.addEventListener("click", () => {
+                // Close the pop-up when the close button is clicked
+                popup.style.display = "none";
+            });
+
+            // sales popup
+            totalsalesChart.addEventListener("click", () => {
+
+
+                // Initialize empty arrays for each quarter
+                const quarter1 = [];
+                const quarter2 = [];
+                const quarter3 = [];
+                const quarter4 = [];
+
+                // Iterate through the income data
+                income.labels.forEach((label, index) => {
+                    const date = new Date(label);
+                    const year = date.getFullYear();
+                    const quarter = Math.floor((date.getMonth() + 3) / 3);
+
+                    // Check if the income is from the current year
+                    if (year === currentYear) {
+                        const sumValue = income.datasets[0].data[index] + income.datasets[1].data[index];
+                        switch (quarter) {
+                            case 1:
+                                quarter1.push(sumValue);
+                                break;
+                            case 2:
+                                quarter2.push(sumValue);
+                                break;
+                            case 3:
+                                quarter3.push(sumValue);
+                                break;
+                            case 4:
+                                quarter4.push(sumValue);
+                                break;
+                        }
+                    }
+                });
+
+                // Calculate the sum of income for each quarter
+                const sumQuarter1 = quarter1.reduce((acc, value) => acc + value, 0);
+                const sumQuarter2 = quarter2.reduce((acc, value) => acc + value, 0);
+                const sumQuarter3 = quarter3.reduce((acc, value) => acc + value, 0);
+                const sumQuarter4 = quarter4.reduce((acc, value) => acc + value, 0);
+
+
+                // Get the appropriate target value based on the current month
+                const targetincomeValue = getTargetValue(currentMonth);
+
+                // Function to determine the target value based on the current month
+                function getTargetValue(month) {
+                    if (month >= 0 && month < 3) {
+                        return targetincomeValues[0]; // January to March
+                    } else if (month >= 3 && month < 6) {
+                        return targetincomeValues[1]; // April to June
+                    } else if (month >= 6 && month < 9) {
+                        return targetincomeValues[2]; // July to September
+                    } else {
+                        return targetincomeValues[3]; // October to December
+                    }
+                }
+
+                Target = targetincomeValue;
+
+
+                let Total;
+
+                if (currentMonth >= 0 && currentMonth < 3) {
+                    Total = sumQuarter1; // January to March
+                } else if (currentMonth >= 3 && currentMonth < 6) {
+                    Total = sumQuarter2; // April to June
+                } else if (currentMonth >= 6 && currentMonth < 9) {
+                    Total = sumQuarter3; // July to September
+                } else if (currentMonth >= 8 && currentMonth < 12) {
+                    Total = sumQuarter4; // October to December
+                }
+                Total = Total.toFixed(2);
+
+                const needle = (Total / Target);
+                let percentage = needle * 100;
+                if (percentage > 100) {
+                    percentage = 100;
+                } else {
+                    percentage = percentage;
+                }
+
+                speedometerReading.textContent = Number(Total).toLocaleString('en-US', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                }) + " Income";
+
+                // Simulate the speedometer arrow movement (you can replace this with actual data)
+                let rotation = (needle) * 180 - 90;
+                if (rotation > 180) {
+                    rotation = 180 - 90;
+                }
+                speedometerArrow.style.transformOrigin = "50% 100%";
+                speedometerArrow.style.transform = `translateX(-50%) rotate(${rotation}deg)`;
+
+                const speedometerDial = document.querySelector('.speedometer-dial');
+
+                // Get the total/target value (you can replace this with your actual value)
+                const totalValue = needle; // Change this value as needed
+
+                // Function to update the background color based on the value
+                function updateBackgroundColor(value) {
+                    if (value >= 0 && value <= 0.25) {
+                        speedometerDial.style.backgroundColor = 'red';
+                    } else if (value > 0.25 && value <= 0.5) {
+                        speedometerDial.style.backgroundColor = 'orange';
+                    } else if (value > 0.5 && value <= 0.75) {
+                        speedometerDial.style.backgroundColor = 'yellow';
+                    } else {
+                        speedometerDial.style.backgroundColor = 'green';
+                    }
+                }
+
+                // Call the updateBackgroundColor function with the initial total/target value
+                updateBackgroundColor(totalValue);
+
+                //percentage text color
+                let percentagecolor = '';
+                if (percentage >= 76 && percentage <= 100) {
+                    percentagecolor = 'green';
+                } else if (percentage >= 51 && percentage <= 75) {
+                    percentagecolor = 'yellow';
+                } else if (percentage >= 26 && percentage <= 50) {
+                    percentagecolor = 'orange';
+                } else {
+                    percentagecolor = 'red';
+                }
+
+
+                // Display the pop-up
+                popup.style.display = "block";
+
+                targetTransaction.innerHTML = "Target income for this quarter is <span style='color: blue;'>" + Target;
+                percentTransaction.innerHTML = "Achieved <span style='color: " + percentagecolor + ";'>" + percentage + "%</span> of target income";
+                PopupHeader.innerHTML = "Total Income";
+                processFilteredDataAmount();
+
+            });
             updateData();
             refreshContent();
-        });
-
-        updateData();
-        refreshContent();
 
 
+            closePopup.addEventListener("click", () => {
+                popup.style.display = "none";
+            });
+        </script>
 
+        <script>
+            // Reference datas
+            const TransactionperDiv = <?php echo json_encode($TransactionperDiv); ?>;
+            const SalesperDiv = <?php echo json_encode($SalesperDiv); ?>;
 
-
-        //totaltransaction popup
-        totaltransactionChart.addEventListener("click", () => {
-
-            // Initialize empty arrays for each quarter
-            const quarter1 = [];
-            const quarter2 = [];
-            const quarter3 = [];
-            const quarter4 = [];
-
-            // Iterate through the transaction data
-            transaction.labels.forEach((label, index) => {
-                const date = new Date(label);
-                const year = date.getFullYear();
-                const quarter = Math.floor((date.getMonth() + 3) / 3);
-
-                // Check if the transaction is from the current year
-                if (year === currentYear) {
-                    const sumValue = transaction.datasets[0].data[index] + transaction.datasets[1].data[index];
-                    switch (quarter) {
-                        case 1:
-                            quarter1.push(sumValue);
-                            break;
-                        case 2:
-                            quarter2.push(sumValue);
-                            break;
-                        case 3:
-                            quarter3.push(sumValue);
-                            break;
-                        case 4:
-                            quarter4.push(sumValue);
-                            break;
-                    }
-                }
+            // getting the sum of the transactions per day (from the data of $TransactionperDiv)
+            const sumTransaction = TransactionperDiv.labels.map((label, index) => {
+                let sum = 0;
+                TransactionperDiv.datasets.forEach(dataset => {
+                    sum += dataset.data[index];
+                });
+                return sum;
             });
 
-            // Calculate the sum of transactions for each quarter
-            const sumQuarter1 = quarter1.reduce((acc, value) => acc + value, 0);
-            const sumQuarter2 = quarter2.reduce((acc, value) => acc + value, 0);
-            const sumQuarter3 = quarter3.reduce((acc, value) => acc + value, 0);
-            const sumQuarter4 = quarter4.reduce((acc, value) => acc + value, 0);
-
-
-            // Get the appropriate target value based on the current month
-            const targetValue = getTargetValue(currentMonth);
-
-            // Function to determine the target value based on the current month
-            function getTargetValue(month) {
-                if (month >= 0 && month < 3) {
-                    return targetValues[0]; // January to March
-                } else if (month >= 3 && month < 6) {
-                    return targetValues[1]; // April to June
-                } else if (month >= 6 && month < 9) {
-                    return targetValues[2]; // July to September
-                } else {
-                    return targetValues[3]; // October to December
-                }
-            }
-
-            Target = targetValue;
-            let Total;
-
-            if (currentMonth >= 0 && currentMonth < 3) {
-                Total = sumQuarter1; // January to March
-            } else if (currentMonth >= 3 && currentMonth < 6) {
-                Total = sumQuarter2; // April to June
-            } else if (currentMonth >= 6 && currentMonth < 9) {
-                Total = sumQuarter3; // July to September
-            } else if (currentMonth >= 8 && currentMonth < 12) {
-                Total = sumQuarter4; // October to December
-            }
-
-            const needle = (Total / Target);
-            let percentage = needle * 100;
-            if (percentage > 100) {
-                percentage = 100;
-            } else {
-                percentage = percentage;
-            }
-
-            speedometerReading.textContent = Total + " Transaction";
-
-            //rotation of the needle 
-            let rotation = (needle) * 180 - 90;
-            if (rotation > 180) {
-                rotation = 180 - 90;
-            }
-
-            speedometerArrow.style.transformOrigin = "50% 100%";
-            speedometerArrow.style.transform = `translateX(-50%) rotate(${rotation}deg)`;
-
-            const speedometerDial = document.querySelector('.speedometer-dial');
-
-            // Get the total/target value (you can replace this with your actual value)
-            const totalValue = needle; // Change this value as needed
-
-            // Function to update the background color based on the value
-            function updateBackgroundColor(value) {
-                if (value >= 0 && value <= 0.25) {
-                    speedometerDial.style.backgroundColor = 'red';
-                } else if (value > 0.25 && value <= 0.5) {
-                    speedometerDial.style.backgroundColor = 'orange';
-                } else if (value > 0.5 && value <= 0.75) {
-                    speedometerDial.style.backgroundColor = 'yellow';
-                } else {
-                    speedometerDial.style.backgroundColor = 'green';
-                }
-            }
-            // Call the updateBackgroundColor function with the initial total/target value
-            updateBackgroundColor(totalValue);
-
-            //percentage text color
-            let percentagecolor = '';
-            if (percentage >= 76 && percentage <= 100) {
-                percentagecolor = 'green';
-            } else if (percentage >= 51 && percentage <= 75) {
-                percentagecolor = 'yellow';
-            } else if (percentage >= 26 && percentage <= 50) {
-                percentagecolor = 'orange';
-            } else {
-                percentagecolor = 'red';
-            }
-
-
-            // Display the pop-up
-            popup.style.display = "block";
-
-            targetTransaction.innerHTML = "Target transaction for this quarter is <span style='color: blue;'>" + Target;
-            percentTransaction.innerHTML = "Achieved <span style='color: " + percentagecolor + ";'>" + percentage + "%</span> of target transaction.";
-            PopupHeader.innerHTML = "Total Transaction";
-            processFilteredData();
-
-        });
-        updateData();
-        refreshContent();
-        closePopup.addEventListener("click", () => {
-            // Close the pop-up when the close button is clicked
-            popup.style.display = "none";
-        });
-
-        // sales popup
-        totalsalesChart.addEventListener("click", () => {
-
-
-            // Initialize empty arrays for each quarter
-            const quarter1 = [];
-            const quarter2 = [];
-            const quarter3 = [];
-            const quarter4 = [];
-
-            // Iterate through the income data
-            income.labels.forEach((label, index) => {
-                const date = new Date(label);
-                const year = date.getFullYear();
-                const quarter = Math.floor((date.getMonth() + 3) / 3);
-
-                // Check if the income is from the current year
-                if (year === currentYear) {
-                    const sumValue = income.datasets[0].data[index] + income.datasets[1].data[index];
-                    switch (quarter) {
-                        case 1:
-                            quarter1.push(sumValue);
-                            break;
-                        case 2:
-                            quarter2.push(sumValue);
-                            break;
-                        case 3:
-                            quarter3.push(sumValue);
-                            break;
-                        case 4:
-                            quarter4.push(sumValue);
-                            break;
-                    }
-                }
-            });
-
-            // Calculate the sum of income for each quarter
-            const sumQuarter1 = quarter1.reduce((acc, value) => acc + value, 0);
-            const sumQuarter2 = quarter2.reduce((acc, value) => acc + value, 0);
-            const sumQuarter3 = quarter3.reduce((acc, value) => acc + value, 0);
-            const sumQuarter4 = quarter4.reduce((acc, value) => acc + value, 0);
-
-
-            // Get the appropriate target value based on the current month
-            const targetincomeValue = getTargetValue(currentMonth);
-
-            // Function to determine the target value based on the current month
-            function getTargetValue(month) {
-                if (month >= 0 && month < 3) {
-                    return targetincomeValues[0]; // January to March
-                } else if (month >= 3 && month < 6) {
-                    return targetincomeValues[1]; // April to June
-                } else if (month >= 6 && month < 9) {
-                    return targetincomeValues[2]; // July to September
-                } else {
-                    return targetincomeValues[3]; // October to December
-                }
-            }
-
-            Target = targetincomeValue;
-
-
-            let Total;
-
-            if (currentMonth >= 0 && currentMonth < 3) {
-                Total = sumQuarter1; // January to March
-            } else if (currentMonth >= 3 && currentMonth < 6) {
-                Total = sumQuarter2; // April to June
-            } else if (currentMonth >= 6 && currentMonth < 9) {
-                Total = sumQuarter3; // July to September
-            } else if (currentMonth >= 8 && currentMonth < 12) {
-                Total = sumQuarter4; // October to December
-            }
-            Total = Total.toFixed(2);
-
-            const needle = (Total / Target);
-            let percentage = needle * 100;
-            if (percentage > 100) {
-                percentage = 100;
-            } else {
-                percentage = percentage;
-            }
-
-            speedometerReading.textContent = Number(Total).toLocaleString('en-US', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-            }) + " Income";
-
-            // Simulate the speedometer arrow movement (you can replace this with actual data)
-            let rotation = (needle) * 180 - 90;
-            if (rotation > 180) {
-                rotation = 180 - 90;
-            }
-            speedometerArrow.style.transformOrigin = "50% 100%";
-            speedometerArrow.style.transform = `translateX(-50%) rotate(${rotation}deg)`;
-
-            const speedometerDial = document.querySelector('.speedometer-dial');
-
-            // Get the total/target value (you can replace this with your actual value)
-            const totalValue = needle; // Change this value as needed
-
-            // Function to update the background color based on the value
-            function updateBackgroundColor(value) {
-                if (value >= 0 && value <= 0.25) {
-                    speedometerDial.style.backgroundColor = 'red';
-                } else if (value > 0.25 && value <= 0.5) {
-                    speedometerDial.style.backgroundColor = 'orange';
-                } else if (value > 0.5 && value <= 0.75) {
-                    speedometerDial.style.backgroundColor = 'yellow';
-                } else {
-                    speedometerDial.style.backgroundColor = 'green';
-                }
-            }
-
-            // Call the updateBackgroundColor function with the initial total/target value
-            updateBackgroundColor(totalValue);
-
-            //percentage text color
-            let percentagecolor = '';
-            if (percentage >= 76 && percentage <= 100) {
-                percentagecolor = 'green';
-            } else if (percentage >= 51 && percentage <= 75) {
-                percentagecolor = 'yellow';
-            } else if (percentage >= 26 && percentage <= 50) {
-                percentagecolor = 'orange';
-            } else {
-                percentagecolor = 'red';
-            }
-
-
-            // Display the pop-up
-            popup.style.display = "block";
-
-            targetTransaction.innerHTML = "Target income for this quarter is <span style='color: blue;'>" + Target;
-            percentTransaction.innerHTML = "Achieved <span style='color: " + percentagecolor + ";'>" + percentage + "%</span> of target income";
-            PopupHeader.innerHTML = "Total Income";
-            processFilteredDataAmount();
-
-        });
-        updateData();
-        refreshContent();
-
-
-        closePopup.addEventListener("click", () => {
-            popup.style.display = "none";
-        });
-    </script>
-
-    <script>
-        // Reference datas
-        const TransactionperDiv = <?php echo json_encode($TransactionperDiv); ?>;
-        const SalesperDiv = <?php echo json_encode($SalesperDiv); ?>;
-
-        // getting the sum of the transactions per day (from the data of $TransactionperDiv)
-        const sumTransaction = TransactionperDiv.labels.map((label, index) => {
-            let sum = 0;
-            TransactionperDiv.datasets.forEach(dataset => {
-                sum += dataset.data[index];
-            });
-            return sum;
-        });
-
-        // Create a new data set named sumTransactionDataset from what we got from sumTransaction
-        const sumTransactionDataset = {
-            label: 'Total Transaction',
-            data: sumTransaction,
-
-        };
-
-        // getting the sum of the sales per day (from the data of $SalesperDiv)
-        const sumSalesData = SalesperDiv.labels.map((label, index) => {
-            let sum = 0;
-            SalesperDiv.datasets.forEach(dataset => {
-                sum += dataset.data[index];
-            });
-            return sum;
-        });
-
-        // Create a new data set named sumSalesDataset from what we got from sumSalesData
-        const sumSalesDataset = {
-            label: 'Total Income',
-            data: sumSalesData,
-        };
-
-        //start of query from controller-----------------------
-
-        //retrieve data from controller
-        var totalTransaction = (<?= json_encode($queryAllDate) ?>);
-        var chartLabels = (<?= json_encode($chartLabel) ?>);
-        //preparing array to store the retrieved data
-        var totalTransactionDataset = {
-            datasets: [{
-                backgroundColor: "#274690",
+            // Create a new data set named sumTransactionDataset from what we got from sumTransaction
+            const sumTransactionDataset = {
                 label: 'Total Transaction',
-                data: {}
-            }, ],
-        }
+                data: sumTransaction,
 
-        console.log("before: ")
-        console.log(totalTransaction)
-        //populate json; create child inside of another child, function to translate data of division and total transaction from controller
-        function totalTransactionTranslate() {
-            var x = 0;
-            while (totalTransaction[x] != null) {
-                var samp = totalTransaction[x].labels;
-                var sampo = parseInt(totalTransaction[x].datasets);
-                if (totalTransaction[x].label == 'National Metrology Division') {
-                    //do nothing
-                } else if (totalTransaction[x].label == 'Standards and Testing Division') {
-                    //do nothing 
-                } else {
-                    totalTransactionDataset.datasets[0].data[samp] = sampo;
-                }
-                x++
-            }
-            x = 0;
-        }
-        console.log("after: ")
-        console.log(totalTransactionDataset)
+            };
 
-        var global_label_day = []; //use this label as duh label for all chart that uses yyyy-mm-dd format label
+            // getting the sum of the sales per day (from the data of $SalesperDiv)
+            const sumSalesData = SalesperDiv.labels.map((label, index) => {
+                let sum = 0;
+                SalesperDiv.datasets.forEach(dataset => {
+                    sum += dataset.data[index];
+                });
+                return sum;
+            });
 
-        function labelTranslate() {
-            var x = 0;
-            while (chartLabels[x] != null) {
-                var lab = chartLabels[x].labels;
-                global_label_day[x] = lab;
-                x++;
-            }
-            x = 0;
-        }
-
-        totalTransactionTranslate(); //call the function to translate data to chartjs readable format
-        labelTranslate();
-
-        const totaltransactionCtx = document.getElementById('totaltransactionChart').getContext('2d');
-        // dashboard total transaction
-        const totaltransactionChartB = new Chart(totaltransactionCtx, {
-            type: 'bar', // This specifies a bar chart
-            data: {
-                labels: global_label_day,
-                datasets: totalTransactionDataset.datasets,
-            },
-            options: {
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            stepSize: 1,
-                        },
-                        grid: {
-                            display: false,
-                        }
-                    },
-                    x: {
-                        ticks: {
-                            autoSkip: false,
-                        },
-                        grid: {
-                            display: false,
-                        }
-                    },
-                },
-            },
-        });
-
-        var total_Income = (<?= json_encode($queryTotalSale) ?>);
-
-        var totalSum = {
-            datasets: [{
-                backgroundColor: "#fccb06",
-                borderColor: "#fccb06",
+            // Create a new data set named sumSalesDataset from what we got from sumSalesData
+            const sumSalesDataset = {
                 label: 'Total Income',
-                data: {}
-            }]
-        }
+                data: sumSalesData,
+            };
 
-        function income_load() {
-            var x = 0;
-            while (total_Income[x] != null) {
-                var samp = total_Income[x].labels;
-                var sampo = parseInt(total_Income[x].datasets);
-                if (total_Income[x].label == 'National Metrology Division') {
-                    //do nuthin
-                } else if (total_Income[x].label == 'Standards and Testing Division') {
-                    //do nuthin
-                } else {
-                    totalSum.datasets[0].data[samp] = sampo;
-                }
-                x++
-            }
-            x = 0;
-        }
+            //start of query from controller-----------------------
 
-        income_load();
-
-        // barPosition plugin block
-        //    const barPositions1 = {
-        //         id: 'barPositions1',
-        //         beforeDatasetsDraw: (chart, args, pluginOptions) => {
-        //             const { ctx, data, chartArea: { top, bottom, left, right, width, height }, scales: { x, y } } = chart;
-
-        //             // Calculate the width for each dataset based on the total number of datasets.
-        //             // This assumes that the labels array length is equal to the number of x-axis categories.
-        //             const barWidth = width / data.labels.length;
-
-        //             // Loop through each dataset.
-        //             data.datasets.forEach((dataset, datasetIndex) => {
-        //             // Get the meta for the current dataset.
-        //             const datasetMeta = chart.getDatasetMeta(datasetIndex);
-
-        //             // Loop through each datapoint in the current dataset.
-        //             datasetMeta.data.forEach((datapoint, index) => {
-        //                 // Adjust the x position of the datapoint.
-        //                 // This centers the bar within the allocated space for each x-axis category.
-        //                 datapoint.x = left + (barWidth * (index + 0.5));
-        //                 datapoint.x += (barWidth / data.datasets.length) * datasetIndex - (barWidth / 4);
-        //             });
-        //             });
-        //         }
-        //         };
-
-        const totalsalesCtx = document.getElementById('totalsalesChart').getContext('2d');
-
-        // dashboard total income
-        const totalsalesChartB = new Chart(totalsalesCtx, {
-            type: 'bar', // This specifies a bar chart
-            data: {
-                labels: global_label_day,
-                datasets: totalSum.datasets,
-            },
-            //plugins: [barPositions1],
-            options: {
-                tension: 0.4,
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        grid: {
-                            display: false,
-                        }
-                    },
-                    x: {
-                        grid: {
-                            display: false,
-                        }
-                    },
-                },
-                // plugins: {
-                //     // Here's how you would add the plugin configuration directly to the options
-                //     barPositions1: false // Assuming you want to set it to false initially
-                // },
-            },
-            //plugins: [barPositions1],
-        });
-
-
-
-        //what this for bruh?
-        //Creating a combined data using the sumTransactionDataset and sumSalesDataset (to be used/call in creating combined chart)
-        const combinedData = {
-            labels: TransactionperDiv.labels,
-            datasets: [{
-                    ...sumSalesDataset,
-                    type: 'line', // Use line type
-                    backgroundColor: '#ba2ee8',
-                    borderColor: '#00d498',
-                    yAxisID: 'lineY', // Assign the line chart to a specific y-axis
-                    cubicInterpolationMode: 'monotone'
-
-
-                },
-                {
-                    ...sumTransactionDataset,
-                    borderColor: 'rgba(127, 207, 250)',
-                    backgroundColor: 'rgba(127, 207, 250)',
-                    type: 'bar',
-                    borderWidth: 2,
-                    yAxisID: 'y-axis-bar', // Assign the line chart to a specific y-axis
-
-                },
-            ]
-        };
-
-        const bgColor = {
-            id: 'bgColor',
-            beforeDraw: (chart, steps, options) => {
-                const {
-                    ctx,
-                    width,
-                    height
-                } = chart;
-                ctx.fillStyle = options.backgroundColor;
-                ctx.fillRect(0, 0, width, height)
-                ctx.restore();
-            }
-
-        };
-
-        const bgColor1 = {
-            id: 'bgColor',
-            beforeDraw: (chart, steps, options) => {
-                const {
-                    ctx,
-                    width,
-                    height
-                } = chart;
-                ctx.fillStyle = options.backgroundColor;
-                ctx.fillRect(0, 0, width, height)
-                ctx.restore();
-            }
-
-        };
-
-        var tPerDivData = (<?= json_encode($queryAllDate) ?>); //retrieve data from controller
-        var perDivData = { //prepare array for translated data
-            datasets: [{
-                    backgroundColor: "#06d6a0",
-                    label: 'National Metrology Division',
+            //retrieve data from controller
+            var totalTransaction = (<?= json_encode($queryAllDate) ?>);
+            var chartLabels = (<?= json_encode($chartLabel) ?>);
+            //preparing array to store the retrieved data
+            var totalTransactionDataset = {
+                datasets: [{
+                    backgroundColor: "#274690",
+                    label: 'Total Transaction',
                     data: {}
-                },
-                {
-                    backgroundColor: "#0073e6",
-                    label: 'Standards and Testing Division',
-                    data: {}
-                }
-            ],
-        }
-
-        function perDivLoad() { //translate for chartjs 
-            var x = 0;
-            while (tPerDivData[x] != null) {
-                var samp = tPerDivData[x].labels;
-                var sampo = parseInt(tPerDivData[x].datasets);
-                if (tPerDivData[x].label == 'National Metrology Division') {
-                    perDivData.datasets[0].data[samp] = sampo;
-                } else if (tPerDivData[x].label == 'Standards and Testing Division') {
-                    perDivData.datasets[1].data[samp] = sampo;
-                }
-                x++
+                }, ],
             }
-            x = 0; //just in case while loop decided to be petty
-        }
-        perDivLoad(); //call the function to translate
 
-        // dashboard transaction per division
-        const transactionCtx = document.getElementById('transactionChart').getContext('2d');
-        const transactionChartB = new Chart(transactionCtx, {
-            type: 'bar',
-            data: {
-                labels: global_label_day,
-                datasets: perDivData.datasets,
-            },
-            options: {
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            stepSize: 1,
-                        },
-                        grid: {
-                            display: false,
-                        },
-                    },
-                    x: {
-                        ticks: {
-                            autoSkip: true,
-                        },
-                        grid: {
-                            display: false,
-                        },
-                    },
-                },
-                plugins: {
-                    bgColor: {
-                        backgroundColor: 'white'
+            //populate json; create child inside of another child, function to translate data of division and total transaction from controller
+            function totalTransactionTranslate() {
+                var x = 0;
+                while (totalTransaction[x] != null) {
+                    var samp = totalTransaction[x].labels;
+                    var sampo = parseInt(totalTransaction[x].datasets);
+                    if (totalTransaction[x].label == 'National Metrology Division') {
+                        //do nothing
+                    } else if (totalTransaction[x].label == 'Standards and Testing Division') {
+                        //do nothing 
+                    } else {
+                        totalTransactionDataset.datasets[0].data[samp] = sampo;
                     }
-                },
-            },
-            plugins: [bgColor],
-        });
-
-        var soldPerDivs = { //prepare array for translated data
-            datasets: [{
-                    backgroundColor: "#06d6a0",
-                    borderColor: "#06d6a0",
-                    label: 'National Metrology Division',
-                    data: {}
-                },
-                {
-                    backgroundColor: "#0073e6",
-                    borderColor: "#0073e6",
-                    label: 'Standards and Testing Division',
-                    data: {}
+                    x++
                 }
-            ]
-        }
-
-        function loadPerDivSales() { //translate for chartjs 
-            var x = 0;
-            while (total_Income[x] != null) {
-                var samp = total_Income[x].labels;
-                var sampo = parseInt(total_Income[x].datasets);
-                if (total_Income[x].label == 'National Metrology Division') {
-                    soldPerDivs.datasets[0].data[samp] = sampo;
-                } else if (total_Income[x].label == 'Standards and Testing Division') {
-                    soldPerDivs.datasets[1].data[samp] = sampo;
-                }
-                x++
+                x = 0;
             }
-            x = 0; //just in case while loop decided to be petty
-        }
-        loadPerDivSales(); //call the function to translate
+
+            var global_label_day = []; //use this label as duh label for all chart that uses yyyy-mm-dd format label
+
+            function labelTranslate() {
+                var x = 0;
+                while (chartLabels[x] != null) {
+                    var lab = chartLabels[x].labels;
+                    global_label_day[x] = lab;
+                    x++;
+                }
+                x = 0;
+            }
+
+            totalTransactionTranslate(); //call the function to translate data to chartjs readable format
+            labelTranslate();
+
+            const totaltransactionCtx = document.getElementById('totaltransactionChart').getContext('2d');
+            // dashboard total transaction
+            const totaltransactionChartB = new Chart(totaltransactionCtx, {
+                type: 'bar', // This specifies a bar chart
+                data: {
+                    labels: global_label_day,
+                    datasets: totalTransactionDataset.datasets,
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1,
+                            },
+                            grid: {
+                                display: false,
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                autoSkip: false,
+                            },
+                            grid: {
+                                display: false,
+                            }
+                        },
+                    },
+                },
+            });
+
+            var total_Income = (<?= json_encode($queryTotalSale) ?>);
+
+            var totalSum = {
+                datasets: [{
+                    backgroundColor: "#fccb06",
+                    borderColor: "#fccb06",
+                    label: 'Total Income',
+                    data: {}
+                }]
+            }
+
+            function income_load() {
+                var x = 0;
+                while (total_Income[x] != null) {
+                    var samp = total_Income[x].labels;
+                    var sampo = parseInt(total_Income[x].datasets);
+                    if (total_Income[x].label == 'National Metrology Division') {
+                        //do nuthin
+                    } else if (total_Income[x].label == 'Standards and Testing Division') {
+                        //do nuthin
+                    } else {
+                        totalSum.datasets[0].data[samp] = sampo;
+                    }
+                    x++
+                }
+                x = 0;
+            }
+
+            income_load();
+
+            // barPosition plugin block
+            //    const barPositions1 = {
+            //         id: 'barPositions1',
+            //         beforeDatasetsDraw: (chart, args, pluginOptions) => {
+            //             const { ctx, data, chartArea: { top, bottom, left, right, width, height }, scales: { x, y } } = chart;
+
+            //             // Calculate the width for each dataset based on the total number of datasets.
+            //             // This assumes that the labels array length is equal to the number of x-axis categories.
+            //             const barWidth = width / data.labels.length;
+
+            //             // Loop through each dataset.
+            //             data.datasets.forEach((dataset, datasetIndex) => {
+            //             // Get the meta for the current dataset.
+            //             const datasetMeta = chart.getDatasetMeta(datasetIndex);
+
+            //             // Loop through each datapoint in the current dataset.
+            //             datasetMeta.data.forEach((datapoint, index) => {
+            //                 // Adjust the x position of the datapoint.
+            //                 // This centers the bar within the allocated space for each x-axis category.
+            //                 datapoint.x = left + (barWidth * (index + 0.5));
+            //                 datapoint.x += (barWidth / data.datasets.length) * datasetIndex - (barWidth / 4);
+            //             });
+            //             });
+            //         }
+            //         };
+
+            const totalsalesCtx = document.getElementById('totalsalesChart').getContext('2d');
+
+            // dashboard total income
+            const totalsalesChartB = new Chart(totalsalesCtx, {
+                type: 'bar', // This specifies a bar chart
+                data: {
+                    labels: global_label_day,
+                    datasets: totalSum.datasets,
+                },
+                //plugins: [barPositions1],
+                options: {
+                    tension: 0.4,
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                display: false,
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false,
+                            }
+                        },
+                    },
+                    // plugins: {
+                    //     // Here's how you would add the plugin configuration directly to the options
+                    //     barPositions1: false // Assuming you want to set it to false initially
+                    // },
+                },
+                //plugins: [barPositions1],
+            });
 
 
-        const barPosition = {
-            id: 'barPosition',
-            beforeDatasetsDraw: (chart, args, pluginOptions) => {
-                const {
-                    ctx,
-                    data,
-                    chartArea: {
-                        top,
-                        bottom,
-                        left,
-                        right,
+
+            //what this for bruh?
+            //Creating a combined data using the sumTransactionDataset and sumSalesDataset (to be used/call in creating combined chart)
+            const combinedData = {
+                labels: TransactionperDiv.labels,
+                datasets: [{
+                        ...sumSalesDataset,
+                        type: 'line', // Use line type
+                        backgroundColor: '#ba2ee8',
+                        borderColor: '#00d498',
+                        yAxisID: 'lineY', // Assign the line chart to a specific y-axis
+                        cubicInterpolationMode: 'monotone'
+
+
+                    },
+                    {
+                        ...sumTransactionDataset,
+                        borderColor: 'rgba(127, 207, 250)',
+                        backgroundColor: 'rgba(127, 207, 250)',
+                        type: 'bar',
+                        borderWidth: 2,
+                        yAxisID: 'y-axis-bar', // Assign the line chart to a specific y-axis
+
+                    },
+                ]
+            };
+
+            const bgColor = {
+                id: 'bgColor',
+                beforeDraw: (chart, steps, options) => {
+                    const {
+                        ctx,
                         width,
                         height
+                    } = chart;
+                    ctx.fillStyle = options.backgroundColor;
+                    ctx.fillRect(0, 0, width, height)
+                    ctx.restore();
+                }
+
+            };
+
+            const bgColor1 = {
+                id: 'bgColor',
+                beforeDraw: (chart, steps, options) => {
+                    const {
+                        ctx,
+                        width,
+                        height
+                    } = chart;
+                    ctx.fillStyle = options.backgroundColor;
+                    ctx.fillRect(0, 0, width, height)
+                    ctx.restore();
+                }
+
+            };
+
+            var tPerDivData = (<?= json_encode($queryAllDate) ?>); //retrieve data from controller
+            var perDivData = { //prepare array for translated data
+                datasets: [{
+                        backgroundColor: "#06d6a0",
+                        label: 'National Metrology Division',
+                        data: {}
                     },
-                    scales: {
-                        x,
-                        y
+                    {
+                        backgroundColor: "#0073e6",
+                        label: 'Standards and Testing Division',
+                        data: {}
                     }
-                } = chart;
-
-                // Calculate the width for each dataset based on the total number of datasets.
-                // This assumes that the labels array length is equal to the number of x-axis categories.
-                // Adding "_unique" to the variable name to make it unique.
-                const barWidth_unique = width / data.labels.length;
-
-                // Loop through each dataset.
-                data.datasets.forEach((dataset, datasetIndex) => {
-                    // Get the meta for the current dataset.
-                    const datasetMeta = chart.getDatasetMeta(datasetIndex);
-
-                    // Loop through each datapoint in the current dataset.
-                    datasetMeta.data.forEach((datapoint, index) => {
-                        // Adjust the x position of the datapoint.
-                        // This centers the bar within the allocated space for each x-axis category.
-                        // Now using "barWidth_unique" to reflect the unique variable name.
-                        datapoint.x = left + (barWidth_unique * (index + 0.5));
-                        datapoint.x += (barWidth_unique / data.datasets.length) * datasetIndex - (barWidth_unique / 4);
-                    });
-                });
+                ],
             }
-        };
 
+            function perDivLoad() { //translate for chartjs 
+                var x = 0;
+                while (tPerDivData[x] != null) {
+                    var samp = tPerDivData[x].labels;
+                    var sampo = parseInt(tPerDivData[x].datasets);
+                    if (tPerDivData[x].label == 'National Metrology Division') {
+                        perDivData.datasets[0].data[samp] = sampo;
+                    } else if (tPerDivData[x].label == 'Standards and Testing Division') {
+                        perDivData.datasets[1].data[samp] = sampo;
+                    }
+                    x++
+                }
+                x = 0; //just in case while loop decided to be petty
+            }
+            perDivLoad(); //call the function to translate
 
-        //dashboard income per division
-        const salesCtx = document.getElementById('salesChart').getContext('2d');
-        const salesChart = new Chart(salesCtx, {
-            type: 'line',
-            data: {
-                labels: global_label_day,
-                datasets: soldPerDivs.datasets,
-            },
-            options: {
-                tension: 0.4,
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        grid: {
-                            drawOnChartArea: false,
-                            display: false,
-                        }
-                    },
-                    x: {
-                        grid: {
-                            display: false,
+            // dashboard transaction per division
+            const transactionCtx = document.getElementById('transactionChart').getContext('2d');
+            const transactionChartB = new Chart(transactionCtx, {
+                type: 'bar',
+                data: {
+                    labels: global_label_day,
+                    datasets: perDivData.datasets,
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1,
+                            },
+                            grid: {
+                                display: false,
+                            },
+                        },
+                        x: {
+                            ticks: {
+                                autoSkip: true,
+                            },
+                            grid: {
+                                display: false,
+                            },
                         },
                     },
-                },
-                plugins: {
-                    bgColor: {
-                        backgroundColor: 'white'
+                    plugins: {
+                        bgColor: {
+                            backgroundColor: 'white'
+                        }
                     },
-                    barPosition: false
                 },
+                plugins: [bgColor],
+            });
 
-            },
-            plugins: [bgColor, barPosition],
-        });
-
-        function dateChange() {
-            let dateTypeSelect = document.getElementById('date_type');
-            let selectedValue = dateTypeSelect.value;
-
-            if (selectedValue === 'Days') {
-
-                // totalsalesChartB.config.type = "bar";
-                // totalsalesChartB.update();
-
-                salesChart.config.type = "line";
-                salesChart.update();
-
-                // totalsalesChartB.options.plugins.barPositions1 = false; // Or any other setting you wish to apply
-                // totalsalesChartB.update(); 
-
-                salesChart.options.plugins.barPosition = false; // Or any other setting you wish to apply
-                salesChart.update();
-
+            var soldPerDivs = { //prepare array for translated data
+                datasets: [{
+                        backgroundColor: "#06d6a0",
+                        borderColor: "#06d6a0",
+                        label: 'National Metrology Division',
+                        data: {}
+                    },
+                    {
+                        backgroundColor: "#0073e6",
+                        borderColor: "#0073e6",
+                        label: 'Standards and Testing Division',
+                        data: {}
+                    }
+                ]
             }
 
-            if (selectedValue === 'Months') {
-
-                document.getElementById('startDate').setAttribute('type', 'month');
-                document.getElementById('endDate').setAttribute('type', 'month');
-
-                var monthLabelZ = (<?= json_encode($monthLabel) ?>);
-                const dX = new Date();
-                let yearX = dX.getFullYear();
-                var listers = []; //for months
-
-                function monthAssign() {
-                    var x = 0;
-                    while (monthLabelZ[x] != null) {
-                        var lab = monthLabelZ[x].month;
-                        listers[x] = lab;
-                        x++;
+            function loadPerDivSales() { //translate for chartjs 
+                var x = 0;
+                while (total_Income[x] != null) {
+                    var samp = total_Income[x].labels;
+                    var sampo = parseInt(total_Income[x].datasets);
+                    if (total_Income[x].label == 'National Metrology Division') {
+                        soldPerDivs.datasets[0].data[samp] = sampo;
+                    } else if (total_Income[x].label == 'Standards and Testing Division') {
+                        soldPerDivs.datasets[1].data[samp] = sampo;
                     }
+                    x++
                 }
-                monthAssign();
-
-                // totalsalesChartB.config.type = "bar";
-                // totalsalesChartB.update();
-
-                salesChart.config.type = "line";
-                salesChart.update();
-
-                let janm = listers.slice(0, 1).toString().split("-");
-                let janMonth = janm[1].toString();
-                let currMonth = ("0" + (dX.getMonth() + 1)).slice(-2); //get current month
-
-                document.getElementById('startDate').value = yearX + "-" + janMonth;
-                document.getElementById('endDate').value = yearX + "-" + currMonth;
-
-                // totalsalesChartB.options.plugins.barPositions1 = false; // Or any other setting you wish to apply
-                // totalsalesChartB.update(); 
-
-                salesChart.options.plugins.barPosition = false; // Or any other setting you wish to apply
-                salesChart.update();
-
-            } else if (selectedValue === 'Years') {
-
-                var yearLabelZ = (<?= json_encode($yearLabel) ?>);
-                const dX = new Date();
-                let yearX = dX.getFullYear();
-                var listers = []; //for years
-
-                function yearAssign() {
-                    var x = 0;
-                    while (yearLabelZ[x] != null) {
-                        var lab = yearLabelZ[x].year;
-                        listers[x] = lab;
-                        x++;
-                    }
-                }
-                yearAssign();
-
-                document.getElementById('startDate').setAttribute('type', 'number');
-                document.getElementById('startDate').value = "2023";
-                document.getElementById('endDate').setAttribute('type', 'number');
-                document.getElementById('endDate').value = yearX;
-
-                // totalsalesChartB.config.type = "bar";
-                // totalsalesChartB.update();
-
-                salesChart.config.type = "bar";
-                salesChart.update();
-
-                // totalsalesChartB.options.plugins.barPositions1 = true; // Or any other setting you wish to apply
-                // totalsalesChartB.update(); 
-
-                salesChart.options.plugins.barPosition = true; // Or any other setting you wish to apply
-                salesChart.update();
-
-            } else {
-
-                document.getElementById('startDate').setAttribute('type', 'date');
-                document.getElementById('endDate').setAttribute('type', 'date');
-
-                dateFilterRefresh();
+                x = 0; //just in case while loop decided to be petty
             }
-            dateFilter();
-        };
-
-        function dateFilterRefresh() { // asign current week's sunday and saturday to datepicker
-
-            let dateTypeSelect = document.getElementById('date_type');
-            let selectedValue = dateTypeSelect.value;
-            if (selectedValue === 'Days') {
-
-                //duh
-                const today = new Date();
-                //get date of this week's sunday
-                const sunDay = new Date(
-                    today.setDate(today.getDate() - today.getDay() + 1),
-                );
-                //get date of this week's saturday
-                const satDay = new Date(
-                    today.setDate(today.getDate() - today.getDay() + 7),
-                );
-                //"yyyy-mm-dd" format
-                var toSunDay = sunDay.toISOString().slice(0, 10);
-                var toSatDay = satDay.toISOString().slice(0, 10);
-
-                //calculated dates as input values
-                document.getElementById('startDate').value = toSunDay;
-                document.getElementById('endDate').value = toSatDay;
-            }
-        }
-        dateFilterRefresh();
-
-        // Function to calculate the average of an array of numbers
-        const calculateAverage = (array) => {
-            if (array.length === 0) return 0;
-            const sum = array.reduce((total, num) => total + num, 0);
-            return Math.round(sum / array.length);
-        };
+            loadPerDivSales(); //call the function to translate
 
 
-        // Calculate the average of each dataset
-        const TransactionAverage = SalesperDiv.datasets.map(dataset => ({
-            label: dataset.label,
-            average: calculateAverage(dataset.data),
-        }));
-
-        // Find the maximum average value
-        const maxAverage = Math.max(...TransactionAverage.map((average) => average.average));
-
-        // Create a new dataset for each sales average
-        const salesAverage = TransactionAverage.map((average, index) => {
-            const datasetColors = ['rgba(0, 115, 199,1)', 'rgba(2, 165, 96,1)', 'rgba(242, 26, 156,1)']; // Array of specific colors
-            const color = datasetColors[index % datasetColors.length]; // Assign color based on index
-
-            return {
-                label: `Average ${average.label}`,
-                data: [average.average],
-                borderWidth: 4, // previous:1
-                circumference: (ctx) => ((ctx.dataset.data[0] / maxAverage) * 270),
-                backgroundColor: color,
-                borderColor: 'white', //borderColor: color (previous code)
-            };
-        });
-
-        // Combine the existing datasets with the new datasets
-        const allDatasets = [...TransactionAverage, ...salesAverage];
-
-        // Define the data for the doughnut chart
-        const data = {
-            datasets: allDatasets,
-        };
-        const divisionName = {
-
-
-        } // tsaka ko na to tutuloy yawa walang wifi
-
-        // Config for the doughnut chart
-        const config = {
-            type: 'doughnut',
-            data,
-            options: {
-                // cutout:'85%',
-                borderRadius: 10,
-                plugins: {
-                    legend: {
-                        display: false
-                    }
-                },
-                // plugins:[divisionName] //to be continue
-            },
-            plugins: [{
-                id: 'divisionName',
-                afterDatasetsDraw(chart, args, options) {
+            const barPosition = {
+                id: 'barPosition',
+                beforeDatasetsDraw: (chart, args, pluginOptions) => {
                     const {
                         ctx,
                         data,
-                        scales,
                         chartArea: {
-                            left,
                             top,
+                            bottom,
+                            left,
+                            right,
                             width,
                             height
+                        },
+                        scales: {
+                            x,
+                            y
                         }
                     } = chart;
 
-                    ctx.save();
-                    ctx.font = 'bolder 15px Poppins';
-                    ctx.fillStyle = 'rgb(3, 98, 186, 1)';
-                    ctx.textAlign = 'center';
-                    ctx.fillText('Average Income', width / 2.1, height / 10 + top);
+                    // Calculate the width for each dataset based on the total number of datasets.
+                    // This assumes that the labels array length is equal to the number of x-axis categories.
+                    // Adding "_unique" to the variable name to make it unique.
+                    const barWidth_unique = width / data.labels.length;
 
-                    // Count and display the numbers
-                    let total1 = 0;
-                    let total2 = 0;
-                    data.datasets[2].data.forEach(value => {
-                        total1 += value;
-                    });
-                    data.datasets[3].data.forEach(value => {
-                        total2 += value;
-                    });
+                    // Loop through each dataset.
+                    data.datasets.forEach((dataset, datasetIndex) => {
+                        // Get the meta for the current dataset.
+                        const datasetMeta = chart.getDatasetMeta(datasetIndex);
 
-                    ctx.fillStyle = 'rgb(0, 115, 230)';
-                    ctx.fillText(`STD: ${parseInt(total1.toLocaleString(), 10).toLocaleString()}`, width / 2.1, height / 2 + top);
-                    ctx.fillStyle = 'rgb(17, 163, 76)';
-                    ctx.fillText(`NMD: ${parseInt(total2.toLocaleString(), 10).toLocaleString()}`, width / 2.1, height / 2 + top + 20);
-                    ctx.restore();
+                        // Loop through each datapoint in the current dataset.
+                        datasetMeta.data.forEach((datapoint, index) => {
+                            // Adjust the x position of the datapoint.
+                            // This centers the bar within the allocated space for each x-axis category.
+                            // Now using "barWidth_unique" to reflect the unique variable name.
+                            datapoint.x = left + (barWidth_unique * (index + 0.5));
+                            datapoint.x += (barWidth_unique / data.datasets.length) * datasetIndex - (barWidth_unique / 4);
+                        });
+                    });
                 }
-            }]
-        };
+            };
 
 
-        // Render the doughnut chart
-        const myChart = new Chart(document.getElementById('myChart'), config);
+            //dashboard income per division
+            const salesCtx = document.getElementById('salesChart').getContext('2d');
+            const salesChart = new Chart(salesCtx, {
+                type: 'line',
+                data: {
+                    labels: global_label_day,
+                    datasets: soldPerDivs.datasets,
+                },
+                options: {
+                    tension: 0.4,
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                drawOnChartArea: false,
+                                display: false,
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false,
+                            },
+                        },
+                    },
+                    plugins: {
+                        bgColor: {
+                            backgroundColor: 'white'
+                        },
+                        barPosition: false
+                    },
 
-        // Instantly assign Chart.js version
-        const chartVersion = document.getElementById('chartVersion');
+                },
+                plugins: [bgColor, barPosition],
+            });
 
-        var customerTypeData = <?php echo json_encode($customerTypeData); ?>;
-        var paragraphElement = document.getElementById('customerTypeParagraph');
-        //paragraphElement.textContent = 'Customer Type: ' + customerTypeData;
-    </script>
+            function dateChange() {
+                let dateTypeSelect = document.getElementById('date_type');
+                let selectedValue = dateTypeSelect.value;
+
+                if (selectedValue === 'Days') {
+
+                    // totalsalesChartB.config.type = "bar";
+                    // totalsalesChartB.update();
+
+                    salesChart.config.type = "line";
+                    salesChart.update();
+
+                    // totalsalesChartB.options.plugins.barPositions1 = false; // Or any other setting you wish to apply
+                    // totalsalesChartB.update(); 
+
+                    salesChart.options.plugins.barPosition = false; // Or any other setting you wish to apply
+                    salesChart.update();
+
+                }
+
+                if (selectedValue === 'Months') {
+
+                    document.getElementById('startDate').setAttribute('type', 'month');
+                    document.getElementById('endDate').setAttribute('type', 'month');
+
+                    var monthLabelZ = (<?= json_encode($monthLabel) ?>);
+                    const dX = new Date();
+                    let yearX = dX.getFullYear();
+                    var listers = []; //for months
+
+                    function monthAssign() {
+                        var x = 0;
+                        while (monthLabelZ[x] != null) {
+                            var lab = monthLabelZ[x].month;
+                            listers[x] = lab;
+                            x++;
+                        }
+                    }
+                    monthAssign();
+
+                    // totalsalesChartB.config.type = "bar";
+                    // totalsalesChartB.update();
+
+                    salesChart.config.type = "line";
+                    salesChart.update();
+
+                    let janm = listers.slice(0, 1).toString().split("-");
+                    let janMonth = janm[1].toString();
+                    let currMonth = ("0" + (dX.getMonth() + 1)).slice(-2); //get current month
+
+                    document.getElementById('startDate').value = yearX + "-" + janMonth;
+                    document.getElementById('endDate').value = yearX + "-" + currMonth;
+
+                    // totalsalesChartB.options.plugins.barPositions1 = false; // Or any other setting you wish to apply
+                    // totalsalesChartB.update(); 
+
+                    salesChart.options.plugins.barPosition = false; // Or any other setting you wish to apply
+                    salesChart.update();
+
+                } else if (selectedValue === 'Years') {
+
+                    var yearLabelZ = (<?= json_encode($yearLabel) ?>);
+                    const dX = new Date();
+                    let yearX = dX.getFullYear();
+                    var listers = []; //for years
+
+                    function yearAssign() {
+                        var x = 0;
+                        while (yearLabelZ[x] != null) {
+                            var lab = yearLabelZ[x].year;
+                            listers[x] = lab;
+                            x++;
+                        }
+                    }
+                    yearAssign();
+
+                    document.getElementById('startDate').setAttribute('type', 'number');
+                    document.getElementById('startDate').value = "2023";
+                    document.getElementById('endDate').setAttribute('type', 'number');
+                    document.getElementById('endDate').value = yearX;
+
+                    // totalsalesChartB.config.type = "bar";
+                    // totalsalesChartB.update();
+
+                    salesChart.config.type = "bar";
+                    salesChart.update();
+
+                    // totalsalesChartB.options.plugins.barPositions1 = true; // Or any other setting you wish to apply
+                    // totalsalesChartB.update(); 
+
+                    salesChart.options.plugins.barPosition = true; // Or any other setting you wish to apply
+                    salesChart.update();
+
+                } else {
+
+                    document.getElementById('startDate').setAttribute('type', 'date');
+                    document.getElementById('endDate').setAttribute('type', 'date');
+
+                    dateFilterRefresh();
+                }
+                dateFilter();
+            };
+
+            function dateFilterRefresh() { // asign current week's sunday and saturday to datepicker
+
+                let dateTypeSelect = document.getElementById('date_type');
+                let selectedValue = dateTypeSelect.value;
+                if (selectedValue === 'Days') {
+
+                    //duh
+                    const today = new Date();
+                    //get date of this week's sunday
+                    const sunDay = new Date(
+                        today.setDate(today.getDate() - today.getDay() + 1),
+                    );
+                    //get date of this week's saturday
+                    const satDay = new Date(
+                        today.setDate(today.getDate() - today.getDay() + 7),
+                    );
+                    //"yyyy-mm-dd" format
+                    var toSunDay = sunDay.toISOString().slice(0, 10);
+                    var toSatDay = satDay.toISOString().slice(0, 10);
+
+                    //calculated dates as input values
+                    document.getElementById('startDate').value = toSunDay;
+                    document.getElementById('endDate').value = toSatDay;
+                }
+            }
+            dateFilterRefresh();
+
+            // Function to calculate the average of an array of numbers
+            const calculateAverage = (array) => {
+                if (array.length === 0) return 0;
+                const sum = array.reduce((total, num) => total + num, 0);
+                return Math.round(sum / array.length);
+            };
 
 
-    <!-- All about customer graphs -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+            // Calculate the average of each dataset
+            const TransactionAverage = SalesperDiv.datasets.map(dataset => ({
+                label: dataset.label,
+                average: calculateAverage(dataset.data),
+            }));
 
-    <div class="customers_data">
-        <div class="date_filter" style="text-align: left; padding-left: 8rem; padding-top: 0rem; padding-bottom: 2rem;">
-            <div class="containers">
-                <div class="date_dropdown" style="top: 25%;">
-                    <label for="chart_type" class="chart_type_label">
-                        <strong>Select Region: </strong></label>
-                    <select name="chart_type" id="chart_type" class="dropdown-content" onchange="dateFilter()">
-                        <option value="ncr">NCR</option>
-                        <option value="region-1">Region-I</option>
-                        <option value="region-2">Region-II</option>
-                        <option value="region-3">Region-III</option>
-                        <option value="region-4a">Region-IV-A</option>
-                        <option value="mimaropa">MIMAROPA</option>
-                        <option value="region-5">Region-V</option>
-                        <option value="car">CAR</option>
-                        <option value="region-6">Region-VI</option>
-                        <option value="region-7">Region-VII</option>
-                        <option value="region-8">Region-VII</option>
-                        <option value="region-9">Region-IX</option>
-                        <option value="region-10">Region-X</option>
-                        <option value="region-11">Region-XI</option>
-                        <option value="region-12">Region-XII</option>
-                        <option value="region-13">Region-XIII</option>
-                        <option value="barm">Bangsamoro</option>
-                    </select>
+            // Find the maximum average value
+            const maxAverage = Math.max(...TransactionAverage.map((average) => average.average));
+
+            // Create a new dataset for each sales average
+            const salesAverage = TransactionAverage.map((average, index) => {
+                const datasetColors = ['rgba(0, 115, 199,1)', 'rgba(2, 165, 96,1)', 'rgba(242, 26, 156,1)']; // Array of specific colors
+                const color = datasetColors[index % datasetColors.length]; // Assign color based on index
+
+                return {
+                    label: `Average ${average.label}`,
+                    data: [average.average],
+                    borderWidth: 4, // previous:1
+                    circumference: (ctx) => ((ctx.dataset.data[0] / maxAverage) * 270),
+                    backgroundColor: color,
+                    borderColor: 'white', //borderColor: color (previous code)
+                };
+            });
+
+            // Combine the existing datasets with the new datasets
+            const allDatasets = [...TransactionAverage, ...salesAverage];
+
+            // Define the data for the doughnut chart
+            const data = {
+                datasets: allDatasets,
+            };
+            const divisionName = {
+
+
+            } // tsaka ko na to tutuloy yawa walang wifi
+
+            // Config for the doughnut chart
+            const config = {
+                type: 'doughnut',
+                data,
+                options: {
+                    // cutout:'85%',
+                    borderRadius: 10,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    // plugins:[divisionName] //to be continue
+                },
+                plugins: [{
+                    id: 'divisionName',
+                    afterDatasetsDraw(chart, args, options) {
+                        const {
+                            ctx,
+                            data,
+                            scales,
+                            chartArea: {
+                                left,
+                                top,
+                                width,
+                                height
+                            }
+                        } = chart;
+
+                        ctx.save();
+                        ctx.font = 'bolder 15px Poppins';
+                        ctx.fillStyle = 'rgb(3, 98, 186, 1)';
+                        ctx.textAlign = 'center';
+                        ctx.fillText('Average Income', width / 2.1, height / 10 + top);
+
+                        // Count and display the numbers
+                        let total1 = 0;
+                        let total2 = 0;
+                        data.datasets[2].data.forEach(value => {
+                            total1 += value;
+                        });
+                        data.datasets[3].data.forEach(value => {
+                            total2 += value;
+                        });
+
+                        ctx.fillStyle = 'rgb(0, 115, 230)';
+                        ctx.fillText(`STD: ${parseInt(total1.toLocaleString(), 10).toLocaleString()}`, width / 2.1, height / 2 + top);
+                        ctx.fillStyle = 'rgb(17, 163, 76)';
+                        ctx.fillText(`NMD: ${parseInt(total2.toLocaleString(), 10).toLocaleString()}`, width / 2.1, height / 2 + top + 20);
+                        ctx.restore();
+                    }
+                }]
+            };
+
+
+            // Render the doughnut chart
+            const myChart = new Chart(document.getElementById('myChart'), config);
+
+            // Instantly assign Chart.js version
+            const chartVersion = document.getElementById('chartVersion');
+
+            var customerTypeData = <?php echo json_encode($customerTypeData); ?>;
+            var paragraphElement = document.getElementById('customerTypeParagraph');
+            //paragraphElement.textContent = 'Customer Type: ' + customerTypeData;
+        </script>
+
+
+        <!-- All about customer graphs -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+        <div class="customers_data">
+            <div class="date_filter" style="text-align: left; padding-left: 8rem; padding-top: 0rem; padding-bottom: 2rem;">
+                <div class="containers">
+                    <div class="date_dropdown" style="top: 25%;">
+                        <label for="chart_type" class="chart_type_label">
+                            <strong>Select Region: </strong></label>
+                        <select name="chart_type" id="chart_type" class="dropdown-content" onchange="dateFilter()">
+                            <option value="ncr">NCR</option>
+                            <option value="region-1">Region-I</option>
+                            <option value="region-2">Region-II</option>
+                            <option value="region-3">Region-III</option>
+                            <option value="region-4a">Region-IV-A</option>
+                            <option value="mimaropa">MIMAROPA</option>
+                            <option value="region-5">Region-V</option>
+                            <option value="car">CAR</option>
+                            <option value="region-6">Region-VI</option>
+                            <option value="region-7">Region-VII</option>
+                            <option value="region-8">Region-VII</option>
+                            <option value="region-9">Region-IX</option>
+                            <option value="region-10">Region-X</option>
+                            <option value="region-11">Region-XI</option>
+                            <option value="region-12">Region-XII</option>
+                            <option value="region-13">Region-XIII</option>
+                            <option value="barm">Bangsamoro</option>
+                        </select>
+                    </div>
+                    <div class="date_dropdown" style="top: -30%; left: 70%;">
+                        <label for="customers_income" class="chart_type_label">
+                            <strong>Select Type: </strong></label>
+                        <select name="customers_income" id="customers_income" class="dropdown-content" onchange="dateFilter()">
+                            <option value="customer">Customer Count</option>
+                            <option value="income">Earned Amount</option>
+                        </select>
+                    </div>
                 </div>
-                <div class="date_dropdown" style="top: 25%; left: 5%;">
-                    <label for="customers_income" class="chart_type_label">
-                        <strong>Select Type: </strong></label>
-                    <select name="customers_income" id="customers_income" class="dropdown-content" onchange="dateFilter()">
-                        <option value="customer">Customer Count</option>
-                        <option value="income">Earned Amount</option>
-                    </select>
-                </div>
+            </div>
+
+            <div class="chart-container">
+                <p class="reportTitle" id="Provincespopup">Customers per Region</p>
+                <canvas id="Provinces" width="100%"></canvas>
             </div>
         </div>
 
-        <div class="chart-container">
-            <p class="reportTitle" id="Provincespopup">Customers per Region</p>
-            <canvas id="Provinces" width="100%"></canvas>
-        </div>
     </div>
 
-</div>
+    <div class="popup" id="ProvinceopenPopup">
+        <div class="popup-content" style="width: 50%; height:auto">
+            <span class="close" id="ProvinceclosePopup">&times;</span>
 
-<div class="popup" id="ProvinceopenPopup">
-    <div class="popup-content" style="width: 50%; height:auto">
-        <span class="close" id="ProvinceclosePopup">&times;</span>
-
-        <h1 id="header"></h1>
-        <h5>Paid Transactions</h5>
-
-        <div style="text-align: left; margin: 0 auto; width: 80%;">
-            <label for="transactionTypeDropdown">Top 5 Provinces</label>
-            <select id="provinceDropdown">
-            </select> <br><br>
-
+            <h1 id="header"></h1>
+            <h5>Paid Transactions</h5>
 
             <div style="text-align: left; margin: 0 auto; width: 80%;">
-                <h4 id="typeprovince"></h4>
-                <p id="contentprovince"></p>
+                <label for="transactionTypeDropdown">Top 5 Provinces</label>
+                <select id="provinceDropdown">
+                </select> <br><br>
 
+
+                <div style="text-align: left; margin: 0 auto; width: 80%;">
+                    <h4 id="typeprovince"></h4>
+                    <p id="contentprovince"></p>
+
+                </div>
             </div>
         </div>
+
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const provincesPopup = document.getElementById("Provincespopup");
+            const ProvinceopenPopup = document.getElementById("ProvinceopenPopup");
+            const ProvinceclosePopup = document.getElementById("ProvinceclosePopup");
+            const header = document.getElementById("header");
+            const provinceDropdown = document.getElementById("provinceDropdown");
+            const typeprovince = document.getElementById("typeprovince");
+            const contentprovince = document.getElementById("contentprovince");
+            const startDateElement = document.getElementById("startDate");
+            const endDateElement = document.getElementById("endDate");
 
-</div>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const provincesPopup = document.getElementById("Provincespopup");
-        const ProvinceopenPopup = document.getElementById("ProvinceopenPopup");
-        const ProvinceclosePopup = document.getElementById("ProvinceclosePopup");
-        const header = document.getElementById("header");
-        const provinceDropdown = document.getElementById("provinceDropdown");
-        const typeprovince = document.getElementById("typeprovince");
-        const contentprovince = document.getElementById("contentprovince");
-        const startDateElement = document.getElementById("startDate");
-        const endDateElement = document.getElementById("endDate");
+            let technicalServicesData = <?php echo json_encode($customerTypeDatapertransaction); ?>;
 
-        let technicalServicesData = <?php echo json_encode($customerTypeDatapertransaction); ?>;
+            function filterDataByDateRange(inputStartDate, inputEndDate) {
+                let startDate, endDate;
+                const startInput = inputStartDate.split('-');
+                const endInput = inputEndDate.split('-');
 
-        function filterDataByDateRange(inputStartDate, inputEndDate) {
-            let startDate, endDate;
-            const startInput = inputStartDate.split('-');
-            const endInput = inputEndDate.split('-');
+                // Start date
+                if (startInput.length === 2) {
+                    const [startYear, startMonth] = startInput.map(Number);
+                    startDate = new Date(startYear, startMonth - 1, 1);
+                } else if (startInput.length === 1) {
+                    startDate = new Date(startInput[0], 0, 1);
+                } else {
+                    startDate = new Date(inputStartDate);
+                }
 
-            // Start date
-            if (startInput.length === 2) {
-                const [startYear, startMonth] = startInput.map(Number);
-                startDate = new Date(startYear, startMonth - 1, 1);
-            } else if (startInput.length === 1) {
-                startDate = new Date(startInput[0], 0, 1);
-            } else {
-                startDate = new Date(inputStartDate);
+                // End date
+                if (endInput.length === 2) {
+                    const [endYear, endMonth] = endInput.map(Number);
+                    endDate = new Date(endYear, endMonth, 0);
+                } else if (endInput.length === 1) {
+                    endDate = new Date(endInput[0], 11, 31);
+                } else {
+                    endDate = new Date(inputEndDate);
+                }
+
+                return technicalServicesData.filter(item =>
+                    new Date(item.transaction_date) >= startDate &&
+                    new Date(item.transaction_date) <= endDate
+                );
             }
 
-            // End date
-            if (endInput.length === 2) {
-                const [endYear, endMonth] = endInput.map(Number);
-                endDate = new Date(endYear, endMonth, 0);
-            } else if (endInput.length === 1) {
-                endDate = new Date(endInput[0], 11, 31);
-            } else {
-                endDate = new Date(inputEndDate);
-            }
-
-            return technicalServicesData.filter(item =>
-                new Date(item.transaction_date) >= startDate &&
-                new Date(item.transaction_date) <= endDate
-            );
-        }
-
-        const customerstatpopup = `
+            const customerstatpopup = `
             <style>
                 .scrollable-table {
                     height: 20rem;
@@ -3420,76 +3405,76 @@ Yii::$app->set('db', [ //revert default connection
             </style>
         `;
 
-        // Add this style to your HTML
-        document.head.insertAdjacentHTML('beforeend', customerstatpopup);
+            // Add this style to your HTML
+            document.head.insertAdjacentHTML('beforeend', customerstatpopup);
 
-        function updateProvinceData(customerTypeData, provinceName) {
-            const formattedProvince = provinceName.charAt(0).toUpperCase() + provinceName.slice(1);
-            const provinceData = customerTypeData.filter(item => item.address === formattedProvince);
-            const provinceDataFiltered = provinceData.reduce((result, item) => {
-                const existingTransactionTypeIndex = result.findIndex(entry => entry.transaction_type === item.transaction_type);
+            function updateProvinceData(customerTypeData, provinceName) {
+                const formattedProvince = provinceName.charAt(0).toUpperCase() + provinceName.slice(1);
+                const provinceData = customerTypeData.filter(item => item.address === formattedProvince);
+                const provinceDataFiltered = provinceData.reduce((result, item) => {
+                    const existingTransactionTypeIndex = result.findIndex(entry => entry.transaction_type === item.transaction_type);
 
-                if (existingTransactionTypeIndex !== -1) {
-                    const existingCustomerTypeIndex = result[existingTransactionTypeIndex].customer_types.findIndex(
-                        customer => customer.customer_type === item.customer_type
-                    );
+                    if (existingTransactionTypeIndex !== -1) {
+                        const existingCustomerTypeIndex = result[existingTransactionTypeIndex].customer_types.findIndex(
+                            customer => customer.customer_type === item.customer_type
+                        );
 
-                    if (existingCustomerTypeIndex !== -1) {
-                        result[existingTransactionTypeIndex].customer_types[existingCustomerTypeIndex].transaction_count += Number(item.transaction_count);
-                        result[existingTransactionTypeIndex].customer_types[existingCustomerTypeIndex].total_amount += Number(item.total_amount);
+                        if (existingCustomerTypeIndex !== -1) {
+                            result[existingTransactionTypeIndex].customer_types[existingCustomerTypeIndex].transaction_count += Number(item.transaction_count);
+                            result[existingTransactionTypeIndex].customer_types[existingCustomerTypeIndex].total_amount += Number(item.total_amount);
+                        } else {
+                            result[existingTransactionTypeIndex].customer_types.push({
+                                customer_type: item.customer_type,
+                                transaction_count: Number(item.transaction_count),
+                                total_amount: Number(item.total_amount)
+                            });
+                        }
                     } else {
-                        result[existingTransactionTypeIndex].customer_types.push({
-                            customer_type: item.customer_type,
-                            transaction_count: Number(item.transaction_count),
-                            total_amount: Number(item.total_amount)
+                        result.push({
+                            transaction_type: item.transaction_type,
+                            customer_types: [{
+                                customer_type: item.customer_type,
+                                transaction_count: Number(item.transaction_count),
+                                total_amount: Number(item.total_amount)
+                            }]
                         });
                     }
-                } else {
-                    result.push({
-                        transaction_type: item.transaction_type,
-                        customer_types: [{
-                            customer_type: item.customer_type,
-                            transaction_count: Number(item.transaction_count),
-                            total_amount: Number(item.total_amount)
-                        }]
+
+                    return result;
+                }, []);
+
+                // if null or empty dataset
+                function handleNullDataset(dataset) {
+                    if (!dataset || dataset.length === 0) {
+                        return [{
+                            transaction_type: ' ',
+                            customer_types: [{
+                                customer_type: ' ',
+                                transaction_count: 0,
+                                total_amount: 0
+                            }]
+                        }];
+                    }
+                    return dataset;
+                }
+                let province1Transactions = handleNullDataset(provinceDataFiltered);
+                let sumOfAllProvince1TransactionCounts = 0;
+                let sumOfAllProvince1TransactionAmounts = 0;
+                province1Transactions.forEach(transaction => {
+                    transaction.customer_types.forEach(customer => {
+                        sumOfAllProvince1TransactionCounts += customer.transaction_count;
+                        sumOfAllProvince1TransactionAmounts += customer.total_amount;
                     });
-                }
-
-                return result;
-            }, []);
-
-            // if null or empty dataset
-            function handleNullDataset(dataset) {
-                if (!dataset || dataset.length === 0) {
-                    return [{
-                        transaction_type: ' ',
-                        customer_types: [{
-                            customer_type: ' ',
-                            transaction_count: 0,
-                            total_amount: 0
-                        }]
-                    }];
-                }
-                return dataset;
-            }
-            let province1Transactions = handleNullDataset(provinceDataFiltered);
-            let sumOfAllProvince1TransactionCounts = 0;
-            let sumOfAllProvince1TransactionAmounts = 0;
-            province1Transactions.forEach(transaction => {
-                transaction.customer_types.forEach(customer => {
-                    sumOfAllProvince1TransactionCounts += customer.transaction_count;
-                    sumOfAllProvince1TransactionAmounts += customer.total_amount;
                 });
-            });
 
-            const Provincewidths = {
-                type: '25%',
-                customer: '25%',
-                count: '25%',
-                amount: '25%'
-            };
+                const Provincewidths = {
+                    type: '25%',
+                    customer: '25%',
+                    count: '25%',
+                    amount: '25%'
+                };
 
-            let cancelledTableHeader = `<table style="border-collapse: collapse; width: 98%;">
+                let cancelledTableHeader = `<table style="border-collapse: collapse; width: 98%;">
                                 <tr>
                                     <th style="border: 1px solid black; padding: 8px; width: ${Provincewidths.type}; text-align: left;">Transaction Type</th>
                                     <th style="border: 1px solid black; padding: 8px; width: ${Provincewidths.customer}; text-align: left;">Customer Type</th>
@@ -3498,294 +3483,294 @@ Yii::$app->set('db', [ //revert default connection
                                 </tr>
                             </table>`;
 
-            // Start of the scrollable table body
-            let cancelledTableScrollable = `<div class="scrollable-table"><table style="border-collapse: collapse; width: 100%;">`;
+                // Start of the scrollable table body
+                let cancelledTableScrollable = `<div class="scrollable-table"><table style="border-collapse: collapse; width: 100%;">`;
 
-            provinceDataFiltered.forEach(transaction => {
-                let totalRowsForTransactionType = transaction.customer_types.length;
-                transaction.customer_types.forEach((customer, customerIndex) => {
-                    cancelledTableScrollable += '<tr style="border: 1px solid black;">';
-                    if (customerIndex === 0) {
-                        cancelledTableScrollable += `<td rowspan="${totalRowsForTransactionType}" style="border: 1px solid black; padding: 8px; width: ${Provincewidths.type};">${transaction.transaction_type}</td>`;
-                    }
-                    cancelledTableScrollable += `
+                provinceDataFiltered.forEach(transaction => {
+                    let totalRowsForTransactionType = transaction.customer_types.length;
+                    transaction.customer_types.forEach((customer, customerIndex) => {
+                        cancelledTableScrollable += '<tr style="border: 1px solid black;">';
+                        if (customerIndex === 0) {
+                            cancelledTableScrollable += `<td rowspan="${totalRowsForTransactionType}" style="border: 1px solid black; padding: 8px; width: ${Provincewidths.type};">${transaction.transaction_type}</td>`;
+                        }
+                        cancelledTableScrollable += `
                                         <td style="border: 1px solid black; padding: 8px; width: ${Provincewidths.customer};">${customer.customer_type}</td>
                                         <td style="border: 1px solid black; padding: 8px; width: ${Provincewidths.count};">${customer.transaction_count}</td>
                                         <td style="border: 1px solid black; padding: 8px; width: ${Provincewidths.amount};">${customer.total_amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
                                     </tr>`;
+                    });
                 });
+
+                cancelledTableScrollable += '</table></div>';
+
+                typeprovince.innerHTML = "<span style='color: Red;'>" + formattedProvince + " <br>";
+                contentprovince.innerHTML = "Total " + formattedProvince + " Transaction: <span style='color: red;'>" + sumOfAllProvince1TransactionCounts + "</span> amounting of <span style='color: red;'>" + Number(sumOfAllProvince1TransactionAmounts).toLocaleString('en-US', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                }) + "</span><br><br>" + cancelledTableHeader + cancelledTableScrollable;
+            }
+
+            function updateDataAndPopup() {
+                const startDate = startDateElement.value;
+                const endDate = endDateElement.value;
+                const customerTypeData = filterDataByDateRange(startDate, endDate);
+
+                const provinceTransactionCounts = {};
+                customerTypeData.forEach(item => {
+                    const province = item.address;
+                    if (!provinceTransactionCounts[province]) {
+                        provinceTransactionCounts[province] = 0;
+                    }
+                    provinceTransactionCounts[province]++;
+                });
+
+                const sortedProvinces = Object.keys(provinceTransactionCounts).sort((a, b) =>
+                    provinceTransactionCounts[b] - provinceTransactionCounts[a]
+                );
+
+                const topProvinces = sortedProvinces.slice(0, 5);
+
+                provinceDropdown.innerHTML = '';
+                topProvinces.forEach(function(province) {
+                    var option = document.createElement('option');
+                    option.value = province;
+                    option.text = province.charAt(0).toUpperCase() + province.slice(1);
+                    provinceDropdown.add(option);
+                });
+
+                header.innerText = 'Top 5 Provinces';
+                provinceDropdown.value = topProvinces[0];
+                provinceDropdown.dispatchEvent(new Event('change'));
+            }
+
+            startDateElement.addEventListener('change', updateDataAndPopup);
+            endDateElement.addEventListener('change', updateDataAndPopup);
+
+            provinceDropdown.addEventListener("change", function() {
+                const selectedValue = this.value;
+                updateProvinceData(filterDataByDateRange(startDateElement.value, endDateElement.value), selectedValue);
             });
 
-            cancelledTableScrollable += '</table></div>';
-
-            typeprovince.innerHTML = "<span style='color: Red;'>" + formattedProvince + " <br>";
-            contentprovince.innerHTML = "Total " + formattedProvince + " Transaction: <span style='color: red;'>" + sumOfAllProvince1TransactionCounts + "</span> amounting of <span style='color: red;'>" + Number(sumOfAllProvince1TransactionAmounts).toLocaleString('en-US', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-            }) + "</span><br><br>" + cancelledTableHeader + cancelledTableScrollable;
-        }
-
-        function updateDataAndPopup() {
-            const startDate = startDateElement.value;
-            const endDate = endDateElement.value;
-            const customerTypeData = filterDataByDateRange(startDate, endDate);
-
-            const provinceTransactionCounts = {};
-            customerTypeData.forEach(item => {
-                const province = item.address;
-                if (!provinceTransactionCounts[province]) {
-                    provinceTransactionCounts[province] = 0;
-                }
-                provinceTransactionCounts[province]++;
+            provincesPopup.addEventListener("click", () => {
+                updateDataAndPopup();
+                ProvinceopenPopup.style.display = "block";
             });
 
-            const sortedProvinces = Object.keys(provinceTransactionCounts).sort((a, b) =>
-                provinceTransactionCounts[b] - provinceTransactionCounts[a]
-            );
-
-            const topProvinces = sortedProvinces.slice(0, 5);
-
-            provinceDropdown.innerHTML = '';
-            topProvinces.forEach(function(province) {
-                var option = document.createElement('option');
-                option.value = province;
-                option.text = province.charAt(0).toUpperCase() + province.slice(1);
-                provinceDropdown.add(option);
+            ProvinceclosePopup.addEventListener("click", () => {
+                ProvinceopenPopup.style.display = "none";
             });
 
-            header.innerText = 'Top 5 Provinces';
-            provinceDropdown.value = topProvinces[0];
-            provinceDropdown.dispatchEvent(new Event('change'));
-        }
-
-        startDateElement.addEventListener('change', updateDataAndPopup);
-        endDateElement.addEventListener('change', updateDataAndPopup);
-
-        provinceDropdown.addEventListener("change", function() {
-            const selectedValue = this.value;
-            updateProvinceData(filterDataByDateRange(startDateElement.value, endDateElement.value), selectedValue);
-        });
-
-        provincesPopup.addEventListener("click", () => {
             updateDataAndPopup();
-            ProvinceopenPopup.style.display = "block";
+        });
+    </script>
+
+
+
+
+
+
+    <!-- scriptfor customers graph -->
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+    <script>
+        // Get references to chart containers and the dropdown
+        const provincesChartContainer = document.getElementById('Provinces').getContext('2d');
+        const chartTypeDropdown = document.getElementById('chart_type');
+        const constprovincesChart = new Chart(provincesChartContainer, {
+            type: 'bar',
+            options: {
+                barThickness: 25,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            display: false,
+                        },
+                    },
+                    x: {
+                        ticks: {
+                            display: false,
+                        },
+                        grid: {
+                            display: false,
+                        },
+                    },
+                },
+                ticks: {
+                    precision: 0,
+                },
+                plugins: {
+                    datalabels: {
+                        anchor: 'end',
+                        align: 'end',
+                        offset: 4,
+                        display: 'auto',
+                        color: 'white',
+                    },
+                    bgColor: {
+                        backgroundColor: 'white'
+                    }
+                },
+            },
         });
 
-        ProvinceclosePopup.addEventListener("click", () => {
-            ProvinceopenPopup.style.display = "none";
-        });
-
-        updateDataAndPopup();
-    });
-</script>
-
-
-
-
-
-
-<!-- scriptfor customers graph -->
-<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
-<script>
-    // Get references to chart containers and the dropdown
-    const provincesChartContainer = document.getElementById('Provinces').getContext('2d');
-    const chartTypeDropdown = document.getElementById('chart_type');
-    const constprovincesChart = new Chart(provincesChartContainer, {
-        type: 'bar',
-        options: {
-            barThickness: 25,
-            maintainAspectRatio: false,
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    grid: {
-                        display: false,
-                    },
-                },
-                x: {
-                    ticks: {
-                        display: false,
-                    },
-                    grid: {
-                        display: false,
-                    },
-                },
-            },
-            ticks: {
-                precision: 0,
-            },
-            plugins: {
-                datalabels: {
-                    anchor: 'end',
-                    align: 'end',
-                    offset: 4,
-                    display: 'auto',
-                    color: 'white',
-                },
-                bgColor: {
-                    backgroundColor: 'white'
-                }
-            },
-        },
-    });
-
-    function getRandomColor() {
-        var letters = '0123456789ABCDEF';
-        var color = '#';
-        for (var i = 0; i < 6; i++) {
-            color += letters[Math.floor(Math.random() * 16)];
+        function getRandomColor() {
+            var letters = '0123456789ABCDEF';
+            var color = '#';
+            for (var i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
         }
-        return color;
-    }
 
-    var provinceData = [];
-    //look for updateProvince(response)
-</script>
+        var provinceData = [];
+        //look for updateProvince(response)
+    </script>
 
-<!-- All about customer graphs -->
-<div class="customers_data">
-    <div class="date_filter" style="text-align: left; padding-left: 8rem; padding-top: 0rem; padding-bottom: 2rem;">
-        <div class="containers">
-            <div class="date_dropdown" style="top: 20px;">
-                <label for="chart_type2" class="chart_type_label2">
-                    <strong>Chart Filter: </strong></label>
-                <select name="chart_type2" id="chart_type2" class="dropdown-content" onchange="changeChart()">
-                    <option value="doughnut">Doughnut</option>
-                    <option value="pie">Pie</option>
-                    <option value="bar">Bar</option>
+    <!-- All about customer graphs -->
+    <div class="customers_data">
+        <div class="date_filter" style="text-align: left; padding-left: 8rem; padding-top: 0rem; padding-bottom: 2rem;">
+            <div class="containers">
+                <div class="date_dropdown" style="top: 20px;">
+                    <label for="chart_type2" class="chart_type_label2">
+                        <strong>Chart Filter: </strong></label>
+                    <select name="chart_type2" id="chart_type2" class="dropdown-content" onchange="changeChart()">
+                        <option value="doughnut">Doughnut</option>
+                        <option value="pie">Pie</option>
+                        <option value="bar">Bar</option>
 
-                    <!-- <option value="horizontal_bar">Horizontal chart</option> -->
-                </select>
+                        <!-- <option value="horizontal_bar">Horizontal chart</option> -->
+                    </select>
+                </div>
             </div>
         </div>
-    </div>
-    
-    <div class="graph2">
-    <div id="transaction" style="margin-top:20px">
-        <div class="chart-container2">
-            <p class="reportTitle" id="transactionStatuspopup">Transaction Status</p>
-            <canvas id="transactionStatus"></canvas>
-        </div>
-        <div class="chart-container2">
-            <p class="reportTitle" id="paymentMethodpopup">Payment Method</p>
-            <canvas id="paymendtMethod"></canvas>
-        </div>
-    </div>
-    <div>
-        <div class="chart-container2">
-            <p class="reportTitle" id="transactionTypepoppup">Type of Transaction</p>
-            <canvas id="transactionType"></canvas>
+
+        <div class="graph2">
+            <div id="transaction" style="margin-top:20px">
+                <div class="chart-container2">
+                    <p class="reportTitle" id="transactionStatuspopup">Transaction Status</p>
+                    <canvas id="transactionStatus"></canvas>
+                </div>
+                <div class="chart-container2">
+                    <p class="reportTitle" id="paymentMethodpopup">Payment Method</p>
+                    <canvas id="paymendtMethod"></canvas>
+                </div>
+            </div>
+            <div>
+                <div class="chart-container2">
+                    <p class="reportTitle" id="transactionTypepoppup">Type of Transaction</p>
+                    <canvas id="transactionType"></canvas>
+                </div>
+
+                <div class="chart-container2">
+                    <p class="reportTitle" id="customerTypepoppup">Type of Customers</p>
+                    <canvas id="customerType"></canvas>
+                </div>
+            </div>
         </div>
 
-        <div class="chart-container2">
-            <p class="reportTitle" id="customerTypepoppup">Type of Customers</p>
-            <canvas id="customerType"></canvas>
+        <!-- Pop-up for transaction type -->
+        <!-- Transaction status popup -->
+        <div class="popup" id="customerpopup">
+            <div class="popup-content">
+                <span class="close" id="close">&times;</span>
+
+                <h2 id="header"></h2>
+
+                <div style="text-align: left; margin: 0 auto; width: 80%;">
+                    <div id="transactionTypeDropdownContainer">
+                        <label for="transactionTypeDropdown"></label>
+                        <select id="transactionTypeDropdown">
+
+                        </select> <br><br>
+                    </div>
+
+                    <div style="text-align: left; margin: 0 auto; width: 80%;">
+                        <h4 id="type1"></h4>
+                        <p id="hightype1"></p>
+
+                    </div>
+                </div>
+            </div>
+
         </div>
-    </div>
-    </div>
 
-    <!-- Pop-up for transaction type -->
-    <!-- Transaction status popup -->
-    <div class="popup" id="customerpopup">
-        <div class="popup-content">
-            <span class="close" id="close">&times;</span>
+        <!-- Transaction Type popup -->
+        <div class="popup" id="customerpopup2">
+            <div class="popup-content">
+                <span class="close" id="close2">&times;</span>
 
-            <h2 id="header"></h2>
+                <h2 id="header2"></h2>
 
-            <div style="text-align: left; margin: 0 auto; width: 80%;">
-                <div id="transactionTypeDropdownContainer">
-                    <label for="transactionTypeDropdown"></label>
-                    <select id="transactionTypeDropdown">
+                <div style="text-align: left; margin: 0 auto; width: 80%;">
+                    <label for="transactionTypeDropdown2"></label>
+                    <select id="transactionTypeDropdown2">
+                    </select> <br><br>
+
+                    <div style="text-align: left; margin: 0 auto; width: 80%;">
+                        <h4 id="type2"></h4>
+                        <p id="hightype2"></p>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Transaction Type popup -->
+        <div class="popup" id="customerpopup3">
+            <div class="popup-content">
+                <span class="close" id="close3">&times;</span>
+
+                <h2 id="header3"></h2>
+
+                <div style="text-align: left; margin: 0 auto; width: 80%;">
+                    <label for="transactionTypeDropdown3"></label>
+                    <select id="transactionTypeDropdown3">
+                        <option value="ts">Technical Services</option>
+                        <option value="nlims">National Laboratory Information Management System</option>
+                        <option value="ulims">Unified Laboratory Information Management System</option>
+
 
                     </select> <br><br>
-                </div>
 
+                    <div style="text-align: left; margin: 0 auto; width: 80%;">
+                        <h4 id="type3"></h4>
+                        <p id="hightype3"></p>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+        <!-- Customer type popup -->
+        <div class="popup" id="customerpopup4">
+            <div class="popup-content">
+                <span class="close" id="close4">&times;</span>
+
+                <h2 id="header4"></h2>
+
+                <div id="yearPickerContainer" style="margin-bottom: 20px;">
+                    <label for="yearPicker">Select Year:</label>
+                    <select id="yearPicker">
+                        <?php foreach ($distinctYears as $year) : ?>
+                            <option value="<?php echo htmlspecialchars($year); ?>">
+                                <?php echo htmlspecialchars($year); ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
                 <div style="text-align: left; margin: 0 auto; width: 80%;">
-                    <h4 id="type1"></h4>
-                    <p id="hightype1"></p>
+                    <h4 id="type"></h4>
+                    <p id="hightype"></p>
 
                 </div>
             </div>
         </div>
 
     </div>
-
-    <!-- Transaction Type popup -->
-    <div class="popup" id="customerpopup2">
-        <div class="popup-content">
-            <span class="close" id="close2">&times;</span>
-
-            <h2 id="header2"></h2>
-
-            <div style="text-align: left; margin: 0 auto; width: 80%;">
-                <label for="transactionTypeDropdown2"></label>
-                <select id="transactionTypeDropdown2">
-                </select> <br><br>
-
-                <div style="text-align: left; margin: 0 auto; width: 80%;">
-                    <h4 id="type2"></h4>
-                    <p id="hightype2"></p>
-
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-    <!-- Transaction Type popup -->
-    <div class="popup" id="customerpopup3">
-        <div class="popup-content">
-            <span class="close" id="close3">&times;</span>
-
-            <h2 id="header3"></h2>
-
-            <div style="text-align: left; margin: 0 auto; width: 80%;">
-                <label for="transactionTypeDropdown3"></label>
-                <select id="transactionTypeDropdown3">
-                    <option value="ts">Technical Services</option>
-                    <option value="nlims">National Laboratory Information Management System</option>
-                    <option value="ulims">Unified Laboratory Information Management System</option>
-
-
-                </select> <br><br>
-
-                <div style="text-align: left; margin: 0 auto; width: 80%;">
-                    <h4 id="type3"></h4>
-                    <p id="hightype3"></p>
-
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-
-    <!-- Customer type popup -->
-    <div class="popup" id="customerpopup4">
-        <div class="popup-content">
-            <span class="close" id="close4">&times;</span>
-
-            <h2 id="header4"></h2>
-
-            <div id="yearPickerContainer" style="margin-bottom: 20px;">
-                <label for="yearPicker">Select Year:</label>
-                <select id="yearPicker">
-                    <?php foreach ($distinctYears as $year) : ?>
-                        <option value="<?php echo htmlspecialchars($year); ?>">
-                            <?php echo htmlspecialchars($year); ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
-            <div style="text-align: left; margin: 0 auto; width: 80%;">
-                <h4 id="type"></h4>
-                <p id="hightype"></p>
-
-            </div>
-        </div>
-    </div>
-
-</div>
 </div>
 
 
@@ -4758,8 +4743,8 @@ Yii::$app->set('db', [ //revert default connection
                     let leastTransactions = Object.values(summary)
                         .filter(item => item.transaction_status === status && item.transaction_count === leastTransactionCount);
 
-                    
-                        
+
+
                     let color;
                     switch (status) {
                         case 'Paid':
@@ -4775,7 +4760,7 @@ Yii::$app->set('db', [ //revert default connection
                             color = 'Black'; // Default color if none of the statuses match
                     }
 
-                        let tableHeader = `<div><br><span style="color:${color}">${status}:</span>`;
+                    let tableHeader = `<div><br><span style="color:${color}">${status}:</span>`;
                     tableHeader += `<table border="1" style="width:98%;"><tr>
                           <th style="width: 30%; color:white; background: #3377ff; padding-left: 2%">Customer Type</th>
                           <th style="width: 30%; color:white; background: #3377ff; padding-left: 2%">Transaction Count</th>
@@ -5236,10 +5221,10 @@ Yii::$app->set('db', [ //revert default connection
         var ciVal = customers_income.value;
         var qVal = ""
 
-        if (ciVal === "customer"){
+        if (ciVal === "customer") {
             document.getElementById('Provincespopup').innerHTML = "Customers per Region"
             qVal = "A"
-        }else{
+        } else {
             document.getElementById('Provincespopup').innerHTML = "Income per Region"
             qVal = "B"
         }
@@ -6248,7 +6233,6 @@ Yii::$app->set('db', [ //revert default connection
             }
             customerTypeChart.update();
 
-            console.log(response.monthforMyChart[0].data);
 
             myChart.config.data.datasets[2].data[0] = response.monthforMyChart[0].data;
             myChart.config.data.datasets[3].data[0] = response.monthforMyChart[1].data;
