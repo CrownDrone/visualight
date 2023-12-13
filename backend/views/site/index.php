@@ -3326,7 +3326,7 @@ Yii::$app->set('db', [ //revert default connection
             <h5>Paid Transactions</h5>
 
             <div style="text-align: left; margin: 0 auto; width: 80%;">
-                <label for="transactionTypeDropdown">Top 5 Provinces</label>
+                <label for="transactionTypeDropdown">Top 10 Provinces</label>
                 <select id="provinceDropdown">
                 </select> <br><br>
 
@@ -3529,7 +3529,7 @@ Yii::$app->set('db', [ //revert default connection
                     provinceTransactionCounts[b] - provinceTransactionCounts[a]
                 );
 
-                const topProvinces = sortedProvinces.slice(0, 5);
+                const topProvinces = sortedProvinces.slice(0, 10);
 
                 provinceDropdown.innerHTML = '';
                 topProvinces.forEach(function(province) {
@@ -3539,7 +3539,7 @@ Yii::$app->set('db', [ //revert default connection
                     provinceDropdown.add(option);
                 });
 
-                header.innerText = 'Top 5 Provinces';
+                header.innerText = 'Top 10 Provinces';
                 provinceDropdown.value = topProvinces[0];
                 provinceDropdown.dispatchEvent(new Event('change'));
             }

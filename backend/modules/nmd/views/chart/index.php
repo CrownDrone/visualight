@@ -1488,7 +1488,7 @@ $targetIncome =
 </div>
 <div class="popup" id="targetPopup">
         <span class="close" onclick="closeTargetPopup()">&times;</span> 
-        <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; background-color: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);">
+        <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; background-color: #fff;">
 
             <span style="position: absolute; top: 10px; right: 10px; cursor: pointer; font-size: 20px; color: #888;" onclick="closeTargetPopup()">&times;</span>
 
@@ -3047,7 +3047,7 @@ $targetIncome =
         <h5>Paid Transactions</h5>
 
         <div style="text-align: left; margin: 0 auto; width: 80%;">
-            <label for="transactionTypeDropdown">Top 5 Provinces</label>
+            <label for="transactionTypeDropdown">Top 10 Provinces</label>
             <select id="provinceDropdown">
             </select> <br><br>
 
@@ -3252,7 +3252,7 @@ $targetIncome =
                 provinceTransactionCounts[b] - provinceTransactionCounts[a]
             );
 
-            const topProvinces = sortedProvinces.slice(0, 5);
+            const topProvinces = sortedProvinces.slice(0, 10);
 
             provinceDropdown.innerHTML = '';
             topProvinces.forEach(function(province) {
@@ -3262,7 +3262,7 @@ $targetIncome =
                 provinceDropdown.add(option);
             });
 
-            header.innerText = 'Top 5 Provinces';
+            header.innerText = 'Top 10 Provinces';
             provinceDropdown.value = topProvinces[0];
             provinceDropdown.dispatchEvent(new Event('change'));
         }
