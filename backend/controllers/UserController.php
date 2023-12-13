@@ -79,7 +79,6 @@ class UserController extends BaseController
                         "The Visualight Team")
                         ->send();
                         if ($mailer) {
-                            Yii::$app->session->setFlash('success', 'User created successfully. Please check your email for verification instructions.');
                             return $this->redirect(['/admin/assignment/view', 'id' => $model->id]);
                         }else {
                             Yii::$app->session->setFlash('error', 'Failed to send the verification email.');

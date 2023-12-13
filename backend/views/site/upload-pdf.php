@@ -8,8 +8,10 @@ $this->title = 'Send PDF';
 $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position' => \yii\web\View::POS_HEAD]);
 
 ?>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
+    
 
 @font-face {
         font-family: 'Poppins';
@@ -132,6 +134,34 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
         overflow-y: auto;
         padding-right: 15px; /* Adjust the padding to avoid cutting the scrollbar */
     }
+
+
+    @media only screen and (max-width: 768px) {
+    .container {
+        flex-direction: column;
+        min-height: auto;
+        margin-top: 0;
+    }
+
+    .card {
+        width: 90%;
+        margin: 10px;
+    }
+
+    .checkboxes-container {
+        flex-direction: column;
+    }
+
+    .role-selection-box, .email-selection-box {
+        margin: 10px 0; /* Adjust margin for mobile layout */
+    }
+}
+
+/* Ensure images are responsive */
+img {
+    max-width: 100%;
+    height: auto;
+}
 </style>
 
 </style>
