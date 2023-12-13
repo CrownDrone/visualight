@@ -6585,6 +6585,6 @@ Yii::$app->set('db', [ //revert default connection
 
         setTimeout(function() {
             document.getElementById('sending-email-message').style.display = 'none';
-        }, 5000);
+        }, 12000);
     }
 </script>

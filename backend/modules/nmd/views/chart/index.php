@@ -5386,7 +5386,7 @@ $targetIncome =
             });
         setTimeout(function() {
             document.getElementById('sending-email-message').style.display = 'none';
-        }, 5000);
+        }, 12000);
 
     }
 </script>
