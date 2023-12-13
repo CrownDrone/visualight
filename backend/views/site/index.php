@@ -1243,15 +1243,7 @@ if ($todaySandTtrans == 0) {
     $SandTdailytransincrease = (($todaySandTtrans - $lastSandTtrans) / $todaySandTtrans) * 100;
     $SandTdailytransincrease = number_format($SandTdailytransincrease);
 }
-
-Yii::$app->set('db', [ //revert default connection 
-    'class' => \yii\db\Connection::class,
-    'dsn' => 'mysql:host=localhost;dbname=visualight2user',
-    'username' => 'root',
-    'password' => '',
-    'charset' => 'utf8',
-]);
-
+ 
 $currentDate = new \DateTime();
 $targetStd = Yii::$app->db->createCommand('
 SELECT quarter_1, quarter_2, quarter_3, quarter_4
@@ -1291,6 +1283,13 @@ $targetIncome = [
     (float)($targeiStd['quarter_4'] ?? 0) + (float)($targeiNmd['quarter_4'] ?? 0),
 ];
 
+Yii::$app->set('db', [ //revert default connection 
+    'class' => \yii\db\Connection::class,
+    'dsn' => 'mysql:host=localhost;dbname=visualight2user',
+    'username' => 'root',
+    'password' => '',
+    'charset' => 'utf8',
+]);
 ?>
 <?php \yii\widgets\Pjax::begin(); ?>
 

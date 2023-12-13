@@ -1324,14 +1324,6 @@ try {
     $average = 0;
 }
 
-Yii::$app->set('db', [ //revert default connection 
-    'class' => \yii\db\Connection::class,
-    'dsn' => 'mysql:host=localhost;dbname=visualight2user',
-    'username' => 'root',
-    'password' => '',
-    'charset' => 'utf8',
-]);
-
 $currentDate = new \DateTime();
 
 $targetTransactiondata = Yii::$app->db->createCommand('
@@ -1358,7 +1350,13 @@ $targetIncome =
         (float)($targetIncomedata['quarter_3'] ?? 0),
         (float)($targetIncomedata['quarter_4'] ?? 0),
     ];
-
+    Yii::$app->set('db', [ //revert default connection 
+        'class' => \yii\db\Connection::class,
+        'dsn' => 'mysql:host=localhost;dbname=visualight2user',
+        'username' => 'root',
+        'password' => '',
+        'charset' => 'utf8',
+    ]);
 ?>
 
 <div class="DailyTransaction">

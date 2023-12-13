@@ -1324,15 +1324,7 @@ try {
     $average = round($totalTransactions / $totalDays); // Calculate the average
 } catch (DivisionByZeroError $e) {
     $average = 0;
-}
-
-Yii::$app->set('db', [ //revert default connection 
-    'class' => \yii\db\Connection::class,
-    'dsn' => 'mysql:host=localhost;dbname=visualight2user',
-    'username' => 'root',
-    'password' => '',
-    'charset' => 'utf8',
-]);
+} 
 
 $currentDate = new \DateTime();
 
@@ -1363,7 +1355,13 @@ $targetIncome =
         (float)($targetIncomedata['quarter_4'] ?? 0),
     ];
 
-
+    Yii::$app->set('db', [ //revert default connection 
+        'class' => \yii\db\Connection::class,
+        'dsn' => 'mysql:host=localhost;dbname=visualight2user',
+        'username' => 'root',
+        'password' => '',
+        'charset' => 'utf8',
+    ]);
 ?>
 
 <div class="DailyTransaction">
