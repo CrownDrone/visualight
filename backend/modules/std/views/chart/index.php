@@ -1482,7 +1482,10 @@ $targetIncome =
                         }
                     </script>
 
-                    <button onclick="openTargetPopup()" class="target">Set Targets</button>
+                    <?php if (Yii::$app->user->can('ADMINISTRATOR') || Yii::$app->user->can('TOP MANAGEMENT')) : ?>
+                        <button onclick="openTargetPopup()" class="target">Set Targets</button>
+                    <?php endif; ?>
+
                 </div>
             </div>            
         </div>
