@@ -15,7 +15,7 @@ $this->registerCssFile(Url::to(['/css/custom.css']));
 
 <head><link href="path/to/font-awesome/css/all.min.css" rel="stylesheet">
  </head>
-<div class="user-update" style = " background: white; padding: 1rem; border-radius: 20px; box-shadow: -4px 4px 8px rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.25);">
+<div class="user-update" style = " background: white; padding: 4rem; border-radius: 20px; box-shadow: -4px 4px 8px rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.25); margin-left:4rem; margin-right:4rem;">
     <h2 style = "padding-bottom: 10px; color: #0362BA;"> Update User </h2>
 
     <?php $form = ActiveForm::begin(); ?>
