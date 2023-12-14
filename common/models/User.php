@@ -111,7 +111,7 @@ class User extends ActiveRecord implements IdentityInterface
             ['email', 'email'],
             ['email', 'unique'],
             ['username', 'unique'],
-            ['newPassword', 'string', 'min' => 6],
+            ['newPassword', 'string', 'min' => 8],
             ['newPassword', 'validatePasswordComplexity'],
             ['password_repeat', 'compare', 'compareAttribute' => 'newPassword'],
 
@@ -122,7 +122,7 @@ class User extends ActiveRecord implements IdentityInterface
             // Validation rules for the update scenario
             ['existingPassword', 'validateExistingPassword', 'on' => self::SCENARIO_UPDATE],
 
-            [['contactNumber'], 'integer'],
+            [['contactNumber'], 'integer', 'message' => 'Contact Number must be a number'],
             [['contactNumber'], 'string', 'length' => [11, 11], 'on' => self::SCENARIO_CREATE],
         ];
 
@@ -207,11 +207,42 @@ class User extends ActiveRecord implements IdentityInterface
     {
         // Regular expression to check if the password contains special characters
         $specialCharacterRegex = '/[!@#$%^&*()\-_=+{};:,<.>]/';
-
-        if (!empty($this->newPassword) && !preg_match($specialCharacterRegex, $this->$attribute)) {
-            $this->addError($attribute, 'Password must contain special characters.');
+        // Regular expression to check for uppercase letters
+        $uppercaseRegex = '/[A-Z]/';
+        // Regular expression to check for lowercase letters
+        $lowercaseRegex = '/[a-z]/';
+        // Regular expression to check for numbers
+        $numberRegex = '/\d/';
+    
+        // Check if the password is set
+        if (!empty($this->$attribute)) {
+            // Check for special characters
+            if (!preg_match($specialCharacterRegex, $this->$attribute)) {
+                $this->addError($attribute, 'Password must contain special characters.');
+            }
+    
+            // Check for uppercase letters
+            if (!preg_match($uppercaseRegex, $this->$attribute)) {
+                $this->addError($attribute, 'Password must contain at least one uppercase letter.');
+            }
+    
+            // Check for lowercase letters
+            if (!preg_match($lowercaseRegex, $this->$attribute)) {
+                $this->addError($attribute, 'Password must contain at least one lowercase letter.');
+            }
+    
+            // Check for numbers
+            if (!preg_match($numberRegex, $this->$attribute)) {
+                $this->addError($attribute, 'Password must contain at least one number.');
+            }
+    
+            // Check for minimum length (8 characters)
+            if (strlen($this->$attribute) < 8) {
+                $this->addError($attribute, 'Password must be at least 8 characters long.');
+            }
         }
     }
+    
     /**
      * Finds user by verification email token
      *
