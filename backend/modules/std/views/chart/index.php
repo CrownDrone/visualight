@@ -373,18 +373,18 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
     }
 
     .popup {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: 2000;
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width:100%;
+    height: 100%;
+    z-index: 2000;
     }
 
     .popup-content {
         width: 69%;
-        position: absolute;
+        position    : absolute;
         top: 50%;
         left: 50%;
         transform: translate(-40%, -46%);
@@ -395,8 +395,13 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
         box-shadow: 2px 2px 10px #888;
         border-radius: 15px;
         text-align: center;
+        overflow: hidden; 
     }
 
+    .popup-contentScroll {
+        max-height: 35rem;
+        overflow-y: auto; 
+    }
     .close {
         position: absolute;
         top: 10px;
@@ -1493,11 +1498,10 @@ $targetIncome =
 </div>
 </div>
 <div class="popup" id="targetPopup">
-        <span class="close" onclick="closeTargetPopup()">&times;</span> 
-        <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; background-color: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);">
-
-            <span style="position: absolute; top: 10px; right: 10px; cursor: pointer; font-size: 20px; color: #888;" onclick="closeTargetPopup()">&times;</span>
-
+    
+<div class="popup-content">
+        <span class="close"  onclick="closeTargetPopup()">&times;</span> 
+       
             <h2 style="color: #007bff; margin-bottom: 20px;">Set Targets</h2>
             <div>
             <label for="InputYear">Input Year:</label>
@@ -1506,7 +1510,7 @@ $targetIncome =
             <form class="form">
     
     <div class="column">
-        <h5>Target Transactin <br> <br></h5>
+        <h5>Target Transaction <br> <br></h5>
         <label for="q1Income">Quarter 1:</label><br>
         <label for="q2Income">Quarter 2:</label><br>
         <label for="q1Income">Quarter 3:</label><br>
@@ -1538,6 +1542,7 @@ $targetIncome =
     <button type="button" onclick="submitTargets()">Submit</button>
 </form>
         </div>
+</div>
         <script>
         var targetPopup = document.getElementById('targetPopup');
 
@@ -3063,11 +3068,11 @@ $targetIncome =
             <select id="provinceDropdown">
             </select> <br><br>
 
-
+            <div class="popup-contentScroll">
             <div style="text-align: left; margin: 0 auto; width: 80%;">
                 <h4 id="typeprovince"></h4>
                 <p id="contentprovince"></p>
-
+            </div>
             </div>
         </div>
     </div>
@@ -3415,10 +3420,12 @@ $targetIncome =
                     </select> <br><br>
                 </div>
 
+                <div class="popup-contentScroll">
                 <div style="text-align: left; margin: 0 auto; width: 80%;">
                     <h4 id="type1"></h4>
                     <p id="hightype1"></p>
 
+                </div>
                 </div>
             </div>
         </div>
@@ -3437,10 +3444,12 @@ $targetIncome =
                 <select id="transactionTypeDropdown2">
                 </select> <br><br>
 
+                <div class="popup-contentScroll">
                 <div style="text-align: left; margin: 0 auto; width: 80%;">
                     <h4 id="type2"></h4>
                     <p id="hightype2"></p>
 
+                </div>
                 </div>
             </div>
         </div>
@@ -3464,10 +3473,12 @@ $targetIncome =
 
                 </select> <br><br>
 
+                <div class="popup-contentScroll">
                 <div style="text-align: left; margin: 0 auto; width: 80%;">
                     <h4 id="type3"></h4>
                     <p id="hightype3"></p>
 
+                </div>
                 </div>
             </div>
         </div>
@@ -3492,10 +3503,13 @@ $targetIncome =
                     <?php endforeach; ?>
                 </select>
             </div>
+
+            <div class="popup-contentScroll">
             <div style="text-align: left; margin: 0 auto; width: 80%;">
                 <h4 id="type"></h4>
                 <p id="hightype"></p>
 
+            </div>
             </div>
         </div>
     </div>

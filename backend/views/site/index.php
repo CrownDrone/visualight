@@ -404,49 +404,43 @@ $currentIndex = Url::to(['']);
     }
 
     .popup {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: 2000;
-    }
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2000;
+}
 
-    .popup-content {
-        width: 69%;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-40%, -46%);
-        background: white;
-        color: black;
-        padding: 20px;
-        border: 1px solid #333;
-        box-shadow: 2px 2px 10px #888;
-        border-radius: 15px;
-        text-align: center;
-    }
+.popup-content {
+    width: 69%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-40%, -46%);
+    background: white;
+    color: black;
+    padding: 20px;
+    border: 1px solid #333;
+    box-shadow: 2px 2px 10px #888;
+    border-radius: 15px;
+    text-align: center;
+    overflow: hidden; 
+}
 
-    .division-content {
-        width: 48%;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background: darkgray;
-        color: black;
-        padding: 20px;
-        border: 1px solid #333;
-        box-shadow: 2px 2px 10px #888;
-        text-align: center;
-    }
+.popup-contentScroll {
+    max-height: 35rem;
+    overflow-y: auto; 
+}
+
+
 
     .close {
         position: absolute;
-        top: 10px;
-        right: 10px;
-        font-size: 24px;
+        top: 2rem;
+        right: 2rem;
+        font-size: 2rem;
         cursor: pointer;
     }
 
@@ -1601,54 +1595,7 @@ Yii::$app->set('db', [ //revert default connection
 
             </div>
         </div>
-        <div class="popup" id="transactiondivisionpopup">
-            <div class="popup-content">
-                <span class="close" id="close-transaction-popup">&times;</span>
-
-                <div class="division-content">
-                    <h2 id="MetrologyPopupHeader">National Metrology Division</h2>
-                    <div class="speedometer">
-                        <p>Color of speedometer will identify if the target is met</p>
-                        <p><span style="color: red">Low </span>
-                            <span style="color: orange">Moderate </span>
-                            <span style="color: yellow">High </span>
-                            <span style="color: green">Satisfaction </span>
-                        </p>
-                        <div class="speedometer-dial">
-                            <div class="speedometer-reading" id="speedometer-reading"></div>
-                            <div class="speedometer-arrow" id="speedometer-arrow"></div>
-                        </div>
-                    </div>
-                    <p id="targetTransaction"></p>
-                    <p id="percentTransaction"></p>
-                    <p></p>
-
-
-                    <div style="text-align: left; margin: 0 auto; width: 80%;">
-                        <p id="highest"> </p>
-                        <p id="least"> </p>
-
-                        <p id="mostTransactionType"> </p>
-                        <p id="leastTransactionType"> </p>
-
-                        <p id="mostCustomerType"> </p>
-                        <p id="leastCustomerType"> </p>
-
-                        <p id="mostCustomerProvince"> </p>
-                        <p id="leastCustomerProvince"> </p>
-                    </div>
-                </div>
-
-                <div class="division-content">
-                    <h2 id="TestingPopupHeader">Standard and Testing Division</h2>
-                </div>
-
-            </div>
-        </div>
-
-
-
-
+        
         <script>
             // Reference datas
             const transaction = <?php echo json_encode($TransactionperDiv); ?>;
@@ -3330,11 +3277,11 @@ Yii::$app->set('db', [ //revert default connection
                 <select id="provinceDropdown">
                 </select> <br><br>
 
-
+                <div class="popup-contentScroll">
                 <div style="text-align: left; margin: 0 auto; width: 80%;">
                     <h4 id="typeprovince"></h4>
                     <p id="contentprovince"></p>
-
+                </div>
                 </div>
             </div>
         </div>
@@ -3686,10 +3633,12 @@ Yii::$app->set('db', [ //revert default connection
                         </select> <br><br>
                     </div>
 
+                    <div class="popup-contentScroll">
                     <div style="text-align: left; margin: 0 auto; width: 80%;">
                         <h4 id="type1"></h4>
                         <p id="hightype1"></p>
 
+                    </div>
                     </div>
                 </div>
             </div>
@@ -3708,10 +3657,11 @@ Yii::$app->set('db', [ //revert default connection
                     <select id="transactionTypeDropdown2">
                     </select> <br><br>
 
+                    <div class="popup-contentScroll">
                     <div style="text-align: left; margin: 0 auto; width: 80%;">
                         <h4 id="type2"></h4>
                         <p id="hightype2"></p>
-
+                    </div>
                     </div>
                 </div>
             </div>
@@ -3724,7 +3674,7 @@ Yii::$app->set('db', [ //revert default connection
                 <span class="close" id="close3">&times;</span>
 
                 <h2 id="header3"></h2>
-
+            
                 <div style="text-align: left; margin: 0 auto; width: 80%;">
                     <label for="transactionTypeDropdown3"></label>
                     <select id="transactionTypeDropdown3">
@@ -3734,10 +3684,11 @@ Yii::$app->set('db', [ //revert default connection
 
 
                     </select> <br><br>
-
+                    <div class="popup-contentScroll">
                     <div style="text-align: left; margin: 0 auto; width: 80%;">
                         <h4 id="type3"></h4>
                         <p id="hightype3"></p>
+                    </div>
 
                     </div>
                 </div>
@@ -3763,10 +3714,12 @@ Yii::$app->set('db', [ //revert default connection
                         <?php endforeach; ?>
                     </select>
                 </div>
+
+                <div class="popup-contentScroll">
                 <div style="text-align: left; margin: 0 auto; width: 80%;">
                     <h4 id="type"></h4>
                     <p id="hightype"></p>
-
+                </div>
                 </div>
             </div>
         </div>
