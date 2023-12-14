@@ -109,6 +109,13 @@ return [ //routes, if you cannot see your created route gamitin nyo this sa term
                 'chart/day' => 'std/chart/day',
                 'chart/month' => 'std/chart/month',
                 'chart/year' => 'std/chart/year',
+
+                'chart/set' => 'nmd/chart/set',
+                'chart/get' => 'nmd/chart/get',
+                
+                'chart/sets' => 'std/chart/sets',
+                'chart/gets' => 'std/chart/gets',
+                
                 // '<controller:[\w-]+>/<id:\d+>' => '<controller>/view',
                 // '<controller:[\w-]+>/<action:[\w-]+>/<id:\d+>' => '<controller>/<action>',
                 // '<controller:[\w\-]+>/<action:[\w\-]+>/<id:[\w]+>' => '<controller>/<action>',

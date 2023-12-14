@@ -373,18 +373,18 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
     }
 
     .popup {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width:100%;
-    height: 100%;
-    z-index: 2000;
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 2000;
     }
 
     .popup-content {
         width: 69%;
-        position    : absolute;
+        position: absolute;
         top: 50%;
         left: 50%;
         transform: translate(-40%, -46%);
@@ -395,13 +395,14 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
         box-shadow: 2px 2px 10px #888;
         border-radius: 15px;
         text-align: center;
-        overflow: hidden; 
+        overflow: hidden;
     }
 
     .popup-contentScroll {
         max-height: 35rem;
-        overflow-y: auto; 
+        overflow-y: auto;
     }
+
     .close {
         position: absolute;
         top: 10px;
@@ -450,9 +451,9 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
         transition: transform 1s ease;
     }
 
-        /* target form */
+    /* target form */
 
-        .form {
+    .form {
         display: flex;
         flex-wrap: wrap;
         justify-content: space-between;
@@ -1330,7 +1331,7 @@ try {
     $average = round($totalTransactions / $totalDays); // Calculate the average
 } catch (DivisionByZeroError $e) {
     $average = 0;
-} 
+}
 
 $currentDate = new \DateTime();
 
@@ -1361,13 +1362,13 @@ $targetIncome =
         (float)($targetIncomedata['quarter_4'] ?? 0),
     ];
 
-    Yii::$app->set('db', [ //revert default connection 
-        'class' => \yii\db\Connection::class,
-        'dsn' => 'mysql:host=localhost;dbname=visualight2user',
-        'username' => 'root',
-        'password' => '',
-        'charset' => 'utf8',
-    ]);
+Yii::$app->set('db', [ //revert default connection 
+    'class' => \yii\db\Connection::class,
+    'dsn' => 'mysql:host=localhost;dbname=visualight2user',
+    'username' => 'root',
+    'password' => '',
+    'charset' => 'utf8',
+]);
 ?>
 
 <div class="DailyTransaction">
@@ -1465,7 +1466,7 @@ $targetIncome =
     <div class="containers">
         <div class="dropdown_pdf_container">
             <div class="date_dropdown">
-            <div class="navigation">
+                <div class="navigation">
                     <label for="navigationDropdown">Navigate to:</label>
                     <select id="navigationDropdown" onchange="navigateToSection()">
                         <option value="transactionChart">Total Transaction</option>
@@ -1492,87 +1493,141 @@ $targetIncome =
                     <?php endif; ?>
 
                 </div>
-            </div>            
+            </div>
         </div>
     </div>
 </div>
 </div>
 <div class="popup" id="targetPopup">
-    
-<div class="popup-content">
-        <span class="close"  onclick="closeTargetPopup()">&times;</span> 
-       
-            <h2 style="color: #007bff; margin-bottom: 20px;">Set Targets</h2>
-            <div>
+
+    <div class="popup-content">
+        <span class="close" onclick="closeTargetPopup()">&times;</span>
+
+        <h2 style="color: #007bff; margin-bottom: 20px;">Set Targets</h2>
+        <div>
             <label for="InputYear">Input Year:</label>
-                    <input type="text" id="InputYear" name="InputYear" required> <br><br>
-            </div> 
-            <form class="form">
-    
-    <div class="column">
-        <h5>Target Transaction <br> <br></h5>
-        <label for="q1Income">Quarter 1:</label><br>
-        <label for="q2Income">Quarter 2:</label><br>
-        <label for="q1Income">Quarter 3:</label><br>
-        <label for="q2Income">Quarter 4: </label><br>
-    </div>
-    <div class="column">
-    <br><br><br>
-    <input type="text" id="q1transaction" name="q1Income" required><br>
-    <input type="text" id="q2transaction" name="q2Income" required><br>
-    <input type="text" id="q3transaction" name="q1Income" required><br>
-    <input type="text" id="q4transaction" name="q2Income" required> <br><br>
-                    </div>
-    <div class="column">
-        <h5>Target Income <br> <br></h5>
-        <label for="q1Income">Quarter 1:</label><br>
-        <label for="q2Income">Quarter 2:</label><br>
-        <label for="q1Income">Quarter 3:</label><br>
-        <label for="q2Income">Quarter 4:</label><br>
-    </div>
-    <div class="column">
-    <br><br><br>
-    <input type="text" id="q1Income" name="q1Income" required><br>
-    <input type="text" id="q2Income" name="q2Income" required><br>
-    <input type="text" id="q3Income" name="q1Income" required><br>
-    <input type="text" id="q4Income" name="q2Income" required><br>
-
-    </div>
-
-    <button type="button" onclick="submitTargets()">Submit</button>
-</form>
+            <input type="text" id="InputYear" name="InputYear" required> <br><br>
         </div>
+        <form class="form">
+
+            <div class="column">
+                <h5>Target Transaction <br> <br></h5>
+                <label for="q1Income">Quarter 1:</label><br>
+                <label for="q2Income">Quarter 2:</label><br>
+                <label for="q1Income">Quarter 3:</label><br>
+                <label for="q2Income">Quarter 4: </label><br>
+            </div>
+            <div class="column">
+                <br><br><br>
+                <input type="number" id="q1Transaction" name="q1Income" required><br>
+                <input type="number" id="q2Transaction" name="q2Income" required><br>
+                <input type="number" id="q3Transaction" name="q1Income" required><br>
+                <input type="number" id="q4Transaction" name="q2Income" required> <br><br>
+            </div>
+            <div class="column">
+                <h5>Target Income <br> <br></h5>
+                <label for="q1Income">Quarter 1:</label><br>
+                <label for="q2Income">Quarter 2:</label><br>
+                <label for="q1Income">Quarter 3:</label><br>
+                <label for="q2Income">Quarter 4:</label><br>
+            </div>
+            <div class="column">
+                <br><br><br>
+                <input type="number" id="q1Income" name="q1Income" required><br>
+                <input type="number" id="q2Income" name="q2Income" required><br>
+                <input type="number" id="q3Income" name="q1Income" required><br>
+                <input type="number" id="q4Income" name="q2Income" required><br>
+
+            </div>
+
+            <button type="button" onclick="submitTargets()">Submit</button>
+        </form>
+    </div>
 </div>
-        <script>
-        var targetPopup = document.getElementById('targetPopup');
+<script>
+    var targetPopup = document.getElementById('targetPopup');
 
-        function openTargetPopup() {
-            targetPopup.style.display = 'block';
+    function openTargetPopup() {
+
+        var d = new Date();
+        var dYear = d.getFullYear();
+        document.getElementById('InputYear').value = dYear;
+        targetPopup.style.display = 'block';
+
+        $.ajax({
+            url: '<?php echo Yii::$app->request->baseUrl . '/chart/gets' ?>', // from index to controller then action
+            method: 'POST',
+            dataType: 'json',
+            data: {
+                InputYear: dYear,
+            },
+            success: function(response) {
+                fillForm(response)
+            },
+            error: function(error) {
+                console.error(error);
+                console.log("=== day error");
+            }
+        });
+
+        function fillForm(response) {
+
+            document.getElementById('q1Transaction').value = response.transaction[0].quarter_1
+            document.getElementById('q2Transaction').value = response.transaction[0].quarter_2
+            document.getElementById('q3Transaction').value = response.transaction[0].quarter_3
+            document.getElementById('q4Transaction').value = response.transaction[0].quarter_4
+
+            document.getElementById('q1Income').value = response.income[0].quarter_1
+            document.getElementById('q2Income').value = response.income[0].quarter_2
+            document.getElementById('q3Income').value = response.income[0].quarter_3
+            document.getElementById('q4Income').value = response.income[0].quarter_4
+
         }
+    }
 
-        function closeTargetPopup() {
-            targetPopup.style.display = 'none';
-        }
+    function closeTargetPopup() {
+        targetPopup.style.display = 'none';
+    }
 
-        function submitTargets() {
-            // Get values from the form
-            var InputYear = document.getElementById('InputYear').value;
+    function submitTargets() {
 
-            var q1Income = document.getElementById('q1Income').value;
-            var q2Income = document.getElementById('q2Income').value;
-            var q3Income = document.getElementById('q3Income').value;
-            var q4Income = document.getElementById('q4Income').value;
+        // Get values from the form
+        var InputYear = document.getElementById('InputYear').value;
 
-            var q1Transactions = document.getElementById('q1Transactions').value;
-            var q2Transactions = document.getElementById('q2Transactions').value;
-            var q3Transactions = document.getElementById('q3Transactions').value;
-            var q4Transactions = document.getElementById('q4Transactions').value;
+        var q1Transaction = document.getElementById('q1Transaction').value;
+        var q2Transaction = document.getElementById('q2Transaction').value;
+        var q3Transaction = document.getElementById('q3Transaction').value;
+        var q4Transaction = document.getElementById('q4Transaction').value;
 
-           
-            closeTargetPopup();
-        }
-        </script>
-    </div></div>
+        var q1Income = document.getElementById('q1Income').value;
+        var q2Income = document.getElementById('q2Income').value;
+        var q3Income = document.getElementById('q3Income').value;
+        var q4Income = document.getElementById('q4Income').value;
+
+        //send data to controller, 
+        $.ajax({
+            url: '<?php echo Yii::$app->request->baseUrl . '/chart/sets' ?>', // from index to controller then action
+            method: 'POST',
+            dataType: 'json',
+            data: {
+                InputYear: InputYear,
+
+                q1Income: q1Income,
+                q2Income: q2Income,
+                q3Income: q3Income,
+                q4Income: q4Income,
+
+                q1Transaction: q1Transaction,
+                q2Transaction: q2Transaction,
+                q3Transaction: q3Transaction,
+                q4Transaction: q4Transaction
+            }
+        });
+        alert("Entry Successful");
+    }
+</script>
+</div>
+</div>
 
 <script>
     window.onscroll = function() {
@@ -1588,15 +1643,15 @@ $targetIncome =
         if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
             message.style.position = "fixed";
             message.style.zIndex = "1000";
-            message.style.top = "7rem"; 
+            message.style.top = "7rem";
             message.style.width = "70%";
             message.style.maxHeight = "7rem"; // Set a maximum height
             message.style.marginBottom = "-50%";
-            
+
             form.style.position = "fixed";
-            form.style.top = "1rem"; 
+            form.style.top = "1rem";
             form.style.width = "68%";
-            form.style.height = "5rem"; 
+            form.style.height = "5rem";
             form.style.maxHeight = "7rem"; // Set a maximum height
             form.style.marginBottom = "-50%";
             form.style.zIndex = "1000";
@@ -1606,7 +1661,7 @@ $targetIncome =
 
             toggleButton.style.display = "block";
             toggleButton.style.position = "fixed";
-            toggleButton.style.top = "1rem"; 
+            toggleButton.style.top = "1rem";
             toggleButton.style.right = "10rem"; // Adjust this???
             toggleButton.style.zIndex = "1500";
 
@@ -1616,16 +1671,16 @@ $targetIncome =
 
         } else {
             message.style.position = "static";
-            message.style.top = "0rem"; 
+            message.style.top = "0rem";
             message.style.width = "100%";
-            message.style.height = "auto"; 
-            message.style.marginBottom = "0"; 
+            message.style.height = "auto";
+            message.style.marginBottom = "0";
 
             form.style.position = "static";
-            form.style.top = "0rem"; 
+            form.style.top = "0rem";
             form.style.width = "100%";
-            form.style.height = "auto"; 
-            form.style.marginBottom = "0"; 
+            form.style.height = "auto";
+            form.style.marginBottom = "0";
             form.style.background = "none";
             form.style.boxShadow = "none";
             toggleButton.style.display = "none";
@@ -3069,10 +3124,10 @@ $targetIncome =
             </select> <br><br>
 
             <div class="popup-contentScroll">
-            <div style="text-align: left; margin: 0 auto; width: 80%;">
-                <h4 id="typeprovince"></h4>
-                <p id="contentprovince"></p>
-            </div>
+                <div style="text-align: left; margin: 0 auto; width: 80%;">
+                    <h4 id="typeprovince"></h4>
+                    <p id="contentprovince"></p>
+                </div>
             </div>
         </div>
     </div>
@@ -3421,11 +3476,11 @@ $targetIncome =
                 </div>
 
                 <div class="popup-contentScroll">
-                <div style="text-align: left; margin: 0 auto; width: 80%;">
-                    <h4 id="type1"></h4>
-                    <p id="hightype1"></p>
+                    <div style="text-align: left; margin: 0 auto; width: 80%;">
+                        <h4 id="type1"></h4>
+                        <p id="hightype1"></p>
 
-                </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -3445,11 +3500,11 @@ $targetIncome =
                 </select> <br><br>
 
                 <div class="popup-contentScroll">
-                <div style="text-align: left; margin: 0 auto; width: 80%;">
-                    <h4 id="type2"></h4>
-                    <p id="hightype2"></p>
+                    <div style="text-align: left; margin: 0 auto; width: 80%;">
+                        <h4 id="type2"></h4>
+                        <p id="hightype2"></p>
 
-                </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -3474,11 +3529,11 @@ $targetIncome =
                 </select> <br><br>
 
                 <div class="popup-contentScroll">
-                <div style="text-align: left; margin: 0 auto; width: 80%;">
-                    <h4 id="type3"></h4>
-                    <p id="hightype3"></p>
+                    <div style="text-align: left; margin: 0 auto; width: 80%;">
+                        <h4 id="type3"></h4>
+                        <p id="hightype3"></p>
 
-                </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -3505,11 +3560,11 @@ $targetIncome =
             </div>
 
             <div class="popup-contentScroll">
-            <div style="text-align: left; margin: 0 auto; width: 80%;">
-                <h4 id="type"></h4>
-                <p id="hightype"></p>
+                <div style="text-align: left; margin: 0 auto; width: 80%;">
+                    <h4 id="type"></h4>
+                    <p id="hightype"></p>
 
-            </div>
+                </div>
             </div>
         </div>
     </div>
@@ -4478,7 +4533,7 @@ $targetIncome =
                     let leastTransactions = Object.values(summary)
                         .filter(item => item.transaction_status === status && item.transaction_count === leastTransactionCount);
 
-                        let color;
+                    let color;
                     switch (status) {
                         case 'Paid':
                             color = 'Green';
@@ -4493,7 +4548,7 @@ $targetIncome =
                             color = 'Black'; // Default color if none of the statuses match
                     }
 
-                        let tableHeader = `<div><br><span style="color:${color}">${status}:</span>`;
+                    let tableHeader = `<div><br><span style="color:${color}">${status}:</span>`;
                     tableHeader += `<table border="1" style="width:98%;"><tr>
                           <th style="width: 30%; color:white; background: #0298e3; padding-left: 2%">Customer Type</th>
                           <th style="width: 30%; color:white; background: #0298e3; padding-left: 2%">Transaction Count</th>
@@ -5412,4 +5467,7 @@ $targetIncome =
         }, 12000);
 
     }
+    document.addEventListener('DOMContentLoaded', function() {
+        dateChange();
+    }, false);
 </script>

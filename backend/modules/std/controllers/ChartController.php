@@ -1018,6 +1018,143 @@ class ChartController extends BaseController
         }
     }
 
+    public function actionSets() //set target to nmdtarget_income and nmdtarget_income
+    {
+        Yii::$app->set('db', [ //reroute default connection 
+            'class' => \yii\db\Connection::class,
+            'dsn' => 'mysql:host=localhost;dbname=visualight2data',
+            'username' => 'root',
+            'password' => '',
+            'charset' => 'utf8',
+        ]);
+
+        if (Yii::$app->request->isAjax) { //target income
+
+            $InputYear = Yii::$app->request->post('InputYear');
+
+            $q1Income = Yii::$app->request->post('q1Income');
+            $q2Income = Yii::$app->request->post('q2Income');
+            $q3Income = Yii::$app->request->post('q3Income');
+            $q4Income = Yii::$app->request->post('q4Income');
+
+            $existingRecord = (new Query())
+                ->from('stdtarget_income')
+                ->where(['date' => $InputYear])
+                ->one();
+
+            if ($existingRecord) {
+                // replace
+                Yii::$app->db->createCommand()
+                    ->update('stdtarget_income', [
+                        'quarter_1' => $q1Income,
+                        'quarter_2' => $q2Income,
+                        'quarter_3' => $q3Income,
+                        'quarter_4' => $q4Income,
+                    ], ['date' => $InputYear])
+                    ->execute();
+            } else {
+                // create
+                Yii::$app->db->createCommand()
+                    ->insert('stdtarget_income', [
+                        'date' => $InputYear,
+                        'quarter_1' => $q1Income,
+                        'quarter_2' => $q2Income,
+                        'quarter_3' => $q3Income,
+                        'quarter_4' => $q4Income,
+                    ])
+                    ->execute();
+            }
+        }
+
+        if (Yii::$app->request->isAjax) { //target transaction
+
+            $InputYear = Yii::$app->request->post('InputYear');
+
+            $q1Transaction = Yii::$app->request->post('q1Transaction');
+            $q2Transaction = Yii::$app->request->post('q2Transaction');
+            $q3Transaction = Yii::$app->request->post('q3Transaction');
+            $q4Transaction = Yii::$app->request->post('q4Transaction');
+
+            $existingRecord = (new Query())
+                ->from('stdtarget_transaction')
+                ->where(['date' => $InputYear])
+                ->one();
+
+            if ($existingRecord) {
+                // replace
+                Yii::$app->db->createCommand()
+                    ->update('stdtarget_transaction', [
+                        'quarter_1' => $q1Transaction,
+                        'quarter_2' => $q2Transaction,
+                        'quarter_3' => $q3Transaction,
+                        'quarter_4' => $q4Transaction,
+                    ], ['date' => $InputYear])
+                    ->execute();
+            } else {
+                // create
+                Yii::$app->db->createCommand()
+                    ->insert('stdtarget_transaction', [
+                        'date' => $InputYear,
+                        'quarter_1' => $q1Transaction,
+                        'quarter_2' => $q2Transaction,
+                        'quarter_3' => $q3Transaction,
+                        'quarter_4' => $q4Transaction,
+                    ])
+                    ->execute();
+            }
+        }
+
+        Yii::$app->set('db', [ //revert default connection 
+            'class' => \yii\db\Connection::class,
+            'dsn' => 'mysql:host=localhost;dbname=visualight2user',
+            'username' => 'root',
+            'password' => '',
+            'charset' => 'utf8',
+        ]);
+    }
+
+    public function actionGets() //get target data from nmdtarget_income and nmdtarget_income
+    {
+        Yii::$app->set('db', [ //reroute default connection 
+            'class' => \yii\db\Connection::class,
+            'dsn' => 'mysql:host=localhost;dbname=visualight2data',
+            'username' => 'root',
+            'password' => '',
+            'charset' => 'utf8',
+        ]);
+
+        if (Yii::$app->request->isAjax) { //target income
+
+            $InputYear = Yii::$app->request->post('InputYear');
+
+            $transaction = (new Query()) //average income per division
+                ->select(['*'])
+                ->from('stdtarget_transaction')
+                ->where(['date' => [$InputYear]])
+                ->groupBy('date')
+                ->all();
+            $income = (new Query()) //average income per division
+                ->select(['*'])
+                ->from('stdtarget_income')
+                ->where(['date' => [$InputYear]])
+                ->groupBy('date')
+                ->all();
+                return json_encode([
+                    'transaction' => $transaction,
+                    'income' => $income,
+                ]);
+        }
+
+        Yii::$app->set('db', [ //revert default connection 
+            'class' => \yii\db\Connection::class,
+            'dsn' => 'mysql:host=localhost;dbname=visualight2user',
+            'username' => 'root',
+            'password' => '',
+            'charset' => 'utf8',
+        ]);
+    }
+
+
     public function actionIndex()
     {
         Yii::$app->set('db', [ //reroute default connection 
