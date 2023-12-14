@@ -28,7 +28,7 @@ use yii\widgets\ActiveForm;
 
     </style>
 
-<div class="terms-and-conditions" style = "background: white; padding: 1rem; border-radius: 20px; box-shadow: -4px 4px 8px rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.25);">
+<div class="terms-and-conditions" style = "background: white; padding: 1rem; margin-top: 2.5rem; border-radius: 20px; box-shadow: -4px 4px 8px rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.25);">
     <h2>Terms of Service</h2>
     <p>Please read the following terms and conditions carefully before using our web application. By accessing or using our web application, you agree to be bound by these terms and conditions. If you do not agree with any part of these terms and conditions, you should not use our web application.</p>
 
