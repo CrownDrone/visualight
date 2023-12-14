@@ -505,9 +505,10 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
     }
 
 
-
-
-
+    .AllPage {
+        padding-left: 7%;
+        padding-right: 7%
+    }
 
 
     /* responsiveness */
@@ -1371,6 +1372,7 @@ Yii::$app->set('db', [ //revert default connection
 ]);
 ?>
 
+<div class="AllPage">
 <div class="DailyTransaction">
     <br>
 
@@ -3437,6 +3439,8 @@ Yii::$app->set('db', [ //revert default connection
             </div>
         </div>
     </div>
+    <div id="TransactionsType"> 
+
     <div class="graph2" id="customertransaction" style="margin-top:20px">
         <div class="chart-container2">
             <p class="reportTitle" id="transactionStatuspopup">Transaction Status</p>
@@ -3458,6 +3462,8 @@ Yii::$app->set('db', [ //revert default connection
             <canvas id="customerType"></canvas>
         </div>
     </div>
+
+</div>
 
     <!-- Pop-up for transaction type -->
     <!-- Transaction status popup -->
@@ -5351,20 +5357,6 @@ Yii::$app->set('db', [ //revert default connection
         // myChart.config.data.datasets[3].data[0] = response.forMyChart[1].data;
         // myChart.update();
 
-        let fDate = new Date(document.getElementById('startDate').value);
-        let tDate = new Date(document.getElementById('endDate').value);
-
-        const timeDifference = tDate.getTime() - fDate.getTime();
-        const numberOfDays = Math.floor(timeDifference / (1000 * 3600 * 24)) + 1;
-        const digi = response.forMyChartAvgTransaction[0].data
-        const avgThis = Math.ceil(digi / numberOfDays);
-        console.log(`Math.ceil( AVG: ${response.forMyChartAvgTransaction[0].data} / ${numberOfDays} = ${avgThis} )`); // mema lang to di yan actual formula
-
-        document.getElementById('dailyTrans').innerHTML = digi;
-        document.getElementById('avgTrans').innerHTML = avgThis;
-        let number = parseInt(response.forMyChart[0].data)
-        let fixedNumber = Math.round(number * 100) / 100;
-        document.getElementById('dailyIncome').innerHTML = fixedNumber.toLocaleString("en-US");
     }
 </script>
 

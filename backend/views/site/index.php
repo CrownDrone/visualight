@@ -3593,7 +3593,7 @@ Yii::$app->set('db', [ //revert default connection
             </div>
         </div>
 
-        <div class="graph2">
+        <div class="graph2" id= "TransactionsType">
             <div id="transaction" style="margin-top:20px">
                 <div class="chart-container2">
                     <p class="reportTitle" id="transactionStatuspopup">Transaction Status</p>

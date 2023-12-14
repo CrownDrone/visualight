@@ -467,6 +467,11 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
         width: 20%;
     }
 
+    .AllPage {
+        padding-left: 7%;
+        padding-right: 7%
+    }
+
 
 
     /* background */
@@ -1366,6 +1371,7 @@ Yii::$app->set('db', [ //revert default connection
 ]);
 ?>
 
+<div class="AllPage">
 <div class="DailyTransaction">
     <br>
 
@@ -1467,7 +1473,7 @@ Yii::$app->set('db', [ //revert default connection
                         <option value="transactionChart">Total Transaction</option>
                         <option value="salesChart">Total Income</option>
                         <option value="Provinces">Customers per Province</option>
-                        <option value="transaction">Transactions</option>
+                        <option value="TransactionsType">Transaction Types</option>
                     </select>
 
                     <script>
@@ -1639,9 +1645,12 @@ Yii::$app->set('db', [ //revert default connection
         var form = document.getElementById("prediction-form");
         var toggleButton = document.getElementById("toggleButton");
         var message = document.getElementById("sending-email-message");
+        var dropdown = document.getElementById("navigation");
 
 
         if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+            
+
             message.style.position = "fixed";
             message.style.zIndex = "1000";
             message.style.top = "7rem";
@@ -3127,6 +3136,8 @@ Yii::$app->set('db', [ //revert default connection
 
 </div>
 
+</div>
+
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -3430,6 +3441,7 @@ Yii::$app->set('db', [ //revert default connection
         </div>
     </div>
 
+   <div id="TransactionsType" style="margin-left: 10%; margin-right: 10%;"> 
     <div class="graph2" id="transaction" style="margin-top:20px">
         <div class="chart-container2">
             <p class="reportTitle" id="transactionStatuspopup">Transaction Status</p>
@@ -3451,6 +3463,7 @@ Yii::$app->set('db', [ //revert default connection
             <canvas id="customerType"></canvas>
         </div>
     </div>
+</div> 
 
     <!-- Pop-up for transaction type -->
     <!-- Transaction status popup -->
@@ -3554,7 +3567,6 @@ Yii::$app->set('db', [ //revert default connection
             </div>
         </div>
     </div>
-
 </div>
 <!-- popup script for customers -->
 
