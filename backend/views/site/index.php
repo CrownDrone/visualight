@@ -1364,9 +1364,9 @@ Yii::$app->set('db', [ //revert default connection
                         <label for="date_type" class="date_type_label">
                             <strong>Date Filter:</strong></label>
                         <select id="date_type" class="dropdown-content" onchange="dateChange()">
-                            <option value="Days">Days</option>
-                            <option value="Months">Months</option>
-                            <option value="Years">Years</option>
+                            <option value="Days">Daily</option>
+                            <option value="Months">Monthly</option>
+                            <option value="Years">Yearly</option>
                         </select>
                     </form>
                 </div>

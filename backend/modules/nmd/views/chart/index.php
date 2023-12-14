@@ -468,8 +468,8 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
     }
 
     .AllPage {
-        padding-left: 7%;
-        padding-right: 7%
+        padding-left: 3%;
+        padding-right: 3%
     }
 
 
@@ -661,14 +661,14 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
         }
 
         .datePicker {
-            font-size: .8rem;
+            font-size: .5rem;
             text-align: left;
 
         }
 
         .datePicker_label {
             border-radius: 0.3rem;
-            width: 6rem;
+            width: 4rem;
             height: 1rem;
             text-align: center;
             font-size: .6rem;
@@ -1436,9 +1436,9 @@ Yii::$app->set('db', [ //revert default connection
                     <label for="date_type" class="date_type_label">
                         <strong>Date Filter:</strong></label>
                     <select name="date_type" id="date_type" class="dropdown-content" onchange="dateChange()">
-                        <option value="Days">Days</option>
-                        <option value="Months">Months</option>
-                        <option value="Years">Years</option>
+                        <option value="Days">Daily</option>
+                        <option value="Months">Monthly</option>
+                        <option value="Years">Yearly</option>
                     </select>
                 </form>
             </div>
@@ -1450,13 +1450,13 @@ Yii::$app->set('db', [ //revert default connection
     </div>
     <div class="containers">
         <!-- <form method="post" action="process_data.php"> Replace with your processing script -->
-        <div class="datePicker">
+        <div class="datePicker" >
             <label>From: </label>
-            <input type="date" id="startDate" name="startDate" class="datePicker_label" onchange="dateFilter(); updateChartContent()">
+            <input type="date" id="startDate" name="startDate" class="datePicker_label" style= "width:30%;" onchange="dateFilter(); updateChartContent()">
             <!-- </div>
     <div class="datePicker"> -->
             <label>&nbsp;&nbsp;&nbsp;&nbsp;To:</label>
-            <input type="date" id="endDate" name="endDate" class="datePicker_label" onchange="dateFilter(); updateChartContent()">
+            <input type="date" id="endDate" name="endDate" class="datePicker_label" style= "width:30%;" onchange="dateFilter(); updateChartContent()">
         </div>
         <!-- <input type="submit" value="Filter"> -->
         <!-- </form> -->

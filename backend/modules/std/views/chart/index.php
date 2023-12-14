@@ -295,7 +295,7 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
         padding: 0.2rem 1rem;
         /* Combined padding properties */
         color: white;
-        width: 8rem;
+        width: 9rem;
         /* Adjust alignment if needed */
     }
 
@@ -506,8 +506,8 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
 
 
     .AllPage {
-        padding-left: 7%;
-        padding-right: 7%
+        padding-left: 3%;
+        padding-right: 3%
     }
 
 
@@ -1437,9 +1437,9 @@ Yii::$app->set('db', [ //revert default connection
                     <label for="date_type" class="date_type_label">
                         <strong>Date Filter:</strong></label>
                     <select name="date_type" id="date_type" class="dropdown-content" onchange="dateChange()">
-                        <option value="Days">Days</option>
-                        <option value="Months">Months</option>
-                        <option value="Years">Years</option>
+                        <option value="Days">Daily</option>
+                        <option value="Months">Monthly</option>
+                        <option value="Years">Yearly</option>
                     </select>
                 </form>
             </div>
@@ -1453,11 +1453,11 @@ Yii::$app->set('db', [ //revert default connection
         <!-- <form method="post" action="process_data.php"> Replace with your processing script -->
         <div class="datePicker">
             <label>From: </label>
-            <input type="date" id="startDate" name="startDate" class="datePicker_label" onchange="dateFilter(); updateChartContent()">
+            <input type="date" id="startDate" name="startDate" class="datePicker_label"  style= "width:30%;" onchange="dateFilter(); updateChartContent()">
             <!-- </div>
     <div class="datePicker"> -->
             <label>&nbsp;&nbsp;&nbsp;&nbsp;To:</label>
-            <input type="date" id="endDate" name="endDate" class="datePicker_label" onchange="dateFilter(); updateChartContent()">
+            <input type="date" id="endDate" name="endDate" class="datePicker_label"  style= "width:30%;" onchange="dateFilter(); updateChartContent()">
         </div>
         <!-- <input type="submit" value="Filter"> -->
         <!-- </form> -->
@@ -1474,7 +1474,7 @@ Yii::$app->set('db', [ //revert default connection
                         <option value="transactionChart">Total Transaction</option>
                         <option value="salesChart">Total Income</option>
                         <option value="Provinces">Customers per Province</option>
-                        <option value="customertransaction">Transactions</option>
+                        <option value="customertransaction">Transactions Type</option>
                     </select>
 
                     <script>
