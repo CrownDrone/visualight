@@ -100,42 +100,7 @@ $currentIndex = Url::to(['']);
         width: 200px;
     }
 
-
-
-    @media (max-width: 600px) {
-        .average {
-            position: absolute;
-            top: 25%;
-            right: 10%;
-            box-sizing: border-box;
-            display: inline-block;
-        }
-
-        .aveTransactionDiv,
-        .aveSalesDiv {
-            width: 120px;
-            height: 120px;
-            border-radius: 20px;
-            padding: 15px;
-            margin-bottom: 15px;
-        }
-
-        #myChart {
-            position: absolute;
-            left: 50px;
-            top: 150px;
-            justify-content: space-between;
-        }
-
-        .asOne {
-            justify-content: space-between;
-            width: 60%;
-            right: 45%;
-        }
-    }
-
-
-
+    
     :root {
         font-size: 16px;
     }
@@ -342,8 +307,9 @@ $currentIndex = Url::to(['']);
 
     .stat {
         text-align: left;
-        font-size: 1.5rem;
-        font-weight: 400;
+        font-size: 1rem;
+        font-weight: 200;
+        font-style: normal;
         letter-spacing: .15rem;
         padding-left: 1rem;
         padding-top: 1rem;
@@ -532,6 +498,39 @@ $currentIndex = Url::to(['']);
 
     /* responsiveness */
 
+    @media (max-width: 600px) {
+        .average {
+            position: absolute;
+            top: 25%;
+            right: 10%;
+            box-sizing: border-box;
+            display: inline-block;
+        }
+
+        .aveTransactionDiv,
+        .aveSalesDiv {
+            width: 120px;
+            height: 120px;
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        #myChart {
+            position: absolute;
+            left: 50px;
+            top: 150px;
+            justify-content: space-between;
+        }
+
+        .asOne {
+            justify-content: space-between;
+            width: 15rem;
+            right: 5rem;
+            top: -10rem;
+        }
+    }
+
     /* daily transaction div */
     @media (max-width: 900px) {
         .deptransaction {
@@ -577,6 +576,7 @@ $currentIndex = Url::to(['']);
 
         .date_filter {
             height: 2.8125rem;
+            width: fit-content;
         }
 
         .containers {
@@ -626,12 +626,53 @@ $currentIndex = Url::to(['']);
             font-size: .6rem;
         }
 
+        .stat {
+            font-size: 1rem;
+            padding-left: 0rem;
+            padding-top: 0rem;
+            padding-bottom: 4rem;
+            margin-left: 2rem;
+            margin-top: 0rem;
+        }
+
+        .navigation-and-download {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-grow: 1;
+        }
+
+        .navigation {
+            font-size: 1rem;
+
+            margin-left: 0rem;
+            margin-top: 5rem;
+        }
+        .navigation label {
+            margin-right: 4px;
+            /* Adds space between the label and the dropdown */
+            white-space: nowrap;
+            /* Prevents the text from wrapping */
+        }
+        .navigation select {
+            padding: 4px;
+            font-size: 13px;
+            /* Adjust this to match other form elements if needed */
+            /* Additional styles if needed */
+        }
+
+        .prediction-form {
+            margin-top: 10rem;
+        }
+
+
     }
 
     /* phone ui */
     @media (max-width: 719px) {
         .date_filter {
             height: 7.8125rem;
+            width: 1rem;
 
         }
 
@@ -643,9 +684,11 @@ $currentIndex = Url::to(['']);
 
 
         .date_dropdown {
-            /* padding-right: 3rem; */
-            padding-top: .5rem;
-            padding-bottom: .5rem;
+            padding-top: 0rem;
+            padding-bottom: 0rem;
+            padding-right: 9rem;
+            margin-right: -30rem ;
+            margin-top: 5rem;
         }
 
         .date_type_label {
@@ -672,7 +715,8 @@ $currentIndex = Url::to(['']);
         .print_pdf_label {
             padding-left: 0rem;
             padding-right: 0rem;
-            width: 6rem;
+            width: 7rem;
+            margin-top: -10rem;
         }
 
         .datePicker {
@@ -687,6 +731,29 @@ $currentIndex = Url::to(['']);
             height: 1rem;
             text-align: center;
             font-size: .6rem;
+        }
+        .navigation-and-download {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-grow: 1;
+        }  
+        .navigation {
+            font-size: 1rem;
+            margin-left: 7rem;
+            margin-top: 10rem;
+        }
+        .navigation label {
+            margin-right: 4px;
+            /* Adds space between the label and the dropdown */
+            white-space: nowrap;
+            /* Prevents the text from wrapping */
+        }
+        .navigation select {
+            padding: 4px;
+            font-size: 13px;
+            /* Adjust this to match other form elements if needed */
+            /* Additional styles if needed */
         }
     }
 </style>
@@ -1313,10 +1380,10 @@ Yii::$app->set('db', [ //revert default connection
                 <p id="dailyTrans"><?= $todaymettrans ?></p>
                 <p id="valueIncrease">
                     <?php
-                    if ($metdailytransincrease > 1 && $todaymettrans!=0) {
+                    if ($metdailytransincrease > 1 && $todaymettrans != 0) {
                         echo "+";
                     } elseif ($metdailytransincrease < 1 && $todaymettrans!=0 ) {
-                        echo " ";
+                        echo "-";
                     }
                     elseif ($metdailytransincrease < 1 && $todaymettrans==0 ) {
                         echo " ";
@@ -1333,10 +1400,10 @@ Yii::$app->set('db', [ //revert default connection
                 <p id="dailyTrans"><?= $todaySandTtrans ?></p>
                 <p id="valueIncrease">
                     <?php
-                    if ($SandTdailytransincrease > 1 && $todaySandTtrans!=0) {
+                    if ($SandTdailytransincrease > 1 && $todaySandTtrans != 0) {
                         echo "+";
                     } elseif ($SandTdailytransincrease < 1 && $todaySandTtrans!=0 ) {
-                        echo " ";
+                        echo "-";
                     }
                     elseif ($SandTdailytransincrease < 1 && $todaySandTtrans==0 ) {
                         echo " ";
@@ -1374,7 +1441,6 @@ Yii::$app->set('db', [ //revert default connection
 
     <!-- Date Filter Div -->
     <div class="date_filter" id="prediction-form">
-
         <div class="containers">
             <div class="dropdown_pdf_container">
                 <div class="date_dropdown">
@@ -1700,21 +1766,21 @@ Yii::$app->set('db', [ //revert default connection
                 // Start date
                 if (startInput.length === 2) { // Format is 'mm-yyyy'
                     const [startYear, startMonth] = startInput.map(Number);
-                    startDate = new Date(startYear, startMonth - 1, 1); 
-                } else if (startInput.length === 1) {  
-                    startDate = new Date(startInput[0], 0, 1); 
+                    startDate = new Date(startYear, startMonth - 1, 1);
+                } else if (startInput.length === 1) {
+                    startDate = new Date(startInput[0], 0, 1);
                 } else {
-                    startDate = new Date(startDateElements.value);  
+                    startDate = new Date(startDateElements.value);
                 }
 
                 // End date
-                if (endInput.length === 2) { 
+                if (endInput.length === 2) {
                     const [endYear, endMonth] = endInput.map(Number);
-                    endDate = new Date(endYear, endMonth, 0); 
-                } else if (endInput.length === 1) { 
-                    endDate = new Date(endInput[0], 11, 31); 
+                    endDate = new Date(endYear, endMonth, 0);
+                } else if (endInput.length === 1) {
+                    endDate = new Date(endInput[0], 11, 31);
                 } else {
-                    endDate = new Date(endDateElements.value); 
+                    endDate = new Date(endDateElements.value);
                 }
 
                 // Filter technicalServicesData based on the date range
@@ -1729,7 +1795,7 @@ Yii::$app->set('db', [ //revert default connection
 
             function processFilteredData() {
                 const customerData = {};
-                
+
                 const filteredData = DatacustomerType.filter(
                     item => item.transaction_status === 'Paid' || item.transaction_status === 'Pending'
                 );
