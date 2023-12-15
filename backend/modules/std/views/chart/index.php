@@ -566,6 +566,21 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
         padding-right: 3%
     }
 
+    .target{
+        background: #0073e6;
+        color:white;
+        border-radius: 10px;
+        margin-left:2%;
+        border-color: #0073e6;
+        width:15%;
+
+    }
+
+    .target:hover {
+        background-color: #1a8cff;
+    }
+
+
 
     /* responsiveness */
 
