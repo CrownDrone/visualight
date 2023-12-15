@@ -340,6 +340,18 @@ $currentIndex = Url::to(['']);
         /* Additional styles if needed */
     }
 
+    .stat {
+        text-align: left;
+        font-size: 1.5rem;
+        font-weight: 400;
+        letter-spacing: .15rem;
+        padding-left: 1rem;
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+        margin-left: 3rem;
+        margin-top: -5rem;
+    }
+
     /* graph div */
     .graph {
         width: 100%;
@@ -1427,6 +1439,16 @@ Yii::$app->set('db', [ //revert default connection
                 <input type="date" id="endDate" class="datePicker_label" onchange="dateFilter(); updateProvince()">
             </div>
         </div>
+        <div class="stat">
+            <form>
+                <strong>Status:</strong></label>
+                <select id="date_type" class="dropdown-content" onchange="dateChange()">
+                    <option value="peyd">Paid</option>
+                    <option value="peding">Pending</option>
+                    <option value="hancel">Cancelled</option>
+                </select>
+            </form>
+        </div>
     </div>
 
 
@@ -1453,8 +1475,8 @@ Yii::$app->set('db', [ //revert default connection
 
                 form.style.position = "fixed";
                 form.style.top = "20px"; // Add "px" for the top value
-                form.style.width = "81%";
-                form.style.height = "10%";
+                form.style.width = "85rem";
+                form.style.height = "8rem";
                 form.style.zIndex = "1000";
                 form.style.background = "white";
                 form.style.boxShadow = "-4px 4px 8px rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.15)";
@@ -1478,7 +1500,7 @@ Yii::$app->set('db', [ //revert default connection
                 message.style.width = "100%";
                 message.style.height = "auto";
                 message.style.marginBottom = "0";
-                
+
                 form.style.position = "static";
                 form.style.top = "20px"; // Add "px" for the top value
                 form.style.width = "100%";
@@ -3617,7 +3639,7 @@ Yii::$app->set('db', [ //revert default connection
             </div>
         </div>
 
-        <div class="graph2" id= "TransactionsType">
+        <div class="graph2" id="TransactionsType">
             <div id="transaction" style="margin-top:20px">
                 <div class="chart-container2">
                     <p class="reportTitle" id="transactionStatuspopup">Transaction Status</p>
