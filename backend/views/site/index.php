@@ -2370,7 +2370,7 @@ Yii::$app->set('db', [ //revert default connection
                 popup.style.display = "block";
 
                 targetTransaction.innerHTML = "Target transaction for this quarter is <span style='color: blue;'>" + Target;
-                percentTransaction.innerHTML = "Achieved <span style='color: " + percentagecolor + ";'>" + percentage + "%</span> of target transaction.";
+                percentTransaction.innerHTML = "Achieved <span style='color: " + percentagecolor + ";'>" + Math.round(percentage) + "%</span> of target transaction.";
                 PopupHeader.innerHTML = "Total Transaction";
                 processFilteredData();
 
@@ -2516,7 +2516,7 @@ Yii::$app->set('db', [ //revert default connection
                 popup.style.display = "block";
 
                 targetTransaction.innerHTML = "Target income for this quarter is <span style='color: blue;'>" + Target;
-                percentTransaction.innerHTML = "Achieved <span style='color: " + percentagecolor + ";'>" + percentage + "%</span> of target income";
+                percentTransaction.innerHTML = "Achieved <span style='color: " + percentagecolor + ";'>" + Math.round(percentage) + "%</span> of target income";
                 PopupHeader.innerHTML = "Total Income";
                 processFilteredDataAmount();
 

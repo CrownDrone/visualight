@@ -1832,34 +1832,34 @@ Yii::$app->set('db', [ //revert default connection
             <p id="targetTransaction"></p>
 
 
-            <div style="text-align: right; margin: 0 auto; width: 80%;">
-                <ul style="padding-left: 500px;">
-                    <li>
-                        <p id="highest"></p>
-                    </li>
-                    <li>
-                        <p id="least"></p>
-                    </li>
-                    <li>
-                        <p id="mostTransactionType"></p>
-                    </li>
-                    <li>
-                        <p id="leastTransactionType"></p>
-                    </li>
-                    <li>
-                        <p id="mostCustomerType"></p>
-                    </li>
-                    <li>
-                        <p id="leastCustomerType"></p>
-                    </li>
-                    <li>
-                        <p id="mostCustomerProvince"></p>
-                    </li>
-                    <li>
-                        <p id="leastCustomerProvince"></p>
-                    </li>
-                </ul>
-            </div>
+            <div style="text-align: right; margin: 0 auto; width: 80%; max-height: 25rem; overflow-y: auto; ">
+                    <ul style="padding-left: 500px; ">
+                        <li>
+                            <p id="highest"></p>
+                        </li>
+                        <li>
+                            <p id="least"></p>
+                        </li>
+                        <li>
+                            <p id="mostTransactionType"></p>
+                        </li>
+                        <li>
+                            <p id="leastTransactionType"></p>
+                        </li>
+                        <li>
+                            <p id="mostCustomerType"></p>
+                        </li>
+                        <li>
+                            <p id="leastCustomerType"></p>
+                        </li>
+                        <li>
+                            <p id="mostCustomerProvince"></p>
+                        </li>
+                        <li>
+                            <p id="leastCustomerProvince"></p>
+                        </li>
+                    </ul>
+                </div>
         </div>
     </div>
 
@@ -2631,7 +2631,7 @@ Yii::$app->set('db', [ //revert default connection
             popup.style.display = "block";
 
             targetTransaction.innerHTML = "Target transaction for this quarter is <span style='color: blue;'>" + Target;
-            percentTransaction.innerHTML = "Achieved <span style='color: " + percentagecolor + ";'>" + percentage + "%</span> of target transaction.";
+            percentTransaction.innerHTML = "Achieved <span style='color: " + percentagecolor + ";'>" + Math.round(percentage) + "%</span> of target transaction.";
             PopupHeader.innerHTML = "Total Transaction";
             processFilteredData();
         });
@@ -2775,7 +2775,7 @@ Yii::$app->set('db', [ //revert default connection
             popup.style.display = "block";
 
             targetTransaction.innerHTML = "Target income for this quarter is <span style='color: blue;'>" + Target;
-            percentTransaction.innerHTML = "Achieved <span style='color: " + percentagecolor + ";'>" + percentage + "%</span> of target income";
+            percentTransaction.innerHTML = "Achieved <span style='color: " + percentagecolor + ";'>" + Math.round(percentage) + "%</span> of target income";
             PopupHeader.innerHTML = "Total Income";
             processFilteredDataAmount();
         });
