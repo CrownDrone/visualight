@@ -280,27 +280,83 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
     }
 
     .print_pdf {
-        /* Removed padding and right positioning */
-        display: flex;
-        /* Set to flex to use the flex properties */
+        padding-right: 1.7rem;
+        padding-top: 1rem;
+        padding-bottom: 1.1rem;
+        right: 5rem;
     }
 
     .print_pdf_label {
-        border-radius: 1rem;
+        /* border-radius: 1rem;
         background-color: #00BDB2;
         font-size: .7rem;
         text-align: center;
-        margin-top: 10%;
-        margin-left: 10%;
-        padding: 0.2rem 1rem;
-        /* Combined padding properties */
+        margin: auto;
+        padding: 0.2rem;
+        padding-left: 1rem;
+        padding-right: 1rem;
         color: white;
-        width: 9rem;
-        /* Adjust alignment if needed */
+        width: 7rem; */
+
+        border-radius: 1rem;
+        background-color: #00BDB2;
+        font-size: 0.7rem;
+        text-align: center;
+        margin: auto;
+        margin-left: 1rem;
+        /* This adds space to the left of the button */
+        padding: 0.2rem;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        color: white;
+        width: 8rem;
+        /* Add display: inline-block or block if the label is not within a flex container */
+        display: inline-block;
+    }
+
+    .datePicker_label {
+        border-radius: 0.5rem;
+        width: 8rem;
+        text-align: center;
+        font-size: 0.9rem;
+        margin-right: 10px;
     }
 
     .datePicker {
         text-align: right;
+    }
+
+    .navigation-and-download {
+        /* justify-content: space-between;
+        align-items: center; */
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-grow: 1;
+    }
+
+    .navigation {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        /* Aligns items to the start of the flex container */
+        margin-top: -5rem;
+        margin-left: 3rem;
+        /* Adds space to the right if needed */
+    }
+
+    .navigation label {
+        margin-right: 5px;
+        /* Adds space between the label and the dropdown */
+        white-space: nowrap;
+        /* Prevents the text from wrapping */
+    }
+
+    .navigation select {
+        padding: 5px;
+        font-size: 16px;
+        /* Adjust this to match other form elements if needed */
+        /* Additional styles if needed */
     }
 
     /* graph div */
@@ -1447,62 +1503,54 @@ Yii::$app->set('db', [ //revert default connection
                     <Button class="print_pdf_label" onclick="downloadPDF()"> Chart Download</Button>
                 </div>
 
-               
+
             </div>
         </div>
         <div class="containers">
-            <!-- <form method="post" action="process_data.php"> Replace with your processing script -->
             <div class="datePicker">
                 <label>From: </label>
                 <input type="date" id="startDate" name="startDate" class="datePicker_label" style="width:33%;" onchange="dateFilter(); updateChartContent()">
-                <!-- </div>
-    <div class="datePicker"> -->
+    
                 <label>&nbsp;&nbsp;&nbsp;&nbsp;To:</label>
                 <input type="date" id="endDate" name="endDate" class="datePicker_label" style="width:33%;" onchange="dateFilter(); updateChartContent()">
             </div>
-            <!-- <input type="submit" value="Filter"> -->
-            <!-- </form> -->
+            
         </div>
 
-        <div class="navigation" >
-                    <select id="navigationDropdown" onchange="navigateToSection()">
-                        <option value="transactionChart" id="navTo">Navigate to:</option>
-                        <option value="transactionChart">Total Transaction</option>
-                        <option value="salesChart">Total Income</option>
-                        <option value="Provinces">Customers per Province</option>
-                        <option value="customertransaction">Transactions Type</option>
-                    </select>
+        <div class="navigation">
+            <select id="navigationDropdown" onchange="navigateToSection()">
+                <option value="transactionChart" id="navTo">Navigate to:</option>
+                <option value="transactionChart">Total Transaction</option>
+                <option value="salesChart">Total Income</option>
+                <option value="Provinces">Customers per Province</option>
+                <option value="customertransaction">Transactions Type</option>
+            </select>
 
-                    <script>
-                        function navigateToSection() {
-                            var dropdown = document.getElementById("navigationDropdown");
+            <script>
+                function navigateToSection() {
+                    var dropdown = document.getElementById("navigationDropdown");
 
-                            if (dropdown.value === "transactionChart") {
-                                document.getElementById("navTo").innerHTML = "Navigate to:";
-                            } else {
-                                document.getElementById("navTo").innerHTML = "Go to Top";
-                            }
-                            console.log(document.getElementById("navTo").innerHTML)
-                            var selectedOption = dropdown.options[dropdown.selectedIndex].value;
+                    if (dropdown.value === "transactionChart") {
+                        document.getElementById("navTo").innerHTML = "Navigate to:";
+                    } else {
+                        document.getElementById("navTo").innerHTML = "Go to Top";
+                    }
+                    console.log(document.getElementById("navTo").innerHTML)
+                    var selectedOption = dropdown.options[dropdown.selectedIndex].value;
 
-                            // Scroll to the selected section
-                            var selectedSection = document.getElementById(selectedOption);
-                            selectedSection.scrollIntoView({
-                                behavior: "smooth",
-                                block: 'center',
-                            });
-                        }
-                    </script>
-                    <?php if (Yii::$app->user->can('ADMINISTRATOR') || Yii::$app->user->can('TOP MANAGEMENT')) : ?>
-                        <button onclick="openTargetPopup()" class="target">Set Targets</button>
-                    <?php endif; ?>
-
-                </div>
-
+                    // Scroll to the selected section
+                    var selectedSection = document.getElementById(selectedOption);
+                    selectedSection.scrollIntoView({
+                        behavior: "smooth",
+                        block: 'center',
+                    });
+                }
+            </script>
+            <?php if (Yii::$app->user->can('ADMINISTRATOR') || Yii::$app->user->can('TOP MANAGEMENT')) : ?>
+                <button onclick="openTargetPopup()" class="target">Set Targets</button>
+            <?php endif; ?>
+        </div>
     </div>
-
-           
-
 </div>
 <div class="popup" id="targetPopup">
 
@@ -1657,8 +1705,8 @@ Yii::$app->set('db', [ //revert default connection
             form.style.position = "fixed";
             form.style.top = "1rem";
             form.style.width = "68%";
-            form.style.height = "10rem";
-            form.style.maxHeight = "10rem"; // Set a maximum height
+            form.style.height = "7rem";
+            form.style.maxHeight = "7rem"; // Set a maximum height
             form.style.marginBottom = "-50%";
             form.style.zIndex = "1000";
             form.style.background = "white";
