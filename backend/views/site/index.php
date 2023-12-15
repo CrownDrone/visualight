@@ -1399,13 +1399,11 @@ Yii::$app->set('db', [ //revert default connection
                 <p id="dailyTrans"><?= $todaySandTtrans ?></p>
                 <p id="valueIncrease">
                     <?php
-                    if ($SandTdailytransincrease > 1 && $todaySandTtrans != 0) {
+                    if ($SandTdailytransincrease > 1 ) {
                         echo "+";
-                    } elseif ($SandTdailytransincrease < 1 && $todaySandTtrans != 0) {
+                    } elseif ($SandTdailytransincrease < 1 ) {
                         echo " ";
-                    } elseif ($SandTdailytransincrease < 1 && $todaySandTtrans == 0) {
-                        echo " ";
-                    }
+                    } 
                     echo $SandTdailytransincrease, "%";
                     ?>
                 </p>

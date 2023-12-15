@@ -1457,12 +1457,9 @@ Yii::$app->set('db', [ //revert default connection
             <p id="dailyTrans"><?= $todaymettrans ?></p>
                 <p id="valueIncrease">
                     <?php
-                    if ($metdailytransincrease > 1 && $todaymettrans!=0) {
+                    if ($metdailytransincrease > 1 ) {
                         echo "+";
-                    } elseif ($metdailytransincrease < 1 && $todaymettrans!=0 ) {
-                        echo " ";
-                    }
-                    elseif ($metdailytransincrease < 1 && $todaymettrans==0 ) {
+                    } elseif ($metdailytransincrease < 1 ) {
                         echo " ";
                     }
                     echo $metdailytransincrease, "%";
@@ -1477,12 +1474,9 @@ Yii::$app->set('db', [ //revert default connection
                 <p id="dailyIncome"><?= $SalesToday ?></p>
                 <p id="valueIncrease">
                     <?php
-                    if ($SalesIncreasePercent > 1 && $SalesToday!=0) {
+                    if ($SalesIncreasePercent > 1) {
                         echo "+";
-                    } elseif ($SalesIncreasePercent < 1 && $SalesToday!=0 ) {
-                        echo " ";
-                    }
-                    elseif ($SalesIncreasePercent < 1 && $SalesToday==0 ) {
+                    } elseif ($SalesIncreasePercent < 1 ) {
                         echo " ";
                     }
                     echo $SalesIncreasePercent, "%";
