@@ -2576,7 +2576,7 @@ Yii::$app->set('db', [ //revert default connection
             // Get the appropriate target value based on the current month
             const targetValue = getTargetValue(currentMonth);
 
-            // Function to determine the target value based on the current month
+            //determine the target value based on the current month
             function getTargetValue(month) {
                 if (month >= 0 && month < 3) {
                     return targetValues[0]; // January to March
@@ -2623,8 +2623,8 @@ Yii::$app->set('db', [ //revert default connection
 
             const speedometerDial = document.querySelector('.speedometer-dial');
 
-            // Get the total/target value (you can replace this with your actual value)
-            const totalValue = needle; // Change this value as needed
+            // Get the total/target value
+            const totalValue = needle; 
 
             // Function to update the background color based on the value
             function updateBackgroundColor(value) {
@@ -3468,7 +3468,8 @@ Yii::$app->set('db', [ //revert default connection
                     barPercentage: .80,
                     stacked: true,
                     ticks: {
-                        minRotation: 25
+                        minRotation: 25,
+                        textAlign: 'center',
                     },
                     grid: {
                         display: false,

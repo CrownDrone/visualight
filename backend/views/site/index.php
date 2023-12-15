@@ -3645,7 +3645,7 @@ Yii::$app->set('db', [ //revert default connection
                         barPercentage: .80,
                         stacked: true,
                         ticks: {
-                            minRotation: 25
+                            minRotation: 0,
                         },
                         grid: {
                             display: false,
