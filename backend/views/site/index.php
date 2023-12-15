@@ -1433,8 +1433,18 @@ Yii::$app->set('db', [ //revert default connection
         function scrollFunction() {
             var form = document.getElementById("prediction-form");
             var toggleButton = document.getElementById("toggleButton");
+            var message = document.getElementById("sending-email-message");
+
 
             if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+
+                message.style.position = "fixed";
+                message.style.zIndex = "1000";
+                message.style.top = "18rem";
+                message.style.width = "70%";
+                message.style.maxHeight = "7rem"; // Set a maximum height
+                message.style.marginBottom = "-50%";
+
                 form.style.position = "fixed";
                 form.style.top = "20px"; // Add "px" for the top value
                 form.style.width = "81%";
@@ -1443,6 +1453,7 @@ Yii::$app->set('db', [ //revert default connection
                 form.style.background = "white";
                 form.style.boxShadow = "-4px 4px 8px rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.15)";
                 form.style.left = "17%";
+
                 toggleButton.style.display = "block";
                 toggleButton.style.position = "fixed";
                 toggleButton.style.top = "10px"; // Add "px" for the top value
@@ -1455,6 +1466,13 @@ Yii::$app->set('db', [ //revert default connection
                 }
 
             } else {
+
+                message.style.position = "static";
+                message.style.top = "0rem";
+                message.style.width = "100%";
+                message.style.height = "auto";
+                message.style.marginBottom = "0";
+                
                 form.style.position = "static";
                 form.style.top = "20px"; // Add "px" for the top value
                 form.style.width = "100%";
