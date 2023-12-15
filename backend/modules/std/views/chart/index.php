@@ -361,8 +361,9 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
 
     .stat {
         text-align: right;
-        font-size: 1.5rem;
-        font-weight: 400;
+        font-size: 1rem;
+        font-style: bold;
+        font-weight: 500;
         letter-spacing: .15rem;
         padding-left: 1rem;
         padding-top: 2.8rem;

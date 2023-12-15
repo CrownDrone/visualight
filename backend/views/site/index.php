@@ -308,8 +308,8 @@ $currentIndex = Url::to(['']);
     .stat {
         text-align: left;
         font-size: 1rem;
-        font-weight: 200;
-        font-style: normal;
+        font-weight: 500;
+        font-style: bold;
         letter-spacing: .15rem;
         padding-left: 1rem;
         padding-top: 1rem;
