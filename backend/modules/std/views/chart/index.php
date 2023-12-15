@@ -1385,11 +1385,11 @@ if ($SalesToday == 0) {
     $SalesIncreasePercent = (($SalesToday - $SalesYesterday) / $SalesToday) * 100;
     $SalesIncreasePercent = number_format($SalesIncreasePercent);
     if ($SalesToday >= 1000 && $SalesToday <= 999999) {
-        $SalesToday = round(($SalesToday / 1000), 2) . 'K';
+        $SalesToday = round(($SalesToday / 1000), 1) . 'K';
     } else if ($SalesToday >= 1000000 && $SalesToday <= 999999999) {
-        $SalesToday = round(($SalesToday / 1000000), 2) . 'M';
+        $SalesToday = round(($SalesToday / 1000000), 1) . 'M';
     } else if ($SalesToday >= 1000000000) {
-        $SalesToday =  round(($SalesToday / 1000000000), 2) . 'B';
+        $SalesToday =  round(($SalesToday / 1000000000), 1) . 'B';
     }
 }
 
@@ -1469,7 +1469,7 @@ Yii::$app->set('db', [ //revert default connection
                     if ($metdailytransincrease > 1 && $todaymettrans!=0) {
                         echo "+";
                     } elseif ($metdailytransincrease < 1 && $todaymettrans!=0 ) {
-                        echo "-";
+                        echo " ";
                     }
                     elseif ($metdailytransincrease < 1 && $todaymettrans==0 ) {
                         echo " ";
@@ -1489,7 +1489,7 @@ Yii::$app->set('db', [ //revert default connection
                     if ($SalesIncreasePercent > 1 && $SalesToday!=0) {
                         echo "+";
                     } elseif ($SalesIncreasePercent < 1 && $SalesToday!=0 ) {
-                        echo "-";
+                        echo " ";
                     }
                     elseif ($SalesIncreasePercent < 1 && $SalesToday==0 ) {
                         echo " ";
@@ -2752,12 +2752,12 @@ Yii::$app->set('db', [ //revert default connection
             Total = Total.toFixed(2);
 
             const needle = (Total / Target);
-            let percentage = needle * 100;
-            if (percentage > 100) {
-                percentage = 100;
-            } else {
-                percentage = percentage;
-            }
+                let percentage = Math.round(needle * 100);
+                if (percentage > 100) {
+                    percentage = 100;
+                } else {
+                    percentage = percentage;
+                }
 
             speedometerReading.textContent = Number(Total).toLocaleString('en-US', {
                 minimumFractionDigits: 2,

@@ -1316,7 +1316,7 @@ Yii::$app->set('db', [ //revert default connection
                     if ($metdailytransincrease > 1 && $todaymettrans!=0) {
                         echo "+";
                     } elseif ($metdailytransincrease < 1 && $todaymettrans!=0 ) {
-                        echo "-";
+                        echo " ";
                     }
                     elseif ($metdailytransincrease < 1 && $todaymettrans==0 ) {
                         echo " ";
@@ -1336,7 +1336,7 @@ Yii::$app->set('db', [ //revert default connection
                     if ($SandTdailytransincrease > 1 && $todaySandTtrans!=0) {
                         echo "+";
                     } elseif ($SandTdailytransincrease < 1 && $todaySandTtrans!=0 ) {
-                        echo "-";
+                        echo " ";
                     }
                     elseif ($SandTdailytransincrease < 1 && $todaySandTtrans==0 ) {
                         echo " ";
@@ -2361,7 +2361,7 @@ Yii::$app->set('db', [ //revert default connection
                 }
 
                 const needle = (Total / Target);
-                let percentage = needle * 100;
+                let percentage = Math.round(needle * 100);
                 if (percentage > 100) {
                     percentage = 100;
                 } else {
