@@ -1712,7 +1712,7 @@ Yii::$app->set('db', [ //revert default connection
         if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
             message.style.position = "fixed";
             message.style.zIndex = "1000";
-            message.style.top = "7rem";
+            message.style.top = "18rem";
             message.style.width = "70%";
             message.style.maxHeight = "7rem"; // Set a maximum height
             message.style.marginBottom = "-50%";
