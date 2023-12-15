@@ -1579,10 +1579,11 @@ Yii::$app->set('db', [ //revert default connection
     <div class="stat">
         <form>
             <strong>Status</strong></label>
-            <select name="date_type" id="date_type" class="dropdown-content" onchange="dateChange()">
-                <option value="peyd">Paid</option>
-                <option value="peding">Pending</option>
-                <option value="hancel">Cancelled</option>
+            <select id="tType" class="dropdown-content" onchange="dateFilter()">
+                <option value="D">All</option>
+                <option value="A">Paid</option>
+                <option value="B">Pending</option>
+                <option value="C">Cancelled</option>
             </select>
         </form>
     </div>
@@ -3161,6 +3162,7 @@ Yii::$app->set('db', [ //revert default connection
                     <label for="chart_type" class="chart_type_label">
                         <strong>Select Region: </strong></label>
                     <select name="chart_type" id="chart_type" class="dropdown-content" onchange="dateFilter()">
+                        <option value="all">All Region</option>
                         <option value="ncr">National Capital Region</option>
                         <option value="region-1">Region-I</option>
                         <option value="region-2">Region-II</option>
@@ -3171,7 +3173,7 @@ Yii::$app->set('db', [ //revert default connection
                         <option value="car">Cordillera Administrative Region</option>
                         <option value="region-6">Region-VI</option>
                         <option value="region-7">Region-VII</option>
-                        <option value="region-8">Region-VII</option>
+                        <option value="region-8">Region-VIII</option>
                         <option value="region-9">Region-IX</option>
                         <option value="region-10">Region-X</option>
                         <option value="region-11">Region-XI</option>
@@ -3457,38 +3459,29 @@ Yii::$app->set('db', [ //revert default connection
     const constprovincesChart = new Chart(provincesChartContainer, {
         type: 'bar',
         options: {
-            barThickness: 25,
+            barThickness: 35,
             maintainAspectRatio: false,
             scales: {
-                y: {
-                    beginAtZero: true,
+                x: {
+                    categoryPercentage: .80,
+                    barPercentage: .80,
+                    stacked: true,
+                    ticks: {
+                        minRotation: 25
+                    },
                     grid: {
                         display: false,
                     },
                 },
-                x: {
-                    ticks: {
-                        display: false,
-                    },
+                y: {
                     grid: {
                         display: false,
-                    },
+                        drawOnChartArea: false
+                    }
                 },
             },
             ticks: {
                 precision: 0,
-            },
-            plugins: {
-                datalabels: {
-                    anchor: 'end',
-                    align: 'end',
-                    offset: 4,
-                    display: 'auto',
-                    color: 'white',
-                },
-                bgColor: {
-                    backgroundColor: 'white'
-                }
             },
         },
     });
@@ -5017,6 +5010,24 @@ Yii::$app->set('db', [ //revert default connection
             qVal = "B"
         }
 
+        var tTypeA = document.getElementById('tType');
+        var tTypeB = tTypeA.value;
+        var tStatus = ""
+
+        if (tTypeB === "A") { //for customer count/earned amount dropdown
+            //document.getElementById('Provincespopup').innerHTML = "" //bruv make sure to replace labels with either Paid, cancel or pending!!!
+            tStatus = 1
+        } else if (tTypeB === "B") {
+            //document.getElementById('').innerHTML = ""
+            tStatus = 2
+        } else if (tTypeB === "C") {
+            //document.getElementById('').innerHTML = ""
+            tStatus = 3
+        } else {
+            //document.getElementById('').innerHTML = ""
+            tStatus = 4
+        }
+
         if (selectedValue === 'Days') {
 
             var csrfToken = $('meta[name="csrf-token"]').attr('content');
@@ -5039,7 +5050,8 @@ Yii::$app->set('db', [ //revert default connection
                 data: {
                     fromDate: fDate,
                     toDate: tDate,
-                    qVal: qVal
+                    qVal: qVal,
+                    tStatus: tStatus,
                 },
                 success: function(response) {
                     updateChartContent(response);
@@ -5286,9 +5298,8 @@ Yii::$app->set('db', [ //revert default connection
             case "region-13":
                 selected_data = response.custmerPerProvinceXIII
                 break;
-            case "barm":
-                selected_data = response.custmerPerProvinceBARMM
-                break;
+            case "all":
+                selected_data = response.allProvince
         }
         // Remove old data
         constprovincesChart.data.labels = [];
@@ -5296,22 +5307,304 @@ Yii::$app->set('db', [ //revert default connection
             dataset.data = [];
         });
 
+
         //convert data into usable chartjs labels
         x = 0
-        while (selected_data[x] != null) {
-            var dataA = selected_data[x].label;
-            var dataB = selected_data[x].data;
-            var arrayZ = [{
-                backgroundColor: getRandomColor(),
-                data: {
-                    [dataA]: parseInt(dataB)
-                },
-                label: dataA
-            }]
-            for (var i = 0; i < arrayZ.length; i++) {
-                provinceData.push(arrayZ[i]);
+        if (selectedType === "all") {
+            console.log("All Province Contents: ");
+            console.log(response.allProvince);
+            while (selected_data[x] != null) {
+
+                if (selected_data[x].label === "Metro Manila") {
+                    var dataB = selected_data[x].data;
+                    var arrayZ = [{
+                        backgroundColor: getRandomColor(),
+                        data: {
+                            "NCR": parseInt(dataB)
+                        },
+                        label: "NCR"
+                    }]
+                    for (var i = 0; i < arrayZ.length; i++) {
+                        provinceData.push(arrayZ[i]);
+                    } //'Ilocos Norte', 'Ilocos Sur', 'La Union', 'Pangasinan'
+                } else if (selected_data[x].label === "Ilocos Norte" ||
+                    selected_data[x].label === "Ilocos Sur" ||
+                    selected_data[x].label === "La Union" ||
+                    selected_data[x].label === "Pangasinan") {
+                    var dataB = selected_data[x].data;
+                    var arrayZ = [{
+                        backgroundColor: getRandomColor(),
+                        data: {
+                            "Region-I": parseInt(dataB)
+                        },
+                        label: "Region-I"
+                    }]
+                    for (var i = 0; i < arrayZ.length; i++) {
+                        provinceData.push(arrayZ[i]);
+                    } //'Batanes', 'Cagayan', 'La Union', 'Isabela', 'Quirino', 'Nueva Vizcaya'
+                } else if (selected_data[x].label === "Batanes" ||
+                    selected_data[x].label === "Cagayan" ||
+                    selected_data[x].label === "La Union" ||
+                    selected_data[x].label === "Isabela" ||
+                    selected_data[x].label === "Quirino" ||
+                    selected_data[x].label === "Nueva Vizcaya") {
+                    var dataB = selected_data[x].data;
+                    var arrayZ = [{
+                        backgroundColor: getRandomColor(),
+                        data: {
+                            "Region-II": parseInt(dataB)
+                        },
+                        label: "Region-II"
+                    }]
+                    for (var i = 0; i < arrayZ.length; i++) {
+                        provinceData.push(arrayZ[i]);
+                    } //'Aurora', 'Bataan', 'Bulacan', 'Nueba Ecija', 'Pampanga', 'Tarlac', 'Zambales'
+                } else if (selected_data[x].label === "Aurora" ||
+                    selected_data[x].label === "Bataan" ||
+                    selected_data[x].label === "Bulacan" ||
+                    selected_data[x].label === "Nueba Ecija" ||
+                    selected_data[x].label === "Pampanga" ||
+                    selected_data[x].label === "Tarlac" ||
+                    selected_data[x].label === "Zambales") {
+                    var dataB = selected_data[x].data;
+                    var arrayZ = [{
+                        backgroundColor: getRandomColor(),
+                        data: {
+                            "Region-III": parseInt(dataB)
+                        },
+                        label: "Region-III"
+                    }]
+                    for (var i = 0; i < arrayZ.length; i++) {
+                        provinceData.push(arrayZ[i]);
+                    } //'Batangas', 'Cavite', 'Laguna', 'Quezon', 'Rizal'
+                } else if (selected_data[x].label === "Batangas" ||
+                    selected_data[x].label === "Cavite" ||
+                    selected_data[x].label === "Laguna" ||
+                    selected_data[x].label === "Quezon" ||
+                    selected_data[x].label === "Rizal") {
+                    var dataB = selected_data[x].data;
+                    var arrayZ = [{
+                        backgroundColor: getRandomColor(),
+                        data: {
+                            "Region-IV-A": parseInt(dataB)
+                        },
+                        label: "Region-IV-A"
+                    }]
+                    for (var i = 0; i < arrayZ.length; i++) {
+                        provinceData.push(arrayZ[i]);
+                    } //'Marinduque', 'Occidental Mindoro', 'Oriental Mindoro', 'Palawan', 'Romblon'
+                } else if (selected_data[x].label === "Marinduque" ||
+                    selected_data[x].label === "Occidental Mindoro" ||
+                    selected_data[x].label === "Oriental Mindoro" ||
+                    selected_data[x].label === "Palawan" ||
+                    selected_data[x].label === "Romblon") {
+                    var dataB = selected_data[x].data;
+                    var arrayZ = [{
+                        backgroundColor: getRandomColor(),
+                        data: {
+                            "MIMAROPA": parseInt(dataB)
+                        },
+                        label: "MIMAROPA"
+                    }]
+                    for (var i = 0; i < arrayZ.length; i++) {
+                        provinceData.push(arrayZ[i]);
+                    } //'Albay', 'Camarines Sur', 'Camarines Norte', 'Catanduanes', 'Masbate', 'Sorsogon'
+                } else if (selected_data[x].label === "Albay" ||
+                    selected_data[x].label === "Camarines Sur" ||
+                    selected_data[x].label === "Camarines Norte" ||
+                    selected_data[x].label === "Catanduanes" ||
+                    selected_data[x].label === "Masbate" ||
+                    selected_data[x].label === "Sorsogon") {
+                    var dataB = selected_data[x].data;
+                    var arrayZ = [{
+                        backgroundColor: getRandomColor(),
+                        data: {
+                            "Region-V": parseInt(dataB)
+                        },
+                        label: "Region-V"
+                    }]
+                    for (var i = 0; i < arrayZ.length; i++) {
+                        provinceData.push(arrayZ[i]);
+                    } //'Abra', 'Apayao', 'Benguet', 'Ifugao', 'Kalinga', 'Mountain Province'
+                } else if (selected_data[x].label === "Abra" ||
+                    selected_data[x].label === "Apayao" ||
+                    selected_data[x].label === "Benguet" ||
+                    selected_data[x].label === "Ifugao" ||
+                    selected_data[x].label === "Kalinga" ||
+                    selected_data[x].label === "Mountain Province") {
+                    var dataB = selected_data[x].data;
+                    var arrayZ = [{
+                        backgroundColor: getRandomColor(),
+                        data: {
+                            "CAR": parseInt(dataB)
+                        },
+                        label: "CAR"
+                    }]
+                    for (var i = 0; i < arrayZ.length; i++) {
+                        provinceData.push(arrayZ[i]);
+                    } //'Aklan', 'Antique', 'Capiz', 'Guimaras', 'Iloilo', 'Negros Occidental'
+                } else if (selected_data[x].label === "Aklan" ||
+                    selected_data[x].label === "Antique" ||
+                    selected_data[x].label === "Capiz" ||
+                    selected_data[x].label === "Guimaras" ||
+                    selected_data[x].label === "Iloilo" ||
+                    selected_data[x].label === "Negros Occidental") {
+                    var dataB = selected_data[x].data;
+                    var arrayZ = [{
+                        backgroundColor: getRandomColor(),
+                        data: {
+                            "Region-VI": parseInt(dataB)
+                        },
+                        label: "Region-VI"
+                    }]
+                    for (var i = 0; i < arrayZ.length; i++) {
+                        provinceData.push(arrayZ[i]);
+                    } //'Bohol', 'Cebu', 'Negros Oriental', 'Siquijor'
+                } else if (selected_data[x].label === "Bohol" ||
+                    selected_data[x].label === "Cebu" ||
+                    selected_data[x].label === "Negros Oriental" ||
+                    selected_data[x].label === "Siquijor") {
+                    var dataB = selected_data[x].data;
+                    var arrayZ = [{
+                        backgroundColor: getRandomColor(),
+                        data: {
+                            "Region-VII": parseInt(dataB)
+                        },
+                        label: "Region-VII"
+                    }]
+                    for (var i = 0; i < arrayZ.length; i++) {
+                        provinceData.push(arrayZ[i]);
+                    } //'Biliran', 'Eastern Samar', 'Leyte', 'Western Samar', 'Samar', 'Southern Leyte'
+                } else if (selected_data[x].label === "Biliran" ||
+                    selected_data[x].label === "Eastern Samar" ||
+                    selected_data[x].label === "Leyte" ||
+                    selected_data[x].label === "Western Samar" ||
+                    selected_data[x].label === "Samar" ||
+                    selected_data[x].label === "Southern Leyte") {
+                    var dataB = selected_data[x].data;
+                    var arrayZ = [{
+                        backgroundColor: getRandomColor(),
+                        data: {
+                            "Region-VIII": parseInt(dataB)
+                        },
+                        label: "Region-VIII"
+                    }]
+                    for (var i = 0; i < arrayZ.length; i++) {
+                        provinceData.push(arrayZ[i]);
+                    } //'Zamboanga del Sur', 'Zamboanga del Norte', 'Zamboanga Sibugay'
+                } else if (selected_data[x].label === "Zamboanga del Sur" ||
+                    selected_data[x].label === "Zamboanga del Norte" ||
+                    selected_data[x].label === "Zamboanga Sibugay") {
+                    var dataB = selected_data[x].data;
+                    var arrayZ = [{
+                        backgroundColor: getRandomColor(),
+                        data: {
+                            "Region-IX": parseInt(dataB)
+                        },
+                        label: "Region-IX"
+                    }]
+                    for (var i = 0; i < arrayZ.length; i++) {
+                        provinceData.push(arrayZ[i]);
+                    } //'Bukidnon', 'Camiguin', 'Lanao del Norte', 'Misamis Oriental', 'Misamis Occidental'
+                } else if (selected_data[x].label === "Bukidnon" ||
+                    selected_data[x].label === "Camiguin" ||
+                    selected_data[x].label === "Lanao del Norte" ||
+                    selected_data[x].label === "Misamis Oriental" ||
+                    selected_data[x].label === "Misamis Occidental") {
+                    var dataB = selected_data[x].data;
+                    var arrayZ = [{
+                        backgroundColor: getRandomColor(),
+                        data: {
+                            "Region-X": parseInt(dataB)
+                        },
+                        label: "Region-X"
+                    }]
+                    for (var i = 0; i < arrayZ.length; i++) {
+                        provinceData.push(arrayZ[i]);
+                    } //'Davao de Oro', 'Davao del Norte', 'Davao del Sur', 'Davao Oriental', 'Davao Occidental'
+                } else if (selected_data[x].label === "Davao de Oro" ||
+                    selected_data[x].label === "Davao del Norte" ||
+                    selected_data[x].label === "Davao del Sur" ||
+                    selected_data[x].label === "Davao Oriental" ||
+                    selected_data[x].label === "Davao Occidental") {
+                    var dataB = selected_data[x].data;
+                    var arrayZ = [{
+                        backgroundColor: getRandomColor(),
+                        data: {
+                            "Region-XI": parseInt(dataB)
+                        },
+                        label: "Region-XI"
+                    }]
+                    for (var i = 0; i < arrayZ.length; i++) {
+                        provinceData.push(arrayZ[i]);
+                    } //'Cotabato', 'Sarangani', 'South Cotabato', 'Sultan Kudarat'
+                } else if (selected_data[x].label === "Cotabato" ||
+                    selected_data[x].label === "Sarangani" ||
+                    selected_data[x].label === "South Cotabato" ||
+                    selected_data[x].label === "Sultan Kudarat") {
+                    var dataB = selected_data[x].data;
+                    var arrayZ = [{
+                        backgroundColor: getRandomColor(),
+                        data: {
+                            "Region-XII": parseInt(dataB)
+                        },
+                        label: "Region-XII"
+                    }]
+                    for (var i = 0; i < arrayZ.length; i++) {
+                        provinceData.push(arrayZ[i]);
+                    } //'Agusan del Norte', 'Agusan del Sur', 'Dinagat Islands', 'Surigao del Norte', 'Surigao del Sur'
+                } else if (selected_data[x].label === "Agusan del Norte" ||
+                    selected_data[x].label === "Agusan del Sur" ||
+                    selected_data[x].label === "Dinagat Islands" ||
+                    selected_data[x].label === "Surigao del Norte" ||
+                    selected_data[x].label === "Surigao del Sur") {
+                    var dataB = selected_data[x].data;
+                    var arrayZ = [{
+                        backgroundColor: getRandomColor(),
+                        data: {
+                            "Region-XIII": parseInt(dataB)
+                        },
+                        label: "Region-XIII"
+                    }]
+                    for (var i = 0; i < arrayZ.length; i++) {
+                        provinceData.push(arrayZ[i]);
+                    } //'Basilan', 'Lanao del Sur', 'Maguindanao del Norte', 'Sulu', 'Maguindanao del Sur', 'Tawi-Tawi'
+                } else if (selected_data[x].label === "Basilan" ||
+                    selected_data[x].label === "Lanao del Sur" ||
+                    selected_data[x].label === "Maguindanao del Norte" ||
+                    selected_data[x].label === "Sulu" ||
+                    selected_data[x].label === "Maguindanao del Sur" ||
+                    selected_data[x].label === "Tawi-Tawi") {
+                    var dataB = selected_data[x].data;
+                    var arrayZ = [{
+                        backgroundColor: getRandomColor(),
+                        data: {
+                            "Bangsamoro": parseInt(dataB)
+                        },
+                        label: "Bangsamoro"
+                    }]
+                    for (var i = 0; i < arrayZ.length; i++) {
+                        provinceData.push(arrayZ[i]);
+                    }
+                }
+                x++
             }
-            x++
+        } else {
+            while (selected_data[x] != null) {
+                var dataA = selected_data[x].label;
+                var dataB = selected_data[x].data;
+                var arrayZ = [{
+                    backgroundColor: getRandomColor(),
+                    data: {
+                        [dataA]: parseInt(dataB)
+                    },
+                    label: dataA
+                }]
+                for (var i = 0; i < arrayZ.length; i++) {
+                    provinceData.push(arrayZ[i]);
+                }
+                x++
+            }
         }
 
         constprovincesChart.data.datasets = provinceData;

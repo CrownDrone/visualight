@@ -1382,10 +1382,9 @@ Yii::$app->set('db', [ //revert default connection
                     <?php
                     if ($metdailytransincrease > 1 && $todaymettrans != 0) {
                         echo "+";
-                    } elseif ($metdailytransincrease < 1 && $todaymettrans!=0 ) {
-                        echo "-";
-                    }
-                    elseif ($metdailytransincrease < 1 && $todaymettrans==0 ) {
+                    } elseif ($metdailytransincrease < 1 && $todaymettrans != 0) {
+                        echo " ";
+                    } elseif ($metdailytransincrease < 1 && $todaymettrans == 0) {
                         echo " ";
                     }
                     echo $metdailytransincrease, "%";
@@ -1402,10 +1401,9 @@ Yii::$app->set('db', [ //revert default connection
                     <?php
                     if ($SandTdailytransincrease > 1 && $todaySandTtrans != 0) {
                         echo "+";
-                    } elseif ($SandTdailytransincrease < 1 && $todaySandTtrans!=0 ) {
-                        echo "-";
-                    }
-                    elseif ($SandTdailytransincrease < 1 && $todaySandTtrans==0 ) {
+                    } elseif ($SandTdailytransincrease < 1 && $todaySandTtrans != 0) {
+                        echo " ";
+                    } elseif ($SandTdailytransincrease < 1 && $todaySandTtrans == 0) {
                         echo " ";
                     }
                     echo $SandTdailytransincrease, "%";
@@ -1508,10 +1506,11 @@ Yii::$app->set('db', [ //revert default connection
         <div class="stat">
             <form>
                 <strong>Status:</strong></label>
-                <select id="date_type" class="dropdown-content" onchange="dateChange()">
-                    <option value="peyd">Paid</option>
-                    <option value="peding">Pending</option>
-                    <option value="hancel">Cancelled</option>
+                <select id="tType" class="dropdown-content" onchange="dateFilter()">
+                    <option value="D">All</option>
+                    <option value="A">Paid</option>
+                    <option value="B">Pending</option>
+                    <option value="C">Cancelled</option>
                 </select>
             </form>
         </div>
@@ -2735,6 +2734,7 @@ Yii::$app->set('db', [ //revert default connection
                 },
                 options: {
                     maintainAspectRatio: false,
+                    responsive: true,
                     scales: {
                         y: {
                             beginAtZero: true,
@@ -3339,6 +3339,7 @@ Yii::$app->set('db', [ //revert default connection
                         <label for="chart_type" class="chart_type_label">
                             <strong>Select Region: </strong></label>
                         <select name="chart_type" id="chart_type" class="dropdown-content" onchange="dateFilter()">
+                            <option value="all">All Region</option>
                             <option value="ncr">NCR</option>
                             <option value="region-1">Region-I</option>
                             <option value="region-2">Region-II</option>
@@ -3638,38 +3639,29 @@ Yii::$app->set('db', [ //revert default connection
         const constprovincesChart = new Chart(provincesChartContainer, {
             type: 'bar',
             options: {
-                barThickness: 25,
+                barThickness: 35,
                 maintainAspectRatio: false,
                 scales: {
-                    y: {
-                        beginAtZero: true,
+                    x: {
+                        categoryPercentage: .80,
+                        barPercentage: .80,
+                        stacked: true,
+                        ticks: {
+                            minRotation: 25
+                        },
                         grid: {
                             display: false,
                         },
                     },
-                    x: {
-                        ticks: {
-                            display: false,
-                        },
+                    y: {
                         grid: {
                             display: false,
-                        },
+                            drawOnChartArea: false
+                        }
                     },
                 },
                 ticks: {
                     precision: 0,
-                },
-                plugins: {
-                    datalabels: {
-                        anchor: 'end',
-                        align: 'end',
-                        offset: 4,
-                        display: 'auto',
-                        color: 'white',
-                    },
-                    bgColor: {
-                        backgroundColor: 'white'
-                    }
                 },
             },
         });
@@ -5287,7 +5279,7 @@ Yii::$app->set('db', [ //revert default connection
         var ciVal = customers_income.value;
         var qVal = ""
 
-        if (ciVal === "customer") {
+        if (ciVal === "customer") { //for customer count/earned amount dropdown
             document.getElementById('Provincespopup').innerHTML = "Customers per Region"
             qVal = "A"
         } else {
@@ -5295,17 +5287,36 @@ Yii::$app->set('db', [ //revert default connection
             qVal = "B"
         }
 
+        var tTypeA = document.getElementById('tType');
+        var tTypeB = tTypeA.value;
+        var tStatus = ""
+
+        if (tTypeB === "A") { //for customer count/earned amount dropdown
+            //document.getElementById('Provincespopup').innerHTML = "" //bruv make sure to replace labels with either Paid, cancel or pending!!!
+            tStatus = 1
+        } else if (tTypeB === "B") {
+            //document.getElementById('').innerHTML = ""
+            tStatus = 2
+        } else if (tTypeB === "C") {
+            //document.getElementById('').innerHTML = ""
+            tStatus = 3
+        } else {
+            //document.getElementById('').innerHTML = ""
+            tStatus = 4
+        }
+
+        var csrfToken = $('meta[name="csrf-token"]').attr('content');
+
+        //get the contents of the html datepicker
+        const fromDateValue = document.getElementById('startDate');
+        const toDatevalue = document.getElementById('endDate');
+
+        const fDate = fromDateValue.value;
+        const tDate = toDatevalue.value;
 
         if (selectedValue === 'Days') {
 
-            var csrfToken = $('meta[name="csrf-token"]').attr('content');
 
-            //get the contents of the html datepicker
-            const fromDateValue = document.getElementById('startDate');
-            const toDatevalue = document.getElementById('endDate');
-
-            const fDate = fromDateValue.value;
-            const tDate = toDatevalue.value;
 
             //send datepicker data to controller, 
             $.ajax({
@@ -5318,7 +5329,8 @@ Yii::$app->set('db', [ //revert default connection
                 data: {
                     fromDate: fDate,
                     toDate: tDate,
-                    qVal: qVal
+                    qVal: qVal,
+                    tStatus: tStatus,
                 },
                 success: function(response) {
                     //assign new value from controller to variables
@@ -5329,205 +5341,7 @@ Yii::$app->set('db', [ //revert default connection
                 }
             });
 
-
-            const dateList = [...global_label_day];
-
-            //get the index of the labels array based on the value of datepicker
-            //both array value and date picker value must be matching cAsE sEnSiTiVe to give a result
-            const sunIndex = dateList.indexOf(fromDateValue.value);
-            const satIndex = dateList.indexOf(toDatevalue.value);
-
-            //slice the labels array based on the sunIndex and satIndex
-            const new_dayList = dateList.slice(sunIndex, satIndex + 1);
-
-            totaltransactionChartB.config.data.labels = new_dayList; //assign new label to the chart
-            transactionChartB.config.data.labels = new_dayList;
-            totalsalesChartB.config.data.labels = new_dayList;
-            salesChart.config.data.labels = new_dayList;
-
-            //new json for new dataset iterates through all object "data"
-            //if date is not accurate remove the -7 on both sunIndex and satIndex, some machines are retarded
-            //------------------------------------------------1st
-            newTotalTransaction.datasets.forEach(function(datasets) {
-                var originalDataLog = datasets.data;
-                var newDataLog = {};
-                var keys = Object.keys(originalDataLog);
-                for (var i = sunIndex - 7; i <= satIndex - 7 && i < keys.length; i++) { //fetch all values based from sunIndex to satIndex
-                    var key = keys[i];
-                    newDataLog[key] = originalDataLog[key];
-                }
-                datasets.data = newDataLog;
-            });
-            totaltransactionChartB.config.data.datasets = newTotalTransaction.datasets; //replace the current chart dataset
-            //now repeating the process for the other chart---2nd
-            newTotalSum.datasets.forEach(function(datasets) {
-                var originalDataLog = datasets.data;
-                var newDataLog = {};
-                var keys = Object.keys(originalDataLog);
-                for (var i = sunIndex - 7; i <= satIndex - 7 && i < keys.length; i++) { //fetch all values based from sunIndex to satIndex
-                    var key = keys[i];
-                    newDataLog[key] = originalDataLog[key];
-                }
-                datasets.data = newDataLog;
-            });
-            totalsalesChartB.config.data.datasets = newTotalSum.datasets
-            //------------------------------------------------3rd
-
-            new_divData.datasets.forEach(function(dataset) {
-                dataset.data = Object.keys(dataset.data)
-                    .filter((date) => date >= fromDateValue.value && date <= toDatevalue.value)
-                    .reduce((obj, date) => {
-                        obj[date] = dataset.data[date];
-                        return obj;
-                    }, {});
-            });
-            transactionChartB.config.data.datasets = new_divData.datasets;
-            //------------------------------------------------4th
-
-            newSoldPerDivs.datasets.forEach(function(dataset) {
-                dataset.data = Object.keys(dataset.data)
-                    .filter((date) => date >= fromDateValue.value && date <= toDatevalue.value)
-                    .reduce((obj, date) => {
-                        obj[date] = dataset.data[date];
-                        return obj;
-                    }, {});
-            });
-            salesChart.config.data.datasets = newSoldPerDivs.datasets;
-
-            totaltransactionChartB.update(); //udpate the chart
-            totalsalesChartB.update();
-            transactionChartB.update();
-            salesChart.update();
-
-            newTotalTransaction = JSON.parse(JSON.stringify(cacheTotalTransaction)); //reverts the value of the newTotalTransaction prior to modification
-            newTotalSum = JSON.parse(JSON.stringify(cacheTotalSum));
-            new_divData = JSON.parse(JSON.stringify(cachePerDivData));
-            newSoldPerDivs = JSON.parse(JSON.stringify(cacheSoldPerDivs));
-
         } else if (selectedValue === 'Months') {
-
-            var monthtotalTransaction = (<?= json_encode($monthqueryAllDate) ?>); // dashboard total transaction
-            var monthLabel = (<?= json_encode($monthLabel) ?>);
-            //preparing array to store the retrieved data
-            var monthttotalTransactionDataset = {
-                datasets: [{
-                    backgroundColor: "#274690",
-                    label: 'Total Transaction',
-                    data: {}
-                }, ],
-            }
-
-            var x = 0;
-
-            function cusmo() {
-                while (monthtotalTransaction[x] != null) {
-                    var samp = monthtotalTransaction[x].labels;
-                    var sampo = parseInt(monthtotalTransaction[x].datasets);
-                    if (monthtotalTransaction[x].label == "Total") {
-                        monthttotalTransactionDataset.datasets[0].data[samp] = sampo;
-                    }
-                    x++
-                }
-            }
-            cusmo();
-            x = 0;
-
-
-            var global_label_month = []; //for months
-
-            while (monthLabel[x] != null) {
-                var lab = monthLabel[x].labels;
-                global_label_month[x] = lab;
-                x++;
-            }
-            x = 0;
-
-            var monthtotal_Income = (<?= json_encode($monthqueryTotalSale) ?>);
-
-            var monthtotalSum = {
-                datasets: [{
-                    backgroundColor: "#fccb06",
-                    borderColor: "#fccb06",
-                    label: 'Total Income',
-                    data: {}
-                }]
-            }
-
-            function calInc() {
-                while (monthtotal_Income[x] != null) {
-                    var samp = monthtotal_Income[x].labels;
-                    var sampo = parseInt(monthtotal_Income[x].datasets);
-                    if (monthtotal_Income[x].label === "Total") {
-                        monthtotalSum.datasets[0].data[samp] = sampo;
-                    }
-                    x++
-                }
-            }
-            calInc();
-            x = 0;
-
-            var monthtPerDivData = (<?= json_encode($monthqueryAllDate) ?>); //retrieve data from controller
-            var monthperDivData = { //prepare array for translated data
-                datasets: [{
-                        backgroundColor: "#06d6a0",
-                        label: 'National Metrology Division',
-                        data: {}
-                    },
-                    {
-                        backgroundColor: "#0073e6",
-                        label: 'Standards and Testing Division',
-                        data: {}
-                    }
-                ],
-            }
-            while (monthtPerDivData[x] != null) {
-                var samp = monthtPerDivData[x].labels;
-                var sampo = parseInt(monthtPerDivData[x].datasets);
-                if (monthtPerDivData[x].label == 'National Metrology Division') {
-                    monthperDivData.datasets[0].data[samp] = sampo;
-                } else if (monthtPerDivData[x].label == 'Standards and Testing Division') {
-                    monthperDivData.datasets[1].data[samp] = sampo;
-                }
-                x++
-            }
-            x = 0;
-
-            var monthsoldPerDivs = { //prepare array for translated data
-                datasets: [{
-                        backgroundColor: "#06d6a0",
-                        borderColor: "#06d6a0",
-                        label: 'National Metrology Division',
-                        data: {}
-                    },
-                    {
-                        backgroundColor: "#0073e6",
-                        borderColor: "#0073e6",
-                        label: 'Standards and Testing Division',
-                        data: {}
-                    }
-                ]
-            }
-
-            while (monthtotal_Income[x] != null) {
-                var samp = monthtotal_Income[x].labels;
-                var sampo = parseInt(monthtotal_Income[x].datasets);
-                if (monthtotal_Income[x].label == 'National Metrology Division') {
-                    monthsoldPerDivs.datasets[0].data[samp] = sampo;
-                } else if (monthtotal_Income[x].label == 'Standards and Testing Division') {
-                    monthsoldPerDivs.datasets[1].data[samp] = sampo;
-                }
-                x++
-            }
-            x = 0;
-
-            var csrfToken = $('meta[name="csrf-token"]').attr('content');
-
-            //get the contents of the html datepicker
-            const fromDateValue = document.getElementById('startDate');
-            const toDatevalue = document.getElementById('endDate');
-
-            const fDate = fromDateValue.value;
-            const tDate = toDatevalue.value;
 
             //send datepicker data to controller, 
             $.ajax({
@@ -5551,223 +5365,7 @@ Yii::$app->set('db', [ //revert default connection
                 }
             });
 
-            const monthList = [...global_label_month];
-
-            //get the index of the labels array based on the value of datepicker
-            //both array value and date picker value must be matching cAsE sEnSiTiVe to give a result
-
-            const sunIndex = monthList.indexOf(fromDateValue.value);
-            const satIndex = monthList.indexOf(toDatevalue.value);
-
-            //slice the labels array based on the sunIndex and satIndex
-            const new_monthList = monthList.slice(sunIndex, satIndex + 1);
-
-
-            //------------------------------------------------1st
-
-            // Remove old data
-            totaltransactionChartB.data.labels = [];
-            totaltransactionChartB.data.datasets.forEach((dataset) => {
-                dataset.data = [];
-            });
-
-            monthttotalTransactionDataset.datasets.forEach(function(dataset) {
-                dataset.data = Object.keys(dataset.data)
-                    .filter((date) => date >= fromDateValue.value && date <= toDatevalue.value)
-                    .reduce((obj, date) => {
-                        obj[date] = dataset.data[date];
-                        return obj;
-                    }, {});
-            });
-            totaltransactionChartB.config.data.datasets = monthttotalTransactionDataset.datasets; //replace the current chart dataset
-            //now repeating the process for the other chart---2nd
-
-            // Remove old data
-            totalsalesChartB.data.labels = [];
-            totalsalesChartB.data.datasets.forEach((dataset) => {
-                dataset.data = [];
-            });
-
-            monthtotalSum.datasets.forEach(function(dataset) {
-                dataset.data = Object.keys(dataset.data)
-                    .filter((date) => date >= fromDateValue.value && date <= toDatevalue.value)
-                    .reduce((obj, date) => {
-                        obj[date] = dataset.data[date];
-                        return obj;
-                    }, {});
-            });
-            totalsalesChartB.config.data.datasets = monthtotalSum.datasets
-            //------------------------------------------------3rd
-
-            // Remove old data
-            transactionChartB.data.labels = [];
-            transactionChartB.data.datasets.forEach((dataset) => {
-                dataset.data = [];
-            });
-
-            monthperDivData.datasets.forEach(function(dataset) {
-                dataset.data = Object.keys(dataset.data)
-                    .filter((date) => date >= fromDateValue.value && date <= toDatevalue.value)
-                    .reduce((obj, date) => {
-                        obj[date] = dataset.data[date];
-                        return obj;
-                    }, {});
-            });
-            transactionChartB.config.data.datasets = monthperDivData.datasets;
-            //------------------------------------------------4th
-
-            // Remove old data
-            salesChart.data.labels = [];
-            salesChart.data.datasets.forEach((dataset) => {
-                dataset.data = [];
-            });
-
-            monthsoldPerDivs.datasets.forEach(function(dataset) {
-                dataset.data = Object.keys(dataset.data)
-                    .filter((date) => date >= fromDateValue.value && date <= toDatevalue.value)
-                    .reduce((obj, date) => {
-                        obj[date] = dataset.data[date];
-                        return obj;
-                    }, {});
-            });
-            salesChart.config.data.datasets = monthsoldPerDivs.datasets;
-            //------------------------------------------------------------
-
-            totaltransactionChartB.config.data.labels = new_monthList; //assign new label to the chart
-            transactionChartB.config.data.labels = new_monthList;
-            totalsalesChartB.config.data.labels = new_monthList;
-            salesChart.config.data.labels = new_monthList;
-
-            totaltransactionChartB.update(); //udpate the chart
-            totalsalesChartB.update();
-            transactionChartB.update();
-            salesChart.update();
-            //
         } else if (selectedValue === 'Years') {
-
-
-            var yeartotalTransaction = (<?= json_encode($yearqueryAllDate) ?>); // dashboard total transaction
-            var yearLabel = (<?= json_encode($yearLabel) ?>);
-            //preparing array to store the retrieved data
-            var yearttotalTransactionDataset = {
-                datasets: [{
-                    backgroundColor: "#274690",
-                    label: 'Total Transaction',
-                    data: {}
-                }, ],
-            }
-
-            var x = 0;
-
-            function cusmo() {
-                while (yeartotalTransaction[x] != null) {
-                    var samp = yeartotalTransaction[x].labels;
-                    var sampo = parseInt(yeartotalTransaction[x].datasets);
-                    if (yeartotalTransaction[x].label == "Total") {
-                        yearttotalTransactionDataset.datasets[0].data[samp] = sampo;
-                    }
-                    x++
-                }
-            }
-            cusmo();
-            x = 0;
-
-
-            var global_label_year = []; //for years
-
-            while (yearLabel[x] != null) {
-                var lab = yearLabel[x].labels;
-                global_label_year[x] = lab;
-                x++;
-            }
-            x = 0;
-
-            var yeartotal_Income = (<?= json_encode($yearqueryTotalSale) ?>);
-
-            var yeartotalSum = {
-                datasets: [{
-                    backgroundColor: "#fccb06",
-                    borderColor: "#fccb06",
-                    label: 'Total Income',
-                    data: {}
-                }]
-            }
-
-            function calInc() {
-                while (yeartotal_Income[x] != null) {
-                    var samp = yeartotal_Income[x].labels;
-                    var sampo = parseInt(yeartotal_Income[x].datasets);
-                    if (yeartotal_Income[x].label === "Total") {
-                        yeartotalSum.datasets[0].data[samp] = sampo;
-                    }
-                    x++
-                }
-            }
-            calInc();
-            x = 0;
-
-            var yeartPerDivData = (<?= json_encode($yearqueryAllDate) ?>); //retrieve data from controller
-            var yearperDivData = { //prepare array for translated data
-                datasets: [{
-                        backgroundColor: "#06d6a0",
-                        label: 'National Metrology Division',
-                        data: {}
-                    },
-                    {
-                        backgroundColor: "#0073e6",
-                        label: 'Standards and Testing Division',
-                        data: {}
-                    }
-                ],
-            }
-            while (yeartPerDivData[x] != null) {
-                var samp = yeartPerDivData[x].labels;
-                var sampo = parseInt(yeartPerDivData[x].datasets);
-                if (yeartPerDivData[x].label == 'National Metrology Division') {
-                    yearperDivData.datasets[0].data[samp] = sampo;
-                } else if (yeartPerDivData[x].label == 'Standards and Testing Division') {
-                    yearperDivData.datasets[1].data[samp] = sampo;
-                }
-                x++
-            }
-            x = 0;
-
-            var yearsoldPerDivs = { //prepare array for translated data
-                datasets: [{
-                        backgroundColor: "#06d6a0",
-                        borderColor: "#06d6a0",
-                        label: 'National Metrology Division',
-                        data: {}
-                    },
-                    {
-                        backgroundColor: "#0073e6",
-                        borderColor: "#0073e6",
-                        label: 'Standards and Testing Division',
-                        data: {}
-                    }
-                ]
-            }
-
-            while (yeartotal_Income[x] != null) {
-                var samp = yeartotal_Income[x].labels;
-                var sampo = parseInt(yeartotal_Income[x].datasets);
-                if (yeartotal_Income[x].label == 'National Metrology Division') {
-                    yearsoldPerDivs.datasets[0].data[samp] = sampo;
-                } else if (yeartotal_Income[x].label == 'Standards and Testing Division') {
-                    yearsoldPerDivs.datasets[1].data[samp] = sampo;
-                }
-                x++
-            }
-            x = 0;
-
-            var csrfToken = $('meta[name="csrf-token"]').attr('content');
-
-            //get the contents of the html datepicker
-            const fromDateValue = document.getElementById('startDate');
-            const toDatevalue = document.getElementById('endDate');
-
-            const fDate = fromDateValue.value;
-            const tDate = toDatevalue.value;
 
             //send datepicker data to controller, 
             $.ajax({
@@ -5790,100 +5388,6 @@ Yii::$app->set('db', [ //revert default connection
                     console.error(error);
                 }
             });
-
-            const yearList = [...global_label_year];
-
-            //get the index of the labels array based on the value of datepicker
-            //both array value and date picker value must be matching cAsE sEnSiTiVe to give a result
-
-            const sunIndex = yearList.indexOf(fromDateValue.value);
-            const satIndex = yearList.indexOf(toDatevalue.value);
-
-            //slice the labels array based on the sunIndex and satIndex
-            const new_yearList = yearList.slice(sunIndex, satIndex + 1);
-
-
-            //------------------------------------------------1st
-
-            // Remove old data
-            totaltransactionChartB.data.labels = [];
-            totaltransactionChartB.data.datasets.forEach((dataset) => {
-                dataset.data = [];
-            });
-
-            yearttotalTransactionDataset.datasets.forEach(function(dataset) {
-                dataset.data = Object.keys(dataset.data)
-                    .filter((date) => date >= fromDateValue.value && date <= toDatevalue.value)
-                    .reduce((obj, date) => {
-                        obj[date] = dataset.data[date];
-                        return obj;
-                    }, {});
-            });
-            totaltransactionChartB.config.data.datasets = yearttotalTransactionDataset.datasets; //replace the current chart dataset
-            //now repeating the process for the other chart---2nd
-
-            // Remove old data
-            totalsalesChartB.data.labels = [];
-            totalsalesChartB.data.datasets.forEach((dataset) => {
-                dataset.data = [];
-            });
-
-            yeartotalSum.datasets.forEach(function(dataset) {
-                dataset.data = Object.keys(dataset.data)
-                    .filter((date) => date >= fromDateValue.value && date <= toDatevalue.value)
-                    .reduce((obj, date) => {
-                        obj[date] = dataset.data[date];
-                        return obj;
-                    }, {});
-            });
-            totalsalesChartB.config.data.datasets = yeartotalSum.datasets
-            //------------------------------------------------3rd
-
-            // Remove old data
-            transactionChartB.data.labels = [];
-            transactionChartB.data.datasets.forEach((dataset) => {
-                dataset.data = [];
-            });
-
-            yearperDivData.datasets.forEach(function(dataset) {
-                dataset.data = Object.keys(dataset.data)
-                    .filter((date) => date >= fromDateValue.value && date <= toDatevalue.value)
-                    .reduce((obj, date) => {
-                        obj[date] = dataset.data[date];
-                        return obj;
-                    }, {});
-            });
-            transactionChartB.config.data.datasets = yearperDivData.datasets;
-            //------------------------------------------------4th
-
-            // Remove old data
-            salesChart.data.labels = [];
-            salesChart.data.datasets.forEach((dataset) => {
-                dataset.data = [];
-            });
-
-            yearsoldPerDivs.datasets.forEach(function(dataset) {
-                dataset.data = Object.keys(dataset.data)
-                    .filter((date) => date >= fromDateValue.value && date <= toDatevalue.value)
-                    .reduce((obj, date) => {
-                        obj[date] = dataset.data[date];
-                        return obj;
-                    }, {});
-            });
-            salesChart.config.data.datasets = yearsoldPerDivs.datasets;
-            //------------------------------------------------------------
-
-            totaltransactionChartB.config.data.labels = new_yearList; //assign new label to the chart
-            transactionChartB.config.data.labels = new_yearList;
-            totalsalesChartB.config.data.labels = new_yearList;
-            salesChart.config.data.labels = new_yearList;
-
-            totaltransactionChartB.update(); //udpate the chart
-            totalsalesChartB.update();
-            transactionChartB.update();
-            salesChart.update();
-            //
-
         }
     }
 
@@ -5894,72 +5398,548 @@ Yii::$app->set('db', [ //revert default connection
         var dateTypeSelect = document.getElementById('date_type');
         var selectedValue = dateTypeSelect.value;
 
+        var x = 0;
+
+        //------------------------------------------------1st//total transaction
+        // Remove old data
+        totaltransactionChartB.data.datasets.forEach((dataset) => {
+            dataset.data = [];
+        });
+
+        var totalTransactionDataset = {
+            datasets: [{
+                backgroundColor: '#274690',
+                label: 'Total Transaction',
+                data: {}
+            }, ],
+        }
+
+        function translateA() {
+            x = 0;
+            while (response.queryAllDate[x] != null) {
+                var samp = response.queryAllDate[x].labels;
+                var sampo = parseInt(response.queryAllDate[x].datasets);
+                if (response.queryAllDate[x].label === "Total") {
+                    totalTransactionDataset.datasets[0].data[samp] = sampo;
+                }
+                x++
+            }
+            x = 0;
+        }
+        translateA();
+
+        totaltransactionChartB.config.data.datasets = totalTransactionDataset.datasets; //replace the current chart dataset
+        //------------------------------------------------2nd//total sales
+        // Remove old data
+        totalsalesChartB.data.datasets.forEach((dataset) => {
+            dataset.data = [];
+        });
+
+        var totalSum = {
+            datasets: [{
+                backgroundColor: "#fccb06",
+                borderColor: "#fccb06",
+                label: 'Total Income',
+                data: {}
+            }, ],
+        }
+
+        function translateB() {
+            x = 0;
+            while (response.queryTotalSale[x] != null) {
+                var samp = response.queryTotalSale[x].labels;
+                var sampo = parseInt(response.queryTotalSale[x].datasets);
+                if (response.queryTotalSale[x].label === 'National Metrology Division') {
+                    //do nuthin
+                } else if (response.queryTotalSale[x].label === 'Standards and Testing Division') {
+                    //do nuthin
+                } else {
+                    totalSum.datasets[0].data[samp] = sampo;
+                }
+                x++
+            }
+            x = 0;
+        }
+        translateB();
+
+        totalsalesChartB.config.data.datasets = totalSum.datasets; //replace the current chart dataset
+        //------------------------------------------------3rd//transaction per division
+        // Remove old data
+        transactionChartB.data.datasets.forEach((dataset) => {
+            dataset.data = [];
+        });
+
+        var perDivData = {
+            datasets: [{
+                    backgroundColor: "#06d6a0",
+                    label: 'National Metrology Division',
+                    data: {}
+                },
+                {
+                    backgroundColor: "#0073e6",
+                    label: 'Standards and Testing Division',
+                    data: {}
+                }
+            ],
+        }
+
+        function translateC() {
+            x = 0;
+            while (response.queryAllDate[x] != null) {
+                var samp = response.queryAllDate[x].labels;
+                var sampo = parseInt(response.queryAllDate[x].datasets);
+                if (response.queryAllDate[x].label == 'National Metrology Division') {
+                    perDivData.datasets[0].data[samp] = sampo;
+                } else if (response.queryAllDate[x].label == 'Standards and Testing Division') {
+                    perDivData.datasets[1].data[samp] = sampo;
+                }
+                x++
+            }
+            x = 0;
+        }
+        translateC();
+
+        transactionChartB.config.data.datasets = perDivData.datasets; //replace the current chart dataset
+        //------------------------------------------------4th//sales per division
+        // Remove old data
+        salesChart.data.datasets.forEach((dataset) => {
+            dataset.data = [];
+        });
+
+        var soldPerDivs = {
+            datasets: [{
+                    backgroundColor: "#06d6a0",
+                    borderColor: "#06d6a0",
+                    label: 'National Metrology Division',
+                    data: {}
+                },
+                {
+                    backgroundColor: "#0073e6",
+                    borderColor: "#0073e6",
+                    label: 'Standards and Testing Division',
+                    data: {}
+                }
+            ]
+        }
+
+        function translateD() {
+            x = 0;
+            while (response.queryTotalSale[x] != null) {
+                var samp = response.queryTotalSale[x].labels;
+                var sampo = parseInt(response.queryTotalSale[x].datasets);
+                if (response.queryTotalSale[x].label === 'National Metrology Division') {
+                    soldPerDivs.datasets[0].data[samp] = sampo;
+                } else if (response.queryTotalSale[x].label === 'Standards and Testing Division') {
+                    soldPerDivs.datasets[1].data[samp] = sampo;
+                }
+                x++
+            }
+            x = 0;
+        }
+        translateD();
+
+        salesChart.config.data.datasets = soldPerDivs.datasets; //replace the current chart dataset
+
+        const dateList = [];
+        const monthList = [];
+        const yearList = []
+
         if (selectedValue === 'Days') {
-            //START OF Total Customers per Province
-            const selectedType = chartTypeDropdown.value;
-            var selected_data;
-            switch (selectedType) {
-                case "ncr":
-                    selected_data = response.custmerPerProvinceNCR
-                    break;
-                case "region-1":
-                    selected_data = response.custmerPerProvinceRI
-                    break;
-                case "region-2":
-                    selected_data = response.custmerPerProvinceRII
-                    break;
-                case "region-3":
-                    selected_data = response.custmerPerProvinceRIII
-                    break;
-                case "region-4a":
-                    selected_data = response.custmerPerProvinceRIVA
-                    break;
-                case "mimaropa":
-                    selected_data = response.custmerPerProvinceMIMAROPA
-                    break;
-                case "region-5":
-                    selected_data = response.custmerPerProvinceV
-                    break;
-                case "car":
-                    selected_data = response.custmerPerProvinceCAR
-                    break;
-                case "region-6":
-                    selected_data = response.custmerPerProvinceVI
-                    break;
-                case "region-7":
-                    selected_data = response.custmerPerProvinceVII
-                    break;
-                case "region-8":
-                    selected_data = response.custmerPerProvinceVIII
-                    break;
-                case "region-9":
-                    selected_data = response.custmerPerProvinceIX
-                    break;
-                case "region-10":
-                    selected_data = response.custmerPerProvinceX
-                    break;
-                case "region-11":
-                    selected_data = response.custmerPerProvinceXI
-                    break;
-                case "region-12":
-                    selected_data = response.custmerPerProvinceXII
-                    break;
-                case "region-13":
-                    selected_data = response.custmerPerProvinceXIII
-                    break;
-                case "barm":
-                    selected_data = response.custmerPerProvinceBARMM
-                    break;
+            while (response.chartLabel[x] != null) {
+                var lab1 = response.chartLabel[x].labels;
+                dateList[x] = lab1;
+                x++;
             }
 
-            // Remove old data
-            constprovincesChart.data.labels = [];
-            constprovincesChart.data.datasets.forEach((dataset) => {
-                dataset.data = [];
-            });
+        } else if (selectedValue === 'Months') {
+            while (response.monthLabel[x] != null) {
+                var lab1 = response.monthLabel[x].labels;
+                monthList[x] = lab1;
+                x++;
+            }
+        } else {
+            while (response.yearLabel[x] != null) {
+                var lab1 = response.yearLabel[x].labels;
+                yearList[x] = lab1;
+                x++;
+            }
+        }
 
-            //convert data into usable chartjs labels
-            var x = 0
+        x = 0;
+        totaltransactionChartB.config.data.labels = [];
+        transactionChartB.config.data.labels = [];
+        totalsalesChartB.config.data.labels = [];
+        salesChart.config.data.labels = [];
+
+        if (selectedValue === 'Days') {
+            totaltransactionChartB.config.data.labels = dateList;
+            transactionChartB.config.data.labels = dateList;
+            totalsalesChartB.config.data.labels = dateList;
+            salesChart.config.data.labels = dateList;
+
+        } else if (selectedValue === 'Months') {
+            totaltransactionChartB.config.data.labels = monthList;
+            transactionChartB.config.data.labels = monthList;
+            totalsalesChartB.config.data.labels = monthList;
+            salesChart.config.data.labels = monthList;
+        } else {
+            totaltransactionChartB.config.data.labels = yearList;
+            transactionChartB.config.data.labels = yearList;
+            totalsalesChartB.config.data.labels = yearList;
+            salesChart.config.data.labels = yearList;
+        }
+
+        totaltransactionChartB.update();
+        transactionChartB.update();
+        totalsalesChartB.update();
+        salesChart.update();
+
+        const selectedType = chartTypeDropdown.value;
+        var selected_data;
+        switch (selectedType) {
+            case "ncr":
+                selected_data = response.custmerPerProvinceNCR
+                break;
+            case "region-1":
+                selected_data = response.custmerPerProvinceRI
+                break;
+            case "region-2":
+                selected_data = response.custmerPerProvinceRII
+                break;
+            case "region-3":
+                selected_data = response.custmerPerProvinceRIII
+                break;
+            case "region-4a":
+                selected_data = response.custmerPerProvinceRIVA
+                break;
+            case "mimaropa":
+                selected_data = response.custmerPerProvinceMIMAROPA
+                break;
+            case "region-5":
+                selected_data = response.custmerPerProvinceV
+                break;
+            case "car":
+                selected_data = response.custmerPerProvinceCAR
+                break;
+            case "region-6":
+                selected_data = response.custmerPerProvinceVI
+                break;
+            case "region-7":
+                selected_data = response.custmerPerProvinceVII
+                break;
+            case "region-8":
+                selected_data = response.custmerPerProvinceVIII
+                break;
+            case "region-9":
+                selected_data = response.custmerPerProvinceIX
+                break;
+            case "region-10":
+                selected_data = response.custmerPerProvinceX
+                break;
+            case "region-11":
+                selected_data = response.custmerPerProvinceXI
+                break;
+            case "region-12":
+                selected_data = response.custmerPerProvinceXII
+                break;
+            case "region-13":
+                selected_data = response.custmerPerProvinceXIII
+                break;
+            case "barm":
+                selected_data = response.custmerPerProvinceBARMM
+                break;
+            case "all":
+                selected_data = response.allProvince
+        }
+
+        // Remove old data
+        provinceData = [];
+        constprovincesChart.data.labels = [];
+        constprovincesChart.data.datasets.forEach((dataset) => {
+            dataset.data = [];
+        });
+
+        //convert data into usable chartjs labels
+        x = 0
+        if (selectedType === "all") {
+
+            while (selected_data[x] != null) {
+
+                if (selected_data[x].label === "Metro Manila") {
+                    var dataB = selected_data[x].data;
+                    var arrayZ = [{
+                        backgroundColor: getRandomColor(),
+                        data: {
+                            "NCR": parseInt(dataB)
+                        },
+                        label: "NCR"
+                    }]
+                    for (var i = 0; i < arrayZ.length; i++) {
+                        provinceData.push(arrayZ[i]);
+                    } //'Ilocos Norte', 'Ilocos Sur', 'La Union', 'Pangasinan'
+                } else if (selected_data[x].label === "Ilocos Norte" ||
+                    selected_data[x].label === "Ilocos Sur" ||
+                    selected_data[x].label === "La Union" ||
+                    selected_data[x].label === "Pangasinan") {
+                    var dataB = selected_data[x].data;
+                    var arrayZ = [{
+                        backgroundColor: getRandomColor(),
+                        data: {
+                            "Region-I": parseInt(dataB)
+                        },
+                        label: "Region-I"
+                    }]
+                    for (var i = 0; i < arrayZ.length; i++) {
+                        provinceData.push(arrayZ[i]);
+                    } //'Batanes', 'Cagayan', 'La Union', 'Isabela', 'Quirino', 'Nueva Vizcaya'
+                } else if (selected_data[x].label === "Batanes" ||
+                    selected_data[x].label === "Cagayan" ||
+                    selected_data[x].label === "La Union" ||
+                    selected_data[x].label === "Isabela" ||
+                    selected_data[x].label === "Quirino" ||
+                    selected_data[x].label === "Nueva Vizcaya") {
+                    var dataB = selected_data[x].data;
+                    var arrayZ = [{
+                        backgroundColor: getRandomColor(),
+                        data: {
+                            "Region-II": parseInt(dataB)
+                        },
+                        label: "Region-II"
+                    }]
+                    for (var i = 0; i < arrayZ.length; i++) {
+                        provinceData.push(arrayZ[i]);
+                    } //'Aurora', 'Bataan', 'Bulacan', 'Nueba Ecija', 'Pampanga', 'Tarlac', 'Zambales'
+                } else if (selected_data[x].label === "Aurora" ||
+                    selected_data[x].label === "Bataan" ||
+                    selected_data[x].label === "Bulacan" ||
+                    selected_data[x].label === "Nueba Ecija" ||
+                    selected_data[x].label === "Pampanga" ||
+                    selected_data[x].label === "Tarlac" ||
+                    selected_data[x].label === "Zambales") {
+                    var dataB = selected_data[x].data;
+                    var arrayZ = [{
+                        backgroundColor: getRandomColor(),
+                        data: {
+                            "Region-III": parseInt(dataB)
+                        },
+                        label: "Region-III"
+                    }]
+                    for (var i = 0; i < arrayZ.length; i++) {
+                        provinceData.push(arrayZ[i]);
+                    } //'Batangas', 'Cavite', 'Laguna', 'Quezon', 'Rizal'
+                } else if (selected_data[x].label === "Batangas" ||
+                    selected_data[x].label === "Cavite" ||
+                    selected_data[x].label === "Laguna" ||
+                    selected_data[x].label === "Quezon" ||
+                    selected_data[x].label === "Rizal") {
+                    var dataB = selected_data[x].data;
+                    var arrayZ = [{
+                        backgroundColor: getRandomColor(),
+                        data: {
+                            "Region-IV-A": parseInt(dataB)
+                        },
+                        label: "Region-IV-A"
+                    }]
+                    for (var i = 0; i < arrayZ.length; i++) {
+                        provinceData.push(arrayZ[i]);
+                    } //'Marinduque', 'Occidental Mindoro', 'Oriental Mindoro', 'Palawan', 'Romblon'
+                } else if (selected_data[x].label === "Marinduque" ||
+                    selected_data[x].label === "Occidental Mindoro" ||
+                    selected_data[x].label === "Oriental Mindoro" ||
+                    selected_data[x].label === "Palawan" ||
+                    selected_data[x].label === "Romblon") {
+                    var dataB = selected_data[x].data;
+                    var arrayZ = [{
+                        backgroundColor: getRandomColor(),
+                        data: {
+                            "MIMAROPA": parseInt(dataB)
+                        },
+                        label: "MIMAROPA"
+                    }]
+                    for (var i = 0; i < arrayZ.length; i++) {
+                        provinceData.push(arrayZ[i]);
+                    } //'Albay', 'Camarines Sur', 'Camarines Norte', 'Catanduanes', 'Masbate', 'Sorsogon'
+                } else if (selected_data[x].label === "Albay" ||
+                    selected_data[x].label === "Camarines Sur" ||
+                    selected_data[x].label === "Camarines Norte" ||
+                    selected_data[x].label === "Catanduanes" ||
+                    selected_data[x].label === "Masbate" ||
+                    selected_data[x].label === "Sorsogon") {
+                    var dataB = selected_data[x].data;
+                    var arrayZ = [{
+                        backgroundColor: getRandomColor(),
+                        data: {
+                            "Region-V": parseInt(dataB)
+                        },
+                        label: "Region-V"
+                    }]
+                    for (var i = 0; i < arrayZ.length; i++) {
+                        provinceData.push(arrayZ[i]);
+                    } //'Abra', 'Apayao', 'Benguet', 'Ifugao', 'Kalinga', 'Mountain Province'
+                } else if (selected_data[x].label === "Abra" ||
+                    selected_data[x].label === "Apayao" ||
+                    selected_data[x].label === "Benguet" ||
+                    selected_data[x].label === "Ifugao" ||
+                    selected_data[x].label === "Kalinga" ||
+                    selected_data[x].label === "Mountain Province") {
+                    var dataB = selected_data[x].data;
+                    var arrayZ = [{
+                        backgroundColor: getRandomColor(),
+                        data: {
+                            "CAR": parseInt(dataB)
+                        },
+                        label: "CAR"
+                    }]
+                    for (var i = 0; i < arrayZ.length; i++) {
+                        provinceData.push(arrayZ[i]);
+                    } //'Aklan', 'Antique', 'Capiz', 'Guimaras', 'Iloilo', 'Negros Occidental'
+                } else if (selected_data[x].label === "Aklan" ||
+                    selected_data[x].label === "Antique" ||
+                    selected_data[x].label === "Capiz" ||
+                    selected_data[x].label === "Guimaras" ||
+                    selected_data[x].label === "Iloilo" ||
+                    selected_data[x].label === "Negros Occidental") {
+                    var dataB = selected_data[x].data;
+                    var arrayZ = [{
+                        backgroundColor: getRandomColor(),
+                        data: {
+                            "Region-VI": parseInt(dataB)
+                        },
+                        label: "Region-VI"
+                    }]
+                    for (var i = 0; i < arrayZ.length; i++) {
+                        provinceData.push(arrayZ[i]);
+                    } //'Bohol', 'Cebu', 'Negros Oriental', 'Siquijor'
+                } else if (selected_data[x].label === "Bohol" ||
+                    selected_data[x].label === "Cebu" ||
+                    selected_data[x].label === "Negros Oriental" ||
+                    selected_data[x].label === "Siquijor") {
+                    var dataB = selected_data[x].data;
+                    var arrayZ = [{
+                        backgroundColor: getRandomColor(),
+                        data: {
+                            "Region-VII": parseInt(dataB)
+                        },
+                        label: "Region-VII"
+                    }]
+                    for (var i = 0; i < arrayZ.length; i++) {
+                        provinceData.push(arrayZ[i]);
+                    } //'Biliran', 'Eastern Samar', 'Leyte', 'Western Samar', 'Samar', 'Southern Leyte'
+                } else if (selected_data[x].label === "Biliran" ||
+                    selected_data[x].label === "Eastern Samar" ||
+                    selected_data[x].label === "Leyte" ||
+                    selected_data[x].label === "Western Samar" ||
+                    selected_data[x].label === "Samar" ||
+                    selected_data[x].label === "Southern Leyte") {
+                    var dataB = selected_data[x].data;
+                    var arrayZ = [{
+                        backgroundColor: getRandomColor(),
+                        data: {
+                            "Region-VIII": parseInt(dataB)
+                        },
+                        label: "Region-VIII"
+                    }]
+                    for (var i = 0; i < arrayZ.length; i++) {
+                        provinceData.push(arrayZ[i]);
+                    } //'Zamboanga del Sur', 'Zamboanga del Norte', 'Zamboanga Sibugay'
+                } else if (selected_data[x].label === "Zamboanga del Sur" ||
+                    selected_data[x].label === "Zamboanga del Norte" ||
+                    selected_data[x].label === "Zamboanga Sibugay") {
+                    var dataB = selected_data[x].data;
+                    var arrayZ = [{
+                        backgroundColor: getRandomColor(),
+                        data: {
+                            "Region-IX": parseInt(dataB)
+                        },
+                        label: "Region-IX"
+                    }]
+                    for (var i = 0; i < arrayZ.length; i++) {
+                        provinceData.push(arrayZ[i]);
+                    } //'Bukidnon', 'Camiguin', 'Lanao del Norte', 'Misamis Oriental', 'Misamis Occidental'
+                } else if (selected_data[x].label === "Bukidnon" ||
+                    selected_data[x].label === "Camiguin" ||
+                    selected_data[x].label === "Lanao del Norte" ||
+                    selected_data[x].label === "Misamis Oriental" ||
+                    selected_data[x].label === "Misamis Occidental") {
+                    var dataB = selected_data[x].data;
+                    var arrayZ = [{
+                        backgroundColor: getRandomColor(),
+                        data: {
+                            "Region-X": parseInt(dataB)
+                        },
+                        label: "Region-X"
+                    }]
+                    for (var i = 0; i < arrayZ.length; i++) {
+                        provinceData.push(arrayZ[i]);
+                    } //'Davao de Oro', 'Davao del Norte', 'Davao del Sur', 'Davao Oriental', 'Davao Occidental'
+                } else if (selected_data[x].label === "Davao de Oro" ||
+                    selected_data[x].label === "Davao del Norte" ||
+                    selected_data[x].label === "Davao del Sur" ||
+                    selected_data[x].label === "Davao Oriental" ||
+                    selected_data[x].label === "Davao Occidental") {
+                    var dataB = selected_data[x].data;
+                    var arrayZ = [{
+                        backgroundColor: getRandomColor(),
+                        data: {
+                            "Region-XI": parseInt(dataB)
+                        },
+                        label: "Region-XI"
+                    }]
+                    for (var i = 0; i < arrayZ.length; i++) {
+                        provinceData.push(arrayZ[i]);
+                    } //'Cotabato', 'Sarangani', 'South Cotabato', 'Sultan Kudarat'
+                } else if (selected_data[x].label === "Cotabato" ||
+                    selected_data[x].label === "Sarangani" ||
+                    selected_data[x].label === "South Cotabato" ||
+                    selected_data[x].label === "Sultan Kudarat") {
+                    var dataB = selected_data[x].data;
+                    var arrayZ = [{
+                        backgroundColor: getRandomColor(),
+                        data: {
+                            "Region-XII": parseInt(dataB)
+                        },
+                        label: "Region-XII"
+                    }]
+                    for (var i = 0; i < arrayZ.length; i++) {
+                        provinceData.push(arrayZ[i]);
+                    } //'Agusan del Norte', 'Agusan del Sur', 'Dinagat Islands', 'Surigao del Norte', 'Surigao del Sur'
+                } else if (selected_data[x].label === "Agusan del Norte" ||
+                    selected_data[x].label === "Agusan del Sur" ||
+                    selected_data[x].label === "Dinagat Islands" ||
+                    selected_data[x].label === "Surigao del Norte" ||
+                    selected_data[x].label === "Surigao del Sur") {
+                    var dataB = selected_data[x].data;
+                    var arrayZ = [{
+                        backgroundColor: getRandomColor(),
+                        data: {
+                            "Region-XIII": parseInt(dataB)
+                        },
+                        label: "Region-XIII"
+                    }]
+                    for (var i = 0; i < arrayZ.length; i++) {
+                        provinceData.push(arrayZ[i]);
+                    } //'Basilan', 'Lanao del Sur', 'Maguindanao del Norte', 'Sulu', 'Maguindanao del Sur', 'Tawi-Tawi'
+                } else if (selected_data[x].label === "Basilan" ||
+                    selected_data[x].label === "Lanao del Sur" ||
+                    selected_data[x].label === "Maguindanao del Norte" ||
+                    selected_data[x].label === "Sulu" ||
+                    selected_data[x].label === "Maguindanao del Sur" ||
+                    selected_data[x].label === "Tawi-Tawi") {
+                    var dataB = selected_data[x].data;
+                    var arrayZ = [{
+                        backgroundColor: getRandomColor(),
+                        data: {
+                            "Bangsamoro": parseInt(dataB)
+                        },
+                        label: "Bangsamoro"
+                    }]
+                    for (var i = 0; i < arrayZ.length; i++) {
+                        provinceData.push(arrayZ[i]);
+                    }
+                }
+                x++
+            }
+        } else {
             while (selected_data[x] != null) {
                 var dataA = selected_data[x].label;
                 var dataB = selected_data[x].data;
@@ -5975,554 +5955,142 @@ Yii::$app->set('db', [ //revert default connection
                 }
                 x++
             }
-            constprovincesChart.data.datasets = provinceData;
-            constprovincesChart.config.data.labels = [];
-            constprovincesChart.update();
-            provinceData = [];
+        }
+        console.log("All Province Contents: ");
+        console.log(provinceData);
+
+        constprovincesChart.data.datasets = provinceData;
+        constprovincesChart.config.data.labels = [];
+        constprovincesChart.update();
+
+
+
+        // for transactionStatusChart / Transaction Status
+        x = 0
+        var TSChart1 = response.forTransactionStatusChart;
+
+        var data1 = TSChart1.map(item => item.data);
+
+        transactionStatusChart.config.data = {
+            labels: ["Paid", "Cancelled", "Pending"],
+            datasets: [{
+                data: data1,
+                backgroundColor: [
+                    'rgba(0, 215, 132, 0.2)', //green
+                    'rgba(241, 37, 150, 0.2)', //yellow
+                    'rgba(229, 247, 48, 0.2)', //red
+
+
+                ],
+                borderColor: [
+                    'rgba(0, 215, 132, 0.93)', //green
+                    'rgba(241, 37, 150, 0.8)', //yellow
+                    'rgba(229, 247, 48, 0.8)', //red
+
+
+                ],
+                borderWidth: 2
+            }],
+        }
+        transactionStatusChart.update();
+
+        //paymendtMethodChart
+        x = 0
+        var TSChart2 = response.forPaymendtMethodChart;
+
+        var data2 = TSChart2.map(item => item.data);
+
+        paymendtMethodChart.config.data = {
+            labels: ["Over the Counter", "Online Payment", "Cheque"],
+            datasets: [{
+                data: data2,
+                backgroundColor: ['rgba(0, 21, 215, 0.2)',
+                    'rgba(0, 215, 132, 0.2)',
+                    'rgba(118, 0, 186, 0.2)',
+                ],
+                borderColor: ['rgba(0, 21, 215, 0.93)',
+                    'rgba(0, 215, 132, 1)',
+                    'rgba(118, 0, 186, 0.93)',
+                ],
+                borderWidth: 2
+            }],
+        }
+        paymendtMethodChart.update();
+
+        //transactionTypeChart
+        x = 0
+        var TSChart3 = response.forTransactionTypeChart;
+
+        var data3 = TSChart3.map(item => item.data);
+
+        transactionTypeChart.config.data = {
+            labels: ["Technical Services", "NLIMS", "ULIMS"],
+            datasets: [{
+                data: data3,
+                backgroundColor: ['rgba(186, 0, 0, 0.2)',
+                    'rgba(250, 154, 37, 0.2)',
+                    'rgba(37, 202, 247, 0.2)',
+                ],
+                borderColor: ['rgba(186, 0, 0, 0.93)',
+                    'rgba(250, 154, 37, 0.81)',
+                    'rgba(37, 202, 247, 0.81)',
+                ],
+                borderWidth: 2
+            }],
+        }
+        transactionTypeChart.update();
+
+        //customerTypeChart
+        x = 0
+        var TSChart4 = response.forCustomerTypeChart;
+
+        var data4 = TSChart4.map(item => item.data);
+
+        customerTypeChart.config.data = {
+            labels: ["Student", "Individual", "Private", "Government", "Internal", "Academe", "Not Applicable", ],
+            datasets: [{
+                data: data4,
+                backgroundColor: ['rgba(247, 37, 149, 0.2)',
+                    'rgba(166, 37, 247, 0.2)',
+                    'rgba(255, 155, 22, 0.2)',
+                    'rgba(255, 213, 22, 0.2)',
+                    'rgba(49, 255, 22, 0.2)',
+                    'rgba(73, 0, 242, 0.2)',
+                    'rgba(0, 220, 242, 0.2)'
+
+                ],
+                borderColor: ['rgba(247, 37, 149, 0.81)',
+                    'rgba(166, 37, 247, 0.83)',
+                    'rgba(255, 155, 22, 0.83)',
+                    'rgba(255, 213, 22, 0.83)',
+                    'rgba(49, 255, 22, 0.83)',
+                    'rgba(73, 0, 242, 0.83)',
+                    'rgba(0, 220, 242, 0.83)'
+                ],
+                borderWidth: 2
+            }],
+        }
+        customerTypeChart.update();
+
+        //myChart
+        myChart.config.data.datasets[2].data[0] = response.forMyChart[0].data;
+        myChart.config.data.datasets[3].data[0] = response.forMyChart[1].data;
+        myChart.update();
+
+        let fDate = new Date(document.getElementById('startDate').value);
+        let tDate = new Date(document.getElementById('endDate').value);
+
+        const timeDifference = tDate.getTime() - fDate.getTime();
+        const numberOfDays = Math.floor(timeDifference / (1000 * 3600 * 24)) + 1;
+        const digi = response.forMyChartAvgTransaction[0].data
+        const avgThis = Math.floor(digi / numberOfDays);
+        console.log(`Math.floor( AVG: ${response.forMyChartAvgTransaction[0].data} / ${numberOfDays} = ${avgThis} )`); // mema lang to di yan actual formula
+
+        document.getElementById('avgTransaction').innerHTML = avgThis;
+        let number = parseInt(response.forMyChart[0].data) + parseInt(response.forMyChart[1].data)
+        let fixedNumber = Math.round(number * 100) / 100;
+        document.getElementById('avgIncome').innerHTML = fixedNumber.toLocaleString("en-US");
 
-            // for transactionStatusChart / Transaction Status
-            x = 0
-            var TSChart1 = response.forTransactionStatusChart;
-
-            var data1 = TSChart1.map(item => item.data);
-
-            transactionStatusChart.config.data = {
-                labels: ["Paid", "Cancelled", "Pending"],
-                datasets: [{
-                    data: data1,
-                    backgroundColor: [
-                        'rgba(0, 215, 132, 0.2)', //green
-                        'rgba(241, 37, 150, 0.2)', //yellow
-                        'rgba(229, 247, 48, 0.2)', //red
-
-
-                    ],
-                    borderColor: [
-                        'rgba(0, 215, 132, 0.93)', //green
-                        'rgba(241, 37, 150, 0.8)', //yellow
-                        'rgba(229, 247, 48, 0.8)', //red
-
-
-                    ],
-                    borderWidth: 2
-                }],
-            }
-            transactionStatusChart.update();
-
-            //paymendtMethodChart
-            x = 0
-            var TSChart2 = response.forPaymendtMethodChart;
-
-            var data2 = TSChart2.map(item => item.data);
-
-            paymendtMethodChart.config.data = {
-                labels: ["Over the Counter", "Online Payment", "Cheque"],
-                datasets: [{
-                    data: data2,
-                    backgroundColor: ['rgba(0, 21, 215, 0.2)',
-                        'rgba(0, 215, 132, 0.2)',
-                        'rgba(118, 0, 186, 0.2)',
-                    ],
-                    borderColor: ['rgba(0, 21, 215, 0.93)',
-                        'rgba(0, 215, 132, 1)',
-                        'rgba(118, 0, 186, 0.93)',
-                    ],
-                    borderWidth: 2
-                }],
-            }
-            paymendtMethodChart.update();
-
-            //transactionTypeChart
-            x = 0
-            var TSChart3 = response.forTransactionTypeChart;
-
-            var data3 = TSChart3.map(item => item.data);
-
-            transactionTypeChart.config.data = {
-                labels: ["Technical Services", "NLIMS", "ULIMS"],
-                datasets: [{
-                    data: data3,
-                    backgroundColor: ['rgba(186, 0, 0, 0.2)',
-                        'rgba(250, 154, 37, 0.2)',
-                        'rgba(37, 202, 247, 0.2)',
-                    ],
-                    borderColor: ['rgba(186, 0, 0, 0.93)',
-                        'rgba(250, 154, 37, 0.81)',
-                        'rgba(37, 202, 247, 0.81)',
-                    ],
-                    borderWidth: 2
-                }],
-            }
-            transactionTypeChart.update();
-
-            //customerTypeChart
-            x = 0
-            var TSChart4 = response.forCustomerTypeChart;
-
-            var data4 = TSChart4.map(item => item.data);
-
-            customerTypeChart.config.data = {
-                labels: ["Student", "Individual", "Private", "Government", "Internal", "Academe", "Not Applicable", ],
-                datasets: [{
-                    data: data4,
-                    backgroundColor: ['rgba(247, 37, 149, 0.2)',
-                        'rgba(166, 37, 247, 0.2)',
-                        'rgba(255, 155, 22, 0.2)',
-                        'rgba(255, 213, 22, 0.2)',
-                        'rgba(49, 255, 22, 0.2)',
-                        'rgba(73, 0, 242, 0.2)',
-                        'rgba(0, 220, 242, 0.2)'
-
-                    ],
-                    borderColor: ['rgba(247, 37, 149, 0.81)',
-                        'rgba(166, 37, 247, 0.83)',
-                        'rgba(255, 155, 22, 0.83)',
-                        'rgba(255, 213, 22, 0.83)',
-                        'rgba(49, 255, 22, 0.83)',
-                        'rgba(73, 0, 242, 0.83)',
-                        'rgba(0, 220, 242, 0.83)'
-                    ],
-                    borderWidth: 2
-                }],
-            }
-            customerTypeChart.update();
-
-            //myChart
-            myChart.config.data.datasets[2].data[0] = response.forMyChart[0].data;
-            myChart.config.data.datasets[3].data[0] = response.forMyChart[1].data;
-            myChart.update();
-
-            let fDate = new Date(document.getElementById('startDate').value);
-            let tDate = new Date(document.getElementById('endDate').value);
-
-            const timeDifference = tDate.getTime() - fDate.getTime();
-            const numberOfDays = Math.floor(timeDifference / (1000 * 3600 * 24)) + 1;
-            const digi = response.forMyChartAvgTransaction[0].data
-            const avgThis = Math.floor(digi / numberOfDays);
-            console.log(`Math.floor( AVG: ${response.forMyChartAvgTransaction[0].data} / ${numberOfDays} = ${avgThis} )`); // mema lang to di yan actual formula
-
-            document.getElementById('avgTransaction').innerHTML = avgThis;
-            let number = parseInt(response.forMyChart[0].data) + parseInt(response.forMyChart[1].data)
-            let fixedNumber = Math.round(number * 100) / 100;
-            document.getElementById('avgIncome').innerHTML = fixedNumber.toLocaleString("en-US");
-        } // end of day filter
-        else if (selectedValue === 'Months') {
-            //START OF Total Customers per Province
-            const selectedType = chartTypeDropdown.value;
-            var selected_data;
-            switch (selectedType) {
-                case "ncr":
-                    selected_data = response.monthcustmerPerProvinceNCR
-                    break;
-                case "region-1":
-                    selected_data = response.monthcustmerPerProvinceRI
-                    break;
-                case "region-2":
-                    selected_data = response.monthcustmerPerProvinceRII
-                    break;
-                case "region-3":
-                    selected_data = response.monthcustmerPerProvinceRIII
-                    break;
-                case "region-4a":
-                    selected_data = response.monthcustmerPerProvinceRIVA
-                    break;
-                case "mimaropa":
-                    selected_data = response.monthcustmerPerProvinceMIMAROPA
-                    break;
-                case "region-5":
-                    selected_data = response.monthcustmerPerProvinceV
-                    break;
-                case "car":
-                    selected_data = response.monthcustmerPerProvinceCAR
-                    break;
-                case "region-6":
-                    selected_data = response.monthcustmerPerProvinceVI
-                    break;
-                case "region-7":
-                    selected_data = response.monthcustmerPerProvinceVII
-                    break;
-                case "region-8":
-                    selected_data = response.monthcustmerPerProvinceVIII
-                    break;
-                case "region-9":
-                    selected_data = response.monthcustmerPerProvinceIX
-                    break;
-                case "region-10":
-                    selected_data = response.monthcustmerPerProvinceX
-                    break;
-                case "region-11":
-                    selected_data = response.monthcustmerPerProvinceXI
-                    break;
-                case "region-12":
-                    selected_data = response.monthcustmerPerProvinceXII
-                    break;
-                case "region-13":
-                    selected_data = response.monthcustmerPerProvinceXIII
-                    break;
-                case "barm":
-                    selected_data = response.monthcustmerPerProvinceBARMM
-                    break;
-            }
-
-            // Remove old data
-            constprovincesChart.data.labels = [];
-            constprovincesChart.data.datasets.forEach((dataset) => {
-                dataset.data = [];
-            });
-
-            //convert data into usable chartjs labels
-            var x = 0
-            while (selected_data[x] != null) {
-                var dataA = selected_data[x].label;
-                var dataB = selected_data[x].data;
-                var arrayZ = [{
-                    backgroundColor: getRandomColor(),
-                    data: {
-                        [dataA]: parseInt(dataB)
-                    },
-                    label: dataA
-                }]
-                for (var i = 0; i < arrayZ.length; i++) {
-                    provinceData.push(arrayZ[i]);
-                }
-                x++
-            }
-            constprovincesChart.data.datasets = provinceData;
-            constprovincesChart.config.data.labels = [];
-            constprovincesChart.update();
-            provinceData = [];
-
-            // for transactionStatusChart / Transaction Status
-            x = 0
-            var TSChart1 = response.monthforTransactionStatusChart;
-
-            var data1 = TSChart1.map(item => item.data);
-
-            transactionStatusChart.config.data = {
-                labels: ["Paid", "Cancelled", "Pending"],
-                datasets: [{
-                    data: data1,
-                    backgroundColor: [
-                        'rgba(0, 215, 132, 0.2)', //green
-                        'rgba(241, 37, 150, 0.2)', //yellow
-                        'rgba(229, 247, 48, 0.2)', //red
-
-
-                    ],
-                    borderColor: [
-                        'rgba(0, 215, 132, 0.93)', //green
-                        'rgba(241, 37, 150, 0.8)', //yellow
-                        'rgba(229, 247, 48, 0.8)', //red
-
-
-                    ],
-                    borderWidth: 2
-                }],
-            }
-            transactionStatusChart.update();
-
-            //paymendtMethodChart
-            x = 0
-            var TSChart2 = response.monthforPaymendtMethodChart;
-
-            var data2 = TSChart2.map(item => item.data);
-
-            paymendtMethodChart.config.data = {
-                labels: ["Over the Counter", "Online Payment", "Cheque"],
-                datasets: [{
-                    data: data2,
-                    backgroundColor: ['rgba(0, 21, 215, 0.2)',
-                        'rgba(0, 215, 132, 0.2)',
-                        'rgba(118, 0, 186, 0.2)',
-                    ],
-                    borderColor: ['rgba(0, 21, 215, 0.93)',
-                        'rgba(0, 215, 132, 1)',
-                        'rgba(118, 0, 186, 0.93)',
-                    ],
-                    borderWidth: 2
-                }],
-            }
-            paymendtMethodChart.update();
-
-            //transactionTypeChart
-            x = 0
-            var TSChart3 = response.monthforTransactionTypeChart;
-
-            var data3 = TSChart3.map(item => item.data);
-
-            transactionTypeChart.config.data = {
-                labels: ["Technical Services", "NLIMS", "ULIMS"],
-                datasets: [{
-                    data: data3,
-                    backgroundColor: ['rgba(186, 0, 0, 0.2)',
-                        'rgba(250, 154, 37, 0.2)',
-                        'rgba(37, 202, 247, 0.2)',
-                    ],
-                    borderColor: ['rgba(186, 0, 0, 0.93)',
-                        'rgba(250, 154, 37, 0.81)',
-                        'rgba(37, 202, 247, 0.81)',
-                    ],
-                    borderWidth: 2
-                }],
-            }
-            transactionTypeChart.update();
-
-            //customerTypeChart
-            x = 0
-            var TSChart4 = response.monthforCustomerTypeChart;
-
-            var data4 = TSChart4.map(item => item.data);
-
-            customerTypeChart.config.data = {
-                labels: ["Student", "Individual", "Private", "Government", "Internal", "Academe", "Not Applicable", ],
-                datasets: [{
-                    data: data4,
-                    backgroundColor: ['rgba(247, 37, 149, 0.2)',
-                        'rgba(166, 37, 247, 0.2)',
-                        'rgba(255, 155, 22, 0.2)',
-                        'rgba(255, 213, 22, 0.2)',
-                        'rgba(49, 255, 22, 0.2)',
-                        'rgba(73, 0, 242, 0.2)',
-                        'rgba(0, 220, 242, 0.2)'
-
-                    ],
-                    borderColor: ['rgba(247, 37, 149, 0.81)',
-                        'rgba(166, 37, 247, 0.83)',
-                        'rgba(255, 155, 22, 0.83)',
-                        'rgba(255, 213, 22, 0.83)',
-                        'rgba(49, 255, 22, 0.83)',
-                        'rgba(73, 0, 242, 0.83)',
-                        'rgba(0, 220, 242, 0.83)'
-                    ],
-                    borderWidth: 2
-                }],
-            }
-            customerTypeChart.update();
-
-
-            myChart.config.data.datasets[2].data[0] = response.monthforMyChart[0].data;
-            myChart.config.data.datasets[3].data[0] = response.monthforMyChart[1].data;
-            myChart.update();
-
-
-            let fDate = new Date(document.getElementById('startDate').value);
-            let tDate = new Date(document.getElementById('endDate').value);
-
-            const timeDifference = tDate.getTime() - fDate.getTime();
-            const numberOfDays = Math.floor(timeDifference / (1000 * 3600 * 24)) + 1;
-            const digi = response.monthforMyChartAvgTransaction[0].data
-            const avgThis = Math.floor(digi / numberOfDays);
-            console.log(`Math.floor( AVG: ${response.monthforMyChartAvgTransaction[0].data} / ${numberOfDays} = ${avgThis} )`); // mema lang to di yan actual formula
-
-            document.getElementById('avgTransaction').innerHTML = avgThis;
-            let number = parseInt(response.monthforMyChart[0].data) + parseInt(response.monthforMyChart[1].data)
-            let fixedNumber = Math.round(number * 100) / 100;
-            document.getElementById('avgIncome').innerHTML = fixedNumber.toLocaleString("en-US");
-        } // end of month filter
-        else if (selectedValue === 'Years') {
-            //START OF Total Customers per Province
-            const selectedType = chartTypeDropdown.value;
-            var selected_data;
-            switch (selectedType) {
-                case "ncr":
-                    selected_data = response.yearcustmerPerProvinceNCR
-                    break;
-                case "region-1":
-                    selected_data = response.yearcustmerPerProvinceRI
-                    break;
-                case "region-2":
-                    selected_data = response.yearcustmerPerProvinceRII
-                    break;
-                case "region-3":
-                    selected_data = response.yearcustmerPerProvinceRIII
-                    break;
-                case "region-4a":
-                    selected_data = response.yearcustmerPerProvinceRIVA
-                    break;
-                case "mimaropa":
-                    selected_data = response.yearcustmerPerProvinceMIMAROPA
-                    break;
-                case "region-5":
-                    selected_data = response.yearcustmerPerProvinceV
-                    break;
-                case "car":
-                    selected_data = response.yearcustmerPerProvinceCAR
-                    break;
-                case "region-6":
-                    selected_data = response.yearcustmerPerProvinceVI
-                    break;
-                case "region-7":
-                    selected_data = response.yearcustmerPerProvinceVII
-                    break;
-                case "region-8":
-                    selected_data = response.yearcustmerPerProvinceVIII
-                    break;
-                case "region-9":
-                    selected_data = response.yearcustmerPerProvinceIX
-                    break;
-                case "region-10":
-                    selected_data = response.yearcustmerPerProvinceX
-                    break;
-                case "region-11":
-                    selected_data = response.yearcustmerPerProvinceXI
-                    break;
-                case "region-12":
-                    selected_data = response.yearcustmerPerProvinceXII
-                    break;
-                case "region-13":
-                    selected_data = response.yearcustmerPerProvinceXIII
-                    break;
-                case "barm":
-                    selected_data = response.yearcustmerPerProvinceBARMM
-                    break;
-            }
-
-            constprovincesChart.data.labels = [];
-            constprovincesChart.data.datasets.forEach((dataset) => {
-                dataset.data = [];
-            });
-
-            var x = 0
-            while (selected_data[x] != null) {
-                var dataA = selected_data[x].label;
-                var dataB = selected_data[x].data;
-                var arrayZ = [{
-                    backgroundColor: getRandomColor(),
-                    data: {
-                        [dataA]: parseInt(dataB)
-                    },
-                    label: dataA
-                }]
-                for (var i = 0; i < arrayZ.length; i++) {
-                    provinceData.push(arrayZ[i]);
-                }
-                x++
-            }
-            constprovincesChart.data.datasets = provinceData;
-            constprovincesChart.config.data.labels = [];
-            constprovincesChart.update();
-            provinceData = [];
-
-            x = 0
-            var TSChart1 = response.yearforTransactionStatusChart;
-
-            var data1 = TSChart1.map(item => item.data);
-
-            transactionStatusChart.config.data = {
-                labels: ["Paid", "Cancelled", "Pending"],
-                datasets: [{
-                    data: data1,
-                    backgroundColor: [
-                        'rgba(0, 215, 132, 0.2)', //green
-                        'rgba(241, 37, 150, 0.2)', //yellow
-                        'rgba(229, 247, 48, 0.2)', //red
-
-
-                    ],
-                    borderColor: [
-                        'rgba(0, 215, 132, 0.93)', //green
-                        'rgba(241, 37, 150, 0.8)', //yellow
-                        'rgba(229, 247, 48, 0.8)', //red
-
-
-                    ],
-                    borderWidth: 2
-                }],
-            }
-            transactionStatusChart.update();
-            x = 0
-
-            var TSChart2 = response.yearforPaymendtMethodChart
-
-            var data2 = TSChart2.map(item => item.data);
-
-            paymendtMethodChart.config.data = {
-                labels: ["Over the Counter", "Online Payment", "Cheque"],
-                datasets: [{
-                    data: data2,
-                    backgroundColor: ['rgba(0, 21, 215, 0.2)',
-                        'rgba(0, 215, 132, 0.2)',
-                        'rgba(118, 0, 186, 0.2)',
-                    ],
-                    borderColor: ['rgba(0, 21, 215, 0.93)',
-                        'rgba(0, 215, 132, 1)',
-                        'rgba(118, 0, 186, 0.93)',
-                    ],
-                    borderWidth: 2
-                }],
-            }
-            paymendtMethodChart.update();
-
-            x = 0
-
-            var TSChart3 = response.yearforTransactionTypeChart;
-            var data3 = TSChart3.map(item => item.data);
-
-            transactionTypeChart.config.data = {
-                labels: ["Technical Services", "NLIMS", "ULIMS"],
-                datasets: [{
-                    data: data3,
-                    backgroundColor: ['rgba(186, 0, 0, 0.2)',
-                        'rgba(250, 154, 37, 0.2)',
-                        'rgba(37, 202, 247, 0.2)',
-                    ],
-                    borderColor: ['rgba(186, 0, 0, 0.93)',
-                        'rgba(250, 154, 37, 0.81)',
-                        'rgba(37, 202, 247, 0.81)',
-                    ],
-                    borderWidth: 2
-                }],
-            }
-            transactionTypeChart.update();
-
-            x = 0
-            var TSChart4 = response.yearforCustomerTypeChart;
-            var data4 = TSChart4.map(item => item.data);
-
-            customerTypeChart.config.data = {
-                labels: ["Student", "Individual", "Private", "Government", "Internal", "Academe", "Not Applicable", ],
-                datasets: [{
-                    data: data4,
-                    backgroundColor: ['rgba(247, 37, 149, 0.2)',
-                        'rgba(166, 37, 247, 0.2)',
-                        'rgba(255, 155, 22, 0.2)',
-                        'rgba(255, 213, 22, 0.2)',
-                        'rgba(49, 255, 22, 0.2)',
-                        'rgba(73, 0, 242, 0.2)',
-                        'rgba(0, 220, 242, 0.2)'
-
-                    ],
-                    borderColor: ['rgba(247, 37, 149, 0.81)',
-                        'rgba(166, 37, 247, 0.83)',
-                        'rgba(255, 155, 22, 0.83)',
-                        'rgba(255, 213, 22, 0.83)',
-                        'rgba(49, 255, 22, 0.83)',
-                        'rgba(73, 0, 242, 0.83)',
-                        'rgba(0, 220, 242, 0.83)'
-                    ],
-                    borderWidth: 2
-                }],
-            }
-            customerTypeChart.update();
-
-            myChart.config.data.datasets[2].data[0] = response.yearforMyChart[0].data;
-            myChart.config.data.datasets[3].data[0] = response.yearforMyChart[1].data;
-            myChart.update();
-
-            let fDate = new Date(document.getElementById('startDate').value);
-            let tDate = new Date(document.getElementById('endDate').value);
-
-            const timeDifference = tDate.getTime() - fDate.getTime();
-            const numberOfDays = Math.floor(timeDifference / (1000 * 3600 * 24)) + 1;
-            const digi = response.yearforMyChartAvgTransaction[0].data
-            const avgThis = Math.floor(digi / numberOfDays);
-            console.log(`Math.floor( AVG: ${response.yearforMyChartAvgTransaction[0].data} / ${numberOfDays} = ${avgThis} )`); // mema lang to di yan actual formula
-
-            document.getElementById('avgTransaction').innerHTML = avgThis;
-            let number = parseInt(response.yearforMyChart[0].data) + parseInt(response.yearforMyChart[1].data)
-            let fixedNumber = Math.round(number * 100) / 100;
-            document.getElementById('avgIncome').innerHTML = fixedNumber.toLocaleString("en-US");
-        } // end of year filter
     }
     dateFilter();
 </script>

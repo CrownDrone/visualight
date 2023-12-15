@@ -46,13 +46,27 @@ class ChartController extends BaseController
         $fromDate = "";
         $toDate = "";
         $qVal = "";
+        $tStatus = "";
         if (Yii::$app->request->isAjax) {
+
             $fromDate = Yii::$app->request->post('fromDate');
             $toDate = Yii::$app->request->post('toDate');
+            $tStatus = Yii::$app->request->post('tStatus');
+
             if (Yii::$app->request->post('qVal') === "A") {
                 $qVal = "COUNT(t1.customer_id) as data";
             } else {
                 $qVal = "SUM(t1.amount) as data";
+            };
+
+            if (Yii::$app->request->post('tStatus') === "1") {
+                $tStatus = 1;
+            } else if (Yii::$app->request->post('tStatus') === "2") {
+                $tStatus = 2;
+            } else if (Yii::$app->request->post('tStatus') === "3") {
+                $tStatus = 3;
+            } else {
+                $tStatus = ['1', '2', '3'];
             };
 
             //----------------------START OF REGIONAL PROVINCE DAYS-----------------------------------
@@ -61,7 +75,7 @@ class ChartController extends BaseController
                 ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
-                ->where(['division' => ['2']])
+                ->where(['division' => ['2'], 'transaction_status' => $tStatus])
                 ->andWhere(['t2.address' => ['Metro Manila']])
                 ->andWhere(['between', 't1.transaction_date', $fromDate, $toDate])
                 ->groupBy('label')
@@ -71,7 +85,7 @@ class ChartController extends BaseController
                 ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
-                ->where(['division' => ['2']])
+                ->where(['division' => ['2'], 'transaction_status' => $tStatus])
                 ->andWhere(['t2.address' => ['Ilocos Norte', 'Ilocos Sur', 'La Union', 'Pangasinan']])
                 ->andWhere(['between', 't1.transaction_date', $fromDate, $toDate])
                 ->groupBy('label')
@@ -81,7 +95,7 @@ class ChartController extends BaseController
                 ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
-                ->where(['division' => ['2']])
+                ->where(['division' => ['2'], 'transaction_status' => $tStatus])
                 ->andWhere(['t2.address' => ['Batanes', 'Cagayan', 'La Union', 'Isabela', 'Quirino', 'Nueva Vizcaya']])
                 ->andWhere(['between', 't1.transaction_date', $fromDate, $toDate])
                 ->groupBy('label')
@@ -91,7 +105,7 @@ class ChartController extends BaseController
                 ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
-                ->where(['division' => ['2']])
+                ->where(['division' => ['2'], 'transaction_status' => $tStatus])
                 ->andWhere(['t2.address' => ['Aurora', 'Bataan', 'Bulacan', 'Nueba Ecija', 'Pampanga', 'Tarlac', 'Zambales']])
                 ->andWhere(['between', 't1.transaction_date', $fromDate, $toDate])
                 ->groupBy('label')
@@ -101,7 +115,7 @@ class ChartController extends BaseController
                 ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
-                ->where(['division' => ['2']])
+                ->where(['division' => ['2'], 'transaction_status' => $tStatus])
                 ->andWhere(['t2.address' => ['Batangas', 'Cavite', 'Laguna', 'Quezon', 'Rizal',]])
                 ->andWhere(['between', 't1.transaction_date', $fromDate, $toDate])
                 ->groupBy('label')
@@ -111,7 +125,7 @@ class ChartController extends BaseController
                 ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
-                ->where(['division' => ['2']])
+                ->where(['division' => ['2'], 'transaction_status' => $tStatus])
                 ->andWhere(['t2.address' => ['Marinduque', 'Occidental Mindoro', 'Oriental Mindoro', 'Palawan', 'Romblon']])
                 ->andWhere(['between', 't1.transaction_date', $fromDate, $toDate])
                 ->groupBy('label')
@@ -121,7 +135,7 @@ class ChartController extends BaseController
                 ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
-                ->where(['division' => ['2']])
+                ->where(['division' => ['2'], 'transaction_status' => $tStatus])
                 ->andWhere(['t2.address' => ['Albay', 'Camarines Sur', 'Camarines Norte', 'Catanduanes', 'Masbate', 'Sorsogon']])
                 ->andWhere(['between', 't1.transaction_date', $fromDate, $toDate])
                 ->groupBy('label')
@@ -131,7 +145,7 @@ class ChartController extends BaseController
                 ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
-                ->where(['division' => ['2']])
+                ->where(['division' => ['2'], 'transaction_status' => $tStatus])
                 ->andWhere(['t2.address' => ['Abra', 'Apayao', 'Benguet', 'Ifugao', 'Kalinga', 'Mountain Province']])
                 ->andWhere(['between', 't1.transaction_date', $fromDate, $toDate])
                 ->groupBy('label')
@@ -141,7 +155,7 @@ class ChartController extends BaseController
                 ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
-                ->where(['division' => ['2']])
+                ->where(['division' => ['2'], 'transaction_status' => $tStatus])
                 ->andWhere(['t2.address' => ['Aklan', 'Antique', 'Capiz', 'Guimaras', 'Iloilo', 'Negros Occidental']])
                 ->andWhere(['between', 't1.transaction_date', $fromDate, $toDate])
                 ->groupBy('label')
@@ -151,7 +165,7 @@ class ChartController extends BaseController
                 ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
-                ->where(['division' => ['2']])
+                ->where(['division' => ['2'], 'transaction_status' => $tStatus])
                 ->andWhere(['t2.address' => ['Bohol', 'Cebu', 'Negros Oriental', 'Siquijor']])
                 ->andWhere(['between', 't1.transaction_date', $fromDate, $toDate])
                 ->groupBy('label')
@@ -161,7 +175,7 @@ class ChartController extends BaseController
                 ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
-                ->where(['division' => ['2']])
+                ->where(['division' => ['2'], 'transaction_status' => $tStatus])
                 ->andWhere(['t2.address' => ['Biliran', 'Eastern Samar', 'Leyte', 'Western Samar', 'Samar', 'Southern Leyte']])
                 ->andWhere(['between', 't1.transaction_date', $fromDate, $toDate])
                 ->groupBy('label')
@@ -171,7 +185,7 @@ class ChartController extends BaseController
                 ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
-                ->where(['division' => ['2']])
+                ->where(['division' => ['2'], 'transaction_status' => $tStatus])
                 ->andWhere(['t2.address' => ['Zamboanga del Sur', 'Zamboanga del Norte', 'Zamboanga Sibugay']])
                 ->andWhere(['between', 't1.transaction_date', $fromDate, $toDate])
                 ->groupBy('label')
@@ -181,7 +195,7 @@ class ChartController extends BaseController
                 ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
-                ->where(['division' => ['2']])
+                ->where(['division' => ['2'], 'transaction_status' => $tStatus])
                 ->andWhere(['t2.address' => ['Bukidnon', 'Camiguin', 'Lanao del Norte', 'Misamis Oriental', 'Misamis Occidental']])
                 ->andWhere(['between', 't1.transaction_date', $fromDate, $toDate])
                 ->groupBy('label')
@@ -191,7 +205,7 @@ class ChartController extends BaseController
                 ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
-                ->where(['division' => ['2']])
+                ->where(['division' => ['2'], 'transaction_status' => $tStatus])
                 ->andWhere(['t2.address' => ['Davao de Oro', 'Davao del Norte', 'Davao del Sur', 'Davao Oriental', 'Davao Occidental']])
                 ->andWhere(['between', 't1.transaction_date', $fromDate, $toDate])
                 ->groupBy('label')
@@ -201,7 +215,7 @@ class ChartController extends BaseController
                 ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
-                ->where(['division' => ['2']])
+                ->where(['division' => ['2'], 'transaction_status' => $tStatus])
                 ->andWhere(['t2.address' => ['Cotabato', 'Sarangani', 'South Cotabato', 'Sultan Kudarat']])
                 ->andWhere(['between', 't1.transaction_date', $fromDate, $toDate])
                 ->groupBy('label')
@@ -211,7 +225,7 @@ class ChartController extends BaseController
                 ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
-                ->where(['division' => ['2']])
+                ->where(['division' => ['2'], 'transaction_status' => $tStatus])
                 ->andWhere(['t2.address' => ['Agusan del Norte', 'Agusan del Sur', 'Dinagat Islands', 'Surigao del Norte', 'Surigao del Sur']])
                 ->andWhere(['between', 't1.transaction_date', $fromDate, $toDate])
                 ->groupBy('label')
@@ -221,17 +235,29 @@ class ChartController extends BaseController
                 ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
-                ->where(['division' => ['2']])
+                ->where(['division' => ['2'], 'transaction_status' => $tStatus])
                 ->andWhere(['t2.address' => ['Basilan', 'Lanao del Sur', 'Maguindanao del Norte', 'Sulu', 'Maguindanao del Sur', 'Tawi-Tawi']])
                 ->andWhere(['between', 't1.transaction_date', $fromDate, $toDate])
                 ->groupBy('label')
                 ->all();
+
+
+            $allProvince = (new Query())
+                ->select(['t2.address as label', $qVal])
+                ->from(['t2' => 'customer'])
+                ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
+                ->where(['division' => ['2'], 'transaction_status' => $tStatus])
+                ->andWhere(['not', ['t2.address' => ['suman']]])
+                ->andWhere(['between', 't1.transaction_date', $fromDate, $toDate])
+                ->groupBy('label')
+                ->all();
+
             //---------END OF PROVINCE----START OF OTHER CHART DAYS
 
             $queryAllDate = (new Query()) //daily transaction record seperated by division, Y axis for the chart
                 ->select(['transaction_date AS labels', 'COUNT(*) AS datasets', 'division AS label'])
                 ->from('visualight2data.transaction') //from visualight2data database within transaction table
-                ->where(['division' => ['2']])
+                ->where(['division' => ['2'], 'transaction_status' => $tStatus])
                 ->andWhere(['between', 'transaction_date', $fromDate, $toDate])
                 ->groupBy('labels, division')
                 ->orderBy('labels')
@@ -250,7 +276,7 @@ class ChartController extends BaseController
             $queryTotalSale = (new Query()) //daily sales record seperated by division
                 ->select(['transaction_date AS labels', 'SUM(amount) AS datasets', 'division AS label'])
                 ->from('visualight2data.transaction') //from visualight2data database within transaction table
-                ->where(['division' => ['2']])
+                ->where(['division' => ['2'], 'transaction_status' => $tStatus])
                 ->andWhere(['between', 'transaction_date', $fromDate, $toDate])
                 ->groupBy('labels, division')
                 ->orderBy('labels')
@@ -307,7 +333,7 @@ class ChartController extends BaseController
             $forMyChartAvgTransaction = (new Query())
                 ->select(['COUNT(*) AS data'])
                 ->from('transaction')
-                ->where(['division' => ['2']])
+                ->where(['division' => ['2'], 'transaction_status' => $tStatus])
                 ->andWhere(['between', 'transaction_date', $fromDate, $toDate])
                 ->all();
 
@@ -345,6 +371,7 @@ class ChartController extends BaseController
                 'custmerPerProvinceXII' => $custmerPerProvinceXII,
                 'custmerPerProvinceXIII' => $custmerPerProvinceXIII,
                 'custmerPerProvinceBARMM' => $custmerPerProvinceBARMM,
+                'allProvince' => $allProvince,
                 //
                 'queryAllDate' => $queryAllDate,
                 'queryTotalSale' => $queryTotalSale,
@@ -375,13 +402,27 @@ class ChartController extends BaseController
         $fromDate = "";
         $toDate = "";
         $qVal = "";
+        $tStatus = "";
         if (Yii::$app->request->isAjax) {
+
             $fromDate = Yii::$app->request->post('fromDate');
             $toDate = Yii::$app->request->post('toDate');
+            $tStatus = Yii::$app->request->post('tStatus');
+
             if (Yii::$app->request->post('qVal') === "A") {
                 $qVal = "COUNT(t1.customer_id) as data";
             } else {
                 $qVal = "SUM(t1.amount) as data";
+            };
+
+            if (Yii::$app->request->post('tStatus') === "1") {
+                $tStatus = 1;
+            } else if (Yii::$app->request->post('tStatus') === "2") {
+                $tStatus = 2;
+            } else if (Yii::$app->request->post('tStatus') === "3") {
+                $tStatus = 3;
+            } else {
+                $tStatus = ['1', '2', '3'];
             };
 
             //----------------------START OF REGIONAL PROVINCE DAYS-----------------------------------
@@ -390,7 +431,7 @@ class ChartController extends BaseController
                 ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
-                ->where(['division' => ['2']])
+                ->where(['division' => ['2'], 'transaction_status' => $tStatus])
                 ->andWhere(['t2.address' => ['Metro Manila']])
                 ->andWhere(['between', 'DATE_FORMAT(t1.transaction_date, "%Y-%m")', $fromDate, $toDate])
                 ->groupBy('label')
@@ -400,7 +441,7 @@ class ChartController extends BaseController
                 ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
-                ->where(['division' => ['2']])
+                ->where(['division' => ['2'], 'transaction_status' => $tStatus])
                 ->andWhere(['t2.address' => ['Ilocos Norte', 'Ilocos Sur', 'La Union', 'Pangasinan']])
                 ->andWhere(['between', 'DATE_FORMAT(t1.transaction_date, "%Y-%m")', $fromDate, $toDate])
                 ->groupBy('label')
@@ -410,7 +451,7 @@ class ChartController extends BaseController
                 ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
-                ->where(['division' => ['2']])
+                ->where(['division' => ['2'], 'transaction_status' => $tStatus])
                 ->andWhere(['t2.address' => ['Batanes', 'Cagayan', 'La Union', 'Isabela', 'Quirino', 'Nueva Vizcaya']])
                 ->andWhere(['between', 'DATE_FORMAT(t1.transaction_date, "%Y-%m")', $fromDate, $toDate])
                 ->groupBy('label')
@@ -420,7 +461,7 @@ class ChartController extends BaseController
                 ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
-                ->where(['division' => ['2']])
+                ->where(['division' => ['2'], 'transaction_status' => $tStatus])
                 ->andWhere(['t2.address' => ['Aurora', 'Bataan', 'Bulacan', 'Nueba Ecija', 'Pampanga', 'Tarlac', 'Zambales']])
                 ->andWhere(['between', 'DATE_FORMAT(t1.transaction_date, "%Y-%m")', $fromDate, $toDate])
                 ->groupBy('label')
@@ -430,7 +471,7 @@ class ChartController extends BaseController
                 ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
-                ->where(['division' => ['2']])
+                ->where(['division' => ['2'], 'transaction_status' => $tStatus])
                 ->andWhere(['t2.address' => ['Batangas', 'Cavite', 'Laguna', 'Quezon', 'Rizal',]])
                 ->andWhere(['between', 'DATE_FORMAT(t1.transaction_date, "%Y-%m")', $fromDate, $toDate])
                 ->groupBy('label')
@@ -440,7 +481,7 @@ class ChartController extends BaseController
                 ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
-                ->where(['division' => ['2']])
+                ->where(['division' => ['2'], 'transaction_status' => $tStatus])
                 ->andWhere(['t2.address' => ['Marinduque', 'Occidental Mindoro', 'Oriental Mindoro', 'Palawan', 'Romblon']])
                 ->andWhere(['between', 'DATE_FORMAT(t1.transaction_date, "%Y-%m")', $fromDate, $toDate])
                 ->groupBy('label')
@@ -450,7 +491,7 @@ class ChartController extends BaseController
                 ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
-                ->where(['division' => ['2']])
+                ->where(['division' => ['2'], 'transaction_status' => $tStatus])
                 ->andWhere(['t2.address' => ['Albay', 'Camarines Sur', 'Camarines Norte', 'Catanduanes', 'Masbate', 'Sorsogon']])
                 ->andWhere(['between', 'DATE_FORMAT(t1.transaction_date, "%Y-%m")', $fromDate, $toDate])
                 ->groupBy('label')
@@ -460,7 +501,7 @@ class ChartController extends BaseController
                 ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
-                ->where(['division' => ['2']])
+                ->where(['division' => ['2'], 'transaction_status' => $tStatus])
                 ->andWhere(['t2.address' => ['Abra', 'Apayao', 'Benguet', 'Ifugao', 'Kalinga', 'Mountain Province']])
                 ->andWhere(['between', 'DATE_FORMAT(t1.transaction_date, "%Y-%m")', $fromDate, $toDate])
                 ->groupBy('label')
@@ -470,7 +511,7 @@ class ChartController extends BaseController
                 ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
-                ->where(['division' => ['2']])
+                ->where(['division' => ['2'], 'transaction_status' => $tStatus])
                 ->andWhere(['t2.address' => ['Aklan', 'Antique', 'Capiz', 'Guimaras', 'Iloilo', 'Negros Occidental']])
                 ->andWhere(['between', 'DATE_FORMAT(t1.transaction_date, "%Y-%m")', $fromDate, $toDate])
                 ->groupBy('label')
@@ -480,7 +521,7 @@ class ChartController extends BaseController
                 ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
-                ->where(['division' => ['2']])
+                ->where(['division' => ['2'], 'transaction_status' => $tStatus])
                 ->andWhere(['t2.address' => ['Bohol', 'Cebu', 'Negros Oriental', 'Siquijor']])
                 ->andWhere(['between', 'DATE_FORMAT(t1.transaction_date, "%Y-%m")', $fromDate, $toDate])
                 ->groupBy('label')
@@ -490,7 +531,7 @@ class ChartController extends BaseController
                 ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
-                ->where(['division' => ['2']])
+                ->where(['division' => ['2'], 'transaction_status' => $tStatus])
                 ->andWhere(['t2.address' => ['Biliran', 'Eastern Samar', 'Leyte', 'Western Samar', 'Samar', 'Southern Leyte']])
                 ->andWhere(['between', 'DATE_FORMAT(t1.transaction_date, "%Y-%m")', $fromDate, $toDate])
                 ->groupBy('label')
@@ -500,7 +541,7 @@ class ChartController extends BaseController
                 ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
-                ->where(['division' => ['2']])
+                ->where(['division' => ['2'], 'transaction_status' => $tStatus])
                 ->andWhere(['t2.address' => ['Zamboanga del Sur', 'Zamboanga del Norte', 'Zamboanga Sibugay']])
                 ->andWhere(['between', 'DATE_FORMAT(t1.transaction_date, "%Y-%m")', $fromDate, $toDate])
                 ->groupBy('label')
@@ -510,7 +551,7 @@ class ChartController extends BaseController
                 ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
-                ->where(['division' => ['2']])
+                ->where(['division' => ['2'], 'transaction_status' => $tStatus])
                 ->andWhere(['t2.address' => ['Bukidnon', 'Camiguin', 'Lanao del Norte', 'Misamis Oriental', 'Misamis Occidental']])
                 ->andWhere(['between', 'DATE_FORMAT(t1.transaction_date, "%Y-%m")', $fromDate, $toDate])
                 ->groupBy('label')
@@ -520,7 +561,7 @@ class ChartController extends BaseController
                 ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
-                ->where(['division' => ['2']])
+                ->where(['division' => ['2'], 'transaction_status' => $tStatus])
                 ->andWhere(['t2.address' => ['Davao de Oro', 'Davao del Norte', 'Davao del Sur', 'Davao Oriental', 'Davao Occidental']])
                 ->andWhere(['between', 'DATE_FORMAT(t1.transaction_date, "%Y-%m")', $fromDate, $toDate])
                 ->groupBy('label')
@@ -530,7 +571,7 @@ class ChartController extends BaseController
                 ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
-                ->where(['division' => ['2']])
+                ->where(['division' => ['2'], 'transaction_status' => $tStatus])
                 ->andWhere(['t2.address' => ['Cotabato', 'Sarangani', 'South Cotabato', 'Sultan Kudarat']])
                 ->andWhere(['between', 'DATE_FORMAT(t1.transaction_date, "%Y-%m")', $fromDate, $toDate])
                 ->groupBy('label')
@@ -540,7 +581,7 @@ class ChartController extends BaseController
                 ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
-                ->where(['division' => ['2']])
+                ->where(['division' => ['2'], 'transaction_status' => $tStatus])
                 ->andWhere(['t2.address' => ['Agusan del Norte', 'Agusan del Sur', 'Dinagat Islands', 'Surigao del Norte', 'Surigao del Sur']])
                 ->andWhere(['between', 'DATE_FORMAT(t1.transaction_date, "%Y-%m")', $fromDate, $toDate])
                 ->groupBy('label')
@@ -550,17 +591,28 @@ class ChartController extends BaseController
                 ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
-                ->where(['division' => ['2']])
+                ->where(['division' => ['2'], 'transaction_status' => $tStatus])
                 ->andWhere(['t2.address' => ['Basilan', 'Lanao del Sur', 'Maguindanao del Norte', 'Sulu', 'Maguindanao del Sur', 'Tawi-Tawi']])
                 ->andWhere(['between', 'DATE_FORMAT(t1.transaction_date, "%Y-%m")', $fromDate, $toDate])
                 ->groupBy('label')
                 ->all();
+
+            $allProvince = (new Query())
+                ->select(['t2.address as label', $qVal])
+                ->from(['t2' => 'customer'])
+                ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
+                ->where(['division' => ['2'], 'transaction_status' => $tStatus])
+                ->andWhere(['not', ['t2.address' => ['suman']]])
+                ->andWhere(['between', 'DATE_FORMAT(t1.transaction_date, "%Y-%m")', $fromDate, $toDate])
+                ->groupBy('label')
+                ->all();
+
             //---------END OF PROVINCE----START OF OTHER CHART MONTHS
 
             $queryAllDate = (new Query()) //daily transaction record seperated by division, Y axis for the chart
                 ->select(['DATE_FORMAT(transaction_date, "%Y-%m") AS labels', 'COUNT(*) AS datasets', 'division AS label'])
                 ->from('visualight2data.transaction') //from visualight2data database within transaction table
-                ->where(['division' => ['2']])
+                ->where(['division' => ['2'], 'transaction_status' => $tStatus])
                 ->andWhere(['between', 'DATE_FORMAT(transaction_date, "%Y-%m")', $fromDate, $toDate])
                 ->groupBy('labels, division')
                 ->orderBy('labels')
@@ -579,7 +631,7 @@ class ChartController extends BaseController
             $queryTotalSale = (new Query()) //daily sales record seperated by division
                 ->select(['DATE_FORMAT(transaction_date, "%Y-%m") AS labels', 'SUM(amount) AS datasets', 'division AS label'])
                 ->from('visualight2data.transaction') //from visualight2data database within transaction table
-                ->where(['division' => ['2']])
+                ->where(['division' => ['2'], 'transaction_status' => $tStatus])
                 ->andWhere(['between', 'DATE_FORMAT(transaction_date, "%Y-%m")', $fromDate, $toDate])
                 ->groupBy('labels, division')
                 ->orderBy('labels')
@@ -628,7 +680,7 @@ class ChartController extends BaseController
             $forMyChart = (new Query()) //average income per division
                 ->select(['division as label', 'ROUND(AVG(amount)) as data'])
                 ->from('transaction')
-                ->where(['division' => ['2']])
+                ->where(['division' => ['2'], 'transaction_status' => $tStatus])
                 ->andWhere(['between', 'DATE_FORMAT(transaction_date, "%Y-%m")', $fromDate, $toDate])
                 ->groupBy('label')
                 ->all();
@@ -636,7 +688,7 @@ class ChartController extends BaseController
             $forMyChartAvgTransaction = (new Query())
                 ->select(['COUNT(*) AS data'])
                 ->from('transaction')
-                ->where(['division' => ['2']])
+                ->where(['division' => ['2'], 'transaction_status' => $tStatus])
                 ->andWhere(['between', 'DATE_FORMAT(transaction_date, "%Y-%m")', $fromDate, $toDate])
                 ->all();
 
@@ -674,6 +726,7 @@ class ChartController extends BaseController
                 'custmerPerProvinceXII' => $custmerPerProvinceXII,
                 'custmerPerProvinceXIII' => $custmerPerProvinceXIII,
                 'custmerPerProvinceBARMM' => $custmerPerProvinceBARMM,
+                'allProvince' => $allProvince,
                 //
                 'queryAllDate' => $queryAllDate,
                 'queryTotalSale' => $queryTotalSale,
@@ -703,13 +756,27 @@ class ChartController extends BaseController
         $fromDate = "";
         $toDate = "";
         $qVal = "";
+        $tStatus = "";
         if (Yii::$app->request->isAjax) {
+
             $fromDate = Yii::$app->request->post('fromDate');
             $toDate = Yii::$app->request->post('toDate');
+            $tStatus = Yii::$app->request->post('tStatus');
+
             if (Yii::$app->request->post('qVal') === "A") {
                 $qVal = "COUNT(t1.customer_id) as data";
             } else {
                 $qVal = "SUM(t1.amount) as data";
+            };
+
+            if (Yii::$app->request->post('tStatus') === "1") {
+                $tStatus = 1;
+            } else if (Yii::$app->request->post('tStatus') === "2") {
+                $tStatus = 2;
+            } else if (Yii::$app->request->post('tStatus') === "3") {
+                $tStatus = 3;
+            } else {
+                $tStatus = ['1', '2', '3'];
             };
 
             //----------------------START OF REGIONAL PROVINCE DAYS-----------------------------------
@@ -718,7 +785,7 @@ class ChartController extends BaseController
                 ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
-                ->where(['division' => ['2']])
+                ->where(['division' => ['2'], 'transaction_status' => $tStatus])
                 ->andWhere(['t2.address' => ['Metro Manila']])
                 ->andWhere(['between', 'DATE_FORMAT(t1.transaction_date, "%Y")', $fromDate, $toDate])
                 ->groupBy('label')
@@ -728,7 +795,7 @@ class ChartController extends BaseController
                 ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
-                ->where(['division' => ['2']])
+                ->where(['division' => ['2'], 'transaction_status' => $tStatus])
                 ->andWhere(['t2.address' => ['Ilocos Norte', 'Ilocos Sur', 'La Union', 'Pangasinan']])
                 ->andWhere(['between', 'DATE_FORMAT(t1.transaction_date, "%Y")', $fromDate, $toDate])
                 ->groupBy('label')
@@ -738,7 +805,7 @@ class ChartController extends BaseController
                 ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
-                ->where(['division' => ['2']])
+                ->where(['division' => ['2'], 'transaction_status' => $tStatus])
                 ->andWhere(['t2.address' => ['Batanes', 'Cagayan', 'La Union', 'Isabela', 'Quirino', 'Nueva Vizcaya']])
                 ->andWhere(['between', 'DATE_FORMAT(t1.transaction_date, "%Y")', $fromDate, $toDate])
                 ->groupBy('label')
@@ -748,7 +815,7 @@ class ChartController extends BaseController
                 ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
-                ->where(['division' => ['2']])
+                ->where(['division' => ['2'], 'transaction_status' => $tStatus])
                 ->andWhere(['t2.address' => ['Aurora', 'Bataan', 'Bulacan', 'Nueba Ecija', 'Pampanga', 'Tarlac', 'Zambales']])
                 ->andWhere(['between', 'DATE_FORMAT(t1.transaction_date, "%Y")', $fromDate, $toDate])
                 ->groupBy('label')
@@ -758,7 +825,7 @@ class ChartController extends BaseController
                 ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
-                ->where(['division' => ['2']])
+                ->where(['division' => ['2'], 'transaction_status' => $tStatus])
                 ->andWhere(['t2.address' => ['Batangas', 'Cavite', 'Laguna', 'Quezon', 'Rizal',]])
                 ->andWhere(['between', 'DATE_FORMAT(t1.transaction_date, "%Y")', $fromDate, $toDate])
                 ->groupBy('label')
@@ -768,7 +835,7 @@ class ChartController extends BaseController
                 ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
-                ->where(['division' => ['2']])
+                ->where(['division' => ['2'], 'transaction_status' => $tStatus])
                 ->andWhere(['t2.address' => ['Marinduque', 'Occidental Mindoro', 'Oriental Mindoro', 'Palawan', 'Romblon']])
                 ->andWhere(['between', 'DATE_FORMAT(t1.transaction_date, "%Y")', $fromDate, $toDate])
                 ->groupBy('label')
@@ -778,7 +845,7 @@ class ChartController extends BaseController
                 ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
-                ->where(['division' => ['2']])
+                ->where(['division' => ['2'], 'transaction_status' => $tStatus])
                 ->andWhere(['t2.address' => ['Albay', 'Camarines Sur', 'Camarines Norte', 'Catanduanes', 'Masbate', 'Sorsogon']])
                 ->andWhere(['between', 'DATE_FORMAT(t1.transaction_date, "%Y")', $fromDate, $toDate])
                 ->groupBy('label')
@@ -788,7 +855,7 @@ class ChartController extends BaseController
                 ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
-                ->where(['division' => ['2']])
+                ->where(['division' => ['2'], 'transaction_status' => $tStatus])
                 ->andWhere(['t2.address' => ['Abra', 'Apayao', 'Benguet', 'Ifugao', 'Kalinga', 'Mountain Province']])
                 ->andWhere(['between', 'DATE_FORMAT(t1.transaction_date, "%Y")', $fromDate, $toDate])
                 ->groupBy('label')
@@ -798,7 +865,7 @@ class ChartController extends BaseController
                 ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
-                ->where(['division' => ['2']])
+                ->where(['division' => ['2'], 'transaction_status' => $tStatus])
                 ->andWhere(['t2.address' => ['Aklan', 'Antique', 'Capiz', 'Guimaras', 'Iloilo', 'Negros Occidental']])
                 ->andWhere(['between', 'DATE_FORMAT(t1.transaction_date, "%Y")', $fromDate, $toDate])
                 ->groupBy('label')
@@ -808,7 +875,7 @@ class ChartController extends BaseController
                 ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
-                ->where(['division' => ['2']])
+                ->where(['division' => ['2'], 'transaction_status' => $tStatus])
                 ->andWhere(['t2.address' => ['Bohol', 'Cebu', 'Negros Oriental', 'Siquijor']])
                 ->andWhere(['between', 'DATE_FORMAT(t1.transaction_date, "%Y")', $fromDate, $toDate])
                 ->groupBy('label')
@@ -818,7 +885,7 @@ class ChartController extends BaseController
                 ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
-                ->where(['division' => ['2']])
+                ->where(['division' => ['2'], 'transaction_status' => $tStatus])
                 ->andWhere(['t2.address' => ['Biliran', 'Eastern Samar', 'Leyte', 'Western Samar', 'Samar', 'Southern Leyte']])
                 ->andWhere(['between', 'DATE_FORMAT(t1.transaction_date, "%Y")', $fromDate, $toDate])
                 ->groupBy('label')
@@ -828,7 +895,7 @@ class ChartController extends BaseController
                 ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
-                ->where(['division' => ['2']])
+                ->where(['division' => ['2'], 'transaction_status' => $tStatus])
                 ->andWhere(['t2.address' => ['Zamboanga del Sur', 'Zamboanga del Norte', 'Zamboanga Sibugay']])
                 ->andWhere(['between', 'DATE_FORMAT(t1.transaction_date, "%Y")', $fromDate, $toDate])
                 ->groupBy('label')
@@ -838,7 +905,7 @@ class ChartController extends BaseController
                 ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
-                ->where(['division' => ['2']])
+                ->where(['division' => ['2'], 'transaction_status' => $tStatus])
                 ->andWhere(['t2.address' => ['Bukidnon', 'Camiguin', 'Lanao del Norte', 'Misamis Oriental', 'Misamis Occidental']])
                 ->andWhere(['between', 'DATE_FORMAT(t1.transaction_date, "%Y")', $fromDate, $toDate])
                 ->groupBy('label')
@@ -848,7 +915,7 @@ class ChartController extends BaseController
                 ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
-                ->where(['division' => ['2']])
+                ->where(['division' => ['2'], 'transaction_status' => $tStatus])
                 ->andWhere(['t2.address' => ['Davao de Oro', 'Davao del Norte', 'Davao del Sur', 'Davao Oriental', 'Davao Occidental']])
                 ->andWhere(['between', 'DATE_FORMAT(t1.transaction_date, "%Y")', $fromDate, $toDate])
                 ->groupBy('label')
@@ -858,7 +925,7 @@ class ChartController extends BaseController
                 ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
-                ->where(['division' => ['2']])
+                ->where(['division' => ['2'], 'transaction_status' => $tStatus])
                 ->andWhere(['t2.address' => ['Cotabato', 'Sarangani', 'South Cotabato', 'Sultan Kudarat']])
                 ->andWhere(['between', 'DATE_FORMAT(t1.transaction_date, "%Y")', $fromDate, $toDate])
                 ->groupBy('label')
@@ -868,7 +935,7 @@ class ChartController extends BaseController
                 ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
-                ->where(['division' => ['2']])
+                ->where(['division' => ['2'], 'transaction_status' => $tStatus])
                 ->andWhere(['t2.address' => ['Agusan del Norte', 'Agusan del Sur', 'Dinagat Islands', 'Surigao del Norte', 'Surigao del Sur']])
                 ->andWhere(['between', 'DATE_FORMAT(t1.transaction_date, "%Y")', $fromDate, $toDate])
                 ->groupBy('label')
@@ -878,17 +945,28 @@ class ChartController extends BaseController
                 ->select(['t2.address as label', $qVal])
                 ->from(['t2' => 'customer'])
                 ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
-                ->where(['division' => ['2']])
+                ->where(['division' => ['2'], 'transaction_status' => $tStatus])
                 ->andWhere(['t2.address' => ['Basilan', 'Lanao del Sur', 'Maguindanao del Norte', 'Sulu', 'Maguindanao del Sur', 'Tawi-Tawi']])
                 ->andWhere(['between', 'DATE_FORMAT(t1.transaction_date, "%Y")', $fromDate, $toDate])
                 ->groupBy('label')
                 ->all();
+
+            $allProvince = (new Query())
+                ->select(['t2.address as label', $qVal])
+                ->from(['t2' => 'customer'])
+                ->join('JOIN', 'transaction t1', 't2.id = t1.customer_id')
+                ->where(['division' => ['2'], 'transaction_status' => $tStatus])
+                ->andWhere(['not', ['t2.address' => ['suman']]])
+                ->andWhere(['between', 'DATE_FORMAT(transaction_date, "%Y")', $fromDate, $toDate])
+                ->groupBy('label')
+                ->all();
+
             //---------END OF PROVINCE----START OF OTHER CHART YEARS
 
             $queryAllDate = (new Query()) //daily transaction record seperated by division, Y axis for the chart
                 ->select(['DATE_FORMAT(transaction_date, "%Y") AS labels', 'COUNT(*) AS datasets', 'division AS label'])
                 ->from('visualight2data.transaction') //from visualight2data database within transaction table
-                ->where(['division' => ['2']])
+                ->where(['division' => ['2'], 'transaction_status' => $tStatus])
                 ->andWhere(['between', 'DATE_FORMAT(transaction_date, "%Y")', $fromDate, $toDate])
                 ->groupBy('labels, division')
                 ->orderBy('labels')
@@ -907,7 +985,7 @@ class ChartController extends BaseController
             $queryTotalSale = (new Query()) //daily sales record seperated by division
                 ->select(['DATE_FORMAT(transaction_date, "%Y") AS labels', 'SUM(amount) AS datasets', 'division AS label'])
                 ->from('visualight2data.transaction') //from visualight2data database within transaction table
-                ->where(['division' => ['2']])
+                ->where(['division' => ['2'], 'transaction_status' => $tStatus])
                 ->andWhere(['between', 'DATE_FORMAT(transaction_date, "%Y")', $fromDate, $toDate])
                 ->groupBy('labels, division')
                 ->orderBy('labels')
@@ -956,7 +1034,7 @@ class ChartController extends BaseController
             $forMyChart = (new Query()) //average income per division
                 ->select(['division as label', 'ROUND(AVG(amount)) as data'])
                 ->from('transaction')
-                ->where(['division' => ['2']])
+                ->where(['division' => ['2'], 'transaction_status' => $tStatus])
                 ->andWhere(['between', 'DATE_FORMAT(transaction_date, "%Y")', $fromDate, $toDate])
                 ->groupBy('division')
                 ->all();
@@ -964,7 +1042,7 @@ class ChartController extends BaseController
             $forMyChartAvgTransaction = (new Query())
                 ->select(['COUNT(*) AS data'])
                 ->from('transaction')
-                ->where(['division' => ['2']])
+                ->where(['division' => ['2'], 'transaction_status' => $tStatus])
                 ->andWhere(['between', 'DATE_FORMAT(transaction_date, "%Y")', $fromDate, $toDate])
                 ->all();
 
@@ -1002,6 +1080,7 @@ class ChartController extends BaseController
                 'custmerPerProvinceXII' => $custmerPerProvinceXII,
                 'custmerPerProvinceXIII' => $custmerPerProvinceXIII,
                 'custmerPerProvinceBARMM' => $custmerPerProvinceBARMM,
+                'allProvince' => $allProvince,
                 //
                 'queryAllDate' => $queryAllDate,
                 'queryTotalSale' => $queryTotalSale,
@@ -1139,10 +1218,10 @@ class ChartController extends BaseController
                 ->where(['date' => [$InputYear]])
                 ->groupBy('date')
                 ->all();
-                return json_encode([
-                    'transaction' => $transaction,
-                    'income' => $income,
-                ]);
+            return json_encode([
+                'transaction' => $transaction,
+                'income' => $income,
+            ]);
         }
 
         Yii::$app->set('db', [ //revert default connection 
