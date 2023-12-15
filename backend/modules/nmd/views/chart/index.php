@@ -1554,7 +1554,7 @@ Yii::$app->set('db', [ //revert default connection
             <label for="InputYear">Input Year:</label>
             <input type="number" id="InputYear" name="InputYear" required> <br><br>
         </div>
-        <form class="form">
+        <form class="form" style="display: flex; justify-content: flex-end;">
 
             <div class="column">
                 <h5>Target Transaction <br> <br></h5>
@@ -1807,8 +1807,8 @@ Yii::$app->set('db', [ //revert default connection
             <div class="speedometer">
                 <p><span style="color: #C70039 ">Low </span>
                     <span style="color: #FF5733 ">Moderate </span>
-                    <span style="color: #FFC300 ">High </span>
-                    <span style="color: #6ABF70">Satisfaction </span>
+                    <span style="color: #FFC300 ">Satisfaction </span>
+                    <span style="color: #6ABF70">High </span>
                 </p>
                 <div class="speedometer-dial">
                     <div class="speedometer-reading" id="speedometer-reading"></div>
@@ -3967,7 +3967,7 @@ Yii::$app->set('db', [ //revert default connection
 
                         pendingTableScrollable += '</table></div>';
 
-                        type1.innerHTML = "<span style='color: Yellow;'>Pending Transaction </span><br>";
+                        type1.innerHTML = "<span style='color: Orange;'>Pending Transaction </span><br>";
                         hightype1.innerHTML = "Total Pending Transaction: <span style='color: red;'>" + sumOfAllPendingTransactionCounts + "</span> amounting of <span style='color: red;'>" + Number(sumOfAllPendingTransactionAmounts).toLocaleString('en-US', {
                             minimumFractionDigits: 2,
                             maximumFractionDigits: 2
@@ -4073,7 +4073,7 @@ Yii::$app->set('db', [ //revert default connection
 
                         cancelledTableScrollable += '</table></div>';
 
-                        type1.innerHTML = "<span style='color: Yellow;'>Cancelled Transaction </span><br>";
+                        type1.innerHTML = "<span style='color: Red;'>Cancelled Transaction </span><br>";
                         hightype1.innerHTML = "Total Cancelled Transaction: <span style='color: red;'>" + sumOfAllCancelledTransactionCounts + "</span> amounting of <span style='color: red;'>" + Number(sumOfAllCancelledTransactionAmounts).toLocaleString('en-US', {
                             minimumFractionDigits: 2,
                             maximumFractionDigits: 2
