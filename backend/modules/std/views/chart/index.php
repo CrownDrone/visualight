@@ -1519,7 +1519,7 @@ Yii::$app->set('db', [ //revert default connection
 
         <div class="navigation">
             <select id="navigationDropdown" onchange="navigateToSection()">
-                <option value="transactionChart" id="navTo">Navigate to:</option>
+                <option value="dailyIncome" id="navTo">Navigate to:</option>
                 <option value="transactionChart">Total Transaction</option>
                 <option value="salesChart">Total Income</option>
                 <option value="Provinces">Customers per Province</option>
@@ -1530,7 +1530,7 @@ Yii::$app->set('db', [ //revert default connection
                 function navigateToSection() {
                     var dropdown = document.getElementById("navigationDropdown");
 
-                    if (dropdown.value === "transactionChart") {
+                    if (dropdown.value === "dailyIncome") {
                         document.getElementById("navTo").innerHTML = "Navigate to:";
                     } else {
                         document.getElementById("navTo").innerHTML = "Go to Top";
