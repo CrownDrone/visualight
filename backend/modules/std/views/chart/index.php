@@ -3171,7 +3171,7 @@ Yii::$app->set('db', [ //revert default connection
                         <label for="customers_income" class="chart_type_label">
                             <strong>Select Type: </strong></label>
                         <select name="customers_income" id="customers_income" class="dropdown-content" onchange="dateFilter()">
-                            <option value="customer">Transaction Count</option>
+                            <option value="customer">Customer Count</option>
                             <option value="income">Earned Amount</option>
                         </select>
                     </div>
