@@ -1488,6 +1488,26 @@ class SiteController extends BaseController
         return $this->render('success');
     }
 
+    public function beforeAction($action)
+    {
+        if ($action->id == 'error') {
+            $this->layout = 'main-no-sidebar';
+        }
+        return parent::beforeAction($action);
+    }
+
+
+    public function actionError()
+    {
+        $this->layout = 'main-no-sidebar'; // Use the custom layout for error page
+
+        $exception = Yii::$app->errorHandler->exception;
+        if ($exception !== null) {
+            return $this->render('error', ['exception' => $exception]);
+        }
+    }
+
+
     public function actionVerifyEmail($token)
     {
 
