@@ -1202,7 +1202,7 @@ $lastmettrans = (new Query())
     ->scalar();
 
 if ($todaymettrans == 0) {
-    $metdailytransincrease = 100;
+    $metdailytransincrease = -100;
 } else {
     //dito magcocompute ng percentage ng increase or decrease ng number of past transaction at today's transaction (tinatype ko pa din yung sa last transaction kunwari kasi di pa ko marunong)
     $metdailytransincrease = (($todaymettrans - $lastmettrans) / $todaymettrans) * 100;
@@ -1232,7 +1232,7 @@ $lastSandTtrans = (new Query())
     ->scalar();
 
 if ($todaySandTtrans == 0) {
-    $SandTdailytransincrease = 100;
+    $SandTdailytransincrease = -100;
 } else {
 
     $SandTdailytransincrease = (($todaySandTtrans - $lastSandTtrans) / $todaySandTtrans) * 100;
@@ -1301,10 +1301,13 @@ Yii::$app->set('db', [ //revert default connection
                 <p id="dailyTrans"><?= $todaymettrans ?></p>
                 <p id="valueIncrease">
                     <?php
-                    if ($metdailytransincrease > 1) {
+                    if ($metdailytransincrease > 1 && $todaymettrans!=0) {
                         echo "+";
-                    } elseif ($metdailytransincrease < 1) {
+                    } elseif ($metdailytransincrease < 1 && $todaymettrans!=0 ) {
                         echo "-";
+                    }
+                    elseif ($metdailytransincrease < 1 && $todaymettrans==0 ) {
+                        echo " ";
                     }
                     echo $metdailytransincrease, "%";
                     ?>
@@ -1318,10 +1321,13 @@ Yii::$app->set('db', [ //revert default connection
                 <p id="dailyTrans"><?= $todaySandTtrans ?></p>
                 <p id="valueIncrease">
                     <?php
-                    if ($SandTdailytransincrease > 1) {
+                    if ($SandTdailytransincrease > 1 && $todaySandTtrans!=0) {
                         echo "+";
-                    } elseif ($SandTdailytransincrease < 1) {
+                    } elseif ($SandTdailytransincrease < 1 && $todaySandTtrans!=0 ) {
                         echo "-";
+                    }
+                    elseif ($SandTdailytransincrease < 1 && $todaySandTtrans==0 ) {
+                        echo " ";
                     }
                     echo $SandTdailytransincrease, "%";
                     ?>
@@ -1672,21 +1678,21 @@ Yii::$app->set('db', [ //revert default connection
                 // Start date
                 if (startInput.length === 2) { // Format is 'mm-yyyy'
                     const [startYear, startMonth] = startInput.map(Number);
-                    startDate = new Date(startYear, startMonth - 1, 1); // First day of the start month
-                } else if (startInput.length === 1) { // Format is 'yyyy'
-                    startDate = new Date(startInput[0], 0, 1); // January 1st of the year
+                    startDate = new Date(startYear, startMonth - 1, 1); 
+                } else if (startInput.length === 1) {  
+                    startDate = new Date(startInput[0], 0, 1); 
                 } else {
-                    startDate = new Date(startDateElements.value); // Full date format
+                    startDate = new Date(startDateElements.value);  
                 }
 
                 // End date
-                if (endInput.length === 2) { // Format is 'mm-yyyy'
+                if (endInput.length === 2) { 
                     const [endYear, endMonth] = endInput.map(Number);
-                    endDate = new Date(endYear, endMonth, 0); // Last day of the end month
-                } else if (endInput.length === 1) { // Format is 'yyyy'
-                    endDate = new Date(endInput[0], 11, 31); // December 31st of the year
+                    endDate = new Date(endYear, endMonth, 0); 
+                } else if (endInput.length === 1) { 
+                    endDate = new Date(endInput[0], 11, 31); 
                 } else {
-                    endDate = new Date(endDateElements.value); // Full date format
+                    endDate = new Date(endDateElements.value); 
                 }
 
                 // Filter technicalServicesData based on the date range
@@ -1701,7 +1707,7 @@ Yii::$app->set('db', [ //revert default connection
 
             function processFilteredData() {
                 const customerData = {};
-
+                
                 const filteredData = DatacustomerType.filter(
                     item => item.transaction_status === 'Paid' || item.transaction_status === 'Pending'
                 );

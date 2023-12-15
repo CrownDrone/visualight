@@ -1337,7 +1337,7 @@ $lastmettrans = (new Query())
     ->scalar();
 
 if ($todaymettrans == 0) {
-    $metdailytransincrease = 100;
+    $metdailytransincrease = -100;
 } else {
     //dito magcocompute ng percentage ng increase or decrease ng number of past transaction at today's transaction (tinatype ko pa din yung sa last transaction kunwari kasi di pa ko marunong)
     $metdailytransincrease = (($todaymettrans - $lastmettrans) / $todaymettrans) * 100;
@@ -1367,7 +1367,7 @@ $SalesYesterday = (new Query())
 
 if ($SalesToday == 0) {
     $SalesToday = 0;
-    $SalesIncreasePercent = 100;
+    $SalesIncreasePercent = -100;
 } else {
 
     $SalesIncreasePercent = (($SalesToday - $SalesYesterday) / $SalesToday) * 100;
@@ -1454,10 +1454,13 @@ Yii::$app->set('db', [ //revert default connection
                 <p id="dailyTrans"><?= $todaymettrans ?></p>
                 <p id="valueIncrease">
                     <?php
-                    if ($metdailytransincrease > 1) {
+                    if ($metdailytransincrease > 1 && $todaymettrans!=0) {
                         echo "+";
-                    } elseif ($metdailytransincrease < 1) {
+                    } elseif ($metdailytransincrease < 1 && $todaymettrans!=0 ) {
                         echo "-";
+                    }
+                    elseif ($metdailytransincrease < 1 && $todaymettrans==0 ) {
+                        echo " ";
                     }
                     echo $metdailytransincrease, "%";
                     ?>
@@ -1471,10 +1474,13 @@ Yii::$app->set('db', [ //revert default connection
                 <p id="dailyIncome"><?= $SalesToday ?></p>
                 <p id="valueIncrease">
                     <?php
-                    if ($SalesIncreasePercent > 1) {
+                    if ($SalesIncreasePercent > 1 && $SalesToday!=0) {
                         echo "+";
-                    } elseif ($SalesIncreasePercent < 1) {
+                    } elseif ($SalesIncreasePercent < 1 && $SalesToday!=0 ) {
                         echo "-";
+                    }
+                    elseif ($SalesIncreasePercent < 1 && $SalesToday==0 ) {
+                        echo " ";
                     }
                     echo $SalesIncreasePercent, "%";
                     ?>
