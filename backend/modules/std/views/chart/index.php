@@ -346,17 +346,29 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
     }
 
     .navigation label {
-        margin-right: 5px;
+        margin-right: 1rem;
         /* Adds space between the label and the dropdown */
         white-space: nowrap;
         /* Prevents the text from wrapping */
     }
 
     .navigation select {
-        padding: 5px;
-        font-size: 16px;
+        padding: -0.2rem;
+        font-size: 1rem;
         /* Adjust this to match other form elements if needed */
         /* Additional styles if needed */
+    }
+
+    .stat {
+        text-align: right;
+        font-size: 1.5rem;
+        font-weight: 400;
+        letter-spacing: .15rem;
+        padding-left: 1rem;
+        padding-top: 2.8rem;
+        padding-bottom: 1rem;
+        margin-right: 17.5rem;
+        margin-top: -5rem;
     }
 
     /* graph div */
@@ -566,13 +578,13 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
         padding-right: 3%
     }
 
-    .target{
+    .target {
         background: #0073e6;
-        color:white;
+        color: white;
         border-radius: 10px;
-        margin-left:2%;
+        margin-left: 2%;
         border-color: #0073e6;
-        width:15%;
+        width: 15%;
 
     }
 
@@ -1531,11 +1543,11 @@ Yii::$app->set('db', [ //revert default connection
             <div class="datePicker">
                 <label>From: </label>
                 <input type="date" id="startDate" name="startDate" class="datePicker_label" style="width:33%;" onchange="dateFilter(); updateChartContent()">
-    
+
                 <label>&nbsp;&nbsp;&nbsp;&nbsp;To:</label>
                 <input type="date" id="endDate" name="endDate" class="datePicker_label" style="width:33%;" onchange="dateFilter(); updateChartContent()">
             </div>
-            
+
         </div>
 
         <div class="navigation">
@@ -1571,6 +1583,17 @@ Yii::$app->set('db', [ //revert default connection
                 <button onclick="openTargetPopup()" class="target">Set Targets</button>
             <?php endif; ?>
         </div>
+
+        <div class="stat">
+        <form>
+            <strong>Status</strong></label>
+            <select name="date_type" id="date_type" class="dropdown-content" onchange="dateChange()">
+                <option value="peyd">Paid</option>
+                <option value="peding">Pending</option>
+                <option value="hancel">Cancelled</option>
+            </select>
+        </form>
+    </div>
     </div>
 </div>
 <div class="popup" id="targetPopup">
@@ -1842,33 +1865,33 @@ Yii::$app->set('db', [ //revert default connection
 
 
             <div style="text-align: right; margin: 0 auto; width: 80%; max-height: 25rem; overflow-y: auto; ">
-                    <ul style="padding-left: 500px; ">
-                        <li>
-                            <p id="highest"></p>
-                        </li>
-                        <li>
-                            <p id="least"></p>
-                        </li>
-                        <li>
-                            <p id="mostTransactionType"></p>
-                        </li>
-                        <li>
-                            <p id="leastTransactionType"></p>
-                        </li>
-                        <li>
-                            <p id="mostCustomerType"></p>
-                        </li>
-                        <li>
-                            <p id="leastCustomerType"></p>
-                        </li>
-                        <li>
-                            <p id="mostCustomerProvince"></p>
-                        </li>
-                        <li>
-                            <p id="leastCustomerProvince"></p>
-                        </li>
-                    </ul>
-                </div>
+                <ul style="padding-left: 500px; ">
+                    <li>
+                        <p id="highest"></p>
+                    </li>
+                    <li>
+                        <p id="least"></p>
+                    </li>
+                    <li>
+                        <p id="mostTransactionType"></p>
+                    </li>
+                    <li>
+                        <p id="leastTransactionType"></p>
+                    </li>
+                    <li>
+                        <p id="mostCustomerType"></p>
+                    </li>
+                    <li>
+                        <p id="leastCustomerType"></p>
+                    </li>
+                    <li>
+                        <p id="mostCustomerProvince"></p>
+                    </li>
+                    <li>
+                        <p id="leastCustomerProvince"></p>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 
@@ -3143,7 +3166,7 @@ Yii::$app->set('db', [ //revert default connection
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-geo"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <div class="customers_data">
-        <div class="date_filter" style="text-align: left; padding-left: 8rem; padding-top: 0rem; padding-bottom: 2rem;">
+        <div class="date_filter" style="text-align: left; padding-left: 1rem; padding-right: 1rem; padding-bottom: 2rem;">
             <div class="containers">
                 <div class="date_dropdown">
                     <label for="chart_type" class="chart_type_label">
@@ -3167,7 +3190,7 @@ Yii::$app->set('db', [ //revert default connection
                         <option value="region-13">Region-XIII</option>
                         <option value="barm">Bangsamoro</option>
                     </select>
-                    <div class="date_dropdown" style="top: 25%; left: 5%;">
+                    <div class="date_dropdown" style="text-align: left;">
                         <label for="customers_income" class="chart_type_label">
                             <strong>Select Type: </strong></label>
                         <select name="customers_income" id="customers_income" class="dropdown-content" onchange="dateFilter()">

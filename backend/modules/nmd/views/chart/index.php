@@ -357,6 +357,18 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
         /* Additional styles if needed */
     }
 
+    .stat {
+        text-align: right;
+        font-size: 1.5rem;
+        font-weight: 400;
+        letter-spacing: .15rem;
+        padding-left: 1rem;
+        padding-top: 2.8rem;
+        padding-bottom: 1rem;
+        margin-right: 18rem;
+        margin-top: -5rem;
+    }
+
 
     /* graph div */
     .graph {
@@ -562,13 +574,13 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
         background-color: #6BBAFF;
     }
 
-    .target{
+    .target {
         background: #1d955d;
-        color:white;
+        color: white;
         border-radius: 10px;
-        margin-left:2%;
+        margin-left: 2%;
         border-color: #1d955d;
-        width:15%;
+        width: 15%;
     }
 
     .target:hover {
@@ -1496,72 +1508,84 @@ Yii::$app->set('db', [ //revert default connection
 
 <!-- Date Filter Div -->
 <div class="date_filter" id="prediction-form">
-        <div class="containers">
-            <div class="dropdown_pdf_container">
-                <div class="date_dropdown">
-                    <form>
-                        <label for="date_type" class="date_type_label">
-                            <strong>Date Filter:</strong></label>
-                        <select name="date_type" id="date_type" class="dropdown-content" onchange="dateChange()">
-                            <option value="Days">Daily</option>
-                            <option value="Months">Monthly</option>
-                            <option value="Years">Yearly</option>
-                        </select>
-                    </form>
-                </div>
-
-                <div class="print_pdf">
-                    <Button class="print_pdf_label" onclick="downloadPDF()"> Chart Download</Button>
-                </div>
-
-
+    <div class="containers">
+        <div class="dropdown_pdf_container">
+            <div class="date_dropdown">
+                <form>
+                    <label for="date_type" class="date_type_label">
+                        <strong>Date Filter:</strong></label>
+                    <select name="date_type" id="date_type" class="dropdown-content" onchange="dateChange()">
+                        <option value="Days">Daily</option>
+                        <option value="Months">Monthly</option>
+                        <option value="Years">Yearly</option>
+                    </select>
+                </form>
             </div>
-        </div>
-        <div class="containers">
-            <div class="datePicker">
-                <label>From: </label>
-                <input type="date" id="startDate" name="startDate" class="datePicker_label" style="width:33%;" onchange="dateFilter(); updateChartContent()">
-    
-                <label>&nbsp;&nbsp;&nbsp;&nbsp;To:</label>
-                <input type="date" id="endDate" name="endDate" class="datePicker_label" style="width:33%;" onchange="dateFilter(); updateChartContent()">
+
+            <div class="print_pdf">
+                <Button class="print_pdf_label" onclick="downloadPDF()"> Chart Download</Button>
             </div>
-            
-        </div>
 
-        <div class="navigation">
-            <select id="navigationDropdown" onchange="navigateToSection()">
-                <option value="dailyIncome" id="navTo">Navigate to:</option>
-                <option value="transactionChart">Total Transaction</option>
-                <option value="salesChart">Total Income</option>
-                <option value="Provinces">Customers per Province</option>
-                <option value="transactionType">Transactions Type</option>
-            </select>
 
-            <script>
-                function navigateToSection() {
-                    var dropdown = document.getElementById("navigationDropdown");
-
-                    if (dropdown.value === "dailyIncome") {
-                        document.getElementById("navTo").innerHTML = "Navigate to:";
-                    } else {
-                        document.getElementById("navTo").innerHTML = "Go to Top";
-                    }
-                    console.log(document.getElementById("navTo").innerHTML)
-                    var selectedOption = dropdown.options[dropdown.selectedIndex].value;
-
-                    // Scroll to the selected section
-                    var selectedSection = document.getElementById(selectedOption);
-                    selectedSection.scrollIntoView({
-                        behavior: "smooth",
-                        block: 'center',
-                    });
-                }
-            </script>
-            <?php if (Yii::$app->user->can('ADMINISTRATOR') || Yii::$app->user->can('TOP MANAGEMENT')) : ?>
-                <button onclick="openTargetPopup()" class="target">Set Targets</button>
-            <?php endif; ?>
         </div>
     </div>
+    <div class="containers">
+        <div class="datePicker">
+            <label>From: </label>
+            <input type="date" id="startDate" name="startDate" class="datePicker_label" style="width:33%;" onchange="dateFilter(); updateChartContent()">
+
+            <label>&nbsp;&nbsp;&nbsp;&nbsp;To:</label>
+            <input type="date" id="endDate" name="endDate" class="datePicker_label" style="width:33%;" onchange="dateFilter(); updateChartContent()">
+        </div>
+
+    </div>
+
+    <div class="navigation">
+        <select id="navigationDropdown" onchange="navigateToSection()">
+            <option value="dailyIncome" id="navTo">Navigate to:</option>
+            <option value="transactionChart">Total Transaction</option>
+            <option value="salesChart">Total Income</option>
+            <option value="Provinces">Customers per Province</option>
+            <option value="transactionType">Transactions Type</option>
+        </select>
+
+        <script>
+            function navigateToSection() {
+                var dropdown = document.getElementById("navigationDropdown");
+
+                if (dropdown.value === "dailyIncome") {
+                    document.getElementById("navTo").innerHTML = "Navigate to:";
+                } else {
+                    document.getElementById("navTo").innerHTML = "Go to Top";
+                }
+                console.log(document.getElementById("navTo").innerHTML)
+                var selectedOption = dropdown.options[dropdown.selectedIndex].value;
+
+                // Scroll to the selected section
+                var selectedSection = document.getElementById(selectedOption);
+                selectedSection.scrollIntoView({
+                    behavior: "smooth",
+                    block: 'center',
+                });
+            }
+        </script>
+
+
+        <?php if (Yii::$app->user->can('ADMINISTRATOR') || Yii::$app->user->can('TOP MANAGEMENT')) : ?>
+            <button onclick="openTargetPopup()" class="target">Set Targets</button>
+        <?php endif; ?>
+    </div>
+    <div class="stat">
+        <form>
+            <strong>Status</strong></label>
+            <select name="date_type" id="date_type" class="dropdown-content" onchange="dateChange()">
+                <option value="peyd">Paid</option>
+                <option value="peding">Pending</option>
+                <option value="hancel">Cancelled</option>
+            </select>
+        </form>
+    </div>
+</div>
 <div class="popup" id="targetPopup">
 
     <div class="popup-content">
@@ -1603,7 +1627,6 @@ Yii::$app->set('db', [ //revert default connection
                 <input type="number" id="q4Income" name="q2Income" required><br>
 
             </div>
-
             <button type="button" onclick="submitTargets()">Submit</button>
         </form>
     </div>
@@ -1722,8 +1745,8 @@ Yii::$app->set('db', [ //revert default connection
             form.style.position = "fixed";
             form.style.top = "1rem";
             form.style.width = "81%";
-            form.style.height = "7rem";
-            form.style.maxHeight = "7rem"; // Set a maximum height
+            form.style.height = "8rem";
+            form.style.maxHeight = "8rem"; // Set a maximum height
             form.style.marginBottom = "-50%";
             form.style.zIndex = "1000";
             form.style.background = "white";
@@ -1839,33 +1862,33 @@ Yii::$app->set('db', [ //revert default connection
 
 
             <div style="text-align: right; margin: 0 auto; width: 80%; max-height: 25rem; overflow-y: auto; ">
-                    <ul style="padding-left: 500px; ">
-                        <li>
-                            <p id="highest"></p>
-                        </li>
-                        <li>
-                            <p id="least"></p>
-                        </li>
-                        <li>
-                            <p id="mostTransactionType"></p>
-                        </li>
-                        <li>
-                            <p id="leastTransactionType"></p>
-                        </li>
-                        <li>
-                            <p id="mostCustomerType"></p>
-                        </li>
-                        <li>
-                            <p id="leastCustomerType"></p>
-                        </li>
-                        <li>
-                            <p id="mostCustomerProvince"></p>
-                        </li>
-                        <li>
-                            <p id="leastCustomerProvince"></p>
-                        </li>
-                    </ul>
-                </div>
+                <ul style="padding-left: 500px; ">
+                    <li>
+                        <p id="highest"></p>
+                    </li>
+                    <li>
+                        <p id="least"></p>
+                    </li>
+                    <li>
+                        <p id="mostTransactionType"></p>
+                    </li>
+                    <li>
+                        <p id="leastTransactionType"></p>
+                    </li>
+                    <li>
+                        <p id="mostCustomerType"></p>
+                    </li>
+                    <li>
+                        <p id="leastCustomerType"></p>
+                    </li>
+                    <li>
+                        <p id="mostCustomerProvince"></p>
+                    </li>
+                    <li>
+                        <p id="leastCustomerProvince"></p>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 
@@ -3156,7 +3179,7 @@ Yii::$app->set('db', [ //revert default connection
                         <option value="barm">Bangsamoro</option>
                     </select>
                 </div>
-                <div class="date_dropdown">
+                <div class="date_dropdown" style="top: -4rem; left: 30rem;">
                     <label for="customers_income" class="chart_type_label">
                         <strong>Select Type: </strong></label>
                     <select name="customers_income" id="customers_income" class="dropdown-content" onchange="dateFilter()">
