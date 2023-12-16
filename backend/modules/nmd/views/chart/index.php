@@ -1267,7 +1267,7 @@ $lastmettrans = (new Query())
     ->scalar();
 
 if ($todaymettrans == 0) {
-    $metdailytransincrease = 0;
+    $metdailytransincrease = 100;
 } else {
     //dito magcocompute ng percentage ng increase or decrease ng number of past transaction at today's transaction (tinatype ko pa din yung sa last transaction kunwari kasi di pa ko marunong)
     $metdailytransincrease = (($todaymettrans - $lastmettrans) / $todaymettrans) * 100;
@@ -1297,7 +1297,7 @@ $SalesYesterday = (new Query())
 
 if ($SalesToday == 0) {
     $SalesToday = 0;
-    $SalesIncreasePercent = 0;
+    $SalesIncreasePercent = 100;
 } else {
 
     $SalesIncreasePercent = (($SalesToday - $SalesYesterday) / $SalesToday) * 100;
