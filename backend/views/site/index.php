@@ -3061,7 +3061,6 @@ Yii::$app->set('db', [ //revert default connection
                     datasets: soldPerDivs.datasets,
                 },
                 options: {
-                    tension: 0.4,
                     responsive: true,
                     maintainAspectRatio: false,
                     scales: {
