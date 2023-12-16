@@ -1590,8 +1590,8 @@ Yii::$app->set('db', [ //revert default connection
                 <select id="tType" class="dropdown-content" onchange="dateFilter()">
                     <option value="D">All</option>
                     <option value="A">Paid</option>
-                    <option value="B">Pending</option>
-                    <option value="C">Cancelled</option>
+                    <option value="B">Cancelled</option>
+                    <option value="C">Pending</option>
                 </select>
             </form>
         </div>
