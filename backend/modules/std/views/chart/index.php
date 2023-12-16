@@ -1656,7 +1656,7 @@ Yii::$app->set('db', [ //revert default connection
         targetPopup.style.display = 'block';
 
         $.ajax({
-            url: '<?php echo Yii::$app->request->baseUrl . '/chart/gets' ?>', // from index to controller then action
+            url: '<?php echo Yii::$app->request->baseUrl . '/chart/get' ?>', // from index to controller then action
             method: 'POST',
             dataType: 'json',
             data: {
@@ -1684,6 +1684,7 @@ Yii::$app->set('db', [ //revert default connection
             document.getElementById('q4Income').value = response.income[0].quarter_4
 
         }
+
     }
 
     function openTargetPopupB() {
@@ -1722,7 +1723,18 @@ Yii::$app->set('db', [ //revert default connection
                 document.getElementById('q3Income').value = response.income[0].quarter_3
                 document.getElementById('q4Income').value = response.income[0].quarter_4
             } catch (Exception) {
+
                 alert("No Target Record");
+
+                document.getElementById('q1Transaction').value = ""
+                document.getElementById('q2Transaction').value = ""
+                document.getElementById('q3Transaction').value = ""
+                document.getElementById('q4Transaction').value = ""
+                document.getElementById('q1Income').value = ""
+                document.getElementById('q2Income').value = ""
+                document.getElementById('q3Income').value = ""
+                document.getElementById('q4Income').value = ""
+
             }
 
         }
@@ -1747,26 +1759,38 @@ Yii::$app->set('db', [ //revert default connection
         var q3Income = document.getElementById('q3Income').value;
         var q4Income = document.getElementById('q4Income').value;
 
+        var csrfToken = $('meta[name="csrf-token"]').attr('content');
         //send data to controller, 
-        $.ajax({
-            url: '<?php echo Yii::$app->request->baseUrl . '/chart/sets' ?>', // from index to controller then action
-            method: 'POST',
-            dataType: 'json',
-            data: {
-                InputYear: InputYear,
-
-                q1Income: q1Income,
-                q2Income: q2Income,
-                q3Income: q3Income,
-                q4Income: q4Income,
-
-                q1Transaction: q1Transaction,
-                q2Transaction: q2Transaction,
-                q3Transaction: q3Transaction,
-                q4Transaction: q4Transaction
-            }
-        });
-        alert("Entry Successful");
+        if (InputYear != "" && q1Transaction != "" && q2Transaction != "" && q3Transaction != "" && q4Transaction != "" && q1Income != "" && q2Income != "" && q3Income != "" && q4Income != "") {
+            $.ajax({
+                url: '<?php echo Yii::$app->request->baseUrl . '/chart/set' ?>', // from index to controller then action
+                method: 'POST',
+                dataType: 'json',
+                data: {
+                    _csrf: csrfToken,
+                    InputYear: InputYear,
+                    q1Transaction: q1Transaction,
+                    q2Transaction: q2Transaction,
+                    q3Transaction: q3Transaction,
+                    q4Transaction: q4Transaction,
+                    q1Income: q1Income,
+                    q2Income: q2Income,
+                    q3Income: q3Income,
+                    q4Income: q4Income,
+                },
+                success: function(response) {
+                    console.log(response)
+                    alert("Target Set");
+                    closeTargetPopup();
+                },
+                error: function(error) {
+                    console.error(error);
+                    console.log("=== day error");
+                }
+            });
+        } else {
+            alert("Please fill up all fields");
+        }
     }
 </script>
 </div>
@@ -2883,7 +2907,10 @@ Yii::$app->set('db', [ //revert default connection
             // Display the pop-up
             popup.style.display = "block";
 
-            targetTransaction.innerHTML = "Target income for this quarter is <span style='color: blue;'>" + Target.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            targetTransaction.innerHTML = "Target income for this quarter is <span style='color: blue;'>" + Target.toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
             percentTransaction.innerHTML = "Achieved <span style='color: " + percentagecolor + ";'>" + Math.round(percentage) + "%</span> of target income";
             PopupHeader.innerHTML = "Total Income";
             processFilteredDataAmount();
