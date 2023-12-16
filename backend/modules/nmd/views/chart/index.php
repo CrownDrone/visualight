@@ -1372,52 +1372,52 @@ Yii::$app->set('db', [ //revert default connection
 ?>
 
 <div class="AllPage">
-<div class="DailyTransaction">
-    <br>
+    <div class="DailyTransaction">
+        <br>
 
-    <div class="deptransaction">
-        <p>Total Transactions Daily</p>
-        <div class="grid">
-            <img src="/images/Total Sales.png" alt="icon1">
-            <p id="dailyTrans"><?= $todaymettrans ?></p>
-            <p id="valueIncrease">
-                <?php
-                if ($metdailytransincrease > 1) {
-                    echo "+";
-                } elseif ($metdailytransincrease < 1) {
-                    echo "-";
-                }
-                echo $metdailytransincrease, "%";
-                ?>
-            </p>
+        <div class="deptransaction">
+            <p>Total Transactions Daily</p>
+            <div class="grid">
+                <img src="/images/Total Sales.png" alt="icon1">
+                <p id="dailyTrans"><?= $todaymettrans ?></p>
+                <p id="valueIncrease">
+                    <?php
+                    if ($metdailytransincrease > 1) {
+                        echo "+";
+                    } elseif ($metdailytransincrease < 1) {
+                        echo "-";
+                    }
+                    echo $metdailytransincrease, "%";
+                    ?>
+                </p>
+            </div>
         </div>
-    </div>
-    <div class="deptransaction">
-        <p>Total Income Daily</p>
-        <div class="grid">
-            <img src="/images/Sales Performance.png" alt="icon2">
-            <p id="dailyIncome"><?= $SalesToday ?></p>
-            <p id="valueIncrease">
-                <?php
-                if ($SalesIncreasePercent > 1) {
-                    echo "+";
-                } elseif ($SalesIncreasePercent < 1) {
-                    echo "-";
-                }
-                echo $SalesIncreasePercent, "%";
-                ?>
-            </p>
+        <div class="deptransaction">
+            <p>Total Income Daily</p>
+            <div class="grid">
+                <img src="/images/Sales Performance.png" alt="icon2">
+                <p id="dailyIncome"><?= $SalesToday ?></p>
+                <p id="valueIncrease">
+                    <?php
+                    if ($SalesIncreasePercent > 1) {
+                        echo "+";
+                    } elseif ($SalesIncreasePercent < 1) {
+                        echo "-";
+                    }
+                    echo $SalesIncreasePercent, "%";
+                    ?>
+                </p>
+            </div>
         </div>
-    </div>
-    <div class="deptransaction">
-        <p>Average Transaction Daily</p>
-        <div class="grid">
-            <img src="/images/Calculator.png" alt="icon3">
-            <p id="avgTrans"><?= $average ?></p>
+        <div class="deptransaction">
+            <p>Average Transaction Daily</p>
+            <div class="grid">
+                <img src="/images/Calculator.png" alt="icon3">
+                <p id="avgTrans"><?= $average ?></p>
+            </div>
         </div>
-    </div>
 
-</div>
+    </div>
 
 <div id="sending-email-message" class="alert alert-info hidden" style="display:none;">
     PDF file is downloading, please wait...
@@ -1468,8 +1468,8 @@ Yii::$app->set('db', [ //revert default connection
         <div class="dropdown_pdf_container">
             <div class="date_dropdown">
                 <div class="navigation">
-                    <label for="navigationDropdown">Navigate to:</label>
                     <select id="navigationDropdown" onchange="navigateToSection()">
+                        <option value="transactionChart" id="navTo">Navigate to:</option>
                         <option value="transactionChart">Total Transaction</option>
                         <option value="salesChart">Total Income</option>
                         <option value="Provinces">Customers per Province</option>
@@ -1477,17 +1477,25 @@ Yii::$app->set('db', [ //revert default connection
                     </select>
 
                     <script>
-                        function navigateToSection() {
-                            var dropdown = document.getElementById("navigationDropdown");
-                            var selectedOption = dropdown.options[dropdown.selectedIndex].value;
+                    function navigateToSection() {
+                        var dropdown = document.getElementById("navigationDropdown");
 
-                            // Scroll to the selected section
-                            var selectedSection = document.getElementById(selectedOption);
-                            selectedSection.scrollIntoView({
-                                behavior: "smooth"
-                            });
+                        if (dropdown.value === "transactionChart") {
+                            document.getElementById("navTo").innerHTML = "Navigate to:";
+                        } else {
+                            document.getElementById("navTo").innerHTML = "Go to Top";
                         }
-                    </script>
+                        console.log(document.getElementById("navTo").innerHTML)
+                        var selectedOption = dropdown.options[dropdown.selectedIndex].value;
+
+                        // Scroll to the selected section
+                        var selectedSection = document.getElementById(selectedOption);
+                        selectedSection.scrollIntoView({
+                            behavior: "smooth",
+                            block: 'center',
+                        });
+                    }
+                </script>
 
                     <?php if (Yii::$app->user->can('ADMINISTRATOR') || Yii::$app->user->can('TOP MANAGEMENT')) : ?>
                         <button onclick="openTargetPopup()" class="target">Set Targets</button>

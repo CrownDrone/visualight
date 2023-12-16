@@ -1373,104 +1373,100 @@ Yii::$app->set('db', [ //revert default connection
 ?>
 
 <div class="AllPage">
-<div class="DailyTransaction">
-    <br>
+    <div class="DailyTransaction">
+        <br>
 
-    <div class="deptransaction">
-        <p>Total Transactions Daily</p>
-        <div class="grid">
-            <img src="/images/Total Sales.png" alt="icon1">
-            <p id="dailyTrans"><?= $todaymettrans ?></p>
-            <p id="valueIncrease">
-                <?php
-                if ($metdailytransincrease > 1) {
-                    echo "+";
-                } elseif ($metdailytransincrease < 1) {
-                    echo "-";
-                }
-                echo $metdailytransincrease, "%";
-                ?>
-            </p>
-        </div>
-    </div>
-    <div class="deptransaction">
-        <p>Total Income Daily</p>
-        <div class="grid">
-            <img src="/images/Sales Performance.png" alt="icon2">
-            <p id="dailyIncome"><?= $SalesToday ?></p>
-            <p id="valueIncrease">
-                <?php
-                if ($SalesIncreasePercent > 1) {
-                    echo "+";
-                } elseif ($SalesIncreasePercent < 1) {
-                    echo "-";
-                }
-                echo $SalesIncreasePercent, "%";
-                ?>
-            </p>
-        </div>
-    </div>
-    <div class="deptransaction">
-        <p>Average Transaction Daily</p>
-        <div class="grid">
-            <img src="/images/Calculator.png" alt="icon3">
-            <p id="avgTrans"><?= $average ?></p>
-        </div>
-    </div>
-
-</div>
-
-
-<div id="sending-email-message" class="alert alert-info hidden" style="display:none;">
-    PDF file is downloading, please wait...
-</div>
-
-<button id="toggleButton">—</button>
-
-<!-- Date Filter Div -->
-<div class="date_filter" id="prediction-form">
-
-    <div class="containers">
-        <div class="dropdown_pdf_container">
-            <div class="date_dropdown">
-                <form>
-                    <label for="date_type" class="date_type_label">
-                        <strong>Date Filter:</strong></label>
-                    <select name="date_type" id="date_type" class="dropdown-content" onchange="dateChange()">
-                        <option value="Days">Daily</option>
-                        <option value="Months">Monthly</option>
-                        <option value="Years">Yearly</option>
-                    </select>
-                </form>
-            </div>
-
-            <div class="print_pdf">
-                <Button class="print_pdf_label" onclick="downloadPDF()"> Chart Download</Button>
+        <div class="deptransaction">
+            <p>Total Transactions Daily</p>
+            <div class="grid">
+                <img src="/images/Total Sales.png" alt="icon1">
+                <p id="dailyTrans"><?= $todaymettrans ?></p>
+                <p id="valueIncrease">
+                    <?php
+                    if ($metdailytransincrease > 1) {
+                        echo "+";
+                    } elseif ($metdailytransincrease < 1) {
+                        echo "-";
+                    }
+                    echo $metdailytransincrease, "%";
+                    ?>
+                </p>
             </div>
         </div>
+        <div class="deptransaction">
+            <p>Total Income Daily</p>
+            <div class="grid">
+                <img src="/images/Sales Performance.png" alt="icon2">
+                <p id="dailyIncome"><?= $SalesToday ?></p>
+                <p id="valueIncrease">
+                    <?php
+                    if ($SalesIncreasePercent > 1) {
+                        echo "+";
+                    } elseif ($SalesIncreasePercent < 1) {
+                        echo "-";
+                    }
+                    echo $SalesIncreasePercent, "%";
+                    ?>
+                </p>
+            </div>
+        </div>
+        <div class="deptransaction">
+            <p>Average Transaction Daily</p>
+            <div class="grid">
+                <img src="/images/Calculator.png" alt="icon3">
+                <p id="avgTrans"><?= $average ?></p>
+            </div>
+        </div>
+
     </div>
-    <div class="containers">
-        <!-- <form method="post" action="process_data.php"> Replace with your processing script -->
-        <div class="datePicker">
-            <label>From: </label>
-            <input type="date" id="startDate" name="startDate" class="datePicker_label"  style= "width:30%;" onchange="dateFilter(); updateChartContent()">
-            <!-- </div>
+
+
+    <div id="sending-email-message" class="alert alert-info hidden" style="display:none;">
+        PDF file is downloading, please wait...
+    </div>
+
+    <button id="toggleButton">—</button>
+
+    <!-- Date Filter Div -->
+    <div class="date_filter" id="prediction-form">
+        <div class="containers">
+            <div class="dropdown_pdf_container">
+                <div class="date_dropdown">
+                    <form>
+                        <label for="date_type" class="date_type_label">
+                            <strong>Date Filter:</strong></label>
+                        <select name="date_type" id="date_type" class="dropdown-content" onchange="dateChange()">
+                            <option value="Days">Daily</option>
+                            <option value="Months">Monthly</option>
+                            <option value="Years">Yearly</option>
+                        </select>
+                    </form>
+                </div>
+
+                <div class="print_pdf">
+                    <Button class="print_pdf_label" onclick="downloadPDF()"> Chart Download</Button>
+                </div>
+
+               
+            </div>
+        </div>
+        <div class="containers">
+            <!-- <form method="post" action="process_data.php"> Replace with your processing script -->
+            <div class="datePicker">
+                <label>From: </label>
+                <input type="date" id="startDate" name="startDate" class="datePicker_label" style="width:30%;" onchange="dateFilter(); updateChartContent()">
+                <!-- </div>
     <div class="datePicker"> -->
-            <label>&nbsp;&nbsp;&nbsp;&nbsp;To:</label>
-            <input type="date" id="endDate" name="endDate" class="datePicker_label"  style= "width:30%;" onchange="dateFilter(); updateChartContent()">
+                <label>&nbsp;&nbsp;&nbsp;&nbsp;To:</label>
+                <input type="date" id="endDate" name="endDate" class="datePicker_label" style="width:30%;" onchange="dateFilter(); updateChartContent()">
+            </div>
+            <!-- <input type="submit" value="Filter"> -->
+            <!-- </form> -->
         </div>
-        <!-- <input type="submit" value="Filter"> -->
-        <!-- </form> -->
-    </div>
-</div>
 
-<div class="date_filter" id="prediction-form">
-    <div class="containers">
-        <div class="dropdown_pdf_container">
-            <div class="date_dropdown">
-                <div class="navigation">
-                    <label for="navigationDropdown">Navigate to:</label>
+        <div class="navigation" >
                     <select id="navigationDropdown" onchange="navigateToSection()">
+                        <option value="transactionChart" id="navTo">Navigate to:</option>
                         <option value="transactionChart">Total Transaction</option>
                         <option value="salesChart">Total Income</option>
                         <option value="Provinces">Customers per Province</option>
@@ -1480,25 +1476,33 @@ Yii::$app->set('db', [ //revert default connection
                     <script>
                         function navigateToSection() {
                             var dropdown = document.getElementById("navigationDropdown");
+
+                            if (dropdown.value === "transactionChart") {
+                                document.getElementById("navTo").innerHTML = "Navigate to:";
+                            } else {
+                                document.getElementById("navTo").innerHTML = "Go to Top";
+                            }
+                            console.log(document.getElementById("navTo").innerHTML)
                             var selectedOption = dropdown.options[dropdown.selectedIndex].value;
 
                             // Scroll to the selected section
                             var selectedSection = document.getElementById(selectedOption);
                             selectedSection.scrollIntoView({
-                                behavior: "smooth"
+                                behavior: "smooth",
+                                block: 'center',
                             });
                         }
                     </script>
-
                     <?php if (Yii::$app->user->can('ADMINISTRATOR') || Yii::$app->user->can('TOP MANAGEMENT')) : ?>
                         <button onclick="openTargetPopup()" class="target">Set Targets</button>
                     <?php endif; ?>
 
                 </div>
-            </div>
-        </div>
+
     </div>
-</div>
+
+           
+
 </div>
 <div class="popup" id="targetPopup">
 
@@ -1653,8 +1657,8 @@ Yii::$app->set('db', [ //revert default connection
             form.style.position = "fixed";
             form.style.top = "1rem";
             form.style.width = "68%";
-            form.style.height = "5rem";
-            form.style.maxHeight = "7rem"; // Set a maximum height
+            form.style.height = "10rem";
+            form.style.maxHeight = "10rem"; // Set a maximum height
             form.style.marginBottom = "-50%";
             form.style.zIndex = "1000";
             form.style.background = "white";
@@ -3098,7 +3102,7 @@ Yii::$app->set('db', [ //revert default connection
                         <label for="customers_income" class="chart_type_label">
                             <strong>Select Type: </strong></label>
                         <select name="customers_income" id="customers_income" class="dropdown-content" onchange="dateFilter()">
-                            <option value="customer">Customer Count</option>
+                            <option value="customer">Transaction Count</option>
                             <option value="income">Earned Amount</option>
                         </select>
                     </div>
@@ -3439,31 +3443,31 @@ Yii::$app->set('db', [ //revert default connection
             </div>
         </div>
     </div>
-    <div id="TransactionsType"> 
+    <div id="TransactionsType">
 
-    <div class="graph2" id="customertransaction" style="margin-top:20px">
-        <div class="chart-container2">
-            <p class="reportTitle" id="transactionStatuspopup">Transaction Status</p>
-            <canvas id="transactionStatus"></canvas>
+        <div class="graph2" id="customertransaction" style="margin-top:20px">
+            <div class="chart-container2">
+                <p class="reportTitle" id="transactionStatuspopup">Transaction Status</p>
+                <canvas id="transactionStatus"></canvas>
+            </div>
+            <div class="chart-container2">
+                <p class="reportTitle" id="paymentMethodpopup">Payment Method</p>
+                <canvas id="paymendtMethod"></canvas>
+            </div>
         </div>
-        <div class="chart-container2">
-            <p class="reportTitle" id="paymentMethodpopup">Payment Method</p>
-            <canvas id="paymendtMethod"></canvas>
+        <div class="graph2">
+            <div class="chart-container2">
+                <p class="reportTitle" id="transactionTypepoppup">Type of Transaction</p>
+                <canvas id="transactionType"></canvas>
+            </div>
+
+            <div class="chart-container2">
+                <p class="reportTitle" id="customerTypepoppup">Type of Customers</p>
+                <canvas id="customerType"></canvas>
+            </div>
         </div>
+
     </div>
-    <div class="graph2">
-        <div class="chart-container2">
-            <p class="reportTitle" id="transactionTypepoppup">Type of Transaction</p>
-            <canvas id="transactionType"></canvas>
-        </div>
-
-        <div class="chart-container2">
-            <p class="reportTitle" id="customerTypepoppup">Type of Customers</p>
-            <canvas id="customerType"></canvas>
-        </div>
-    </div>
-
-</div>
 
     <!-- Pop-up for transaction type -->
     <!-- Transaction status popup -->
