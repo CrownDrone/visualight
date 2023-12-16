@@ -31,6 +31,8 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
         display: flex;
         flex-direction: center;
         align-items: center;
+        box-shadow: -4px 4px 8px rgba(0, 0, 0, 0.20), 0 6px 20px 0 rgba(0, 0, 0, 0.01);
+
     }
 
     .aveTransactionDiv,
@@ -401,6 +403,7 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
         display: inline-block;
         height: 30rem;
         width: 100%;
+        
 
     }
 
@@ -409,6 +412,9 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
         text-align: center;
         display: wrap;
         background-color: white;
+        border-radius:10px;
+        box-shadow: -4px 4px 8px rgba(0, 0, 0, 0.15), 0 6px 20px 0 rgba(0, 0, 0, 0.07);
+
     }
 
     .chart-container2 {
@@ -3522,7 +3528,7 @@ Yii::$app->set('db', [ //revert default connection
             </div>
         </div>
     </div>
-    <div id="TransactionsType">
+    <div id="TransactionsType" style = "margin-top: -3%;">
 
         <div class="graph2" id="customertransaction" style="margin-top:20px">
             <div class="chart-container2">
@@ -3533,8 +3539,6 @@ Yii::$app->set('db', [ //revert default connection
                 <p class="reportTitle" id="paymentMethodpopup">Payment Method</p>
                 <canvas id="paymendtMethod"></canvas>
             </div>
-        </div>
-        <div class="graph2">
             <div class="chart-container2">
                 <p class="reportTitle" id="transactionTypepoppup">Type of Transaction</p>
                 <canvas id="transactionType"></canvas>
