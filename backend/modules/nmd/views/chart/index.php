@@ -1737,6 +1737,8 @@ Yii::$app->set('db', [ //revert default connection
             message.style.width = "70%";
             message.style.maxHeight = "7rem"; // Set a maximum height
             message.style.marginBottom = "-50%";
+            message.style.boxShadow = "-4px 4px 8px rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.15)";
+
 
             form.style.position = "fixed";
             form.style.top = "1rem";
@@ -1746,6 +1748,7 @@ Yii::$app->set('db', [ //revert default connection
             form.style.marginBottom = "-50%";
             form.style.zIndex = "1000";
             form.style.background = "white";
+            form.style.borderRadius = "30px";
             form.style.boxShadow = "-0.3rem 0.3rem 0.5rem rgba(0, 0, 0, 0.3), 0 0.1rem 0.5rem 0 rgba(0, 0, 0, 0.15)";
             form.style.left = "17%";
 

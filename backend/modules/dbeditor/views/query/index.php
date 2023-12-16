@@ -9,13 +9,18 @@ use yii\grid\GridView;
 /** @var yii\data\ActiveDataProvider $dataProvider */
 ?>
 <style>
+    .content{
+        margin-left:2%;
+        margin-right:2%;
+        margin-bottom:-3%;
+    }
     .top-side {
         border: 0.1rem dashed grey;
         margin: 1rem;
-        margin-left: 5%;
+        margin-left:3%;
         padding: 1%;
         padding-left: 1.5%;
-        width: 90%;
+        width: 93%;
         height: 10vh;
         display: flex;
         align-items: top;
@@ -46,7 +51,7 @@ use yii\grid\GridView;
         background-color: #00BDB2;
         font-size: .9rem;
         text-align: center;
-        margin-left: 5%;
+        margin-left: 88%;
         padding: 0.2rem;
         padding-left: 1rem;
         padding-right: 1rem;
@@ -56,6 +61,7 @@ use yii\grid\GridView;
     }
 </style>
 
+<div class = "content">
 <?php $form = ActiveForm::begin(); ?>
 
 <?= $form->field($model, 'query')->textarea(['class' => 'top-side']) ?>
@@ -63,9 +69,11 @@ use yii\grid\GridView;
 <?= Html::submitButton('Search', ['class' => 'submit-button']) ?>
 
 <?php ActiveForm::end(); ?>
+</div>
+
 
 <?php if (isset($result) && is_array($result) && !empty($result)) : ?>
-    <h5>Result:</h5>
+    <h5 style = "margin-left: 2%; margin-top:2%;">Result:</h5>
     <div class="bot-side">
         <?= GridView::widget([
             'dataProvider' => new \yii\data\ArrayDataProvider([
@@ -76,7 +84,7 @@ use yii\grid\GridView;
         ]) ?>
     </div>
 <?php else : ?>
-    <h5>Result:</h5>
+    <h5 style = "margin-left: 2%; margin-top:2%;">Result:</h5>
     <div class="bot-side">
         <?php echo ("Enter a Valid Query"); ?>
     </div>

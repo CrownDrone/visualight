@@ -1525,16 +1525,19 @@ Yii::$app->set('db', [ //revert default connection
             var form = document.getElementById("prediction-form");
             var toggleButton = document.getElementById("toggleButton");
             var message = document.getElementById("sending-email-message");
+            var date_type = document.getElementById("date_type");
+
 
 
             if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
 
                 message.style.position = "fixed";
-                message.style.zIndex = "1000";
+                message.style.zIndex = "1500";
                 message.style.top = "18rem";
                 message.style.width = "70%";
                 message.style.maxHeight = "7rem"; // Set a maximum height
                 message.style.marginBottom = "-50%";
+                message.style.boxShadow = "-4px 4px 8px rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.15)";
 
                 form.style.position = "fixed";
                 form.style.top = "20px"; // Add "px" for the top value
@@ -1542,8 +1545,9 @@ Yii::$app->set('db', [ //revert default connection
                 form.style.height = "8rem";
                 form.style.zIndex = "1000";
                 form.style.background = "white";
+                form.style.borderRadius = "30px";
                 form.style.boxShadow = "-4px 4px 8px rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.15)";
-                form.style.left = "17%";
+                form.style.right = "1%";
 
                 toggleButton.style.display = "block";
                 toggleButton.style.position = "fixed";
@@ -1568,7 +1572,6 @@ Yii::$app->set('db', [ //revert default connection
                 form.style.top = "20px"; // Add "px" for the top value
                 form.style.width = "100%";
                 form.style.height = "17%";
-                form.style.marginBottom = "-7%";
                 form.style.background = "none";
                 form.style.boxShadow = "none";
                 toggleButton.style.display = "none";
