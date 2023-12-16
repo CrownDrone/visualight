@@ -781,8 +781,6 @@ $query = new Query();
 
 $salesData = $query->select(['division', 'transaction_date', 'SUM(amount) as total_amount'])
     ->from('transaction')
-    // ->where(['between', 'transaction_date', $fromDate, $toDate])
-    // ->where(['between', 'transaction_date', '2023-06-10', '2023-06-14'])
     ->groupBy(['division', 'transaction_date'])
     ->orderBy(['transaction_date' => SORT_DESC])
     ->all();
@@ -790,7 +788,6 @@ $salesData = $query->select(['division', 'transaction_date', 'SUM(amount) as tot
 // Fetch transaction data from the database (depends on how many transaction in same date and same div)
 $transactionData = $query->select(['division', 'transaction_date', 'COUNT(*) as transaction_count'])
     ->from('transaction')
-    // ->where(['between', 'transaction_date', $fromDate, $toDate])
     ->groupBy(['division', 'transaction_date'])
     ->orderBy(['transaction_date' => SORT_DESC])
     ->all();
@@ -1720,9 +1717,7 @@ Yii::$app->set('db', [ //revert default connection
             const income = <?php echo json_encode($SalesperDiv); ?>;
             const targetValues = <?php echo json_encode($targetTransaction); ?>;
             const targetincomeValues = <?php echo json_encode($targetIncome); ?>;
-            const province = <?php echo json_encode($provincestransaction); ?>;
-            const provinceincome = <?php echo json_encode($provincesincome); ?>;
-
+            
             const currentDate = new Date();
             const currentMonth = currentDate.getMonth();
             const currentYear = currentDate.getFullYear();

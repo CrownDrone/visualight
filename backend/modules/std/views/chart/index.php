@@ -845,6 +845,7 @@ $transactionData = $query->select(['division', 'transaction_date', 'COUNT(*) as 
     ->where([
         'division' => '2'
 
+
     ])
     ->groupBy(['division', 'transaction_date'])
     ->orderBy(['transaction_date' => SORT_DESC])
@@ -1606,7 +1607,7 @@ Yii::$app->set('db', [ //revert default connection
         <h2 style="color: #007bff; margin-bottom: 20px;">Set Targets</h2>
         <div>
             <label for="InputYear">Input Year:</label>
-            <input type="text" id="InputYear" name="InputYear" required> <br><br>
+            <input type="number" id="InputYear" name="InputYear" onchange="openTargetPopupB()" required>
         </div>
         <form class="form" style="display: flex; justify-content: flex-end;">
 
@@ -1681,6 +1682,48 @@ Yii::$app->set('db', [ //revert default connection
             document.getElementById('q2Income').value = response.income[0].quarter_2
             document.getElementById('q3Income').value = response.income[0].quarter_3
             document.getElementById('q4Income').value = response.income[0].quarter_4
+
+        }
+    }
+
+    function openTargetPopupB() {
+
+        var dYear = document.getElementById('InputYear').value;
+        console.log("Selected Year: ")
+        console.log(dYear)
+
+        $.ajax({
+            url: '<?php echo Yii::$app->request->baseUrl . '/chart/gets' ?>', // from index to controller then action
+            method: 'POST',
+            dataType: 'json',
+            data: {
+                InputYear: dYear,
+            },
+            success: function(response) {
+                fillForm(response)
+            },
+            error: function(error) {
+                console.error(error);
+                console.log("=== day error");
+            }
+        });
+
+
+        function fillForm(response) {
+            console.log(response)
+            try {
+                document.getElementById('q1Transaction').value = response.transaction[0].quarter_1
+                document.getElementById('q2Transaction').value = response.transaction[0].quarter_2
+                document.getElementById('q3Transaction').value = response.transaction[0].quarter_3
+                document.getElementById('q4Transaction').value = response.transaction[0].quarter_4
+
+                document.getElementById('q1Income').value = response.income[0].quarter_1
+                document.getElementById('q2Income').value = response.income[0].quarter_2
+                document.getElementById('q3Income').value = response.income[0].quarter_3
+                document.getElementById('q4Income').value = response.income[0].quarter_4
+            } catch (Exception) {
+                alert("No Target Record");
+            }
 
         }
     }
