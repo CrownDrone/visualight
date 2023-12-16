@@ -1454,11 +1454,11 @@ Yii::$app->set('db', [ //revert default connection
             <!-- <form method="post" action="process_data.php"> Replace with your processing script -->
             <div class="datePicker">
                 <label>From: </label>
-                <input type="date" id="startDate" name="startDate" class="datePicker_label" style="width:30%;" onchange="dateFilter(); updateChartContent()">
+                <input type="date" id="startDate" name="startDate" class="datePicker_label" style="width:33%;" onchange="dateFilter(); updateChartContent()">
                 <!-- </div>
     <div class="datePicker"> -->
                 <label>&nbsp;&nbsp;&nbsp;&nbsp;To:</label>
-                <input type="date" id="endDate" name="endDate" class="datePicker_label" style="width:30%;" onchange="dateFilter(); updateChartContent()">
+                <input type="date" id="endDate" name="endDate" class="datePicker_label" style="width:33%;" onchange="dateFilter(); updateChartContent()">
             </div>
             <!-- <input type="submit" value="Filter"> -->
             <!-- </form> -->
