@@ -410,7 +410,7 @@ $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position'
         text-align: center;
         display: wrap;
         background-color: white;
-        border-radius:10px;
+        border-radius: 10px;
         box-shadow: -4px 4px 8px rgba(0, 0, 0, 0.15), 0 6px 20px 0 rgba(0, 0, 0, 0.07);
     }
 
@@ -1459,32 +1459,32 @@ Yii::$app->set('db', [ //revert default connection
         <div class="grid">
             <img src="/images/Total Sales.png" alt="icon1">
             <p id="dailyTrans"><?= $todaymettrans ?></p>
-                <p id="valueIncrease">
-                    <?php
-                    if ($metdailytransincrease > 1 ) {
-                        echo "+";
-                    } elseif ($metdailytransincrease < 1 ) {
-                        echo " ";
-                    }
-                    echo $metdailytransincrease, "%";
-                    ?>
-                </p>
-            </div>
+            <p id="valueIncrease">
+                <?php
+                if ($metdailytransincrease > 1) {
+                    echo "+";
+                } elseif ($metdailytransincrease < 1) {
+                    echo " ";
+                }
+                echo $metdailytransincrease, "%";
+                ?>
+            </p>
         </div>
-        <div class="deptransaction">
-            <p>Total Income Daily</p>
-            <div class="grid">
-                <img src="/images/Sales Performance.png" alt="icon2">
-                <p id="dailyIncome"><?= $SalesToday ?></p>
-                <p id="valueIncrease">
-                    <?php
-                    if ($SalesIncreasePercent > 1) {
-                        echo "+";
-                    } elseif ($SalesIncreasePercent < 1 ) {
-                        echo " ";
-                    }
-                    echo $SalesIncreasePercent, "%";
-                    ?>
+    </div>
+    <div class="deptransaction">
+        <p>Total Income Daily</p>
+        <div class="grid">
+            <img src="/images/Sales Performance.png" alt="icon2">
+            <p id="dailyIncome"><?= $SalesToday ?></p>
+            <p id="valueIncrease">
+                <?php
+                if ($SalesIncreasePercent > 1) {
+                    echo "+";
+                } elseif ($SalesIncreasePercent < 1) {
+                    echo " ";
+                }
+                echo $SalesIncreasePercent, "%";
+                ?>
             </p>
         </div>
     </div>
@@ -1928,86 +1928,86 @@ Yii::$app->set('db', [ //revert default connection
         const leastCustomerProvince = document.getElementById("leastCustomerProvince");
         const tType = document.getElementById("tType");
 
-const startDateElements = document.getElementById("startDate");
-const endDateElements = document.getElementById("endDate");
+        const startDateElements = document.getElementById("startDate");
+        const endDateElements = document.getElementById("endDate");
 
-startDateElements.valueAsDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
-endDateElements.valueAsDate = currentDate;
+        startDateElements.valueAsDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+        endDateElements.valueAsDate = currentDate;
 
-// Initialize data from PHP
-let technicalServicesData = <?php echo json_encode($customerTypeDatapertransaction); ?>;
-let DatacustomerType = [];
+        // Initialize data from PHP
+        let technicalServicesData = <?php echo json_encode($customerTypeDatapertransaction); ?>;
+        let DatacustomerType = [];
 
-function getMonthDateRange(year, month) {
-    const startDate = new Date(year, month - 1, 1);
-    const endDate = new Date(year, month, 0);
-    return {
-        startDate,
-        endDate
-    };
-}
-
-function updateData() {
-        let startDate, endDate;
-        const startInput = startDateElements.value.split('-');
-        const endInput = endDateElements.value.split('-');
-        let ttype=tType.value;
-
-        // Start date
-        if (startInput.length === 2) { // Format is 'mm-yyyy'
-            const [startYear, startMonth] = startInput.map(Number);
-            startDate = new Date(startYear, startMonth - 1, 1);
-        } else if (startInput.length === 1) {
-            startDate = new Date(startInput[0], 0, 1);
-        } else {
-            startDate = new Date(startDateElements.value);
+        function getMonthDateRange(year, month) {
+            const startDate = new Date(year, month - 1, 1);
+            const endDate = new Date(year, month, 0);
+            return {
+                startDate,
+                endDate
+            };
         }
 
-        // End date
-        if (endInput.length === 2) {
-            const [endYear, endMonth] = endInput.map(Number);
-            endDate = new Date(endYear, endMonth, 0);
-        } else if (endInput.length === 1) {
-            endDate = new Date(endInput[0], 11, 31);
-        } else {
-            endDate = new Date(endDateElements.value);
+        function updateData() {
+            let startDate, endDate;
+            const startInput = startDateElements.value.split('-');
+            const endInput = endDateElements.value.split('-');
+            let ttype = tType.value;
+
+            // Start date
+            if (startInput.length === 2) { // Format is 'mm-yyyy'
+                const [startYear, startMonth] = startInput.map(Number);
+                startDate = new Date(startYear, startMonth - 1, 1);
+            } else if (startInput.length === 1) {
+                startDate = new Date(startInput[0], 0, 1);
+            } else {
+                startDate = new Date(startDateElements.value);
+            }
+
+            // End date
+            if (endInput.length === 2) {
+                const [endYear, endMonth] = endInput.map(Number);
+                endDate = new Date(endYear, endMonth, 0);
+            } else if (endInput.length === 1) {
+                endDate = new Date(endInput[0], 11, 31);
+            } else {
+                endDate = new Date(endDateElements.value);
+            }
+
+            if (ttype === "D") {
+                DatacustomerType = technicalServicesData.filter(item =>
+                    new Date(item.transaction_date) >= startDate &&
+                    new Date(item.transaction_date) <= endDate
+                );
+            } else if (ttype === "A") {
+                DatacustomerType = technicalServicesData.filter(item =>
+                    new Date(item.transaction_date) >= startDate &&
+                    new Date(item.transaction_date) <= endDate &&
+                    item.transaction_status === 'Paid'
+                );
+            } else if (ttype === "B") {
+                DatacustomerType = technicalServicesData.filter(item =>
+                    new Date(item.transaction_date) >= startDate &&
+                    new Date(item.transaction_date) <= endDate &&
+                    item.transaction_status === 'Cancelled'
+                );
+            } else if (ttype === "C") {
+                DatacustomerType = technicalServicesData.filter(item =>
+                    new Date(item.transaction_date) >= startDate &&
+                    new Date(item.transaction_date) <= endDate &&
+                    item.transaction_status === 'Pending'
+                );
+            }
+
+
+            processFilteredData();
+            processFilteredDataAmount();
         }
 
-        if (ttype === "D") {
-        DatacustomerType = technicalServicesData.filter(item =>
-            new Date(item.transaction_date) >= startDate &&
-            new Date(item.transaction_date) <= endDate
-        );
-    } else if (ttype === "A") {
-        DatacustomerType = technicalServicesData.filter(item =>
-            new Date(item.transaction_date) >= startDate &&
-            new Date(item.transaction_date) <= endDate &&
-            item.transaction_status === 'Paid'
-        );
-    } else if (ttype === "B") {
-        DatacustomerType = technicalServicesData.filter(item =>
-            new Date(item.transaction_date) >= startDate &&
-            new Date(item.transaction_date) <= endDate &&
-            item.transaction_status === 'Cancelled'
-        );
-    } else if (ttype === "C") {
-        DatacustomerType = technicalServicesData.filter(item =>
-            new Date(item.transaction_date) >= startDate &&
-            new Date(item.transaction_date) <= endDate &&
-            item.transaction_status === 'Pending'
-        );
-    }
-
-        
-        processFilteredData();
-        processFilteredDataAmount();
-    }
-
-    document.addEventListener('DOMContentLoaded', function () {
-    tType.addEventListener('change', function() {
-        updateData();
-    });
-});
+        document.addEventListener('DOMContentLoaded', function() {
+            tType.addEventListener('change', function() {
+                updateData();
+            });
+        });
 
 
         function processFilteredData() {
@@ -2578,7 +2578,7 @@ function updateData() {
                 const year = date.getFullYear();
                 const quarter = Math.floor((date.getMonth() + 3) / 3);
 
-                
+
                 if (year === currentYear) {
                     // Categorize transactions into quarters
                     switch (quarter) {
@@ -2775,12 +2775,12 @@ function updateData() {
             Total = Total.toFixed(2);
 
             const needle = (Total / Target);
-                let percentage = Math.round(needle * 100);
-                if (percentage > 100) {
-                    percentage = 100;
-                } else {
-                    percentage = percentage;
-                }
+            let percentage = Math.round(needle * 100);
+            if (percentage > 100) {
+                percentage = 100;
+            } else {
+                percentage = percentage;
+            }
 
             speedometerReading.textContent = Number(Total).toLocaleString('en-US', {
                 minimumFractionDigits: 2,
@@ -5271,6 +5271,12 @@ function updateData() {
         transactionChart.update();
         salesChart.update();
 
+        // Remove old data
+        constprovincesChart.data.labels = [];
+        constprovincesChart.data.datasets.forEach((dataset) => {
+            dataset.data = [];
+        });
+
         const selectedType = chartTypeDropdown.value;
         var selected_data;
         switch (selectedType) {
@@ -5325,64 +5331,143 @@ function updateData() {
             case "all":
                 selected_data = response.allProvince
         }
-        // Remove old data
-        constprovincesChart.data.labels = [];
-        constprovincesChart.data.datasets.forEach((dataset) => {
-            dataset.data = [];
-        });
+
+        var regionData = [{
+            backgroundColor: getRandomColor(),
+            label: 'NCR',
+            data: {
+                'NCR': 0
+            }
+        }, {
+            backgroundColor: getRandomColor(),
+            label: 'Region-I',
+            data: {
+                'Region-I': 0
+            }
+        }, {
+            backgroundColor: getRandomColor(),
+            label: 'Region-II',
+            data: {
+                'Region-II': 0
+            }
+        }, {
+            backgroundColor: getRandomColor(),
+            label: 'Region-III',
+            data: {
+                'Region-III': 0
+            }
+        }, {
+            backgroundColor: getRandomColor(),
+            label: 'Region-IV-A',
+            data: {
+                'Region-IV-A': 0
+            }
+        }, {
+            backgroundColor: getRandomColor(),
+            label: 'MIMAROPA',
+            data: {
+                'MIMAROPA': 0
+            }
+        }, {
+            backgroundColor: getRandomColor(),
+            label: 'Region-V',
+            data: {
+                'Region-V': 0
+            }
+        }, {
+            backgroundColor: getRandomColor(),
+            label: 'CAR',
+            data: {
+                'CAR': 0
+            }
+        }, {
+            backgroundColor: getRandomColor(),
+            label: 'Region-VI',
+            data: {
+                'Region-VI': 0
+            }
+        }, {
+            backgroundColor: getRandomColor(),
+            label: 'Region-VII',
+            data: {
+                'Region-VII': 0
+            }
+        }, {
+            backgroundColor: getRandomColor(),
+            label: 'Region-VIII',
+            data: {
+                'Region-VIII': 0
+            }
+        }, {
+            backgroundColor: getRandomColor(),
+            label: 'Region-IX',
+            data: {
+                'Region-IX': 0
+            }
+        }, {
+            backgroundColor: getRandomColor(),
+            label: 'Region-X',
+            data: {
+                'Region-X': 0
+            }
+        }, {
+            backgroundColor: getRandomColor(),
+            label: 'Region-XI',
+            data: {
+                'Region-XI': 0
+            }
+        }, {
+            backgroundColor: getRandomColor(),
+            label: 'Region-XII',
+            data: {
+                'Region-XII': 0
+            }
+        }, {
+            backgroundColor: getRandomColor(),
+            label: 'Region-XIII',
+            data: {
+                'Region-XIII': 0
+            }
+        }, {
+            backgroundColor: getRandomColor(),
+            label: 'Bangsamoro',
+            data: {
+                'Bangsamoro': 0
+            }
+        }, ]
 
 
         //convert data into usable chartjs labels
         x = 0
         if (selectedType === "all") {
-            console.log("All Province Contents: ");
-            console.log(response.allProvince);
+
             while (selected_data[x] != null) {
 
                 if (selected_data[x].label === "Metro Manila") {
-                    var dataB = selected_data[x].data;
-                    var arrayZ = [{
-                        backgroundColor: getRandomColor(),
-                        data: {
-                            "NCR": parseInt(dataB)
-                        },
-                        label: "NCR"
-                    }]
-                    for (var i = 0; i < arrayZ.length; i++) {
-                        provinceData.push(arrayZ[i]);
-                    } //'Ilocos Norte', 'Ilocos Sur', 'La Union', 'Pangasinan'
-                } else if (selected_data[x].label === "Ilocos Norte" ||
+                    regionData[0].data['NCR'] = 20
+
+                } //'Ilocos Norte', 'Ilocos Sur', 'La Union', 'Pangasinan'
+                else if (selected_data[x].label === "Ilocos Norte" ||
                     selected_data[x].label === "Ilocos Sur" ||
                     selected_data[x].label === "La Union" ||
                     selected_data[x].label === "Pangasinan") {
+
                     var dataB = selected_data[x].data;
-                    var arrayZ = [{
-                        backgroundColor: getRandomColor(),
-                        data: {
-                            "Region-I": parseInt(dataB)
-                        },
-                        label: "Region-I"
-                    }]
-                    for (var i = 0; i < arrayZ.length; i++) {
-                        provinceData.push(arrayZ[i]);
-                    } //'Batanes', 'Cagayan', 'La Union', 'Isabela', 'Quirino', 'Nueva Vizcaya'
-                } else if (selected_data[x].label === "Batanes" ||
+                    regionData[1].data['Region-I'] =
+                        regionData[1].data['Region-I'] + parseInt(dataB)
+                } //'Batanes', 'Cagayan', 'La Union', 'Isabela', 'Quirino', 'Nueva Vizcaya' 
+                else if (selected_data[x].label === "Batanes" ||
                     selected_data[x].label === "Cagayan" ||
                     selected_data[x].label === "La Union" ||
                     selected_data[x].label === "Isabela" ||
                     selected_data[x].label === "Quirino" ||
                     selected_data[x].label === "Nueva Vizcaya") {
+
                     var dataB = selected_data[x].data;
-                    var arrayZ = [{
-                        backgroundColor: getRandomColor(),
-                        data: {
-                            "Region-II": parseInt(dataB)
-                        },
-                        label: "Region-II"
-                    }]
-                    for (var i = 0; i < arrayZ.length; i++) {
-                        provinceData.push(arrayZ[i]);
-                    } //'Aurora', 'Bataan', 'Bulacan', 'Nueba Ecija', 'Pampanga', 'Tarlac', 'Zambales'
+                    regionData[2].data['Region-II'] =
+                        regionData[2].data['Region-II'] + parseInt(dataB)
+
+                    //'Aurora', 'Bataan', 'Bulacan', 'Nueba Ecija', 'Pampanga', 'Tarlac', 'Zambales'
                 } else if (selected_data[x].label === "Aurora" ||
                     selected_data[x].label === "Bataan" ||
                     selected_data[x].label === "Bulacan" ||
@@ -5390,229 +5475,161 @@ function updateData() {
                     selected_data[x].label === "Pampanga" ||
                     selected_data[x].label === "Tarlac" ||
                     selected_data[x].label === "Zambales") {
+
                     var dataB = selected_data[x].data;
-                    var arrayZ = [{
-                        backgroundColor: getRandomColor(),
-                        data: {
-                            "Region-III": parseInt(dataB)
-                        },
-                        label: "Region-III"
-                    }]
-                    for (var i = 0; i < arrayZ.length; i++) {
-                        provinceData.push(arrayZ[i]);
-                    } //'Batangas', 'Cavite', 'Laguna', 'Quezon', 'Rizal'
+                    regionData[3].data['Region-III'] =
+                        regionData[3].data['Region-III'] + parseInt(dataB)
+
+                    //'Batangas', 'Cavite', 'Laguna', 'Quezon', 'Rizal'
                 } else if (selected_data[x].label === "Batangas" ||
                     selected_data[x].label === "Cavite" ||
                     selected_data[x].label === "Laguna" ||
                     selected_data[x].label === "Quezon" ||
                     selected_data[x].label === "Rizal") {
+
                     var dataB = selected_data[x].data;
-                    var arrayZ = [{
-                        backgroundColor: getRandomColor(),
-                        data: {
-                            "Region-IV-A": parseInt(dataB)
-                        },
-                        label: "Region-IV-A"
-                    }]
-                    for (var i = 0; i < arrayZ.length; i++) {
-                        provinceData.push(arrayZ[i]);
-                    } //'Marinduque', 'Occidental Mindoro', 'Oriental Mindoro', 'Palawan', 'Romblon'
+                    regionData[4].data['Region-IV-A'] =
+                        regionData[4].data['Region-IV-A'] + parseInt(dataB)
+
+                    //'Marinduque', 'Occidental Mindoro', 'Oriental Mindoro', 'Palawan', 'Romblon'
                 } else if (selected_data[x].label === "Marinduque" ||
                     selected_data[x].label === "Occidental Mindoro" ||
                     selected_data[x].label === "Oriental Mindoro" ||
                     selected_data[x].label === "Palawan" ||
                     selected_data[x].label === "Romblon") {
+
                     var dataB = selected_data[x].data;
-                    var arrayZ = [{
-                        backgroundColor: getRandomColor(),
-                        data: {
-                            "MIMAROPA": parseInt(dataB)
-                        },
-                        label: "MIMAROPA"
-                    }]
-                    for (var i = 0; i < arrayZ.length; i++) {
-                        provinceData.push(arrayZ[i]);
-                    } //'Albay', 'Camarines Sur', 'Camarines Norte', 'Catanduanes', 'Masbate', 'Sorsogon'
+                    regionData[5].data['MIMAROPA'] =
+                        regionData[5].data['MIMAROPA'] + parseInt(dataB)
+
+                    //'Albay', 'Camarines Sur', 'Camarines Norte', 'Catanduanes', 'Masbate', 'Sorsogon'
                 } else if (selected_data[x].label === "Albay" ||
                     selected_data[x].label === "Camarines Sur" ||
                     selected_data[x].label === "Camarines Norte" ||
                     selected_data[x].label === "Catanduanes" ||
                     selected_data[x].label === "Masbate" ||
                     selected_data[x].label === "Sorsogon") {
+
                     var dataB = selected_data[x].data;
-                    var arrayZ = [{
-                        backgroundColor: getRandomColor(),
-                        data: {
-                            "Region-V": parseInt(dataB)
-                        },
-                        label: "Region-V"
-                    }]
-                    for (var i = 0; i < arrayZ.length; i++) {
-                        provinceData.push(arrayZ[i]);
-                    } //'Abra', 'Apayao', 'Benguet', 'Ifugao', 'Kalinga', 'Mountain Province'
+                    regionData[6].data['Region-V'] =
+                        regionData[6].data['Region-V'] + parseInt(dataB)
+
+                    //'Abra', 'Apayao', 'Benguet', 'Ifugao', 'Kalinga', 'Mountain Province'
                 } else if (selected_data[x].label === "Abra" ||
                     selected_data[x].label === "Apayao" ||
                     selected_data[x].label === "Benguet" ||
                     selected_data[x].label === "Ifugao" ||
                     selected_data[x].label === "Kalinga" ||
                     selected_data[x].label === "Mountain Province") {
+
                     var dataB = selected_data[x].data;
-                    var arrayZ = [{
-                        backgroundColor: getRandomColor(),
-                        data: {
-                            "CAR": parseInt(dataB)
-                        },
-                        label: "CAR"
-                    }]
-                    for (var i = 0; i < arrayZ.length; i++) {
-                        provinceData.push(arrayZ[i]);
-                    } //'Aklan', 'Antique', 'Capiz', 'Guimaras', 'Iloilo', 'Negros Occidental'
+                    regionData[7].data['CAR'] =
+                        regionData[7].data['CAR'] + parseInt(dataB)
+
+                    //'Aklan', 'Antique', 'Capiz', 'Guimaras', 'Iloilo', 'Negros Occidental'
                 } else if (selected_data[x].label === "Aklan" ||
                     selected_data[x].label === "Antique" ||
                     selected_data[x].label === "Capiz" ||
                     selected_data[x].label === "Guimaras" ||
                     selected_data[x].label === "Iloilo" ||
                     selected_data[x].label === "Negros Occidental") {
+
                     var dataB = selected_data[x].data;
-                    var arrayZ = [{
-                        backgroundColor: getRandomColor(),
-                        data: {
-                            "Region-VI": parseInt(dataB)
-                        },
-                        label: "Region-VI"
-                    }]
-                    for (var i = 0; i < arrayZ.length; i++) {
-                        provinceData.push(arrayZ[i]);
-                    } //'Bohol', 'Cebu', 'Negros Oriental', 'Siquijor'
+                    regionData[8].data['Region-VI'] =
+                        regionData[8].data['Region-VI'] + parseInt(dataB)
+
+                    //'Bohol', 'Cebu', 'Negros Oriental', 'Siquijor'
                 } else if (selected_data[x].label === "Bohol" ||
                     selected_data[x].label === "Cebu" ||
                     selected_data[x].label === "Negros Oriental" ||
                     selected_data[x].label === "Siquijor") {
+
                     var dataB = selected_data[x].data;
-                    var arrayZ = [{
-                        backgroundColor: getRandomColor(),
-                        data: {
-                            "Region-VII": parseInt(dataB)
-                        },
-                        label: "Region-VII"
-                    }]
-                    for (var i = 0; i < arrayZ.length; i++) {
-                        provinceData.push(arrayZ[i]);
-                    } //'Biliran', 'Eastern Samar', 'Leyte', 'Western Samar', 'Samar', 'Southern Leyte'
+                    regionData[9].data['Region-VII'] =
+                        regionData[9].data['Region-VII'] + parseInt(dataB)
+
+                    //'Biliran', 'Eastern Samar', 'Leyte', 'Western Samar', 'Samar', 'Southern Leyte'
                 } else if (selected_data[x].label === "Biliran" ||
                     selected_data[x].label === "Eastern Samar" ||
                     selected_data[x].label === "Leyte" ||
                     selected_data[x].label === "Western Samar" ||
                     selected_data[x].label === "Samar" ||
                     selected_data[x].label === "Southern Leyte") {
+
                     var dataB = selected_data[x].data;
-                    var arrayZ = [{
-                        backgroundColor: getRandomColor(),
-                        data: {
-                            "Region-VIII": parseInt(dataB)
-                        },
-                        label: "Region-VIII"
-                    }]
-                    for (var i = 0; i < arrayZ.length; i++) {
-                        provinceData.push(arrayZ[i]);
-                    } //'Zamboanga del Sur', 'Zamboanga del Norte', 'Zamboanga Sibugay'
+                    regionData[10].data['Region-VIII'] =
+                        regionData[10].data['Region-VIII'] + parseInt(dataB)
+
+                    //'Zamboanga del Sur', 'Zamboanga del Norte', 'Zamboanga Sibugay'
                 } else if (selected_data[x].label === "Zamboanga del Sur" ||
                     selected_data[x].label === "Zamboanga del Norte" ||
                     selected_data[x].label === "Zamboanga Sibugay") {
+
                     var dataB = selected_data[x].data;
-                    var arrayZ = [{
-                        backgroundColor: getRandomColor(),
-                        data: {
-                            "Region-IX": parseInt(dataB)
-                        },
-                        label: "Region-IX"
-                    }]
-                    for (var i = 0; i < arrayZ.length; i++) {
-                        provinceData.push(arrayZ[i]);
-                    } //'Bukidnon', 'Camiguin', 'Lanao del Norte', 'Misamis Oriental', 'Misamis Occidental'
+                    regionData[11].data['Region-IX'] =
+                        regionData[11].data['Region-IX'] + parseInt(dataB)
+
+                    //'Bukidnon', 'Camiguin', 'Lanao del Norte', 'Misamis Oriental', 'Misamis Occidental'
                 } else if (selected_data[x].label === "Bukidnon" ||
                     selected_data[x].label === "Camiguin" ||
                     selected_data[x].label === "Lanao del Norte" ||
                     selected_data[x].label === "Misamis Oriental" ||
                     selected_data[x].label === "Misamis Occidental") {
+
                     var dataB = selected_data[x].data;
-                    var arrayZ = [{
-                        backgroundColor: getRandomColor(),
-                        data: {
-                            "Region-X": parseInt(dataB)
-                        },
-                        label: "Region-X"
-                    }]
-                    for (var i = 0; i < arrayZ.length; i++) {
-                        provinceData.push(arrayZ[i]);
-                    } //'Davao de Oro', 'Davao del Norte', 'Davao del Sur', 'Davao Oriental', 'Davao Occidental'
+                    regionData[12].data['Region-X'] =
+                        regionData[12].data['Region-X'] + parseInt(dataB)
+
+                    //'Davao de Oro', 'Davao del Norte', 'Davao del Sur', 'Davao Oriental', 'Davao Occidental'
                 } else if (selected_data[x].label === "Davao de Oro" ||
                     selected_data[x].label === "Davao del Norte" ||
                     selected_data[x].label === "Davao del Sur" ||
                     selected_data[x].label === "Davao Oriental" ||
                     selected_data[x].label === "Davao Occidental") {
+
                     var dataB = selected_data[x].data;
-                    var arrayZ = [{
-                        backgroundColor: getRandomColor(),
-                        data: {
-                            "Region-XI": parseInt(dataB)
-                        },
-                        label: "Region-XI"
-                    }]
-                    for (var i = 0; i < arrayZ.length; i++) {
-                        provinceData.push(arrayZ[i]);
-                    } //'Cotabato', 'Sarangani', 'South Cotabato', 'Sultan Kudarat'
+                    regionData[13].data['Region-XI'] =
+                        regionData[13].data['Region-XI'] + parseInt(dataB)
+
+                    //'Cotabato', 'Sarangani', 'South Cotabato', 'Sultan Kudarat'
                 } else if (selected_data[x].label === "Cotabato" ||
                     selected_data[x].label === "Sarangani" ||
                     selected_data[x].label === "South Cotabato" ||
                     selected_data[x].label === "Sultan Kudarat") {
+
                     var dataB = selected_data[x].data;
-                    var arrayZ = [{
-                        backgroundColor: getRandomColor(),
-                        data: {
-                            "Region-XII": parseInt(dataB)
-                        },
-                        label: "Region-XII"
-                    }]
-                    for (var i = 0; i < arrayZ.length; i++) {
-                        provinceData.push(arrayZ[i]);
-                    } //'Agusan del Norte', 'Agusan del Sur', 'Dinagat Islands', 'Surigao del Norte', 'Surigao del Sur'
+                    regionData[14].data['Region-XII'] =
+                        regionData[14].data['Region-XII'] + parseInt(dataB)
+
+                    //'Agusan del Norte', 'Agusan del Sur', 'Dinagat Islands', 'Surigao del Norte', 'Surigao del Sur'
                 } else if (selected_data[x].label === "Agusan del Norte" ||
                     selected_data[x].label === "Agusan del Sur" ||
                     selected_data[x].label === "Dinagat Islands" ||
                     selected_data[x].label === "Surigao del Norte" ||
                     selected_data[x].label === "Surigao del Sur") {
+
                     var dataB = selected_data[x].data;
-                    var arrayZ = [{
-                        backgroundColor: getRandomColor(),
-                        data: {
-                            "Region-XIII": parseInt(dataB)
-                        },
-                        label: "Region-XIII"
-                    }]
-                    for (var i = 0; i < arrayZ.length; i++) {
-                        provinceData.push(arrayZ[i]);
-                    } //'Basilan', 'Lanao del Sur', 'Maguindanao del Norte', 'Sulu', 'Maguindanao del Sur', 'Tawi-Tawi'
+                    regionData[15].data['Region-XIII'] =
+                        regionData[15].data['Region-XIII'] + parseInt(dataB)
+
+                    //'Basilan', 'Lanao del Sur', 'Maguindanao del Norte', 'Sulu', 'Maguindanao del Sur', 'Tawi-Tawi'
                 } else if (selected_data[x].label === "Basilan" ||
                     selected_data[x].label === "Lanao del Sur" ||
                     selected_data[x].label === "Maguindanao del Norte" ||
                     selected_data[x].label === "Sulu" ||
                     selected_data[x].label === "Maguindanao del Sur" ||
                     selected_data[x].label === "Tawi-Tawi") {
+
                     var dataB = selected_data[x].data;
-                    var arrayZ = [{
-                        backgroundColor: getRandomColor(),
-                        data: {
-                            "Bangsamoro": parseInt(dataB)
-                        },
-                        label: "Bangsamoro"
-                    }]
-                    for (var i = 0; i < arrayZ.length; i++) {
-                        provinceData.push(arrayZ[i]);
-                    }
+                    regionData[16].data['Bangsamoro'] =
+                        regionData[16].data['Bangsamoro'] + parseInt(dataB)
+
                 }
                 x++
             }
+            constprovincesChart.data.datasets = regionData;
+            console.log("regionData: ")
+            console.log(regionData)
         } else {
             while (selected_data[x] != null) {
                 var dataA = selected_data[x].label;
@@ -5629,12 +5646,13 @@ function updateData() {
                 }
                 x++
             }
+            constprovincesChart.data.datasets = provinceData;
         }
 
-        constprovincesChart.data.datasets = provinceData;
+
         constprovincesChart.config.data.labels = [];
-        constprovincesChart.update();
         provinceData = [];
+        constprovincesChart.update();
 
         // for transactionStatusChart / Transaction Status
         x = 0
