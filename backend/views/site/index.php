@@ -1721,6 +1721,7 @@ Yii::$app->set('db', [ //revert default connection
             const currentMonth = currentDate.getMonth();
             const currentYear = currentDate.getFullYear();
 
+            const tType = document.getElementById("tType");
             const totaltransactionChart = document.getElementById("totaltransaction");
             const totalsalesChart = document.getElementById("totalsales");
             const popup = document.getElementById("popup");
@@ -1762,6 +1763,7 @@ Yii::$app->set('db', [ //revert default connection
                 let startDate, endDate;
                 const startInput = startDateElements.value.split('-');
                 const endInput = endDateElements.value.split('-');
+                let ttype=tType.value;
 
                 // Start date
                 if (startInput.length === 2) { // Format is 'mm-yyyy'
@@ -1783,22 +1785,52 @@ Yii::$app->set('db', [ //revert default connection
                     endDate = new Date(endDateElements.value);
                 }
 
-                // Filter technicalServicesData based on the date range
+                if (ttype === "D") {
                 DatacustomerType = technicalServicesData.filter(item =>
                     new Date(item.transaction_date) >= startDate &&
                     new Date(item.transaction_date) <= endDate
                 );
+            } else if (ttype === "A") {
+                DatacustomerType = technicalServicesData.filter(item =>
+                    new Date(item.transaction_date) >= startDate &&
+                    new Date(item.transaction_date) <= endDate &&
+                    item.transaction_status === 'Paid'
+                );
+            } else if (ttype === "B") {
+                DatacustomerType = technicalServicesData.filter(item =>
+                    new Date(item.transaction_date) >= startDate &&
+                    new Date(item.transaction_date) <= endDate &&
+                    item.transaction_status === 'Cancelled'
+                );
+            } else if (ttype === "C") {
+                DatacustomerType = technicalServicesData.filter(item =>
+                    new Date(item.transaction_date) >= startDate &&
+                    new Date(item.transaction_date) <= endDate &&
+                    item.transaction_status === 'Pending'
+                );
+            }
 
+                
                 processFilteredData();
                 processFilteredDataAmount();
             }
 
+            document.addEventListener('DOMContentLoaded', function () {
+            tType.addEventListener('change', function() {
+                updateData();
+            });
+        });
+
+            document.addEventListener('DOMContentLoaded', function () {
+            tType.addEventListener('change', function() {
+                updateData();
+            });
+        });
+
             function processFilteredData() {
                 const customerData = {};
 
-                const filteredData = DatacustomerType.filter(
-                    item => item.transaction_status === 'Paid' || item.transaction_status === 'Pending'
-                );
+                const filteredData = DatacustomerType;
 
                 filteredData.forEach(item => {
                     const transactionDate = item.transaction_date;
@@ -2055,9 +2087,7 @@ Yii::$app->set('db', [ //revert default connection
             function processFilteredDataAmount() {
                 const customerData = {};
 
-                const filteredData = DatacustomerType.filter(
-                    item => item.transaction_status === 'Paid' || item.transaction_status === 'Pending'
-                );
+                const filteredData = DatacustomerType;
 
                 filteredData.forEach(item => {
                     const transactionDate = item.transaction_date;
@@ -2363,7 +2393,8 @@ Yii::$app->set('db', [ //revert default connection
                 const quarter2 = [];
                 const quarter3 = [];
                 const quarter4 = [];
-
+                
+                
                 // Iterate through the transaction data
                 transaction.labels.forEach((label, index) => {
                     const date = new Date(label);
@@ -3438,6 +3469,8 @@ Yii::$app->set('db', [ //revert default connection
                 } else {
                     endDate = new Date(inputEndDate);
                 }
+
+                
 
                 return technicalServicesData.filter(item =>
                     new Date(item.transaction_date) >= startDate &&

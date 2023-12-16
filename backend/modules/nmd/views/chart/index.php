@@ -781,7 +781,7 @@ $salesData = $query->select(['division', 'transaction_date', 'SUM(amount) as tot
     // ->where(['between', 'transaction_date', '2023-06-10', '2023-06-14'])
     ->where([
         'division' => '1',
-        'transaction_status' => ['1'] //videlle bakit mo sinasama pending sa sales? Di pa nga bayad yon eh
+        'transaction_status' => ['1'] //videlle bakit mo sinasama pending sa sales? Di pa nga bayad yon eh (Videlle: Sorry naman)
     ])
     ->groupBy(['division', 'transaction_date'])
     ->orderBy(['transaction_date' => SORT_DESC])
@@ -1926,67 +1926,94 @@ Yii::$app->set('db', [ //revert default connection
         const leastCustomerType = document.getElementById("leastCustomerType");
         const mostCustomerProvince = document.getElementById("mostCustomerProvince");
         const leastCustomerProvince = document.getElementById("leastCustomerProvince");
+        const tType = document.getElementById("tType");
 
-        const startDateElements = document.getElementById("startDate");
-        const endDateElements = document.getElementById("endDate");
+const startDateElements = document.getElementById("startDate");
+const endDateElements = document.getElementById("endDate");
 
-        startDateElements.valueAsDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
-        endDateElements.valueAsDate = currentDate;
+startDateElements.valueAsDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+endDateElements.valueAsDate = currentDate;
 
-        // Initialize data from PHP
-        let technicalServicesData = <?php echo json_encode($customerTypeDatapertransaction); ?>;
-        let DatacustomerType = [];
+// Initialize data from PHP
+let technicalServicesData = <?php echo json_encode($customerTypeDatapertransaction); ?>;
+let DatacustomerType = [];
 
-        function getMonthDateRange(year, month) {
-            const startDate = new Date(year, month - 1, 1);
-            const endDate = new Date(year, month, 0);
-            return {
-                startDate,
-                endDate
-            };
+function getMonthDateRange(year, month) {
+    const startDate = new Date(year, month - 1, 1);
+    const endDate = new Date(year, month, 0);
+    return {
+        startDate,
+        endDate
+    };
+}
+
+function updateData() {
+        let startDate, endDate;
+        const startInput = startDateElements.value.split('-');
+        const endInput = endDateElements.value.split('-');
+        let ttype=tType.value;
+
+        // Start date
+        if (startInput.length === 2) { // Format is 'mm-yyyy'
+            const [startYear, startMonth] = startInput.map(Number);
+            startDate = new Date(startYear, startMonth - 1, 1);
+        } else if (startInput.length === 1) {
+            startDate = new Date(startInput[0], 0, 1);
+        } else {
+            startDate = new Date(startDateElements.value);
         }
 
-        function updateData() {
-            let startDate, endDate;
-            const startInput = startDateElements.value.split('-');
-            const endInput = endDateElements.value.split('-');
-
-            // Start date
-            if (startInput.length === 2) { // Format is 'mm-yyyy'
-                const [startYear, startMonth] = startInput.map(Number);
-                startDate = new Date(startYear, startMonth - 1, 1); // First day of the start month
-            } else if (startInput.length === 1) { // Format is 'yyyy'
-                startDate = new Date(startInput[0], 0, 1); // January 1st of the year
-            } else {
-                startDate = new Date(startDateElements.value); // Full date format
-            }
-
-            // End date
-            if (endInput.length === 2) { // Format is 'mm-yyyy'
-                const [endYear, endMonth] = endInput.map(Number);
-                endDate = new Date(endYear, endMonth, 0); // Last day of the end month
-            } else if (endInput.length === 1) { // Format is 'yyyy'
-                endDate = new Date(endInput[0], 11, 31); // December 31st of the year
-            } else {
-                endDate = new Date(endDateElements.value); // Full date format
-            }
-
-            // Filter technicalServicesData based on the date range
-            DatacustomerType = technicalServicesData.filter(item =>
-                new Date(item.transaction_date) >= startDate &&
-                new Date(item.transaction_date) <= endDate
-            );
-
-            processFilteredData();
-            processFilteredDataAmount();
+        // End date
+        if (endInput.length === 2) {
+            const [endYear, endMonth] = endInput.map(Number);
+            endDate = new Date(endYear, endMonth, 0);
+        } else if (endInput.length === 1) {
+            endDate = new Date(endInput[0], 11, 31);
+        } else {
+            endDate = new Date(endDateElements.value);
         }
+
+        if (ttype === "D") {
+        DatacustomerType = technicalServicesData.filter(item =>
+            new Date(item.transaction_date) >= startDate &&
+            new Date(item.transaction_date) <= endDate
+        );
+    } else if (ttype === "A") {
+        DatacustomerType = technicalServicesData.filter(item =>
+            new Date(item.transaction_date) >= startDate &&
+            new Date(item.transaction_date) <= endDate &&
+            item.transaction_status === 'Paid'
+        );
+    } else if (ttype === "B") {
+        DatacustomerType = technicalServicesData.filter(item =>
+            new Date(item.transaction_date) >= startDate &&
+            new Date(item.transaction_date) <= endDate &&
+            item.transaction_status === 'Cancelled'
+        );
+    } else if (ttype === "C") {
+        DatacustomerType = technicalServicesData.filter(item =>
+            new Date(item.transaction_date) >= startDate &&
+            new Date(item.transaction_date) <= endDate &&
+            item.transaction_status === 'Pending'
+        );
+    }
+
+        
+        processFilteredData();
+        processFilteredDataAmount();
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+    tType.addEventListener('change', function() {
+        updateData();
+    });
+});
+
 
         function processFilteredData() {
             const customerData = {};
 
-            const filteredData = DatacustomerType.filter(
-                item => item.transaction_status === 'Paid' || item.transaction_status === 'Pending'
-            );
+            const filteredData = DatacustomerType;
 
             filteredData.forEach(item => {
                 const transactionDate = item.transaction_date;
@@ -2243,9 +2270,7 @@ Yii::$app->set('db', [ //revert default connection
         function processFilteredDataAmount() {
             const customerData = {};
 
-            const filteredData = DatacustomerType.filter(
-                item => item.transaction_status === 'Paid' || item.transaction_status === 'Pending'
-            );
+            const filteredData = DatacustomerType;
 
             filteredData.forEach(item => {
                 const transactionDate = item.transaction_date;
@@ -2553,7 +2578,7 @@ Yii::$app->set('db', [ //revert default connection
                 const year = date.getFullYear();
                 const quarter = Math.floor((date.getMonth() + 3) / 3);
 
-                // Check if the transaction is from the current year
+                
                 if (year === currentYear) {
                     // Categorize transactions into quarters
                     switch (quarter) {
