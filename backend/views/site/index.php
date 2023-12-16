@@ -2659,7 +2659,7 @@ Yii::$app->set('db', [ //revert default connection
                 // Display the pop-up
                 popup.style.display = "block";
 
-                targetTransaction.innerHTML = "Target income for this quarter is <span style='color: blue;'>" + Target;
+                targetTransaction.innerHTML = "Target income for this quarter is <span style='color: blue;'>" + Target.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
                 percentTransaction.innerHTML = "Achieved <span style='color: " + percentagecolor + ";'>" + Math.round(percentage) + "%</span> of target income";
                 PopupHeader.innerHTML = "Total Income";
                 processFilteredDataAmount();
